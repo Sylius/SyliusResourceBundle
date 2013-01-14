@@ -65,7 +65,7 @@ class SyliusResourceExtension extends Twig_Extension
         $route = null === $route ? $this->request->attributes->get('_route') : $route;
         $routeParameters = empty($routeParameters) ? $this->request->attributes->get('_route_parameters') : $routeParameters;
 
-        $sorting = $this->request->get('sorting');
+        $sorting = $this->request->get('_sorting');
 
         if (null === $order && isset($sorting[$property])) {
             $currentOrder = $sorting[$property];
@@ -75,8 +75,8 @@ class SyliusResourceExtension extends Twig_Extension
 
         $order = null === $order ? 'asc' : $order;
 
-        $url = $this->router->generate($route, array(
-            array_merge(array('sorting' => array($property => $order), $routeParameters))
+        $url = $this->router->generate($route, array_merge(
+            array('_sorting' => array($property => $order), $routeParameters)
         ));
 
         return sprintf('<a href="%s">%s</a>', $url, $label);
