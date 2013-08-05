@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ParametersParser
 {
-    public function parse(array $parameters, Request $request)
+    public function parse(array $parameters, Request $request, $default = array())
     {
         foreach ($parameters as $key => $value) {
             if (is_array($value)) {
@@ -28,7 +28,13 @@ class ParametersParser
             }
 
             if (is_string($value) && 0 === strpos($value, '$')) {
-                $parameters[$key] = $request->get(substr($value, 1));
+                if (null === ($parameter = $request->get(substr($value, 1)))) {
+                    if (array_key_exists($key, $default)) {
+                        $parameter = $default[$key];
+                    }
+                }
+
+                $parameters[$key] = $parameter;
             }
         }
 

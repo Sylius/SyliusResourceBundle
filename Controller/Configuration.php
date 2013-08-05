@@ -27,6 +27,8 @@ class Configuration
     protected $templateNamespace;
     protected $templatingEngine;
     protected $parameters;
+    protected $settings;
+    protected $defaultSettings;
 
     /**
      * Current request.
@@ -37,7 +39,6 @@ class Configuration
 
     public function __construct($bundlePrefix, $resourceName, $templateNamespace, $templatingEngine = 'twig')
     {
-
         $this->bundlePrefix = $bundlePrefix;
         $this->resourceName = $resourceName;
         $this->templateNamespace = $templateNamespace;
@@ -46,16 +47,17 @@ class Configuration
         $this->parameters = array();
     }
 
-    public function load(Request $request)
+    public function load(Request $request, $settings)
     {
         $this->request = $request;
-
-        $parameters = $request->attributes->get('_sylius', array());
         $parser = new ParametersParser();
 
-        $parameters = $parser->parse($parameters, $request);
+        $parameters = array_merge(
+            $settings['settings'],
+            $request->attributes->get('_sylius', array())
+        );
 
-        $this->parameters = $parameters;
+        $this->parameters = $parser->parse($parameters, $request, $settings['default_settings']);
     }
 
     public function getBundlePrefix()
