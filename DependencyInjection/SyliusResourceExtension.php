@@ -40,7 +40,7 @@ class SyliusResourceExtension extends Extension
 
         $settings = $config;
         unset($settings['resources']);
-        $container->setParameter('sylius.settings', $settings);
+        $container->setParameter('sylius.resource.settings', $settings);
 
         if (isset($config['resources'])) {
             $this->createResourceServices($config['resources'], $container);
