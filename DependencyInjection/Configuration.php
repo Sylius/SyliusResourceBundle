@@ -34,7 +34,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('sylius_resource');
 
         $this->addSettingsSection($rootNode);
-        $this->addDynamicsSettingsSection($rootNode);
         $this->addResourcesSection($rootNode);
 
         return $treeBuilder;
@@ -83,31 +82,11 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('limit')->defaultValue(10)->end()
                         ->scalarNode('paginate')->defaultValue(10)->end()
-                        ->scalarNode('filterable')->defaultValue(false)->end()
-                        ->scalarNode('criteria')->defaultValue(array())->end()
-                        ->scalarNode('sortable')->defaultValue(false)->end()
-                        ->scalarNode('sorting')->defaultValue(array())->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Adds `dynamic_setting` section.
-     *
-     * @param $node
-     */
-    private function addDynamicsSettingsSection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('default_settings')
-                ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('paginate')->defaultValue(10)->end()
-                        ->scalarNode('criteria')->defaultValue(array())->end()
-                        ->scalarNode('sorting')->defaultValue(array())->end()
+                        ->integerNode('defaultPaginate')->defaultValue(10)->end()
+                        ->booleanNode('filterable')->defaultValue(false)->end()
+                        ->scalarNode('criteria')->defaultValue('$criteria')->end()
+                        ->booleanNode('sortable')->defaultValue(false)->end()
+                        ->scalarNode('sorting')->defaultValue('$sorting')->end()
                     ->end()
                 ->end()
             ->end()

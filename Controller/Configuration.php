@@ -27,8 +27,6 @@ class Configuration
     protected $templateNamespace;
     protected $templatingEngine;
     protected $parameters;
-    protected $settings;
-    protected $defaultSettings;
 
     /**
      * Current request.
@@ -53,11 +51,11 @@ class Configuration
         $parser = new ParametersParser();
 
         $parameters = array_merge(
-            $settings['settings'],
+            $settings,
             $request->attributes->get('_sylius', array())
         );
 
-        $this->parameters = $parser->parse($parameters, $request, $settings['default_settings']);
+        $this->parameters = $parser->parse($parameters, $request);
     }
 
     public function getBundlePrefix()
@@ -158,7 +156,7 @@ class Configuration
 
     public function getPaginationMaxPerPage()
     {
-        return (int) $this->get('paginate', 10);
+        return (int) $this->get('paginate', $this->parameters['defaultPaginate']);
     }
 
     public function isFilterable()
@@ -210,6 +208,11 @@ class Configuration
 
     protected function get($parameter, $default = null)
     {
-        return array_key_exists($parameter, $this->parameters) ? $this->parameters[$parameter] : $default;
+        if (array_key_exists($parameter, $this->parameters) &&
+            null !== $this->parameters[$parameter]) {
+            return $this->parameters[$parameter];
+        }
+
+        return $default;
     }
 }

@@ -61,7 +61,7 @@ class SyliusResourceExtension extends Twig_Extension
         $this->request = $event->getRequest();
 
         $this->settings = array_merge(
-            $this->settings['settings'],
+            $this->settings,
             $this->request->attributes->get('_sylius', array())
         );;
     }
