@@ -25,7 +25,15 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
      */
     function let($router)
     {
-        $this->beConstructedWith($router);
+        $this->beConstructedWith($router, array(
+            'limit' => 10,
+            'paginate' => 10,
+            'defaultPaginate' => 10,
+            'filterable' => false,
+            'criteria' => array(),
+            'sortable' => false,
+            'sorting' => array()
+        ));
     }
 
     function it_is_initializable()
@@ -36,5 +44,11 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
     function it_is_a_Twig_extension()
     {
         $this->shouldHaveType('Twig_Extension');
+    }
+
+    function it_should_return_the_label()
+    {
+        $this->renderSortingLink('', 'label')
+            ->shouldReturn('label');
     }
 }
