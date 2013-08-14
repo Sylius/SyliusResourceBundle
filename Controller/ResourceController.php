@@ -264,34 +264,46 @@ class ResourceController extends FOSRestController
     public function create($resource)
     {
         $manager = $this->getManager();
-
+        $config = $this->getConfiguration();
+        
         $this->dispatchEvent('pre_create', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_pre_create_'.$config->getResourceName(), $resource);
         $manager->persist($resource);
         $this->dispatchEvent('create', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_create_'.$config->getResourceName(), $resource);
         $manager->flush();
         $this->dispatchEvent('post_create', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_post_create_'.$config->getResourceName(), $resource);
     }
 
     public function update($resource)
     {
         $manager = $this->getManager();
+        $config = $this->getConfiguration();
 
         $this->dispatchEvent('pre_update', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_pre_update_'.$config->getResourceName(), $resource);
         $manager->persist($resource);
         $this->dispatchEvent('update', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_update_'.$config->getResourceName(), $resource);
         $manager->flush();
         $this->dispatchEvent('post_update', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_post_update_'.$config->getResourceName(), $resource);
     }
 
     public function delete($resource)
     {
         $manager = $this->getManager();
+        $config = $this->getConfiguration();
 
         $this->dispatchEvent('pre_delete', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_pre_delete_'.$config->getResourceName(), $resource);
         $manager->remove($resource);
         $this->dispatchEvent('delete', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_delete_'.$config->getResourceName(), $resource);
         $manager->flush();
         $this->dispatchEvent('post_delete', $resource);
+        $this->dispatchEvent($config->getBundlePrefix().'_post_delete_'.$config->getResourceName(), $resource);
     }
 
     public function persistAndFlush($resource)
