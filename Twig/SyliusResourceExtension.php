@@ -29,15 +29,17 @@ class SyliusResourceExtension extends Twig_Extension
      * @var Symfony\Component\HttpFoundation\Request
      */
     private $request;
+    private $settings;
 
     /**
      * @var RouterInterface
      */
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, $settings)
     {
         $this->router = $router;
+        $this->settings = $settings;
     }
 
     /**
@@ -57,10 +59,19 @@ class SyliusResourceExtension extends Twig_Extension
         }
 
         $this->request = $event->getRequest();
+
+        $this->settings = array_merge(
+            $this->settings,
+            $this->request->attributes->get('_sylius', array())
+        );;
     }
 
     public function renderSortingLink($property, $label = null, $order = null, $route = null, array $routeParameters = array())
     {
+        if (!$this->settings['sortable']) {
+            return $label;
+        }
+
         $label = null === $label ? $property : $label;
         $route = null === $route ? $this->request->attributes->get('_route') : $route;
 

@@ -54,7 +54,10 @@ class ResourceController extends FOSRestController
      */
     public function getConfiguration()
     {
-        $this->configuration->load($this->getRequest());
+        $this->configuration->load(
+            $this->getRequest(),
+            $this->container->getParameter('sylius.resource.settings')
+        );
 
         return $this->configuration;
     }

@@ -37,7 +37,6 @@ class Configuration
 
     public function __construct($bundlePrefix, $resourceName, $templateNamespace, $templatingEngine = 'twig')
     {
-
         $this->bundlePrefix = $bundlePrefix;
         $this->resourceName = $resourceName;
         $this->templateNamespace = $templateNamespace;
@@ -46,16 +45,17 @@ class Configuration
         $this->parameters = array();
     }
 
-    public function load(Request $request)
+    public function load(Request $request, $settings)
     {
         $this->request = $request;
-
-        $parameters = $request->attributes->get('_sylius', array());
         $parser = new ParametersParser();
 
-        $parameters = $parser->parse($parameters, $request);
+        $parameters = array_merge(
+            $settings,
+            $request->attributes->get('_sylius', array())
+        );
 
-        $this->parameters = $parameters;
+        $this->parameters = $parser->parse($parameters, $request);
     }
 
     public function getBundlePrefix()
@@ -156,7 +156,7 @@ class Configuration
 
     public function getPaginationMaxPerPage()
     {
-        return (int) $this->get('paginate', 10);
+        return (int) $this->get('paginate', $this->parameters['defaultPaginate']);
     }
 
     public function isFilterable()
@@ -210,6 +210,11 @@ class Configuration
 
     protected function get($parameter, $default = null)
     {
-        return array_key_exists($parameter, $this->parameters) ? $this->parameters[$parameter] : $default;
+        if (array_key_exists($parameter, $this->parameters) &&
+            null !== $this->parameters[$parameter]) {
+            return $this->parameters[$parameter];
+        }
+
+        return $default;
     }
 }

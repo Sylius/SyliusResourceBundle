@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sylius_resource');
 
+        $this->addSettingsSection($rootNode);
         $this->addResourcesSection($rootNode);
 
         return $treeBuilder;
@@ -61,6 +62,31 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Adds `settings` section.
+     *
+     * @param $node
+     */
+    private function addSettingsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('settings')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('limit')->defaultValue(10)->end()
+                        ->scalarNode('paginate')->defaultValue(10)->end()
+                        ->integerNode('defaultPaginate')->defaultValue(10)->end()
+                        ->booleanNode('filterable')->defaultValue(false)->end()
+                        ->scalarNode('criteria')->defaultValue('$criteria')->end()
+                        ->booleanNode('sortable')->defaultValue(false)->end()
+                        ->scalarNode('sorting')->defaultValue('$sorting')->end()
                     ->end()
                 ->end()
             ->end()
