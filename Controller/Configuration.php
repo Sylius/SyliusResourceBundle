@@ -11,8 +11,10 @@
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\Common\Inflector\Inflector;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Resource controller configuration.
@@ -22,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Configuration
 {
+    protected $container;
     protected $bundlePrefix;
     protected $resourceName;
     protected $templateNamespace;
@@ -35,27 +38,60 @@ class Configuration
      */
     protected $request;
 
-    public function __construct($bundlePrefix, $resourceName, $templateNamespace, $templatingEngine = 'twig')
+    public function __construct(Container $container, $bundlePrefix, $resourceName, $templateNamespace, $templatingEngine = 'twig')
     {
-
+        $this->container = $container;
         $this->bundlePrefix = $bundlePrefix;
         $this->resourceName = $resourceName;
         $this->templateNamespace = $templateNamespace;
         $this->templatingEngine = $templatingEngine;
 
-        $this->parameters = array();
+        $this->request = $this->container->get('request');
+        $this->parameters = $this->parseParameters($this->request->attributes->get('_sylius', array()));
     }
 
-    public function load(Request $request)
+    protected function parseParameters(array $parameters)
     {
-        $this->request = $request;
+        foreach ($parameters as $key => $value) {
+            if (is_array($value)) {
+                $parameters[$key] = $this->parseParameters($value);
+            }
 
-        $parameters = $request->attributes->get('_sylius', array());
-        $parser = new ParametersParser();
+            if (is_string($value) && 0 === strpos($value, '$')) {
+                $parameters[$key] = $request->get(substr($value, 1));
+            }
 
-        $parameters = $parser->parse($parameters, $request);
+            if (is_string($value) && $result = $this->getServiceAndExpression($value)) {
+                $accessor = PropertyAccess::createPropertyAccessor();
+                try{
+                    $value = $accessor->getValue($result['service'], $result['expression']);
+                    $parameters[$key] = $value;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+        }
 
-        $this->parameters = $parameters;
+        return $parameters;
+    }
+
+    protected function getServiceAndExpression($expression)
+    {
+        $expressionParts = explode('.', $expression);
+
+        $serviceName = "";
+        $serviceExists = false;
+        while (count($expressionParts) > 0 && !$serviceExists = $this->container->has($serviceName))
+        {
+            $serviceName .= ($serviceName === "") ? array_shift($expressionParts) : '.'.array_shift($expressionParts);
+        }
+
+        if (!$serviceExists) return false;
+
+        return [
+            'service' => $this->container->get($serviceName),
+            'expression' => implode('.', $expressionParts)
+        ];
     }
 
     public function getBundlePrefix()
