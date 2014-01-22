@@ -33,7 +33,8 @@
         "phpspec/phpspec":      "2.0.*@dev",
         "twig/twig":            "~1.11",
         "doctrine/orm":         "~2.3",
-        "doctrine/mongodb-odm": "1.0.*@dev"
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "jmikola/geojson":      "1.0.*@dev"
     },
     "suggest": {
         "fsc/hateoas-bundle":   "0.3.x-dev",
