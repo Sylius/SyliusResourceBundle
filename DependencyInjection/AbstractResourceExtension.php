@@ -157,7 +157,8 @@ abstract class AbstractResourceExtension extends Extension
                     $driver,
                     $container,
                     $this->applicationName,
-                    $model
+                    $model,
+                    isset($config['templates'][$model]) ? $config['templates'][$model] : null
                 )->load($classes);
             }
         }
