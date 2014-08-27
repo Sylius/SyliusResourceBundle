@@ -182,9 +182,15 @@ class EntityRepository extends BaseEntityRepository implements RepositoryInterfa
             return;
         }
 
+        $i = 0;
         foreach ($sorting as $property => $order) {
             if (!empty($order)) {
-                $queryBuilder->orderBy($this->getPropertyName($property), $order);
+                if ($i == 0) {
+                    $queryBuilder->orderBy($this->getPropertyName($property), $order);
+                } else {
+                    $queryBuilder->addOrderBy($this->getPropertyName($property), $order);
+                }
+                $i ++;
             }
         }
     }
