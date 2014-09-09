@@ -82,8 +82,10 @@ class KernelControllerSubscriber implements EventSubscriberInterface
         if ($controller[0] instanceof ResourceController) {
             $request = $event->getRequest();
 
-            $parameters = $this->parseApiData($request);
-            $parameters = array_merge($this->settings, $parameters);
+            $apiData = $this->parseApiData($request);
+            $sortingData = $this->parseSortingData($request);
+
+            $parameters = array_merge($this->settings, $apiData, $sortingData);
             list($parameters , $parameterNames) = $this->parametersParser->parse($parameters, $request);
 
             $this->parameters->replace($parameters);
@@ -92,6 +94,23 @@ class KernelControllerSubscriber implements EventSubscriberInterface
             $controller[0]->getConfiguration()->setRequest($request);
             $controller[0]->getConfiguration()->setParameters($this->parameters);
         }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function parseSortingData(Request $request)
+    {
+        $data = array();
+        if ($request->attributes->get('_sylius[sortable]', false, true)) {
+            if ($request->query->has('sorting')) {
+                $data['sorting'] = $request->query->get('sorting');
+            }
+        }
+
+        return $data;
     }
 
     /**
