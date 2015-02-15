@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Sylius\Bundle\ResourceBundle\Fixture\Entity;
+namespace spec\Sylius\Bundle\ResourceBundle\Fixture\Document;
 
 use Sylius\Component\Translation\Model\AbstractTranslatable;
 
 /**
- * Foo translatable entity.
+ * Foo translatable document.
  *
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @author Ivannis Suárez Jérez <ivannis.suarez@gmail.com>
  */
 class TranslatableFoo extends AbstractTranslatable
 {
     protected function getTranslationEntityClass(){
-        return  'spec\Sylius\Bundle\ResourceBundle\Fixture\Entity\Foo';
+        return  'spec\Sylius\Bundle\ResourceBundle\Fixture\Document\Foo';
     }
 }
