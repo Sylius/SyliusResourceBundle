@@ -12,7 +12,9 @@
 namespace Sylius\Bundle\ResourceBundle\Form;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ORM\Mapping\ClassMetadataInfo as ClassMetadataInfoORM;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo as ClassMetadataInfoODM;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
@@ -31,9 +33,19 @@ class DefaultFormFactory
         $this->formFactory = $formFactory;
     }
 
-    public function create($resource, EntityManager $entityManager)
+    /**
+     * @param $resource
+     * @param EntityManager|DocumentManager $manager
+     * @return \Symfony\Component\Form\Form
+     * @throws \Exception
+     */
+    public function create($resource, $manager)
     {
-        $metadata = $entityManager->getClassMetadata(get_class($resource));
+        if (!$manager instanceof EntityManager && !$manager instanceof DocumentManager) {
+            throw new \Exception("Must be an instance of Doctrine\\ORM\\EntityManager or Doctrine\\ODM\\MongoDB\\DocumentManager");
+        }
+
+        $metadata = $manager->getClassMetadata(get_class($resource));
 
         if (count($metadata->identifier) > 1) {
             throw new \RuntimeException('The default form factory does not support entity classes with multiple primary keys.');
@@ -61,26 +73,36 @@ class DefaultFormFactory
      * Returns an array of fields. Fields can be both column fields and
      * association fields.
      *
-     * @param ClassMetadataInfo $metadata
+     * @param ClassMetadataInfoORM|ClassMetadataInfoODM $metadata
      *
      * @return array $fields
      */
-    private function getFieldsFromMetadata(ClassMetadataInfo $metadata)
+    private function getFieldsFromMetadata($metadata)
     {
-        $fields = (array) $metadata->fieldNames;
-
-        if (!$metadata->isIdentifierNatural()) {
-            $fields = array_diff($fields, $metadata->identifier);
+        if (!$metadata instanceof ClassMetadataInfoORM && !$metadata instanceof ClassMetadataInfoODM) {
+            throw new \Exception("Must be an instance of Doctrine\\ORM\\Mapping\\ClassMetadataInfo or Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadataInfo");
         }
 
         $fieldsMapping = array();
+
+        if ($metadata instanceof ClassMetadataInfoORM) {
+            $fields = (array)$metadata->fieldNames;
+            if (!$metadata->isIdentifierNatural()) {
+                $fields = array_diff($fields, $metadata->identifier);
+            }
+        } elseif ($metadata instanceof ClassMetadataInfoODM) {
+            $fields = array_keys($metadata->fieldMappings);
+            if (!$metadata->getIdentifier()) {
+                $fields = array_diff($fields, $metadata->identifier);
+            }
+        }
 
         foreach ($fields as $field) {
             $fieldsMapping[$field] = $metadata->getTypeOfField($field);
         }
 
         foreach ($metadata->associationMappings as $fieldName => $relation) {
-            if ($relation['type'] !== ClassMetadataInfo::ONE_TO_MANY) {
+            if ($relation['type'] !== ClassMetadataInfoORM::ONE_TO_MANY || $relation['type'] !== ClassMetadataInfoODM::REFERENCE_MANY) {
                 $fieldsMapping[$fieldName] = 'relation';
             }
         }
