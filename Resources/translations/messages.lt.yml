@@ -3,5 +3,5 @@
 
 form:
   collection:
-    add: Hozzáadás
-    delete: Törlés
+    add: Pridėti
+    delete: Šalinti
