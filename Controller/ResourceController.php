@@ -313,6 +313,7 @@ class ResourceController extends Controller
                 $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
     
                 return $this->redirectHandler->redirectToResource($configuration, $resource);
+            }
         }
 
         if (!$configuration->isHtmlRequest()) {
