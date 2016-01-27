@@ -39,10 +39,6 @@ class ResourceFormFactory implements ResourceFormFactoryInterface
     {
         $formType = $requestConfiguration->getFormType();
 
-        if (false !== strpos($formType, '\\')) {
-            $formType = new $formType();
-        }
-
         if ($requestConfiguration->isHtmlRequest()) {
             return $this->formFactory->create($formType, $resource);
         }

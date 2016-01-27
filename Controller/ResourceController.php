@@ -225,30 +225,34 @@ class ResourceController extends Controller
 
         $form = $this->resourceFormFactory->create($configuration, $newResource);
 
-        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
-            $newResource = $form->getData();
+        if ($request->isMethod('POST')) {
+            $form->submit($request->request->get($form->getName()));
+            
+            if($form->isValid()) {
+                $newResource = $form->getData();
 
-            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
+                $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
 
-            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
-                throw new HttpException($event->getErrorCode(), $event->getMessage());
+                if ($event->isStopped() && !$configuration->isHtmlRequest()) {
+                    throw new HttpException($event->getErrorCode(), $event->getMessage());
+                }
+                if ($event->isStopped()) {
+                    $this->flashHelper->addFlashFromEvent($configuration, $event);
+
+                    return $this->redirectHandler->redirectToIndex($configuration, $newResource);
+                }
+
+                $this->repository->add($newResource);
+                $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
+
+                if (!$configuration->isHtmlRequest()) {
+                    return $this->viewHandler->handle($configuration, View::create($newResource, 201));
+                }
+    
+                $this->flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource);
+    
+                return $this->redirectHandler->redirectToResource($configuration, $newResource);
             }
-            if ($event->isStopped()) {
-                $this->flashHelper->addFlashFromEvent($configuration, $event);
-
-                return $this->redirectHandler->redirectToIndex($configuration, $newResource);
-            }
-
-            $this->repository->add($newResource);
-            $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
-
-            if (!$configuration->isHtmlRequest()) {
-                return $this->viewHandler->handle($configuration, View::create($newResource, 201));
-            }
-
-            $this->flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource);
-
-            return $this->redirectHandler->redirectToResource($configuration, $newResource);
         }
 
         if (!$configuration->isHtmlRequest()) {
@@ -282,30 +286,34 @@ class ResourceController extends Controller
 
         $form = $this->resourceFormFactory->create($configuration, $resource);
 
-        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH')) && $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
-            $resource = $form->getData();
-
-            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
-
-            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
-                throw new HttpException($event->getErrorCode(), $event->getMessage());
-            }
-            if ($event->isStopped()) {
-                $this->flashHelper->addFlashFromEvent($configuration, $event);
-
+        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))) {
+            $form->submit($request->request->get($form->getName(), !$request->isMethod('PATCH')));
+            
+            if($form->isValid()) {
+                $resource = $form->getData();
+    
+                $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
+    
+                if ($event->isStopped() && !$configuration->isHtmlRequest()) {
+                    throw new HttpException($event->getErrorCode(), $event->getMessage());
+                }
+                if ($event->isStopped()) {
+                    $this->flashHelper->addFlashFromEvent($configuration, $event);
+    
+                    return $this->redirectHandler->redirectToResource($configuration, $resource);
+                }
+    
+                $this->manager->flush();
+                $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
+    
+                if (!$configuration->isHtmlRequest()) {
+                    return $this->viewHandler->handle($configuration, View::create($resource, 204));
+                }
+    
+                $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
+    
                 return $this->redirectHandler->redirectToResource($configuration, $resource);
             }
-
-            $this->manager->flush();
-            $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
-
-            if (!$configuration->isHtmlRequest()) {
-                return $this->viewHandler->handle($configuration, View::create($resource, 204));
-            }
-
-            $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
-
-            return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
 
         if (!$configuration->isHtmlRequest()) {

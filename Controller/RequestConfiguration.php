@@ -120,7 +120,15 @@ class RequestConfiguration
      */
     public function getFormType()
     {
-        return $this->parameters->get('form', sprintf('%s_%s', $this->metadata->getApplicationName(), $this->metadata->getName()));
+        if($type = $this->parameters->get('form')) {
+            return $type;
+        } else {
+            if($this->metadata->hasClass('form')) {
+                return $this->metadata->getClass('form')['default'];
+            }
+
+            return sprintf('%s_%s', $this->metadata->getApplicationName(), $this->metadata->getName());
+        }
     }
 
     /**
