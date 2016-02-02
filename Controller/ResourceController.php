@@ -287,7 +287,7 @@ class ResourceController extends Controller
         $form = $this->resourceFormFactory->create($configuration, $resource);
 
         if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))) {
-            $form->submit($request->request->get($form->getName(), !$request->isMethod('PATCH')));
+            $form->handleRequest($request);
             
             if($form->isValid()) {
                 $resource = $form->getData();
