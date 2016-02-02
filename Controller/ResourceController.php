@@ -226,9 +226,9 @@ class ResourceController extends Controller
         $form = $this->resourceFormFactory->create($configuration, $newResource);
 
         if ($request->isMethod('POST')) {
-            $form->submit($request->request->get($form->getName()));
+            $form->handleRequest($request);
             
-            if($form->isValid()) {
+            if($form->isSubmitted() && $form->isValid()) {
                 $newResource = $form->getData();
 
                 $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
