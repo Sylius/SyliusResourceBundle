@@ -17,20 +17,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * @author Anna Walasek <anna.walasek@lakion.com>
  */
-class BookType extends AbstractResourceType
+class BookTranslationType extends AbstractResourceType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('translations', 'sylius_translations', [
-                'label' => 'title',
-                'type' => 'app_book_translation',
-            ])
-            ->add('author', 'text')
-        ;
+        $builder->add('title', 'text');
     }
 
     /**
@@ -38,6 +32,6 @@ class BookType extends AbstractResourceType
      */
     public function getName()
     {
-        return 'app_book';
+        return 'app_book_translation';
     }
 }
