@@ -3,5 +3,5 @@
 
 sylius:
     resource:
-        not_enabled: Verilen kaynak devre dışı
-        not_disabled: Verilen kaynak etkin
+        not_enabled: 该资源已被禁用
+        not_disabled: 该资源已启用
