@@ -14,7 +14,7 @@ namespace Sylius\Component\Resource\Provider;
 /**
  * @author Paweł Jędrzejewski <pawel@sylius.org>
  */
-interface LocaleProviderInterface
+interface TranslationLocaleProviderInterface
 {
     /**
      * @return string[]
