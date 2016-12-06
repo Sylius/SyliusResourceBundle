@@ -15,7 +15,6 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Translation\TranslatorBagInterface;
 
 /**
  * @author Paweł Jędrzejewski <pawel@sylius.org>
