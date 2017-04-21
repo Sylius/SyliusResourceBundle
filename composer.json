@@ -53,8 +53,8 @@
         "phpspec/phpspec": "^3.2",
         "phpunit/phpunit": "^5.6",
         "sensio/generator-bundle": "^3.1",
-        "sylius/grid-bundle": "^1.0",
-        "sylius/locale": "^1.0",
+        "sylius/grid-bundle": "^1.0@beta",
+        "sylius/locale": "^1.0@beta",
         "twig/twig": "^1.28"
     },
     "suggest": {
