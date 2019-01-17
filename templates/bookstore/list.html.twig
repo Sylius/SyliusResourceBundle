@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div id="dialog-form" title="Ajout d'un nouveau livre" style="display: none">
+
+        <form id="update_book">
+            <fieldset>
+                <label for="title">title</label>
+                <input type="text" name="title" id="title" value="" class="text ui-widget-content ui-corner-all">
+                <input type="hidden" name="id">
+
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
+    <input type="button" value="Ajouter" id="add_book">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script lang="js">
+
+        $(document).ready(function () {
+
+            $.getJSON('{{ path('app_book_index') }}').done(function (r) {
+                if (typeof r._embedded.items != "undefined") {
+                    var el = $("<ul></ul>")
+                    r._embedded.items.forEach(function (e) {
+                        el.append('<li class="edit_book" data-id="'+e.id+'">'+e.title+'<a href="#">Edit</a><a href="#" class="delete_book" data-id="'+e.id+'">Delete</a></li>')
+                    })
+
+                    $("body").append(el)
+                }
+
+            })
+
+        })
+
+        $("body").on("click","#add_book,.edit_book",function () {
+
+            var method = 'POST'
+            var label = 'Ajouter livre'
+            var id = null
+            var url = '{{ url('app_book_index') }}'
+
+            if (typeof $(this).data('id') != "undefined") {
+                method = 'PATCH'
+                label = 'Modifier livre'
+                id = $(this).data('id')
+                url = url + id
+
+                $.getJSON('{{ path('app_book_index') }}'+id).done(function (r) {
+                    if (typeof r != "undefined") {
+                        $("#update_book input[name=title]").val(r.title)
+                        $("#update_book input[name=id]").val(r.id)
+                    }
+
+                })
+            }
+
+            var dialog = $( "#dialog-form" ).dialog({
+                autoOpen: true,
+                height: 400,
+                width: 350,
+                modal: true,
+                buttons: {
+                    Sauvegarder: function () {
+
+
+                        var data = {title: $("#update_book input[name=title]").val()}
+
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            data: data,
+                            success: function(result) {
+                                location.reload()
+                            }
+                        });
+                    },
+                    Annuler: function() {
+                        dialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+                    $("#update_boo").reset()
+                    dialog.dialog( "close" );
+                }
+            });
+        })
+
+        $("body").on("click",".delete_book",function (e) {
+            e.preventDefault()
+            var id = $(this).data('id')
+            $.ajax({
+                url: '{{ url('app_book_index') }}'+id,
+                type: 'DELETE',
+                success: function(result) {
+                    location.reload()
+                }
+            });
+        })
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <style media="all">
+        li {
+            margin: 0.5em;
+
+        }
+        a {
+            margin-left: 0.3em;
+        }
+
+
+    </style>
+
+{% endblock %}
