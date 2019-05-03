@@ -65,7 +65,7 @@
         "symfony/dom-crawler": "4.1.8"
     },
     "replace": {
-        "sylius/mailer": "self.version"
+        "sylius/resource": "self.version"
     },
     "autoload": {
         "psr-4": {
