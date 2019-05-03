@@ -24,7 +24,10 @@ final class NewResourceFactory implements NewResourceFactoryInterface
     public function create(RequestConfiguration $requestConfiguration, FactoryInterface $factory): ResourceInterface
     {
         if (null === $method = $requestConfiguration->getFactoryMethod()) {
-            return $factory->createNew();
+            /** @var ResourceInterface $resource */
+            $resource = $factory->createNew();
+
+            return $resource;
         }
 
         if (is_array($method) && 2 === count($method)) {
