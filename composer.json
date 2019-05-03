@@ -43,9 +43,7 @@
     },
     "require-dev": {
         "akeneo/phpspec-skip-example-extension": "^3.0",
-        "doctrine/mongodb-odm": "^1.0",
         "doctrine/orm": "^2.5",
-        "doctrine/phpcr-odm": "^1.4",
         "jackalope/jackalope-doctrine-dbal": "^1.2",
         "lakion/api-test-case": "^2.0",
         "matthiasnoback/symfony-dependency-injection-test": "^2.0",
@@ -61,26 +59,22 @@
         "doctrine/orm": "^2.5",
         "sylius/locale": "^1.0"
     },
-    "config": {
-        "bin-dir": "bin"
+    "replace": {
+        "sylius/mailer": "self.version"
     },
     "autoload": {
-        "psr-4": { "Sylius\\Bundle\\ResourceBundle\\": "" }
+        "psr-4": {
+            "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
+            "Sylius\\Component\\Resource\\": "src/Component/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sylius\\Bundle\\ResourceBundle\\spec\\": "spec/",
-            "AppBundle\\": "test/src/AppBundle/"
+            "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
+            "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
+            "AppBundle\\": "src/Bundle/test/src/AppBundle/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../../*/*"
-        }
-    ],
     "extra": {
         "branch-alias": {
             "dev-master": "1.1-dev"
