@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 final class ORMTranslatableListener implements EventSubscriber
 {
@@ -39,7 +40,12 @@ final class ORMTranslatableListener implements EventSubscriber
         ContainerInterface $container
     ) {
         $this->resourceMetadataRegistry = $resourceMetadataRegistry;
-        $this->translatableEntityLocaleAssigner = $container->get('sylius.translatable_entity_locale_assigner');
+
+        $translatableEntityLocaleAssigner = $container->get('sylius.translatable_entity_locale_assigner');
+
+        Assert::isInstanceOf($translatableEntityLocaleAssigner, TranslatableEntityLocaleAssignerInterface::class);
+
+        $this->translatableEntityLocaleAssigner = $translatableEntityLocaleAssigner;
     }
 
     /**

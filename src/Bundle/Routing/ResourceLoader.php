@@ -114,7 +114,7 @@ final class ResourceLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function getResolver(): void
+    public function getResolver()
     {
         // Intentionally left blank.
     }
