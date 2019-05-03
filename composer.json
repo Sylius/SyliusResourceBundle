@@ -60,7 +60,7 @@
         "sylius/locale": "^1.0"
     },
     "replace": {
-        "sylius/mailer": "self.version"
+        "sylius/resource": "self.version"
     },
     "autoload": {
         "psr-4": {
