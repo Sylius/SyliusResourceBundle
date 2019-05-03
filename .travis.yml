@@ -28,6 +28,8 @@ script:
     - composer validate --strict
     - (cd src/Component && composer validate --strict)
 
+    - composer analyse
+
     - vendor/bin/phpspec run
     - (cd src/Component && vendor/bin/phpspec run)
 

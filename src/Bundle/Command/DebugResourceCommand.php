@@ -65,7 +65,7 @@ EOT
         if (null === $resource) {
             $this->listResources($output);
 
-            return;
+            return 0;
         }
 
         $metadata = $this->registry->get($resource);

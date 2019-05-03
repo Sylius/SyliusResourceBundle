@@ -44,11 +44,14 @@
     "require-dev": {
         "akeneo/phpspec-skip-example-extension": "^4.0",
         "doctrine/orm": "^2.5",
-        "jackalope/jackalope-doctrine-dbal": "^1.2",
         "lakion/api-test-case": "^3.1.0",
         "matthiasnoback/symfony-dependency-injection-test": "^3.0",
         "phpspec/phpspec": "^5.0",
+        "phpstan/phpstan-phpunit": "^0.11",
+        "phpstan/phpstan-shim": "^0.11",
+        "phpstan/phpstan-webmozart-assert": "^0.11",
         "phpunit/phpunit": "^7.0",
+        "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.2",
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.1.1",
@@ -80,6 +83,15 @@
             "AppBundle\\": "src/Bundle/test/src/AppBundle/"
         },
         "classmap": ["src/Bundle/test/app/AppKernel.php"]
+    },
+    "scripts": {
+        "analyse": [
+            "@php vendor/bin/ecs check src",
+            "@php vendor/bin/phpstan analyse --ansi -c phpstan.neon -l 5 src"
+        ],
+        "fix": [
+            "@php vendor/bin/ecs check src --fix"
+        ]
     },
     "extra": {
         "branch-alias": {

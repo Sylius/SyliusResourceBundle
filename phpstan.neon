@@ -1,0 +1,31 @@
+includes:
+    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    excludes_analyse:
+        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
+        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php
+        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
+        - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
+        - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
+        - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
+        - %currentWorkingDirectory%/src/Bundle/spec/*
+        - %currentWorkingDirectory%/src/Bundle/test/*
+        - %currentWorkingDirectory%/src/Bundle/Tests/*
+        - %currentWorkingDirectory%/src/Component/spec/*
+        - %currentWorkingDirectory%/src/Component/vendor/*
+
+    ignoreErrors:
+        # Symfony 3.4 compatibility
+        - '/Call to function method_exists\(\) with .Symfony\\\\Component…. and .getRootNode. will always evaluate to false/'
+        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::getRootNode\(\)/'
+        - '/Class Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder does not have a constructor and must be instantiated without any parameters/'
+        - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
+        - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
+
+        - '/Class Doctrine\\Bundle\\MongoDBBundle/'
+        - '/Class Doctrine\\Bundle\\PHPCRBundle/'

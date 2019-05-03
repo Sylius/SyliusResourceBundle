@@ -39,7 +39,10 @@ final class SingleResourceProvider implements SingleResourceProviderInterface
         $request = $requestConfiguration->getRequest();
 
         if ($request->attributes->has('id')) {
-            return $repository->find($request->attributes->get('id'));
+            /** @var ResourceInterface|null $resource */
+            $resource = $repository->find($request->attributes->get('id'));
+
+            return $resource;
         }
 
         if ($request->attributes->has('slug')) {
@@ -48,6 +51,9 @@ final class SingleResourceProvider implements SingleResourceProviderInterface
 
         $criteria = array_merge($criteria, $requestConfiguration->getCriteria());
 
-        return $repository->findOneBy($criteria);
+        /** @var ResourceInterface|null $resource */
+        $resource = $repository->findOneBy($criteria);
+
+        return $resource;
     }
 }
