@@ -2,7 +2,6 @@
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
-         colors="true"
 >
     <php>
         <server name="KERNEL_CLASS" value="AppKernel" />
@@ -11,8 +10,8 @@
 
     <testsuites>
         <testsuite name="SyliusResourceBundle Test Suite">
-            <directory>./test/</directory>
-            <directory>./Tests/</directory>
+            <directory>./src/Bundle/test/</directory>
+            <directory>./src/Bundle/Tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
