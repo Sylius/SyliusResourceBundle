@@ -131,7 +131,9 @@ class InMemoryRepository implements RepositoryInterface
 
         $results = $this->applyCriteria($this->findAll(), $criteria);
 
-        if ($result = reset($results)) {
+        /** @var ResourceInterface|false $result */
+        $result = reset($results);
+        if ($result !== false) {
             return $result;
         }
 
@@ -165,9 +167,9 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * @param ResourceInterface[] $resources
+     * @param object[] $resources
      *
-     * @return ResourceInterface[]|array
+     * @return object[]|array
      */
     private function applyCriteria(array $resources, array $criteria): array
     {
@@ -184,9 +186,9 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * @param ResourceInterface[] $resources
+     * @param object[] $resources
      *
-     * @return ResourceInterface[]
+     * @return object[]
      */
     private function applyOrder(array $resources, array $orderBy): array
     {

@@ -58,6 +58,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
     {
         $parameters = [];
 
+        /** @var string[] $apiVersionHeaders */
         $apiVersionHeaders = $request->headers->get(self::API_VERSION_HEADER, null, false);
         foreach ($apiVersionHeaders as $apiVersionHeader) {
             if (preg_match(self::API_VERSION_REGEXP, $apiVersionHeader, $matches)) {
@@ -65,6 +66,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
             }
         }
 
+        /** @var string[] $apiGroupsHeaders */
         $apiGroupsHeaders = $request->headers->get(self::API_GROUPS_HEADER, null, false);
         foreach ($apiGroupsHeaders as $apiGroupsHeader) {
             if (preg_match(self::API_GROUPS_REGEXP, $apiGroupsHeader, $matches)) {

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
+use Webmozart\Assert\Assert;
+
 class AbstractTranslation implements TranslationInterface
 {
     /** @var string|null */
@@ -26,7 +28,12 @@ class AbstractTranslation implements TranslationInterface
      */
     public function getTranslatable(): TranslatableInterface
     {
-        return $this->translatable;
+        $translatable = $this->translatable;
+
+        // Return typehint should account for null value.
+        Assert::notNull($translatable);
+
+        return $translatable;
     }
 
     /**
