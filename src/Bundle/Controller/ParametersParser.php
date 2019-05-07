@@ -69,7 +69,7 @@ final class ParametersParser implements ParametersParserInterface
 
     private function parseRequestValueExpression(string $expression, Request $request)
     {
-        $expression = preg_replace_callback('/(\$\w+)/', function ($matches) use ($request) {
+        $expression = (string) preg_replace_callback('/(\$\w+)/', function ($matches) use ($request) {
             $variable = $request->get(substr($matches[1], 1));
 
             if (is_array($variable) || is_object($variable)) {
@@ -90,6 +90,7 @@ final class ParametersParser implements ParametersParserInterface
     {
         [$typecast, $castedValue] = explode(' ', $parameter, 2);
 
+        /** @var callable $castFunctionName */
         $castFunctionName = substr($typecast, 2) . 'val';
 
         Assert::oneOf($castFunctionName, ['intval', 'floatval', 'boolval'], 'Variable can be casted only to int, float or bool.');

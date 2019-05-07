@@ -29,3 +29,6 @@ parameters:
 
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
+
+        # Calls to Event::getResponse() after Event::hasResponse() has been made
+        - '/should return Symfony\\Component\\HttpFoundation\\Response but returns Symfony\\Component\\HttpFoundation\\Response\|null/'

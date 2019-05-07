@@ -60,6 +60,7 @@ EOT
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var string|null $resource */
         $resource = $input->getArgument('resource');
 
         if (null === $resource) {
@@ -76,6 +77,7 @@ EOT
     private function listResources(OutputInterface $output): void
     {
         $resources = $this->registry->getAll();
+        $resources = is_array($resources) ? $resources : iterator_to_array($resources);
         ksort($resources);
 
         $table = new Table($output);

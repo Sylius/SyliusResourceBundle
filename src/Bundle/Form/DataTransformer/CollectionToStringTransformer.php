@@ -68,6 +68,6 @@ final class CollectionToStringTransformer implements DataTransformerInterface
             return new ArrayCollection();
         }
 
-        return new ArrayCollection(explode($this->delimiter, $value));
+        return new ArrayCollection(explode($this->delimiter, $value) ?: []);
     }
 }

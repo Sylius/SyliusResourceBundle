@@ -62,6 +62,15 @@ final class SyliusResourceExtension extends Extension
         $container->addObjectResource(DoctrinePHPCRDriver::class);
     }
 
+    public function getConfiguration(array $config, ContainerBuilder $container): Configuration
+    {
+        $configuration = new Configuration();
+
+        $container->addObjectResource($configuration);
+
+        return $configuration;
+    }
+
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
         foreach ($resources as $alias => $resource) {
