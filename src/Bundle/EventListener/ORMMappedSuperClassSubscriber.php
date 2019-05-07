@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Webmozart\Assert\Assert;
 
 final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 {
@@ -64,8 +66,12 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
         if (!class_exists($class)) {
             return;
         }
+
+        $metadataDriver = $configuration->getMetadataDriverImpl();
+        Assert::isInstanceOf($metadataDriver, MappingDriver::class);
+
         foreach (class_parents($class) as $parent) {
-            if (false === in_array($parent, $configuration->getMetadataDriverImpl()->getAllClassNames(), true)) {
+            if (false === in_array($parent, $metadataDriver->getAllClassNames(), true)) {
                 continue;
             }
 
@@ -78,7 +84,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
             $parentMetadata->wakeupReflection($this->getReflectionService());
 
             // Load Metadata
-            $configuration->getMetadataDriverImpl()->loadMetadataForClass($parent, $parentMetadata);
+            $metadataDriver->loadMetadataForClass($parent, $parentMetadata);
 
             if (false === $this->isResource($parentMetadata)) {
                 continue;

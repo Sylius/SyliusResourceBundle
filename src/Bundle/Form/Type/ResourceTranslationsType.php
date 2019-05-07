@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class ResourceTranslationsType extends AbstractType
 {
@@ -41,9 +42,13 @@ final class ResourceTranslationsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            /** @var TranslationInterface[] $translations */
+            /** @var TranslationInterface[]|null[] $translations */
             $translations = $event->getData();
-            $translatable = $event->getForm()->getParent()->getData();
+
+            $parentForm = $event->getForm()->getParent();
+            Assert::notNull($parentForm);
+
+            $translatable = $parentForm->getData();
 
             foreach ($translations as $localeCode => $translation) {
                 if (null === $translation) {

@@ -59,9 +59,9 @@ final class ORMTranslatableListener implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         $classMetadata = $eventArgs->getClassMetadata();
-        $reflection = $classMetadata->reflClass;
+        $reflection = $classMetadata->getReflectionClass();
 
-        if (!$reflection || $reflection->isAbstract()) {
+        if ($reflection->isAbstract()) {
             return;
         }
 
