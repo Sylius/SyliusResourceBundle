@@ -202,7 +202,9 @@ class RequestConfiguration
      */
     public function getRedirectReferer()
     {
+        /** @var array $redirect */
         $redirect = $this->parameters->get('redirect');
+        /** @var string $referer */
         $referer = $this->request->headers->get('referer');
 
         if (!is_array($redirect) || empty($redirect['referer'])) {
