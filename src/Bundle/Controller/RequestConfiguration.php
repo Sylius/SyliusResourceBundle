@@ -363,7 +363,7 @@ class RequestConfiguration
      */
     public function getRequestParameter($parameter, $defaults = [])
     {
-        return array_replace_recursive(
+        return (array) array_replace_recursive(
             $defaults,
             $this->request->get($parameter, [])
         );
