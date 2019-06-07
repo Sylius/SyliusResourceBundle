@@ -26,6 +26,8 @@ parameters:
         - '/Class Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder does not have a constructor and must be instantiated without any parameters/'
         - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
         - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
+        - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
+        - '/Parameter \#1 \$event of method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) expects object, string given\./'
 
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
