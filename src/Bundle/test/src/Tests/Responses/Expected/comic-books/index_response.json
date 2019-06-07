@@ -19,12 +19,18 @@
       "items": [
         {
           "id": @integer@,
-          "author": "Andrea Sorrentino",
+          "author": {
+              "first_name": "Andrea",
+              "last_name": "Sorrentino"
+          },
           "title": "Old Man Logan"
         },
         {
           "id": @integer@,
-          "author": "Brian Michael Bendis",
+          "author": {
+              "first_name": "Brian Michael",
+              "last_name": "Bendis"
+          },
           "title": "Civil War II"
         }
       ]

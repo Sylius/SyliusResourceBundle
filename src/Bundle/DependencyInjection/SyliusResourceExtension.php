@@ -73,6 +73,14 @@ final class SyliusResourceExtension extends Extension
 
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
+        $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {
+            return $result || in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_ORM, SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true);
+        }, false);
+
+        if ($integrateDoctrine) {
+            $loader->load('services/integrations/doctrine.xml');
+        }
+
         foreach ($resources as $alias => $resource) {
             if (!in_array($resource['driver'], $drivers, true)) {
                 throw new InvalidArgumentException(sprintf(

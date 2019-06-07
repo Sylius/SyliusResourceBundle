@@ -41,6 +41,11 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
             throw new \RuntimeException('The default form factory does not support entity classes with multiple primary keys.');
         }
 
+        $this->doBuild($classMetadata, $formBuilder);
+    }
+
+    private function doBuild(ClassMetadataInfo $classMetadata, FormBuilderInterface $formBuilder): void
+    {
         $fields = (array) $classMetadata->fieldNames;
 
         if (!$classMetadata->isIdentifierNatural()) {
@@ -49,6 +54,11 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
 
         foreach ($fields as $fieldName) {
             $options = [];
+
+            // Skip fields coming from embeddables
+            if (strpos($fieldName, '.') !== false) {
+                continue;
+            }
 
             if (in_array($fieldName, ['createdAt', 'updatedAt'], true)) {
                 continue;
@@ -59,6 +69,14 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
             }
 
             $formBuilder->add($fieldName, null, $options);
+        }
+
+        foreach ($classMetadata->embeddedClasses as $fieldName => $embeddedMapping) {
+            $nestedFormBuilder = $formBuilder->create($fieldName, null, ['data_class' => $embeddedMapping['class'], 'compound' => true]);
+
+            $this->doBuild($this->entityManager->getClassMetadata($embeddedMapping['class']), $nestedFormBuilder);
+
+            $formBuilder->add($nestedFormBuilder);
         }
 
         foreach ($classMetadata->getAssociationMappings() as $fieldName => $associationMapping) {

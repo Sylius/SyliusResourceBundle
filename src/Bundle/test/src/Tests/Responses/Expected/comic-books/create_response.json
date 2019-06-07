@@ -1,5 +1,8 @@
 {
   "id": @integer@,
-  "author": "Joe Kelly",
+  "author": {
+    "first_name": "Joe",
+    "last_name": "Kelly"
+  },
   "title": "Deadpool #1-69"
 }

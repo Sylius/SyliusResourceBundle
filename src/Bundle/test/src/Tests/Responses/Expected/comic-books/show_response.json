@@ -1,5 +1,8 @@
 {
   "id": @integer@,
-  "author": "Andrea Sorrentino",
+  "author": {
+    "first_name": "Andrea",
+    "last_name": "Sorrentino"
+  },
   "title": "Old Man Logan"
 }
