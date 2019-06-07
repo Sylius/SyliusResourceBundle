@@ -1,9 +1,15 @@
 AppBundle\Entity\ComicBook:
     comic-book1:
         title:  "Old Man Logan"
-        authorFirstName: "Andrea"
-        authorLastName: "Sorrentino"
+        author: "@sorrentino"
     comic-book2:
         title: "Civil War II"
-        authorFirstName: "Brian Michael"
-        authorLastName: "Bendis"
+        author: "@bendis"
+
+AppBundle\Entity\Author:
+    sorrentino:
+        firstName: "Andrea"
+        lastName: "Sorrentino"
+    bendis:
+        firstName: "Brian Michael"
+        lastName: "Bendis"

@@ -1,5 +1,5 @@
 AppBundle\Entity\Book:
-    type: entity
+    type: mappedSuperclass
     table: app_book
     id:
         id:

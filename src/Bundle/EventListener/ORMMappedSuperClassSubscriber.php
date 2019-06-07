@@ -34,29 +34,10 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        $this->convertToEntityIfNeeded($metadata);
-
         if (!$metadata->isMappedSuperclass) {
             $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
         } else {
             $this->unsetAssociationMappings($metadata);
-        }
-    }
-
-    private function convertToEntityIfNeeded(ClassMetadataInfo $metadata): void
-    {
-        if (false === $metadata->isMappedSuperclass) {
-            return;
-        }
-
-        try {
-            $resourceMetadata = $this->resourceRegistry->getByClass($metadata->getName());
-        } catch (\InvalidArgumentException $exception) {
-            return;
-        }
-
-        if ($metadata->getName() === $resourceMetadata->getClass('model')) {
-            $metadata->isMappedSuperclass = false;
         }
     }
 

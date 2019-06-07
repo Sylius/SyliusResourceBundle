@@ -35,8 +35,10 @@ final class ComicBookApiTest extends JsonApiTestCase
 <<<EOT
         {
             "title": "Deadpool #1-69",
-            "authorFirstName": "Joe",
-            "authorLastName": "Kelly"
+            "author": {
+                "firstName": "Joe",
+                "lastName": "Kelly"
+            }
         }
 EOT;
 
@@ -54,8 +56,10 @@ EOT;
 <<<EOT
         {
             "title": "Deadpool #1-69",
-            "authorFirstName": "Joe",
-            "authorLastName": "Kelly"
+            "author": {
+                "firstName": "Joe",
+                "lastName": "Kelly"
+            }
         }
 EOT;
 
@@ -75,8 +79,10 @@ EOT;
 <<<EOT
         {
             "title": "Deadpool #1-69",
-            "authorFirstName": "Joe",
-            "authorLastName": "Kelly"
+            "author": {
+                "firstName": "Joe",
+                "lastName": "Kelly"
+            }
         }
 EOT;
 
@@ -95,8 +101,10 @@ EOT;
         $data =
  <<<EOT
         {
-            "authorFirstName": "Joe",
-            "authorLastName": "Kelly"
+            "author": {
+                "firstName": "Joe",
+                "lastName": "Kelly"
+            }
         }
 EOT;
 

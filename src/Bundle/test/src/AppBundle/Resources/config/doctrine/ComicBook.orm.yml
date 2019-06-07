@@ -1,5 +1,5 @@
 AppBundle\Entity\ComicBook:
-    type: entity
+    type: mappedSuperclass
     table: app_comic_book
     id:
         id:
@@ -8,12 +8,9 @@ AppBundle\Entity\ComicBook:
             generator:
                 strategy: AUTO
     fields:
-        authorFirstName:
-            type: string
-            length: 255
-        authorLastName:
-            type: string
-            length: 255
         title:
             type: string
             length: 255
+    embedded:
+        author:
+            class: AppBundle\Entity\Author

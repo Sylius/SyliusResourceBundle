@@ -28,11 +28,8 @@ class ComicBook implements ResourceInterface
     /** @var int */
     private $id;
 
-    /** @var string */
-    private $authorFirstName;
-
-    /** @var string */
-    private $authorLastName;
+    /** @var Author */
+    private $author;
 
     /** @var string */
     private $title;
@@ -61,43 +58,23 @@ class ComicBook implements ResourceInterface
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthorFirstName()
+    public function getAuthorFirstName(): ?string
     {
-        return $this->authorFirstName;
+        return $this->author ? $this->author->getFirstName() : null;
     }
 
-    /**
-     * @param string $authorFirstName
-     */
-    public function setAuthorFirstName($authorFirstName)
+    public function getAuthorLastName(): ?string
     {
-        $this->authorFirstName = $authorFirstName;
+        return $this->author ? $this->author->getLastName() : null;
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthorLastName()
+    public function getAuthor(): ?Author
     {
-        return $this->authorLastName;
+        return $this->author;
     }
 
-    /**
-     * @param string $authorLastName
-     */
-    public function setAuthorLastName($authorLastName)
+    public function setAuthor(?Author $author): void
     {
-        $this->authorLastName = $authorLastName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return sprintf('%s %s', $this->authorFirstName, $this->authorLastName);
+        $this->author = $author;
     }
 }
