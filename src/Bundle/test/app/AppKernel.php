@@ -40,6 +40,7 @@ class AppKernel extends Kernel
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new \winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
             new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
             new AppBundle\AppBundle(),

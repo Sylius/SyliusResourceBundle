@@ -1,0 +1,6 @@
+AppBundle\Entity\GedmoExtendedExample:
+    type: mappedSuperclass
+    table: gedmo
+    fields:
+        extra:
+            type: string

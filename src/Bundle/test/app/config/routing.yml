@@ -3,6 +3,11 @@ app_book:
         alias: app.book
     type: sylius.resource_api
 
+app_gedmo:
+    resource: |
+        alias: app.gedmo
+    type: sylius.resource_api
+
 app_book_sortable_index:
     path: /sortable-books/
     methods: [GET]

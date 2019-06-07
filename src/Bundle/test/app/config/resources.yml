@@ -17,3 +17,7 @@ sylius_resource:
         app.comic_book:
             classes:
                 model: AppBundle\Entity\ComicBook
+
+        app.gedmo:
+            classes:
+                model: AppBundle\Entity\GedmoExtendedExample

@@ -42,6 +42,12 @@ fos_rest:
         rules:
             - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: true }
 
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    orm:
+        default:
+            sortable: true
+
 services:
     test.translation_locale_provider:
         class: Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider
