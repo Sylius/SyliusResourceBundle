@@ -1,7 +1,7 @@
 SyliusResourceBundle [![Build status...](https://secure.travis-ci.org/Sylius/SyliusResourceBundle.png?branch=master)](http://travis-ci.org/Sylius/SyliusResourceBundle)
 ====================
 
-Easy CRUD and persistence for Symfony2 apps.
+Easy CRUD and persistence for Symfony apps.
 
 During our work on Sylius, we noticed a lot of duplicated code across all controllers. We started looking for good solution of the problem.
 We're not big fans of administration generators (they're cool, but not for our usecase!) - we wanted something simpler and more flexible.
