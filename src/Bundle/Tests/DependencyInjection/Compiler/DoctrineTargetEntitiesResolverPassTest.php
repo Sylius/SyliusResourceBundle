@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -23,16 +24,14 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
     /**
      * @test
      */
-    public function it_adds_method_call_to_resolve_doctrine_target_entities_with_interface_given_as_fqcn(): void
+    public function it_adds_method_call_to_resolve_doctrine_target_entities(): void
     {
         $this->setDefinition('doctrine.orm.listeners.resolve_target_entity', new Definition());
 
         $this->setParameter(
             'sylius.resources',
-            ['app.loremipsum' => ['classes' => ['interface' => \Countable::class]]]
+            ['app.loremipsum' => ['classes' => ['model' => \stdClass::class, 'interface' => \Countable::class]]]
         );
-
-        $this->setParameter('app.model.loremipsum.class', \stdClass::class);
 
         $this->compile();
 
@@ -41,45 +40,6 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
             'addResolveTargetEntity',
             [\Countable::class, \stdClass::class, []]
         );
-    }
-
-    /**
-     * @test
-     */
-    public function it_adds_method_call_to_resolve_doctrine_target_entities_with_interface_given_as_parameter(): void
-    {
-        $this->setDefinition('doctrine.orm.listeners.resolve_target_entity', new Definition());
-
-        $this->setParameter(
-            'sylius.resources',
-            ['app.loremipsum' => ['classes' => ['interface' => 'app.interface.loremipsum.class']]]
-        );
-
-        $this->setParameter('app.model.loremipsum.class', \stdClass::class);
-        $this->setParameter('app.interface.loremipsum.class', \Countable::class);
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'doctrine.orm.listeners.resolve_target_entity',
-            'addResolveTargetEntity',
-            [\Countable::class, \stdClass::class, []]
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function it_ignores_resources_without_interface(): void
-    {
-        $this->setDefinition('doctrine.orm.listeners.resolve_target_entity', new Definition());
-
-        $this->setParameter(
-            'sylius.resources',
-            ['app.loremipsum' => ['classes' => ['model' => \stdClass::class]]]
-        );
-
-        $this->compile();
     }
 
     /**
@@ -104,6 +64,17 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
      */
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass());
+        $targetEntitiesResolver = new class() implements TargetEntitiesResolverInterface {
+            public function resolve(array $resourcesConfiguration): array
+            {
+                if ($resourcesConfiguration === ['app.loremipsum' => ['classes' => ['model' => \stdClass::class, 'interface' => \Countable::class]]]) {
+                    return [\Countable::class => \stdClass::class];
+                }
+
+                return [];
+            }
+        };
+
+        $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass($targetEntitiesResolver));
     }
 }

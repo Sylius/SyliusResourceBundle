@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
 use Doctrine\Common\EventSubscriber;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolverInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -24,9 +25,14 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
  */
 final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** @var TargetEntitiesResolverInterface */
+    private $targetEntitiesResolver;
+
+    public function __construct(TargetEntitiesResolverInterface $targetEntitiesResolver)
+    {
+        $this->targetEntitiesResolver = $targetEntitiesResolver;
+    }
+
     public function process(ContainerBuilder $container): void
     {
         try {
@@ -36,13 +42,9 @@ final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
             return;
         }
 
-        $interfaces = $this->getInterfacesMapping($resources);
+        $interfaces = $this->targetEntitiesResolver->resolve($resources);
         foreach ($interfaces as $interface => $model) {
-            $resolveTargetEntityListener->addMethodCall('addResolveTargetEntity', [
-                $this->getInterface($container, $interface),
-                $this->getClass($container, $model),
-                [],
-            ]);
+            $resolveTargetEntityListener->addMethodCall('addResolveTargetEntity', [$interface, $model, []]);
         }
 
         $resolveTargetEntityListenerClass = $container->getParameterBag()->resolveValue($resolveTargetEntityListener->getClass());
@@ -53,61 +55,5 @@ final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
         } elseif (!$resolveTargetEntityListener->hasTag('doctrine.event_listener')) {
             $resolveTargetEntityListener->addTag('doctrine.event_listener', ['event' => 'loadClassMetadata']);
         }
-    }
-
-    private function getInterfacesMapping(array $resources): array
-    {
-        $interfaces = [];
-        foreach ($resources as $alias => $configuration) {
-            if (isset($configuration['classes']['interface'])) {
-                $alias = explode('.', $alias);
-
-                if (!isset($alias[0], $alias[1])) {
-                    throw new \RuntimeException(sprintf('Error configuring "%s" resource. The resource alias should follow the "prefix.name" format.', $alias[0]));
-                }
-
-                $interfaces[$configuration['classes']['interface']] = sprintf('%s.model.%s.class', $alias[0], $alias[1]);
-            }
-        }
-
-        return $interfaces;
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    private function getInterface(ContainerBuilder $container, string $key): string
-    {
-        if ($container->hasParameter($key)) {
-            return $container->getParameter($key);
-        }
-
-        if (interface_exists($key)) {
-            return $key;
-        }
-
-        throw new \InvalidArgumentException(
-            sprintf('The interface %s does not exist.', $key)
-        );
-    }
-
-    /**
-     * @param string $key
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function getClass(ContainerBuilder $container, $key): string
-    {
-        if ($container->hasParameter($key)) {
-            return $container->getParameter($key);
-        }
-
-        if (class_exists($key)) {
-            return $key;
-        }
-
-        throw new \InvalidArgumentException(
-            sprintf('The class %s does not exist.', $key)
-        );
     }
 }
