@@ -109,7 +109,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
         $this->assertContainerBuilderHasService('app.factory.book');
         $this->assertContainerBuilderHasService('app.factory.comic_book');
-        $this->assertContainerBuilderHasAlias(BookFactory::class, 'app.factory.comic_book');
+
+        $this->assertContainerBuilderHasAlias(sprintf('%s $bookFactory', BookFactory::class), 'app.factory.book');
+        $this->assertContainerBuilderHasAlias(sprintf('%s $comicBookFactory', BookFactory::class), 'app.factory.comic_book');
     }
 
     /**
