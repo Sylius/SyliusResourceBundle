@@ -110,7 +110,13 @@ abstract class AbstractDriver implements DriverInterface
         $container->setDefinition($metadata->getServiceId('factory'), $definition);
 
         if (method_exists($container, 'registerAliasForArgument')) {
-            foreach (class_implements($factoryClass) as $typehintClass) {
+            $typehintClasses = array_merge(
+                class_implements($factoryClass),
+                [$factoryClass],
+                class_parents($factoryClass)
+            );
+
+            foreach ($typehintClasses as $typehintClass) {
                 $container->registerAliasForArgument(
                     $metadata->getServiceId('factory'),
                     $typehintClass,

@@ -58,7 +58,13 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
 
         if (method_exists($container, 'registerAliasForArgument')) {
-            foreach (class_implements($repositoryClass) as $typehintClass) {
+            $typehintClasses = array_merge(
+                class_implements($repositoryClass),
+                [$repositoryClass],
+                class_parents($repositoryClass)
+            );
+
+            foreach ($typehintClasses as $typehintClass) {
                 $container->registerAliasForArgument(
                     $metadata->getServiceId('repository'),
                     $typehintClass,
