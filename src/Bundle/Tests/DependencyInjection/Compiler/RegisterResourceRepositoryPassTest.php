@@ -58,6 +58,8 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
         );
 
         $this->compile();
+
+        $this->assertContainerBuilderNotHasService('sylius.registry.resource_repository');
     }
 
     /**
