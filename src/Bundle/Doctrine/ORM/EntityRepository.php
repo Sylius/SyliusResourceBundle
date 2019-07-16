@@ -80,32 +80,33 @@ class EntityRepository extends BaseEntityRepository implements RepositoryInterfa
 
             $name = $this->getPropertyName($property);
 
-            if('' === $value) {
+            if ('' === $value) {
                 continue;
             }
 
             if (null === $value) {
                 $queryBuilder->andWhere($queryBuilder->expr()->isNull($name));
+
                 continue;
             }
 
             if (is_array($value)) {
                 $queryBuilder->andWhere($queryBuilder->expr()->in($name, $value));
+
                 continue;
             }
 
             $parameter = str_replace('.', '_', $property);
-            if(is_string($value)) {
-                $expression = $queryBuilder->expr()->like($name, ':'. $parameter);
+            if (is_string($value)) {
+                $expression = $queryBuilder->expr()->like($name, ':' . $parameter);
             } else {
-                $expression = $queryBuilder->expr()->eq($name, ':'.$parameter);
+                $expression = $queryBuilder->expr()->eq($name, ':' . $parameter);
             }
 
             $queryBuilder
                 ->andWhere($expression)
                 ->setParameter($parameter, $value)
             ;
-
         }
     }
 
