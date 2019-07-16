@@ -115,6 +115,7 @@ EOT;
 
         $this->client->request('GET', '/books/' . $objects['book1']->getId());
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'books/show_response');
     }
 
@@ -198,9 +199,22 @@ EOT;
      */
     public function it_applies_filtering_for_existing_field()
     {
-        $this->loadFixturesFromFile('more_books.yml');
+        $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['author' => 'J.R.R. Tolkien']]);
+        $response = $this->client->getResponse();
+
+        $this->assertResponseCode($response, Response::HTTP_OK);
+    }
+
+    /**
+     * @test
+     */
+    public function it_applies_partial_filtering_for_an_existing_field()
+    {
+        $this->loadFixturesFromFile('more_books.yml');
+
+        $this->client->request('GET', '/filterable-books/', ['criteria' => ['author' => 'Tolkien']]);
         $response = $this->client->getResponse();
 
         $this->assertResponseCode($response, Response::HTTP_OK);
