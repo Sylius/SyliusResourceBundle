@@ -38,7 +38,7 @@
         "symfony/validator": "^3.4|^4.2",
         "symfony/yaml": "^3.4|^4.2",
         "white-october/pagerfanta-bundle": "^1.0",
-        "willdurand/hateoas-bundle": "^1.2",
+        "willdurand/hateoas-bundle": "^2.0",
         "winzou/state-machine-bundle": "^0.3"
     },
     "require-dev": {
