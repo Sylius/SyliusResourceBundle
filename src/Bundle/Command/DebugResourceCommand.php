@@ -36,7 +36,7 @@ final class DebugResourceCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('sylius:debug:resource');
         $this->setDescription('Debug resource metadata.');
@@ -58,7 +58,7 @@ EOT
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         /** @var string|null $resource */
         $resource = $input->getArgument('resource');
@@ -72,10 +72,13 @@ EOT
         $metadata = $this->registry->get($resource);
 
         $this->debugResource($metadata, $output);
+
+        return 0;
     }
 
     private function listResources(OutputInterface $output): void
     {
+        /** @var iterable<MetadataInterface> $resources */
         $resources = $this->registry->getAll();
         $resources = is_array($resources) ? $resources : iterator_to_array($resources);
         ksort($resources);

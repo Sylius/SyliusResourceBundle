@@ -39,9 +39,16 @@ final class RecursiveTransformer implements DataTransformerInterface
 
         $this->assertTransformationValueType($values, Collection::class);
 
-        return $values->map(function ($value) {
-            return $this->decoratedTransformer->transform($value);
-        });
+        return $values->map(
+            /**
+             * @param mixed $value
+             *
+             * @return mixed
+             */
+            function ($value) {
+                return $this->decoratedTransformer->transform($value);
+            }
+        );
     }
 
     /**
@@ -55,12 +62,21 @@ final class RecursiveTransformer implements DataTransformerInterface
 
         $this->assertTransformationValueType($values, Collection::class);
 
-        return $values->map(function ($value) {
-            return $this->decoratedTransformer->reverseTransform($value);
-        });
+        return $values->map(
+            /**
+             * @param mixed $value
+             *
+             * @return mixed
+             */
+            function ($value) {
+                return $this->decoratedTransformer->reverseTransform($value);
+            }
+        );
     }
 
     /**
+     * @param mixed $value
+     *
      * @throws TransformationFailedException
      */
     private function assertTransformationValueType($value, string $expectedType): void

@@ -196,8 +196,9 @@ class ResourceController extends Controller
             if ($event->isStopped()) {
                 $this->flashHelper->addFlashFromEvent($configuration, $event);
 
-                if ($event->hasResponse()) {
-                    return $event->getResponse();
+                $eventResponse = $event->getResponse();
+                if (null !== $eventResponse) {
+                    return $eventResponse;
                 }
 
                 return $this->redirectHandler->redirectToIndex($configuration, $newResource);
@@ -219,8 +220,9 @@ class ResourceController extends Controller
                 return $this->viewHandler->handle($configuration, View::create($newResource, Response::HTTP_CREATED));
             }
 
-            if ($postEvent->hasResponse()) {
-                return $postEvent->getResponse();
+            $postEventResponse = $postEvent->getResponse();
+            if (null !== $postEventResponse) {
+                return $postEventResponse;
             }
 
             return $this->redirectHandler->redirectToResource($configuration, $newResource);
@@ -231,8 +233,9 @@ class ResourceController extends Controller
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource);
-        if ($initializeEvent->hasResponse()) {
-            return $initializeEvent->getResponse();
+        $initializeEventResponse = $initializeEvent->getResponse();
+        if (null !== $initializeEventResponse) {
+            return $initializeEventResponse;
         }
 
         $view = View::create()
@@ -270,8 +273,9 @@ class ResourceController extends Controller
             if ($event->isStopped()) {
                 $this->flashHelper->addFlashFromEvent($configuration, $event);
 
-                if ($event->hasResponse()) {
-                    return $event->getResponse();
+                $eventResponse = $event->getResponse();
+                if (null !== $eventResponse) {
+                    return $eventResponse;
                 }
 
                 return $this->redirectHandler->redirectToResource($configuration, $resource);
@@ -304,8 +308,9 @@ class ResourceController extends Controller
                 return $this->viewHandler->handle($configuration, $view);
             }
 
-            if ($postEvent->hasResponse()) {
-                return $postEvent->getResponse();
+            $postEventResponse = $postEvent->getResponse();
+            if (null !== $postEventResponse) {
+                return $postEventResponse;
             }
 
             return $this->redirectHandler->redirectToResource($configuration, $resource);
@@ -316,8 +321,9 @@ class ResourceController extends Controller
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
-        if ($initializeEvent->hasResponse()) {
-            return $initializeEvent->getResponse();
+        $initializeEventResponse = $initializeEvent->getResponse();
+        if (null !== $initializeEventResponse) {
+            return $initializeEventResponse;
         }
 
         $view = View::create()
@@ -353,8 +359,9 @@ class ResourceController extends Controller
         if ($event->isStopped()) {
             $this->flashHelper->addFlashFromEvent($configuration, $event);
 
-            if ($event->hasResponse()) {
-                return $event->getResponse();
+            $eventResponse = $event->getResponse();
+            if (null !== $eventResponse) {
+                return $eventResponse;
             }
 
             return $this->redirectHandler->redirectToIndex($configuration, $resource);
@@ -385,8 +392,9 @@ class ResourceController extends Controller
             return $this->viewHandler->handle($configuration, View::create(null, Response::HTTP_NO_CONTENT));
         }
 
-        if ($postEvent->hasResponse()) {
-            return $postEvent->getResponse();
+        $postEventResponse = $postEvent->getResponse();
+        if (null !== $postEventResponse) {
+            return $postEventResponse;
         }
 
         return $this->redirectHandler->redirectToIndex($configuration, $resource);
@@ -417,8 +425,9 @@ class ResourceController extends Controller
             if ($event->isStopped()) {
                 $this->flashHelper->addFlashFromEvent($configuration, $event);
 
-                if ($event->hasResponse()) {
-                    return $event->getResponse();
+                $eventResponse = $event->getResponse();
+                if (null !== $eventResponse) {
+                    return $eventResponse;
                 }
 
                 return $this->redirectHandler->redirectToIndex($configuration, $resource);
@@ -448,8 +457,11 @@ class ResourceController extends Controller
 
         $this->flashHelper->addSuccessFlash($configuration, ResourceActions::BULK_DELETE);
 
-        if (isset($postEvent) && $postEvent->hasResponse()) {
-            return $postEvent->getResponse();
+        if (isset($postEvent)) {
+            $postEventResponse = $postEvent->getResponse();
+            if (null !== $postEventResponse) {
+                return $postEventResponse;
+            }
         }
 
         return $this->redirectHandler->redirectToIndex($configuration);
@@ -474,8 +486,9 @@ class ResourceController extends Controller
         if ($event->isStopped()) {
             $this->flashHelper->addFlashFromEvent($configuration, $event);
 
-            if ($event->hasResponse()) {
-                return $event->getResponse();
+            $eventResponse = $event->getResponse();
+            if (null !== $eventResponse) {
+                return $eventResponse;
             }
 
             return $this->redirectHandler->redirectToResource($configuration, $resource);
@@ -512,8 +525,9 @@ class ResourceController extends Controller
             return $this->viewHandler->handle($configuration, $view);
         }
 
-        if ($postEvent->hasResponse()) {
-            return $postEvent->getResponse();
+        $postEventResponse = $postEvent->getResponse();
+        if (null !== $postEventResponse) {
+            return $postEventResponse;
         }
 
         return $this->redirectHandler->redirectToResource($configuration, $resource);

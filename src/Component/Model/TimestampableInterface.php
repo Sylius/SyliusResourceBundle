@@ -17,9 +17,11 @@ interface TimestampableInterface
 {
     public function getCreatedAt(): ?\DateTimeInterface;
 
+    /** @psalm-suppress MissingReturnType */
     public function setCreatedAt(?\DateTimeInterface $createdAt);
 
     public function getUpdatedAt(): ?\DateTimeInterface;
 
+    /** @psalm-suppress MissingReturnType */
     public function setUpdatedAt(?\DateTimeInterface $updatedAt);
 }

@@ -94,7 +94,7 @@ class RequestConfiguration
     /**
      * @param string $name
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function getTemplate($name)
     {
@@ -121,12 +121,7 @@ class RequestConfiguration
             return $form;
         }
 
-        $form = $this->metadata->getClass('form');
-        if (is_string($form)) {
-            return $form;
-        }
-
-        return sprintf('%s_%s', $this->metadata->getApplicationName(), $this->metadata->getName());
+        return $this->metadata->getClass('form');
     }
 
     /**
@@ -149,7 +144,8 @@ class RequestConfiguration
      */
     public function getRouteName($name)
     {
-        $sectionPrefix = $this->getSection() ? $this->getSection() . '_' : '';
+        $section = $this->getSection();
+        $sectionPrefix = $section ? $section . '_' : '';
 
         return sprintf('%s_%s%s_%s', $this->metadata->getApplicationName(), $sectionPrefix, $this->metadata->getName(), $name);
     }
@@ -198,13 +194,13 @@ class RequestConfiguration
      * Get redirect referer, This will detected by configuration
      * If not exists, The `referrer` from headers will be used.
      *
-     * @return string
+     * @return string|null
      */
     public function getRedirectReferer()
     {
-        /** @var array $redirect */
+        /** @var array|null $redirect */
         $redirect = $this->parameters->get('redirect');
-        /** @var string $referer */
+        /** @var string|null $referer */
         $referer = $this->request->headers->get('referer');
 
         if (!is_array($redirect) || empty($redirect['referer'])) {
@@ -227,7 +223,7 @@ class RequestConfiguration
     {
         $redirect = $this->parameters->get('redirect');
 
-        if ($this->areParametersIntentionallyEmptyArray($redirect)) {
+        if (isset($redirect['parameters']) && $redirect['parameters'] === []) {
             return [];
         }
 
@@ -434,6 +430,8 @@ class RequestConfiguration
     }
 
     /**
+     * @param string $message
+     *
      * @return mixed|null
      */
     public function getFlashMessage($message)
@@ -450,7 +448,7 @@ class RequestConfiguration
     }
 
     /**
-     * @return mixed|null
+     * @return array|null
      */
     public function getSerializationGroups()
     {
@@ -521,6 +519,9 @@ class RequestConfiguration
         return (bool) $redirect['header'];
     }
 
+    /**
+     * @return array
+     */
     public function getVars()
     {
         return $this->parameters->get('vars', []);
@@ -606,10 +607,5 @@ class RequestConfiguration
     public function isCsrfProtectionEnabled()
     {
         return $this->parameters->get('csrf_protection', true);
-    }
-
-    private function areParametersIntentionallyEmptyArray($redirect): bool
-    {
-        return isset($redirect['parameters']) && is_array($redirect['parameters']) && empty($redirect['parameters']);
     }
 }

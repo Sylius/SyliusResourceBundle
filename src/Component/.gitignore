@@ -1,5 +1,7 @@
-vendor/
-bin/
+/vendor/
+!/vendor/.gitignore
 
-composer.phar
-composer.lock
+/bin/
+
+/composer.phar
+/composer.lock

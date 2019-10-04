@@ -23,18 +23,19 @@ abstract class AbstractResourceExtension extends Extension
     protected function registerResources(
         string $applicationName,
         string $driver,
-        array $resources,
+        array $registeredResources,
         ContainerBuilder $container
     ): void {
         $container->setParameter(sprintf('%s.driver.%s', $this->getAlias(), $driver), true);
         $container->setParameter(sprintf('%s.driver', $this->getAlias()), $driver);
 
-        foreach ($resources as $resourceName => $resourceConfig) {
+        $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
+
+        foreach ($registeredResources as $resourceName => $resourceConfig) {
             $alias = $applicationName . '.' . $resourceName;
             $resourceConfig = array_merge(['driver' => $driver], $resourceConfig);
 
-            $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
-            $resources = array_merge($resources, [$alias => $resourceConfig]);
+            $resources[$alias] = $resourceConfig;
             $container->setParameter('sylius.resources', $resources);
 
             $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);
@@ -45,8 +46,7 @@ abstract class AbstractResourceExtension extends Extension
                 $alias .= '_translation';
                 $resourceConfig = array_merge(['driver' => $driver], $resourceConfig['translation']);
 
-                $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
-                $resources = array_merge($resources, [$alias => $resourceConfig]);
+                $resources[$alias] = $resourceConfig;
                 $container->setParameter('sylius.resources', $resources);
 
                 $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);

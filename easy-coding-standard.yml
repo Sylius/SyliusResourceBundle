@@ -12,6 +12,9 @@ services:
             file that was distributed with this source code.
         location: 'after_open'
 
+    PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer:
+        allow_mixed: true
+
 parameters:
     exclude_files:
         - 'src/Bundle/test/var/*'

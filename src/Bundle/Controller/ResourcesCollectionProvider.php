@@ -35,6 +35,8 @@ final class ResourcesCollectionProvider implements ResourcesCollectionProviderIn
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MissingReturnType
      */
     public function get(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)
     {

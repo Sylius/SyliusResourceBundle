@@ -69,14 +69,21 @@ final class FixedCollectionType extends AbstractType
 
     private function optionalCallableNormalizer(): \Closure
     {
-        return function (Options $options, $value) {
-            if (is_callable($value)) {
-                return $value;
-            }
+        return
+            /**
+             * @param mixed $value
+             *
+             * @return mixed
+             */
+            function (Options $options, $value) {
+                if (is_callable($value)) {
+                    return $value;
+                }
 
-            return function () use ($value) {
-                return $value;
-            };
-        };
+                return /** @return mixed */ function () use ($value) {
+                    return $value;
+                };
+            }
+        ;
     }
 }

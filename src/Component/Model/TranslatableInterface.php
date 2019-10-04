@@ -18,7 +18,8 @@ use Doctrine\Common\Collections\Collection;
 interface TranslatableInterface
 {
     /**
-     * @return Collection|TranslationInterface[]
+     * @return Collection|TranslatableInterface[]
+     * @psalm-return Collection<array-key, TranslationInterface>
      */
     public function getTranslations(): Collection;
 

@@ -113,6 +113,8 @@ final class ResourceLoader implements LoaderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidReturnType Symfony docblocks are messing with us
      */
     public function getResolver()
     {

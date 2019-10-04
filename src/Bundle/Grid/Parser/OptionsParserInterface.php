@@ -17,5 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface OptionsParserInterface
 {
+    /**
+     * @param mixed $data
+     */
     public function parseOptions(array $parameters, Request $request, $data = null): array;
 }

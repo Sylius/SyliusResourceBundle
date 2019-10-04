@@ -44,15 +44,29 @@ final class OptionsParser implements OptionsParserInterface
      */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
-        return array_map(function ($parameter) use ($request, $data) {
-            if (is_array($parameter)) {
-                return $this->parseOptions($parameter, $request, $data);
-            }
+        return array_map(
+            /**
+             * @param mixed $parameter
+             *
+             * @return mixed
+             */
+            function ($parameter) use ($request, $data) {
+                if (is_array($parameter)) {
+                    return $this->parseOptions($parameter, $request, $data);
+                }
 
-            return $this->parseOption($parameter, $request, $data);
-        }, $parameters);
+                return $this->parseOption($parameter, $request, $data);
+            },
+            $parameters
+        );
     }
 
+    /**
+     * @param mixed $parameter
+     * @param mixed $data
+     *
+     * @return mixed
+     */
     private function parseOption($parameter, Request $request, $data)
     {
         if (!is_string($parameter)) {
@@ -78,17 +92,32 @@ final class OptionsParser implements OptionsParserInterface
         return $parameter;
     }
 
+    /**
+     * @return mixed
+     */
     private function parseOptionExpression(string $expression, Request $request)
     {
-        $expression = (string) preg_replace_callback('/\$(\w+)/', function (array $matches) use ($request) {
-            $variable = $request->get($matches[1]);
+        $expression = (string) preg_replace_callback(
+            '/\$(\w+)/',
+            /**
+             * @return mixed
+             */
+            function (array $matches) use ($request) {
+                $variable = $request->get($matches[1]);
 
-            return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
-        }, $expression);
+                return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
+            },
+            $expression
+        );
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
     private function parseOptionResourceField(string $value, $data)
     {
         return $this->propertyAccessor->getValue($data, $value);

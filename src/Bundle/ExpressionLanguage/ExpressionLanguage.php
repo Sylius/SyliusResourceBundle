@@ -22,6 +22,8 @@ final class ExpressionLanguage extends BaseExpressionLanguage
 {
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $cache
      */
     public function __construct($cache = null, array $providers = [])
     {

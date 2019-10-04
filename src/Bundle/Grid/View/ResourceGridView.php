@@ -27,6 +27,9 @@ class ResourceGridView extends GridView
     /** @var RequestConfiguration */
     private $requestConfiguration;
 
+    /**
+     * @param mixed $data
+     */
     public function __construct(
         $data,
         Grid $gridDefinition,

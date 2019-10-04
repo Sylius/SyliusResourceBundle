@@ -33,7 +33,7 @@ final class ViewHandler implements ViewHandlerInterface
     public function handle(RequestConfiguration $requestConfiguration, View $view): Response
     {
         if (!$requestConfiguration->isHtmlRequest()) {
-            $this->restViewHandler->setExclusionStrategyGroups($requestConfiguration->getSerializationGroups());
+            $this->restViewHandler->setExclusionStrategyGroups($requestConfiguration->getSerializationGroups() ?? []);
 
             if ($version = $requestConfiguration->getSerializationVersion()) {
                 $this->restViewHandler->setExclusionStrategyVersion($version);

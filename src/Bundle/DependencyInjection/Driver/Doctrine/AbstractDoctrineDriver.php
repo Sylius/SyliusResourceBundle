@@ -45,6 +45,7 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
             new Alias($this->getManagerServiceId($metadata), true)
         );
 
+        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {
             $container->registerAliasForArgument(
                 $metadata->getServiceId('manager'),

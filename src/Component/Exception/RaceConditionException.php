@@ -21,7 +21,7 @@ class RaceConditionException extends UpdateHandlingException
             'Operated entity was previously modified.',
             'race_condition_error',
             409,
-            null !== $previous ? $previous->getCode() : 0,
+            null !== $previous ? (int) $previous->getCode() : 0,
             $previous
         );
     }

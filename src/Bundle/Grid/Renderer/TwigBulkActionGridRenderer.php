@@ -18,11 +18,12 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Twig\Environment;
 use Webmozart\Assert\Assert;
 
 final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterface
 {
-    /** @var \Twig_Environment */
+    /** @var Environment */
     private $twig;
 
     /** @var OptionsParserInterface */
@@ -32,7 +33,7 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
     private $bulkActionTemplates;
 
     public function __construct(
-        \Twig_Environment $twig,
+        Environment $twig,
         OptionsParserInterface $optionsParser,
         array $bulkActionTemplates = []
     ) {

@@ -15,6 +15,9 @@ namespace Sylius\Component\Resource\Exception;
 
 class UnexpectedTypeException extends \InvalidArgumentException
 {
+    /**
+     * @param mixed $value
+     */
     public function __construct($value, string $expectedType)
     {
         parent::__construct(sprintf(
