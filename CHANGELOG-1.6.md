@@ -1,5 +1,10 @@
 ## CHANGELOG FOR `1.6.x`
 
+### v1.6.0 (2019-10-07)
+
+- [#104](https://github.com/Sylius/SyliusResourceBundle/issues/104) [RFC] Add success flashes before post event ([@Zales0123](https://github.com/Zales0123))
+- [#110](https://github.com/Sylius/SyliusResourceBundle/issues/110) Add Psalm and fix all the errors ([@pamil](https://github.com/pamil))
+
 ### v1.6.0-RC.3 (2019-06-18)
 
 - [#92](https://github.com/Sylius/SyliusResourceBundle/issues/92) Removing '2' from 'Symfony2' ([@loevgaard](https://github.com/loevgaard))
