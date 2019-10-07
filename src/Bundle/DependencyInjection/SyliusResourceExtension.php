@@ -103,13 +103,14 @@ final class SyliusResourceExtension extends Extension
         }
     }
 
-    private function loadResources(array $resources, ContainerBuilder $container): void
+    private function loadResources(array $loadedResources, ContainerBuilder $container): void
     {
-        foreach ($resources as $alias => $resourceConfig) {
+        $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
+
+        foreach ($loadedResources as $alias => $resourceConfig) {
             $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);
 
-            $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
-            $resources = array_merge($resources, [$alias => $resourceConfig]);
+            $resources[$alias] = $resourceConfig;
             $container->setParameter('sylius.resources', $resources);
 
             DriverProvider::get($metadata)->load($container, $metadata);
@@ -118,8 +119,7 @@ final class SyliusResourceExtension extends Extension
                 $alias .= '_translation';
                 $resourceConfig = array_merge(['driver' => $resourceConfig['driver']], $resourceConfig['translation']);
 
-                $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
-                $resources = array_merge($resources, [$alias => $resourceConfig]);
+                $resources[$alias] = $resourceConfig;
                 $container->setParameter('sylius.resources', $resources);
 
                 $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);

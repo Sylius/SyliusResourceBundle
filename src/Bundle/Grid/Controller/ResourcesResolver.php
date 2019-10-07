@@ -43,6 +43,8 @@ final class ResourcesResolver implements ResourcesResolverInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MissingReturnType
      */
     public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)
     {

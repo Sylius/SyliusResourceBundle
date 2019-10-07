@@ -37,15 +37,28 @@ final class ParametersParser implements ParametersParserInterface
      */
     public function parseRequestValues(array $parameters, Request $request): array
     {
-        return array_map(function ($parameter) use ($request) {
-            if (is_array($parameter)) {
-                return $this->parseRequestValues($parameter, $request);
-            }
+        return array_map(
+            /**
+             * @param mixed $parameter
+             *
+             * @return mixed
+             */
+            function ($parameter) use ($request) {
+                if (is_array($parameter)) {
+                    return $this->parseRequestValues($parameter, $request);
+                }
 
-            return $this->parseRequestValue($parameter, $request);
-        }, $parameters);
+                return $this->parseRequestValue($parameter, $request);
+            },
+            $parameters
+        );
     }
 
+    /**
+     * @param mixed $parameter
+     *
+     * @return mixed
+     */
     private function parseRequestValue($parameter, Request $request)
     {
         if (!is_string($parameter)) {
@@ -67,26 +80,35 @@ final class ParametersParser implements ParametersParserInterface
         return $parameter;
     }
 
+    /** @return mixed */
     private function parseRequestValueExpression(string $expression, Request $request)
     {
-        $expression = (string) preg_replace_callback('/(\$\w+)/', function ($matches) use ($request) {
-            $variable = $request->get(substr($matches[1], 1));
+        $expression = (string) preg_replace_callback(
+            '/(\$\w+)/',
+            /**
+             * @return mixed
+             */
+            function (array $matches) use ($request) {
+                $variable = $request->get(substr($matches[1], 1));
 
-            if (is_array($variable) || is_object($variable)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Cannot use %s ($%s) as parameter in expression.',
-                    gettype($variable),
-                    $matches[1]
-                ));
-            }
+                if (is_array($variable) || is_object($variable)) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Cannot use %s ($%s) as parameter in expression.',
+                        gettype($variable),
+                        $matches[1]
+                    ));
+                }
 
-            return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
-        }, $expression);
+                return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
+            },
+            $expression
+        );
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);
     }
 
-    private function parseRequestValueTypecast($parameter, Request $request)
+    /** @return mixed */
+    private function parseRequestValueTypecast(string $parameter, Request $request)
     {
         [$typecast, $castedValue] = explode(' ', $parameter, 2);
 

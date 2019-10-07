@@ -29,12 +29,18 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
     /** @var ParametersParserInterface */
     private $parametersParser;
 
-    /** @var string */
+    /**
+     * @var string
+     * @psalm-var class-string<RequestConfiguration>
+     */
     private $configurationClass;
 
     /** @var array */
     private $defaultParameters;
 
+    /**
+     * @psalm-param class-string<RequestConfiguration> $configurationClass
+     */
     public function __construct(ParametersParserInterface $parametersParser, string $configurationClass, array $defaultParameters = [])
     {
         $this->parametersParser = $parametersParser;

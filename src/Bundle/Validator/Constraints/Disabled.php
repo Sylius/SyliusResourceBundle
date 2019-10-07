@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraint;
 
 final class Disabled extends Constraint
 {
+    /** @var string */
     public $message = 'sylius.resource.not_disabled';
 
     /**

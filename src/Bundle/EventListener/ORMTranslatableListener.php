@@ -200,6 +200,8 @@ final class ORMTranslatableListener implements EventSubscriber
                 sprintf('Passing an instance of "%s" is deprecated since 1.4. Use "%s" instead.',
                     ContainerInterface::class, TranslatableEntityLocaleAssignerInterface::class), \E_USER_DEPRECATED
             );
+
+            /** @var object $translatableEntityLocaleAssigner */
             $translatableEntityLocaleAssigner = $translatableEntityLocaleAssigner->get('sylius.translatable_entity_locale_assigner');
         }
 

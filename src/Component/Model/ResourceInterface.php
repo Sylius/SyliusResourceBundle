@@ -15,5 +15,6 @@ namespace Sylius\Component\Resource\Model;
 
 interface ResourceInterface
 {
+    /** @psalm-suppress MissingReturnType */
     public function getId();
 }

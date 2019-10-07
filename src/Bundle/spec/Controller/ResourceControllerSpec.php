@@ -342,7 +342,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
         $event->isStopped()->willReturn(false);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $request->isMethod('POST')->willReturn(false);
         $form->createView()->willReturn($formView);
@@ -397,7 +397,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
         $event->isStopped()->willReturn(false);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -504,7 +504,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
 
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $repository->add($newResource)->shouldNotBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
@@ -617,7 +617,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $repository->add($newResource)->shouldBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($postEvent);
 
-        $postEvent->hasResponse()->willReturn(false);
+        $postEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource)->shouldBeCalled();
         $redirectHandler->redirectToResource($configuration, $newResource)->willReturn($redirectResponse);
@@ -865,7 +865,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(false);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('GET');
@@ -923,7 +923,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(false);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1031,7 +1031,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(true);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
         $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
 
         $manager->flush()->shouldNotBeCalled();
@@ -1094,7 +1094,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
 
-        $postEvent->hasResponse()->willReturn(false);
+        $postEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
         $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
@@ -1430,7 +1430,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
 
-        $postEvent->hasResponse()->willReturn(false);
+        $postEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
         $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
@@ -1514,7 +1514,7 @@ final class ResourceControllerSpec extends ObjectBehavior
             ->dispatchPostEvent(ResourceActions::DELETE, $configuration, $firstResource)
             ->willReturn($firstPostEvent)
         ;
-        $firstPostEvent->hasResponse()->willReturn(false);
+        $firstPostEvent->getResponse()->willReturn(null);
 
         $eventDispatcher
             ->dispatchPreEvent(ResourceActions::DELETE, $configuration, $secondResource)
@@ -1528,7 +1528,7 @@ final class ResourceControllerSpec extends ObjectBehavior
             ->dispatchPostEvent(ResourceActions::DELETE, $configuration, $secondResource)
             ->willReturn($secondPostEvent)
         ;
-        $secondPostEvent->hasResponse()->willReturn(false);
+        $secondPostEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::BULK_DELETE)->shouldBeCalled();
 
@@ -1623,7 +1623,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $resourceDeleteHandler->handle($resource, $repository)->shouldBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($postEvent);
 
-        $postEvent->hasResponse()->willReturn(false);
+        $postEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldBeCalled();
         $redirectHandler->redirectToIndex($configuration, $resource)->willReturn($redirectResponse);
@@ -1721,7 +1721,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(true);
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $resourceDeleteHandler->handle($resource, $repository)->shouldNotBeCalled();
         $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->shouldNotBeCalled();
@@ -2136,7 +2136,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
 
-        $postEvent->hasResponse()->willReturn(false);
+        $postEvent->getResponse()->willReturn(null);
 
         $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
 
@@ -2247,7 +2247,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldNotBeCalled();
         $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldNotBeCalled();
 
-        $event->hasResponse()->willReturn(false);
+        $event->getResponse()->willReturn(null);
 
         $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
         $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);

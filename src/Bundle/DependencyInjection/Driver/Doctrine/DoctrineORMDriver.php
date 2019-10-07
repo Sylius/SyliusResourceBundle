@@ -57,6 +57,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
 
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
 
+        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {
             $typehintClasses = array_merge(
                 class_implements($repositoryClass),
@@ -78,6 +79,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
     {
         parent::addManager($container, $metadata);
 
+        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {
             $container->registerAliasForArgument(
                 $metadata->getServiceId('manager'),

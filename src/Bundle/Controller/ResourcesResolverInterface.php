@@ -17,5 +17,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface ResourcesResolverInterface
 {
+    /** @psalm-suppress MissingReturnType */
     public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository);
 }

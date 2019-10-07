@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<psalm
+    totallyTyped="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="src/Bundle/Doctrine/ODM" />
+            <directory name="src/Bundle/spec" />
+            <directory name="src/Bundle/test" />
+            <directory name="src/Bundle/Tests" />
+            <directory name="src/Component/spec" />
+            <directory name="src/Component/vendor" />
+            <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
+            <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
+            <file name="src/Bundle/EventListener/ODM*.php" />
+            <file name="src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <DeprecatedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Symfony\Bundle\FrameworkBundle\Controller\Controller" />
+                <referencedClass name="Symfony\Component\HttpKernel\Event\FilterResponseEvent" />
+                <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent" />
+                <referencedClass name="Symfony\Component\Translation\TranslatorInterface" />
+            </errorLevel>
+        </DeprecatedClass>
+
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\TreeBuilder::root" />
+                <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
+                <referencedMethod name="Symfony\Component\EventDispatcher\Event::stopPropagation" />
+                <referencedMethod name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
+            </errorLevel>
+        </DeprecatedMethod>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
+            </errorLevel>
+        </InvalidArgument>
+
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/DependencyInjection/Configuration.php" />
+            </errorLevel>
+        </PossiblyNullReference>
+
+        <PossiblyUndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::arrayNode" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::scalarNode" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::variableNode" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::end" />
+            </errorLevel>
+        </PossiblyUndefinedMethod>
+
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\DependencyInjection\ContainerAwareTrait::$container" />
+                <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch"/>
+            </errorLevel>
+        </TooManyArguments>
+
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
+                <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
+                <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheAdapter" />
+                <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
+            </errorLevel>
+        </UndefinedClass>
+    </issueHandlers>
+</psalm>

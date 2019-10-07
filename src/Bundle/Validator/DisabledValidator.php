@@ -20,13 +20,7 @@ use Webmozart\Assert\Assert;
 
 final class DisabledValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @param ToggleableInterface $value
-     * @param Constraints\Disabled $constraint
-     */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         /** @var Constraints\Disabled $constraint */
         Assert::isInstanceOf($constraint, Constraints\Disabled::class);
@@ -35,20 +29,16 @@ final class DisabledValidator extends ConstraintValidator
             return;
         }
 
-        $this->ensureValueImplementsToggleableInterface($value);
+        if (!$value instanceof ToggleableInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s" validates "%s" instances only',
+                __CLASS__,
+                ToggleableInterface::class
+            ));
+        }
 
         if ($value->isEnabled()) {
             $this->context->addViolation($constraint->message);
-        }
-    }
-
-    private function ensureValueImplementsToggleableInterface($value): void
-    {
-        if (!($value instanceof ToggleableInterface)) {
-            throw new \InvalidArgumentException(sprintf(
-                '"%s" validates "%s" instances only',
-                __CLASS__, ToggleableInterface::class
-            ));
         }
     }
 }

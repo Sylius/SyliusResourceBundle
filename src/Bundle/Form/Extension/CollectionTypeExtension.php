@@ -23,6 +23,8 @@ final class CollectionTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MissingPropertyType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

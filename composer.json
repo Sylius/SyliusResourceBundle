@@ -49,14 +49,15 @@
         "matthiasnoback/symfony-dependency-injection-test": "^3.0",
         "phpspec/phpspec": "^5.0",
         "phpstan/phpstan-phpunit": "^0.11",
-        "phpstan/phpstan-shim": "^0.11",
+        "phpstan/phpstan": "^0.11",
         "phpstan/phpstan-webmozart-assert": "^0.11",
         "phpunit/phpunit": "^7.0",
         "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.2",
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.2",
-        "twig/twig": "^2.0"
+        "twig/twig": "^2.0",
+        "vimeo/psalm": "^3.5"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
@@ -88,7 +89,8 @@
     "scripts": {
         "analyse": [
             "@php vendor/bin/ecs check src",
-            "@php vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src"
+            "@php vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src",
+            "@php vendor/bin/psalm"
         ],
         "fix": [
             "@php vendor/bin/ecs check src --fix"

@@ -20,6 +20,7 @@ use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\Definition\Filter;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Twig\Environment;
 use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
@@ -27,7 +28,7 @@ final class TwigGridRenderer implements GridRendererInterface
     /** @var GridRendererInterface */
     private $gridRenderer;
 
-    /** @var \Twig_Environment */
+    /** @var Environment */
     private $twig;
 
     /** @var OptionsParserInterface */
@@ -38,7 +39,7 @@ final class TwigGridRenderer implements GridRendererInterface
 
     public function __construct(
         GridRendererInterface $gridRenderer,
-        \Twig_Environment $twig,
+        Environment $twig,
         OptionsParserInterface $optionsParser,
         array $actionTemplates = []
     ) {
@@ -58,6 +59,8 @@ final class TwigGridRenderer implements GridRendererInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $data
      */
     public function renderField(GridViewInterface $gridView, Field $field, $data): string
     {
@@ -66,6 +69,8 @@ final class TwigGridRenderer implements GridRendererInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $data
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
