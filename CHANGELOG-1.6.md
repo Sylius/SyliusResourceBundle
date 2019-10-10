@@ -1,5 +1,9 @@
 ## CHANGELOG FOR `1.6.x`
 
+### v1.6.1 (2019-10-10)
+
+- [#112](https://github.com/Sylius/SyliusResourceBundle/issues/112) Support for Symfony 3.4 / 4.3+ ([@pamil](https://github.com/pamil))
+
 ### v1.6.0 (2019-10-07)
 
 - [#104](https://github.com/Sylius/SyliusResourceBundle/issues/104) [RFC] Add success flashes before post event ([@Zales0123](https://github.com/Zales0123))
