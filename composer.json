@@ -45,7 +45,7 @@
         "akeneo/phpspec-skip-example-extension": "^4.0",
         "doctrine/orm": "^2.5",
         "gedmo/doctrine-extensions": "^2.4",
-        "lchrusciel/api-test-case": "^3.1.0",
+        "lchrusciel/api-test-case": "^4.1.0",
         "matthiasnoback/symfony-dependency-injection-test": "^3.0",
         "phpspec/phpspec": "^5.0",
         "phpstan/phpstan-phpunit": "^0.11",
