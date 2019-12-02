@@ -57,7 +57,8 @@
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.3",
         "twig/twig": "^2.0",
-        "vimeo/psalm": "^3.5"
+        "vimeo/psalm": "^3.5",
+        "polishsymfonycommunity/symfony-mocker-container": "^1.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
