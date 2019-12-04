@@ -18,6 +18,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,13 +38,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn([]);
+        $headersBag->all('Accept')->willReturn([]);
 
         $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:show.html.twig']);
         $parametersParser
@@ -58,13 +59,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn([]);
+        $headersBag->all('Accept')->willReturn([]);
 
         $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
         $parametersParser
@@ -79,13 +80,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn(['groups=Default,Detailed']);
+        $headersBag->all('Accept')->willReturn(['groups=Default,Detailed']);
 
         $attributesBag->get('_sylius', [])->willReturn([]);
         $parametersParser
@@ -100,13 +101,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed']);
+        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
 
         $attributesBag->get('_sylius', [])->willReturn([]);
         $parametersParser
@@ -121,13 +122,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn(['version=1.0.0']);
+        $headersBag->all('Accept')->willReturn(['version=1.0.0']);
 
         $attributesBag->get('_sylius', [])->willReturn([]);
 
@@ -143,13 +144,13 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn(['application/xml', 'version=1.0.0']);
+        $headersBag->all('Accept')->willReturn(['application/xml', 'version=1.0.0']);
 
         $attributesBag->get('_sylius', [])->willReturn([]);
 
@@ -165,7 +166,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag
     ): void {
         $this->beConstructedWith($parametersParser, RequestConfiguration::class, ['sortable' => true]);
@@ -173,7 +174,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->get('Accept', null, false)->willReturn([]);
+        $headersBag->all('Accept')->willReturn([]);
 
         $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
 
