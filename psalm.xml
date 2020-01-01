@@ -29,6 +29,7 @@
                 <referencedClass name="Symfony\Component\HttpKernel\Event\FilterResponseEvent" />
                 <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent" />
                 <referencedClass name="Symfony\Component\Translation\TranslatorInterface" />
+                <referencedClass name="Doctrine\Common\Persistence\ObjectRepository" />
             </errorLevel>
         </DeprecatedClass>
 
@@ -71,7 +72,8 @@
 
         <TooManyArguments>
             <errorLevel type="suppress">
-                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch"/>
+                <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
+                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
 

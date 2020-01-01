@@ -21,6 +21,7 @@ use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
+/** @psalm-suppress DeprecatedInterface */
 class EntityRepository extends BaseEntityRepository implements RepositoryInterface
 {
     /**
