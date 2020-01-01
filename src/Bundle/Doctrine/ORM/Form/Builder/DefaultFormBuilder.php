@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
@@ -64,7 +64,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
                 continue;
             }
 
-            if (Type::DATETIME === $classMetadata->getTypeOfField($fieldName)) {
+            if (Types::DATETIME_MUTABLE === $classMetadata->getTypeOfField($fieldName)) {
                 $options = ['widget' => 'single_text'];
             }
 

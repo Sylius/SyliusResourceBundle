@@ -45,7 +45,7 @@
         "akeneo/phpspec-skip-example-extension": "^4.0",
         "doctrine/orm": "^2.5",
         "gedmo/doctrine-extensions": "^2.4",
-        "lakion/api-test-case": "^3.1.0",
+        "lchrusciel/api-test-case": "^4.1.0",
         "matthiasnoback/symfony-dependency-injection-test": "^3.0",
         "phpspec/phpspec": "^5.0",
         "phpstan/phpstan-phpunit": "^0.11",
@@ -57,7 +57,8 @@
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.3",
         "twig/twig": "^2.0",
-        "vimeo/psalm": "^3.5"
+        "vimeo/psalm": "^3.5",
+        "polishsymfonycommunity/symfony-mocker-container": "^1.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",

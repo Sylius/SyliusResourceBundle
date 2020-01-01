@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Controller;
 
-use Lakion\ApiTestCase\JsonApiTestCase;
+use ApiTestCase\JsonApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookApiTest extends JsonApiTestCase

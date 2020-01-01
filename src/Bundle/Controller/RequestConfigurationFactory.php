@@ -67,7 +67,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         $parameters = [];
 
         /** @var string[] $apiVersionHeaders */
-        $apiVersionHeaders = $request->headers->get(self::API_VERSION_HEADER, null, false);
+        $apiVersionHeaders = $request->headers->all(self::API_VERSION_HEADER);
         foreach ($apiVersionHeaders as $apiVersionHeader) {
             if (preg_match(self::API_VERSION_REGEXP, $apiVersionHeader, $matches)) {
                 $parameters['serialization_version'] = $matches['version'];
@@ -75,7 +75,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         }
 
         /** @var string[] $apiGroupsHeaders */
-        $apiGroupsHeaders = $request->headers->get(self::API_GROUPS_HEADER, null, false);
+        $apiGroupsHeaders = $request->headers->all(self::API_GROUPS_HEADER);
         foreach ($apiGroupsHeaders as $apiGroupsHeader) {
             if (preg_match(self::API_GROUPS_REGEXP, $apiGroupsHeader, $matches)) {
                 $parameters['serialization_groups'] = array_map('trim', explode(',', $matches['groups']));
