@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------
+
+by mamazu at 2019-12-01T00:50:09Z
+
+I think the build job failed for some reason. Could you restart it?
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2019-12-02T10:27:42Z
+
+done
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2019-12-02T10:42:45Z
+
+Ah, this container was removed from dependencies and added as a suggestion. That's why it's failing.
+
+Ref. https://github.com/lchrusciel/ApiTestCase/blob/master/UPGRADE.md#upgrading-from-v3-to-v4
+
+---------------------------------------------------------------------------
+
+by mamazu at 2019-12-04T17:19:22Z
+
+@pamil This is the new way of doing things. However to preserve backwards compatibilty the `all` function that psalm complains about already has documentation like that.
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-01-01T14:38:47Z
+
+Thanks, @mamazu! :tada:
