@@ -30,7 +30,8 @@
         "pagerfanta/pagerfanta": "^1.0|^2.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^5.0",
+        "behat/transliterator": "dev-master",
+        "phpspec/phpspec": "^6.1",
         "sylius/locale": "^1.0"
     },
     "suggest": {
