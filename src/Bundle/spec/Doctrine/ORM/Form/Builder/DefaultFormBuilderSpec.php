@@ -139,7 +139,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
         $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME);
+        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -165,8 +165,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         ]);
 
         $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('descript
-        ion')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
         $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
