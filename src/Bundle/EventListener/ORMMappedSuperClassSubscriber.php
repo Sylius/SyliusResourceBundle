@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Webmozart\Assert\Assert;
 
 final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
@@ -48,6 +48,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
             return;
         }
 
+        /** @psalm-suppress DeprecatedClass */
         $metadataDriver = $configuration->getMetadataDriverImpl();
         Assert::isInstanceOf($metadataDriver, MappingDriver::class);
 
@@ -62,6 +63,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
             );
 
             // Wakeup Reflection
+            /** @psalm-suppress ArgumentTypeCoercion */
             $parentMetadata->wakeupReflection($this->getReflectionService());
 
             // Load Metadata

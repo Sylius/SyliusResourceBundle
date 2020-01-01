@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 
+/** @psalm-suppress DeprecatedInterface */
 final class ResourceLogEntryRepository extends EntityRepository implements ResourceLogEntryRepositoryInterface
 {
     /**
