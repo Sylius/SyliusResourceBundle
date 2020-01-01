@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PhpSpec\ObjectBehavior;
@@ -63,9 +63,9 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->isIdentifierNatural()->willReturn(false);
         $classMetadataInfo->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('id', Argument::cetera())->shouldNotBeCalled();
         $formBuilder->add('name', null, [])->shouldBeCalled();
@@ -88,10 +88,10 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->isIdentifierNatural()->willReturn(true);
         $classMetadataInfo->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('id')->willReturn(Type::INTEGER);
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('id')->willReturn(Types::INTEGER);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('id', null, [])->shouldBeCalled();
         $formBuilder->add('name', null, [])->shouldBeCalled();
@@ -113,9 +113,9 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->isIdentifierNatural()->willReturn(true);
         $classMetadataInfo->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -136,10 +136,10 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->isIdentifierNatural()->willReturn(true);
         $classMetadataInfo->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Type::DATETIME);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -164,10 +164,11 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
             'users' => ['type' => ClassMetadataInfo::ONE_TO_MANY],
         ]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Type::DATETIME);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('descript
+        ion')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -191,11 +192,11 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->isIdentifierNatural()->willReturn(true);
         $classMetadataInfo->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Type::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Type::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Type::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('createdAt')->willReturn(Type::DATETIME);
-        $classMetadataInfo->getTypeOfField('updatedAt')->willReturn(Type::DATETIME);
+        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadataInfo->getTypeOfField('createdAt')->willReturn(Types::DATETIME_MUTABLE);
+        $classMetadataInfo->getTypeOfField('updatedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
