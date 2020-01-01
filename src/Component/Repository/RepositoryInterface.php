@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Repository;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface RepositoryInterface extends ObjectRepository
