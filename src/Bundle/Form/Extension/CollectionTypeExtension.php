@@ -50,4 +50,9 @@ final class CollectionTypeExtension extends AbstractTypeExtension
     {
         return CollectionType::class;
     }
+
+    public static function getExtendedTypes(): iterable
+    {
+        return [CollectionType::class];
+    }
 }
