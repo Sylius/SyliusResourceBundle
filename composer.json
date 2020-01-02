@@ -39,7 +39,7 @@
         "symfony/yaml": "^3.4|^4.4",
         "white-october/pagerfanta-bundle": "^1.0",
         "willdurand/hateoas-bundle": "^2.0",
-        "winzou/state-machine-bundle": "^0.3"
+        "winzou/state-machine-bundle": "^0.3|^0.4"
     },
     "require-dev": {
         "behat/transliterator": "dev-master",
@@ -58,7 +58,7 @@
         "sylius/grid-bundle": "^1.2",
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.4",
-        "twig/twig": "^2.0|^3.0",
+        "twig/twig": "^2.12|^3.0",
         "vimeo/psalm": "3.8.1"
     },
     "suggest": {
