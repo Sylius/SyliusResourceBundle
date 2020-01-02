@@ -20,10 +20,11 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 final class TwigBulkActionGridRendererSpec extends ObjectBehavior
 {
-    function let(\Twig_Environment $twig, OptionsParserInterface $optionsParser): void
+    function let(Environment $twig, OptionsParserInterface $optionsParser): void
     {
         $this->beConstructedWith(
             $twig,
@@ -38,7 +39,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
     }
 
     function it_uses_twig_to_render_the_bulk_action(
-        \Twig_Environment $twig,
+        Environment $twig,
         OptionsParserInterface $optionsParser,
         ResourceGridView $gridView,
         Action $bulkAction,
