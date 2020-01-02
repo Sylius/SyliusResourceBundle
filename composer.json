@@ -58,7 +58,7 @@
         "sylius/grid-bundle": "^1.2",
         "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^3.4|^4.3",
-        "twig/twig": "^2.0|^3.0",
+        "twig/twig": "^2.7|^3.0",
         "vimeo/psalm": "3.8.1"
     },
     "suggest": {

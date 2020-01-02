@@ -20,12 +20,13 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 final class TwigGridRendererSpec extends ObjectBehavior
 {
     function let(
         GridRendererInterface $gridRenderer,
-        \Twig_Environment $twig,
+        Environment $twig,
         OptionsParserInterface $optionsParser
     ): void {
         $actionTemplates = [
@@ -47,7 +48,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
     }
 
     function it_uses_twig_to_render_the_action(
-        \Twig_Environment $twig,
+        Environment $twig,
         OptionsParserInterface $optionsParser,
         ResourceGridView $gridView,
         Action $action,
