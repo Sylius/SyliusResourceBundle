@@ -65,6 +65,7 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Bundle\FrameworkBundle\Controller\AbstractController::$container"/>
                 <referencedProperty name="Symfony\Component\DependencyInjection\ContainerAwareTrait::$container" />
                 <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
             </errorLevel>
