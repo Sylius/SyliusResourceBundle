@@ -11,9 +11,6 @@ env:
 
 jobs:
     fast_finish: true
-    allow_failures:
-        -
-            env: SYMFONY_VERSION=5.0.*
 
 cache:
     directories:
