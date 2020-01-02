@@ -34,7 +34,6 @@
         "symfony/form": "^3.4|^4.3",
         "symfony/framework-bundle": "^3.4|^4.3",
         "symfony/security-csrf": "^3.4|^4.3",
-        "symfony/templating": "^3.4|^4.3",
         "symfony/twig-bundle": "^3.4|^4.3",
         "symfony/validator": "^3.4|^4.3",
         "symfony/yaml": "^3.4|^4.3",
