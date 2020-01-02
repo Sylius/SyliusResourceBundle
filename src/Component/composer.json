@@ -31,11 +31,7 @@
     },
     "require-dev": {
         "behat/transliterator": "dev-master",
-        "phpspec/phpspec": "^6.1",
-        "sylius/locale": "^1.0"
-    },
-    "suggest": {
-        "sylius/locale": "^1.0"
+        "phpspec/phpspec": "^6.1"
     },
     "autoload": {
         "psr-4": { "Sylius\\Component\\Resource\\": "" }

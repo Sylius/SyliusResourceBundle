@@ -55,7 +55,6 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.2",
-        "sylius/locale": "^1.2",
         "symfony/dependency-injection": "^4.4|^5.0",
         "twig/twig": "^2.12|^3.0",
         "vimeo/psalm": "3.8.1"
