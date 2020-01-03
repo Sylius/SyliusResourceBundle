@@ -22,7 +22,7 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EventDispatcherSpec extends ObjectBehavior
 {
@@ -47,7 +47,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.show', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.show')->shouldBeCalled();
 
         $this->dispatch(ResourceActions::SHOW, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
     }
@@ -63,7 +63,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.register', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.register')->shouldBeCalled();
 
         $this->dispatch(ResourceActions::CREATE, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
     }
@@ -79,7 +79,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.register', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.register')->shouldBeCalled();
 
         $this->dispatchMultiple(ResourceActions::CREATE, $requestConfiguration, $resources)->shouldHaveType(ResourceControllerEvent::class);
     }
@@ -95,7 +95,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.pre_create', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.pre_create')->shouldBeCalled();
 
         $this->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
@@ -111,7 +111,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.pre_register', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.pre_register')->shouldBeCalled();
 
         $this->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
@@ -127,7 +127,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.post_create', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.post_create')->shouldBeCalled();
 
         $this->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
@@ -143,7 +143,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
 
-        $eventDispatcher->dispatch('sylius.product.post_register', Argument::type(ResourceControllerEvent::class))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.post_register')->shouldBeCalled();
 
         $this->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
     }

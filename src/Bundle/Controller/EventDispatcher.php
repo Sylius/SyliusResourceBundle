@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface as SymfonyEventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as SymfonyEventDispatcherInterface;
 
 final class EventDispatcher implements EventDispatcherInterface
 {
@@ -39,7 +39,7 @@ final class EventDispatcher implements EventDispatcherInterface
         $metadata = $requestConfiguration->getMetadata();
         $event = new ResourceControllerEvent($resource);
 
-        $this->eventDispatcher->dispatch(sprintf('%s.%s.%s', $metadata->getApplicationName(), $metadata->getName(), $eventName), $event);
+        $this->eventDispatcher->dispatch($event, sprintf('%s.%s.%s', $metadata->getApplicationName(), $metadata->getName(), $eventName));
 
         return $event;
     }
@@ -56,7 +56,7 @@ final class EventDispatcher implements EventDispatcherInterface
         $metadata = $requestConfiguration->getMetadata();
         $event = new ResourceControllerEvent($resources);
 
-        $this->eventDispatcher->dispatch(sprintf('%s.%s.%s', $metadata->getApplicationName(), $metadata->getName(), $eventName), $event);
+        $this->eventDispatcher->dispatch($event, sprintf('%s.%s.%s', $metadata->getApplicationName(), $metadata->getName(), $eventName));
 
         return $event;
     }
@@ -73,7 +73,7 @@ final class EventDispatcher implements EventDispatcherInterface
         $metadata = $requestConfiguration->getMetadata();
         $event = new ResourceControllerEvent($resource);
 
-        $this->eventDispatcher->dispatch(sprintf('%s.%s.pre_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName), $event);
+        $this->eventDispatcher->dispatch($event, sprintf('%s.%s.pre_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName));
 
         return $event;
     }
@@ -90,7 +90,7 @@ final class EventDispatcher implements EventDispatcherInterface
         $metadata = $requestConfiguration->getMetadata();
         $event = new ResourceControllerEvent($resource);
 
-        $this->eventDispatcher->dispatch(sprintf('%s.%s.post_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName), $event);
+        $this->eventDispatcher->dispatch($event, sprintf('%s.%s.post_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName));
 
         return $event;
     }
@@ -108,8 +108,8 @@ final class EventDispatcher implements EventDispatcherInterface
         $event = new ResourceControllerEvent($resource);
 
         $this->eventDispatcher->dispatch(
-            sprintf('%s.%s.initialize_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName),
-            $event
+            $event,
+            sprintf('%s.%s.initialize_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName)
         );
 
         return $event;

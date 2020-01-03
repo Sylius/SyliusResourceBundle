@@ -75,6 +75,7 @@
             <errorLevel type="suppress">
                 <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
                 <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
+                <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
 
