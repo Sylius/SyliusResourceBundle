@@ -5,7 +5,10 @@ includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
+
     excludes_analyse:
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php
@@ -34,3 +37,18 @@ parameters:
 
         # Calls to Event::getResponse() after Event::hasResponse() has been made
         - '/should return Symfony\\Component\\HttpFoundation\\Response but returns Symfony\\Component\\HttpFoundation\\Response\|null/'
+
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::get\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProviderInterface::get\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolverInterface::getResources\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent::stop\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
+        - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
+        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
+        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\ExpressionLanguage\\ExpressionLanguage::__construct\(\) has parameter \$cache with no typehint specified./'
+        - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
+        - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Routing\\ResourceLoader::getResolver\(\) should return Symfony\\Component\\Config\\Loader\\LoaderResolverInterface but return statement is missing./'
