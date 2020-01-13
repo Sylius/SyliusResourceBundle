@@ -1,5 +1,9 @@
 ## CHANGELOG FOR `1.6.x`
 
+### v1.6.2 (2020-01-13)
+
+- [#145](https://github.com/Sylius/SyliusResourceBundle/issues/145) Autowire Doctrine\Persistence\ObjectManager ([@pamil](https://github.com/pamil))
+
 ### v1.6.1 (2019-10-10)
 
 - [#112](https://github.com/Sylius/SyliusResourceBundle/issues/112) Support for Symfony 3.4 / 4.3+ ([@pamil](https://github.com/pamil))
