@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\AbstractDriver;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Symfony\Component\DependencyInjection\Alias;
@@ -47,11 +48,17 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
 
         /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {
-            $container->registerAliasForArgument(
-                $metadata->getServiceId('manager'),
-                ObjectManager::class,
-                $metadata->getHumanizedName() . ' manager'
-            );
+            foreach ([DeprecatedObjectManager::class, ObjectManager::class] as $objectManagerClass) {
+                if (!class_exists($objectManagerClass)) {
+                    continue;
+                }
+
+                $container->registerAliasForArgument(
+                    $metadata->getServiceId('manager'),
+                    $objectManagerClass,
+                    $metadata->getHumanizedName() . ' manager'
+                );
+            }
         }
     }
 
