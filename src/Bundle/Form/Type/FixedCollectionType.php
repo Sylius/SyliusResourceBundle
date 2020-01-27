@@ -30,7 +30,7 @@ final class FixedCollectionType extends AbstractType
             $entryName = $options['entry_name']($entry);
             $entryOptions = $options['entry_options']($entry);
 
-            $builder->add($entryName, $entryType, array_replace([
+            $builder->add($entryName, $entryType, (array) array_replace([
                 'property_path' => '[' . $entryName . ']',
                 'block_name' => 'entry',
             ], $entryOptions));

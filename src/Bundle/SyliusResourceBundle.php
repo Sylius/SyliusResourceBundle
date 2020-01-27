@@ -25,7 +25,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 final class SyliusResourceBundle extends Bundle
 {
     public const DRIVER_DOCTRINE_ORM = 'doctrine/orm';
+
     public const DRIVER_DOCTRINE_MONGODB_ODM = 'doctrine/mongodb-odm';
+
     public const DRIVER_DOCTRINE_PHPCR_ODM = 'doctrine/phpcr-odm';
 
     /**

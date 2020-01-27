@@ -19,9 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 final class RequestConfigurationFactory implements RequestConfigurationFactoryInterface
 {
     private const API_VERSION_HEADER = 'Accept';
+
     private const API_GROUPS_HEADER = 'Accept';
 
     private const API_VERSION_REGEXP = '/(v|version)=(?P<version>[0-9\.]+)/i';
+
     private const API_GROUPS_REGEXP = '/(g|groups)=(?P<groups>[a-z,_\s]+)/i';
 
     /** @var ParametersParserInterface */
@@ -56,7 +58,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
      */
     private function parseApiParameters(Request $request): array
     {
-        $parameters = [];
+        $parameters = $request->attributes->get('_sylius', []);
 
         /** @var string[] $apiVersionHeaders */
         $apiVersionHeaders = $request->headers->get(self::API_VERSION_HEADER, null, false);
@@ -66,14 +68,19 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
             }
         }
 
+        $allowedSerializationGroups = array_merge(
+            $parameters['allowed_serialization_groups'] ?? [],
+            $parameters['serialization_groups'] ?? []
+        );
+
         /** @var string[] $apiGroupsHeaders */
         $apiGroupsHeaders = $request->headers->get(self::API_GROUPS_HEADER, null, false);
         foreach ($apiGroupsHeaders as $apiGroupsHeader) {
             if (preg_match(self::API_GROUPS_REGEXP, $apiGroupsHeader, $matches)) {
-                $parameters['serialization_groups'] = array_map('trim', explode(',', $matches['groups']));
+                $parameters['serialization_groups'] = array_intersect($allowedSerializationGroups, array_map('trim', explode(',', $matches['groups'])));
             }
         }
 
-        return array_merge($request->attributes->get('_sylius', []), $parameters);
+        return $parameters;
     }
 }
