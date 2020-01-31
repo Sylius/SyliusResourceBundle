@@ -57,10 +57,10 @@ class EntityRepository extends BaseEntityRepository implements RepositoryInterfa
         return $this->getPaginator($queryBuilder);
     }
 
-    protected function getPaginator(QueryBuilder $queryBuilder): Pagerfanta
+    // Use output walkers option in DoctrineORMAdapter should be false as it affects performance greatly (see #3775)
+    protected function getPaginator(QueryBuilder $queryBuilder, $fetchJoinCollection = true, $useOutputWalker = false): Pagerfanta
     {
-        // Use output walkers option in DoctrineORMAdapter should be false as it affects performance greatly (see #3775)
-        return new Pagerfanta(new DoctrineORMAdapter($queryBuilder, false, false));
+        return new Pagerfanta(new DoctrineORMAdapter($queryBuilder, $fetchJoinCollection, $useOutputWalker));
     }
 
     /**
