@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use FOS\RestBundle\View\View;
-use FOS\RestBundle\View\ViewHandler as RestViewHandler;
+use FOS\RestBundle\View\ViewHandlerInterface as RestViewHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface
 {
-    /** @var RestViewHandler */
+    /** @var RestViewHandlerInterface */
     private $restViewHandler;
 
-    public function __construct(RestViewHandler $restViewHandler)
+    public function __construct(RestViewHandlerInterface $restViewHandler)
     {
         $this->restViewHandler = $restViewHandler;
     }
