@@ -24,7 +24,7 @@
 
         "doctrine/doctrine-bundle": "^1.12|^2.0",
         "doctrine/persistence": "^1.3",
-        "friendsofsymfony/rest-bundle": "^2.1",
+        "friendsofsymfony/rest-bundle": "^2.6|^3.0@dev",
         "jms/serializer-bundle": "^3.5",
         "stof/doctrine-extensions-bundle": "^1.2",
         "sylius/registry": "^1.2",
