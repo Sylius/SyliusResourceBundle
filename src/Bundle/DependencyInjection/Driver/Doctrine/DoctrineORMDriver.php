@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine;
 
+use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -81,11 +83,19 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
 
         /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {
-            $container->registerAliasForArgument(
-                $metadata->getServiceId('manager'),
+            $typehintClasses = [
+                DeprecatedObjectManager::class,
+                ObjectManager::class,
                 EntityManagerInterface::class,
-                $metadata->getHumanizedName() . ' manager'
-            );
+            ];
+
+            foreach ($typehintClasses as $typehintClass) {
+                $container->registerAliasForArgument(
+                    $metadata->getServiceId('manager'),
+                    $typehintClass,
+                    $metadata->getHumanizedName() . ' manager'
+                );
+            }
         }
     }
 

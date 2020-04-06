@@ -41,7 +41,6 @@
         "winzou/state-machine-bundle": "^0.3|^0.4"
     },
     "require-dev": {
-        "behat/transliterator": "dev-master",
         "doctrine/orm": "^2.5",
         "gedmo/doctrine-extensions": "^2.4",
         "lchrusciel/api-test-case": "^4.1.0",
