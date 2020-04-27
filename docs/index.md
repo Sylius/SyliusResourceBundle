@@ -30,7 +30,6 @@ So far we support:
 * [delete_resource](delete_resource.md)
 * [reference](reference.md)
 
-
-##Learn more
+## Learn more
 
 * [Resource Layer in the Sylius platform](https://docs.sylius.com/en/latest/book/architecture/resource_layer.html) - concept documentation
