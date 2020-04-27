@@ -4,6 +4,11 @@ To display a form, handle its submission or to create a new resource via API,
 you should use the **createAction** of your **app.controller.book** service.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -30,6 +35,11 @@ When validation fails, it will render the form just like previously with the err
 Just like for the **show** and **index** actions, you can customize the template per route.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -45,6 +55,11 @@ You can also use custom form type on per route basis. Following Symfony3 convent
 Below you can see the usage for specifying a custom form.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -61,6 +76,11 @@ Well, there's a configuration for that!
 Below you can see the usage for specifying custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -78,6 +98,11 @@ By default, ``ResourceController`` will use the ``createNew`` method with no arg
 To use a different method of your factory, you can simply configure the ``factory`` option.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -89,6 +114,11 @@ To use a different method of your factory, you can simply configure the ``factor
 Additionally, if you want to provide your custom method with arguments from the request, you can do so by adding more parameters.
 
 ```yaml
+<<<<<<< HEAD
+=======
+    # config/routes.yaml
+
+>>>>>>> b2de718... ResourceBundle documentation extracted to its repository
     app_book_create:
         path: /books/{author}/new
         methods: [GET, POST]

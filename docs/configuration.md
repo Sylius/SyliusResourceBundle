@@ -60,8 +60,8 @@ Remember that the ``doctrine/orm`` driver is used by default.
                 classes:
                     model: App\Document\ArticleDocument
 ```
-## Generate API routing.
 
+## Generate API routing.
 
 Learn more about using Sylius REST API in these articles:
 [How to use Sylius API? - Cookbook](https://docs.sylius.com/en/latest/cookbook/api/api.html)
