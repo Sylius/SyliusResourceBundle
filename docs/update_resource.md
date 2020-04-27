@@ -94,8 +94,7 @@ By default, the **updateAction** will look for the resource by id. You can easil
             _sylius:
                 criteria: { title: $title }
 ```
-Custom Redirect After Success
------------------------------
+## Custom Redirect After Success
 
 By default the controller will try to get the id of resource and redirect to the "show" route. To change that, use the following configuration.
 
@@ -164,8 +163,7 @@ Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty 
                 criteria: { title: $title }
                 return_content: true
 ```
-**Warning**
-
+### **Warning**
 The `return_content` flag is available for the `applyStateMachineTransitionAction` method as well. But these are the only ones which can be configured this way.
 It is worth noticing, that the `applyStateMachineTransitionAction` returns a default `200 HTTP Code` response with a fully serialized object.
 

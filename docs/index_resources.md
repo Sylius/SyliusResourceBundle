@@ -1,4 +1,4 @@
-#Getting a Collection of Resources
+# Getting a Collection of Resources
 
 To get a paginated list of Books, we will use **indexAction** of our controller.
 In the default scenario, it will return an instance of paginator, with a list of Books.
