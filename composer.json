@@ -89,6 +89,9 @@
             "@php vendor/bin/ecs check src --fix"
         ]
     },
+    "conflict": {
+        "amphp/amp": "2.4.3"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.7-dev"
