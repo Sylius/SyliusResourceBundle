@@ -7,160 +7,160 @@ SyliusResourceBundle ships with a custom route loader that can save you some tim
 To generate a full CRUD routing, simply configure it in your ``config/routes.yaml``:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+    type: sylius.resource
 ```
 Results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{id}
-    app_book_index           GET             ANY      ANY    /books/
-    app_book_create          GET|POST        ANY      ANY    /books/new
-    app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{id}/edit
-    app_book_delete          DELETE          ANY      ANY    /books/{id}
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_index           GET             ANY      ANY    /books/
+app_book_create          GET|POST        ANY      ANY    /books/new
+app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{id}/edit
+app_book_delete          DELETE          ANY      ANY    /books/{id}
 ```
 ## Using a Custom Path
 
 By default, Sylius will use a plural form of the resource name, but you can easily customize the path:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            path: library
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        path: library
+    type: sylius.resource
 ```
 Results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /library/{id}
-    app_book_index           GET             ANY      ANY    /library/
-    app_book_create          GET|POST        ANY      ANY    /library/new
-    app_book_update          GET|PUT|PATCH   ANY      ANY    /library/{id}/edit
-    app_book_delete          DELETE          ANY      ANY    /library/{id}
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /library/{id}
+app_book_index           GET             ANY      ANY    /library/
+app_book_create          GET|POST        ANY      ANY    /library/new
+app_book_update          GET|PUT|PATCH   ANY      ANY    /library/{id}/edit
+app_book_delete          DELETE          ANY      ANY    /library/{id}
 ```
 ## Generating API CRUD Routing
 
 To generate a full API-friendly CRUD routing, add these YAML lines to your ``config/routes.yaml``:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-        type: sylius.resource_api
+app_book:
+    resource: |
+        alias: app.book
+    type: sylius.resource_api
 ```
 Results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{id}
-    app_book_index           GET             ANY      ANY    /books/
-    app_book_create          POST            ANY      ANY    /books/
-    app_book_update          PUT|PATCH       ANY      ANY    /books/{id}
-    app_book_delete          DELETE          ANY      ANY    /books/{id}
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_index           GET             ANY      ANY    /books/
+app_book_create          POST            ANY      ANY    /books/
+app_book_update          PUT|PATCH       ANY      ANY    /books/{id}
+app_book_delete          DELETE          ANY      ANY    /books/{id}
 ```
 ## Excluding Routes
 
 If you want to skip some routes, simply use ``except`` configuration:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            except: ['delete', 'update']
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        except: ['delete', 'update']
+    type: sylius.resource
 ```
 Results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{id}
-    app_book_index           GET             ANY      ANY    /books/
-    app_book_create          GET|POST        ANY      ANY    /books/new
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_index           GET             ANY      ANY    /books/
+app_book_create          GET|POST        ANY      ANY    /books/new
 ```
 ## Generating Only Specific Routes
 
 If you want to generate only some specific routes, simply use the ``only`` configuration:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            only: ['show', 'index']
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        only: ['show', 'index']
+    type: sylius.resource
 ```
 Results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{id}
-    app_book_index           GET             ANY      ANY    /books/
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_index           GET             ANY      ANY    /books/
 ```
 ## Generating Routing for a Section
 
 Sometimes you want to generate routing for different "sections" of an application:
 
 ```yaml
-    app_admin_book:
-        resource: |
-            alias: app.book
-            section: admin
-        type: sylius.resource
-        prefix: /admin
+app_admin_book:
+    resource: |
+        alias: app.book
+        section: admin
+    type: sylius.resource
+    prefix: /admin
 
-    app_library_book:
-        resource: |
-            alias: app.book
-            section: library
-            only: ['show', 'index']
-        type: sylius.resource
-        prefix: /library
+app_library_book:
+    resource: |
+        alias: app.book
+        section: library
+        only: ['show', 'index']
+    type: sylius.resource
+    prefix: /library
 ```
 The generation results in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_admin_book_show      GET             ANY      ANY    /admin/books/{id}
-    app_admin_book_index     GET             ANY      ANY    /admin/books/
-    app_admin_book_create    GET|POST        ANY      ANY    /admin/books/new
-    app_admin_book_update    GET|PUT|PATCH   ANY      ANY    /admin/books/{id}/edit
-    app_admin_book_delete    DELETE          ANY      ANY    /admin/books/{id}
-    app_library_book_show    GET             ANY      ANY    /library/books/{id}
-    app_library_book_index   GET             ANY      ANY    /library/books/
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_admin_book_show      GET             ANY      ANY    /admin/books/{id}
+app_admin_book_index     GET             ANY      ANY    /admin/books/
+app_admin_book_create    GET|POST        ANY      ANY    /admin/books/new
+app_admin_book_update    GET|PUT|PATCH   ANY      ANY    /admin/books/{id}/edit
+app_admin_book_delete    DELETE          ANY      ANY    /admin/books/{id}
+app_library_book_show    GET             ANY      ANY    /library/books/{id}
+app_library_book_index   GET             ANY      ANY    /library/books/
 ```
 ## Using Custom Templates
 
@@ -168,13 +168,13 @@ By default, ``ResourceController`` will use the templates namespace you have con
 You can easily change that per route, but it is also easy when you generate the routing:
 
 ```yaml
-    app_admin_book:
-        resource: |
-            alias: app.book
-            section: admin
-            templates: Admin/Book
-        type: sylius.resource
-        prefix: /admin
+app_admin_book:
+    resource: |
+        alias: app.book
+        section: admin
+        templates: Admin/Book
+    type: sylius.resource
+    prefix: /admin
 ```
 Following templates will be used for actions:
 
@@ -188,11 +188,11 @@ Following templates will be used for actions:
 If you want to use a custom form:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            form: App/Form/Type/AdminBookType
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        form: App/Form/Type/AdminBookType
+    type: sylius.resource
 ```
 ``create`` and ``update`` actions will use ``App/Form/Type/AdminBookType`` form type.
 
@@ -205,11 +205,11 @@ By default, after successful resource creation or update, Sylius will redirect t
 If you want to change that behavior, use the following configuration:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            redirect: update
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        redirect: update
+    type: sylius.resource
 ```
 ## API Versioning
 
@@ -217,20 +217,20 @@ One of the ResourceBundle dependencies is JMSSerializer, which provides a useful
 If you would like to return only the second version of your object serializations, use the following snippet:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            serialization_version: 2
-        type: sylius.resource_api
+app_book:
+    resource: |
+        alias: app.book
+        serialization_version: 2
+    type: sylius.resource_api
 ```
 What is more, you can use a path variable to dynamically change your request. You can achieve this by setting a path prefix when importing file or specify it in the path option.
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            serialization_version: $version
-        type: sylius.resource_api
+app_book:
+    resource: |
+        alias: app.book
+        serialization_version: $version
+    type: sylius.resource_api
 ```
 ### **Note** 
 Remember that a dynamically resolved `books` prefix is no longer available when you specify ``path``, and it has to be defined manually.
@@ -241,27 +241,27 @@ Sometimes it is convenient to add some additional constraint when resolving reso
 Assuming that the path prefix is `/libraries/{libraryId}`, if you would like to list all books from this library, you could use the following snippet:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-            criteria:
-                library: $libraryId
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+        criteria:
+            library: $libraryId
+    type: sylius.resource
 ```
 Which will result in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ ---------------------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ ---------------------------------------
-    app_book_show            GET             ANY      ANY    /libraries/{libraryId}/books/{id}
-    app_book_index           GET             ANY      ANY    /libraries/{libraryId}/books/
-    app_book_create          GET|POST        ANY      ANY    /libraries/{libraryId}/books/new
-    app_book_update          GET|PUT|PATCH   ANY      ANY    /libraries/{libraryId}/books/{id}/edit
-    app_book_delete          DELETE          ANY      ANY    /libraries/{libraryId}/books/{id}
+------------------------ --------------- -------- ------ ---------------------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ ---------------------------------------
+app_book_show            GET             ANY      ANY    /libraries/{libraryId}/books/{id}
+app_book_index           GET             ANY      ANY    /libraries/{libraryId}/books/
+app_book_create          GET|POST        ANY      ANY    /libraries/{libraryId}/books/new
+app_book_update          GET|PUT|PATCH   ANY      ANY    /libraries/{libraryId}/books/{id}/edit
+app_book_delete          DELETE          ANY      ANY    /libraries/{libraryId}/books/{id}
 ```
 
 ## Using a Custom Identifier
@@ -270,28 +270,28 @@ As you could notice the generated routing resolves resources by the ``id`` field
 If you want to look for books by ``isbn``, use the following configuration:
 
 ```yaml
-    app_book:
-        resource: |
-            identifier: isbn
-            alias: app.book
-            criteria:
-                isbn: $isbn
-        type: sylius.resource
+app_book:
+    resource: |
+        identifier: isbn
+        alias: app.book
+        criteria:
+            isbn: $isbn
+    type: sylius.resource
 ```
 Which will result in the following routes:
 
 ```bash
-    php bin/console debug:router
+php bin/console debug:router
 ```
 ```
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{isbn}
-    app_book_index           GET             ANY      ANY    /books/
-    app_book_create          GET|POST        ANY      ANY    /books/new
-    app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{isbn}/edit
-    app_book_delete          DELETE          ANY      ANY    /books/{isbn}
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{isbn}
+app_book_index           GET             ANY      ANY    /books/
+app_book_create          GET|POST        ANY      ANY    /books/new
+app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{isbn}/edit
+app_book_delete          DELETE          ANY      ANY    /books/{isbn}
 ```
 
 **[Go back to the documentation's index](index.md)**

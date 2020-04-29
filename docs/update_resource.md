@@ -3,11 +3,13 @@
 To display an edit form of a particular resource, change it or update it via API, you should use the **updateAction** action of your **app.controller.book** service.
 
 ```yaml
-    app_book_update:
-        path: /books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
 ```
 Done! Now when you go to ``/books/5/edit``, ResourceController will use the repository (``app.repository.book``) to find the book with id == **5**.
 If found it will create the ``app_book`` form, and set the existing book as data.
@@ -17,8 +19,8 @@ If found it will create the ``app_book`` form, and set the existing book as data
 You can use exactly the same route to handle the submit of the form and updating the book.
 
 ```html
-    <form method="post" action="{{ path('app_book_update', {'id': book.id}) }}">
-        <input type="hidden" name="_method" value="PUT" />
+<form method="post" action="{{ path('app_book_update', {'id': book.id}) }}">
+    <input type="hidden" name="_method" value="PUT" />
 ```
 On submit, the update action with method PUT, will bind the request on the form, and if it is valid it will use the right manager to persist the resource.
 Then, by default it redirects to ``app_book_show`` to display the updated book, but like for creation of the resource - it's customizable.
@@ -30,13 +32,15 @@ When validation fails, it will simply render the form again, but with error mess
 Just like for other actions, you can customize the template.
 
 ```yaml
-    app_book_update:
-        path: /books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                template: Admin/Book/update.html.twig
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            template: Admin/Book/update.html.twig
 ```
 
 ## Using Custom Form
@@ -44,13 +48,15 @@ Just like for other actions, you can customize the template.
 Same way like for **createAction** you can override the default form.
 
 ```yaml
-    app_book_update:
-        path: /books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                form: App\Form\BookType
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            form: App\Form\BookType
 ```
 ## Passing Custom Options to Form
 
@@ -59,16 +65,18 @@ Same way like for **createAction** you can pass options to the form.
 Below you can see how to specify custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
 
 ```yaml
-    app_book_update:
-        path: /books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                form:
-                    type: app_book_custom
-                    options:
-                        validation_groups: [sylius, my_custom_group]
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            form:
+                type: app_book_custom
+                options:
+                    validation_groups: [sylius, my_custom_group]
 ```
 
 ## Overriding the Criteria
@@ -76,13 +84,15 @@ Below you can see how to specify custom options, in this case, ``validation_grou
 By default, the **updateAction** will look for the resource by id. You can easily change that criteria.
 
 ```yaml
-    app_book_update:
-        path: /books/{title}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                criteria: { title: $title }
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{title}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            criteria: { title: $title }
 ```
 
 ## Custom Redirect After Success
@@ -90,26 +100,30 @@ By default, the **updateAction** will look for the resource by id. You can easil
 By default the controller will try to get the id of resource and redirect to the "show" route. To change that, use the following configuration.
 
 ```yaml
-    app_book_update:
-        path: /books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                redirect: app_book_index
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            redirect: app_book_index
 ```
 You can also perform more complex redirects, with parameters. For example:
 
 ```yaml
-    app_book_update:
-        path: /genre/{genreId}/books/{id}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                redirect:
-                    route: app_genre_show
-                    parameters: { id: $genreId }
+# config/routes.yaml
+
+app_book_update:
+    path: /genre/{genreId}/books/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            redirect:
+                route: app_genre_show
+                parameters: { id: $genreId }
 ```
 
 ## Custom Event Name
@@ -119,13 +133,15 @@ The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_upd
 own action name.
 
 ```yaml
-    app_book_customer_update:
-        path: /customer/book-update/{id}
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                event: customer_update
+# config/routes.yaml
+
+app_book_customer_update:
+    path: /customer/book-update/{id}
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            event: customer_update
 ```
 This way, you can listen to ``app.book.pre_customer_update`` and ``app.book.post_customer_update`` events. It's especially useful, when you use
 ``ResourceController:updateAction`` in more than one route.
@@ -137,14 +153,16 @@ Depending on your app approach it can be useful to return a changed object or on
 Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty response. If you would like to receive a whole object as a response you should set a ``return_content`` option to true.
 
 ```yaml
-    app_book_update:
-        path: /books/{title}/edit
-        methods: [GET, PUT]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                criteria: { title: $title }
-                return_content: true
+# config/routes.yaml
+
+app_book_update:
+    path: /books/{title}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            criteria: { title: $title }
+            return_content: true
 ```
 
 ### **Warning**
@@ -154,25 +172,27 @@ It is worth noticing, that the ``applyStateMachineTransitionAction`` returns a d
 ## Configuration Reference
 
 ```yaml
-    app_book_update:
-        path: /genre/{genreId}/books/{title}/edit
-        methods: [GET, PUT, PATCH]
-        defaults:
-            _controller: app.controller.book:updateAction
-            _sylius:
-                template: Book/editInGenre.html.twig
-                form: app_book_custom
-                event: book_update
-                repository:
-                    method: findBookByTitle
-                    arguments: [$title, expr:service('app.context.book')]
-                criteria:
-                    enabled: true
-                    genreId: $genreId
-                redirect:
-                    route: app_book_show
-                    parameters: { title: resource.title }
-                return_content: true
+# config/routes.yaml
+
+app_book_update:
+    path: /genre/{genreId}/books/{title}/edit
+    methods: [GET, PUT, PATCH]
+    defaults:
+        _controller: app.controller.book:updateAction
+        _sylius:
+            template: Book/editInGenre.html.twig
+            form: app_book_custom
+            event: book_update
+            repository:
+                method: findBookByTitle
+                arguments: [$title, expr:service('app.context.book')]
+            criteria:
+                enabled: true
+                genreId: $genreId
+            redirect:
+                route: app_book_show
+                parameters: { title: resource.title }
+            return_content: true
 ```          
 **[Go back to the documentation's index](index.md)**
 

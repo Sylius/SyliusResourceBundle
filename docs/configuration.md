@@ -13,20 +13,20 @@ You can see a full exemplary configuration of a typical resource
 ## Implement the ResourceInterface in your model class.
 
 ```php
-    namespace App\Entity;
+namespace App\Entity;
 
-    use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
-    class Book implements ResourceInterface
+class Book implements ResourceInterface
+{
+    // Most of the time you have the code below already in your class.
+    protected $id;
+
+    public function getId()
     {
-        // Most of the time you have the code below already in your class.
-        protected $id;
-
-        public function getId()
-        {
-            return $this->id;
-        }
+        return $this->id;
     }
+}
 ```
 
 ## Configure the class as a resource.
@@ -34,11 +34,11 @@ You can see a full exemplary configuration of a typical resource
 In your ``config/packages/sylius_resource.yaml`` add:
 
 ```yaml
-    sylius_resource:
-        resources:
-            app.book:
-                classes:
-                    model: App\Entity\Book
+sylius_resource:
+    resources:
+        app.book:
+            classes:
+                model: App\Entity\Book
 ```
 That's it! Your Book entity is now registered as Sylius Resource.
 
@@ -47,18 +47,18 @@ That's it! Your Book entity is now registered as Sylius Resource.
 Remember that the ``doctrine/orm`` driver is used by default.
 
 ```yaml
-    sylius_resource:
-        drivers:
-            - doctrine/orm
-            - doctrine/phpcr-odm
-        resources:
-            app.book:
-                classes:
-                    model: App\Entity\Book
-            app.article:
-                driver: doctrine/phpcr-odm
-                classes:
-                    model: App\Document\ArticleDocument
+sylius_resource:
+    drivers:
+        - doctrine/orm
+        - doctrine/phpcr-odm
+    resources:
+        app.book:
+            classes:
+                model: App\Entity\Book
+        app.article:
+            driver: doctrine/phpcr-odm
+            classes:
+                model: App\Document\ArticleDocument
 ```
 ## Generate API routing.
 
@@ -68,10 +68,10 @@ Learn more about using Sylius REST API in these articles:
 Add the following lines to ``config/routes.yaml``:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-        type: sylius.resource_api
+app_book:
+    resource: |
+        alias: app.book
+    type: sylius.resource_api
 ```
 After that a full JSON/XML CRUD API is ready to use.
 Sounds crazy? Spin up the built-in server and give it a try:
@@ -99,10 +99,10 @@ As you can guess, other CRUD actions are available through this API.
 What if you want to render HTML pages? That's easy! Update the routing configuration:
 
 ```yaml
-    app_book:
-        resource: |
-            alias: app.book
-        type: sylius.resource
+app_book:
+    resource: |
+        alias: app.book
+    type: sylius.resource
 ```
 This will generate routing for HTML views.
 

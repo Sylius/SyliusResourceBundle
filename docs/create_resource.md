@@ -4,11 +4,13 @@ To display a form, handle its submission or to create a new resource via API,
 you should use the **createAction** of your **app.controller.book** service.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
 ```
 Done! Now when you go to ``/books/new``, the ResourceController will use the factory (``app.factory.book``) to create a new book instance.
 Then it will try to create an ``app_book`` form, and set the newly created book as its data.
@@ -30,13 +32,15 @@ When validation fails, it will render the form just like previously with the err
 Just like for the **show** and **index** actions, you can customize the template per route.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                template: Book/create.html.twig
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            template: Book/create.html.twig
 ```
 ## Using Custom Form
 
@@ -45,13 +49,15 @@ You can also use custom form type on per route basis. Following Symfony3 convent
 Below you can see the usage for specifying a custom form.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                form: App\Form\BookType
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            form: App\Form\BookType
 ```
 ## Passing Custom Options to Form
 
@@ -61,16 +67,18 @@ Well, there's a configuration for that!
 Below you can see the usage for specifying custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                form:
-                    type: App\Form\BookType
-                    options:
-                        validation_groups: [sylius, my_custom_group]
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            form:
+                type: App\Form\BookType
+                options:
+                    validation_groups: [sylius, my_custom_group]
 ```
 ## Using Custom Factory Method
 
@@ -78,26 +86,30 @@ By default, ``ResourceController`` will use the ``createNew`` method with no arg
 To use a different method of your factory, you can simply configure the ``factory`` option.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                factory: createNewWithAuthor
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            factory: createNewWithAuthor
 ```
 Additionally, if you want to provide your custom method with arguments from the request, you can do so by adding more parameters.
 
 ```yaml
-    app_book_create:
-        path: /books/{author}/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                factory:
-                    method: createNewWithAuthor
-                    arguments: [$author]
+# config/routes.yaml
+
+app_book_create:
+    path: /books/{author}/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            factory:
+                method: createNewWithAuthor
+                arguments: [$author]
 ```
 With this configuration, ``$factory->createNewWithAuthor($request->get('author'))`` will be called to create new resource within the ``createAction``.
 
@@ -106,15 +118,17 @@ With this configuration, ``$factory->createNewWithAuthor($request->get('author')
 If you would like to use your own service to create the resource, then try the following configuration:
 
 ```yaml
-    app_book_create:
-        path: /{authorId}/books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                factory:
-                    method: ["expr:service('app.factory.custom_book_factory')", "createNewByAuthorId"]
-                    arguments: $authorId
+# config/routes.yaml
+
+app_book_create:
+    path: /{authorId}/books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            factory:
+                method: ["expr:service('app.factory.custom_book_factory')", "createNewByAuthorId"]
+                arguments: $authorId
 ```
 With this configuration, service with id "app.factory.custom_book_factory" will be called to create new resource within the ``createNewByAuthorId`` method and the author id from the url as argument.
 
@@ -125,39 +139,45 @@ You can easily change that behaviour.
 For example, to redirect to the index list after successfully creating a new resource - you can use the following configuration.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                redirect: app_book_index
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            redirect: app_book_index
 ```
 You can also perform more complex redirects, with parameters. For example:
 
 ```yaml
-    app_book_create:
-        path: /genre/{genreId}/books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                redirect:
-                    route: app_genre_show
-                    parameters: { id: $genreId }
+# config/routes.yaml
+
+app_book_create:
+    path: /genre/{genreId}/books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            redirect:
+                route: app_genre_show
+                parameters: { id: $genreId }
 ```
 In addition to the request parameters, you can access some of the newly created objects properties, using the ``resource.`` prefix.
 
 ```yaml
-    app_book_create:
-        path: /books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                redirect:
-                    route: app_book_show
-                    parameters: { title: resource.title }
+# config/routes.yaml
+
+app_book_create:
+    path: /books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            redirect:
+                route: app_book_show
+                parameters: { title: resource.title }
 ```
 With this configuration, the ``title`` parameter for route ``app_book_show`` will be obtained from your newly created book.
 
@@ -168,13 +188,15 @@ The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_cre
 own action name.
 
 ```yaml
-    app_book_customer_create:
-        path: /customer/books/new
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                event: customer_create
+# config/routes.yaml
+
+app_book_customer_create:
+    path: /customer/books/new
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            event: customer_create
 ```
 This way, you can listen to ``app.book.pre_customer_create`` and ``app.book.post_customer_create`` events. It's especially useful, when you use
 ``ResourceController:createAction`` in more than one route.
@@ -182,23 +204,25 @@ This way, you can listen to ``app.book.pre_customer_create`` and ``app.book.post
 ## Configuration Reference
 
 ```yaml
-    app_genre_book_add:
-        path: /{genreName}/books/add
-        methods: [GET, POST]
-        defaults:
-            _controller: app.controller.book:createAction
-            _sylius:
-                template: Book/addToGenre.html.twig
-                form: App\Form\BookType
-                event: book_create
-                factory:
-                    method: createForGenre
-                    arguments: [$genreName]
-                criteria:
-                    group.name: $genreName
-                redirect:
-                    route: app_book_show
-                    parameters: { title: resource.title }
+# config/routes.yaml
+
+app_genre_book_add:
+    path: /{genreName}/books/add
+    methods: [GET, POST]
+    defaults:
+        _controller: app.controller.book:createAction
+        _sylius:
+            template: Book/addToGenre.html.twig
+            form: App\Form\BookType
+            event: book_create
+            factory:
+                method: createForGenre
+                arguments: [$genreName]
+            criteria:
+                group.name: $genreName
+            redirect:
+                route: app_book_show
+                parameters: { title: resource.title }
 ```
 
 **[Go back to the documentation's index](index.md)**

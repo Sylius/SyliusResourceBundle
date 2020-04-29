@@ -7,30 +7,30 @@ Have you noticed how Sylius generates forms for you? Of course, for many use-cas
 ### Create a FormType class for your resource
 
 ```php
-    namespace App\Form\Type;
+namespace App\Form\Type;
 
-    use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
-    use Symfony\Component\Form\FormBuilderInterface;
+use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
-    class BookType extends AbstractResourceType
+class BookType extends AbstractResourceType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /**
-         * {@inheritdoc}
-         */
-        public function buildForm(FormBuilderInterface $builder, array $options)
-        {
-            // Build your custom form, with all fields that you need
-            $builder->add('title', TextType::class);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-        public function getBlockPrefix()
-        {
-            return 'app_book';
-        }
+        // Build your custom form, with all fields that you need
+        $builder->add('title', TextType::class);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'app_book';
+    }
+}
 ```
 ### **Note**
 The getBlockPrefix method returns the prefix of the template block name for this type.
@@ -44,21 +44,21 @@ the registration of a form type is only needed when the form is extending the ``
 or when it has some custom constructor dependencies.
 
 ```yaml
-    app.book.form.type:
-        class: App\Form\Type\BookType
-        tags:
-            - { name: form.type }
-        arguments: ['%app.model.book.class%', '%app.book.form.type.validation_groups%']
+app.book.form.type:
+    class: App\Form\Type\BookType
+    tags:
+        - { name: form.type }
+    arguments: ['%app.model.book.class%', '%app.book.form.type.validation_groups%']
 ```
 ## Configure the form for your resource
 
 ```yaml
-    sylius_resource:
-        resources:
-            app.book:
-                classes:
-                    model: App\Entity\Book
-                    form: App\Form\Type\BookType
+sylius_resource:
+    resources:
+        app.book:
+            classes:
+                model: App\Entity\Book
+                form: App\Form\Type\BookType
 ```
 That's it. Your new class will be used for all forms!
 

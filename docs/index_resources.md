@@ -4,11 +4,13 @@ To get a paginated list of Books, we will use **indexAction** of our controller.
 In the default scenario, it will return an instance of paginator, with a list of Books.
 
 ```yaml
-    app_book_index:
-        path: /books
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
+# config/routes.yaml
+
+app_book_index:
+    path: /books
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
 ```
 When you go to ``/books``, the ResourceController will use the repository (``app.repository.book``) to create a paginator.
 The default template will be rendered - ``App:Book:index.html.twig`` with the paginator as the ``books`` variable.
@@ -21,16 +23,18 @@ which is a [Library](https://github.com/whiteoctober/Pagerfanta) used to manage 
 Just like for the **showAction**, you can override the default template and criteria.
 
 ```yaml
-    app_book_index_inactive:
-        path: /books/disabled
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
-            _sylius:
-                filterable: true
-                criteria:
-                    enabled: false
-                template: Book/disabled.html.twig
+# config/routes.yaml
+
+app_book_index_inactive:
+    path: /books/disabled
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            filterable: true
+            criteria:
+                enabled: false
+            template: Book/disabled.html.twig
 ```
 This action will render a custom template with a paginator only for disabled Books.
 
@@ -39,16 +43,18 @@ This action will render a custom template with a paginator only for disabled Boo
 Except filtering, you can also sort Books.
 
 ```yaml
-    app_book_index_top:
-        path: /books/top
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
-            _sylius:
-                sortable: true
-                sorting:
-                    score: desc
-                template: Book/top.html.twig
+# config/routes.yaml
+
+app_book_index_top:
+    path: /books/top
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            sortable: true
+            sorting:
+                score: desc
+            template: Book/top.html.twig
 ```
 Under that route, you can paginate over the Books by their score.
 
@@ -66,17 +72,19 @@ It will transform your doctrine query builder into ``Pagerfanta\Pagerfanta`` obj
 You can also control the "max per page" for paginator, using ``paginate`` parameter.
 
 ```yaml
-    app_book_index_top:
-        path: /books/top
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
-            _sylius:
-                paginate: 5
-                sortable: true
-                sorting:
-                    score: desc
-                template: Book/top.html.twig
+# config/routes.yaml
+
+app_book_index_top:
+    path: /books/top
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            paginate: 5
+            sortable: true
+            sorting:
+                score: desc
+            template: Book/top.html.twig
 ```
 This will paginate 5 books per page, where 10 is the default.
 
@@ -85,18 +93,20 @@ This will paginate 5 books per page, where 10 is the default.
 Pagination is handy, but you do not always want to do it, you can disable pagination and simply request a collection of resources.
 
 ```yaml
-    app_book_index_top3:
-        path: /books/top
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
-            _sylius:
-                paginate: false
-                limit: 3
-                sortable: true
-                sorting:
-                    score: desc
-                template: Book/top3.html.twig
+# config/routes.yaml
+
+app_book_index_top3:
+    path: /books/top
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            paginate: false
+            limit: 3
+            sortable: true
+            sorting:
+                score: desc
+            template: Book/top3.html.twig
 ```
 That action will return the top 3 books by score, as the ``books`` variable.
 
@@ -104,22 +114,24 @@ That action will return the top 3 books by score, as the ``books`` variable.
 
 
 ```yaml
-    app_book_index:
-        path: /{author}/books
-        methods: [GET]
-        defaults:
-            _controller: app.controller.book:indexAction
-            _sylius:
-                template: Author/books.html.twig
-                repository:
-                    method: createPaginatorByAuthor
-                    arguments: [$author]
-                criteria:
-                    enabled: true
-                    author.name: $author
-                paginate: false # Or: 50
-                limit: 100 # Or: false
-                serialization_groups: [Custom, Details]
-                serialization_version: 1.0.2
+# config/routes.yaml
+
+app_book_index:
+    path: /{author}/books
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            template: Author/books.html.twig
+            repository:
+                method: createPaginatorByAuthor
+                arguments: [$author]
+            criteria:
+                enabled: true
+                author.name: $author
+            paginate: false # Or: 50
+            limit: 100 # Or: false
+            serialization_groups: [Custom, Details]
+            serialization_version: 1.0.2
 ```
 **[Go back to the documentation's index](index.md)**
