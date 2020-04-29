@@ -6,13 +6,13 @@ Use the following command to add the bundle to your ``composer.json`` and downlo
 If you have [Composer installed globally](http://getcomposer.org/doc/00-intro.md#globally).
 
 ```bash
-    composer require sylius/resource-bundle
+composer require sylius/resource-bundle
 ```
 Otherwise you have to download .phar file.
 
 ```bash
-    curl -sS https://getcomposer.org/installer | php
-    php composer.phar require sylius/resource-bundle
+curl -sS https://getcomposer.org/installer | php
+php composer.phar require sylius/resource-bundle
 ```
 ## Adding Required Bundles to The Kernel
 

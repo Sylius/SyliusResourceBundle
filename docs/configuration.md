@@ -77,20 +77,20 @@ After that a full JSON/XML CRUD API is ready to use.
 Sounds crazy? Spin up the built-in server and give it a try:
 
 ```bash
-    php bin/console server:run
+php bin/console server:run
 ```
 You should see something like:
 
 ```bash
-    Server running on http://127.0.0.1:8000
+Server running on http://127.0.0.1:8000
 
-    Quit the server with CONTROL-C.
+Quit the server with CONTROL-C.
 ```
 Now, in a separate Terminal window, call these commands:
 
 ```bash
-   curl -i -X POST -H "Content-Type: application/json" -d '{"title": "Lord of The Rings", "author": "J. R. R. Tolkien", "description": "Amazing!"}' http://localhost:8000/books/
-   curl -i -X GET -H "Accept: application/json" http://localhost:8000/books/
+curl -i -X POST -H "Content-Type: application/json" -d '{"title": "Lord of The Rings", "author": "J. R. R. Tolkien", "description": "Amazing!"}' http://localhost:8000/books/
+curl -i -X GET -H "Accept: application/json" http://localhost:8000/books/
 ```
 As you can guess, other CRUD actions are available through this API.
 
@@ -109,16 +109,17 @@ This will generate routing for HTML views.
 Run the ``debug:router`` command to see available routes:
 
 ```bash
-    php bin/console debug:router
-
-    ------------------------ --------------- -------- ------ -------------------------
-    Name                     Method          Scheme   Host   Path
-    ------------------------ --------------- -------- ------ -------------------------
-    app_book_show            GET             ANY      ANY    /books/{id}
-    app_book_index           GET             ANY      ANY    /books/
-    app_book_create          GET|POST        ANY      ANY    /books/new
-    app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{id}/edit
-    app_book_delete          DELETE          ANY      ANY    /books/{id}
+php bin/console debug:router
+```
+```
+------------------------ --------------- -------- ------ -------------------------
+Name                     Method          Scheme   Host   Path
+------------------------ --------------- -------- ------ -------------------------
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_index           GET             ANY      ANY    /books/
+app_book_create          GET|POST        ANY      ANY    /books/new
+app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{id}/edit
+app_book_delete          DELETE          ANY      ANY    /books/{id}
 ```
 
 Do you need **views** for your newly created entity? Read more about 
