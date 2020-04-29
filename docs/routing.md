@@ -16,7 +16,8 @@ Results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -41,7 +42,8 @@ Results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -65,7 +67,8 @@ Results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -90,7 +93,8 @@ Results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -113,7 +117,8 @@ Results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -144,7 +149,8 @@ The generation results in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------
@@ -246,7 +252,8 @@ Which will result in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ ---------------------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ ---------------------------------------
@@ -275,7 +282,8 @@ Which will result in the following routes:
 
 ```bash
     php bin/console debug:router
-
+```
+```
     ------------------------ --------------- -------- ------ -------------------------
     Name                     Method          Scheme   Host   Path
     ------------------------ --------------- -------- ------ -------------------------

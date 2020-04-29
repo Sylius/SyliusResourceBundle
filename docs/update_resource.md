@@ -134,7 +134,7 @@ This way, you can listen to ``app.book.pre_customer_update`` and ``app.book.post
 ## [API] Returning resource or no content
 
 Depending on your app approach it can be useful to return a changed object or only the ``204 HTTP Code``, which indicates that everything worked smoothly.
-Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty response. If you would like to receive a whole object as a response you should set a `return_content` option to true.
+Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty response. If you would like to receive a whole object as a response you should set a ``return_content`` option to true.
 
 ```yaml
     app_book_update:
@@ -148,8 +148,8 @@ Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty 
 ```
 
 ### **Warning**
-The `return_content` flag is available for the `applyStateMachineTransitionAction` method as well. But these are the only ones which can be configured this way.
-It is worth noticing, that the `applyStateMachineTransitionAction` returns a default `200 HTTP Code` response with a fully serialized object.
+The ``return_content`` flag is available for the ``applyStateMachineTransitionAction`` method as well. But these are the only ones which can be configured this way.
+It is worth noticing, that the ``applyStateMachineTransitionAction`` returns a default ``200 HTTP Code`` response with a fully serialized object.
 
 ## Configuration Reference
 
