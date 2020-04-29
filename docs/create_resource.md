@@ -4,8 +4,6 @@ To display a form, handle its submission or to create a new resource via API,
 you should use the **createAction** of your **app.controller.book** service.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -32,8 +30,6 @@ When validation fails, it will render the form just like previously with the err
 Just like for the **show** and **index** actions, you can customize the template per route.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -49,8 +45,6 @@ You can also use custom form type on per route basis. Following Symfony3 convent
 Below you can see the usage for specifying a custom form.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -67,8 +61,6 @@ Well, there's a configuration for that!
 Below you can see the usage for specifying custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -86,8 +78,6 @@ By default, ``ResourceController`` will use the ``createNew`` method with no arg
 To use a different method of your factory, you can simply configure the ``factory`` option.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -99,8 +89,6 @@ To use a different method of your factory, you can simply configure the ``factor
 Additionally, if you want to provide your custom method with arguments from the request, you can do so by adding more parameters.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/{author}/new
         methods: [GET, POST]
@@ -118,8 +106,6 @@ With this configuration, ``$factory->createNewWithAuthor($request->get('author')
 If you would like to use your own service to create the resource, then try the following configuration:
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /{authorId}/books/new
         methods: [GET, POST]
@@ -139,8 +125,6 @@ You can easily change that behaviour.
 For example, to redirect to the index list after successfully creating a new resource - you can use the following configuration.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -152,8 +136,6 @@ For example, to redirect to the index list after successfully creating a new res
 You can also perform more complex redirects, with parameters. For example:
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /genre/{genreId}/books/new
         methods: [GET, POST]
@@ -167,8 +149,6 @@ You can also perform more complex redirects, with parameters. For example:
 In addition to the request parameters, you can access some of the newly created objects properties, using the ``resource.`` prefix.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_create:
         path: /books/new
         methods: [GET, POST]
@@ -188,8 +168,6 @@ The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_cre
 own action name.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_customer_create:
         path: /customer/books/new
         methods: [GET, POST]
@@ -204,8 +182,6 @@ This way, you can listen to ``app.book.pre_customer_create`` and ``app.book.post
 ## Configuration Reference
 
 ```yaml
-    # config/routes.yaml
-
     app_genre_book_add:
         path: /{genreName}/books/add
         methods: [GET, POST]

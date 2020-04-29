@@ -3,8 +3,6 @@
 Deleting a resource is simple.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_delete:
         path: /books/{id}
         methods: [DELETE]
@@ -33,8 +31,6 @@ By default, the **deleteAction** will look for the resource by id. However, you 
 For example, if you want to delete a book that belongs to a particular genre, not only by its id.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_delete:
         path: /genre/{genreId}/books/{id}
         methods: [DELETE]
@@ -52,8 +48,6 @@ There are no magic hacks behind that, it simply takes parameters from request an
 By default the controller will redirect to the "index" route after successful action. To change that, use the following configuration.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_delete:
         path: /genre/{genreId}/books/{id}
         methods: [DELETE]
@@ -72,8 +66,6 @@ The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_del
 However, you can customize the last part of the event, to provide your own action name.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_customer_delete:
         path: /customer/book-delete/{id}
         methods: [DELETE]
@@ -90,8 +82,6 @@ This way, you can listen to ``app.book.pre_customer_delete`` and ``app.book.post
 
 
 ```yaml
-    # config/routes.yaml
-
     app_genre_book_remove:
         path: /{genreName}/books/{id}/remove
         methods: [DELETE]

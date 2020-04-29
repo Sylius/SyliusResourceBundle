@@ -7,8 +7,6 @@ The simplest action is **showAction**. It is used to display a single resource. 
 Let's assume that you have a ``app.book`` resource registered. To display a single Book, define the following routing:
 
 ```yaml
-    # config/routes.yaml
-
     app_book_show:
         path: /books/{id}
         methods: [GET]
@@ -26,8 +24,6 @@ with the Book result as the ``book`` variable. That's the most basic usage of th
 Okay, but what if you want to display the same Book resource, but with a different representation in a view?
 
 ```yaml
-    # config/routes.yaml
-
     app_admin_book_show:
         path: /admin/books/{id}
         methods: [GET]
@@ -44,8 +40,6 @@ it using the custom template you specified under the route configuration. Simple
 Displaying books by id can be boring... and let's say we do not want to allow viewing disabled books. There is a solution for that!
 
 ```yaml
-    # config/routes.yaml
-
     app_book_show:
         path: /books/{title}
         methods: [GET]
@@ -65,8 +59,6 @@ By default, resource repository uses **findOneBy(array $criteria)**, but in some
 Creating yet another action to change the method called could be a solution but there is a better way. The configuration below will use a custom repository method to get the resource.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_show:
         path: /books/{author}
         methods: [GET]
@@ -84,8 +76,6 @@ Internally, it simply uses the ``$repository->findOneNewestByAuthor($author)`` m
 If you would like to use your own service to get the resource, then try the following configuration:
 
 ```yaml
-    # config/routes.yaml
-
     app_book_show:
         path: /books/{author}
         methods: [GET]
@@ -102,8 +92,6 @@ With this configuration, method ``findOneNewestByAuthor`` from service with ID `
 ## Configuration Reference
 
 ```yaml
-    # config/routes.yaml
-
     app_book_show:
         path: /books/{author}
         methods: [GET]

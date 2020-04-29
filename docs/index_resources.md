@@ -4,8 +4,6 @@ To get a paginated list of Books, we will use **indexAction** of our controller.
 In the default scenario, it will return an instance of paginator, with a list of Books.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_index:
         path: /books
         methods: [GET]
@@ -23,8 +21,6 @@ which is a [Library](https://github.com/whiteoctober/Pagerfanta) used to manage 
 Just like for the **showAction**, you can override the default template and criteria.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_index_inactive:
         path: /books/disabled
         methods: [GET]
@@ -43,9 +39,6 @@ This action will render a custom template with a paginator only for disabled Boo
 Except filtering, you can also sort Books.
 
 ```yaml
-
-    # config/routes.yaml
-
     app_book_index_top:
         path: /books/top
         methods: [GET]
@@ -73,8 +66,6 @@ It will transform your doctrine query builder into ``Pagerfanta\Pagerfanta`` obj
 You can also control the "max per page" for paginator, using ``paginate`` parameter.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_index_top:
         path: /books/top
         methods: [GET]
@@ -94,8 +85,6 @@ This will paginate 5 books per page, where 10 is the default.
 Pagination is handy, but you do not always want to do it, you can disable pagination and simply request a collection of resources.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_index_top3:
         path: /books/top
         methods: [GET]
@@ -115,8 +104,6 @@ That action will return the top 3 books by score, as the ``books`` variable.
 
 
 ```yaml
-    # config/routes.yaml
-
     app_book_index:
         path: /{author}/books
         methods: [GET]

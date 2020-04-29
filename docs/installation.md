@@ -19,8 +19,6 @@ Otherwise you have to download .phar file.
 You need to enable the bundle and its dependencies in the kernel:
 
 ```php
-    # config/bundles.php
-
     return [
         new FOS\RestBundle\FOSRestBundle(),
         new JMS\SerializerBundle\JMSSerializerBundle($this),

@@ -3,8 +3,6 @@
 To display an edit form of a particular resource, change it or update it via API, you should use the **updateAction** action of your **app.controller.book** service.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{id}/edit
         methods: [GET, PUT]
@@ -32,8 +30,6 @@ When validation fails, it will simply render the form again, but with error mess
 Just like for other actions, you can customize the template.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{id}/edit
         methods: [GET, PUT]
@@ -48,8 +44,6 @@ Just like for other actions, you can customize the template.
 Same way like for **createAction** you can override the default form.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{id}/edit
         methods: [GET, PUT]
@@ -65,8 +59,6 @@ Same way like for **createAction** you can pass options to the form.
 Below you can see how to specify custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{id}/edit
         methods: [GET, PUT]
@@ -84,8 +76,6 @@ Below you can see how to specify custom options, in this case, ``validation_grou
 By default, the **updateAction** will look for the resource by id. You can easily change that criteria.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{title}/edit
         methods: [GET, PUT]
@@ -99,8 +89,6 @@ By default, the **updateAction** will look for the resource by id. You can easil
 By default the controller will try to get the id of resource and redirect to the "show" route. To change that, use the following configuration.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{id}/edit
         methods: [GET, PUT]
@@ -112,8 +100,6 @@ By default the controller will try to get the id of resource and redirect to the
 You can also perform more complex redirects, with parameters. For example:
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /genre/{genreId}/books/{id}/edit
         methods: [GET, PUT]
@@ -132,8 +118,6 @@ The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_upd
 own action name.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_customer_update:
         path: /customer/book-update/{id}
         methods: [GET, PUT]
@@ -152,8 +136,6 @@ Depending on your app approach it can be useful to return a changed object or on
 Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty response. If you would like to receive a whole object as a response you should set a `return_content` option to true.
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /books/{title}/edit
         methods: [GET, PUT]
@@ -167,12 +149,9 @@ Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty 
 The `return_content` flag is available for the `applyStateMachineTransitionAction` method as well. But these are the only ones which can be configured this way.
 It is worth noticing, that the `applyStateMachineTransitionAction` returns a default `200 HTTP Code` response with a fully serialized object.
 
-Configuration Reference
------------------------
+## Configuration Reference
 
 ```yaml
-    # config/routes.yaml
-
     app_book_update:
         path: /genre/{genreId}/books/{title}/edit
         methods: [GET, PUT, PATCH]
