@@ -56,7 +56,7 @@
         "sylius/grid-bundle": "^1.2",
         "symfony/dependency-injection": "^4.4|^5.0",
         "twig/twig": "^2.12|^3.0",
-        "vimeo/psalm": "3.8.1"
+        "vimeo/psalm": "^3.11"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
@@ -88,9 +88,6 @@
         "fix": [
             "@php vendor/bin/ecs check src --fix"
         ]
-    },
-    "conflict": {
-        "amphp/amp": "^2.4.3"
     },
     "extra": {
         "branch-alias": {
