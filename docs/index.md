@@ -18,17 +18,17 @@ So far we support:
 
 ## Resource system for Symfony applications.
 
-* [installation](installation.md)
-* [configuration](configuration.md)
-* [services](services.md)
-* [routing](routing.md)
-* [forms](forms.md)
-* [show_resource](show_resource.md)
-* [index_resources](index_resources.md)
-* [create_resource](create_resource.md)
-* [update_resource](update_resource.md)
-* [delete_resource](delete_resource.md)
-* [reference](reference.md)
+* [Installation](installation.md)
+* [Configuring Your Resources](configuration.md)
+* [Services](services.md)
+* [Routing](routing.md)
+* [Forms](forms.md)
+* [Getting a Single Resource](show_resource.md)
+* [Getting a Collection of Resources](index_resources.md)
+* [Creating Resources](create_resource.md)
+* [Updating Resources](update_resource.md)
+* [Deleting Resources](delete_resource.md)
+* [Configuration Reference](reference.md)
 
 ## Learn more
 
