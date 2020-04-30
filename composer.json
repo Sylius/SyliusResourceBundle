@@ -90,7 +90,7 @@
         ]
     },
     "conflict": {
-        "amphp/amp": "2.4.3"
+        "amphp/amp": "^2.4.3"
     },
     "extra": {
         "branch-alias": {
