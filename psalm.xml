@@ -25,11 +25,12 @@
     <issueHandlers>
         <DeprecatedClass>
             <errorLevel type="suppress">
+                <referencedClass name="Doctrine\Common\Inflector\Inflector" />
+                <referencedClass name="Doctrine\Common\Persistence\ObjectRepository" />
                 <referencedClass name="Symfony\Bundle\FrameworkBundle\Controller\Controller" />
                 <referencedClass name="Symfony\Component\HttpKernel\Event\FilterResponseEvent" />
                 <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent" />
                 <referencedClass name="Symfony\Component\Translation\TranslatorInterface" />
-                <referencedClass name="Doctrine\Common\Persistence\ObjectRepository" />
             </errorLevel>
         </DeprecatedClass>
 
@@ -38,6 +39,7 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\TreeBuilder::root" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::stopPropagation" />
+                <referencedMethod name="Doctrine\Common\Inflector\Inflector::pluralize" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </DeprecatedMethod>

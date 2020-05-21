@@ -39,6 +39,8 @@ fos_rest:
     format_listener:
         rules:
             - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: true }
+    exception:
+        enabled: false
 
 stof_doctrine_extensions:
     default_locale: "%locale%"

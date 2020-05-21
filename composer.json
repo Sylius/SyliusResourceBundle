@@ -44,19 +44,19 @@
         "doctrine/orm": "^2.5",
         "gedmo/doctrine-extensions": "^2.4",
         "lchrusciel/api-test-case": "^5.0",
-        "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "pamil/phpspec-skip-example-extension": "^4.1",
         "phpspec/phpspec": "^6.1",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-webmozart-assert": "^0.12",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^8.5",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.2",
         "symfony/dependency-injection": "^4.4|^5.0",
         "twig/twig": "^2.12|^3.0",
-        "vimeo/psalm": "3.8.1"
+        "vimeo/psalm": "3.11.4"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
