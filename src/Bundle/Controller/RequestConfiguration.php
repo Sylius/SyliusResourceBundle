@@ -582,7 +582,7 @@ class RequestConfiguration
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStateMachineGraph()
     {
@@ -592,7 +592,7 @@ class RequestConfiguration
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStateMachineTransition()
     {

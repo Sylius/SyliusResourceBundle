@@ -35,7 +35,13 @@ final class StateMachine implements StateMachineInterface
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
         }
 
-        return $this->stateMachineFactory->get($resource, $configuration->getStateMachineGraph())->can($configuration->getStateMachineTransition());
+        /** @var string $graph */
+        $graph = $configuration->getStateMachineGraph();
+
+        /** @var string $transition */
+        $transition = $configuration->getStateMachineTransition();
+
+        return $this->stateMachineFactory->get($resource, $graph)->can($transition);
     }
 
     /**
@@ -47,6 +53,12 @@ final class StateMachine implements StateMachineInterface
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
         }
 
-        $this->stateMachineFactory->get($resource, $configuration->getStateMachineGraph())->apply($configuration->getStateMachineTransition());
+        /** @var string $graph */
+        $graph = $configuration->getStateMachineGraph();
+
+        /** @var string $transition */
+        $transition = $configuration->getStateMachineTransition();
+
+        $this->stateMachineFactory->get($resource, $graph)->apply($transition);
     }
 }

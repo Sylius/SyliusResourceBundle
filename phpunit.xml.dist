@@ -5,6 +5,8 @@
          colors="true"
 >
     <php>
+        <ini name="error_reporting" value="-1" />
+
         <server name="KERNEL_CLASS" value="AppKernel" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
