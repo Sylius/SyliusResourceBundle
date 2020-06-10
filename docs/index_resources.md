@@ -124,7 +124,7 @@ app_book_index:
             serialization_groups: { 0: Default, items: [ Custom ] }
 ```
 
-Read more about [nested serialization groups](https://jmsyst.com/libs/serializer/master/cookbook/exclusion_strategies#overriding-groups-of-deeper-branches-of-the-graph)
+Read more about [nested serialization groups](https://jmsyst.com/libs/serializer/master/cookbook/exclusion_strategies#overriding-groups-of-deeper-branches-of-the-graph).
 
 ## Configuration Reference
 
