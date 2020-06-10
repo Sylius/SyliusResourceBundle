@@ -58,7 +58,8 @@ final class ResourcesCollectionProvider implements ResourcesCollectionProviderIn
                 $requestConfiguration->getPaginationMaxPerPage(),
                 $paginationLimits
             ));
-            $paginator->setCurrentPage($request->query->get('page', 1));
+            $currentPage = (int) $request->query->get('page', '1');
+            $paginator->setCurrentPage($currentPage);
 
             // This prevents Pagerfanta from querying database from a template
             $paginator->getCurrentPageResults();
