@@ -35,8 +35,6 @@ fos_rest:
     body_listener:
         enabled: true
     view:
-        view_response_listener:
-            enabled: true
         formats:
             json: true
         empty_content: 204
