@@ -19,8 +19,10 @@ class Parameters extends ParameterBag
 {
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param string $path
      */
-    public function get(string $path, $default = null)
+    public function get($path, $default = null)
     {
         $result = parent::get($path, $default);
 
