@@ -36,7 +36,7 @@
         "symfony/twig-bundle": "^4.4|^5.0",
         "symfony/validator": "^4.4|^5.0",
         "symfony/yaml": "^4.4|^5.0",
-        "white-october/pagerfanta-bundle": "^1.0",
+        "babdev/pagerfanta-bundle": "^2.4",
         "willdurand/hateoas-bundle": "^2.0",
         "winzou/state-machine-bundle": "^0.3|^0.4"
     },
