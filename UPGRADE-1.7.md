@@ -1,6 +1,6 @@
 # UPGRADE FROM `v1.6.*` TO `v1.7.0`
 
-* **BC BREAK**: Edit your fos_rest config to enable the body listener as following:
+* **BC BREAK**: Edit your `fos_rest` config to enable the body listener as follows:
 ```yaml
 fos_rest:
     # [...]
