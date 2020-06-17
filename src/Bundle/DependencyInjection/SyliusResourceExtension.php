@@ -72,7 +72,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         return $configuration;
     }
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $config = ['body_listener' => ['enabled' => true]];
         $container->prependExtensionConfig('fos_rest', $config);
