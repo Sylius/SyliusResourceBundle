@@ -32,8 +32,6 @@ doctrine:
                 auto_mapping: true
 
 fos_rest:
-    body_listener:
-        enabled: true
     view:
         formats:
             json: true

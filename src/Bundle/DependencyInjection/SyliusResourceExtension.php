@@ -24,9 +24,10 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-final class SyliusResourceExtension extends Extension
+final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -69,6 +70,12 @@ final class SyliusResourceExtension extends Extension
         $container->addObjectResource($configuration);
 
         return $configuration;
+    }
+
+    public function prepend(ContainerBuilder $container)
+    {
+        $config = ['body_listener' => ['enabled' => true]];
+        $container->prependExtensionConfig('fos_rest', $config);
     }
 
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
