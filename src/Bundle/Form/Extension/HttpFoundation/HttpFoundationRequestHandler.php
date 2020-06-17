@@ -89,7 +89,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                 $params = $request->request->all();
                 $files = $request->files->all();
             } elseif ($request->request->has($name) || $request->files->has($name)) {
-                /** @psalm-var mixed $default */
+                /** @psalm-var array|null $default */
                 $default = $form->getConfig()->getCompound() ? [] : null;
                 $params = $request->request->get($name, $default);
                 $files = $request->files->get($name, $default);
