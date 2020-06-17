@@ -8,5 +8,5 @@ fos_rest:
         enabled: true 
 ```
 
-* **BC BREAK**: `ViewHandler` constructor now requires `FOS\RestBundle\View\ConfigurableViewHandlerInterface` as first argument instead of 
+* **BC BREAK**: `Sylius\Bundle\ResourceBundle\Controller\ViewHandler` constructor now requires `FOS\RestBundle\View\ConfigurableViewHandlerInterface` as first argument instead of 
     `FOS\RestBundle\View\ViewHandler`.
