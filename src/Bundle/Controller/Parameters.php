@@ -19,6 +19,8 @@ class Parameters extends ParameterBag
 {
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param string $path
      */
     public function get($path, $default = null)
     {

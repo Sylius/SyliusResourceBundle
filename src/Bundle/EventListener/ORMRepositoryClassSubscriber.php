@@ -40,7 +40,9 @@ final class ORMRepositoryClassSubscriber extends AbstractDoctrineSubscriber
         }
 
         if ($resourceMetadata->hasClass('repository')) {
-            $metadata->setCustomRepositoryClass($resourceMetadata->getClass('repository'));
+            /** @psalm-var class-string $repository */
+            $repository = $resourceMetadata->getClass('repository');
+            $metadata->setCustomRepositoryClass($repository);
         }
     }
 }

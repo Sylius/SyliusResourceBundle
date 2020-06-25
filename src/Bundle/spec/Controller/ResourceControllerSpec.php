@@ -53,6 +53,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Twig\Environment;
 
 final class ResourceControllerSpec extends ObjectBehavior
 {
@@ -154,10 +155,10 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ViewHandlerInterface $viewHandler,
         EventDispatcherInterface $eventDispatcher,
-        Request $request,
-        Response $response
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -172,22 +173,24 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->isHtmlRequest()->willReturn(true);
         $configuration->getTemplate(ResourceActions::SHOW . '.html')->willReturn('@SyliusShop/Product/show.html.twig');
 
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
+
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $resource,
+            'product' => $resource,
+        ];
+
+        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->willReturn('view');
+
         $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->shouldBeCalled();
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $resource,
-                'product' => $resource,
-            ])
-            ->setTemplateVar('product')
-            ->setTemplate('@SyliusShop/Product/show.html.twig')
-        ;
+        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->shouldBeCalled();
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
-
-        $this->showAction($request)->shouldReturn($response);
+        $this->showAction($request);
     }
 
     function it_returns_a_response_for_non_html_view_of_single_resource(
@@ -253,9 +256,9 @@ final class ResourceControllerSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         ResourceInterface $resource1,
         ResourceInterface $resource2,
-        ViewHandlerInterface $viewHandler,
-        Request $request,
-        Response $response
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -273,20 +276,22 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->shouldBeCalled();
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resources' => [$resource1, $resource2],
-                'products' => [$resource1, $resource2],
-            ])
-            ->setTemplateVar('products')
-            ->setTemplate('@SyliusShop/Product/index.html.twig')
-        ;
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resources' => [$resource1, $resource2],
+            'products' => [$resource1, $resource2],
+        ];
 
-        $this->indexAction($request)->shouldReturn($response);
+        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->indexAction($request);
     }
 
     function it_throws_a_403_exception_if_user_is_unauthorized_to_create_a_new_resource(
@@ -322,8 +327,9 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        Request $request,
-        Response $response
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -347,20 +353,23 @@ final class ResourceControllerSpec extends ObjectBehavior
         $request->isMethod('POST')->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $newResource,
-                'product' => $newResource,
-                'form' => $formView,
-            ])
-            ->setTemplate('@SyliusShop/Product/create.html.twig')
-        ;
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $newResource,
+            'product' => $newResource,
+            'form' => $formView,
+        ];
 
-        $this->createAction($request)->shouldReturn($response);
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->createAction($request);
     }
 
     function it_returns_a_html_response_for_invalid_form_during_resource_creation(
@@ -368,7 +377,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RequestConfiguration $configuration,
         AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
@@ -377,8 +385,9 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        Request $request,
-        Response $response
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -404,20 +413,23 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isValid()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $newResource,
-                'product' => $newResource,
-                'form' => $formView,
-            ])
-            ->setTemplate('@SyliusShop/Product/create.html.twig')
-        ;
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $newResource,
+            'product' => $newResource,
+            'form' => $formView,
+        ];
 
-        $this->createAction($request)->shouldReturn($response);
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->createAction($request);
     }
 
     function it_returns_a_non_html_response_for_invalid_form_during_resource_creation(
@@ -835,7 +847,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RequestConfiguration $configuration,
         AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
@@ -844,8 +855,9 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        Request $request,
-        Response $response
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -873,20 +885,23 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->handleRequest($request)->willReturn($form);
         $form->createView()->willReturn($formView);
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $resource,
-                'product' => $resource,
-                'form' => $formView,
-            ])
-            ->setTemplate('@SyliusShop/Product/update.html.twig')
-        ;
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $resource,
+            'product' => $resource,
+            'form' => $formView,
+        ];
 
-        $this->updateAction($request)->shouldReturn($response);
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->updateAction($request);
     }
 
     function it_returns_a_html_response_for_invalid_form_during_resource_update(
@@ -903,6 +918,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
+        ContainerInterface $container,
+        Environment $twig,
         Request $request,
         Response $response
     ): void {
@@ -933,20 +950,23 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isValid()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $resource,
-                'product' => $resource,
-                'form' => $formView,
-            ])
-            ->setTemplate('@SyliusShop/Product/update.html.twig')
-        ;
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $resource,
+            'product' => $resource,
+            'form' => $formView,
+        ];
 
-        $this->updateAction($request)->shouldReturn($response);
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->updateAction($request);
     }
 
     function it_returns_a_non_html_response_for_invalid_form_during_resource_update(
@@ -1177,6 +1197,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $initializeEvent,
         Form $form,
         FormView $formView,
+        ContainerInterface $container,
+        Environment $twig,
         Request $request,
         Response $response
     ): void {
@@ -1206,19 +1228,15 @@ final class ResourceControllerSpec extends ObjectBehavior
         $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
         $redirectHandler->redirectToResource($configuration, $newResource)->shouldNotBeCalled();
 
-        $expectedView = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $metadata,
-                'resource' => $newResource,
-                'product' => $newResource,
-                'form' => $formView,
-            ])
-            ->setTemplate('@SyliusShop/Product/create.html.twig')
-        ;
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->shouldNotBeCalled();
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
 
-        $this->createAction($request)->shouldReturn($response);
+        $twig->render(Argument::cetera())->willReturn('view');
+
+        $twig->render(Argument::cetera())->shouldNotBeCalled();
+
+        $this->createAction($request);
     }
 
     function it_uses_response_from_initialize_update_event_if_defined(
@@ -2472,11 +2490,8 @@ final class ResourceControllerSpec extends ObjectBehavior
             return
                 $expectedView->getStatusCode() === $value->getStatusCode() &&
                 $expectedView->getHeaders() === $value->getHeaders() &&
-                $expectedView->getEngine() === $value->getEngine() &&
                 $expectedView->getFormat() === $value->getFormat() &&
-                $expectedView->getData() === $value->getData() &&
-                $expectedView->getTemplate() === $value->getTemplate() &&
-                $expectedView->getTemplateVar() === $value->getTemplateVar()
+                $expectedView->getData() === $value->getData()
             ;
         };
     }

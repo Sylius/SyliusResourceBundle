@@ -131,20 +131,16 @@ class ResourceController extends AbstractController
 
         $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
 
-        $view = View::create($resource);
-
         if ($configuration->isHtmlRequest()) {
-            $view
-                ->setTemplate($configuration->getTemplate(ResourceActions::SHOW . '.html'))
-                ->setTemplateVar($this->metadata->getName())
-                ->setData([
-                    'configuration' => $configuration,
-                    'metadata' => $this->metadata,
-                    'resource' => $resource,
-                    $this->metadata->getName() => $resource,
-                ])
-            ;
+            return $this->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
+                'configuration' => $configuration,
+                'metadata' => $this->metadata,
+                'resource' => $resource,
+                $this->metadata->getName() => $resource,
+            ]);
         }
+
+        $view = View::create($resource);
 
         return $this->viewHandler->handle($configuration, $view);
     }
@@ -158,20 +154,16 @@ class ResourceController extends AbstractController
 
         $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
 
-        $view = View::create($resources);
-
         if ($configuration->isHtmlRequest()) {
-            $view
-                ->setTemplate($configuration->getTemplate(ResourceActions::INDEX . '.html'))
-                ->setTemplateVar($this->metadata->getPluralName())
-                ->setData([
-                    'configuration' => $configuration,
-                    'metadata' => $this->metadata,
-                    'resources' => $resources,
-                    $this->metadata->getPluralName() => $resources,
-                ])
-            ;
+            return $this->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
+                'configuration' => $configuration,
+                'metadata' => $this->metadata,
+                'resources' => $resources,
+                $this->metadata->getPluralName() => $resources,
+            ]);
         }
+
+        $view = View::create($resources);
 
         return $this->viewHandler->handle($configuration, $view);
     }
@@ -238,18 +230,13 @@ class ResourceController extends AbstractController
             return $initializeEventResponse;
         }
 
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $newResource,
-                $this->metadata->getName() => $newResource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::CREATE . '.html'))
-        ;
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->render($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resource' => $newResource,
+            $this->metadata->getName() => $newResource,
+            'form' => $form->createView(),
+        ]);
     }
 
     public function updateAction(Request $request): Response
@@ -326,18 +313,13 @@ class ResourceController extends AbstractController
             return $initializeEventResponse;
         }
 
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $resource,
-                $this->metadata->getName() => $resource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE . '.html'))
-        ;
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->render($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resource' => $resource,
+            $this->metadata->getName() => $resource,
+            'form' => $form->createView(),
+        ]);
     }
 
     public function deleteAction(Request $request): Response

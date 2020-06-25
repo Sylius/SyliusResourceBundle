@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use FOS\RestBundle\Context\Context;
+use FOS\RestBundle\View\ConfigurableViewHandlerInterface;
 use FOS\RestBundle\View\View;
-use FOS\RestBundle\View\ViewHandler as RestViewHandler;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandlerSpec extends ObjectBehavior
 {
-    function let(RestViewHandler $restViewHandler): void
+    function let(ConfigurableViewHandlerInterface $restViewHandler): void
     {
         $this->beConstructedWith($restViewHandler);
     }
@@ -35,7 +35,7 @@ final class ViewHandlerSpec extends ObjectBehavior
 
     function it_handles_view_normally_for_html_requests(
         RequestConfiguration $requestConfiguration,
-        RestViewHandler $restViewHandler,
+        ConfigurableViewHandlerInterface $restViewHandler,
         Response $response
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
@@ -48,7 +48,7 @@ final class ViewHandlerSpec extends ObjectBehavior
 
     function it_sets_proper_values_for_non_html_requests(
         RequestConfiguration $requestConfiguration,
-        RestViewHandler $restViewHandler,
+        ConfigurableViewHandlerInterface $restViewHandler,
         Response $response
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(false);
