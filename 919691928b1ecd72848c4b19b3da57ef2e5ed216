@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2020-06-04T19:54:37Z
+
+@pamil we have a lot of work here :rofl:
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-06-09T13:05:54Z
+
+@lchrusciel @pamil
+I worked a lot today on this pull request. Tell me if I am in the good direction or not.
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-06-10T13:43:39Z
+
+@pamil To copy here what we said in slack.
+
+We can create a recipe for this bundle with this configuration:
+```
+fos_rest:
+    body_listener:
+        enabled: true
+```
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-25T12:38:20Z
+
+Thank you, Loïc! :tada:
