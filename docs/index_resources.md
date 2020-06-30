@@ -110,6 +110,22 @@ app_book_index_top3:
 ```
 That action will return the top 3 books by score, as the ``books`` variable.
 
+## Changing the serialization groups of the elements in a paginated response
+
+```yaml
+# config/routes.yaml
+
+app_book_index:
+    path: /{author}/books
+    methods: [GET]
+    defaults:
+        _controller: app.controller.book:indexAction
+        _sylius:
+            serialization_groups: { 0: Default, items: [ Custom ] }
+```
+
+Read more about [nested serialization groups](https://jmsyst.com/libs/serializer/master/cookbook/exclusion_strategies#overriding-groups-of-deeper-branches-of-the-graph).
+
 ## Configuration Reference
 
 
