@@ -367,6 +367,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
 
+        $form->handleRequest($request)->shouldBeCalled();
         $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->createAction($request);
@@ -1407,7 +1408,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $initializeEvent,
         Form $form,
-        FormView $formView,
         ContainerInterface $container,
         Environment $twig,
         Request $request,
@@ -1446,6 +1446,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $twig->render(Argument::cetera())->willReturn('view');
 
         $twig->render(Argument::cetera())->shouldNotBeCalled();
+        $form->handleRequest($request)->shouldBeCalled();
 
         $this->createAction($request);
     }

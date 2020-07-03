@@ -176,8 +176,9 @@ class ResourceController extends AbstractController
         $newResource = $this->newResourceFactory->create($configuration, $this->factory);
 
         $form = $this->resourceFormFactory->create($configuration, $newResource);
+        $form->handleRequest($request);
 
-        if ($request->isMethod('POST') && $form->isSubmitted() && $form->handleRequest($request)->isValid()) {
+        if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             $newResource = $form->getData();
 
             $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
@@ -247,11 +248,12 @@ class ResourceController extends AbstractController
         $resource = $this->findOr404($configuration);
 
         $form = $this->resourceFormFactory->create($configuration, $resource);
+        $form->handleRequest($request);
 
         if (
             in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)
             && $form->isSubmitted()
-            && $form->handleRequest($request)->isValid()
+            && $form->isValid()
         ) {
             $resource = $form->getData();
 
