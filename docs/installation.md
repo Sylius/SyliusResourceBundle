@@ -25,7 +25,7 @@ return [
     new FOS\RestBundle\FOSRestBundle(),
     new JMS\SerializerBundle\JMSSerializerBundle($this),
     new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
-    new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+    new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(),
     new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
     new winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
 ];

@@ -28,7 +28,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
-            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(),
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new \winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),

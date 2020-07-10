@@ -11,6 +11,7 @@ parameters:
 
     excludes_analyse:
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
+        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/PagerfantaConfiguration.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
         - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
