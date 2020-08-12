@@ -1,5 +1,11 @@
 ## CHANGELOG FOR `1.6.x`
 
+### v1.6.3 (2020-01-27)
+
+Security release:
+
+- [CVE-2020-5220: Ability to define unintended serialisation groups via HTTP header which might lead to data exposure](https://github.com/Sylius/SyliusResourceBundle/security/advisories/GHSA-8vp7-j5cj-vvm2)
+
 ### v1.6.2 (2020-01-13)
 
 - [#145](https://github.com/Sylius/SyliusResourceBundle/issues/145) Autowire Doctrine\Persistence\ObjectManager ([@pamil](https://github.com/pamil))

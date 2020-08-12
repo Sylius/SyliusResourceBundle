@@ -86,15 +86,23 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->all('Accept')->willReturn(['groups=Default,Detailed']);
+        $attributesBag->get('_sylius', [])->willReturn([
+            'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+        ]);
+        $headersBag->get('Accept', null, false)->willReturn(['groups=Default,Detailed']);
 
-        $attributesBag->get('_sylius', [])->willReturn([]);
         $parametersParser
-            ->parseRequestValues(['serialization_groups' => ['Default', 'Detailed']], $request)
-            ->willReturn(['template' => ':Product:list.html.twig'])
+            ->parseRequestValues(
+                [
+                    'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+                    'serialization_groups' => ['Default', 'Detailed'],
+                ],
+                $request
+            )
+            ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
 
-        $this->create($metadata, $request)->isSortable()->shouldReturn(false);
+        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
     }
 
     function it_creates_configuration_for_serialization_group_from_multiple_headers(
@@ -107,15 +115,105 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
 
-        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
+        $attributesBag->get('_sylius', [])->willReturn([
+            'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+        ]);
+        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed']);
 
-        $attributesBag->get('_sylius', [])->willReturn([]);
         $parametersParser
-            ->parseRequestValues(['serialization_groups' => ['Default', 'Detailed']], $request)
-            ->willReturn(['template' => ':Product:list.html.twig'])
+            ->parseRequestValues(
+                [
+                    'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+                    'serialization_groups' => ['Default', 'Detailed'],
+                ],
+                $request
+            )
+            ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
 
-        $this->create($metadata, $request)->isSortable()->shouldReturn(false);
+        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
+    }
+
+    function it_creates_configuration_using_only_those_serialization_groups_that_are_allowed(
+        ParametersParserInterface $parametersParser,
+        MetadataInterface $metadata,
+        Request $request,
+        ParameterBag $headersBag,
+        ParameterBag $attributesBag
+    ): void {
+        $request->headers = $headersBag;
+        $request->attributes = $attributesBag;
+
+        $attributesBag->get('_sylius', [])->willReturn([
+            'allowed_serialization_groups' => ['Default'],
+        ]);
+        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed']);
+
+        $parametersParser
+            ->parseRequestValues(
+                [
+                    'allowed_serialization_groups' => ['Default'],
+                    'serialization_groups' => ['Default'],
+                ],
+                $request
+            )
+            ->willReturn(['serialization_groups' => ['Default']])
+        ;
+
+        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default']);
+    }
+
+    function it_creates_configuration_using_only_those_serialization_groups_that_are_allowed_or_defined_as_default(
+        ParametersParserInterface $parametersParser,
+        MetadataInterface $metadata,
+        Request $request,
+        ParameterBag $headersBag,
+        ParameterBag $attributesBag
+    ): void {
+        $request->headers = $headersBag;
+        $request->attributes = $attributesBag;
+
+        $attributesBag->get('_sylius', [])->willReturn([
+            'allowed_serialization_groups' => ['Default'],
+            'serialization_groups' => ['Detailed'],
+        ]);
+        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+
+        $parametersParser
+            ->parseRequestValues(
+                [
+                    'allowed_serialization_groups' => ['Default'],
+                    'serialization_groups' => ['Default', 'Detailed'],
+                ],
+                $request
+            )
+            ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
+        ;
+
+        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
+    }
+
+    function it_creates_configuration_using_only_those_serialization_groups_that_are_defined_as_default(
+        ParametersParserInterface $parametersParser,
+        MetadataInterface $metadata,
+        Request $request,
+        ParameterBag $headersBag,
+        ParameterBag $attributesBag
+    ): void {
+        $request->headers = $headersBag;
+        $request->attributes = $attributesBag;
+
+        $attributesBag->get('_sylius', [])->willReturn([
+            'serialization_groups' => ['Detailed'],
+        ]);
+        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+
+        $parametersParser
+            ->parseRequestValues(['serialization_groups' => ['Detailed']], $request)
+            ->willReturn(['serialization_groups' => ['Detailed']])
+        ;
+
+        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Detailed']);
     }
 
     function it_creates_configuration_for_serialization_version_from_single_header(
