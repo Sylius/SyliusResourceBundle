@@ -89,7 +89,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $attributesBag->get('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
         ]);
-        $headersBag->get('Accept', null, false)->willReturn(['groups=Default,Detailed']);
+        $headersBag->all('Accept')->willReturn(['groups=Default,Detailed']);
 
         $parametersParser
             ->parseRequestValues(
@@ -118,7 +118,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $attributesBag->get('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
         ]);
-        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed']);
+        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
 
         $parametersParser
             ->parseRequestValues(
@@ -147,7 +147,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $attributesBag->get('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default'],
         ]);
-        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed']);
+        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
 
         $parametersParser
             ->parseRequestValues(
@@ -177,7 +177,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
             'allowed_serialization_groups' => ['Default'],
             'serialization_groups' => ['Detailed'],
         ]);
-        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
 
         $parametersParser
             ->parseRequestValues(
@@ -206,7 +206,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         $attributesBag->get('_sylius', [])->willReturn([
             'serialization_groups' => ['Detailed'],
         ]);
-        $headersBag->get('Accept', null, false)->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
 
         $parametersParser
             ->parseRequestValues(['serialization_groups' => ['Detailed']], $request)
