@@ -69,6 +69,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
             // Load Metadata
             $metadataDriver->loadMetadataForClass($parent, $parentMetadata);
 
+            /** @psalm-suppress InvalidArgument */
             if (false === $this->isResource($parentMetadata)) {
                 continue;
             }
@@ -85,6 +86,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 
     private function unsetAssociationMappings(ClassMetadataInfo $metadata): void
     {
+        /** @psalm-suppress InvalidArgument */
         if (false === $this->isResource($metadata)) {
             return;
         }

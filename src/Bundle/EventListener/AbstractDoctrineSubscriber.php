@@ -38,12 +38,16 @@ abstract class AbstractDoctrineSubscriber implements EventSubscriber
         return $metadata->getReflectionClass()->implementsInterface(ResourceInterface::class);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     */
     protected function getReflectionService(): ReflectionService
     {
         if ($this->reflectionService === null) {
             $this->reflectionService = new RuntimeReflectionService();
         }
 
+        /** @psalm-suppress InvalidReturnStatement */
         return $this->reflectionService;
     }
 }
