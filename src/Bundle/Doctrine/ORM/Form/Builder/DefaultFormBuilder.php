@@ -64,6 +64,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
                 continue;
             }
 
+            /** @psalm-suppress DeprecatedConstant */
             if (Type::DATETIME === $classMetadata->getTypeOfField($fieldName)) {
                 $options = ['widget' => 'single_text'];
             }

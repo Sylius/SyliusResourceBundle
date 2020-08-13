@@ -582,6 +582,8 @@ class RequestConfiguration
     }
 
     /**
+     * @psalm-suppress NullableReturnStatement
+     *
      * @return string
      */
     public function getStateMachineGraph()
@@ -592,6 +594,8 @@ class RequestConfiguration
     }
 
     /**
+     * @psalm-suppress NullableReturnStatement
+     *
      * @return string
      */
     public function getStateMachineTransition()

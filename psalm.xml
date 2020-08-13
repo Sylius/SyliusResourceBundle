@@ -25,6 +25,8 @@
     <issueHandlers>
         <DeprecatedClass>
             <errorLevel type="suppress">
+                <referencedClass name="Doctrine\Common\Inflector\Inflector" />
+                <referencedClass name="Pagerfanta\Adapter\DoctrineORMAdapter" />
                 <referencedClass name="Symfony\Bundle\FrameworkBundle\Controller\Controller" />
                 <referencedClass name="Symfony\Component\HttpKernel\Event\FilterResponseEvent" />
                 <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent" />
@@ -34,6 +36,9 @@
 
         <DeprecatedMethod>
             <errorLevel type="suppress">
+                <referencedMethod name="Doctrine\Common\Inflector\Inflector::pluralize" />
+                <referencedMethod name="FOS\RestBundle\View\View::setTemplate" />
+                <referencedMethod name="FOS\RestBundle\View\View::setTemplateVar" />
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\TreeBuilder::root" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::stopPropagation" />
@@ -46,6 +51,18 @@
                 <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </InvalidArgument>
+
+        <MethodSignatureMismatch>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
+            </errorLevel>
+        </MethodSignatureMismatch>
+
+        <MoreSpecificImplementedParamType>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
+            </errorLevel>
+        </MoreSpecificImplementedParamType>
 
         <PossiblyNullReference>
             <errorLevel type="suppress">
@@ -71,7 +88,9 @@
 
         <TooManyArguments>
             <errorLevel type="suppress">
-                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch"/>
+                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
+                <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::get" />
+                <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
 
