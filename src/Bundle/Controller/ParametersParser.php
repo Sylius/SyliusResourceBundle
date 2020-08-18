@@ -99,7 +99,7 @@ final class ParametersParser implements ParametersParserInterface
                     ));
                 }
 
-                return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
+                return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },
             $expression
         );
