@@ -83,7 +83,7 @@ final class OptionsParser implements OptionsParserInterface
         $expression = (string) preg_replace_callback('/\$(\w+)/', function (array $matches) use ($request) {
             $variable = $request->get($matches[1]);
 
-            return is_string($variable) ? sprintf('"%s"', $variable) : $variable;
+            return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
         }, $expression);
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);
