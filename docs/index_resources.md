@@ -16,7 +16,7 @@ When you go to ``/books``, the ResourceController will use the repository (``app
 The default template will be rendered - ``App:Book:index.html.twig`` with the paginator as the ``books`` variable.
 
 A paginator can be a simple array, if you disable the pagination, otherwise it is an instance of ``Pagerfanta\Pagerfanta``
-which is a [Library](https://github.com/whiteoctober/Pagerfanta) used to manage the pagination.
+which is a [Library](https://github.com/BabDev/Pagerfanta) used to manage the pagination.
 
 ## Overriding the Template and Criteria
 
