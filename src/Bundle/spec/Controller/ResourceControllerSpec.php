@@ -367,6 +367,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
 
+        $form->handleRequest($request)->shouldBeCalled();
         $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->createAction($request);
@@ -410,7 +411,68 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
+        $form->createView()->willReturn($formView);
+
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
+
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $newResource,
+            'product' => $newResource,
+            'form' => $formView,
+        ];
+
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->createAction($request);
+    }
+
+    function it_returns_a_html_response_for_not_submitted_form_during_resource_creation(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        FactoryInterface $factory,
+        NewResourceFactoryInterface $newResourceFactory,
+        ResourceInterface $newResource,
+        ResourceFormFactoryInterface $resourceFormFactory,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceControllerEvent $event,
+        Form $form,
+        FormView $formView,
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+
+        $configuration->isHtmlRequest()->willReturn(true);
+        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+
+        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
+        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+
+        $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+        $event->getResponse()->willReturn(null);
+
+        $request->isMethod('POST')->willReturn(true);
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(false);
         $form->createView()->willReturn($formView);
 
         $container->has('templating')->willReturn(false);
@@ -463,7 +525,48 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
+
+        $expectedView = View::create($form, 400);
+
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->createAction($request)->shouldReturn($response);
+    }
+
+    function it_returns_a_non_html_response_for_not_submitted_form_during_resource_creation(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ViewHandlerInterface $viewHandler,
+        FactoryInterface $factory,
+        NewResourceFactoryInterface $newResourceFactory,
+        ResourceInterface $newResource,
+        ResourceFormFactoryInterface $resourceFormFactory,
+        Form $form,
+        Request $request,
+        Response $response
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+
+        $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+
+        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
+        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+
+        $request->isMethod('POST')->willReturn(true);
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(false);
 
         $expectedView = View::create($form, 400);
 
@@ -508,6 +611,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -561,6 +665,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -618,6 +723,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -674,6 +780,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -729,6 +836,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -782,6 +890,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($newResource);
 
@@ -920,8 +1029,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FormView $formView,
         ContainerInterface $container,
         Environment $twig,
-        Request $request,
-        Response $response
+        Request $request
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -947,7 +1055,71 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $form->handleRequest($request)->willReturn($form);
 
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
+        $form->createView()->willReturn($formView);
+
+        $container->has('templating')->willReturn(false);
+        $container->has('twig')->willReturn(true);
+        $container->get('twig')->willReturn($twig);
+
+        $expectedContext = [
+            'configuration' => $configuration,
+            'metadata' => $metadata,
+            'resource' => $resource,
+            'product' => $resource,
+            'form' => $formView,
+        ];
+
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+
+        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+
+        $this->updateAction($request);
+    }
+
+    function it_returns_a_html_response_for_not_submitted_form_during_resource_update(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        RepositoryInterface $repository,
+        SingleResourceProviderInterface $singleResourceProvider,
+        ResourceInterface $resource,
+        ResourceFormFactoryInterface $resourceFormFactory,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceControllerEvent $event,
+        Form $form,
+        FormView $formView,
+        ContainerInterface $container,
+        Environment $twig,
+        Request $request
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+
+        $configuration->isHtmlRequest()->willReturn(true);
+        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
+
+        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+
+        $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+        $event->getResponse()->willReturn(null);
+
+        $request->isMethod('PATCH')->willReturn(false);
+        $request->getMethod()->willReturn('PUT');
+
+        $form->handleRequest($request)->willReturn($form);
+
+        $form->isSubmitted()->willReturn(false);
         $form->createView()->willReturn($formView);
 
         $container->has('templating')->willReturn(false);
@@ -1000,7 +1172,47 @@ final class ResourceControllerSpec extends ObjectBehavior
         $request->getMethod()->willReturn('PATCH');
 
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
+
+        $expectedView = View::create($form, 400);
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->updateAction($request)->shouldReturn($response);
+    }
+
+    function it_returns_a_non_html_response_for_not_submitted_form_during_resource_update(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ViewHandlerInterface $viewHandler,
+        RepositoryInterface $repository,
+        SingleResourceProviderInterface $singleResourceProvider,
+        ResourceInterface $resource,
+        ResourceFormFactoryInterface $resourceFormFactory,
+        Form $form,
+        Request $request,
+        Response $response
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->isHtmlRequest()->willReturn(false);
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+
+        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+
+        $request->isMethod('PATCH')->willReturn(true);
+        $request->getMethod()->willReturn('PATCH');
+
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(false);
 
         $expectedView = View::create($form, 400);
         $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
@@ -1196,7 +1408,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $initializeEvent,
         Form $form,
-        FormView $formView,
         ContainerInterface $container,
         Environment $twig,
         Request $request,
@@ -1235,6 +1446,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $twig->render(Argument::cetera())->willReturn('view');
 
         $twig->render(Argument::cetera())->shouldNotBeCalled();
+        $form->handleRequest($request)->shouldBeCalled();
 
         $this->createAction($request);
     }
@@ -1333,6 +1545,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $request->getMethod()->willReturn('PUT');
 
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($resource);
 
@@ -1380,6 +1593,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $request->getMethod()->willReturn('PUT');
 
         $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
         $form->getData()->willReturn($resource);
 
