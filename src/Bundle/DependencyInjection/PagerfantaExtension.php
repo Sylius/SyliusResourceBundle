@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.8. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in Sylius 2.0.', PagerfantaExtension::class), \E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" class is deprecated since sylius/resource-bundle 1.7. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in Sylius 2.0.', PagerfantaExtension::class), \E_USER_DEPRECATED);
 
 /**
  * Container extension to bridge the configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle
