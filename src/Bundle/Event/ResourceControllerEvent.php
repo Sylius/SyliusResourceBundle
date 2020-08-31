@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Event;
 
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResourceControllerEvent extends GenericEvent
+class ResourceControllerEvent extends Event
 {
     public const TYPE_ERROR = 'error';
 
