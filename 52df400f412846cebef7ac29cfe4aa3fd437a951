@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by stloyd at 2020-08-18T14:08:40Z
+
+@lchrusciel @pamil Is there anything blocking this? We would love to use Sylius + Symfony 5 but we're still locked due too few things :(
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2020-08-19T09:36:53Z
+
+Hey Joseph, we are blocked mostly by our current commitments. We will enter a feature freeze next week, so probably we will put more effort into Symfony5 compatibility since then.
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2020-08-31T13:06:38Z
+
+Thank you, Michael! :tada:
