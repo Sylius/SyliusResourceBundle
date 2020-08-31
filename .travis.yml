@@ -31,6 +31,7 @@ install:
             symfony/form:$SYMFONY_VERSION \
             symfony/framework-bundle:$SYMFONY_VERSION \
             symfony/security-csrf:$SYMFONY_VERSION \
+            symfony/translation:$SYMFONY_VERSION \
             symfony/twig-bundle:$SYMFONY_VERSION \
             symfony/validator:$SYMFONY_VERSION \
             symfony/yaml:$SYMFONY_VERSION \

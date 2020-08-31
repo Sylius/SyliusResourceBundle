@@ -69,6 +69,7 @@
         <PossiblyNullReference>
             <errorLevel type="suppress">
                 <file name="src/Bundle/DependencyInjection/Configuration.php" />
+                <file name="src/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
                 <file name="src/Bundle/Routing/Configuration.php" />
             </errorLevel>
         </PossiblyNullReference>

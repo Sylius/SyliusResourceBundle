@@ -15,10 +15,12 @@ namespace Sylius\Bundle\ResourceBundle;
 
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -43,6 +45,9 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
         $container->addCompilerPass(new WinzouStateMachinePass());
+
+        $container->registerExtension(new PagerfantaExtension());
+        $container->addCompilerPass(new PagerfantaBridgePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
     }
 
     /**
