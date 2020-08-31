@@ -24,9 +24,9 @@
 
         "doctrine/common": "^2.6",
         "gedmo/doctrine-extensions": "^2.4",
+        "pagerfanta/core": "^2.4",
         "symfony/event-dispatcher": "^4.4|^5.0",
         "symfony/property-access": "^4.4|^5.0",
-        "pagerfanta/pagerfanta": "^1.0|^2.0"
     },
     "require-dev": {
         "behat/transliterator": "dev-master",

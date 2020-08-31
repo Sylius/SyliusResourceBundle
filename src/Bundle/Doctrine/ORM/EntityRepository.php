@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -59,8 +59,8 @@ class EntityRepository extends BaseEntityRepository implements RepositoryInterfa
 
     protected function getPaginator(QueryBuilder $queryBuilder): Pagerfanta
     {
-        // Use output walkers option in DoctrineORMAdapter should be false as it affects performance greatly (see #3775)
-        return new Pagerfanta(new DoctrineORMAdapter($queryBuilder, false, false));
+        // Use output walkers option in the query adapter should be false as it affects performance greatly (see sylius/sylius#3775)
+        return new Pagerfanta(new QueryAdapter($queryBuilder, false, false));
     }
 
     /**
