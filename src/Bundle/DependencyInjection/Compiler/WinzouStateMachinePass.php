@@ -18,7 +18,6 @@ use SM\Callback\CascadeTransitionCallback;
 use SM\Factory\FactoryInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Marks WinzouStateMachineBundle's services as public for compatibility with both Symfony 3.4 and 4.0+.
@@ -53,9 +52,12 @@ final class WinzouStateMachinePass implements CompilerPassInterface
         }
 
         foreach (['sm.factory', 'sm.callback_factory', 'sm.callback.cascade_transition'] as $id) {
-            try {
+            if ($container->has($id)) {
                 $container->findDefinition($id)->setPublic(true);
-            } catch (ServiceNotFoundException $exception) {
+            }
+
+            if ($container->hasAlias($id)) {
+                $container->getAlias($id)->setPublic(true);
             }
         }
     }
