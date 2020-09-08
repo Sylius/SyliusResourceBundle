@@ -39,7 +39,7 @@
         "symfony/validator": "^4.4|^5.0",
         "symfony/yaml": "^4.4|^5.0",
         "willdurand/hateoas-bundle": "^2.0",
-        "winzou/state-machine-bundle": "^0.3|^0.4"
+        "winzou/state-machine-bundle": "^0.4.3"
     },
     "require-dev": {
         "doctrine/orm": "^2.5",
