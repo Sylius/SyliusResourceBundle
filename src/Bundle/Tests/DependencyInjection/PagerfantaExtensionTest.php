@@ -24,6 +24,9 @@ final class PagerfantaExtensionTest extends AbstractExtensionTestCase
      */
     public function it_prepends_the_white_october_bundle_configuration_to_the_babdev_bundle(): void
     {
+        // TODO: Move Resource-Grid integration to a dedicated compiler pass
+        $this->setParameter('kernel.bundles', []);
+
         $bundleConfig = [
             'default_view' => 'twitter_bootstrap',
             'exceptions_strategy' => [
