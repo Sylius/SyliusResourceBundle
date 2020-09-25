@@ -9,15 +9,19 @@ env:
     -
         SYMFONY_VERSION=4.4.*
         STATE_MACHINE_VERSION=^0.3.2
+        TWIG_VERSION=^2.12
     -
         SYMFONY_VERSION=4.4.*
         STATE_MACHINE_VERSION=^0.4.3
+        TWIG_VERSION=^3.0
     -
         SYMFONY_VERSION=4.4.*
         STATE_MACHINE_VERSION=^0.5
+        TWIG_VERSION=^3.0
     -
         SYMFONY_VERSION=5.0.*
         STATE_MACHINE_VERSION=^0.5
+        TWIG_VERSION=^3.0
 
 jobs:
     fast_finish: true
@@ -26,6 +30,7 @@ jobs:
             env:
                 SYMFONY_VERSION=5.0.*
                 STATE_MACHINE_VERSION=^0.5
+                TWIG_VERSION=^3.0
 
 cache:
     directories:
@@ -50,6 +55,7 @@ install:
             winzou/state-machine-bundle:$STATE_MACHINE_VERSION \
             --no-update --no-scripts --prefer-dist
     - composer require symfony/dependency-injection:$SYMFONY_VERSION --dev --no-update --no-scripts --prefer-dist
+    - composer require twig/twig:$TWIG_VERSION --dev --no-update --no-scripts --prefer-dist
     - composer update --prefer-dist
 
     - |
