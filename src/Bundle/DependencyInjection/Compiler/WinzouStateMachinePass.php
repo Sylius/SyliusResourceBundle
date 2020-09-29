@@ -34,9 +34,21 @@ final class WinzouStateMachinePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        $container->setAlias('sm.factory', FactoryInterface::class);
-        $container->setAlias('sm.callback_factory', CallbackFactoryInterface::class);
-        $container->setAlias('sm.callback.cascade_transition', CascadeTransitionCallback::class);
+        if ($container->has('sm.factory')) {
+            $container->setAlias(FactoryInterface::class, 'sm.factory');
+        }else {
+            $container->setAlias('sm.factory', FactoryInterface::class);
+        }
+        if ($container->has('sm.callback_factory')) {
+            $container->setAlias(CallbackFactoryInterface::class, 'sm.callback_factory');
+        }else {
+            $container->setAlias('sm.callback_factory', CallbackFactoryInterface::class);
+        }
+        if ($container->has('sm.callback.cascade_transition')) {
+            $container->setAlias(CascadeTransitionCallback::class, 'sm.callback.cascade_transition');
+        }else {
+            $container->setAlias('sm.callback.cascade_transition', CascadeTransitionCallback::class);
+        }
 
         foreach (['sm.factory', 'sm.callback_factory', 'sm.callback.cascade_transition'] as $id) {
             try {
