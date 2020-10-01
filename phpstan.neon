@@ -16,6 +16,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
         - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
         - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
+        - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
         - %currentWorkingDirectory%/src/Bundle/test/*
