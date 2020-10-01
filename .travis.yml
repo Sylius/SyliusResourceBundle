@@ -29,12 +29,6 @@ env:
 
 jobs:
     fast_finish: true
-    allow_failures:
-        -
-            env:
-                SYMFONY_VERSION=5.0.*
-                STATE_MACHINE_VERSION=^0.5
-                TWIG_VERSION=^3.0
 
 cache:
     directories:
