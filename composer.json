@@ -37,6 +37,7 @@
         "symfony/twig-bundle": "^3.4|^4.3",
         "symfony/validator": "^3.4|^4.3",
         "symfony/yaml": "^3.4|^4.3",
+        "webmozart/assert":  "^1.8",
         "white-october/pagerfanta-bundle": "^1.0",
         "willdurand/hateoas-bundle": "^1.2",
         "winzou/state-machine-bundle": "^0.3"
