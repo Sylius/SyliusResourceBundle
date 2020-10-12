@@ -40,11 +40,11 @@ final class SyliusResourceBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new WinzouStateMachinePass());
         $container->addCompilerPass(new RegisterResourcesPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
-        $container->addCompilerPass(new WinzouStateMachinePass());
 
         $container->registerExtension(new PagerfantaExtension());
         $container->addCompilerPass(new PagerfantaBridgePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
