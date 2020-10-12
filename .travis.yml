@@ -62,3 +62,7 @@ script:
     - (cd src/Component && vendor/bin/phpspec run)
 
     - vendor/bin/phpunit
+
+    - composer require doctrine/orm:^2.5 --no-update --no-scripts --prefer-dist
+    - composer update --no-dev --prefer-dist
+    - (cd src/Bundle/test && app/console cache:clear --env=prod)

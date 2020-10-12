@@ -22,21 +22,31 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        return [
+        if ('prod' === $this->getEnvironment()) {
+            $loader = require __DIR__ . '/../../../../vendor/autoload.php';
+            $loader->addPsr4('AppBundle\\', __DIR__ . '/../src/AppBundle/');
+        }
+
+        $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(),
-            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new \winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
+            new winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
-            new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
             new AppBundle\AppBundle(),
         ];
+
+        if (in_array($this->getEnvironment(), ['dev', 'test'])) {
+            $bundles[] = new FOS\RestBundle\FOSRestBundle();
+            $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
+            $bundles[] = new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle();
+            $bundles[] = new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle();
+            $bundles[] = new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle();
+        }
+
+        return $bundles;
     }
 
     /**
@@ -44,7 +54,7 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config/config.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     /**
