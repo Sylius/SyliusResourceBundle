@@ -38,6 +38,7 @@
         "symfony/twig-bundle": "^4.4|^5.0",
         "symfony/validator": "^4.4|^5.0",
         "symfony/yaml": "^4.4|^5.0",
+        "webmozart/assert":  "^1.8",
         "willdurand/hateoas-bundle": "^2.0",
         "winzou/state-machine-bundle": "^0.3.2|^0.4.3|^0.5"
     },
@@ -48,16 +49,16 @@
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "pamil/phpspec-skip-example-extension": "^4.1",
         "phpspec/phpspec": "^6.1",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan-webmozart-assert": "^0.12",
+        "phpstan/phpstan": "0.12.49",
+        "phpstan/phpstan-phpunit": "0.12.16",
+        "phpstan/phpstan-webmozart-assert": "0.12.7",
         "phpunit/phpunit": "^8.5",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.2",
         "symfony/dependency-injection": "^4.4|^5.0",
         "twig/twig": "^2.12|^3.0",
-        "vimeo/psalm": "3.11.4"
+        "vimeo/psalm": "3.16"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
