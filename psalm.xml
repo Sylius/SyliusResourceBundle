@@ -60,6 +60,12 @@
             </errorLevel>
         </MethodSignatureMismatch>
 
+        <MissingParamType>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Routing/ResourceLoader.php" />
+            </errorLevel>
+        </MissingParamType>
+
         <MoreSpecificImplementedParamType>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
