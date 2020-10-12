@@ -31,6 +31,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
 
     /**
      * @var string
+     *
      * @psalm-var class-string<RequestConfiguration>
      */
     private $configurationClass;
@@ -56,6 +57,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         $parameters = array_merge($this->defaultParameters, $this->parseApiParameters($request));
         $parameters = $this->parametersParser->parseRequestValues($parameters, $request);
 
+        /** @psalm-suppress UnsafeInstantiation */
         return new $this->configurationClass($metadata, $request, new Parameters($parameters));
     }
 

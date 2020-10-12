@@ -21,7 +21,7 @@ final class DisabledAuthorizationChecker implements AuthorizationCheckerInterfac
     /**
      * {@inheritdoc}
      */
-    public function isGranted(RequestConfiguration $requestConfiguration, string $permission): bool
+    public function isGranted(RequestConfiguration $configuration, string $permission): bool
     {
         return true;
     }

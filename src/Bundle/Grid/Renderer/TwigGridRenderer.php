@@ -74,7 +74,6 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        /** @var ResourceGridView $gridView */
         Assert::isInstanceOf($gridView, ResourceGridView::class);
 
         $type = $action->getType();

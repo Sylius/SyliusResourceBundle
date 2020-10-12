@@ -22,7 +22,6 @@ final class EnabledValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void
     {
-        /** @var Constraints\Enabled $constraint */
         Assert::isInstanceOf($constraint, Constraints\Enabled::class);
 
         if (null === $value) {

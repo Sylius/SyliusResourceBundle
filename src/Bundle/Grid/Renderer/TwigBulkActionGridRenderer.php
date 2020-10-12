@@ -47,7 +47,6 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
      */
     public function renderBulkAction(GridViewInterface $gridView, Action $bulkAction, $data = null): string
     {
-        /** @var ResourceGridView $gridView */
         Assert::isInstanceOf($gridView, ResourceGridView::class);
 
         $type = $bulkAction->getType();

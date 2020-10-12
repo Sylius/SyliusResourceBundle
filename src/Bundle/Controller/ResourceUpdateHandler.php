@@ -31,11 +31,11 @@ final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
      */
     public function handle(
         ResourceInterface $resource,
-        RequestConfiguration $configuration,
+        RequestConfiguration $requestConfiguration,
         ObjectManager $manager
     ): void {
-        if ($configuration->hasStateMachine()) {
-            $this->stateMachine->apply($configuration, $resource);
+        if ($requestConfiguration->hasStateMachine()) {
+            $this->stateMachine->apply($requestConfiguration, $resource);
         }
 
         $manager->flush();

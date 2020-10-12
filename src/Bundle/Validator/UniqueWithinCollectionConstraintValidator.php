@@ -24,15 +24,14 @@ final class UniqueWithinCollectionConstraintValidator extends ConstraintValidato
     /**
      * {@inheritdoc}
      */
-    public function validate($collectionOfEntities, Constraint $constraint): void
+    public function validate($value, Constraint $constraint): void
     {
-        /** @var UniqueWithinCollectionConstraint $constraint */
         Assert::isInstanceOf($constraint, UniqueWithinCollectionConstraint::class);
 
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $collectionOfEntitiesCodes = [];
 
-        foreach ($collectionOfEntities as $key => $entity) {
+        foreach ($value as $key => $entity) {
             $checkingAttribute = $propertyAccessor->getValue($entity, $constraint->attributePath);
 
             if (null === $checkingAttribute) {

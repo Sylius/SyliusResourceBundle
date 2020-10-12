@@ -20,13 +20,15 @@ class Parameters extends ParameterBag
     /**
      * {@inheritdoc}
      *
-     * @psalm-param string $path
+     * @param string $key
+     *
+     * @return mixed
      */
-    public function get($path, $default = null)
+    public function get($key, $default = null)
     {
-        $result = parent::get($path, $default);
+        $result = parent::get($key, $default);
 
-        if (null === $result && $default !== null && $this->has($path)) {
+        if (null === $result && $default !== null && $this->has($key)) {
             $result = $default;
         }
 

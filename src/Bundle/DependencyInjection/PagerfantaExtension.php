@@ -45,9 +45,9 @@ final class PagerfantaExtension extends Extension implements PrependExtensionInt
     /**
      * {@inheritdoc}
      */
-    public function load(array $config, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration($this->getConfiguration($config, $container), $config);
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('white_october_pagerfanta.default_view', $config['default_view']);
     }
