@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-09T08:34:15Z
+
+@lchrusciel @pamil
+Do we need to keep 0.3 compatibility ? Cause I think we need a pollyfill  for this error:
+https://travis-ci.org/github/Sylius/SyliusResourceBundle/jobs/725499862#L572
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-25T11:10:51Z
+
+@pamil @lchrusciel IMHO, to improve that, it would be better to fix winzou/state-machine dependencies to twig
+Cause it's not compatible with twig: ^3.0 due to deprecated \Twig_Extension removal.
+https://github.com/winzou/state-machine/blob/0.3.3/composer.json
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-10-12T12:29:49Z
+
+Thanks, Loïc! :tada:
