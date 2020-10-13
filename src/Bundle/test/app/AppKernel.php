@@ -38,7 +38,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test'])) {
+        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new FOS\RestBundle\FOSRestBundle();
             $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
             $bundles[] = new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle();
