@@ -42,8 +42,8 @@ before_install:
     - (cd src/Component && composer config extra.symfony.require "${SYMFONY_VERSION}")
 
 install:
-    - composer require winzou/state-machine-bundle:$STATE_MACHINE_VERSION --no-update --no-scripts --prefer-dist
-    - composer require twig/twig:$TWIG_VERSION --dev --no-update --no-scripts --prefer-dist
+    - composer require winzou/state-machine-bundle:$STATE_MACHINE_VERSION --no-update --no-scripts
+    - composer require twig/twig:$TWIG_VERSION --dev --no-update --no-scripts
     - composer update --prefer-dist --no-scripts
 
     - (cd src/Component && composer update --prefer-dist --no-scripts)
@@ -64,6 +64,5 @@ script:
     - vendor/bin/phpunit
 
     # Test the whole bundle without FOSRestBundle dependency
-    - composer require doctrine/orm:^2.5 --no-update --no-scripts
-    - composer update --no-dev --prefer-dist
+    - composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
     - (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)

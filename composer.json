@@ -75,7 +75,10 @@
     },
     "suggest": {
         "doctrine/orm": "^2.5",
-        "sylius/locale": "^1.0"
+        "friendsofsymfony/rest-bundle": "^3.0",
+        "jms/serializer-bundle": "^3.5",
+        "sylius/locale": "^1.0",
+        "willdurand/hateoas-bundle": "^2.0"
     },
     "extra": {
         "branch-alias": {
