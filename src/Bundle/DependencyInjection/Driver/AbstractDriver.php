@@ -69,7 +69,7 @@ abstract class AbstractDriver implements DriverInterface
             ->setArguments([
                 $this->getMetadataDefinition($metadata),
                 new Reference('sylius.resource_controller.request_configuration_factory'),
-                $viewHandler,
+                new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
                 new Reference($metadata->getServiceId('repository')),
                 new Reference($metadata->getServiceId('factory')),
                 new Reference('sylius.resource_controller.new_resource_factory'),
