@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
 $input = new ArgvInput();
-$env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'test');
+$env = $input->getParameterOption(['--env', '-e'], getenv('APP_ENV') ?? 'test');
 
 $application = new Application(new AppKernel($env, true));
 $application->run($input);

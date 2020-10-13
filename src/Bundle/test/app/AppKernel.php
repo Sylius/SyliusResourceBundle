@@ -11,22 +11,13 @@
 
 declare(strict_types=1);
 
-use PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles()
     {
-        if ('prod' === $this->getEnvironment()) {
-            $loader = require __DIR__ . '/../../../../vendor/autoload.php';
-            $loader->addPsr4('AppBundle\\', __DIR__ . '/../src/AppBundle/');
-        }
-
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
@@ -38,7 +29,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+        if ($this->getEnvironment() !== 'test_without_fosrest') {
             $bundles[] = new FOS\RestBundle\FOSRestBundle();
             $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
             $bundles[] = new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle();
@@ -49,23 +40,9 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContainerBaseClass()
-    {
-        if (0 === strpos($this->environment, 'test')) {
-            return MockerContainer::class;
-        }
-
-        return parent::getContainerBaseClass();
+        $loader->load(__DIR__ . '/config/{config}.{php,xml,yaml,yml}', 'glob');
+        $loader->load(__DIR__ . '/config/{config}_' . $this->getEnvironment() . '.{php,xml,yaml,yml}', 'glob');
     }
 }

@@ -63,6 +63,7 @@ script:
 
     - vendor/bin/phpunit
 
-    - composer require doctrine/orm:^2.5 --no-update --no-scripts --prefer-dist
+    # Test the whole bundle without FOSRestBundle dependency
+    - composer require doctrine/orm:^2.5 --no-update --no-scripts
     - composer update --no-dev --prefer-dist
-    - (cd src/Bundle/test && app/console cache:clear --env=prod)
+    - (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)
