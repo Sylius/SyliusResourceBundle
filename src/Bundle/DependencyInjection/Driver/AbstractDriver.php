@@ -18,6 +18,7 @@ use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -60,13 +61,15 @@ abstract class AbstractDriver implements DriverInterface
 
     protected function addController(ContainerBuilder $container, MetadataInterface $metadata): void
     {
+        $viewHandler = new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+
         $definition = new Definition($metadata->getClass('controller'));
         $definition
             ->setPublic(true)
             ->setArguments([
                 $this->getMetadataDefinition($metadata),
                 new Reference('sylius.resource_controller.request_configuration_factory'),
-                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
                 new Reference($metadata->getServiceId('repository')),
                 new Reference($metadata->getServiceId('factory')),
                 new Reference('sylius.resource_controller.new_resource_factory'),

@@ -11,51 +11,38 @@
 
 declare(strict_types=1);
 
-use PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles()
     {
-        return [
+        $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(),
-            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new \winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
+            new winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
-            new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
             new AppBundle\AppBundle(),
         ];
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function registerContainerConfiguration(LoaderInterface $loader)
-    {
-        $loader->load(__DIR__ . '/config/config.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContainerBaseClass()
-    {
-        if (0 === strpos($this->environment, 'test')) {
-            return MockerContainer::class;
+        if ($this->getEnvironment() !== 'test_without_fosrest') {
+            $bundles[] = new FOS\RestBundle\FOSRestBundle();
+            $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
+            $bundles[] = new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle();
+            $bundles[] = new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle();
+            $bundles[] = new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle();
         }
 
-        return parent::getContainerBaseClass();
+        return $bundles;
+    }
+
+    public function registerContainerConfiguration(LoaderInterface $loader): void
+    {
+        $loader->load(__DIR__ . '/config/{config}.{php,xml,yaml,yml}', 'glob');
+        $loader->load(__DIR__ . '/config/{config}_' . $this->getEnvironment() . '.{php,xml,yaml,yml}', 'glob');
     }
 }

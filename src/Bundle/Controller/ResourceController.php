@@ -39,7 +39,7 @@ class ResourceController extends AbstractController
     /** @var RequestConfigurationFactoryInterface */
     protected $requestConfigurationFactory;
 
-    /** @var ViewHandlerInterface */
+    /** @var ViewHandlerInterface|null */
     protected $viewHandler;
 
     /** @var RepositoryInterface */
@@ -87,7 +87,7 @@ class ResourceController extends AbstractController
     public function __construct(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ViewHandlerInterface $viewHandler,
+        ?ViewHandlerInterface $viewHandler,
         RepositoryInterface $repository,
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
@@ -140,9 +140,7 @@ class ResourceController extends AbstractController
             ]);
         }
 
-        $view = View::create($resource);
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->createRestView($configuration, $resource);
     }
 
     public function indexAction(Request $request): Response
@@ -163,9 +161,7 @@ class ResourceController extends AbstractController
             ]);
         }
 
-        $view = View::create($resources);
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->createRestView($configuration, $resources);
     }
 
     public function createAction(Request $request): Response
@@ -210,7 +206,7 @@ class ResourceController extends AbstractController
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
 
             if (!$configuration->isHtmlRequest()) {
-                return $this->viewHandler->handle($configuration, View::create($newResource, Response::HTTP_CREATED));
+                return $this->createRestView($configuration, $newResource, Response::HTTP_CREATED);
             }
 
             $postEventResponse = $postEvent->getResponse();
@@ -222,7 +218,7 @@ class ResourceController extends AbstractController
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
+            return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource);
@@ -278,10 +274,7 @@ class ResourceController extends AbstractController
                 $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
             } catch (UpdateHandlingException $exception) {
                 if (!$configuration->isHtmlRequest()) {
-                    return $this->viewHandler->handle(
-                        $configuration,
-                        View::create($form, $exception->getApiResponseCode())
-                    );
+                    return $this->createRestView($configuration, $form, $exception->getApiResponseCode());
                 }
 
                 $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -296,9 +289,11 @@ class ResourceController extends AbstractController
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
 
             if (!$configuration->isHtmlRequest()) {
-                $view = $configuration->getParameters()->get('return_content', false) ? View::create($resource, Response::HTTP_OK) : View::create(null, Response::HTTP_NO_CONTENT);
+                if ($configuration->getParameters()->get('return_content', false)) {
+                    return $this->createRestView($configuration, $resource, Response::HTTP_OK);
+                }
 
-                return $this->viewHandler->handle($configuration, $view);
+                return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
             }
 
             $postEventResponse = $postEvent->getResponse();
@@ -310,7 +305,7 @@ class ResourceController extends AbstractController
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
+            return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
@@ -359,10 +354,7 @@ class ResourceController extends AbstractController
             $this->resourceDeleteHandler->handle($resource, $this->repository);
         } catch (DeleteHandlingException $exception) {
             if (!$configuration->isHtmlRequest()) {
-                return $this->viewHandler->handle(
-                    $configuration,
-                    View::create(null, $exception->getApiResponseCode())
-                );
+                return $this->createRestView($configuration, null, $exception->getApiResponseCode());
             }
 
             $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -377,7 +369,7 @@ class ResourceController extends AbstractController
         $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource);
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create(null, Response::HTTP_NO_CONTENT));
+            return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
         }
 
         $postEventResponse = $postEvent->getResponse();
@@ -425,10 +417,7 @@ class ResourceController extends AbstractController
                 $this->resourceDeleteHandler->handle($resource, $this->repository);
             } catch (DeleteHandlingException $exception) {
                 if (!$configuration->isHtmlRequest()) {
-                    return $this->viewHandler->handle(
-                        $configuration,
-                        View::create(null, $exception->getApiResponseCode())
-                    );
+                    return $this->createRestView($configuration, null, $exception->getApiResponseCode());
                 }
 
                 $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -440,7 +429,7 @@ class ResourceController extends AbstractController
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create(null, Response::HTTP_NO_CONTENT));
+            return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
         }
 
         $this->flashHelper->addSuccessFlash($configuration, ResourceActions::BULK_DELETE);
@@ -490,10 +479,7 @@ class ResourceController extends AbstractController
             $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
         } catch (UpdateHandlingException $exception) {
             if (!$configuration->isHtmlRequest()) {
-                return $this->viewHandler->handle(
-                    $configuration,
-                    View::create($resource, $exception->getApiResponseCode())
-                );
+                return $this->createRestView($configuration, $resource, $exception->getApiResponseCode());
             }
 
             $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -508,9 +494,11 @@ class ResourceController extends AbstractController
         $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
 
         if (!$configuration->isHtmlRequest()) {
-            $view = $configuration->getParameters()->get('return_content', true) ? View::create($resource, Response::HTTP_OK) : View::create(null, Response::HTTP_NO_CONTENT);
+            if ($configuration->getParameters()->get('return_content', true)) {
+                return $this->createRestView($configuration, $resource, Response::HTTP_OK);
+            }
 
-            return $this->viewHandler->handle($configuration, $view);
+            return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
         }
 
         $postEventResponse = $postEvent->getResponse();
@@ -547,5 +535,19 @@ class ResourceController extends AbstractController
         }
 
         return $resource;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
+    {
+        if (null === $this->viewHandler) {
+            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
+        }
+
+        $view = View::create($data, $statusCode);
+
+        return $this->viewHandler->handle($configuration, $view);
     }
 }
