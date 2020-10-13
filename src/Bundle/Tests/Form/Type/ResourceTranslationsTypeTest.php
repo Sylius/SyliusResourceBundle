@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Form\Type;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 final class ResourceTranslationsTypeTest extends TypeTestCase
 {
+    use ProphecyTrait;
+
     /**
      * {@inheritdoc}
      */

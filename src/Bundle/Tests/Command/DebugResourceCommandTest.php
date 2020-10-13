@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand;
 use Sylius\Component\Resource\Metadata\Metadata;
@@ -23,6 +24,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class DebugResourceCommandTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var ObjectProphecy|RegistryInterface */
     private $registry;
 
