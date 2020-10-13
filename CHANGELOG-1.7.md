@@ -2,6 +2,14 @@
 
 ### v1.7.0-BETA.1 (2020-10-13)
 
+#### TL;DR
+
+- Added support for Symfony 5
+- Added support for Twig 3
+- Added support for `winzou/state-machine-bundle` 0.4 and 0.5
+
+#### Details
+
 - [#114](https://github.com/Sylius/SyliusResourceBundle/issues/114) Updating composer dependencies ([@mamazu](https://github.com/mamazu))
 - [#117](https://github.com/Sylius/SyliusResourceBundle/issues/117) Fix extended types deprecation ([@dannyvw](https://github.com/dannyvw))
 - [#119](https://github.com/Sylius/SyliusResourceBundle/issues/119) Update composer dependencies ([@dannyvw](https://github.com/dannyvw))
