@@ -71,7 +71,7 @@
         "sylius/grid-bundle": "^1.2",
         "symfony/dependency-injection": "^4.4 || ^5.0",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "3.16",
+        "vimeo/psalm": "3.17.1",
         "willdurand/hateoas-bundle": "^2.0"
     },
     "suggest": {
