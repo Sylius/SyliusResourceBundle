@@ -1,0 +1,64 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2020-07-09T18:44:54Z
+
+I think we have to add these librairies on conflict to prevent installing older versions than compatible ones. See Symfony composer requirements...
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-07-09T19:20:04Z
+
+I'd like to test prod requirements too. but I don't manage to launch clear cache command on --env=prod after composer install --no-dev. Test app still have test env...
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-07-13T09:57:19Z
+
+@pamil @lchrusciel I need help to test prod requirements. It doesn't work with my last commit.
+When I run this command "(cd src/Bundle/test && app/console cache:clear --env=prod)" I am on test environment.
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2020-07-14T13:53:28Z
+
+Hey Loic, sorry for not being to responsive. We had a few commitments that we had to fulfill recently. However, with 1.8 release coming, you can expect more power to review and push things further.
+
+In the same time, thanks a lot for your patience and work :)
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-02T13:37:14Z
+
+@pamil @lchrusciel I rebased this PR to fix conflicts. I can squash all commits into one if you want.
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2020-09-08T07:27:49Z
+
+Hey Loic,
+
+thanks for your contribution and again sorry for the long feedback loop. However, we have to fix the main build before we can go anywhere further.
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-09T15:23:01Z
+
+@lchrusciel I fixed the Ci build.
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-25T06:38:44Z
+
+@lchrusciel @pamil This one is ready and build is fixed. Is there anything else to improve?
+
+---------------------------------------------------------------------------
+
+by loic425 at 2020-09-29T09:10:53Z
+
+@lchrusciel I made a little change to use `on-invalid="null"`, it allows to remove a compiler pass just for that case.
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-10-13T15:10:41Z
+
+Thank you, Loïc! :1st_place_medal:
