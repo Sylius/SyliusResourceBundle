@@ -47,6 +47,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
 
     /**
      * @test
+     * @doesNotPerformAssertions
      */
     public function it_does_not_add_resource_repository_to_resource_repository_registry_if_registry_does_not_exist(): void
     {

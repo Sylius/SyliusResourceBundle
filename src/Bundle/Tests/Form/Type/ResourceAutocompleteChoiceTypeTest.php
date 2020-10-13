@@ -155,10 +155,12 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
             ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code']
         );
 
-        $this->assertArraySubset(
-            ['choice_name' => 'name', 'choice_value' => 'code', 'multiple' => false, 'placeholder' => ''],
-            $form->createView()->vars
-        );
+        $formViewVars = $form->createView()->vars;
+
+        $this->assertSame('name', $formViewVars['choice_name']);
+        $this->assertSame('code', $formViewVars['choice_value']);
+        $this->assertFalse($formViewVars['multiple']);
+        $this->assertSame('', $formViewVars['placeholder']);
     }
 
     /**
