@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceAutocompleteChoiceType;
 use Sylius\Component\Registry\ServiceRegistryInterface;
@@ -26,6 +27,8 @@ use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
 {
+    use ProphecyTrait;
+
     /** @var ObjectProphecy|ServiceRegistryInterface */
     private $resourceRepositoryRegistry;
 
