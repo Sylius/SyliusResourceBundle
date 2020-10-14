@@ -13,8 +13,6 @@ So far we support:
 * Doctrine ORM
 * Doctrine MongoDB ODM
 * Doctrine PHPCR ODM
-* InMemory
-* ElasticSearch (via an [extension](https://github.com/Sylius/SyliusElasticSearchPlugin))
 
 ## Resource system for Symfony applications.
 
