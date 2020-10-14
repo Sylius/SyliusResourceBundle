@@ -1,5 +1,22 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-BETA.2 (2020-10-14)
+
+#### TL;DR
+
+- Made FOSRestBundle optional
+- Ensured WinzouStateMachineBundle services and aliases are public
+
+#### Details
+
+- [#173](https://github.com/Sylius/SyliusResourceBundle/issues/173) Remove rest dependencies ([@loic425](https://github.com/loic425), [@pamil](https://github.com/pamil))
+- [#177](https://github.com/Sylius/SyliusResourceBundle/issues/177) Pagerfanta updates ([@mbabker](https://github.com/mbabker))
+- [#178](https://github.com/Sylius/SyliusResourceBundle/issues/178) When using winzouStateMachineBundle 0.4, the old named services are aliases, so need to be marked public as well ([@mbabker](https://github.com/mbabker), [@pamil](https://github.com/pamil))
+- [#192](https://github.com/Sylius/SyliusResourceBundle/issues/192) Remove conflict with amphp/amp ([@pamil](https://github.com/pamil))
+- [#195](https://github.com/Sylius/SyliusResourceBundle/issues/195) Upgrade to Psalm v3.17.1 ([@pamil](https://github.com/pamil))
+- [#196](https://github.com/Sylius/SyliusResourceBundle/issues/196) Remove unnecessary dev dependency on "polishsymfonycommunity/symfony-mocker-container" ([@pamil](https://github.com/pamil))
+- [#197](https://github.com/Sylius/SyliusResourceBundle/issues/197) Make RegisterFormBuilderPass accept multiple tags on a single service ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-BETA.1 (2020-10-13)
 
 #### TL;DR
