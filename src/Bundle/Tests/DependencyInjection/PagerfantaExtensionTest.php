@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection;
 
+use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
 use BabDev\PagerfantaBundle\DependencyInjection\BabDevPagerfantaExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 
 final class PagerfantaExtensionTest extends AbstractExtensionTestCase
 {
@@ -24,8 +26,13 @@ final class PagerfantaExtensionTest extends AbstractExtensionTestCase
      */
     public function it_prepends_the_white_october_bundle_configuration_to_the_babdev_bundle(): void
     {
-        // TODO: Move Resource-Grid integration to a dedicated compiler pass
-        $this->setParameter('kernel.bundles', []);
+        $this->container->setParameter(
+            'kernel.bundles',
+            [
+                'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
+                'TwigBundle' => TwigBundle::class,
+            ]
+        );
 
         $bundleConfig = [
             'default_view' => 'twitter_bootstrap',

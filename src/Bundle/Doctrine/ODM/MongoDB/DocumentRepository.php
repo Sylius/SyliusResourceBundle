@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ODM\MongoDB;
 
 use Doctrine\MongoDB\Query\Builder as QueryBuilder;
 use Doctrine\ODM\MongoDB\DocumentRepository as BaseDocumentRepository;
-use Pagerfanta\Adapter\DoctrineODMMongoDBAdapter;
+use Pagerfanta\Doctrine\MongoDBODM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -134,7 +134,7 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
      */
     public function getPaginator(QueryBuilder $queryBuilder)
     {
-        return new Pagerfanta(new DoctrineODMMongoDBAdapter($queryBuilder));
+        return new Pagerfanta(new QueryAdapter($queryBuilder));
     }
 
     /**

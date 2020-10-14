@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR;
 
 use Doctrine\ODM\PHPCR\DocumentRepository as BaseDocumentRepository;
 use Doctrine\ODM\PHPCR\Query\Builder\QueryBuilder;
-use Pagerfanta\Adapter\DoctrineODMPhpcrAdapter;
+use Pagerfanta\Doctrine\PHPCRODM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -65,7 +65,7 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
      */
     public function getPaginator(QueryBuilder $queryBuilder)
     {
-        return new Pagerfanta(new DoctrineODMPhpcrAdapter($queryBuilder));
+        return new Pagerfanta(new QueryAdapter($queryBuilder));
     }
 
     /**
