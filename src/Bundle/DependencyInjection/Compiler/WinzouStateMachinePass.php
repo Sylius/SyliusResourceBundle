@@ -28,9 +28,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class WinzouStateMachinePass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition('sm.factory') && !$container->hasDefinition(FactoryInterface::class)) {
@@ -51,13 +48,22 @@ final class WinzouStateMachinePass implements CompilerPassInterface
             $container->setAlias('sm.callback.cascade_transition', CascadeTransitionCallback::class);
         }
 
-        foreach (['sm.factory', 'sm.callback_factory', 'sm.callback.cascade_transition'] as $id) {
-            if ($container->has($id)) {
-                $container->findDefinition($id)->setPublic(true);
-            }
+        $services = [
+            'sm.factory',
+            'sm.callback_factory',
+            'sm.callback.cascade_transition',
+            FactoryInterface::class,
+            CallbackFactoryInterface::class,
+            CascadeTransitionCallback::class,
+        ];
 
+        foreach ($services as $id) {
             if ($container->hasAlias($id)) {
                 $container->getAlias($id)->setPublic(true);
+            }
+
+            if ($container->hasDefinition($id)) {
+                $container->getDefinition($id)->setPublic(true);
             }
         }
     }
