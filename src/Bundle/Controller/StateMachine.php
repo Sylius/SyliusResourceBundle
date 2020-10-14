@@ -26,9 +26,6 @@ final class StateMachine implements StateMachineInterface
         $this->stateMachineFactory = $stateMachineFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool
     {
         if (!$configuration->hasStateMachine()) {
@@ -44,9 +41,6 @@ final class StateMachine implements StateMachineInterface
         return $this->stateMachineFactory->get($resource, $graph)->can($transition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function apply(RequestConfiguration $configuration, ResourceInterface $resource): void
     {
         if (!$configuration->hasStateMachine()) {

@@ -26,9 +26,6 @@ class ComicBook implements ResourceInterface
     /** @var string */
     private $title;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId()
     {
         return $this->id;

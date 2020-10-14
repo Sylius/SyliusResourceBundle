@@ -18,8 +18,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 final class ResourcesResolver implements ResourcesResolverInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @psalm-suppress MissingReturnType
      */
     public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)

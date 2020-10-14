@@ -28,9 +28,6 @@ final class CollectionToStringTransformer implements DataTransformerInterface
         $this->delimiter = $delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform($values): string
     {
         if (!($values instanceof Collection)) {
@@ -50,9 +47,6 @@ final class CollectionToStringTransformer implements DataTransformerInterface
         return implode($this->delimiter, $values->toArray());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseTransform($value): Collection
     {
         if (!is_string($value)) {

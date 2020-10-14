@@ -49,9 +49,6 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         $this->defaultParameters = $defaultParameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(MetadataInterface $metadata, Request $request): RequestConfiguration
     {
         $parameters = array_merge($this->defaultParameters, $this->parseApiParameters($request));

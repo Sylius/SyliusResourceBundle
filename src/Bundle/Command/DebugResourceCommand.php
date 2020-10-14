@@ -33,9 +33,6 @@ final class DebugResourceCommand extends Command
         $this->registry = $registry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(): void
     {
         $this->setName('sylius:debug:resource');
@@ -55,9 +52,6 @@ EOT
         $this->addArgument('resource', InputArgument::OPTIONAL, 'Resource to debug');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         /** @var string|null $resource */

@@ -18,17 +18,11 @@ use Symfony\Component\Routing\RouteCollection;
 
 final class RouteFactory implements RouteFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function createRouteCollection(): RouteCollection
     {
         return new RouteCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createRoute(
         string $path,
         array $defaults = [],

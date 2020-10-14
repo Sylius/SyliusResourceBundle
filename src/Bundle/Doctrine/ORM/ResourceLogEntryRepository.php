@@ -18,9 +18,6 @@ use Doctrine\ORM\QueryBuilder;
 /** @psalm-suppress DeprecatedInterface */
 final class ResourceLogEntryRepository extends EntityRepository implements ResourceLogEntryRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function createByObjectIdQueryBuilder(string $objectId): QueryBuilder
     {
         return $this->createQueryBuilder('log')

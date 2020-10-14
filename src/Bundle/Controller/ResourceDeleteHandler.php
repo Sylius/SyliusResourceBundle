@@ -18,9 +18,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class ResourceDeleteHandler implements ResourceDeleteHandlerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function handle(ResourceInterface $resource, RepositoryInterface $repository): void
     {
         $repository->remove($resource);

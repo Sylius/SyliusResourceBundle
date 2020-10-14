@@ -37,9 +37,6 @@ final class AddCodeFormSubscriber implements EventSubscriberInterface
         $this->options = $options;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

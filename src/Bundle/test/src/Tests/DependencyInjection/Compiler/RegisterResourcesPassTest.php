@@ -51,9 +51,6 @@ class RegisterResourcesPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new RegisterResourcesPass());

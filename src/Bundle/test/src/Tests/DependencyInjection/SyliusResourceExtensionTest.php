@@ -114,9 +114,6 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasAlias(sprintf('%s $comicBookFactory', BookFactory::class), 'app.factory.comic_book');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getContainerExtensions(): array
     {
         return [

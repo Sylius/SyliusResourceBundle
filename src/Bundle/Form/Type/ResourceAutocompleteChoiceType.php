@@ -35,9 +35,6 @@ class ResourceAutocompleteChoiceType extends AbstractType
         $this->resourceRepositoryRegistry = $resourceRepositoryRegistry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!$options['multiple']) {
@@ -65,8 +62,6 @@ class ResourceAutocompleteChoiceType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-suppress MissingPropertyType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -77,9 +72,6 @@ class ResourceAutocompleteChoiceType extends AbstractType
         $view->vars['placeholder'] = $options['placeholder'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
@@ -104,17 +96,11 @@ class ResourceAutocompleteChoiceType extends AbstractType
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return HiddenType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'sylius_resource_autocomplete_choice';

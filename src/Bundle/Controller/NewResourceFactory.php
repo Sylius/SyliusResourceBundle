@@ -18,9 +18,6 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class NewResourceFactory implements NewResourceFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(RequestConfiguration $requestConfiguration, FactoryInterface $factory): ResourceInterface
     {
         if (null === $method = $requestConfiguration->getFactoryMethod()) {

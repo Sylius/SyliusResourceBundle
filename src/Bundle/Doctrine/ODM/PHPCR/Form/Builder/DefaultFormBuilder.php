@@ -31,9 +31,6 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
         $this->documentManager = $documentManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(MetadataInterface $metadata, FormBuilderInterface $formBuilder, array $options): void
     {
         $classMetadata = $this->documentManager->getClassMetadata($metadata->getClass('model'));

@@ -69,9 +69,6 @@ class Book implements ResourceInterface, TranslatableInterface
         $this->author = $author;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createTranslation()
     {
         return new BookTranslation();

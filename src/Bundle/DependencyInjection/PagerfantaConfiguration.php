@@ -28,9 +28,6 @@ final class PagerfantaConfiguration implements ConfigurationInterface
 {
     public const EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND = 'to_http_not_found';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('white_october_pagerfanta');

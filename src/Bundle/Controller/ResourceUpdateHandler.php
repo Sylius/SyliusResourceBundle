@@ -26,9 +26,6 @@ final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
         $this->stateMachine = $stateMachine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(
         ResourceInterface $resource,
         RequestConfiguration $requestConfiguration,

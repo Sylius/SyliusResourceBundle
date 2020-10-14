@@ -28,9 +28,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         parent::load($container, $metadata);
@@ -145,17 +142,11 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType(): string
     {
         return SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addRepository(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $repositoryClass = new Parameter('sylius.phpcr_odm.repository.class');
@@ -173,9 +164,6 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getManagerServiceId(MetadataInterface $metadata): string
     {
         if ($objectManagerName = $this->getObjectManagerName($metadata)) {
@@ -185,9 +173,6 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
         return 'doctrine_phpcr.odm.document_manager';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getClassMetadataClassname(): string
     {
         return 'Doctrine\\ODM\\PHPCR\\Mapping\\ClassMetadata';

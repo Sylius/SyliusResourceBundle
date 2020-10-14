@@ -29,9 +29,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);

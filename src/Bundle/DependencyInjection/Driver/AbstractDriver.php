@@ -24,9 +24,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 abstract class AbstractDriver implements DriverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $this->setClassesParameters($container, $metadata);

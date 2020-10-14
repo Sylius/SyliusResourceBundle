@@ -37,9 +37,6 @@ final class ResourceLoader implements LoaderInterface
         $this->routeFactory = $routeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($resource, $type = null): RouteCollection
     {
         $processor = new Processor();
@@ -103,17 +100,12 @@ final class ResourceLoader implements LoaderInterface
         return $routes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($resource, $type = null): bool
     {
         return 'sylius.resource' === $type || 'sylius.resource_api' === $type;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-suppress InvalidReturnType Symfony docblocks are messing with us
      */
     public function getResolver()
@@ -121,9 +113,6 @@ final class ResourceLoader implements LoaderInterface
         // Intentionally left blank.
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setResolver(LoaderResolverInterface $resolver): void
     {
         // Intentionally left blank.

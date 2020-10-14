@@ -74,9 +74,6 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getConfiguration()
     {
         return new Configuration();

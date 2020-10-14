@@ -30,9 +30,6 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(MetadataInterface $metadata, FormBuilderInterface $formBuilder, array $options): void
     {
         $classMetadata = $this->entityManager->getClassMetadata($metadata->getClass('model'));

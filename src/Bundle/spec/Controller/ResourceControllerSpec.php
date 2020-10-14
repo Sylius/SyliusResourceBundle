@@ -2686,9 +2686,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function getViewComparingCallback(View $expectedView)
     {
         return function ($value) use ($expectedView) {

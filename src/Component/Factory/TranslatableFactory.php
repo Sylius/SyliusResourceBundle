@@ -32,8 +32,6 @@ final class TranslatableFactory implements TranslatableFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnexpectedTypeException
      */
     public function createNew()

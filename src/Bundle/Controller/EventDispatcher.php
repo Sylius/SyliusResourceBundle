@@ -27,9 +27,6 @@ final class EventDispatcher implements EventDispatcherInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch(
         string $eventName,
         RequestConfiguration $requestConfiguration,
@@ -44,9 +41,6 @@ final class EventDispatcher implements EventDispatcherInterface
         return $event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatchMultiple(
         string $eventName,
         RequestConfiguration $requestConfiguration,
@@ -61,9 +55,6 @@ final class EventDispatcher implements EventDispatcherInterface
         return $event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatchPreEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
@@ -78,9 +69,6 @@ final class EventDispatcher implements EventDispatcherInterface
         return $event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatchPostEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
@@ -95,9 +83,6 @@ final class EventDispatcher implements EventDispatcherInterface
         return $event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatchInitializeEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,

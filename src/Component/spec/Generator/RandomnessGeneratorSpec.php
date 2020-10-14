@@ -49,9 +49,6 @@ final class RandomnessGeneratorSpec extends ObjectBehavior
         $this->generateInt($min, $max)->shouldBeInRange($min, $max);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMatchers(): array
     {
         return [

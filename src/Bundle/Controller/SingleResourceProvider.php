@@ -18,9 +18,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class SingleResourceProvider implements SingleResourceProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function get(RequestConfiguration $requestConfiguration, RepositoryInterface $repository): ?ResourceInterface
     {
         $method = $requestConfiguration->getRepositoryMethod();

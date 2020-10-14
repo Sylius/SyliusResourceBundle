@@ -35,9 +35,6 @@ final class CookieStorage implements StorageInterface, EventSubscriberInterface
         $this->responseCookies = new ParameterBag();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -71,41 +68,26 @@ final class CookieStorage implements StorageInterface, EventSubscriberInterface
         $this->responseCookies = new ParameterBag();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $name): bool
     {
         return !in_array($this->get($name), ['', null], true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $name, $default = null)
     {
         return $this->responseCookies->get($name, $this->requestCookies->get($name, $default));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(string $name, $value): void
     {
         $this->responseCookies->set($name, $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(string $name): void
     {
         $this->set($name, null);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): array
     {
         return array_merge($this->responseCookies->all(), $this->requestCookies->all());

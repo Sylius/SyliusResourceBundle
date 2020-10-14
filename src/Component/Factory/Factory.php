@@ -32,9 +32,6 @@ final class Factory implements FactoryInterface
         $this->className = $className;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createNew()
     {
         return new $this->className();

@@ -19,9 +19,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class NotNullExpressionFunctionProvider implements ExpressionFunctionProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

@@ -26,25 +26,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 final class PagerfantaExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'white_october_pagerfanta';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfiguration(array $config, ContainerBuilder $container): PagerfantaConfiguration
     {
         return new PagerfantaConfiguration();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
@@ -52,9 +43,6 @@ final class PagerfantaExtension extends Extension implements PrependExtensionInt
         $container->setParameter('white_october_pagerfanta.default_view', $config['default_view']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepend(ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $container->getExtensionConfig($this->getAlias()));

@@ -38,9 +38,6 @@ final class PagerfantaBridgePassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('pagerfanta.view_factory', 'My\ViewFactory');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new PagerfantaBridgePass());

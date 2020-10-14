@@ -22,8 +22,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class CollectionTypeExtension extends AbstractTypeExtension
 {
     /**
-     * {@inheritdoc}
-     *
      * @psalm-suppress MissingPropertyType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -32,9 +30,6 @@ final class CollectionTypeExtension extends AbstractTypeExtension
         $view->vars['button_delete_label'] = $options['button_delete_label'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -43,9 +38,6 @@ final class CollectionTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getExtendedType(): string
     {
         return CollectionType::class;

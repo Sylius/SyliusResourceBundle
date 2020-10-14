@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class RegisterResourceRepositoryPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$container->hasParameter('sylius.resources') || !$container->has('sylius.registry.resource_repository')) {

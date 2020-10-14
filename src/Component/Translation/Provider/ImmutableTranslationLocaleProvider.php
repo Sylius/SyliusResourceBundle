@@ -27,17 +27,11 @@ final class ImmutableTranslationLocaleProvider implements TranslationLocaleProvi
         $this->defaultLocaleCode = $defaultLocaleCode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefinedLocalesCodes(): array
     {
         return $this->definedLocalesCodes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultLocaleCode(): string
     {
         return $this->defaultLocaleCode;

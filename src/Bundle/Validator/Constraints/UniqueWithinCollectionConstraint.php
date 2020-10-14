@@ -24,9 +24,6 @@ final class UniqueWithinCollectionConstraint extends Constraint
     /** @var string */
     public $attributePath = 'code';
 
-    /**
-     * {@inheritdoc}
-     */
     public function validatedBy(): string
     {
         return UniqueWithinCollectionConstraintValidator::class;

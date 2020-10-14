@@ -32,9 +32,6 @@ final class ParametersParser implements ParametersParserInterface
         $this->expression = $expression;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function parseRequestValues(array $parameters, Request $request): array
     {
         return array_map(

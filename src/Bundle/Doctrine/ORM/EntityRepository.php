@@ -24,18 +24,12 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 /** @psalm-suppress DeprecatedInterface */
 class EntityRepository extends BaseEntityRepository implements RepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function add(ResourceInterface $resource): void
     {
         $this->_em->persist($resource);
         $this->_em->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(ResourceInterface $resource): void
     {
         if (null !== $this->find($resource->getId())) {
@@ -44,9 +38,6 @@ class EntityRepository extends BaseEntityRepository implements RepositoryInterfa
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable
     {
         $queryBuilder = $this->createQueryBuilder('o');

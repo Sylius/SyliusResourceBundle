@@ -21,9 +21,6 @@ use Webmozart\Assert\Assert;
 
 final class UniqueWithinCollectionConstraintValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritdoc}
-     */
     public function validate($value, Constraint $constraint): void
     {
         Assert::isInstanceOf($constraint, UniqueWithinCollectionConstraint::class);

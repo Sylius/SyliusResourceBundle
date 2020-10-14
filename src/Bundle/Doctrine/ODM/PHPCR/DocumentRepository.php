@@ -27,9 +27,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
  */
 class DocumentRepository extends BaseDocumentRepository implements RepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
@@ -40,18 +37,12 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
         return $this->getPaginator($queryBuilder);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(ResourceInterface $resource): void
     {
         $this->dm->persist($resource);
         $this->dm->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(ResourceInterface $resource): void
     {
         if (null !== $this->find($resource->getId())) {

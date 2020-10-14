@@ -20,9 +20,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class BookType extends AbstractResourceType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -34,9 +31,6 @@ final class BookType extends AbstractResourceType
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'app_book';

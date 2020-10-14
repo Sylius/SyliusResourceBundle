@@ -21,17 +21,11 @@ final class Enabled extends Constraint
     /** @var string */
     public $message = 'sylius.resource.not_enabled';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTargets(): array
     {
         return [self::PROPERTY_CONSTRAINT, self::CLASS_CONSTRAINT];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validatedBy(): string
     {
         return EnabledValidator::class;

@@ -20,9 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class FixedCollectionType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['entries'] as $entry) {
@@ -37,9 +34,6 @@ final class FixedCollectionType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('entries');
@@ -59,9 +53,6 @@ final class FixedCollectionType extends AbstractType
         $resolver->setNormalizer('entry_options', $this->optionalCallableNormalizer());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'sylius_fixed_collection';

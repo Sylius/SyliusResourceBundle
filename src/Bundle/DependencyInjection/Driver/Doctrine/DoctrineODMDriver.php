@@ -26,17 +26,11 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class DoctrineODMDriver extends AbstractDoctrineDriver
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getType(): string
     {
         return SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addRepository(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $modelClass = $metadata->getClass('model');
@@ -66,9 +60,6 @@ final class DoctrineODMDriver extends AbstractDoctrineDriver
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getManagerServiceId(MetadataInterface $metadata): string
     {
         if ($objectManagerName = $this->getObjectManagerName($metadata)) {
@@ -78,9 +69,6 @@ final class DoctrineODMDriver extends AbstractDoctrineDriver
         return 'doctrine_mongodb.odm.document_manager';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getClassMetadataClassname(): string
     {
         return 'Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata';

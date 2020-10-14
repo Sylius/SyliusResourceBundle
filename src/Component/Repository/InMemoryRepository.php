@@ -52,8 +52,6 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ExistingResourceException
      * @throws UnexpectedTypeException
      */
@@ -70,9 +68,6 @@ class InMemoryRepository implements RepositoryInterface
         $this->arrayObject->append($resource);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(ResourceInterface $resource): void
     {
         $newResources = array_filter($this->findAll(), function ($object) use ($resource) {
@@ -83,8 +78,6 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsupportedMethodException
      */
     public function find($id)
@@ -92,17 +85,11 @@ class InMemoryRepository implements RepositoryInterface
         return $this->findOneBy(['id' => $id]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findAll(): array
     {
         return $this->arrayObject->getArrayCopy();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
     {
         $results = $this->findAll();
@@ -119,8 +106,6 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \InvalidArgumentException
      */
     public function findOneBy(array $criteria): ?ResourceInterface
@@ -140,17 +125,11 @@ class InMemoryRepository implements RepositoryInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getClassName(): string
     {
         return $this->interface;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable
     {
         $resources = $this->findAll();

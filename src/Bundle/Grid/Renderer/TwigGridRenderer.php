@@ -49,17 +49,12 @@ final class TwigGridRenderer implements GridRendererInterface
         $this->actionTemplates = $actionTemplates;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(GridViewInterface $gridView, ?string $template = null): string
     {
         return (string) $this->gridRenderer->render($gridView, $template);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param mixed $data
      */
     public function renderField(GridViewInterface $gridView, Field $field, $data): string
@@ -68,8 +63,6 @@ final class TwigGridRenderer implements GridRendererInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param mixed $data
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
@@ -95,9 +88,6 @@ final class TwigGridRenderer implements GridRendererInterface
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderFilter(GridViewInterface $gridView, Filter $filter): string
     {
         return (string) $this->gridRenderer->renderFilter($gridView, $filter);

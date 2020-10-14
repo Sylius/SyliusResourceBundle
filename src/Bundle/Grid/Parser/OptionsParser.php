@@ -39,9 +39,6 @@ final class OptionsParser implements OptionsParserInterface
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
         return array_map(

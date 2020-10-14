@@ -26,17 +26,11 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class DoctrineORMDriver extends AbstractDoctrineDriver
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getType(): string
     {
         return SyliusResourceBundle::DRIVER_DOCTRINE_ORM;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addRepository(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $repositoryClassParameterName = sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName());
@@ -99,9 +93,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getManagerServiceId(MetadataInterface $metadata): string
     {
         if ($objectManagerName = $this->getObjectManagerName($metadata)) {
@@ -111,9 +102,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         return 'doctrine.orm.entity_manager';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getClassMetadataClassname(): string
     {
         return ClassMetadata::class;

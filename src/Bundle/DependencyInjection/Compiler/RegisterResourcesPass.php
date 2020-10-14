@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 final class RegisterResourcesPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         try {

@@ -25,9 +25,6 @@ final class ResourceTranslationsTypeTest extends TypeTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getExtensions(): array
     {
         /** @var TranslationLocaleProviderInterface|ObjectProphecy $translationLocaleProvider */

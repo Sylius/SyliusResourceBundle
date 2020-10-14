@@ -42,9 +42,6 @@ final class ORMTranslatableListener implements EventSubscriber
         $this->translatableEntityLocaleAssigner = $this->processTranslatableEntityLocaleAssigner($translatableEntityLocaleAssigner);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents(): array
     {
         return [

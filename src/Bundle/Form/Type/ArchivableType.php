@@ -22,9 +22,6 @@ use Symfony\Component\Form\FormEvents;
 
 final class ArchivableType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -45,9 +42,6 @@ final class ArchivableType extends AbstractType
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'sylius_archivable';

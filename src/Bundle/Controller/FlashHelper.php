@@ -39,9 +39,6 @@ final class FlashHelper implements FlashHelperInterface
         $this->defaultLocale = $defaultLocale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSuccessFlash(
         RequestConfiguration $requestConfiguration,
         string $actionName,
@@ -50,17 +47,11 @@ final class FlashHelper implements FlashHelperInterface
         $this->addFlashWithType($requestConfiguration, $actionName, 'success');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addErrorFlash(RequestConfiguration $requestConfiguration, string $actionName): void
     {
         $this->addFlashWithType($requestConfiguration, $actionName, 'error');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addFlashFromEvent(RequestConfiguration $requestConfiguration, ResourceControllerEvent $event): void
     {
         $this->addFlash($event->getMessageType(), $event->getMessage(), $event->getMessageParameters());

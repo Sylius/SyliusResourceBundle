@@ -31,9 +31,6 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
      */
     protected $mappingFormat = ResourceBundleInterface::MAPPING_XML;
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container): void
     {
         if (null !== $this->getModelNamespace()) {

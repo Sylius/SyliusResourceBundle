@@ -30,9 +30,6 @@ final class RedirectHandler implements RedirectHandlerInterface
         $this->router = $router;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function redirectToResource(RequestConfiguration $configuration, ResourceInterface $resource): Response
     {
         try {
@@ -50,9 +47,6 @@ final class RedirectHandler implements RedirectHandlerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function redirectToIndex(RequestConfiguration $configuration, ?ResourceInterface $resource = null): Response
     {
         return $this->redirectToRoute(
@@ -62,9 +56,6 @@ final class RedirectHandler implements RedirectHandlerInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function redirectToRoute(RequestConfiguration $configuration, string $route, array $parameters = []): Response
     {
         if ('referer' === $route) {
@@ -74,9 +65,6 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->redirect($configuration, $this->router->generate($route, $parameters));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function redirect(RequestConfiguration $configuration, string $url, int $status = 302): Response
     {
         if ($configuration->isHeaderRedirection()) {
@@ -88,9 +76,6 @@ final class RedirectHandler implements RedirectHandlerInterface
         return new RedirectResponse($url . $configuration->getRedirectHash(), $status);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function redirectToReferer(RequestConfiguration $configuration): Response
     {
         return $this->redirect($configuration, (string) $configuration->getRedirectReferer());

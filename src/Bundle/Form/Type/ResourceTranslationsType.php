@@ -36,9 +36,6 @@ final class ResourceTranslationsType extends AbstractType
         $this->defaultLocaleCode = $localeProvider->getDefaultLocaleCode();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
@@ -65,9 +62,6 @@ final class ResourceTranslationsType extends AbstractType
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -83,17 +77,11 @@ final class ResourceTranslationsType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return FixedCollectionType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'sylius_translations';

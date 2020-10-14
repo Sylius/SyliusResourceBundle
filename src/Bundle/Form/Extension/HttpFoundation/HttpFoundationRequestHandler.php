@@ -34,17 +34,11 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
     /** @var ServerParams */
     private $serverParams;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(ServerParams $serverParams = null)
     {
         $this->serverParams = $serverParams ?: new ServerParams();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handleRequest(FormInterface $form, $request = null)
     {
         if (!$request instanceof Request) {

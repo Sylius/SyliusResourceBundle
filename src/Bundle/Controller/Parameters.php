@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class Parameters extends ParameterBag
 {
     /**
-     * {@inheritdoc}
-     *
      * @param string $key
      *
      * @return mixed

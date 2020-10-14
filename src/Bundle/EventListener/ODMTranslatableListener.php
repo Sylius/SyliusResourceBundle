@@ -43,9 +43,6 @@ final class ODMTranslatableListener implements EventSubscriber
         $this->fallbackLocale = $fallbackLocale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCurrentLocale($currentLocale)
     {
         $this->currentLocale = $currentLocale;
@@ -53,9 +50,6 @@ final class ODMTranslatableListener implements EventSubscriber
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [

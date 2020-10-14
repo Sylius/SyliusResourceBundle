@@ -17,9 +17,6 @@ use SM\StateMachine\StateMachine as BaseStateMachine;
 
 final class StateMachine extends BaseStateMachine implements StateMachineInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getTransitionFromState(string $fromState): ?string
     {
         foreach ($this->getPossibleTransitions() as $transition) {
@@ -32,9 +29,6 @@ final class StateMachine extends BaseStateMachine implements StateMachineInterfa
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTransitionToState(string $toState): ?string
     {
         foreach ($this->getPossibleTransitions() as $transition) {

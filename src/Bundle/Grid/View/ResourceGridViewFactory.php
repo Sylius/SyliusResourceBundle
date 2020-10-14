@@ -34,9 +34,6 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
         $this->parametersParser = $parametersParser;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(
         Grid $grid,
         Parameters $parameters,

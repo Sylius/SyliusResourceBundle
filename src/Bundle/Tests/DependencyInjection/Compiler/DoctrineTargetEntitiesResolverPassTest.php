@@ -59,9 +59,6 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $targetEntitiesResolver = new class() implements TargetEntitiesResolverInterface {

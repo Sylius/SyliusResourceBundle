@@ -27,9 +27,6 @@ final class ViewHandler implements ViewHandlerInterface
         $this->restViewHandler = $restViewHandler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(RequestConfiguration $requestConfiguration, View $view): Response
     {
         if (!$requestConfiguration->isHtmlRequest()) {

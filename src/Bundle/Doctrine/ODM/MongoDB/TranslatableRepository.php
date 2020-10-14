@@ -23,9 +23,6 @@ use Sylius\Component\Resource\Repository\TranslatableRepositoryInterface;
  */
 class TranslatableRepository extends DocumentRepository implements TranslatableRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null)
     {
         if (null === $criteria) {
@@ -45,9 +42,6 @@ class TranslatableRepository extends DocumentRepository implements TranslatableR
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function applySorting(QueryBuilder $queryBuilder, array $sorting = null)
     {
         if (null === $sorting) {

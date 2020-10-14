@@ -36,9 +36,6 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
         return $definition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addManager(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $container->setAlias(

@@ -40,9 +40,6 @@ abstract class PrioritizedCompositeServicePass implements CompilerPassInterface
         $this->methodName = $methodName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$container->has($this->compositeId)) {

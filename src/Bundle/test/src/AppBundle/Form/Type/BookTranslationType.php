@@ -19,17 +19,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class BookTranslationType extends AbstractResourceType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', TextType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'app_book_translation';

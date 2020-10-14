@@ -18,9 +18,6 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
  */
 final class DisabledAuthorizationChecker implements AuthorizationCheckerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function isGranted(RequestConfiguration $configuration, string $permission): bool
     {
         return true;
