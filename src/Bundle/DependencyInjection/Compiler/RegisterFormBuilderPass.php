@@ -31,11 +31,13 @@ final class RegisterFormBuilderPass implements CompilerPassInterface
         $registry = $container->findDefinition('sylius.registry.form_builder');
 
         foreach ($container->findTaggedServiceIds('sylius.default_resource_form.builder') as $id => $attributes) {
-            if (!isset($attributes[0]['type'])) {
-                throw new \InvalidArgumentException('Tagged grid drivers needs to have `type` attribute.');
-            }
+            foreach ($attributes as $attribute) {
+                if (!isset($attribute['type'])) {
+                    throw new \InvalidArgumentException('Tagged grid drivers needs to have "type" attribute.');
+                }
 
-            $registry->addMethodCall('register', [$attributes[0]['type'], new Reference($id)]);
+                $registry->addMethodCall('register', [$attribute['type'], new Reference($id)]);
+            }
         }
     }
 }
