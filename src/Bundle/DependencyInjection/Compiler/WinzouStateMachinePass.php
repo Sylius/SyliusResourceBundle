@@ -18,7 +18,6 @@ use SM\Callback\CascadeTransitionCallback;
 use SM\Factory\FactoryInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Marks WinzouStateMachineBundle's services as public for compatibility with both Symfony 3.4 and 4.0+.
@@ -29,9 +28,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  */
 final class WinzouStateMachinePass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition('sm.factory') && !$container->hasDefinition(FactoryInterface::class)) {
@@ -52,10 +48,22 @@ final class WinzouStateMachinePass implements CompilerPassInterface
             $container->setAlias('sm.callback.cascade_transition', CascadeTransitionCallback::class);
         }
 
-        foreach (['sm.factory', 'sm.callback_factory', 'sm.callback.cascade_transition'] as $id) {
-            try {
-                $container->findDefinition($id)->setPublic(true);
-            } catch (ServiceNotFoundException $exception) {
+        $services = [
+            'sm.factory',
+            'sm.callback_factory',
+            'sm.callback.cascade_transition',
+            FactoryInterface::class,
+            CallbackFactoryInterface::class,
+            CascadeTransitionCallback::class,
+        ];
+
+        foreach ($services as $id) {
+            if ($container->hasAlias($id)) {
+                $container->getAlias($id)->setPublic(true);
+            }
+
+            if ($container->hasDefinition($id)) {
+                $container->getDefinition($id)->setPublic(true);
             }
         }
     }
