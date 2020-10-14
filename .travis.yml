@@ -22,7 +22,7 @@ env:
         STATE_MACHINE_VERSION=^0.5
         TWIG_VERSION=^3.0
     -
-        SYMFONY_VERSION=5.0.*
+        SYMFONY_VERSION=5.1.*
         STATE_MACHINE_VERSION=^0.5
         TWIG_VERSION=^3.0
 
