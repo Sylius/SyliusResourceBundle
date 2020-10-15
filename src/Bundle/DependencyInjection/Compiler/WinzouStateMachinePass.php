@@ -18,6 +18,7 @@ use SM\Callback\CascadeTransitionCallback;
 use SM\Factory\FactoryInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 /**
  * Marks WinzouStateMachineBundle's services as public for compatibility with both Symfony 3.4 and 4.0+.
@@ -30,6 +31,13 @@ final class WinzouStateMachinePass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
+        $bundles = $container->getParameter('kernel.bundles');
+        $winzouStateMachineEnabled = in_array(winzouStateMachineBundle::class, $bundles, true);
+
+        if (!$winzouStateMachineEnabled) {
+            return;
+        }
+
         if ($container->hasDefinition('sm.factory') && !$container->hasDefinition(FactoryInterface::class)) {
             $container->setAlias(FactoryInterface::class, 'sm.factory');
         } else {

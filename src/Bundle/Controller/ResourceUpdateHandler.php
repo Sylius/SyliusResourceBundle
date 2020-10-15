@@ -18,10 +18,10 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
 {
-    /** @var StateMachineInterface */
+    /** @var StateMachineInterface|null */
     private $stateMachine;
 
-    public function __construct(StateMachineInterface $stateMachine)
+    public function __construct(?StateMachineInterface $stateMachine)
     {
         $this->stateMachine = $stateMachine;
     }
@@ -31,7 +31,7 @@ final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
         RequestConfiguration $requestConfiguration,
         ObjectManager $manager
     ): void {
-        if ($requestConfiguration->hasStateMachine()) {
+        if (null !== $this->stateMachine && $requestConfiguration->hasStateMachine()) {
             $this->stateMachine->apply($requestConfiguration, $resource);
         }
 

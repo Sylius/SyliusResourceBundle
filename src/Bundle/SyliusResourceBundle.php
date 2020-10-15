@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePa
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -38,6 +39,7 @@ final class SyliusResourceBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new WinzouStateMachinePass());
+        $container->addCompilerPass(new RegisterStateMachinePass());
         $container->addCompilerPass(new RegisterResourcesPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterResourceRepositoryPass());

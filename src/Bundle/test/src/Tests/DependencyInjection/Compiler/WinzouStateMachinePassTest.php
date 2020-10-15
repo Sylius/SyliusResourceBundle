@@ -17,6 +17,7 @@ use PHPUnit\Framework\Assert;
 use SM\Callback\CallbackFactoryInterface;
 use SM\Callback\CascadeTransitionCallback;
 use SM\Factory\FactoryInterface;
+use SM\StateMachine\StateMachineInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,6 +27,10 @@ final class WinzouStateMachinePassTest extends WebTestCase
     /** @test */
     public function all_winzou_services_are_public(): void
     {
+        if (!class_exists(StateMachineInterface::class)) {
+            $this->markTestSkipped('State machine is not installed');
+        }
+
         /** @var ContainerBuilder $container */
         $container = self::createClient()->getContainer();
 
