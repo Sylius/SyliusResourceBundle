@@ -1,5 +1,15 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-BETA.3 (2020-10-15)
+
+#### Details
+
+- [#198](https://github.com/Sylius/SyliusResourceBundle/issues/198) Bump up minimal requirements to Symfony ^5.1 ([@pamil](https://github.com/pamil))
+- [#199](https://github.com/Sylius/SyliusResourceBundle/issues/199) Update the year in LICENSE file ([@ValentineJester](https://github.com/ValentineJester))
+- [#200](https://github.com/Sylius/SyliusResourceBundle/issues/200) Use HTTPS instead of HTTP in links in composer.json ([@ValentineJester](https://github.com/ValentineJester))
+- [#201](https://github.com/Sylius/SyliusResourceBundle/issues/201) Remove outdated persistence backends from the documentation ([@ValentineJester](https://github.com/ValentineJester))
+- [#204](https://github.com/Sylius/SyliusResourceBundle/issues/204) Replace AbstractController with ControllerTrait & ContainerAwareInterface ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-BETA.2 (2020-10-14)
 
 #### TL;DR
