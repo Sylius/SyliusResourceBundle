@@ -15,6 +15,7 @@
             <directory name="src/Bundle/Tests" />
             <directory name="src/Component/spec" />
             <directory name="src/Component/vendor" />
+            <file name="src/Bundle/Controller/ControllerTrait.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
             <file name="src/Bundle/EventListener/ODM*.php" />

@@ -39,7 +39,6 @@ use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Form;
@@ -98,11 +97,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         );
 
         $this->setContainer($container);
-    }
-
-    function it_extends_base_Symfony_controller(): void
-    {
-        $this->shouldHaveType(AbstractController::class);
     }
 
     function it_throws_a_403_exception_if_user_is_unauthorized_to_view_a_single_resource(

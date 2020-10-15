@@ -23,7 +23,8 @@ use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -31,8 +32,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ResourceController extends AbstractController
+class ResourceController
 {
+    use ControllerTrait;
+    use ContainerAwareTrait;
+
     /** @var MetadataInterface */
     protected $metadata;
 
@@ -507,6 +511,22 @@ class ResourceController extends AbstractController
         }
 
         return $this->redirectHandler->redirectToResource($configuration, $resource);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getParameter(string $name)
+    {
+        if (!$this->container instanceof ContainerInterface) {
+            throw new \RuntimeException(sprintf(
+                'Container passed to "%s" has to implements "%s".',
+                self::class,
+                ContainerInterface::class
+            ));
+        }
+
+        return $this->container->getParameter($name);
     }
 
     /**

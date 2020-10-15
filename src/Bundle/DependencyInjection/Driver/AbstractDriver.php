@@ -58,8 +58,6 @@ abstract class AbstractDriver implements DriverInterface
 
     protected function addController(ContainerBuilder $container, MetadataInterface $metadata): void
     {
-        $viewHandler = new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-
         $definition = new Definition($metadata->getClass('controller'));
         $definition
             ->setPublic(true)

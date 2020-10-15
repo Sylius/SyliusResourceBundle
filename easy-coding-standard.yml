@@ -17,6 +17,7 @@ services:
 
 parameters:
     exclude_files:
+        - 'src/Bundle/Controller/ControllerTrait.php'
         - 'src/Bundle/test/app/cache/*'
         - 'src/Bundle/test/var/*'
 
