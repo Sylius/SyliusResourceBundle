@@ -8,3 +8,7 @@ fos_rest:
             - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: true }
     exception:
         enabled: false
+
+twig:
+    debug: "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
