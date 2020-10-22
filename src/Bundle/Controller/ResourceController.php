@@ -75,7 +75,7 @@ class ResourceController extends AbstractController
     /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
-    /** @var StateMachineInterface */
+    /** @var StateMachineInterface|null */
     protected $stateMachine;
 
     /** @var ResourceUpdateHandlerInterface */
@@ -99,7 +99,7 @@ class ResourceController extends AbstractController
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
-        StateMachineInterface $stateMachine,
+        ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler
     ) {
@@ -194,7 +194,8 @@ class ResourceController extends AbstractController
             }
 
             if ($configuration->hasStateMachine()) {
-                $this->stateMachine->apply($configuration, $newResource);
+                $stateMachine = $this->getStateMachine();
+                $stateMachine->apply($configuration, $newResource);
             }
 
             $this->repository->add($newResource);
@@ -446,6 +447,7 @@ class ResourceController extends AbstractController
 
     public function applyStateMachineTransitionAction(Request $request): Response
     {
+        $stateMachine = $this->getStateMachine();
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
@@ -471,7 +473,7 @@ class ResourceController extends AbstractController
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
 
-        if (!$this->stateMachine->can($configuration, $resource)) {
+        if (!$stateMachine->can($configuration, $resource)) {
             throw new BadRequestHttpException();
         }
 
@@ -549,5 +551,14 @@ class ResourceController extends AbstractController
         $view = View::create($data, $statusCode);
 
         return $this->viewHandler->handle($configuration, $view);
+    }
+
+    protected function getStateMachine(): StateMachineInterface
+    {
+        if (null === $this->stateMachine) {
+            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
+        }
+
+        return $this->stateMachine;
     }
 }

@@ -1,0 +1,12 @@
+framework:
+    assets: false
+    translator: { fallbacks: ["%locale%"] }
+    secret: "%secret%"
+    form: ~
+    csrf_protection: true
+    default_locale: "%locale%"
+    session:
+        handler_id: ~
+        storage_id: session.storage.mock_file
+    http_method_override: true
+    test: ~

@@ -1,0 +1,9 @@
+App\Entity\Author:
+    exclusion_policy: ALL
+    properties:
+        firstName:
+            expose: true
+            type: string
+        lastName:
+            expose: true
+            type: string

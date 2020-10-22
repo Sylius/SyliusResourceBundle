@@ -1,0 +1,14 @@
+App\Entity\GedmoBaseExample:
+    type: mappedSuperclass
+    table: gedmo
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        position:
+            type: integer
+            gedmo:
+                - sortablePosition

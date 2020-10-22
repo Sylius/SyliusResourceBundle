@@ -45,8 +45,8 @@ install:
     - (cd src/Component && composer update --prefer-dist --no-scripts)
 
 before_script:
-    - (cd src/Bundle/test && app/console doctrine:database:create)
-    - (cd src/Bundle/test && app/console doctrine:schema:create)
+    - (cd src/Bundle/test && bin/console doctrine:database:create)
+    - (cd src/Bundle/test && bin/console doctrine:schema:create)
 
 script:
     - composer validate --strict
@@ -61,4 +61,8 @@ script:
 
     # Test the whole bundle without FOSRestBundle dependency
     - composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
-    - (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)
+    - (cd src/Bundle/test && bin/console cache:clear --env=test_without_fosrest)
+
+    # Test the whole bundle without WinzouStateMachineBundle dependency
+    - composer remove winzou/state-machine-bundle --dev --no-scripts
+    - (cd src/Bundle/test && bin/console cache:clear --env=test_without_state_machine)

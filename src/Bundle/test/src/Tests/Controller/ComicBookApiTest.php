@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Tests\Controller;
+namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
 use Symfony\Component\HttpFoundation\Response;

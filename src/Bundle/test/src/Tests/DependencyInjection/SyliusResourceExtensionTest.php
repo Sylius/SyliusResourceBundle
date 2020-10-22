@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection;
 
-use AppBundle\Entity\Book;
-use AppBundle\Entity\BookTranslation;
-use AppBundle\Entity\ComicBook;
-use AppBundle\Factory\BookFactory;
+use App\Entity\Book;
+use App\Entity\BookTranslation;
+use App\Entity\ComicBook;
+use App\Factory\BookFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 
