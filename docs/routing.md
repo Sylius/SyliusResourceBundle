@@ -172,7 +172,7 @@ app_admin_book:
     resource: |
         alias: app.book
         section: admin
-        templates: Admin/Book
+        templates: Admin\Book
     type: sylius.resource
     prefix: /admin
 ```
@@ -191,7 +191,7 @@ If you want to use a custom form:
 app_book:
     resource: |
         alias: app.book
-        form: App/Form/Type/AdminBookType
+        form: App\Form\Type\AdminBookType
     type: sylius.resource
 ```
 ``create`` and ``update`` actions will use ``App/Form/Type/AdminBookType`` form type.
