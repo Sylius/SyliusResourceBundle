@@ -16,28 +16,14 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
-        $bundles = [
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
-            new BabDev\PagerfantaBundle\BabDevPagerfantaBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new AppBundle\AppBundle(),
-        ];
-
-        if ($this->getEnvironment() !== 'test_without_fosrest') {
-            $bundles[] = new FOS\RestBundle\FOSRestBundle();
-            $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
-            $bundles[] = new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle();
-            $bundles[] = new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle();
-            $bundles[] = new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle();
+        $contents = require $this->getProjectDir() . '/config/bundles.php';
+        foreach ($contents as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
+            }
         }
-
-        return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
