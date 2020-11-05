@@ -102,12 +102,17 @@
     },
     "scripts": {
         "analyse": [
-            "@php vendor/bin/ecs check src",
-            "@php vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src",
-            "@php vendor/bin/psalm"
+            "@composer validate --strict",
+            "vendor/bin/ecs check src",
+            "vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src",
+            "vendor/bin/psalm"
         ],
         "fix": [
-            "@php vendor/bin/ecs check src --fix"
+            "vendor/bin/ecs check src --fix"
+        ],
+        "test": [
+            "vendor/bin/phpspec run --ansi --no-interaction",
+            "vendor/bin/phpunit --colors=always"
         ]
     }
 }

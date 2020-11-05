@@ -1,0 +1,106 @@
+name: Build
+
+on:
+    push: ~
+    pull_request: ~
+    release:
+        types: [created]
+    schedule:
+        -
+            cron: "0 1 * * 6" # Run at 1am every Saturday
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        name: Build and test
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -
+                        php: 7.3
+                        symfony-version: 4.4.*
+                    -
+                        php: 7.3
+                        symfony-version: 5.1.*
+                    -
+                        php: 7.4
+                        symfony-version: 4.4.*
+                        winzou-version: ^0.3.2
+                        twig-version: ^2.12
+                    -
+                        php: 7.4
+                        symfony-version: 4.4.*
+                        winzou-version: ^0.4.3
+                        twig-version: ^3.0
+                    -
+                        php: 7.4
+                        symfony-version: 4.4.*
+                        winzou-version: ^0.5
+                        twig-version: ^3.0
+                    -
+                        php: 7.4
+                        symfony-version: 5.1.*
+                        winzou-version: ^0.5
+                        twig-version: ^3.0
+
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "${{ matrix.php }}"
+                    coverage: none
+
+            -
+                name: Restrict Symfony version
+                if: matrix.symfony-version != ''
+                run: |
+                    composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
+                    composer config extra.symfony.require "${{ matrix.symfony-version }}"
+                    (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony-version }}")
+
+            -
+                name: Restrict winzou/state-machine-bundle version
+                if: matrix.winzou-version != ''
+                run: composer require "winzou/state-machine-bundle:${{ matrix.winzou-version }}" --no-update --no-scripts
+
+            -
+                name: Restrict twig/twig version
+                if: matrix.twig-version != ''
+                run: composer require "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
+
+            -
+                name: Install dependencies
+                run: |
+                    composer update ${{ matrix.composer-flags }} --no-scripts
+                    (cd src/Component && composer update ${{ matrix.composer-flags }} --no-scripts)
+
+            -
+                name: Prepare test application
+                run: |
+                    (cd src/Bundle/test && app/console doctrine:database:create)
+                    (cd src/Bundle/test && app/console doctrine:schema:create)
+
+            -
+                name: Run analysis
+                run: |
+                    composer analyse
+                    (cd src/Component && composer validate --strict)
+
+            -
+                name: Run component tests
+                run: (cd src/Component && vendor/bin/phpspec run)
+
+            -
+                name: Run bundle tests
+                run: composer test
+
+            -
+                name: Run smoke tests without optional dependencies
+                run: |
+                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
+                    (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)
