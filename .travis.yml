@@ -33,7 +33,7 @@ cache:
 before_install:
     - phpenv config-rm xdebug.ini || true
     - echo "memory_limit=6144M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    - composer global require --no-progress --no-scripts --no-plugins symfony/flex dev-master
+    - composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
     - composer config extra.symfony.require "${SYMFONY_VERSION}"
     - (cd src/Component && composer config extra.symfony.require "${SYMFONY_VERSION}")
 
