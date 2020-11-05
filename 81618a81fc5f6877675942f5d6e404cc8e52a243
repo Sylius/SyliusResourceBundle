@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2020-10-15T18:19:46Z
+
+@pamil This one is ready, I will make the second part (upgrading the test app) on another PR.
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-11-05T12:47:47Z
+
+Rebased with master and ported Travis CI changes to GitHub Actions 🎉
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-11-05T12:51:53Z
+
+Thank you, Loïc! :1st_place_medal:
