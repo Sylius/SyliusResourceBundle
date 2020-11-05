@@ -173,6 +173,7 @@ class InMemoryRepository implements RepositoryInterface
     {
         $results = $resources;
 
+        $arguments = [];
         foreach ($orderBy as $property => $order) {
             $sortable = [];
 
@@ -180,19 +181,26 @@ class InMemoryRepository implements RepositoryInterface
                 $sortable[$key] = $this->accessor->getValue($object, $property);
             }
 
+            $arguments[] = $sortable;
+
             if (RepositoryInterface::ORDER_ASCENDING === $order) {
-                asort($sortable);
-            }
-            if (RepositoryInterface::ORDER_DESCENDING === $order) {
-                arsort($sortable);
-            }
-
-            $results = [];
-
-            foreach ($sortable as $key => $propertyValue) {
-                $results[$key] = $resources[$key];
+                $arguments[] = \SORT_ASC;
+            } elseif (RepositoryInterface::ORDER_DESCENDING === $order) {
+                $arguments[] = \SORT_DESC;
+            } else {
+                throw new \InvalidArgumentException('Unknown order.');
             }
         }
+
+        $arguments[] = &$results;
+
+        /**
+         * Doing PHP magic, it works this way
+         *
+         * @psalm-suppress InvalidPassByReference
+         * @psalm-suppress PossiblyInvalidArgument
+         */
+        array_multisort(...$arguments);
 
         return $results;
     }
