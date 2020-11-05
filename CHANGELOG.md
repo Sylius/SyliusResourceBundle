@@ -1,5 +1,22 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-BETA.4 (2020-11-05)
+
+#### TL;DR
+
+- Made `winzou/state-machine-bundle` optional
+- Made `symfony/twig-bundle` optional
+
+#### Details
+
+- [#202](https://github.com/Sylius/SyliusResourceBundle/issues/202) Remove winzou state machine dependency ([@loic425](https://github.com/loic425))
+- [#206](https://github.com/Sylius/SyliusResourceBundle/issues/206) Remove twig bundle dependency ([@loic425](https://github.com/loic425))
+- [#207](https://github.com/Sylius/SyliusResourceBundle/issues/207) Bump doctrine/persistance version ([@dotdevru](https://github.com/dotdevru))
+- [#209](https://github.com/Sylius/SyliusResourceBundle/issues/209) [Travis] Use symfony/flex ^1.10 instead of dev-master ([@pamil](https://github.com/pamil))
+- [#211](https://github.com/Sylius/SyliusResourceBundle/issues/211) Upgrade to Psalm 4 ([@pamil](https://github.com/pamil))
+- [#212](https://github.com/Sylius/SyliusResourceBundle/issues/212) Normalise composer.json ([@pamil](https://github.com/pamil))
+- [#213](https://github.com/Sylius/SyliusResourceBundle/issues/213) Update component's composer.json and normalise it ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-BETA.3 (2020-10-15)
 
 #### Details
