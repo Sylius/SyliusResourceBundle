@@ -153,7 +153,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
             ],
             $limit = 2,
             $offset = 1
-        )->shouldReturn([$secondBook, $thirdBook]);
+        )->shouldReturn([$thirdBook, $firstBook]);
     }
 
     function it_throws_invalid_argument_exception_when_finding_one_object_with_empty_parameter_array(): void
