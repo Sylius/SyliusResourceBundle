@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector as InflectorObject;
+use Doctrine\Inflector\InflectorFactory;
+use Doctrine\Inflector\LanguageInflectorFactory;
 
 final class Metadata implements MetadataInterface
 {
@@ -31,6 +33,25 @@ final class Metadata implements MetadataInterface
 
     /** @var array */
     private $parameters;
+
+    /** @var LanguageInflectorFactory|null */
+    private static $inflectorFactory;
+
+    /** @var InflectorObject|null */
+    private static $inflectorInstance;
+
+    private static function getInflector(): InflectorObject
+    {
+        if (self::$inflectorFactory === null) {
+            self::$inflectorFactory = InflectorFactory::create();
+        }
+
+        if (self::$inflectorInstance === null) {
+            self::$inflectorInstance = self::$inflectorFactory->build();
+        }
+
+        return self::$inflectorInstance;
+    }
 
     private function __construct(string $name, string $applicationName, array $parameters)
     {
@@ -72,7 +93,7 @@ final class Metadata implements MetadataInterface
 
     public function getPluralName(): string
     {
-        return Inflector::pluralize($this->name);
+        return self::getInflector()->pluralize($this->name);
     }
 
     public function getDriver(): string

@@ -28,7 +28,8 @@
     ],
     "require": {
         "php": "^7.3",
-        "doctrine/common": "^2.6",
+        "doctrine/collections": "^1.6",
+        "doctrine/inflector": "^1.4 || ^2.0",
         "gedmo/doctrine-extensions": "^2.4",
         "pagerfanta/core": "^2.4",
         "symfony/event-dispatcher": "^4.4 || ^5.1",
