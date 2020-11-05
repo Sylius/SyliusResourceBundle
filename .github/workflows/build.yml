@@ -71,7 +71,7 @@ jobs:
             -
                 name: Restrict twig/twig version
                 if: matrix.twig-version != ''
-                run: composer require "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
+                run: composer require --dev "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
 
             -
                 name: Install dependencies
@@ -104,9 +104,18 @@ jobs:
                 run: |
                     composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
                     (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)
+                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
 
             -
-                name: Run smoke tests without winzou/state-machine-bundle packages
+                name: Run smoke tests without winzou/state-machine-bundle package
                 run: |
                     composer remove winzou/state-machine-bundle --dev --no-scripts
                     (cd src/Bundle/test && app/console cache:clear --env=test_without_state_machine)
+                    composer require winzou/state-machine-bundle --dev --no-scripts
+
+            -
+                name: Run smoke tests without twig/twig package
+                run: |
+                    composer remove symfony/twig-bundle --dev --no-scripts
+                    (cd src/Bundle/test && app/console cache:clear --env=test_without_twig)
+                    composer require symfony/twig-bundle --dev --no-scripts
