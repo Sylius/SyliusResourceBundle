@@ -31,6 +31,7 @@ final class WinzouStateMachinePass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
+        /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
         $winzouStateMachineEnabled = in_array(winzouStateMachineBundle::class, $bundles, true);
 

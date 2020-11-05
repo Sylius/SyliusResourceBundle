@@ -25,6 +25,7 @@ final class RegisterResourceRepositoryPass implements CompilerPassInterface
             return;
         }
 
+        /** @var array $resources */
         $resources = $container->getParameter('sylius.resources');
 
         $repositoryRegistry = $container->findDefinition('sylius.registry.resource_repository');

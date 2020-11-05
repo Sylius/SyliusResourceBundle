@@ -26,6 +26,7 @@ final class RegisterFqcnControllersPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         try {
+            /** @var array $resources */
             $resources = $container->getParameter('sylius.resources');
         } catch (InvalidArgumentException $exception) {
             return;

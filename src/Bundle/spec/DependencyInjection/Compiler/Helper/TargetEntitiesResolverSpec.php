@@ -75,8 +75,10 @@ class TargetEntitiesResolverSpec extends ObjectBehavior
             'app.deprecated' => ['classes' => ['model' => Resource::class, 'interface' => \Countable::class]],
         ];
 
+        error_reporting(0);
         $this->resolve($config)->shouldHaveCount(1);
         $this->resolve($config)->shouldHaveKeyWithValue(\Countable::class, Resource::class);
+        error_reporting(\E_ALL);
         $this->shouldTrigger(\E_USER_DEPRECATED)->during('resolve', [$config]);
     }
 
@@ -87,10 +89,13 @@ class TargetEntitiesResolverSpec extends ObjectBehavior
             'app.bear' => ['classes' => ['model' => Bear::class]],
         ];
 
+
+        error_reporting(0);
         $this->resolve($config)->shouldHaveCount(3);
         $this->resolve($config)->shouldHaveKeyWithValue(MammalInterface::class, Resource::class);
         $this->resolve($config)->shouldHaveKeyWithValue(AnimalInterface::class, Bear::class);
         $this->resolve($config)->shouldHaveKeyWithValue(BearInterface::class, Bear::class);
+        error_reporting(\E_ALL);
         $this->shouldTrigger(\E_USER_DEPRECATED)->during('resolve', [$config]);
     }
 

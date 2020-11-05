@@ -23,6 +23,7 @@ final class RegisterResourcesPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         try {
+            /** @var array $resources */
             $resources = $container->getParameter('sylius.resources');
             $registry = $container->findDefinition('sylius.resource_registry');
         } catch (InvalidArgumentException $exception) {
@@ -37,7 +38,10 @@ final class RegisterResourcesPass implements CompilerPassInterface
 
     private function validateSyliusResource(string $class): void
     {
-        if (!in_array(ResourceInterface::class, class_implements($class) ?: [], true)) {
+        /** @var array $interfaces */
+        $interfaces = class_implements($class);
+
+        if (!in_array(ResourceInterface::class, $interfaces, true)) {
             throw new InvalidArgumentException(sprintf(
                 'Class "%s" must implement "%s" to be registered as a Sylius resource.',
                 $class,

@@ -36,6 +36,7 @@ final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         try {
+            /** @var array $resources */
             $resources = $container->getParameter('sylius.resources');
             $resolveTargetEntityListener = $container->findDefinition('doctrine.orm.listeners.resolve_target_entity');
         } catch (InvalidArgumentException $exception) {
