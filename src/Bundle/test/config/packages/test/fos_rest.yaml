@@ -1,3 +1,7 @@
+framework:
+    workflow:
+        enabled: true
+
 fos_rest:
     view:
         formats:
