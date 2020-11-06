@@ -21,6 +21,10 @@ interface ResourceBundleInterface
 
     public const MAPPING_ANNOTATION = 'annotation';
 
+    public const STATE_MACHINE_SYMFONY = 'symfony';
+
+    public const STATE_MACHINE_WINZOU = 'winzou';
+
     /**
      * Returns a vector of supported drivers.
      *

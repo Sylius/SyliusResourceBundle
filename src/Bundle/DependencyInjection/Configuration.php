@@ -111,6 +111,7 @@ final class Configuration implements ConfigurationInterface
                         ->variableNode('sorting')->defaultNull()->end()
                         ->booleanNode('filterable')->defaultFalse()->end()
                         ->variableNode('criteria')->defaultNull()->end()
+                        ->scalarNode('state_machine')->defaultNull()->end()
                     ->end()
                 ->end()
             ->end()
