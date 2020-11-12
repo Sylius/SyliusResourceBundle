@@ -1,4 +1,5 @@
 AppBundle\Entity\PullRequest:
+    type: mappedSuperclass
     table: app_pull_request
     id:
         id:
