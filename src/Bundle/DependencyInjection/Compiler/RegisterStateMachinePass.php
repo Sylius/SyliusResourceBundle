@@ -32,16 +32,31 @@ final class RegisterStateMachinePass implements CompilerPassInterface
         $settings = $container->getParameter('sylius.resource.settings');
         $stateMachine = $settings['state_machine'];
 
+        if (null !== $stateMachine) {
+            $this->setStateMachine($container, $stateMachine);
+
+            return;
+        }
+
+        // No state machine enabled
         if (
-            null === $stateMachine
-            && !$this->isSymfonyWorkflowEnabled($container)
+            !$this->isSymfonyWorkflowEnabled($container)
             && !$this->isWinzouStateMachineEnabled($container)
         ) {
             return;
         }
 
-        $stateMachine = $stateMachine ?? ResourceBundleInterface::STATE_MACHINE_SYMFONY;
+        if ($this->isSymfonyWorkflowEnabled($container)) {
+            $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_SYMFONY);
 
+            return;
+        }
+
+        $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_WINZOU);
+    }
+
+    private function setStateMachine(ContainerBuilder $container, string $stateMachine): void
+    {
         if (ResourceBundleInterface::STATE_MACHINE_SYMFONY === $stateMachine) {
             $this->setSymfonyWorkflowAsStateMachine($container);
 
