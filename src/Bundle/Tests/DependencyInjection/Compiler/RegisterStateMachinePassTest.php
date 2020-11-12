@@ -27,10 +27,22 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
     /**
      * @test
      */
-    public function it_registers_state_machine_controller_with_symfony_workflow_when_available(): void
+    public function it_does_nothing_when_no_state_machine_are_available_and_no_state_machine_is_configured(): void
     {
         $this->setParameter('sylius.resource.settings', ['state_machine' => null]);
-        $this->registerService('workflow.registry', Workflow::class);
+
+        $this->compile();
+
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_state_machine_controller_with_symfony_workflow_when_its_configured_to(): void
+    {
+        $this->setParameter('sylius.resource.settings', ['state_machine' => ResourceBundleInterface::STATE_MACHINE_SYMFONY]);
+        $this->makeSymfonyWorkflowAvailable();
 
         $this->compile();
 
@@ -40,19 +52,72 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
     /**
      * @test
      */
-    public function it_registers_state_machine_controller_with_winzou_when_available(): void
+    public function it_registers_state_machine_controller_with_winzou_when_its_configured_to(): void
     {
-        $this->setParameter('kernel.bundles', ['Winzou/StateMachine' => winzouStateMachineBundle::class]);
         $this->setParameter('sylius.resource.settings', ['state_machine' => ResourceBundleInterface::STATE_MACHINE_WINZOU]);
-        $this->registerService('sm.factory', Factory::class);
+        $this->makeWinzouStateMachineAvailable();
 
         $this->compile();
 
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
     }
 
+    /**
+     * @test
+     */
+    public function it_registers_state_machine_controller_with_symfony_workflow_by_default_when_only_this_one_is_available(): void
+    {
+        $this->setParameter('sylius.resource.settings', ['state_machine' => null]);
+        $this->makeSymfonyWorkflowAvailable();
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', Workflow::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_state_machine_controller_with_winzou_by_default_when_only_this_one_is_available(): void
+    {
+        $this->setParameter('sylius.resource.settings', ['state_machine' => null]);
+        $this->makeWinzouStateMachineAvailable();
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_state_machine_controller_with_symfony_workflow_by_default_when_both_are_available(): void
+    {
+        $this->setParameter('sylius.resource.settings', ['state_machine' => null]);
+        $this->makeWinzouStateMachineAvailable();
+        $this->makeSymfonyWorkflowAvailable();
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', Workflow::class);
+    }
+
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
+        $this->setParameter('kernel.bundles', []);
+        $this->setParameter('sylius.resource.settings', ['state_machine' => null]);
+
         $container->addCompilerPass(new RegisterStateMachinePass());
+    }
+
+    private function makeWinzouStateMachineAvailable(): void
+    {
+        $this->setParameter('kernel.bundles', ['Winzou/StateMachine' => winzouStateMachineBundle::class]);
+        $this->registerService('sm.factory', Factory::class);
+    }
+
+    private function makeSymfonyWorkflowAvailable(): void
+    {
+        $this->registerService('workflow.registry', Workflow::class);
     }
 }
