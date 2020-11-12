@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Resource;
 
+use AppBundle\Entity\Book;
+use AppBundle\Entity\ComicBook;
+use AppBundle\Repository\BookRepository;
 use Doctrine\ORM\EntityManager;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\FactoryInterface;
@@ -39,5 +42,39 @@ final class ResourceServicesTest extends WebTestCase
 
         $productRepository = $client->getContainer()->get('app.factory.book');
         $this->assertTrue($productRepository instanceof FactoryInterface);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_return_the_same_repository_instance()
+    {
+        $client = parent::createClient();
+        $repository = self::$container->get(BookRepository::class);
+
+        $repositoryAlias = $client->getContainer()->get('app.repository.book');
+        $this->assertSame($repository, $repositoryAlias);
+
+        $em = $client->getContainer()->get('app.manager.book');
+        $repositoryAlias = $em->getRepository(Book::class);
+        $this->assertSame($repository, $repositoryAlias);
+
+        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $repositoryAlias = $em->getRepository(Book::class);
+        $this->assertSame($repository, $repositoryAlias);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_return_the_same_repository_instance_for_default_repositories()
+    {
+        $client = parent::createClient();
+        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $repository = $client->getContainer()->get('app.repository.comic_book');
+        $repositoryAlias = $em->getRepository(ComicBook::class);
+
+        $this->assertInstanceOf(RepositoryInterface::class, $repository);
+        $this->assertSame($repository, $repositoryAlias);
     }
 }

@@ -17,6 +17,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODM
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Symfony\Component\Config\FileLocator;
@@ -73,6 +74,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     {
         $config = ['body_listener' => ['enabled' => true]];
         $container->prependExtensionConfig('fos_rest', $config);
+
+        $config = ['orm' => ['default_repository_class' => EntityRepository::class]];
+        $container->prependExtensionConfig('doctrine', $config);
     }
 
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void

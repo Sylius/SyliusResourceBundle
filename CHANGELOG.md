@@ -1,5 +1,8 @@
 ## CHANGELOG FOR `1.7.x`
 
+#### Details
+- [#217](https://github.com/Sylius/SyliusResourceBundle/issues/202) Duplicate initialisation of repositories ([@Fantus](https://github.com/Sylius/SyliusResourceBundle/issues/217))
+
 ### v1.7.0-BETA.4 (2020-11-05)
 
 #### TL;DR
