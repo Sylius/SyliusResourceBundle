@@ -70,6 +70,7 @@
         "sylius/grid-bundle": "^1.7",
         "symfony/dependency-injection": "^4.4 || ^5.4",
         "symfony/dotenv": "^4.4 || ^5.4",
+        "symfony/workflow": "^4.4 || ^5.4",
         "symplify/easy-coding-standard": "^9.4",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "4.7.0",
