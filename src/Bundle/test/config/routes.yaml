@@ -8,6 +8,21 @@ app_gedmo:
         alias: app.gedmo
     type: sylius.resource_api
 
+app_pull_request:
+    resource: |
+        alias: app.pull_request
+    type: sylius.resource_api
+
+app_pull_request_apply_transition:
+    path: /pull-requests/{id}/{transition}
+    methods: [PUT]
+    defaults:
+        _controller: app.controller.pull_request:applyStateMachineTransitionAction
+        _sylius:
+            csrf_protection: false
+            state_machine:
+                transition: $transition
+
 app_book_sortable_index:
     path: /sortable-books/
     methods: [GET]

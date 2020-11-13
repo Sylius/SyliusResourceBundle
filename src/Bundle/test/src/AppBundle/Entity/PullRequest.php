@@ -20,16 +20,21 @@ class PullRequest implements ResourceInterface
     /** @var int|null */
     private $id;
 
-    /** @var string|null */
-    private $currentPlace;
+    /** @var string */
+    private $currentPlace = 'start';
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCurrentPlace(): ?string
+    public function getCurrentPlace(): string
     {
         return $this->currentPlace;
+    }
+
+    public function setCurrentPlace(string $currentPlace): void
+    {
+        $this->currentPlace = $currentPlace;
     }
 }
