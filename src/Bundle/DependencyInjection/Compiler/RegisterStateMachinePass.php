@@ -30,7 +30,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
     {
         /** @var array $settings */
         $settings = $container->getParameter('sylius.resource.settings');
-        $stateMachine = $settings['state_machine'];
+        $stateMachine = $settings['state_machine_component'];
 
         if (null !== $stateMachine) {
             $this->setStateMachine($container, $stateMachine);
