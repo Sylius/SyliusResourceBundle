@@ -11,7 +11,8 @@ But you can configure it explicitly:
 
 ```yaml
 sylius_resources:
-    state_machine_component: symfony
+    settings:
+        state_machine_component: symfony
 ```
 
 ## Configuring Winzou as state machine`
@@ -22,7 +23,8 @@ But you can configure it explicitly:
 
 ```yaml
 sylius_resources:
-    state_machine_component: winzou
+    settings:
+        state_machine_component: winzou
 ```
 
 ## Applying a transition`
