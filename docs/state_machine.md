@@ -38,7 +38,7 @@ app_pull_request_apply_transition:
     defaults:
         _controller: app.controller.pull_request:applyStateMachineTransitionAction
         _sylius:
-            csrf_protection: false
             state_machine:
+                # graph: app_pull_request # Needed for Winzou state machine
                 transition: $transition
 ```
