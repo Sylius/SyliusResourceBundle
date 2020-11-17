@@ -62,14 +62,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $definition->addTag(ServiceRepositoryCompilerPass::REPOSITORY_SERVICE_TAG);
 
             $serviceAlias = new Alias($repositoryClass, true);
-            $usesSymfony51Api = method_exists(Alias::class, 'getDeprecation');
-            $deprecationMessage = sprintf('Using the service dot notation "%%alias_id%%" is deprecated. Use the class name "%s"', $repositoryClass);
-
-            if ($usesSymfony51Api) {
-                $serviceAlias->setDeprecated('sylius/resource-bundle', '1.7', $deprecationMessage);
-            } else {
-                $serviceAlias->setDeprecated(true, $deprecationMessage);
-            }
 
             $container->setDefinition($repositoryClass, $definition);
             $container->setAlias($aliasId, $serviceAlias);
