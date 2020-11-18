@@ -35,10 +35,6 @@ parameters:
         - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
         - '/Parameter \#1 \$event of method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) expects object, string given\./'
 
-        # Symfony 4.4 compatibility
-        - '/Parameter #1 \$status of method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\) expects bool, string given./'
-        - '/Method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\) invoked with 3 parameters, 0-2 required./'
-
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
 
