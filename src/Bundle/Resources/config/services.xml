@@ -58,7 +58,7 @@
         </service>
 
         <service id="sylius.doctrine.orm.container_repository_factory" decorates="doctrine.orm.container_repository_factory" class="Sylius\Bundle\ResourceBundle\Doctrine\ContainerRepositoryFactory" public="false">
-            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.doctrine.orm.container_repository_factory.inner" />
         </service>
     </services>
 </container>

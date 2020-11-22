@@ -25,8 +25,8 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     /** @var ObjectRepository[] */
     private $managedRepositories = [];
 
-    /** @var array */
-    private $genericEntities;
+    /** @var string[] */
+    private $genericEntities = [];
 
     /** @var DoctrineContainerRepositoryFactory */
     private $doctrineFactory;
@@ -60,6 +60,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
         ClassMetadata $metadata
     ): ObjectRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
+
         if (isset($this->managedRepositories[$repositoryHash])) {
             return $this->managedRepositories[$repositoryHash];
         }
