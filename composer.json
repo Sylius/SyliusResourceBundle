@@ -64,7 +64,7 @@
         "pamil/phpspec-skip-example-extension": "^4.1",
         "phpspec/phpspec": "^6.1",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "0.12.49",
+        "phpstan/phpstan": "0.12.57",
         "phpstan/phpstan-phpunit": "0.12.16",
         "phpstan/phpstan-webmozart-assert": "0.12.7",
         "phpunit/phpunit": "^9.4",
