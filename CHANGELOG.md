@@ -1,5 +1,21 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-BETA.5 (2020-11-23)
+
+#### TL;DR
+
+- Modernized the usage of Doctrine Inflector not to use deprecated API
+- Made sure there is only one instance of repository service for each resource
+
+#### Details
+
+- [#214](https://github.com/Sylius/SyliusResourceBundle/issues/214) Do not use deprecated Doctrine Inflector API ([@pamil](https://github.com/pamil))
+- [#215](https://github.com/Sylius/SyliusResourceBundle/issues/215) Fix InMemoryRepository::applyOrder implementation ([@pamil](https://github.com/pamil))
+- [#216](https://github.com/Sylius/SyliusResourceBundle/issues/216) [CI] Better job naming ([@pamil](https://github.com/pamil))
+- [#220](https://github.com/Sylius/SyliusResourceBundle/issues/220) Duplicate initialisation of repositories ([@Justus Krapp](https://github.com/Fantus))
+- [#221](https://github.com/Sylius/SyliusResourceBundle/issues/221) Update vimeo/psalm requirement from 4.1.1 to 4.2.1 ([@dependabot-preview](https://github.com/dependabot-preview))
+- [#223](https://github.com/Sylius/SyliusResourceBundle/issues/223) Update phpstan/phpstan requirement from 0.12.49 to 0.12.57 ([@dependabot-preview](https://github.com/dependabot-preview))
+
 ### v1.7.0-BETA.4 (2020-11-05)
 
 #### TL;DR
