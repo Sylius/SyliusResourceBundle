@@ -21,7 +21,6 @@ use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -46,30 +45,32 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $repositoryClass = $metadata->getClass('repository');
         }
 
-        $aliasId = $metadata->getServiceId('repository');
+        $serviceId = $metadata->getServiceId('repository');
         $repositoryFactoryDef = $container->getDefinition('sylius.doctrine.orm.container_repository_factory');
         $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
+        $definition->setPublic(true);
 
         if ($repositoryClass === EntityRepository::class) {
             $entityClass = $metadata->getClass('model');
 
             $definition->setFactory([$managerReference, 'getRepository']);
             $definition->setArguments([$entityClass]);
-            $definition->setPublic(true);
 
-            $container->setDefinition($aliasId, $definition);
+            $container->setDefinition($serviceId, $definition);
 
             $repositoryFactoryDef->addMethodCall('addGenericEntity', [$entityClass]);
         } else {
-            // we cant use the doctrine factory as this will lead to an endless loop
             $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
-            $definition->addTag(ServiceRepositoryCompilerPass::REPOSITORY_SERVICE_TAG);
 
-            $serviceAlias = new Alias($repositoryClass, true);
+            $container->setDefinition($serviceId, $definition);
 
-            $container->setDefinition($repositoryClass, $definition);
-            $container->setAlias($aliasId, $serviceAlias);
+            $doctrineDefinition = new Definition($repositoryClass);
+            $doctrineDefinition->addTag(ServiceRepositoryCompilerPass::REPOSITORY_SERVICE_TAG);
+            $doctrineDefinition->setFactory([new Reference('service_container'), 'get']);
+            $doctrineDefinition->setArguments([$serviceId]);
+
+            $container->setDefinition($repositoryClass, $doctrineDefinition);
         }
 
         /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
