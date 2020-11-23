@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine;
 
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\ServiceRepositoryCompilerPass;
 use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -44,14 +45,33 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $repositoryClass = $metadata->getClass('repository');
         }
 
+        $serviceId = $metadata->getServiceId('repository');
+        $repositoryFactoryDef = $container->getDefinition('sylius.doctrine.orm.container_repository_factory');
+        $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
-        $definition->setArguments([
-            new Reference($metadata->getServiceId('manager')),
-            $this->getClassMetadataDefinition($metadata),
-        ]);
         $definition->setPublic(true);
 
-        $container->setDefinition($metadata->getServiceId('repository'), $definition);
+        if ($repositoryClass === EntityRepository::class) {
+            $entityClass = $metadata->getClass('model');
+
+            $definition->setFactory([$managerReference, 'getRepository']);
+            $definition->setArguments([$entityClass]);
+
+            $container->setDefinition($serviceId, $definition);
+
+            $repositoryFactoryDef->addMethodCall('addGenericEntity', [$entityClass]);
+        } else {
+            $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
+
+            $container->setDefinition($serviceId, $definition);
+
+            $doctrineDefinition = new Definition($repositoryClass);
+            $doctrineDefinition->addTag(ServiceRepositoryCompilerPass::REPOSITORY_SERVICE_TAG);
+            $doctrineDefinition->setFactory([new Reference('service_container'), 'get']);
+            $doctrineDefinition->setArguments([$serviceId]);
+
+            $container->setDefinition($repositoryClass, $doctrineDefinition);
+        }
 
         /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
         if (method_exists($container, 'registerAliasForArgument')) {

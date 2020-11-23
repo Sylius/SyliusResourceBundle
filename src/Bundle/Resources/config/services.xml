@@ -56,5 +56,9 @@
             <argument>Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface</argument>
             <argument>form builder</argument>
         </service>
+
+        <service id="sylius.doctrine.orm.container_repository_factory" decorates="doctrine.orm.container_repository_factory" class="Sylius\Bundle\ResourceBundle\Doctrine\ContainerRepositoryFactory" public="false">
+            <argument type="service" id="sylius.doctrine.orm.container_repository_factory.inner" />
+        </service>
     </services>
 </container>
