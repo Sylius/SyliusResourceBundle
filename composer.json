@@ -73,7 +73,7 @@
         "symfony/dependency-injection": "^4.4 || ^5.1",
         "symfony/twig-bundle": "^4.4 || ^5.1",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "4.1.1",
+        "vimeo/psalm": "4.2.1",
         "willdurand/hateoas-bundle": "^2.0",
         "winzou/state-machine-bundle": "^0.3.2 || ^0.4.3 || ^0.5"
     },
