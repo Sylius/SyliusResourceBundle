@@ -66,12 +66,12 @@ jobs:
             -
                 name: Restrict winzou/state-machine-bundle version
                 if: matrix.winzou-version != ''
-                run: composer require --dev "winzou/state-machine-bundle:${{ matrix.winzou-version }}" --no-update --no-scripts
+                run: composer require "winzou/state-machine-bundle:${{ matrix.winzou-version }}" --no-update --no-scripts
 
             -
                 name: Restrict twig/twig version
                 if: matrix.twig-version != ''
-                run: composer require --dev "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
+                run: composer require "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
 
             -
                 name: Install dependencies
@@ -102,20 +102,20 @@ jobs:
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
                 run: |
-                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
+                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd src/Bundle/test && app/console cache:clear --env=test_without_fosrest)
-                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --dev --no-scripts
+                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
 
             -
                 name: Run smoke tests without winzou/state-machine-bundle package
                 run: |
-                    composer remove winzou/state-machine-bundle --dev --no-scripts
+                    composer remove winzou/state-machine-bundle --no-scripts
                     (cd src/Bundle/test && app/console cache:clear --env=test_without_state_machine)
-                    composer require winzou/state-machine-bundle --dev --no-scripts
+                    composer require winzou/state-machine-bundle --no-scripts
 
             -
                 name: Run smoke tests without twig/twig package
                 run: |
-                    composer remove symfony/twig-bundle --dev --no-scripts
+                    composer remove symfony/twig-bundle --no-scripts
                     (cd src/Bundle/test && app/console cache:clear --env=test_without_twig)
-                    composer require symfony/twig-bundle --dev --no-scripts
+                    composer require symfony/twig-bundle --no-scripts
