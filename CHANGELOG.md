@@ -1,5 +1,21 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-RC.1 (2020-11-24)
+
+#### TL;DR
+
+- Added an ability to customise the inflector used by Metadata class
+- All the packages made optional in previous 1.7.0-BETA releases were made required once again
+
+#### Details
+
+- [#224](https://github.com/Sylius/SyliusResourceBundle/issues/224) Require previously required dependencies ([@pamil](https://github.com/pamil))
+- [#225](https://github.com/Sylius/SyliusResourceBundle/issues/225) Bump up dev dependencies ([@pamil](https://github.com/pamil))
+- [#226](https://github.com/Sylius/SyliusResourceBundle/issues/226) Remove Gedmo/DoctrineExtensions from dependencies ([@pamil](https://github.com/pamil))
+- [#227](https://github.com/Sylius/SyliusResourceBundle/issues/227) Apply misc static analysis fixes ([@pamil](https://github.com/pamil))
+- [#228](https://github.com/Sylius/SyliusResourceBundle/issues/228) Add an ability to define your own Inflector for Metadata class ([@pamil](https://github.com/pamil))
+- [#229](https://github.com/Sylius/SyliusResourceBundle/issues/229) Fix tests namespace in the bundle ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-BETA.5 (2020-11-23)
 
 #### TL;DR
