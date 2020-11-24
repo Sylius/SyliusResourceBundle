@@ -56,3 +56,5 @@ parameters:
         - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Routing\\ResourceLoader::getResolver\(\) should return Symfony\\Component\\Config\\Loader\\LoaderResolverInterface but return statement is missing./'
         - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
+
+        - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'

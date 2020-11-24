@@ -17,7 +17,6 @@ use ArrayObject;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\Exception\UnsupportedMethodException;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\Exception\ExistingResourceException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -31,11 +30,11 @@ class InMemoryRepository implements RepositoryInterface
     /** @var ArrayObject */
     protected $arrayObject;
 
-    /** @var string */
+    /** @psalm-var class-string */
     protected $interface;
 
     /**
-     * @param string $interface | Fully qualified name of the interface.
+     * @psalm-param class-string $interface
      *
      * @throws \InvalidArgumentException
      * @throws UnexpectedTypeException
@@ -61,7 +60,7 @@ class InMemoryRepository implements RepositoryInterface
             throw new UnexpectedTypeException($resource, $this->interface);
         }
 
-        if (in_array($resource, $this->findAll())) {
+        if (in_array($resource, $this->findAll(), true)) {
             throw new ExistingResourceException();
         }
 
@@ -70,17 +69,14 @@ class InMemoryRepository implements RepositoryInterface
 
     public function remove(ResourceInterface $resource): void
     {
-        $newResources = array_filter($this->findAll(), function ($object) use ($resource) {
+        $newResources = array_filter($this->findAll(), static function ($object) use ($resource) {
             return $object !== $resource;
         });
 
         $this->arrayObject->exchangeArray($newResources);
     }
 
-    /**
-     * @throws UnsupportedMethodException
-     */
-    public function find($id)
+    public function find($id): ?object
     {
         return $this->findOneBy(['id' => $id]);
     }
