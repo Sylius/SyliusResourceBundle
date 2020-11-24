@@ -43,19 +43,16 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
             new Alias($this->getManagerServiceId($metadata), true)
         );
 
-        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
-        if (method_exists($container, 'registerAliasForArgument')) {
-            foreach ([DeprecatedObjectManager::class, ObjectManager::class] as $objectManagerClass) {
-                if (!class_exists($objectManagerClass)) {
-                    continue;
-                }
-
-                $container->registerAliasForArgument(
-                    $metadata->getServiceId('manager'),
-                    $objectManagerClass,
-                    $metadata->getHumanizedName() . ' manager'
-                );
+        foreach ([DeprecatedObjectManager::class, ObjectManager::class] as $objectManagerClass) {
+            if (!class_exists($objectManagerClass)) {
+                continue;
             }
+
+            $container->registerAliasForArgument(
+                $metadata->getServiceId('manager'),
+                $objectManagerClass,
+                $metadata->getHumanizedName() . ' manager'
+            );
         }
     }
 
