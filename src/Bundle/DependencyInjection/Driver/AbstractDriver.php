@@ -107,21 +107,18 @@ abstract class AbstractDriver implements DriverInterface
 
         $container->setDefinition($metadata->getServiceId('factory'), $definition);
 
-        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
-        if (method_exists($container, 'registerAliasForArgument')) {
-            $typehintClasses = array_merge(
-                class_implements($factoryClass),
-                [$factoryClass],
-                class_parents($factoryClass)
-            );
+        $typehintClasses = array_merge(
+            class_implements($factoryClass),
+            [$factoryClass],
+            class_parents($factoryClass)
+        );
 
-            foreach ($typehintClasses as $typehintClass) {
-                $container->registerAliasForArgument(
-                    $metadata->getServiceId('factory'),
-                    $typehintClass,
-                    $metadata->getHumanizedName() . ' factory'
-                );
-            }
+        foreach ($typehintClasses as $typehintClass) {
+            $container->registerAliasForArgument(
+                $metadata->getServiceId('factory'),
+                $typehintClass,
+                $metadata->getHumanizedName() . ' factory'
+            );
         }
     }
 

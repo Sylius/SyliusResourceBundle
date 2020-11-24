@@ -73,21 +73,18 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $container->setDefinition($repositoryClass, $doctrineDefinition);
         }
 
-        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
-        if (method_exists($container, 'registerAliasForArgument')) {
-            $typehintClasses = array_merge(
-                class_implements($repositoryClass),
-                [$repositoryClass],
-                class_parents($repositoryClass)
-            );
+        $typehintClasses = array_merge(
+            class_implements($repositoryClass),
+            [$repositoryClass],
+            class_parents($repositoryClass)
+        );
 
-            foreach ($typehintClasses as $typehintClass) {
-                $container->registerAliasForArgument(
-                    $metadata->getServiceId('repository'),
-                    $typehintClass,
-                    $metadata->getHumanizedName() . ' repository'
-                );
-            }
+        foreach ($typehintClasses as $typehintClass) {
+            $container->registerAliasForArgument(
+                $metadata->getServiceId('repository'),
+                $typehintClass,
+                $metadata->getHumanizedName() . ' repository'
+            );
         }
     }
 
@@ -95,21 +92,18 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
     {
         parent::addManager($container, $metadata);
 
-        /** @psalm-suppress RedundantCondition Backward compatibility with Symfony */
-        if (method_exists($container, 'registerAliasForArgument')) {
-            $typehintClasses = [
-                DeprecatedObjectManager::class,
-                ObjectManager::class,
-                EntityManagerInterface::class,
-            ];
+        $typehintClasses = [
+            DeprecatedObjectManager::class,
+            ObjectManager::class,
+            EntityManagerInterface::class,
+        ];
 
-            foreach ($typehintClasses as $typehintClass) {
-                $container->registerAliasForArgument(
-                    $metadata->getServiceId('manager'),
-                    $typehintClass,
-                    $metadata->getHumanizedName() . ' manager'
-                );
-            }
+        foreach ($typehintClasses as $typehintClass) {
+            $container->registerAliasForArgument(
+                $metadata->getServiceId('manager'),
+                $typehintClass,
+                $metadata->getHumanizedName() . ' manager'
+            );
         }
     }
 
