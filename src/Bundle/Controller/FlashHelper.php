@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-use Doctrine\Common\Inflector\Inflector;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -60,8 +60,7 @@ final class FlashHelper implements FlashHelperInterface
     private function addFlashWithType(RequestConfiguration $requestConfiguration, string $actionName, string $type): void
     {
         $metadata = $requestConfiguration->getMetadata();
-        $metadataName = ucfirst($metadata->getHumanizedName());
-        $parameters = $this->getParametersWithName($metadataName, $actionName);
+        $parameters = $this->getParametersWithName($metadata, $actionName);
 
         $message = (string) $requestConfiguration->getFlashMessage($actionName);
         if (empty($message)) {
@@ -122,12 +121,12 @@ final class FlashHelper implements FlashHelperInterface
         return $message !== $this->translator->trans($message, $parameters, 'flashes');
     }
 
-    private function getParametersWithName(string $metadataName, string $actionName): array
+    private function getParametersWithName(MetadataInterface $metadata, string $actionName): array
     {
         if (stripos($actionName, 'bulk') !== false) {
-            return ['%resources%' => ucfirst(Inflector::pluralize($metadataName))];
+            return ['%resources%' => ucfirst($metadata->getPluralName())];
         }
 
-        return ['%resource%' => ucfirst($metadataName)];
+        return ['%resource%' => ucfirst($metadata->getHumanizedName())];
     }
 }

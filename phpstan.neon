@@ -26,21 +26,11 @@ parameters:
         - %currentWorkingDirectory%/src/Component/vendor/*
 
     ignoreErrors:
-        # Symfony 3.4 compatibility
-        - '/Call to function method_exists\(\) with .Symfony\\\\Component…. and .getRootNode. will always evaluate to false/'
-        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::getRootNode\(\)/'
-        - '/Class Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder does not have a constructor and must be instantiated without any parameters/'
-        - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
-        - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
-        - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
-        - '/Parameter \#1 \$event of method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) expects object, string given\./'
-
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
-
-        # Calls to Event::getResponse() after Event::hasResponse() has been made
-        - '/should return Symfony\\Component\\HttpFoundation\\Response but returns Symfony\\Component\\HttpFoundation\\Response\|null/'
-
+        - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'
+        - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
+        - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::get\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProviderInterface::get\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
@@ -51,10 +41,7 @@ parameters:
         - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\ExpressionLanguage\\ExpressionLanguage::__construct\(\) has parameter \$cache with no typehint specified./'
+        - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
+        - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
         - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
         - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Routing\\ResourceLoader::getResolver\(\) should return Symfony\\Component\\Config\\Loader\\LoaderResolverInterface but return statement is missing./'
-        - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
-
-        - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'
