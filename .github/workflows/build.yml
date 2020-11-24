@@ -12,37 +12,37 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        name: "PHP ${{ matrix.php }}${{ matrix.symfony-version != '' && format(', Symfony {0}', matrix.symfony-version) || '' }}${{ matrix.twig-version != '' && format(', Twig {0}', matrix.twig-version) || '' }}${{ matrix.winzou-version != '' && format(', Winzou {0}', matrix.winzou-version) || '' }}${{ matrix.composer-flags != '' && format(', Composer with {0}', matrix.composer-flags) || '' }}"
+        name: "PHP ${{ matrix.php }}${{ matrix.symfony != '' && format(', Symfony {0}', matrix.symfony) || '' }}${{ matrix.twig != '' && format(', Twig {0}', matrix.twig) || '' }}${{ matrix.winzou != '' && format(', Winzou {0}', matrix.winzou) || '' }}${{ matrix.composer-flags != '' && format(', Composer with {0}', matrix.composer-flags) || '' }}"
         strategy:
             fail-fast: false
             matrix:
                 include:
                     -
                         php: 7.3
-                        symfony-version: 4.4.*
+                        symfony: 4.4.*
                     -
                         php: 7.3
-                        symfony-version: 5.1.*
+                        symfony: 5.1.*
                     -
                         php: 7.4
-                        symfony-version: 4.4.*
-                        winzou-version: ^0.3.2
-                        twig-version: ^2.12
+                        symfony: 4.4.*
+                        winzou: ^0.3.2
+                        twig: ^2.12
                     -
                         php: 7.4
-                        symfony-version: 4.4.*
-                        winzou-version: ^0.4.3
-                        twig-version: ^3.0
+                        symfony: 4.4.*
+                        winzou: ^0.4.3
+                        twig: ^3.0
                     -
                         php: 7.4
-                        symfony-version: 4.4.*
-                        winzou-version: ^0.5
-                        twig-version: ^3.0
+                        symfony: 4.4.*
+                        winzou: ^0.5
+                        twig: ^3.0
                     -
                         php: 7.4
-                        symfony-version: 5.1.*
-                        winzou-version: ^0.5
-                        twig-version: ^3.0
+                        symfony: 5.1.*
+                        winzou: ^0.5
+                        twig: ^3.0
 
         steps:
             -
@@ -57,21 +57,21 @@ jobs:
 
             -
                 name: Restrict Symfony version
-                if: matrix.symfony-version != ''
+                if: matrix.symfony != ''
                 run: |
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
-                    composer config extra.symfony.require "${{ matrix.symfony-version }}"
-                    (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony-version }}")
+                    composer config extra.symfony.require "${{ matrix.symfony }}"
+                    (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
 
             -
                 name: Restrict winzou/state-machine-bundle version
-                if: matrix.winzou-version != ''
-                run: composer require "winzou/state-machine-bundle:${{ matrix.winzou-version }}" --no-update --no-scripts
+                if: matrix.winzou != ''
+                run: composer require "winzou/state-machine-bundle:${{ matrix.winzou }}" --no-update --no-scripts
 
             -
                 name: Restrict twig/twig version
-                if: matrix.twig-version != ''
-                run: composer require "twig/twig:${{ matrix.twig-version }}" --no-update --no-scripts
+                if: matrix.twig != ''
+                run: composer require "twig/twig:${{ matrix.twig }}" --no-update --no-scripts
 
             -
                 name: Install dependencies
