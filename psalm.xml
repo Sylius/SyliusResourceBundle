@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -24,36 +23,12 @@
     </projectFiles>
 
     <issueHandlers>
-        <DeprecatedClass>
-            <errorLevel type="suppress">
-                <referencedClass name="Doctrine\Common\Inflector\Inflector" />
-                <referencedClass name="Doctrine\Common\Persistence\ObjectRepository" />
-                <referencedClass name="Pagerfanta\Adapter\DoctrineORMAdapter" />
-                <referencedClass name="Symfony\Bundle\FrameworkBundle\Controller\Controller" />
-                <referencedClass name="Symfony\Component\HttpKernel\Event\FilterResponseEvent" />
-                <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent" />
-                <referencedClass name="Symfony\Component\Translation\TranslatorInterface" />
-            </errorLevel>
-        </DeprecatedClass>
-
         <DeprecatedMethod>
             <errorLevel type="suppress">
-                <referencedMethod name="Doctrine\Common\Inflector\Inflector::pluralize" />
-                <referencedMethod name="FOS\RestBundle\View\View::setTemplate" />
-                <referencedMethod name="FOS\RestBundle\View\View::setTemplateVar" />
-                <referencedMethod name="Symfony\Component\Config\Definition\Builder\TreeBuilder::root" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::stopPropagation" />
-                <referencedMethod name="Doctrine\Common\Inflector\Inflector::pluralize" />
-                <referencedMethod name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </DeprecatedMethod>
-
-        <InvalidArgument>
-            <errorLevel type="suppress">
-                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
-            </errorLevel>
-        </InvalidArgument>
 
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
@@ -90,19 +65,9 @@
             </errorLevel>
         </PossiblyUndefinedMethod>
 
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress">
-                <referencedProperty name="Symfony\Bundle\FrameworkBundle\Controller\AbstractController::$container"/>
-                <referencedProperty name="Symfony\Component\DependencyInjection\ContainerAwareTrait::$container" />
-                <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
-            </errorLevel>
-        </PropertyNotSetInConstructor>
-
         <TooManyArguments>
             <errorLevel type="suppress">
-                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
                 <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
-                <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::get" />
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
