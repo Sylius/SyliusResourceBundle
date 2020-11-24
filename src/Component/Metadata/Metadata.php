@@ -15,7 +15,6 @@ namespace Sylius\Component\Resource\Metadata;
 
 use Doctrine\Inflector\Inflector as InflectorObject;
 use Doctrine\Inflector\InflectorFactory;
-use Doctrine\Inflector\LanguageInflectorFactory;
 
 final class Metadata implements MetadataInterface
 {
@@ -34,24 +33,8 @@ final class Metadata implements MetadataInterface
     /** @var array */
     private $parameters;
 
-    /** @var LanguageInflectorFactory|null */
-    private static $inflectorFactory;
-
     /** @var InflectorObject|null */
     private static $inflectorInstance;
-
-    private static function getInflector(): InflectorObject
-    {
-        if (self::$inflectorFactory === null) {
-            self::$inflectorFactory = InflectorFactory::create();
-        }
-
-        if (self::$inflectorInstance === null) {
-            self::$inflectorInstance = self::$inflectorFactory->build();
-        }
-
-        return self::$inflectorInstance;
-    }
 
     private function __construct(string $name, string $applicationName, array $parameters)
     {
@@ -69,6 +52,22 @@ final class Metadata implements MetadataInterface
         [$applicationName, $name] = self::parseAlias($alias);
 
         return new self($name, $applicationName, $parameters);
+    }
+
+    public static function setInflector(InflectorObject $inflector): void
+    {
+        self::$inflectorInstance = $inflector;
+    }
+
+    private static function getInflector(): InflectorObject
+    {
+        if (self::$inflectorInstance === null) {
+            $inflectorFactory = InflectorFactory::create();
+
+            self::$inflectorInstance = $inflectorFactory->build();
+        }
+
+        return self::$inflectorInstance;
     }
 
     public function getAlias(): string
