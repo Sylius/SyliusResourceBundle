@@ -46,7 +46,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         }
 
         $serviceId = $metadata->getServiceId('repository');
-        $repositoryFactoryDef = $container->getDefinition('sylius.doctrine.orm.container_repository_factory');
         $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
         $definition->setPublic(true);
@@ -59,7 +58,11 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
 
             $container->setDefinition($serviceId, $definition);
 
-            $repositoryFactoryDef->addMethodCall('addGenericEntity', [$entityClass]);
+            $genericEntitiesParameterName = 'sylius.doctrine.orm.container_repository_factory.entities';
+            $genericEntities = $container->hasParameter($genericEntitiesParameterName) ? $container->getParameter($genericEntitiesParameterName) : [];
+
+            $genericEntities[] = $entityClass;
+            $container->setParameter($genericEntitiesParameterName, $genericEntities);
         } else {
             $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
 

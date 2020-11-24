@@ -26,19 +26,18 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     private $managedRepositories = [];
 
     /** @var string[] */
-    private $genericEntities = [];
+    private $genericEntities;
 
     /** @var DoctrineContainerRepositoryFactory */
     private $doctrineFactory;
 
-    public function __construct(DoctrineContainerRepositoryFactory $doctrineFactory)
+    /**
+     * @param string[] $genericEntities
+     */
+    public function __construct(DoctrineContainerRepositoryFactory $doctrineFactory, array $genericEntities)
     {
         $this->doctrineFactory = $doctrineFactory;
-    }
-
-    public function addGenericEntity(string $entityName): void
-    {
-        $this->genericEntities[$entityName] = $entityName;
+        $this->genericEntities = $genericEntities;
     }
 
     /**
@@ -46,7 +45,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
      */
     public function getRepository(EntityManagerInterface $entityManager, $entityName): ObjectRepository
     {
-        if (isset($this->genericEntities[$entityName])) {
+        if (in_array($entityName, $this->genericEntities, true)) {
             $metadata = $entityManager->getClassMetadata($entityName);
 
             return $this->getOrCreateRepository($entityManager, $metadata);
