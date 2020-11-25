@@ -1,5 +1,11 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-RC.3 (2020-11-25)
+
+#### Details
+
+- [#232](https://github.com/Sylius/SyliusResourceBundle/issues/232) Create ResourceBundle's EntityRepository only if custom repository is not set ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-RC.2 (2020-11-25)
 
 #### Details
