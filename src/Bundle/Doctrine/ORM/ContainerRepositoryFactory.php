@@ -11,43 +11,38 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Doctrine;
+namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory as DoctrineContainerRepositoryFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Doctrine\Persistence\ObjectRepository;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
-    /** @var ObjectRepository[] */
-    private $managedRepositories = [];
+    /** @var RepositoryFactory */
+    private $doctrineFactory;
 
     /** @var string[] */
     private $genericEntities;
 
-    /** @var DoctrineContainerRepositoryFactory */
-    private $doctrineFactory;
+    /** @var ObjectRepository[] */
+    private $managedRepositories = [];
 
     /**
      * @param string[] $genericEntities
      */
-    public function __construct(DoctrineContainerRepositoryFactory $doctrineFactory, array $genericEntities)
+    public function __construct(RepositoryFactory $doctrineFactory, array $genericEntities)
     {
         $this->doctrineFactory = $doctrineFactory;
         $this->genericEntities = $genericEntities;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRepository(EntityManagerInterface $entityManager, $entityName): ObjectRepository
     {
-        if (in_array($entityName, $this->genericEntities, true)) {
-            $metadata = $entityManager->getClassMetadata($entityName);
+        $metadata = $entityManager->getClassMetadata($entityName);
 
+        if ($metadata->customRepositoryClassName === null && in_array($entityName, $this->genericEntities, true)) {
             return $this->getOrCreateRepository($entityManager, $metadata);
         }
 
@@ -60,10 +55,10 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     ): ObjectRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
 
-        if (isset($this->managedRepositories[$repositoryHash])) {
-            return $this->managedRepositories[$repositoryHash];
+        if (!isset($this->managedRepositories[$repositoryHash])) {
+            $this->managedRepositories[$repositoryHash] = new EntityRepository($entityManager, $metadata);
         }
 
-        return $this->managedRepositories[$repositoryHash] = new EntityRepository($entityManager, $metadata);
+        return $this->managedRepositories[$repositoryHash];
     }
 }
