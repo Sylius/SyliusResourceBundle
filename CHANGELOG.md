@@ -1,5 +1,12 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-RC.2 (2020-11-25)
+
+#### Details
+
+- [#230](https://github.com/Sylius/SyliusResourceBundle/issues/230) Do not rely on services in DoctrineORMDriver ([@pamil](https://github.com/pamil))
+- [#231](https://github.com/Sylius/SyliusResourceBundle/issues/231) Remove unnecessary BC layer for symfony/dependency-injection <=4.2 ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-RC.1 (2020-11-24)
 
 #### TL;DR
