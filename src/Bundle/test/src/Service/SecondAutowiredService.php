@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Factory\BookFactoryInterface;
 use App\Repository\BookRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class SecondAutowiredService
 {
