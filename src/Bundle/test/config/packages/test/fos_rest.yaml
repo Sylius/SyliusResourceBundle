@@ -1,3 +1,7 @@
+sylius_resource:
+    settings:
+        state_machine_component: symfony
+
 framework:
     workflows:
         pull_request:
