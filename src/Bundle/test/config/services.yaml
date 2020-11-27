@@ -31,3 +31,15 @@ services:
         public: true
         arguments:
             - "@app.repository.book"
+
+    app.form.type.book:
+        class: App\Form\Type\BookType
+        arguments:
+            - '%app.model.book.class%'
+        tags: ['form.type']
+
+    app.form.type.book_translation:
+        class: App\Form\Type\BookTranslationType
+        arguments:
+            - '%app.model.book_translation.class%'
+        tags: ['form.type']
