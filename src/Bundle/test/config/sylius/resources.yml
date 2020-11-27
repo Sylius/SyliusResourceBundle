@@ -5,19 +5,19 @@ sylius_resource:
     resources:
         app.book:
             classes:
-                model: AppBundle\Entity\Book
-                factory: AppBundle\Factory\BookFactory
-                repository: AppBundle\Repository\BookRepository
-                form: AppBundle\Form\Type\BookType
+                model: App\Entity\Book
+                factory: App\Factory\BookFactory
+                repository: App\Repository\BookRepository
+                form: App\Form\Type\BookType
             translation:
                 classes:
-                    model: AppBundle\Entity\BookTranslation
-                    form: AppBundle\Form\Type\BookTranslationType
+                    model: App\Entity\BookTranslation
+                    form: App\Form\Type\BookTranslationType
 
         app.comic_book:
             classes:
-                model: AppBundle\Entity\ComicBook
+                model: App\Entity\ComicBook
 
         app.gedmo:
             classes:
-                model: AppBundle\Entity\GedmoExtendedExample
+                model: App\Entity\GedmoExtendedExample
