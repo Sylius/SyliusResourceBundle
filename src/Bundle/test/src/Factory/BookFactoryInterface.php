@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\test\src\App\Factory;
+namespace App\Factory;
 
 use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
 

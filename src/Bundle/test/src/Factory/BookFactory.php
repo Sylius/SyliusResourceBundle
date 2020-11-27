@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use Sylius\Bundle\ResourceBundle\test\src\App\Factory\BookFactoryInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;

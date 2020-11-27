@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sylius\Bundle\ResourceBundle\test\src\App\Factory\BookFactoryInterface;
+use App\Factory\BookFactoryInterface;
 use App\Repository\BookRepositoryInterface;
 
 final class SecondAutowiredService
