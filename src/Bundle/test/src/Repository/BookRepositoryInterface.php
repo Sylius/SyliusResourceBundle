@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\test\src\App\Repository;
+namespace App\Repository;
 
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 

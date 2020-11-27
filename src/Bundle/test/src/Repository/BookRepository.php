@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Sylius\Bundle\ResourceBundle\test\src\App\Repository\BookRepositoryInterface;
 
 final class BookRepository extends EntityRepository implements BookRepositoryInterface
 {
