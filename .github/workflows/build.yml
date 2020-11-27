@@ -91,6 +91,19 @@ jobs:
                     composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts ${{ matrix.composer-flags }}
 
             -
+                name: Run smoke tests with winzou package as state machine
+                run: |
+                    (cd src/Bundle/test && app/console cache:clear --env=test_with_winzou_state_machine)
+                    composer require winzou/state-machine-bundle --dev --no-scripts
+
+            -
+                name: Run state machine tests with winzou/state-machine package
+                run: |
+                    composer remove symfony/workflow --dev --no-scripts
+                    (cd src/Bundle/test && app/console cache:clear --env=test)
+                    vendor/bin/phpunit --filter AppBundle\\Tests\\Controller\\PullRequestApiTest
+
+            -
                 name: Run smoke tests without winzou/state-machine-bundle package
                 run: |
                     composer remove winzou/state-machine-bundle --no-scripts ${{ matrix.composer-flags }}

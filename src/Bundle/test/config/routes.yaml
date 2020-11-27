@@ -21,6 +21,7 @@ app_pull_request_apply_transition:
         _sylius:
             csrf_protection: false
             state_machine:
+                graph: pull_request
                 transition: $transition
 
 app_book_sortable_index:
