@@ -1,4 +1,3 @@
-
 {
     "page": 1,
     "limit": 10,
@@ -16,23 +15,23 @@
         }
     },
     "_embedded": {
-      "items": [
-        {
-          "id": @integer@,
-          "author": {
-              "first_name": "Andrea",
-              "last_name": "Sorrentino"
-          },
-          "title": "Old Man Logan"
-        },
-        {
-          "id": @integer@,
-          "author": {
-              "first_name": "Brian Michael",
-              "last_name": "Bendis"
-          },
-          "title": "Civil War II"
-        }
-      ]
+        "items": [
+            {
+                "id": @integer@,
+                "author": {
+                    "first_name": "Andrea",
+                    "last_name": "Sorrentino"
+                },
+                "title": "Old Man Logan"
+            },
+            {
+                "id": @integer@,
+                "author": {
+                    "first_name": "Brian Michael",
+                    "last_name": "Bendis"
+                },
+                "title": "Civil War II"
+            }
+        ]
     }
 }

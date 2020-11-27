@@ -1,6 +1,5 @@
 {
-  "id": @integer@,
-  "title": "Star Wars: Dark Disciple",
-  "author": "Christie Golden"
-
+    "id": @integer@,
+    "title": "Star Wars: Dark Disciple",
+    "author": "Christie Golden"
 }

@@ -13,17 +13,37 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use JMS\Serializer\Annotation as Serializer;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
+/**
+ * @Serializer\ExclusionPolicy("all")
+ */
 class ComicBook implements ResourceInterface
 {
-    /** @var int */
+    /**
+     * @var int
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("integer")
+     * @Serializer\XmlAttribute
+     */
     private $id;
 
-    /** @var Author */
+    /**
+     * @var Author
+     *
+     * @Serializer\Expose
+     * @Serializer\Until("1.1")
+     */
     private $author;
 
-    /** @var string */
+    /**
+     * @var string
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
     private $title;
 
     public function getId()
@@ -47,11 +67,19 @@ class ComicBook implements ResourceInterface
         $this->title = $title;
     }
 
+    /**
+     * @Serializer\VirtualProperty()
+     * @Serializer\Since("1.1")
+     */
     public function getAuthorFirstName(): ?string
     {
         return $this->author ? $this->author->getFirstName() : null;
     }
 
+    /**
+     * @Serializer\VirtualProperty()
+     * @Serializer\Since("1.1")
+     */
     public function getAuthorLastName(): ?string
     {
         return $this->author ? $this->author->getLastName() : null;

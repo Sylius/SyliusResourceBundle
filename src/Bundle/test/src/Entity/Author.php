@@ -13,12 +13,27 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use JMS\Serializer\Annotation as Serializer;
+
+/**
+ * @Serializer\ExclusionPolicy("all")
+ */
 final class Author
 {
-    /** @var string|null */
+    /**
+     * @var string|null
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
     private $firstName;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
     private $lastName;
 
     public function getFirstName(): ?string

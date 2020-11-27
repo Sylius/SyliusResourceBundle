@@ -13,20 +13,35 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use JMS\Serializer\Annotation as Serializer;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 
+/**
+ * @Serializer\ExclusionPolicy("all")
+ */
 class Book implements ResourceInterface, TranslatableInterface
 {
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
     }
 
-    /** @var int */
+    /**
+     * @var int
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("integer")
+     * @Serializer\XmlAttribute
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @var string
+     *
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
     private $author;
 
     /**
@@ -39,6 +54,9 @@ class Book implements ResourceInterface, TranslatableInterface
 
     /**
      * @return string
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("title")
      */
     public function getTitle()
     {

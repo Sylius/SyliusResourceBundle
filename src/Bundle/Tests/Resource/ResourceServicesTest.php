@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Resource;
 
-use AppBundle\Entity\Book;
-use AppBundle\Entity\ComicBook;
-use AppBundle\Repository\BookRepository;
+use App\Entity\Book;
+use App\Entity\ComicBook;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManager;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\FactoryInterface;

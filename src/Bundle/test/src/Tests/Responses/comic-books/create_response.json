@@ -1,8 +1,8 @@
 {
-  "id": @integer@,
-  "author": {
-    "first_name": "Joe",
-    "last_name": "Kelly"
-  },
-  "title": "Deadpool #1-69"
+    "id": @integer@,
+    "author": {
+        "first_name": "Joe",
+        "last_name": "Kelly"
+    },
+    "title": "Deadpool #1-69"
 }
