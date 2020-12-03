@@ -65,26 +65,47 @@ class WorkflowSpec extends ObjectBehavior
         ResourceInterface $resource,
         SymfonyWorkflow $workflow
     ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn(null);
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource)->willReturn($workflow);
+        $registry->get($resource, null)->willReturn($workflow);
         $workflow->can($resource, 'reject')->willReturn(true);
 
         $this->can($requestConfiguration, $resource)->shouldReturn(true);
     }
 
-    function it_applies_configured_state_machine_transition(
+    function it_applies_configured_state_machine_transition_without_graph_configuration(
         RequestConfiguration $requestConfiguration,
         Registry $registry,
         ResourceInterface $resource,
         SymfonyWorkflow $workflow,
         Marking $marking
     ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn(null);
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource)->willReturn($workflow);
+        $registry->get($resource, null)->willReturn($workflow);
         $workflow->apply($resource, 'reject')->willReturn($marking);
 
+        $workflow->apply($resource, 'reject')->shouldBeCalled();
+
+        $this->apply($requestConfiguration, $resource);
+    }
+
+    function it_applies_configured_state_machine_transition_with_graph_configuration(
+        RequestConfiguration $requestConfiguration,
+        Registry $registry,
+        ResourceInterface $resource,
+        SymfonyWorkflow $workflow,
+        Marking $marking
+    ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
+        $requestConfiguration->hasStateMachine()->willReturn(true);
+        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+        $registry->get($resource, 'pull_request')->willReturn($workflow);
+        $workflow->apply($resource, 'reject')->willReturn($marking);
+
+        $registry->get($resource, 'pull_request')->shouldBeCalled();
         $workflow->apply($resource, 'reject')->shouldBeCalled();
 
         $this->apply($requestConfiguration, $resource);
