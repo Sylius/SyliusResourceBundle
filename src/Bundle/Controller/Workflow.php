@@ -50,9 +50,11 @@ final class Workflow implements StateMachineInterface
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
         }
 
+        $graph = $configuration->getStateMachineGraph();
+
         /** @var string $transitionName */
         $transitionName = $configuration->getStateMachineTransition();
 
-        $this->registry->get($resource)->apply($resource, $transitionName);
+        $this->registry->get($resource, $graph)->apply($resource, $transitionName);
     }
 }

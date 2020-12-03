@@ -68,7 +68,24 @@ final class StateMachineSpec extends ObjectBehavior
         $this->can($requestConfiguration, $resource)->shouldReturn(true);
     }
 
-    function it_applies_configured_state_machine_transition(
+    function it_applies_configured_state_machine_transition_without_graph_configuration(
+        RequestConfiguration $requestConfiguration,
+        ResourceInterface $resource,
+        FactoryInterface $stateMachineFactory,
+        StateMachineInterface $stateMachine
+    ): void {
+        $requestConfiguration->hasStateMachine()->willReturn(true);
+        $requestConfiguration->getStateMachineGraph()->willReturn(null);
+        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+        $stateMachineFactory->get($resource, 'default')->willReturn($stateMachine);
+
+        $stateMachineFactory->get($resource, 'default')->shouldBeCalled();
+        $stateMachine->apply('reject')->shouldBeCalled();
+
+        $this->apply($requestConfiguration, $resource);
+    }
+
+    function it_applies_configured_state_machine_transition_with_graph_configuration(
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FactoryInterface $stateMachineFactory,
