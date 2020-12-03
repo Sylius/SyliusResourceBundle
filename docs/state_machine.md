@@ -3,11 +3,11 @@
 You can either use [Symfony workflow](https://symfony.com/doc/current/components/workflow.html) or [Winzou state machine](https://github.com/winzou/StateMachineBundle).
 The recommended way is to use the `Symfony workflow component`.
 
-## Configuring Symfony workflow as state machine`
-
-If Symfony workflow is on your requirements, you have nothing to do even if winzou state machine is on your requirements too.
+If only Symfony workflow is on your requirements you have nothing to do.
 
 But you can configure it explicitly:
+
+## Configuring Symfony workflow as state machine`
 
 ```yaml
 sylius_resources:
@@ -17,7 +17,7 @@ sylius_resources:
 
 ## Configuring Winzou as state machine`
 
-If Winzou state machine is on your requirements but Symfony workflow is not, you have nothing to do.
+If Winzou state machine is on your requirements you have nothing to do even if Symfony workflow is on your requirements too.
 
 But you can configure it explicitly:
 

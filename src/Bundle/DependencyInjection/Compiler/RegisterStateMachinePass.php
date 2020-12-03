@@ -46,13 +46,13 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             return;
         }
 
-        if ($this->isSymfonyWorkflowEnabled($container)) {
-            $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_SYMFONY);
+        if ($this->isWinzouStateMachineEnabled($container)) {
+            $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_WINZOU);
 
             return;
         }
 
-        $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_WINZOU);
+        $this->setStateMachine($container, ResourceBundleInterface::STATE_MACHINE_SYMFONY);
     }
 
     private function setStateMachine(ContainerBuilder $container, string $stateMachine): void

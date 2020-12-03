@@ -91,7 +91,7 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
     /**
      * @test
      */
-    public function it_registers_state_machine_controller_with_symfony_workflow_by_default_when_both_are_available(): void
+    public function it_registers_state_machine_controller_with_winzou_by_default_when_both_are_available(): void
     {
         $this->setParameter('sylius.resource.settings', ['state_machine_component' => null]);
         $this->makeWinzouStateMachineAvailable();
@@ -99,7 +99,7 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', Workflow::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
