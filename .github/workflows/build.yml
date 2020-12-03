@@ -83,11 +83,21 @@ jobs:
                 name: Run lint container
                 run: (cd src/Bundle/test && bin/console lint:container)
 
-            -   name: Run state machine tests with winzou/state-machine package
+            -
+                name: Run state machine tests with winzou/state-machine package
                 run: |
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/app/config/config_test.yml
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/app/config/config_test.yml
                     (cd src/Bundle/test && app/console cache:clear --env=test)
                     composer test
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/app/config/config_test.yml
+
+            -
+                name: Run state machine tests with symfony/workflow package
+                run: |
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/app/config/config_test.yml
+                    (cd src/Bundle/test && app/console cache:clear --env=test)
+                    composer test
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/app/config/config_test.yml
 
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
