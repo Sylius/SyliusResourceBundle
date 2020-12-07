@@ -30,6 +30,12 @@
             </errorLevel>
         </DeprecatedMethod>
 
+        <InvalidDocblock>
+            <errorLevel type="suppress">
+                <file name="vendor/doctrine/orm/lib/Doctrine/ORM/EntityRepository.php" />
+            </errorLevel>
+        </InvalidDocblock>
+
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
