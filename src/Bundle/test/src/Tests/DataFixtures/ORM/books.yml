@@ -1,4 +1,4 @@
-AppBundle\Entity\Book:
+App\Entity\Book:
     book1:
         fallbackLocale: en_US
         currentLocale: en_US

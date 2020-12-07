@@ -1,4 +1,4 @@
-AppBundle\Entity\ComicBook:
+App\Entity\ComicBook:
     comic-book1:
         title:  "Old Man Logan"
         author: "@sorrentino"
@@ -6,7 +6,7 @@ AppBundle\Entity\ComicBook:
         title: "Civil War II"
         author: "@bendis"
 
-AppBundle\Entity\Author:
+App\Entity\Author:
     sorrentino:
         firstName: "Andrea"
         lastName: "Sorrentino"
