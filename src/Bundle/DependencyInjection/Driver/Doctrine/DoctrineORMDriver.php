@@ -27,6 +27,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class DoctrineORMDriver extends AbstractDoctrineDriver
 {
+    public const GENERIC_ENTITIES_PARAMETER = 'sylius.doctrine.orm.container_repository_factory.entities';
+
     public function getType(): string
     {
         return SyliusResourceBundle::DRIVER_DOCTRINE_ORM;
@@ -37,8 +39,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $repositoryClassParameterName = sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName());
         $repositoryClass = EntityRepository::class;
 
-        $genericEntitiesParameterName = 'sylius.doctrine.orm.container_repository_factory.entities';
-        $genericEntities = $container->hasParameter($genericEntitiesParameterName) ? $container->getParameter($genericEntitiesParameterName) : [];
+        $genericEntities = $container->hasParameter(self::GENERIC_ENTITIES_PARAMETER) ? $container->getParameter(self::GENERIC_ENTITIES_PARAMETER) : [];
 
         if ($container->hasParameter($repositoryClassParameterName)) {
             $repositoryClass = $container->getParameter($repositoryClassParameterName);
@@ -89,7 +90,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             );
         }
 
-        $container->setParameter($genericEntitiesParameterName, $genericEntities);
+        $container->setParameter(self::GENERIC_ENTITIES_PARAMETER, $genericEntities);
     }
 
     protected function addManager(ContainerBuilder $container, MetadataInterface $metadata): void

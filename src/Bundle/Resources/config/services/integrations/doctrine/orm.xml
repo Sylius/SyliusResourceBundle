@@ -15,7 +15,6 @@
     <parameters>
         <parameter key="sylius.orm.repository.class">Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository</parameter>
         <parameter key="sylius.translation.translatable_listener.doctrine.orm.class">Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener</parameter>
-        <parameter key="sylius.doctrine.orm.container_repository_factory.entities" type="collection" />
     </parameters>
 
     <services>
