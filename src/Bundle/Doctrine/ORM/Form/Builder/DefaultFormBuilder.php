@@ -43,7 +43,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
 
     private function doBuild(ClassMetadataInfo $classMetadata, FormBuilderInterface $formBuilder): void
     {
-        $fields = (array) $classMetadata->fieldNames;
+        $fields = $classMetadata->fieldNames;
 
         if (!$classMetadata->isIdentifierNatural()) {
             $fields = array_diff($fields, $classMetadata->identifier);
