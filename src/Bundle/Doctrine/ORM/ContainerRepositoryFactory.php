@@ -32,10 +32,10 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     /**
      * @param string[] $genericEntities
      */
-    public function __construct(RepositoryFactory $doctrineFactory, ?array $genericEntities)
+    public function __construct(RepositoryFactory $doctrineFactory, array $genericEntities)
     {
         $this->doctrineFactory = $doctrineFactory;
-        $this->genericEntities = $genericEntities ?? [];
+        $this->genericEntities = $genericEntities;
     }
 
     public function getRepository(EntityManagerInterface $entityManager, $entityName): ObjectRepository

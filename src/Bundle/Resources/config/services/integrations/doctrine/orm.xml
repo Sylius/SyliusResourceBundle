@@ -15,6 +15,7 @@
     <parameters>
         <parameter key="sylius.orm.repository.class">Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository</parameter>
         <parameter key="sylius.translation.translatable_listener.doctrine.orm.class">Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener</parameter>
+        <parameter key="sylius.doctrine.orm.container_repository_factory.entities" type="collection" />
     </parameters>
 
     <services>
@@ -35,7 +36,7 @@
 
         <service id="sylius.doctrine.orm.container_repository_factory" decorates="doctrine.orm.container_repository_factory" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" public="false">
             <argument type="service" id="sylius.doctrine.orm.container_repository_factory.inner" />
-            <argument on-invalid="null">%sylius.doctrine.orm.container_repository_factory.entities%</argument>
+            <argument>%sylius.doctrine.orm.container_repository_factory.entities%</argument>
         </service>
     </services>
 </container>
