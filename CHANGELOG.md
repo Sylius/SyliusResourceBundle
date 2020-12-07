@@ -1,5 +1,13 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.0-RC.4 (2020-12-07)
+
+#### Details
+
+- [#234](https://github.com/Sylius/SyliusResourceBundle/issues/234) Refactor test app ([@loic425](https://github.com/loic425))
+- [#238](https://github.com/Sylius/SyliusResourceBundle/issues/238) Always set sylius.doctrine.orm.container_repository_factory.entities parameter ([@pamil](https://github.com/pamil))
+- [#239](https://github.com/Sylius/SyliusResourceBundle/issues/239) Fix the static analysis build ([@pamil](https://github.com/pamil))
+
 ### v1.7.0-RC.3 (2020-11-25)
 
 #### Details
