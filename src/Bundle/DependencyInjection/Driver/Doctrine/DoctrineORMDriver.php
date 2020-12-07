@@ -37,6 +37,9 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $repositoryClassParameterName = sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName());
         $repositoryClass = EntityRepository::class;
 
+        $genericEntitiesParameterName = 'sylius.doctrine.orm.container_repository_factory.entities';
+        $genericEntities = $container->hasParameter($genericEntitiesParameterName) ? $container->getParameter($genericEntitiesParameterName) : [];
+
         if ($container->hasParameter($repositoryClassParameterName)) {
             $repositoryClass = $container->getParameter($repositoryClassParameterName);
         }
@@ -58,11 +61,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
 
             $container->setDefinition($serviceId, $definition);
 
-            $genericEntitiesParameterName = 'sylius.doctrine.orm.container_repository_factory.entities';
-            $genericEntities = $container->hasParameter($genericEntitiesParameterName) ? $container->getParameter($genericEntitiesParameterName) : [];
-
             $genericEntities[] = $entityClass;
-            $container->setParameter($genericEntitiesParameterName, $genericEntities);
         } else {
             $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
 
@@ -89,6 +88,8 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
                 $metadata->getHumanizedName() . ' repository'
             );
         }
+
+        $container->setParameter($genericEntitiesParameterName, $genericEntities);
     }
 
     protected function addManager(ContainerBuilder $container, MetadataInterface $metadata): void
