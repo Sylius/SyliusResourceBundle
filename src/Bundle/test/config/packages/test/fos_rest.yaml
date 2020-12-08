@@ -10,7 +10,7 @@ framework:
                 type: 'method'
                 property: 'currentPlace'
             supports:
-                - AppBundle\Entity\PullRequest
+                - App\Entity\PullRequest
             initial_marking: start
             places:
                 - start
@@ -44,7 +44,7 @@ framework:
 
 winzou_state_machine:
     pull_request:
-        class: AppBundle\Entity\PullRequest
+        class: App\Entity\PullRequest
         property_path: currentPlace
         graph: pull_request
         states:

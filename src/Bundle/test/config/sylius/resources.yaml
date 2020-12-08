@@ -25,5 +25,5 @@ sylius_resource:
 
         app.pull_request:
             classes:
-                model: AppBundle\Entity\PullRequest
-                form: AppBundle\Form\Type\PullRequestType
+                model: App\Entity\PullRequest
+                form: App\Form\Type\PullRequestType

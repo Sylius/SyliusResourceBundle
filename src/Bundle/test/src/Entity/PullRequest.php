@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 
