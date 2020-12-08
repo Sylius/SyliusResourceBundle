@@ -6,7 +6,7 @@ framework:
                 type: 'method'
                 property: 'currentPlace'
             supports:
-                - AppBundle\Entity\PullRequest
+                - App\Entity\PullRequest
             initial_marking: start
             places:
                 - start
