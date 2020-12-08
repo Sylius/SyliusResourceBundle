@@ -94,10 +94,10 @@ jobs:
             -
                 name: Run state machine tests with symfony/workflow package
                 run: |
-                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/app/config/config_test.yml
-                    (cd src/Bundle/test && app/console cache:clear --env=test)
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
+                    (cd src/Bundle/test && bin/console cache:clear --env=test)
                     composer test
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/app/config/config_test.yml
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
 
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
