@@ -1,5 +1,11 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.7.1 (2020-12-09)
+
+#### Details
+
+- [#243](https://github.com/Sylius/SyliusResourceBundle/issues/243) Add back winzou/state-machine to required packages of the component ([@pamil](https://github.com/pamil))
+
 ### v1.7.0 (2020-12-09)
 
 These are complete release notes summing up all BETA and RC releases.
