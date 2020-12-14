@@ -61,7 +61,7 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "0.12.59",
         "phpstan/phpstan-phpunit": "0.12.16",
-        "phpstan/phpstan-webmozart-assert": "0.12.7",
+        "phpstan/phpstan-webmozart-assert": "0.12.8",
         "phpunit/phpunit": "^9.4",
         "sylius-labs/coding-standard": "^3.0",
         "sylius/grid-bundle": "^1.7",
