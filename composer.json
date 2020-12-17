@@ -60,7 +60,7 @@
         "phpspec/phpspec": "^7.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "0.12.62",
-        "phpstan/phpstan-phpunit": "0.12.16",
+        "phpstan/phpstan-phpunit": "0.12.17",
         "phpstan/phpstan-webmozart-assert": "0.12.8",
         "phpunit/phpunit": "^9.4",
         "sylius-labs/coding-standard": "^3.0",
