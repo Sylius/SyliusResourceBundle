@@ -7,6 +7,7 @@ sylius_resource:
             classes:
                 model: App\Entity\Book
                 factory: App\Factory\BookFactory
+                controller: App\Controller\BookController
                 repository: App\Repository\BookRepository
                 form: App\Form\Type\BookType
             translation:

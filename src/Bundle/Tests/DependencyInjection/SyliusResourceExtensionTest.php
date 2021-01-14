@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection;
 
+use App\Controller\BookController;
 use App\Entity\Book;
 use App\Entity\BookTranslation;
 use App\Entity\ComicBook;
 use App\Factory\BookFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 
 class SyliusResourceExtensionTest extends AbstractExtensionTestCase
@@ -49,6 +51,41 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('app.repository.book');
         $this->assertContainerBuilderHasService('app.controller.book');
         $this->assertContainerBuilderHasService('app.manager.book');
+        $this->assertContainerBuilderNotHasService(ResourceController::class);
+
+        $this->assertContainerBuilderHasParameter('app.model.book.class', Book::class);
+        $this->assertContainerBuilderHasParameter('app.model.book_translation.class', BookTranslation::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_custom_services_and_parameters_for_resources()
+    {
+        // TODO: Move Resource-Grid integration to a dedicated compiler pass
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'resources' => [
+                'app.book' => [
+                    'classes' => [
+                        'model' => Book::class,
+                        'controller' => BookController::class,
+                    ],
+                    'translation' => [
+                        'classes' => [
+                            'model' => BookTranslation::class,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasService('app.factory.book');
+        $this->assertContainerBuilderHasService('app.repository.book');
+        $this->assertContainerBuilderHasService('app.controller.book');
+        $this->assertContainerBuilderHasService('app.manager.book');
+        $this->assertContainerBuilderHasService(BookController::class);
 
         $this->assertContainerBuilderHasParameter('app.model.book.class', Book::class);
         $this->assertContainerBuilderHasParameter('app.model.book_translation.class', BookTranslation::class);
