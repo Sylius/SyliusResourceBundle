@@ -70,6 +70,9 @@
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "4.4.1"
     },
+    "conflict": {
+        "symfony/polyfill-mbstring": "1.22.0"
+    },
     "suggest": {
         "doctrine/orm": "^2.5",
         "sylius/locale": "^1.0"
