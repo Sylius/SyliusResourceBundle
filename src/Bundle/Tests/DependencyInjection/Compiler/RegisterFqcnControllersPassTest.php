@@ -15,29 +15,18 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterControllerAliasesPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnControllersPass;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
-final class RegisterControllerAliasesPassTest extends AbstractCompilerPassTestCase
+final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
 {
     /**
      * @test
-     * @doesNotPerformAssertions
      */
-    public function it_throws_exception_if_resource_does_not_exist(): void
-    {
-        $this->compile();
-
-        $this->throwException(new InvalidArgumentException());
-    }
-
-    /**
-     * @test
-     */
-    public function it_register_alias_for_resource_controller_as_a_FQCN(): void
+    public function it_registers_alias_for_resource_controller_as_a_FQCN(): void
     {
         $this->setDefinition('sylius.resource_registry', new Definition());
         $this->setDefinition('app.controller.book', new Definition());
@@ -47,7 +36,7 @@ final class RegisterControllerAliasesPassTest extends AbstractCompilerPassTestCa
             [
                 'app.book' => [
                     'driver' => 'doctrine/orm',
-                    'classes' => ['model' => BookTestClass::class, 'controller' => BookTestController::class]
+                    'classes' => ['model' => BookTestClass::class, 'controller' => BookTestController::class],
                 ],
             ]
         );
@@ -57,11 +46,30 @@ final class RegisterControllerAliasesPassTest extends AbstractCompilerPassTestCa
         $this->assertContainerBuilderHasService(BookTestController::class);
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container): void
+    /**
+     * @test
+     */
+    public function it_throws_exception_if_class_does_not_implement_resource_interface(): void
     {
-        $container->addCompilerPass(new RegisterControllerAliasesPass());
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->setParameter(
+            'sylius.resources',
+            [
+                'app.normalClass' => [
+                    'driver' => 'doctrine/orm',
+                    'classes' => ['model' => NormalClass::class],
+                ],
+            ]
+        );
+
+        $this->compile();
     }
 
+    protected function registerCompilerPass(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new RegisterFqcnControllersPass());
+    }
 }
 
 class BookTestClass implements ResourceInterface
@@ -70,6 +78,11 @@ class BookTestClass implements ResourceInterface
     {
     }
 }
+
+class NormalClass
+{
+}
+
 class BookTestController extends ResourceController
 {
 }

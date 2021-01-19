@@ -16,12 +16,12 @@ namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
-final class RegisterControllerAliasesPass implements CompilerPassInterface
+/** @internal */
+final class RegisterFqcnControllersPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
@@ -35,12 +35,12 @@ final class RegisterControllerAliasesPass implements CompilerPassInterface
             $metadata = Metadata::fromAliasAndConfiguration($alias, $configuration);
 
             $this->validateSyliusResource($metadata->getClass('model'));
-            $controllerFQCN = $metadata->getClass('controller');
+            $controllerFqcn = $metadata->getClass('controller');
 
-            if ($controllerFQCN !== ResourceController::class) {
+            if ($controllerFqcn !== ResourceController::class) {
                 $definition = $container->getDefinition($metadata->getServiceId('controller'));
 
-                // TODO: Change to alias definition after bumping to > Symfony 5.2
+                // TODO: Change to alias definition after bumping to > Symfony 5.1
                 $container->setDefinition($metadata->getClass('controller'), $definition);
             }
         }
@@ -48,7 +48,7 @@ final class RegisterControllerAliasesPass implements CompilerPassInterface
 
     private function validateSyliusResource(string $class): void
     {
-        if (!in_array(ResourceInterface::class, class_implements($class), true)) {
+        if (!in_array(ResourceInterface::class, class_implements($class) ?: [], true)) {
             throw new InvalidArgumentException(sprintf(
                 'Class "%s" must implement "%s" to be registered as a Sylius resource.',
                 $class,
