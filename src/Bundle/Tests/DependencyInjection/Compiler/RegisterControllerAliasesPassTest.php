@@ -40,7 +40,7 @@ final class RegisterControllerAliasesPassTest extends AbstractCompilerPassTestCa
     public function it_register_alias_for_resource_controller_as_a_FQCN(): void
     {
         $this->setDefinition('sylius.resource_registry', new Definition());
-        $this->setDefinition('sylius.controller.book', new Definition());
+        $this->setDefinition('app.controller.book', new Definition());
 
         $this->setParameter(
             'sylius.resources',
@@ -54,7 +54,7 @@ final class RegisterControllerAliasesPassTest extends AbstractCompilerPassTestCa
 
         $this->compile();
 
-        $this->assertContainerBuilderHasAlias(BookTestController::class, 'app.controller.book');
+        $this->assertContainerBuilderHasService(BookTestController::class);
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void

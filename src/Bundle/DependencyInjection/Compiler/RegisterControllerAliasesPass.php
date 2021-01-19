@@ -38,9 +38,10 @@ final class RegisterControllerAliasesPass implements CompilerPassInterface
             $controllerFQCN = $metadata->getClass('controller');
 
             if ($controllerFQCN !== ResourceController::class) {
-                $alias = new Alias($metadata->getServiceId('controller'));
-                $alias->setPublic(true);
-                $container->setAlias($controllerFQCN, $alias);
+                $definition = $container->getDefinition($metadata->getServiceId('controller'));
+
+                // TODO: Change to alias definition after bumping to > Symfony 5.2
+                $container->setDefinition($metadata->getClass('controller'), $definition);
             }
         }
     }
