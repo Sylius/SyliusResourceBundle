@@ -67,9 +67,9 @@
         "sylius/grid-bundle": "^1.7",
         "symfony/dependency-injection": "^4.4 || ^5.1",
         "symfony/dotenv": "^4.4 || ^5.1",
+        "symplify/easy-coding-standard": "^8.3",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "4.4.1",
-        "symplify/easy-coding-standard": "^8.3"
+        "vimeo/psalm": "4.4.1"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
