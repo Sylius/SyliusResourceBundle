@@ -77,9 +77,9 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         }
 
         $typehintClasses = array_merge(
-            class_implements($repositoryClass),
+            class_implements($repositoryClass) ?: [],
             [$repositoryClass],
-            class_parents($repositoryClass)
+            class_parents($repositoryClass) ?: []
         );
 
         foreach ($typehintClasses as $typehintClass) {
