@@ -24,7 +24,9 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
         foreach ($resources as $alias => $configuration) {
             $model = $this->getModel($alias, $configuration);
 
-            foreach (class_implements($model) as $interface) {
+            $modelInterfaces = class_implements($model) ?: [];
+
+            foreach ($modelInterfaces as $interface) {
                 if ($interface === ResourceInterface::class) {
                     continue;
                 }
@@ -33,11 +35,11 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
             }
         }
 
-        $interfaces = array_filter($interfaces, function (array $classes): bool {
+        $interfaces = array_filter($interfaces, static function (array $classes): bool {
             return count($classes) === 1;
         });
 
-        $interfaces = array_map(function (array $classes): string {
+        $interfaces = array_map(static function (array $classes): string {
             return (string) current($classes);
         }, $interfaces);
 

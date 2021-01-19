@@ -59,7 +59,7 @@
         "pamil/phpspec-skip-example-extension": "^4.2",
         "phpspec/phpspec": "^7.0",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "0.12.67",
+        "phpstan/phpstan": "0.12.68",
         "phpstan/phpstan-phpunit": "0.12.17",
         "phpstan/phpstan-webmozart-assert": "0.12.8",
         "phpunit/phpunit": "^9.4",
@@ -67,6 +67,7 @@
         "sylius/grid-bundle": "^1.7",
         "symfony/dependency-injection": "^4.4 || ^5.1",
         "symfony/dotenv": "^4.4 || ^5.1",
+        "symplify/easy-coding-standard": "^8.3",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "4.4.1"
     },

@@ -19,6 +19,7 @@ class Parameters extends ParameterBag
 {
     /**
      * @param string $key
+     * @param mixed $default
      *
      * @return mixed
      */
