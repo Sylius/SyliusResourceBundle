@@ -9,10 +9,9 @@ parameters:
     secret: "Three can keep a secret, if two of them are dead."
 
 services:
-#    # Gets rid of "[error] Uncaught PHP Exception Symfony\Component\HttpKernel\Exception\NotFoundHttpException"
-#    # errors in PHPUnit output when testing 404 errors.
-#    logger: "@Psr\Log\NullLogger"
-
+    # Gets rid of "[error] Uncaught PHP Exception Symfony\Component\HttpKernel\Exception\NotFoundHttpException"
+    # errors in PHPUnit output when testing 404 errors.
+    logger: "@Psr\Log\NullLogger"
 
     # Default configuration for services in *this* file
     _defaults:
@@ -24,7 +23,7 @@ services:
 
         # Allows optimizing the container by removing unused services; this also means
         # fetching services directly from the container via $container->get() won't work
-        public: true
+        public: false
 
     # Controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

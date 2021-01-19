@@ -17,5 +17,4 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 
 final class BookController extends ResourceController
 {
-
 }
