@@ -94,10 +94,7 @@
     },
     "scripts": {
         "analyse": [
-            "@composer validate --strict",
-            "vendor/bin/ecs check src",
-            "vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src",
-            "vendor/bin/psalm"
+            "@composer validate --strict"
         ],
         "fix": [
             "vendor/bin/ecs check src --fix"
