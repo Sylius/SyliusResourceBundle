@@ -1,0 +1,41 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2021-01-19T16:17:47Z
+
+@lchrusciel @AdamKasp FYI, there is a hook here
+https://github.com/Sylius/Sylius-Standard/blob/a9ec0c5ee46d3f61ad661414fb580bf16493358b/config/services.yaml#L20
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2021-01-20T09:49:53Z
+
+Hey Loic,
+thanks for the advice. I've totally forgotten about your fix and it was pretty good. However, it works only when the people will customize it in their end application, and from what I've checked `lint:container` command will still complain about resource controllers:
+![image](https://user-images.githubusercontent.com/6213903/105156871-afacba80-5b0c-11eb-9227-49f771151beb.png)
+
+In addition, with this fix, you will be able to use the FQCN of controllers in routing:
+```yaml
+app_book_sortable_index:
+    path: /sortable-books/
+    methods: [GET]
+    defaults:
+        _controller: \App\Controller\BookController:indexAction
+        _sylius:
+            sortable: true
+```
+@AdamKasp can you add config to your PR? It should be changed in `src/Bundle/test/config/routes.yaml`, line 15th to be exact.
+
+---------------------------------------------------------------------------
+
+by loic425 at 2021-01-20T09:56:23Z
+
+> Hey Loic,
+> thanks for the advice. I've totally forgotten about your fix and it was pretty good. However, it works only when the people will customize it in their end application, [...]
+
+@lchrusciel Yes, I just wanted you have this little hook on your mind :)
+
+---------------------------------------------------------------------------
+
+by GSadee at 2021-01-21T08:10:37Z
+
+Thanks, Adam! :tada:
