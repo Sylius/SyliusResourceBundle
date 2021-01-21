@@ -225,4 +225,6 @@ app_genre_book_add:
                 parameters: { title: resource.title }
 ```
 
+Remember that you can use controller's Fully Qualified Class Name (``App\Controller\BookController``) instead of id ``app.controller.book`` 
+
 **[Go back to the documentation's index](index.md)**

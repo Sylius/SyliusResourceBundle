@@ -120,4 +120,6 @@ app_book_show:
             serialization_version: 1.0.2
 ```
 
+Remember that you can use controller's Fully Qualified Class Name (``App\Controller\BookController``) instead of id ``app.controller.book`` 
+
 **[Go back to the documentation's index](index.md)**

@@ -13,6 +13,24 @@ services:
     # errors in PHPUnit output when testing 404 errors.
     logger: "@Psr\Log\NullLogger"
 
+    # Default configuration for services in *this* file
+    _defaults:
+        # Automatically injects dependencies in your services
+        autowire: true
+
+        # Automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+
+        # Allows optimizing the container by removing unused services; this also means
+        # fetching services directly from the container via $container->get() won't work
+        public: false
+
+    # Controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
     test.translation_locale_provider:
         class: Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider
         arguments:
