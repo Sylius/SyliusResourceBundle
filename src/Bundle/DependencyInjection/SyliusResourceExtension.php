@@ -36,6 +36,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $loader->load('services.xml');
 
+        /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
         if (array_key_exists('SyliusGridBundle', $bundles)) {
             $loader->load('services/integrations/grid.xml');
@@ -109,6 +110,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
     private function loadResources(array $loadedResources, ContainerBuilder $container): void
     {
+        /** @var array<string, array> $resources */
         $resources = $container->hasParameter('sylius.resources') ? $container->getParameter('sylius.resources') : [];
 
         foreach ($loadedResources as $alias => $resourceConfig) {

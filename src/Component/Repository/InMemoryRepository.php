@@ -41,7 +41,10 @@ class InMemoryRepository implements RepositoryInterface
      */
     public function __construct(string $interface)
     {
-        if (!in_array(ResourceInterface::class, class_implements($interface) ?: [], true)) {
+        /** @var array $interfaceInterfaces */
+        $interfaceInterfaces = class_implements($interface);
+
+        if (!in_array(ResourceInterface::class, $interfaceInterfaces, true)) {
             throw new UnexpectedTypeException($interface, ResourceInterface::class);
         }
 

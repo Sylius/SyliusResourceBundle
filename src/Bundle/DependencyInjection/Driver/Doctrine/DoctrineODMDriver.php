@@ -35,7 +35,10 @@ final class DoctrineODMDriver extends AbstractDoctrineDriver
     {
         $modelClass = $metadata->getClass('model');
 
-        $repositoryClass = in_array(TranslatableInterface::class, class_implements($modelClass))
+        /** @var array $modelInterfaces */
+        $modelInterfaces = class_implements($modelClass);
+
+        $repositoryClass = in_array(TranslatableInterface::class, $modelInterfaces)
             ? TranslatableRepository::class
             : new Parameter('sylius.mongodb.odm.repository.class')
         ;

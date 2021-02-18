@@ -37,8 +37,11 @@ final class PagerfantaBridgePass implements CompilerPassInterface
             return;
         }
 
+        /** @var string $viewFactoryClass */
+        $viewFactoryClass = $container->getParameter('white_october_pagerfanta.view_factory.class');
+
         $container->getDefinition('pagerfanta.view_factory')
-            ->setClass($container->getParameter('white_october_pagerfanta.view_factory.class'));
+            ->setClass($viewFactoryClass);
     }
 
     private function aliasRenamedServices(ContainerBuilder $container): void

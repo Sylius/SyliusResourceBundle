@@ -18,29 +18,37 @@ jobs:
             matrix:
                 include:
                     -
-                        php: 7.3
-                        symfony: 4.4.*
-                    -
-                        php: 7.3
-                        symfony: 5.1.*
+                        php: 7.4
+                        symfony: ^4.4
                     -
                         php: 7.4
-                        symfony: 4.4.*
+                        symfony: ^5.2
+                    -
+                        php: 8.0
+                        symfony: ^4.4
+                        composer-flags: --ignore-platform-req=php
+                    -
+                        php: 8.0
+                        symfony: ^5.2
+                        composer-flags: --ignore-platform-req=php
+                    -
+                        php: 7.4
+                        symfony: ^4.4
                         winzou: ^0.3.2
                         twig: ^2.12
                     -
                         php: 7.4
-                        symfony: 4.4.*
+                        symfony: ^4.4
                         winzou: ^0.4.3
                         twig: ^3.0
                     -
                         php: 7.4
-                        symfony: 4.4.*
+                        symfony: ^4.4
                         winzou: ^0.5
                         twig: ^3.0
                     -
                         php: 7.4
-                        symfony: 5.1.*
+                        symfony: ^5.2
                         winzou: ^0.5
                         twig: ^3.0
 
@@ -106,20 +114,20 @@ jobs:
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
                 run: |
-                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
+                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts ${{ matrix.composer-flags }}
                     (cd src/Bundle/test && bin/console cache:clear --env=test_without_fosrest)
-                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
+                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts ${{ matrix.composer-flags }}
 
             -
                 name: Run smoke tests without winzou/state-machine-bundle package
                 run: |
-                    composer remove winzou/state-machine-bundle --no-scripts
+                    composer remove winzou/state-machine-bundle --no-scripts ${{ matrix.composer-flags }}
                     (cd src/Bundle/test && bin/console cache:clear --env=test_without_state_machine)
-                    composer require winzou/state-machine-bundle --no-scripts
+                    composer require winzou/state-machine-bundle --no-scripts ${{ matrix.composer-flags }}
 
             -
                 name: Run smoke tests without twig/twig package
                 run: |
-                    composer remove symfony/twig-bundle --no-scripts
+                    composer remove symfony/twig-bundle --no-scripts ${{ matrix.composer-flags }}
                     (cd src/Bundle/test && bin/console cache:clear --env=test_without_twig)
-                    composer require symfony/twig-bundle --no-scripts
+                    composer require symfony/twig-bundle --no-scripts ${{ matrix.composer-flags }}

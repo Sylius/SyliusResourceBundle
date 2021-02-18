@@ -39,13 +39,16 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $repositoryClassParameterName = sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName());
         $repositoryClass = EntityRepository::class;
 
+        /** @var string[] $genericEntities */
         $genericEntities = $container->hasParameter(self::GENERIC_ENTITIES_PARAMETER) ? $container->getParameter(self::GENERIC_ENTITIES_PARAMETER) : [];
 
         if ($container->hasParameter($repositoryClassParameterName)) {
+            /** @var string $repositoryClass */
             $repositoryClass = $container->getParameter($repositoryClassParameterName);
         }
 
         if ($metadata->hasClass('repository')) {
+            /** @var string $repositoryClass */
             $repositoryClass = $metadata->getClass('repository');
         }
 
@@ -55,6 +58,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $definition->setPublic(true);
 
         if ($repositoryClass === EntityRepository::class) {
+            /** @var string $entityClass */
             $entityClass = $metadata->getClass('model');
 
             $definition->setFactory([$managerReference, 'getRepository']);
@@ -76,10 +80,16 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $container->setDefinition($repositoryClass, $doctrineDefinition);
         }
 
+        /** @var array $repositoryInterfaces */
+        $repositoryInterfaces = class_implements($repositoryClass);
+
+        /** @var array $repositoryParents */
+        $repositoryParents = class_parents($repositoryClass);
+
         $typehintClasses = array_merge(
-            class_implements($repositoryClass) ?: [],
+            $repositoryInterfaces,
             [$repositoryClass],
-            class_parents($repositoryClass) ?: []
+            $repositoryParents
         );
 
         foreach ($typehintClasses as $typehintClass) {
