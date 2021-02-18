@@ -34,22 +34,10 @@ jobs:
                     -
                         php: 7.4
                         symfony: ^4.4
-                        winzou: ^0.3.2
                         twig: ^2.12
                     -
                         php: 7.4
-                        symfony: ^4.4
-                        winzou: ^0.4.3
-                        twig: ^3.0
-                    -
-                        php: 7.4
-                        symfony: ^4.4
-                        winzou: ^0.5
-                        twig: ^3.0
-                    -
-                        php: 7.4
                         symfony: ^5.2
-                        winzou: ^0.5
                         twig: ^3.0
 
         steps:
@@ -70,11 +58,6 @@ jobs:
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
                     (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
-
-            -
-                name: Restrict winzou/state-machine-bundle version
-                if: matrix.winzou != ''
-                run: composer require "winzou/state-machine-bundle:${{ matrix.winzou }}" --no-update --no-scripts
 
             -
                 name: Restrict twig/twig version
