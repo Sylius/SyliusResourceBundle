@@ -61,3 +61,12 @@ services:
         arguments:
             - '%app.model.book_translation.class%'
         tags: ['form.type']
+
+    Gedmo\Sortable\SortableListener:
+        calls:
+            -
+                setAnnotationReader: ['@annotation_reader']
+        tags:
+            -
+                name: doctrine.event_subscriber
+                connection: default
