@@ -17,7 +17,6 @@ return [
     Sylius\Bundle\ResourceBundle\SyliusResourceBundle::class => ['all' => true],
     BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true, 'test_without_twig' => false],
-    Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     FOS\RestBundle\FOSRestBundle::class => ['test' => true],
     JMS\SerializerBundle\JMSSerializerBundle::class => ['test' => true],
     Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle::class => ['test' => true],
