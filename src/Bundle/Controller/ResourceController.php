@@ -117,7 +117,11 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);
         $resource = $this->findOr404($configuration);
 
-        $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
+        $event = $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
+        $eventResponse = $event->getResponse();
+        if (null !== $eventResponse) {
+            return $eventResponse;
+        }
 
         if ($configuration->isHtmlRequest()) {
             return $this->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
@@ -138,7 +142,11 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::INDEX);
         $resources = $this->resourcesCollectionProvider->get($configuration, $this->repository);
 
-        $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
+        $event = $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
+        $eventResponse = $event->getResponse();
+        if (null !== $eventResponse) {
+            return $eventResponse;
+        }
 
         if ($configuration->isHtmlRequest()) {
             return $this->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
