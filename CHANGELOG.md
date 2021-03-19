@@ -1,5 +1,23 @@
 ## CHANGELOG FOR `1.7.x`
 
+### v1.8.0 (2021-03-19)
+
+#### TL;DR
+
+- Added support for PHP 8
+- Removed StofDoctrineExtensionsBundle from dependencies
+- Remvoed support for winzou/state-machine-bundle <0.5
+
+#### Details
+
+- [#210](https://github.com/Sylius/SyliusResourceBundle/issues/210) Add compatibility with PHP 8 ([@pamil](https://github.com/pamil))
+- [#247](https://github.com/Sylius/SyliusResourceBundle/issues/247) Fix wrong licence on test app's kernel ([@loic425](https://github.com/loic425))
+- [#255](https://github.com/Sylius/SyliusResourceBundle/issues/255) Add autowire for resource Controllers ([@AdamKasp](https://github.com/AdamKasp), [@lchrusciel](https://github.com/lchrusciel))
+- [#259](https://github.com/Sylius/SyliusResourceBundle/issues/259) [Minor] Add symfony.lock to git ignore ([@lchrusciel](https://github.com/lchrusciel))
+- [#264](https://github.com/Sylius/SyliusResourceBundle/issues/264) Fix the build ([@pamil](https://github.com/pamil))
+- [#283](https://github.com/Sylius/SyliusResourceBundle/issues/283) Remove StofDoctrineExtensionsBundle and replace it with GedmoDoctrineExtensions ([@pamil](https://github.com/pamil))
+- [#285](https://github.com/Sylius/SyliusResourceBundle/issues/285) Drop winzou/state-machine-bundle <0.5 ([@pamil](https://github.com/pamil))
+
 ### v1.7.1 (2020-12-09)
 
 #### Details
