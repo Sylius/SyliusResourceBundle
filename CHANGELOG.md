@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### v1.8.1 (2021-03-19)
+
+#### Details
+
+- [#297](https://github.com/Sylius/SyliusResourceBundle/issues/297) Skip registering controllers as a services if there is no custom class defined ([@pamil](https://github.com/pamil))
+
 ### v1.8.0 (2021-03-19)
 
 #### TL;DR
