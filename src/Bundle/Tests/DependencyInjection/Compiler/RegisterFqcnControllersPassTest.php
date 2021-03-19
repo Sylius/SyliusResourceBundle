@@ -49,6 +49,29 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
     /**
      * @test
      */
+    public function it_skips_the_alias_if_controller_class_is_not_defined(): void
+    {
+        $this->setDefinition('sylius.resource_registry', new Definition());
+        $this->setDefinition('app.controller.book', new Definition());
+
+        $this->setParameter(
+            'sylius.resources',
+            [
+                'app.book' => [
+                    'driver' => 'doctrine/orm',
+                    'classes' => ['model' => BookTestClass::class],
+                ],
+            ]
+        );
+
+        $this->compile();
+
+        $this->assertContainerBuilderNotHasService(BookTestController::class);
+    }
+
+    /**
+     * @test
+     */
     public function it_throws_exception_if_class_does_not_implement_resource_interface(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -58,7 +81,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
             [
                 'app.normalClass' => [
                     'driver' => 'doctrine/orm',
-                    'classes' => ['model' => NormalClass::class],
+                    'classes' => ['model' => NormalClass::class, 'controller' => BookTestController::class],
                 ],
             ]
         );
