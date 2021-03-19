@@ -37,10 +37,12 @@ jobs:
                         symfony: ^5.2
                     -
                         php: 7.4
+                        pagerfanta-bundle: ^2.5
                         symfony: ^4.4
                         twig: ^2.12
                     -
                         php: 7.4
+                        pagerfanta-bundle: ^3.0
                         symfony: ^5.2
                         twig: ^3.0
 
@@ -62,6 +64,11 @@ jobs:
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
                     (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
+
+            -
+                name: Restrict babdev/pagerfanta-bundle version
+                if: matrix.pagerfanta-bundle != ''
+                run: composer require "babdev/pagerfanta-bundle:${{ matrix.pagerfanta-bundle }}" --no-update --no-scripts
 
             -
                 name: Restrict twig/twig version
