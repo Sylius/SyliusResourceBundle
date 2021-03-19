@@ -35,6 +35,10 @@ final class RegisterFqcnControllersPass implements CompilerPassInterface
         foreach ($resources as $alias => $configuration) {
             $metadata = Metadata::fromAliasAndConfiguration($alias, $configuration);
 
+            if (!$metadata->hasClass('controller')) {
+                continue;
+            }
+
             $this->validateSyliusResource($metadata->getClass('model'));
             $controllerFqcn = $metadata->getClass('controller');
 
