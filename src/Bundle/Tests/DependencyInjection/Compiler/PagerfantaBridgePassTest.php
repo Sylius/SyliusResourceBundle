@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
-use BabDev\PagerfantaBundle\Twig\PagerfantaExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use Pagerfanta\Twig\Extension\PagerfantaExtension;
 use Pagerfanta\View\ViewFactory;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
