@@ -1,4 +1,4 @@
-## CHANGELOG FOR `1.7.x`
+## CHANGELOG
 
 ### v1.8.0 (2021-03-19)
 
