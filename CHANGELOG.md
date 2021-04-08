@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### v1.8.2 (2021-04-08)
+
+#### Details
+
+- [#304](https://github.com/Sylius/SyliusResourceBundle/issues/304) Fix doctrine extensions version on component ([@loic425](https://github.com/loic425))
+- [#303](https://github.com/Sylius/SyliusResourceBundle/issues/303) fix namespace of `ConfigurationTest` ([@bendavies](https://github.com/bendavies))
+- [#302](https://github.com/Sylius/SyliusResourceBundle/issues/302) Fix namespace of `WinzouStateMachinePassTest` ([@bendavies](https://github.com/bendavies))
+- [#301](https://github.com/Sylius/SyliusResourceBundle/issues/301) Update phpstan/phpstan requirement from 0.12.82 to 0.12.83 ([@dependabot-preview](https://github.com/dependabot-preview)[[@bot](https://github.com/bot)])
+- [#300](https://github.com/Sylius/SyliusResourceBundle/issues/300) Update vimeo/psalm requirement from 4.6.4 to 4.7.0 ([@dependabot-preview](https://github.com/dependabot-preview)[[@bot](https://github.com/bot)])
+
 ### v1.8.1 (2021-03-19)
 
 #### Details
