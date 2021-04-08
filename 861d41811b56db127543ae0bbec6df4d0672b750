@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2021-04-07T08:31:34Z
+
+@pamil Can you review this quickly ? This is blocking for Monofony to add PHP 8 support.
+
+"don't install one of gedmo/doctrine-extensions[v2.4.42]"
+
+---------------------------------------------------------------------------
+
+by loic425 at 2021-04-08T10:08:58Z
+
+@pamil Please, this is the last step to add PHP 8 support on Monofony...
+https://github.com/Monofony/Monofony/runs/2295638071
+
+---------------------------------------------------------------------------
+
+by pamil at 2021-04-08T10:46:52Z
+
+Thanks, Loïc! :tada:
