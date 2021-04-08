@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\test\src\Tests\DependencyInjection\Compiler;
+namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\Assert;
 use SM\Callback\CallbackFactoryInterface;
