@@ -1,0 +1,13 @@
+App\Entity\PullRequest:
+    type: mappedSuperclass
+    table: app_pull_request
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        currentPlace:
+            type: string
+            length: 255

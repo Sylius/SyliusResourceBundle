@@ -22,3 +22,8 @@ sylius_resource:
         app.gedmo:
             classes:
                 model: App\Entity\GedmoExtendedExample
+
+        app.pull_request:
+            classes:
+                model: App\Entity\PullRequest
+                form: App\Form\Type\PullRequestType

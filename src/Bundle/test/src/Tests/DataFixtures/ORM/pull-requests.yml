@@ -1,0 +1,3 @@
+App\Entity\PullRequest:
+    pull_request_{start, coding, test, review, merged, closed}:
+        currentPlace: <current()>

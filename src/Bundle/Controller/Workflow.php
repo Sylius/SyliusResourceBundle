@@ -13,44 +13,48 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-use SM\Factory\FactoryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Workflow\Registry;
 
-final class StateMachine implements StateMachineInterface
+final class Workflow implements StateMachineInterface
 {
-    /** @var FactoryInterface */
-    private $stateMachineFactory;
+    /** @var Registry */
+    private $registry;
 
-    public function __construct(FactoryInterface $stateMachineFactory)
+    public function __construct(Registry $registry)
     {
-        $this->stateMachineFactory = $stateMachineFactory;
+        $this->registry = $registry;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool
     {
         if (!$configuration->hasStateMachine()) {
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
         }
 
-        $graph = $configuration->getStateMachineGraph() ?? 'default';
+        /** @var string $transitionName */
+        $transitionName = $configuration->getStateMachineTransition();
 
-        /** @var string $transition */
-        $transition = $configuration->getStateMachineTransition();
-
-        return $this->stateMachineFactory->get($resource, $graph)->can($transition);
+        return $this->registry->get($resource)->can($resource, $transitionName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function apply(RequestConfiguration $configuration, ResourceInterface $resource): void
     {
         if (!$configuration->hasStateMachine()) {
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
         }
 
-        $graph = $configuration->getStateMachineGraph() ?? 'default';
+        $graph = $configuration->getStateMachineGraph();
 
-        /** @var string $transition */
-        $transition = $configuration->getStateMachineTransition();
+        /** @var string $transitionName */
+        $transitionName = $configuration->getStateMachineTransition();
 
-        $this->stateMachineFactory->get($resource, $graph)->apply($transition);
+        $this->registry->get($resource, $graph)->apply($resource, $transitionName);
     }
 }

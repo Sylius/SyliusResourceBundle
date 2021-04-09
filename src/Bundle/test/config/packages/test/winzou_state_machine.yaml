@@ -1,0 +1,34 @@
+winzou_state_machine:
+    pull_request:
+        class: App\Entity\PullRequest
+        property_path: currentPlace
+        graph: pull_request
+        states:
+            - start
+            - coding
+            - test
+            - review
+            - merged
+            - closed
+        transitions:
+            submit:
+                from: [ start ]
+                to: test
+            update:
+                from: [ coding, test, review ]
+                to: test
+            wait_for_review:
+                from: [ test ]
+                to: review
+            request_change:
+                from: [ review ]
+                to: coding
+            accept:
+                from: [ review ]
+                to: merged
+            reject:
+                from: [ review ]
+                to: closed
+            reopen:
+                from: [ closed ]
+                to: review
