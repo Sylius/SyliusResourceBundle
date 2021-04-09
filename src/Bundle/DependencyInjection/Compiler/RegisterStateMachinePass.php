@@ -103,6 +103,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
 
     private function isWinzouStateMachineEnabled(ContainerBuilder $container): bool
     {
+        /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
 
         return in_array(winzouStateMachineBundle::class, $bundles, true);
