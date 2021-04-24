@@ -73,6 +73,7 @@ abstract class PrioritizedCompositeServicePass implements CompilerPassInterface
     {
         foreach ($tags as $attributes) {
             $this->addMethodCall($contextDefinition, $id, $attributes);
+            break; // Prevent calling method multiple times if a service has the tag multiple times
         }
     }
 
