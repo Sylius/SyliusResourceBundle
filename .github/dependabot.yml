@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: phpstan/phpstan
+    versions:
+    - 0.12.70
+    - 0.12.71
+    - 0.12.73
+    - 0.12.74
+    - 0.12.75
+    - 0.12.76
+    - 0.12.78
+    - 0.12.79
+    - 0.12.80
+    - 0.12.83
+  - dependency-name: vimeo/psalm
+    versions:
+    - 4.5.0
+    - 4.5.1
+    - 4.5.2
+    - 4.6.0
+    - 4.6.2
+    - 4.6.3
+  - dependency-name: babdev/pagerfanta-bundle
+    versions:
+    - 3.0.0
+  - dependency-name: phpstan/phpstan-webmozart-assert
+    versions:
+    - 0.12.10
+    - 0.12.11
+    - 0.12.9
