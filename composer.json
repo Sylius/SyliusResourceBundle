@@ -69,7 +69,7 @@
         "symfony/dotenv": "^4.4 || ^5.2",
         "symplify/easy-coding-standard": "^8.3",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "4.7.0"
+        "vimeo/psalm": "4.7.2"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
