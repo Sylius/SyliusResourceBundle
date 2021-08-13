@@ -64,13 +64,14 @@
         "phpstan/phpstan-phpunit": "0.12.18",
         "phpstan/phpstan-webmozart-assert": "0.12.12",
         "phpunit/phpunit": "^9.5",
-        "sylius-labs/coding-standard": "^3.0",
+        "sylius-labs/coding-standard": "^4.0",
         "sylius/grid-bundle": "^1.7",
         "symfony/dependency-injection": "^4.4 || ^5.2",
         "symfony/dotenv": "^4.4 || ^5.2",
-        "symplify/easy-coding-standard": "^8.3",
+        "symplify/easy-coding-standard": "^9.4",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "4.7.0"
+        "vimeo/psalm": "4.7.0",
+        "rector/rector": "^0.11.47"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
