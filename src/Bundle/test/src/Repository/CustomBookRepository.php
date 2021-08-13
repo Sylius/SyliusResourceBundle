@@ -18,8 +18,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class CustomBookRepository
 {
-    /** @var RepositoryInterface */
-    private $repository;
+    private RepositoryInterface $repository;
 
     public function __construct(RepositoryInterface $repository)
     {

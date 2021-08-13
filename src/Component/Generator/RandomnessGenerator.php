@@ -15,11 +15,9 @@ namespace Sylius\Component\Resource\Generator;
 
 final class RandomnessGenerator implements RandomnessGeneratorInterface
 {
-    /** @var string */
-    private $uriSafeAlphabet;
+    private string $uriSafeAlphabet;
 
-    /** @var string */
-    private $digits;
+    private string $digits;
 
     public function __construct()
     {

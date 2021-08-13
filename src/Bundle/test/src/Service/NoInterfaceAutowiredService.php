@@ -20,17 +20,13 @@ use Sylius\Component\Resource\Factory\Factory;
 
 final class NoInterfaceAutowiredService
 {
-    /** @var BookFactory */
-    private $bookFactory;
+    private BookFactory $bookFactory;
 
-    /** @var BookRepository */
-    private $bookRepository;
+    private BookRepository $bookRepository;
 
-    /** @var Factory */
-    private $comicBookFactory;
+    private Factory $comicBookFactory;
 
-    /** @var EntityRepository */
-    private $comicBookRepository;
+    private EntityRepository $comicBookRepository;
 
     public function __construct(
         BookFactory $bookFactory,

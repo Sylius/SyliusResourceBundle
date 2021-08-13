@@ -23,11 +23,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ResourceToIdentifierType extends AbstractType
 {
-    /** @var RepositoryInterface */
-    private $repository;
+    private RepositoryInterface $repository;
 
-    /** @var MetadataInterface */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     public function __construct(RepositoryInterface $repository, MetadataInterface $metadata)
     {

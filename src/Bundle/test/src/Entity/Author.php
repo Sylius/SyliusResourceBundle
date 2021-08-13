@@ -21,20 +21,18 @@ use JMS\Serializer\Annotation as Serializer;
 final class Author
 {
     /**
-     * @var string|null
      *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */
-    private $firstName;
+    private ?string $firstName = null;
 
     /**
-     * @var string|null
      *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */
-    private $lastName;
+    private ?string $lastName = null;
 
     public function getFirstName(): ?string
     {

@@ -19,14 +19,11 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RequestConfiguration
 {
-    /** @var Request */
-    private $request;
+    private Request $request;
 
-    /** @var MetadataInterface */
-    private $metadata;
+    private MetadataInterface $metadata;
 
-    /** @var Parameters */
-    private $parameters;
+    private Parameters $parameters;
 
     public function __construct(MetadataInterface $metadata, Request $request, Parameters $parameters)
     {

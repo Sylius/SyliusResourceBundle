@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Repository\TranslatableRepositoryInterface;
  */
 class TranslatableRepository extends DocumentRepository implements TranslatableRepositoryInterface
 {
-    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null)
+    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null): void
     {
         if (null === $criteria) {
             return;
@@ -42,7 +42,7 @@ class TranslatableRepository extends DocumentRepository implements TranslatableR
         }
     }
 
-    protected function applySorting(QueryBuilder $queryBuilder, array $sorting = null)
+    protected function applySorting(QueryBuilder $queryBuilder, array $sorting = null): void
     {
         if (null === $sorting) {
             return;

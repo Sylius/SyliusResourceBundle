@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Validator;
 
+use Sylius\Bundle\ResourceBundle\Validator\Constraints\Enabled;
 use Sylius\Component\Resource\Model\ToggleableInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -22,7 +23,7 @@ final class EnabledValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void
     {
-        Assert::isInstanceOf($constraint, Constraints\Enabled::class);
+        Assert::isInstanceOf($constraint, Enabled::class);
 
         if (null === $value) {
             return;

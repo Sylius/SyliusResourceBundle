@@ -26,10 +26,8 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
 {
     /**
      * Configure format of mapping files.
-     *
-     * @var string
      */
-    protected $mappingFormat = ResourceBundleInterface::MAPPING_XML;
+    protected string $mappingFormat = ResourceBundleInterface::MAPPING_XML;
 
     public function build(ContainerBuilder $container): void
     {

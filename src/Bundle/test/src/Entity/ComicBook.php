@@ -22,29 +22,26 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 class ComicBook implements ResourceInterface
 {
     /**
-     * @var int
      *
      * @Serializer\Expose
      * @Serializer\Type("integer")
      * @Serializer\XmlAttribute
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var Author
      *
      * @Serializer\Expose
      * @Serializer\Until("1.1")
      */
-    private $author;
+    private ?Author $author = null;
 
     /**
-     * @var string
      *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */
-    private $title;
+    private ?string $title = null;
 
     public function getId()
     {

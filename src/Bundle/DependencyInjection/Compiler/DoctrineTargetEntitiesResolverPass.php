@@ -25,8 +25,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
  */
 final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
 {
-    /** @var TargetEntitiesResolverInterface */
-    private $targetEntitiesResolver;
+    private TargetEntitiesResolverInterface $targetEntitiesResolver;
 
     public function __construct(TargetEntitiesResolverInterface $targetEntitiesResolver)
     {

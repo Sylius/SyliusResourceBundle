@@ -15,8 +15,7 @@ namespace App\Entity;
 
 class GedmoExtendedExample extends GedmoBaseExample
 {
-    /** @var string|null */
-    private $extra;
+    private ?string $extra = null;
 
     public function getExtra(): ?string
     {

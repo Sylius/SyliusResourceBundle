@@ -18,11 +18,9 @@ use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInte
 
 final class CustomBookFactory
 {
-    /** @var string */
-    private $className;
+    private string $className;
 
-    /** @var TranslationLocaleProviderInterface */
-    private $localeProvider;
+    private TranslationLocaleProviderInterface $localeProvider;
 
     public function __construct(string $className, TranslationLocaleProviderInterface $localeProvider)
     {

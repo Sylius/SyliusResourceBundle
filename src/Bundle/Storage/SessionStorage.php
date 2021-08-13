@@ -18,8 +18,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SessionStorage implements StorageInterface
 {
-    /** @var SessionInterface */
-    private $session;
+    private SessionInterface $session;
 
     public function __construct(SessionInterface $session)
     {

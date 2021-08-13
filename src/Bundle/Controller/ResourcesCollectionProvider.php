@@ -21,11 +21,9 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class ResourcesCollectionProvider implements ResourcesCollectionProviderInterface
 {
-    /** @var ResourcesResolverInterface */
-    private $resourcesResolver;
+    private ResourcesResolverInterface $resourcesResolver;
 
-    /** @var PagerfantaFactory */
-    private $pagerfantaRepresentationFactory;
+    private PagerfantaFactory $pagerfantaRepresentationFactory;
 
     public function __construct(ResourcesResolverInterface $resourcesResolver, PagerfantaFactory $pagerfantaRepresentationFactory)
     {

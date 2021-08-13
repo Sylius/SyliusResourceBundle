@@ -22,14 +22,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class ResourcesResolver implements ResourcesResolverInterface
 {
-    /** @var ResourcesResolverInterface */
-    private $decoratedResolver;
+    private ResourcesResolverInterface $decoratedResolver;
 
-    /** @var GridProviderInterface */
-    private $gridProvider;
+    private GridProviderInterface $gridProvider;
 
-    /** @var ResourceGridViewFactoryInterface */
-    private $gridViewFactory;
+    private ResourceGridViewFactoryInterface $gridViewFactory;
 
     public function __construct(
         ResourcesResolverInterface $decoratedResolver,

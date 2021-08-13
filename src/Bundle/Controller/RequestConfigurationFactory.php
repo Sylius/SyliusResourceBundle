@@ -26,8 +26,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
 
     private const API_GROUPS_REGEXP = '/(g|groups)=(?P<groups>[a-z,_\s]+)/i';
 
-    /** @var ParametersParserInterface */
-    private $parametersParser;
+    private ParametersParserInterface $parametersParser;
 
     /**
      * @var string
@@ -36,8 +35,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
      */
     private $configurationClass;
 
-    /** @var array */
-    private $defaultParameters;
+    private array $defaultParameters;
 
     /**
      * @psalm-param class-string<RequestConfiguration> $configurationClass

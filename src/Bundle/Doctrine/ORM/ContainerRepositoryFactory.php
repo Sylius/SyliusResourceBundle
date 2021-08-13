@@ -20,14 +20,13 @@ use Doctrine\Persistence\ObjectRepository;
 
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
-    /** @var RepositoryFactory */
-    private $doctrineFactory;
+    private RepositoryFactory $doctrineFactory;
 
     /** @var string[] */
-    private $genericEntities;
+    private array $genericEntities;
 
     /** @var ObjectRepository[] */
-    private $managedRepositories = [];
+    private array $managedRepositories = [];
 
     /**
      * @param string[] $genericEntities
