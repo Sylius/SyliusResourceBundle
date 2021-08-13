@@ -15,8 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Form\Registry;
 
 final class FormTypeRegistry implements FormTypeRegistryInterface
 {
-    /** @var array|string[][] */
-    private $formTypes = [];
+    private array $formTypes = [];
 
     public function add(string $identifier, string $typeIdentifier, string $formType): void
     {

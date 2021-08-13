@@ -29,8 +29,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy|ServiceRegistryInterface */
-    private $resourceRepositoryRegistry;
+    private ObjectProphecy $resourceRepositoryRegistry;
 
     protected function setUp(): void
     {

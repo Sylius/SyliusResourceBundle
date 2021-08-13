@@ -37,56 +37,39 @@ class ResourceController
     use ControllerTrait;
     use ContainerAwareTrait;
 
-    /** @var MetadataInterface */
-    protected $metadata;
+    protected MetadataInterface $metadata;
 
-    /** @var RequestConfigurationFactoryInterface */
-    protected $requestConfigurationFactory;
+    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    /** @var ViewHandlerInterface|null */
-    protected $viewHandler;
+    protected ?ViewHandlerInterface $viewHandler;
 
-    /** @var RepositoryInterface */
-    protected $repository;
+    protected RepositoryInterface $repository;
 
-    /** @var FactoryInterface */
-    protected $factory;
+    protected FactoryInterface $factory;
 
-    /** @var NewResourceFactoryInterface */
-    protected $newResourceFactory;
+    protected NewResourceFactoryInterface $newResourceFactory;
 
-    /** @var ObjectManager */
-    protected $manager;
+    protected ObjectManager $manager;
 
-    /** @var SingleResourceProviderInterface */
-    protected $singleResourceProvider;
+    protected SingleResourceProviderInterface $singleResourceProvider;
 
-    /** @var ResourcesCollectionProviderInterface */
-    protected $resourcesCollectionProvider;
+    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
 
-    /** @var ResourceFormFactoryInterface */
-    protected $resourceFormFactory;
+    protected ResourceFormFactoryInterface $resourceFormFactory;
 
-    /** @var RedirectHandlerInterface */
-    protected $redirectHandler;
+    protected RedirectHandlerInterface $redirectHandler;
 
-    /** @var FlashHelperInterface */
-    protected $flashHelper;
+    protected FlashHelperInterface $flashHelper;
 
-    /** @var AuthorizationCheckerInterface */
-    protected $authorizationChecker;
+    protected AuthorizationCheckerInterface $authorizationChecker;
 
-    /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /** @var StateMachineInterface|null */
-    protected $stateMachine;
+    protected ?StateMachineInterface $stateMachine;
 
-    /** @var ResourceUpdateHandlerInterface */
-    protected $resourceUpdateHandler;
+    protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
-    /** @var ResourceDeleteHandlerInterface */
-    protected $resourceDeleteHandler;
+    protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -335,7 +318,7 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::DELETE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $request->request->get('_csrf_token'))) {
+        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get('_csrf_token'))) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid csrf token.');
         }
 
@@ -394,7 +377,7 @@ class ResourceController
 
         if (
             $configuration->isCsrfProtectionEnabled() &&
-            !$this->isCsrfTokenValid(ResourceActions::BULK_DELETE, $request->request->get('_csrf_token'))
+            !$this->isCsrfTokenValid(ResourceActions::BULK_DELETE, (string) $request->request->get('_csrf_token'))
         ) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid csrf token.');
         }

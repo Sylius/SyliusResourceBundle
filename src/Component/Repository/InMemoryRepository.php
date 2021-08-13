@@ -24,11 +24,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class InMemoryRepository implements RepositoryInterface
 {
-    /** @var PropertyAccessor */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
-    /** @var ArrayObject */
-    protected $arrayObject;
+    protected \ArrayObject $arrayObject;
 
     /** @psalm-var class-string */
     protected $interface;

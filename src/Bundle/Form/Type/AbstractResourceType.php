@@ -18,11 +18,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractResourceType extends AbstractType
 {
-    /** @var string */
-    protected $dataClass;
+    protected string $dataClass;
 
     /** @var string[] */
-    protected $validationGroups = [];
+    protected array $validationGroups = [];
 
     /**
      * @param string $dataClass FQCN

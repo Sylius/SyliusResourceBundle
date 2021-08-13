@@ -20,8 +20,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class RecursiveTransformer implements DataTransformerInterface
 {
-    /** @var DataTransformerInterface */
-    private $decoratedTransformer;
+    private DataTransformerInterface $decoratedTransformer;
 
     public function __construct(DataTransformerInterface $decoratedTransformer)
     {

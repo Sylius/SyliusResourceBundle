@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface
 {
-    /** @var ConfigurableViewHandlerInterface */
-    private $restViewHandler;
+    private ConfigurableViewHandlerInterface $restViewHandler;
 
     public function __construct(ConfigurableViewHandlerInterface $restViewHandler)
     {

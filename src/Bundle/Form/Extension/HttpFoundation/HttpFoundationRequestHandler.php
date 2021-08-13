@@ -31,8 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class HttpFoundationRequestHandler implements RequestHandlerInterface
 {
-    /** @var ServerParams */
-    private $serverParams;
+    private ServerParams $serverParams;
 
     public function __construct(ServerParams $serverParams = null)
     {
@@ -85,7 +84,13 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
             } elseif ($request->request->has($name) || $request->files->has($name)) {
                 /** @psalm-var array|null $default */
                 $default = $form->getConfig()->getCompound() ? [] : null;
-                $params = $request->request->get($name, $default);
+
+                if ($request->request->has($name)) {
+                    $params = $request->request->get($name);
+                } else {
+                    $params = $default;
+                }
+
                 $files = $request->files->get($name, $default);
             } else {
                 // Don't submit the form if it is not present in the request

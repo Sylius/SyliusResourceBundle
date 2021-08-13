@@ -28,11 +28,9 @@ final class ODMTranslatableListener implements EventSubscriber
     /** @var string */
     private $currentLocale;
 
-    /** @var string */
-    private $fallbackLocale;
+    private string $fallbackLocale;
 
-    /** @var array */
-    private $mappings;
+    private array $mappings;
 
     /**
      * @param string $fallbackLocale

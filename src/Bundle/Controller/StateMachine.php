@@ -18,8 +18,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class StateMachine implements StateMachineInterface
 {
-    /** @var FactoryInterface */
-    private $stateMachineFactory;
+    private FactoryInterface $stateMachineFactory;
 
     public function __construct(FactoryInterface $stateMachineFactory)
     {

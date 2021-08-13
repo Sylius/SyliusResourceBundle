@@ -26,20 +26,16 @@ class ResourceControllerEvent extends GenericEvent
 
     public const TYPE_SUCCESS = 'success';
 
-    /** @var string */
-    private $messageType = '';
+    private string $messageType = '';
 
-    /** @var string */
-    private $message = '';
+    private string $message = '';
 
     /** @var array */
     private $messageParameters = [];
 
-    /** @var int */
-    private $errorCode = 500;
+    private int $errorCode = 500;
 
-    /** @var Response|null */
-    private $response;
+    private ?Response $response = null;
 
     /** @psalm-suppress MissingReturnType */
     public function stop(string $message, string $type = self::TYPE_ERROR, array $parameters = [], int $errorCode = 500)

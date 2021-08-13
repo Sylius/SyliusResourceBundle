@@ -28,21 +28,19 @@ class Book implements ResourceInterface, TranslatableInterface
     }
 
     /**
-     * @var int
      *
      * @Serializer\Expose
      * @Serializer\Type("integer")
      * @Serializer\XmlAttribute
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
      *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */
-    private $author;
+    private ?string $author = null;
 
     /**
      * @return int

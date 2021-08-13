@@ -18,11 +18,9 @@ use Symfony\Component\Validator\Constraint;
 
 final class UniqueWithinCollectionConstraint extends Constraint
 {
-    /** @var string */
-    public $message = 'This code must be unique within this collection.';
+    public string $message = 'This code must be unique within this collection.';
 
-    /** @var string */
-    public $attributePath = 'code';
+    public string $attributePath = 'code';
 
     public function validatedBy(): string
     {

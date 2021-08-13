@@ -20,8 +20,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class CollectionToStringTransformer implements DataTransformerInterface
 {
-    /** @var string */
-    private $delimiter;
+    private string $delimiter;
 
     public function __construct(string $delimiter)
     {
@@ -62,6 +61,7 @@ final class CollectionToStringTransformer implements DataTransformerInterface
             return new ArrayCollection();
         }
 
-        return new ArrayCollection(explode($this->delimiter, $value) ?: []);
+        /** Explode would return string[]|false for PHP 7.4 and string[] for PHP 8 which messes in PHPStan algorithms */
+        return new ArrayCollection(explode($this->delimiter, $value) ?: []); // @phpstan-ignore-line
     }
 }

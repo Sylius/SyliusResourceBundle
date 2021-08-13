@@ -20,11 +20,9 @@ use Webmozart\Assert\Assert;
 
 final class ParametersParser implements ParametersParserInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
-    /** @var ExpressionLanguage */
-    private $expression;
+    private ExpressionLanguage $expression;
 
     public function __construct(ContainerInterface $container, ExpressionLanguage $expression)
     {
