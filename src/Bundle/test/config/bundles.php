@@ -11,16 +11,28 @@
 
 declare(strict_types=1);
 
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use FOS\RestBundle\FOSRestBundle;
+use JMS\SerializerBundle\JMSSerializerBundle;
+use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
+use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
+use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
+
 return [
-    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
-    Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
-    Sylius\Bundle\ResourceBundle\SyliusResourceBundle::class => ['all' => true],
-    BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
-    Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true, 'test_without_twig' => false],
-    FOS\RestBundle\FOSRestBundle::class => ['test' => true],
-    JMS\SerializerBundle\JMSSerializerBundle::class => ['test' => true],
-    Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle::class => ['test' => true],
-    Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle::class => ['test' => true],
-    Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle::class => ['test' => true],
-    winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
+    FrameworkBundle::class => ['all' => true],
+    DoctrineBundle::class => ['all' => true],
+    SyliusResourceBundle::class => ['all' => true],
+    BabDevPagerfantaBundle::class => ['all' => true],
+    TwigBundle::class => ['all' => true, 'test_without_twig' => false],
+    FOSRestBundle::class => ['test' => true],
+    JMSSerializerBundle::class => ['test' => true],
+    BazingaHateoasBundle::class => ['test' => true],
+    FidryAliceDataFixturesBundle::class => ['test' => true],
+    NelmioAliceBundle::class => ['test' => true],
+    winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
 ];

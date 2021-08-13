@@ -37,56 +37,39 @@ class ResourceController
     use ControllerTrait;
     use ContainerAwareTrait;
 
-    /** @var MetadataInterface */
-    protected $metadata;
+    protected MetadataInterface $metadata;
 
-    /** @var RequestConfigurationFactoryInterface */
-    protected $requestConfigurationFactory;
+    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    /** @var ViewHandlerInterface|null */
-    protected $viewHandler;
+    protected ?ViewHandlerInterface $viewHandler;
 
-    /** @var RepositoryInterface */
-    protected $repository;
+    protected RepositoryInterface $repository;
 
-    /** @var FactoryInterface */
-    protected $factory;
+    protected FactoryInterface $factory;
 
-    /** @var NewResourceFactoryInterface */
-    protected $newResourceFactory;
+    protected NewResourceFactoryInterface $newResourceFactory;
 
-    /** @var ObjectManager */
-    protected $manager;
+    protected ObjectManager $manager;
 
-    /** @var SingleResourceProviderInterface */
-    protected $singleResourceProvider;
+    protected SingleResourceProviderInterface $singleResourceProvider;
 
-    /** @var ResourcesCollectionProviderInterface */
-    protected $resourcesCollectionProvider;
+    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
 
-    /** @var ResourceFormFactoryInterface */
-    protected $resourceFormFactory;
+    protected ResourceFormFactoryInterface $resourceFormFactory;
 
-    /** @var RedirectHandlerInterface */
-    protected $redirectHandler;
+    protected RedirectHandlerInterface $redirectHandler;
 
-    /** @var FlashHelperInterface */
-    protected $flashHelper;
+    protected FlashHelperInterface $flashHelper;
 
-    /** @var AuthorizationCheckerInterface */
-    protected $authorizationChecker;
+    protected AuthorizationCheckerInterface $authorizationChecker;
 
-    /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /** @var StateMachineInterface|null */
-    protected $stateMachine;
+    protected ?StateMachineInterface $stateMachine;
 
-    /** @var ResourceUpdateHandlerInterface */
-    protected $resourceUpdateHandler;
+    protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
-    /** @var ResourceDeleteHandlerInterface */
-    protected $resourceDeleteHandler;
+    protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
     public function __construct(
         MetadataInterface $metadata,

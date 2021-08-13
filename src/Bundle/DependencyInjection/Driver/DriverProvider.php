@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Metadata\MetadataInterface;
 final class DriverProvider
 {
     /** @var DriverInterface[] */
-    private static $drivers = [];
+    private static array $drivers = [];
 
     /**
      * @throws UnknownDriverException

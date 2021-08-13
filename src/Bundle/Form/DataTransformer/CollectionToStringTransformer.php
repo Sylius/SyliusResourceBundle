@@ -20,8 +20,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class CollectionToStringTransformer implements DataTransformerInterface
 {
-    /** @var string */
-    private $delimiter;
+    private string $delimiter;
 
     public function __construct(string $delimiter)
     {

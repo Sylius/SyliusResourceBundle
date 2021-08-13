@@ -28,14 +28,11 @@ class DefaultParentListener
     /** @var DocumentManagerInterface */
     private $documentManager;
 
-    /** @var string */
-    private $parentPath;
+    private string $parentPath;
 
-    /** @var bool */
-    private $autocreate;
+    private bool $autocreate;
 
-    /** @var bool */
-    private $force;
+    private bool $force;
 
     /**
      * @param string $parentPath

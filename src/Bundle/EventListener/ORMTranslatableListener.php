@@ -28,11 +28,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class ORMTranslatableListener implements EventSubscriber
 {
-    /** @var RegistryInterface */
-    private $resourceMetadataRegistry;
+    private RegistryInterface $resourceMetadataRegistry;
 
-    /** @var TranslatableEntityLocaleAssignerInterface */
-    private $translatableEntityLocaleAssigner;
+    private TranslatableEntityLocaleAssignerInterface $translatableEntityLocaleAssigner;
 
     public function __construct(
         RegistryInterface $resourceMetadataRegistry,

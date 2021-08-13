@@ -19,14 +19,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class SecondAutowiredService
 {
-    /** @var BookFactoryInterface */
-    public $bookFactory;
+    public BookFactoryInterface $bookFactory;
 
-    /** @var BookRepositoryInterface */
-    public $bookRepository;
+    public BookRepositoryInterface $bookRepository;
 
-    /** @var EntityManagerInterface */
-    public $bookManager;
+    public EntityManagerInterface $bookManager;
 
     public function __construct(
         BookFactoryInterface $bookFactory,

@@ -25,8 +25,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
  */
 final class ResourceMappingDriverChain extends MappingDriverChain
 {
-    /** @var RegistryInterface */
-    private $resourceRegistry;
+    private RegistryInterface $resourceRegistry;
 
     public function __construct(MappingDriver $mappingDriver, RegistryInterface $resourceRegistry)
     {

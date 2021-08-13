@@ -18,11 +18,9 @@ use Doctrine\Inflector\InflectorFactory;
 
 final class Metadata implements MetadataInterface
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $applicationName;
+    private string $applicationName;
 
     /** @var string */
     private $driver;
@@ -33,8 +31,7 @@ final class Metadata implements MetadataInterface
     /** @var array */
     private $parameters;
 
-    /** @var InflectorObject|null */
-    private static $inflectorInstance;
+    private static ?InflectorObject $inflectorInstance = null;
 
     private function __construct(string $name, string $applicationName, array $parameters)
     {

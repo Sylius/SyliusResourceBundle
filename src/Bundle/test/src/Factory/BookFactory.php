@@ -20,11 +20,9 @@ use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInte
 
 final class BookFactory implements BookFactoryInterface
 {
-    /** @var FactoryInterface */
-    private $factory;
+    private FactoryInterface $factory;
 
-    /** @var TranslationLocaleProviderInterface */
-    private $localeProvider;
+    private TranslationLocaleProviderInterface $localeProvider;
 
     public function __construct(FactoryInterface $factory, TranslationLocaleProviderInterface $localeProvider)
     {

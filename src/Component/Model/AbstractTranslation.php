@@ -17,11 +17,9 @@ use Webmozart\Assert\Assert;
 
 class AbstractTranslation implements TranslationInterface
 {
-    /** @var string|null */
-    protected $locale;
+    protected ?string $locale = null;
 
-    /** @var TranslatableInterface|null */
-    protected $translatable;
+    protected ?TranslatableInterface $translatable = null;
 
     public function getTranslatable(): TranslatableInterface
     {

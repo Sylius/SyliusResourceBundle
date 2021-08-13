@@ -15,11 +15,9 @@ namespace Sylius\Component\Resource\Exception;
 
 class DeleteHandlingException extends \Exception
 {
-    /** @var string */
-    protected $flash;
+    protected string $flash;
 
-    /** @var int */
-    protected $apiResponseCode;
+    protected int $apiResponseCode;
 
     public function __construct(
         string $message = 'Ups, something went wrong during deleting a resource, please try again.',

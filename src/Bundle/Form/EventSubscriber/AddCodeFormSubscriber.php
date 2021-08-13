@@ -22,11 +22,9 @@ use Symfony\Component\Form\FormEvents;
 
 final class AddCodeFormSubscriber implements EventSubscriberInterface
 {
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var array */
-    private $options;
+    private array $options;
 
     /**
      * @param string $type

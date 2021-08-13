@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Metadata;
 final class Registry implements RegistryInterface
 {
     /** @var array|MetadataInterface[] */
-    private $metadata = [];
+    private array $metadata = [];
 
     public function getAll(): iterable
     {

@@ -18,8 +18,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
 {
-    /** @var StateMachineInterface|null */
-    private $stateMachine;
+    private ?StateMachineInterface $stateMachine;
 
     public function __construct(?StateMachineInterface $stateMachine)
     {

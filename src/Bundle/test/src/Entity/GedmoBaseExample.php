@@ -17,11 +17,9 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 class GedmoBaseExample implements ResourceInterface
 {
-    /** @var int */
-    private $id;
+    private ?int $id = null;
 
-    /** @var int|null */
-    private $position;
+    private ?int $position = null;
 
     public function getId(): ?int
     {

@@ -25,17 +25,13 @@ use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
 {
-    /** @var GridRendererInterface */
-    private $gridRenderer;
+    private GridRendererInterface $gridRenderer;
 
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
-    /** @var OptionsParserInterface */
-    private $optionsParser;
+    private OptionsParserInterface $optionsParser;
 
-    /** @var array */
-    private $actionTemplates;
+    private array $actionTemplates;
 
     public function __construct(
         GridRendererInterface $gridRenderer,

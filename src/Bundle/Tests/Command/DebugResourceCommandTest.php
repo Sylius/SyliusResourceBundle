@@ -26,11 +26,9 @@ final class DebugResourceCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy|RegistryInterface */
-    private $registry;
+    private ObjectProphecy $registry;
 
-    /** @var CommandTester */
-    private $tester;
+    private CommandTester $tester;
 
     public function setUp(): void
     {
