@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Resource;
 use App\Entity\Book;
 use App\Entity\ComicBook;
 use App\Repository\BookRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\FactoryInterface;
@@ -31,17 +32,20 @@ final class ResourceServicesTest extends WebTestCase
     {
         $client = parent::createClient();
 
-        $productRepository = $client->getContainer()->get('app.repository.book');
-        $this->assertTrue($productRepository instanceof RepositoryInterface);
+        $repository = $client->getContainer()->get('app.repository.book');
+        $this->assertTrue($repository instanceof RepositoryInterface);
 
-        $productRepository = $client->getContainer()->get('app.manager.book');
-        $this->assertTrue($productRepository instanceof EntityManager);
+        $repository = $client->getContainer()->get('app.repository.comic_book');
+        $this->assertTrue($repository instanceof ServiceEntityRepository);
 
-        $productRepository = $client->getContainer()->get('app.controller.book');
-        $this->assertTrue($productRepository instanceof ResourceController);
+        $repository = $client->getContainer()->get('app.manager.book');
+        $this->assertTrue($repository instanceof EntityManager);
 
-        $productRepository = $client->getContainer()->get('app.factory.book');
-        $this->assertTrue($productRepository instanceof FactoryInterface);
+        $repository = $client->getContainer()->get('app.controller.book');
+        $this->assertTrue($repository instanceof ResourceController);
+
+        $repository = $client->getContainer()->get('app.factory.book');
+        $this->assertTrue($repository instanceof FactoryInterface);
     }
 
     /**
