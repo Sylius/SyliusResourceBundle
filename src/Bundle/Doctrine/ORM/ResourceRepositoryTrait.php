@@ -16,8 +16,8 @@ use Sylius\Component\Resource\Model\ResourceInterface;
  * @property EntityManagerInterface $_em
  * @property ClassMetadata          $_class
  *
- * @method createQueryBuilder(string $alias, string $indexBy = null)
- * @method find($id, $lockMode = null, $lockVersion = null)
+ * @method QueryBuilder createQueryBuilder(string $alias, string $indexBy = null)
+ * @method ?object      find($id, $lockMode = null, $lockVersion = null)
  */
 trait ResourceRepositoryTrait
 {
