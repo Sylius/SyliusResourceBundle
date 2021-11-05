@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------
+
+by mbabker at 2021-03-23T13:44:34Z
+
+If you wanted, sure.  But from your perspective from this bundle since it’s
+only using the query adapters, there aren’t really any API changes that
+make supporting both versions complex (if anything the benefit is less CI
+time).  Considering the new major just shipped, and the breaking changes
+are quite minimal (strictly typed API and minor template output changes)
+I’d say it’s better to support both versions for a little while (even if
+it’s just one or two minor versions) then go 3.0 only.
+
+Also keep in mind that the UiBundle is still using deprecated APIs from
+PagerfantaBundle.  So 3.0 only becomes a blocker to allowing this bundle to
+be upgraded in the main app until that issue is addressed.
+
+On Tue, Mar 23, 2021 at 2:59 AM Łukasz Chruściel ***@***.***>
+wrote:
+
+> ***@***.**** commented on this pull request.
+>
+> Can't we just migrate to 3.0 only?
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/Sylius/SyliusResourceBundle/pull/298#pullrequestreview-618291602>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AACZ7INXIDEZESL22TJVB3DTFBC5LANCNFSM4ZPAQLCA>
+> .
+>
+--
+- Michael Please pardon any errors, this message was sent from my iPhone.
+
+---------------------------------------------------------------------------
+
+by mbabker at 2021-11-03T14:31:16Z
+
+I plan on EOL'ing the 2.x branch of the PagerfantaBundle at the end of this year, and the Pagerfanta library's 2.x branch won't get much support in 2022.  So, moving forward with this and https://github.com/Sylius/SyliusGridBundle/pull/143 would be really helpful in keeping Sylius from being locked to non-supported software branches (which also means https://github.com/Sylius/Sylius/issues/12462 needs some focus to be able to fully complete the upgrade).
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2021-11-03T15:32:15Z
+
+Therefore, let's just migrate to 3.0
+
+---------------------------------------------------------------------------
+
+by mbabker at 2021-11-03T21:11:13Z
+
+> Therefore, let's just migrate to 3.0
+
+Done
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2021-11-05T16:58:16Z
+
+Thanks, Michael! :1st_place_medal:
