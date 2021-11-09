@@ -2,7 +2,7 @@
     {% from '@SyliusResource/Macros/notification.html.twig' import error %}
     {% set attr = attr|merge({'class': attr.class|default ~ ' controls collection-widget'}) %}
 
-    {% spaceless %}
+    {% apply spaceless %}
         <div data-form-type="collection"
              {{ block('widget_container_attributes') }}
              {% if prototype is defined and allow_add %}
@@ -34,11 +34,11 @@
                 </a>
             {% endif %}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {%- endblock collection_widget %}
 
 {% macro collectionItem(form, allow_delete, button_delete_label, index) %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div data-form-collection="item"
              data-form-collection-index="{{ index }}"
              class="collection-item">
@@ -58,5 +58,5 @@
                 {% endif %}
             </div>
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endmacro %}
