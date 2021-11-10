@@ -13,14 +13,21 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults public="true" />
+        <defaults public="false" />
 
-        <service id="sylius.routing.loader.resource" class="Sylius\Bundle\ResourceBundle\Routing\ResourceLoader" public="false">
+        <service id="sylius.routing.loader.resource" class="Sylius\Bundle\ResourceBundle\Routing\ResourceLoader">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service">
                 <service class="Sylius\Bundle\ResourceBundle\Routing\RouteFactory" />
             </argument>
             <tag name="routing.loader" />
+        </service>
+
+        <service id="sylius.routing.loader.attributes" class="Sylius\Bundle\ResourceBundle\Routing\AttributesLoader">
+            <!-- TODO make it configurable -->
+            <argument>%kernel.project_dir%/src/Entity</argument>
+            <argument type="service" id="sylius.routing.loader.resource" />
+            <tag name="routing.route_loader" />
         </service>
     </services>
 </container>

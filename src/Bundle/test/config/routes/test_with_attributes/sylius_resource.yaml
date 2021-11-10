@@ -1,0 +1,3 @@
+sylius_resource:
+    resource: 'sylius.routing.loader.attributes'
+    type: service

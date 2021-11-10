@@ -19,6 +19,7 @@
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
             <file name="src/Bundle/EventListener/ODM*.php" />
             <file name="src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php" />
+            <file name="src/Bundle/Routing/AttributesLoader.php" />
         </ignoreFiles>
     </projectFiles>
 
@@ -102,6 +103,8 @@
         <TooManyArguments>
             <errorLevel type="suppress">
                 <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
+                <referencedFunction name="Symfony\Component\Routing\RouteCollection::add" />
+                <referencedFunction name="Symfony\Component\Finder\Finder::sortByName" />
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
