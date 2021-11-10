@@ -90,4 +90,63 @@ final class AttributesLoaderForSyliusRouteTest extends KernelTestCase
             ],
         ], $route->getDefaults());
     }
+
+    /**
+     * @test
+     */
+    public function it_generates_route_from_resource_with_template(): void
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped();
+        }
+
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_template');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book:showAction',
+            '_sylius' => [
+                'template' => 'book/show.html.twig',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_route_from_resource_with_repository(): void
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped();
+        }
+
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_repository');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book:showAction',
+            '_sylius' => [
+                'repository' => [
+                    'method' => 'findOneNewestByAuthor',
+                    'arguments' => '[$author]',
+                ],
+            ],
+        ], $route->getDefaults());
+    }
 }

@@ -78,6 +78,10 @@ final class AttributesLoader
                 $syliusOptions['criteria'] = $arguments['criteria'];
             }
 
+            if (isset($arguments['repository'])) {
+                $syliusOptions['repository'] = $arguments['repository'];
+            }
+
             $route = new Route(
                 $arguments['path'],
                 [
