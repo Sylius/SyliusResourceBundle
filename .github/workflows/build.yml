@@ -22,20 +22,20 @@ jobs:
                         symfony: ^4.4
                     -
                         php: 7.4
-                        symfony: ^5.2
+                        symfony: ^5.3
                     -
                         php: 8.0
                         symfony: ^4.4
                     -
                         php: 8.0
-                        symfony: ^5.2
+                        symfony: ^5.3
                     -
                         php: 7.4
                         symfony: ^4.4
                         twig: ^2.12
                     -
                         php: 7.4
-                        symfony: ^5.2
+                        symfony: ^5.3
                         twig: ^3.0
 
         steps:
