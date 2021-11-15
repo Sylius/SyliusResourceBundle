@@ -82,6 +82,14 @@ final class AttributesLoader
                 $syliusOptions['repository'] = $arguments['repository'];
             }
 
+            if (isset($arguments['serializationGroups'])) {
+                $syliusOptions['serialization_groups'] = $arguments['serializationGroups'];
+            }
+
+            if (isset($arguments['serializationVersion'])) {
+                $syliusOptions['serialization_version'] = $arguments['serializationVersion'];
+            }
+
             $route = new Route(
                 $arguments['path'],
                 [
@@ -94,6 +102,7 @@ final class AttributesLoader
                 $arguments['schemes'] ?? [],
                 $arguments['methods'] ?? []
             );
+
             $routeCollection->add($arguments['name'], $route, $arguments['priority'] ?? 0);
         }
     }
