@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Routing;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Routing\RouteCompiler;
 
 final class AttributesLoaderForSyliusRouteTest extends KernelTestCase
 {
@@ -281,5 +282,79 @@ final class AttributesLoaderForSyliusRouteTest extends KernelTestCase
         $route = $routesCollection->get('show_book_with_priority');
         $this->assertNotNull($route);
         $this->assertSame($route, array_values($routesCollection->all())[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_route_from_resource_with_options(): void
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped();
+        }
+
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_options');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals([
+            'compiler_class' => RouteCompiler::class,
+            'utf8' => true,
+        ], $route->getOptions());
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_route_from_resource_with_host(): void
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped();
+        }
+
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_host');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals('m.example.com', $route->getHost());
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_route_from_resource_with_schemes(): void
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped();
+        }
+
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_schemes');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals([
+            'https',
+        ], $route->getSchemes());
     }
 }
