@@ -25,7 +25,7 @@
 
         <service id="sylius.routing.loader.attributes" class="Sylius\Bundle\ResourceBundle\Routing\AttributesLoader">
             <!-- TODO make it configurable -->
-            <argument>%kernel.project_dir%/src/Entity</argument>
+            <argument>%sylius.resource.mapping%</argument>
             <argument type="service" id="sylius.routing.loader.resource" />
             <tag name="routing.route_loader" />
         </service>

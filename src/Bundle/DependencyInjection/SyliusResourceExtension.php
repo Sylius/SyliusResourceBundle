@@ -48,6 +48,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $container->setAlias('sylius.translation_locale_provider', $config['translation']['locale_provider'])->setPublic(true);
         }
 
+        $container->setParameter('sylius.resource.mapping', $config['mapping']);
         $container->setParameter('sylius.resource.settings', $config['settings']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 

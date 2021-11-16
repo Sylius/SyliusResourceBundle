@@ -36,6 +36,15 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('mapping')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('paths')
+                            ->defaultValue(['%kernel.project_dir%/src/Entity'])
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->scalarNode('authorization_checker')
                     ->defaultValue('sylius.resource_controller.authorization_checker.disabled')
                     ->cannotBeEmpty()

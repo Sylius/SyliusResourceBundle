@@ -23,15 +23,15 @@ use Webmozart\Assert\Assert;
 
 final class AttributesLoader
 {
-    private string $resourceDirectory;
+    private array $mapping;
 
     private ResourceLoader $resourceLoader;
 
     public function __construct(
-        string $resourceDirectory,
+        array $mapping,
         ResourceLoader $resourceLoader
     ) {
-        $this->resourceDirectory = $resourceDirectory;
+        $this->mapping = $mapping;
         $this->resourceLoader = $resourceLoader;
     }
 
@@ -117,13 +117,19 @@ final class AttributesLoader
 
     private function getReflectionClasses(): \Iterator
     {
-        $resources = $this->getResourcesByPath($this->resourceDirectory);
+        $paths = $this->mapping['paths'] ?? [];
 
-        foreach ($resources as $className) {
-            $reflectionClass = new \ReflectionClass($className);
+        foreach ($paths as $resourceDirectory) {
+            $resources = $this->getResourcesByPath($resourceDirectory);
 
-            yield $className => $reflectionClass;
+            foreach ($resources as $className) {
+                $reflectionClass = new \ReflectionClass($className);
+
+                yield $className => $reflectionClass;
+            }
         }
+
+
     }
 
     private function getResourcesByPath(string $path): array

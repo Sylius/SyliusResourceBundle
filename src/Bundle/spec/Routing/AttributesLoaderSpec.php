@@ -30,7 +30,7 @@ final class AttributesLoaderSpec extends ObjectBehavior
     function let(RegistryInterface $resourceRegistry, RouteFactoryInterface $routeFactory): void
     {
         $this->beConstructedWith(
-            __DIR__.'/../../test/src',
+            ['paths' => [__DIR__.'/../../test/src']],
             new ResourceLoader($resourceRegistry->getWrappedObject(), $routeFactory->getWrappedObject())
         );
     }
@@ -47,6 +47,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -77,6 +81,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -108,6 +116,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -142,6 +154,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -174,6 +190,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -209,6 +229,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -241,6 +265,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -273,6 +301,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -307,6 +339,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -336,6 +372,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -363,6 +403,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -393,6 +437,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -420,6 +468,10 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
