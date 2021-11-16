@@ -21,6 +21,7 @@ use Sylius\Bundle\ResourceBundle\Routing\RouteFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouteCompiler;
@@ -372,7 +373,7 @@ final class AttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
-        if (\PHP_VERSION_ID < 80000) {
+        if (\PHP_VERSION_ID < 80000 || Kernel::MAJOR_VERSION < 5) {
             return;
         }
 

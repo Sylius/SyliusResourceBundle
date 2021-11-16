@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Routing;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCompiler;
 
 final class AttributesLoaderForSyliusRouteTest extends KernelTestCase
@@ -276,7 +277,7 @@ final class AttributesLoaderForSyliusRouteTest extends KernelTestCase
      */
     public function it_generates_routes_from_resource_with_priority(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
+        if (\PHP_VERSION_ID < 80000 || Kernel::MAJOR_VERSION < 5) {
             $this->markTestSkipped();
         }
 
