@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the test-sylius-attributes project.
+ * This file is part of the Sylius package.
  *
- * (c) Mobizel
+ * (c) Paweł Jędrzejewski
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -128,8 +128,6 @@ final class AttributesLoader
                 yield $className => $reflectionClass;
             }
         }
-
-
     }
 
     private function getResourcesByPath(string $path): array
