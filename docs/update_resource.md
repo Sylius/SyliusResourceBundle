@@ -9,7 +9,7 @@ app_book_update:
     path: /books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
 ```
 Done! Now when you go to ``/books/5/edit``, ResourceController will use the repository (``app.repository.book``) to find the book with id == **5**.
 If found it will create the ``app_book`` form, and set the existing book as data.
@@ -38,7 +38,7 @@ app_book_update:
     path: /books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             template: Admin/Book/update.html.twig
 ```
@@ -54,7 +54,7 @@ app_book_update:
     path: /books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             form: App\Form\BookType
 ```
@@ -71,7 +71,7 @@ app_book_update:
     path: /books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             form:
                 type: app_book_custom
@@ -90,7 +90,7 @@ app_book_update:
     path: /books/{title}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             criteria: { title: $title }
 ```
@@ -106,7 +106,7 @@ app_book_update:
     path: /books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             redirect: app_book_index
 ```
@@ -119,7 +119,7 @@ app_book_update:
     path: /genre/{genreId}/books/{id}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             redirect:
                 route: app_genre_show
@@ -139,7 +139,7 @@ app_book_customer_update:
     path: /customer/book-update/{id}
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             event: customer_update
 ```
@@ -159,7 +159,7 @@ app_book_update:
     path: /books/{title}/edit
     methods: [GET, PUT]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             criteria: { title: $title }
             return_content: true
@@ -178,7 +178,7 @@ app_book_update:
     path: /genre/{genreId}/books/{title}/edit
     methods: [GET, PUT, PATCH]
     defaults:
-        _controller: app.controller.book:updateAction
+        _controller: app.controller.book::updateAction
         _sylius:
             template: Book/editInGenre.html.twig
             form: app_book_custom
