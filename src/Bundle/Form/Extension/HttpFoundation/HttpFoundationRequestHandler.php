@@ -107,7 +107,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
         $form->submit($data, 'PATCH' !== $method);
     }
 
-    public function isFileUpload($data)
+    public function isFileUpload($data): bool
     {
         return $data instanceof File;
     }
