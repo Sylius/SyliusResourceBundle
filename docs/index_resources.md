@@ -10,7 +10,7 @@ app_book_index:
     path: /books
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
 ```
 When you go to ``/books``, the ResourceController will use the repository (``app.repository.book``) to create a paginator.
 The default template will be rendered - ``App:Book:index.html.twig`` with the paginator as the ``books`` variable.
@@ -29,7 +29,7 @@ app_book_index_inactive:
     path: /books/disabled
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             filterable: true
             criteria:
@@ -49,7 +49,7 @@ app_book_index_top:
     path: /books/top
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             sortable: true
             sorting:
@@ -78,7 +78,7 @@ app_book_index_top:
     path: /books/top
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             paginate: 5
             sortable: true
@@ -99,7 +99,7 @@ app_book_index_top3:
     path: /books/top
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             paginate: false
             limit: 3
@@ -119,7 +119,7 @@ app_book_index:
     path: /{author}/books
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             serialization_groups: { 0: Default, items: [ Custom ] }
 ```
@@ -136,7 +136,7 @@ app_book_index:
     path: /{author}/books
     methods: [GET]
     defaults:
-        _controller: app.controller.book:indexAction
+        _controller: app.controller.book::indexAction
         _sylius:
             template: Author/books.html.twig
             repository:

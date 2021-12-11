@@ -10,7 +10,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
 ```
 Done! Now when you go to ``/books/new``, the ResourceController will use the factory (``app.factory.book``) to create a new book instance.
 Then it will try to create an ``app_book`` form, and set the newly created book as its data.
@@ -38,7 +38,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             template: Book/create.html.twig
 ```
@@ -55,7 +55,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             form: App\Form\BookType
 ```
@@ -73,7 +73,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             form:
                 type: App\Form\BookType
@@ -92,7 +92,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             factory: createNewWithAuthor
 ```
@@ -105,7 +105,7 @@ app_book_create:
     path: /books/{author}/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             factory:
                 method: createNewWithAuthor
@@ -124,7 +124,7 @@ app_book_create:
     path: /{authorId}/books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             factory:
                 method: ["expr:service('app.factory.custom_book_factory')", "createNewByAuthorId"]
@@ -145,7 +145,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             redirect: app_book_index
 ```
@@ -158,7 +158,7 @@ app_book_create:
     path: /genre/{genreId}/books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             redirect:
                 route: app_genre_show
@@ -173,7 +173,7 @@ app_book_create:
     path: /books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             redirect:
                 route: app_book_show
@@ -194,7 +194,7 @@ app_book_customer_create:
     path: /customer/books/new
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             event: customer_create
 ```
@@ -210,7 +210,7 @@ app_genre_book_add:
     path: /{genreName}/books/add
     methods: [GET, POST]
     defaults:
-        _controller: app.controller.book:createAction
+        _controller: app.controller.book::createAction
         _sylius:
             template: Book/addToGenre.html.twig
             form: App\Form\BookType
