@@ -27,23 +27,23 @@ final class CollectionToStringTransformer implements DataTransformerInterface
         $this->delimiter = $delimiter;
     }
 
-    public function transform($values): string
+    public function transform($value): string
     {
-        if (!($values instanceof Collection)) {
+        if (!($value instanceof Collection)) {
             throw new TransformationFailedException(
                 sprintf(
                     'Expected "%s", but got "%s"',
                     Collection::class,
-                    is_object($values) ? get_class($values) : gettype($values)
+                    is_object($value) ? get_class($value) : gettype($value)
                 )
             );
         }
 
-        if ($values->isEmpty()) {
+        if ($value->isEmpty()) {
             return '';
         }
 
-        return implode($this->delimiter, $values->toArray());
+        return implode($this->delimiter, $value->toArray());
     }
 
     public function reverseTransform($value): Collection

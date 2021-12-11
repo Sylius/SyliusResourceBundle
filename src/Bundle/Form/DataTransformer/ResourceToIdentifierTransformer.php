@@ -25,15 +25,15 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
 
     private string $identifier;
 
-    /**
-     * @param string $identifier
-     */
     public function __construct(RepositoryInterface $repository, ?string $identifier = null)
     {
         $this->repository = $repository;
         $this->identifier = $identifier ?? 'id';
     }
 
+    /**
+     * @return string|null
+     */
     public function transform($value)
     {
         if (null === $value) {
@@ -46,6 +46,9 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
+    /**
+     * @return object|null
+     */
     public function reverseTransform($value)
     {
         if (null === $value) {
