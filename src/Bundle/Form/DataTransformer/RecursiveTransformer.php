@@ -37,12 +37,12 @@ final class RecursiveTransformer implements DataTransformerInterface
 
         return $value->map(
             /**
-             * @param mixed $value
+             * @param mixed $currentValue
              *
              * @return mixed
              */
-            function ($value) {
-                return $this->decoratedTransformer->transform($value);
+            function ($currentValue) {
+                return $this->decoratedTransformer->transform($currentValue);
             }
         );
     }
@@ -57,12 +57,12 @@ final class RecursiveTransformer implements DataTransformerInterface
 
         return $value->map(
             /**
-             * @param mixed $value
+             * @param mixed $currentValue
              *
              * @return mixed
              */
-            function ($value) {
-                return $this->decoratedTransformer->reverseTransform($value);
+            function ($currentValue) {
+                return $this->decoratedTransformer->reverseTransform($currentValue);
             }
         );
     }
