@@ -6,7 +6,7 @@ namespace Routing;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
+final class CrudRoutesAttributesLoaderTest extends KernelTestCase
 {
     /**
      * @test
@@ -21,7 +21,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -99,7 +99,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -137,7 +137,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -212,7 +212,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -276,7 +276,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -337,7 +337,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -413,7 +413,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -475,7 +475,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -535,7 +535,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
@@ -575,7 +575,7 @@ final class AttributesLoaderForSyliusCrudRoutesTest extends KernelTestCase
 
         $container = static::$container;
 
-        $attributesLoader = $container->get('sylius.routing.loader.attributes');
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
         $routesCollection = $attributesLoader->__invoke();
 
