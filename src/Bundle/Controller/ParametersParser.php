@@ -61,7 +61,7 @@ final class ParametersParser implements ParametersParserInterface
         }
 
         if (0 === strpos($parameter, '$')) {
-            return $request->get(substr($parameter, 1));
+            return $request->request->get(substr($parameter, 1));
         }
 
         if (0 === strpos($parameter, 'expr:')) {
