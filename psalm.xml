@@ -19,7 +19,8 @@
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
             <file name="src/Bundle/EventListener/ODM*.php" />
             <file name="src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php" />
-            <file name="src/Bundle/Routing/AttributesLoader.php" />
+            <file name="src/Bundle/Routing/RoutesAttributesLoader.php" />
+            <file name="src/Bundle/Routing/CrudRoutesAttributesLoader.php" />
         </ignoreFiles>
     </projectFiles>
 

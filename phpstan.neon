@@ -49,6 +49,7 @@ parameters:
         - '/Parameter \#1 \$maxPerPage of method Pagerfanta\\Pagerfanta<mixed>::setMaxPerPage\(\) expects int<1, max>, int given\./'
         - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
         - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
-        - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\AttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
+        - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\CrudRoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
+        - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\RoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
         - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
         - '/is deprecated since Sylius 1\.8/'
