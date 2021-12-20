@@ -60,6 +60,44 @@ sylius_resource:
             classes:
                 model: App\Document\ArticleDocument
 ```
+
+## Update the resource repository
+
+If you use the "make:entity" command you should have a generated repository which extends ServiceEntityRepository.
+Then you just have to implement `SyliusRepositoryInterface` and use `ResourceRepositoryTrait`.
+
+```php
+namespace App\Repository;
+
+use App\Entity\Book;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+
+class BookRepository extends ServiceEntityRepository implements RepositoryInterface
+{
+    use ResourceRepositoryTrait;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Book::class);
+    }
+}
+```
+
+And configure this repository class:
+
+```yaml
+sylius_resource:
+    drivers:
+        - doctrine/orm
+        - doctrine/phpcr-odm
+    resources:
+        app.book:
+            classes:
+                model: App\Entity\Book
+                repository: App\Entity\BookRepository
+```
+
 ## Generate API routing.
 
 Learn more about using Sylius REST API in these articles:
