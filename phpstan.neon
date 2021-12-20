@@ -9,7 +9,7 @@ parameters:
     checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
 
-    excludes_analyse:
+    excludePaths:
         - %currentWorkingDirectory%/src/Bundle/Controller/ControllerTrait.php
         - %currentWorkingDirectory%/src/Bundle/Controller/Parameters.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
