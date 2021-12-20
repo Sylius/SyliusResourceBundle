@@ -30,6 +30,15 @@
             </errorLevel>
         </DeprecatedMethod>
 
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ParametersParser.php" />
+                <file name="src/Bundle/Controller/RequestConfiguration.php" />
+                <file name="src/Bundle/Controller/ResourceController.php" />
+                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+            </errorLevel>
+        </InternalMethod>
+
         <InvalidDocblock>
             <errorLevel type="suppress">
                 <file name="vendor/doctrine/orm/lib/Doctrine/ORM/EntityRepository.php" />
@@ -39,6 +48,8 @@
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
+                <file name="src/Bundle/Storage/CookieStorage.php" />
+                <file name="src/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </MethodSignatureMismatch>
 
@@ -70,6 +81,14 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::end" />
             </errorLevel>
         </PossiblyUndefinedMethod>
+
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
+                <file name="src/Bundle/Validator/Constraints/Enabled.php" />
+                <file name="src/Bundle/Validator/Constraints/Disabled.php" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
 
         <TooManyArguments>
             <errorLevel type="suppress">
