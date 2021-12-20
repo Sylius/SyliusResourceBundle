@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------
+
+by lchrusciel at 2021-12-17T13:24:30Z
+
++ would be awesome, to add note about it to our docs
+
+---------------------------------------------------------------------------
+
+by loic425 at 2021-12-20T11:47:05Z
+
+> * would be awesome, to add note about it to our docs
+
+I think it has to be here too
+https://docs.sylius.com/en/latest/cookbook/entities/custom-model.html#change-repository-to-extend-entityrepository
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2021-12-20T19:05:35Z
+
+Thank you, Loïc! :tada:
