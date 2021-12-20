@@ -120,7 +120,7 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
         return $this->createQueryBuilder();
     }
 
-    protected function getCollectionQueryBuilder(): QueryBuilder\
+    protected function getCollectionQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder();
     }

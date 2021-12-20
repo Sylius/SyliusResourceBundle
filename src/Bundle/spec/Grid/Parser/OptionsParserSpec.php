@@ -74,7 +74,7 @@ final class OptionsParserSpec extends ObjectBehavior
                         ],
                     ],
                 ]
-        );
+            );
     }
 
     function it_parses_options_with_parameter_from_resource(

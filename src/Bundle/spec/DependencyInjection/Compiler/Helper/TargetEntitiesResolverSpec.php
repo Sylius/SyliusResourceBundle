@@ -89,7 +89,6 @@ class TargetEntitiesResolverSpec extends ObjectBehavior
             'app.bear' => ['classes' => ['model' => Bear::class]],
         ];
 
-
         error_reporting(0);
         $this->resolve($config)->shouldHaveCount(3);
         $this->resolve($config)->shouldHaveKeyWithValue(MammalInterface::class, Resource::class);

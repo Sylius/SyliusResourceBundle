@@ -56,7 +56,7 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
         return new Pagerfanta(new QueryAdapter($queryBuilder));
     }
 
-    protected function getCollectionQueryBuilder(): QueryBuilder\
+    protected function getCollectionQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('o');
     }
