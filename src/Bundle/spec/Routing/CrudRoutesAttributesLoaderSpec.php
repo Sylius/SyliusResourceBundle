@@ -56,6 +56,7 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
 
         $routeCollection->all()->willReturn([$route->getWrappedObject()]);
         $routeCollection->getResources()->willReturn([]);
+        $routeCollection->getAliases()->willReturn([]);
 
         $routeCollection->add(Argument::type('string'), $route)->shouldBeCalled();
 
