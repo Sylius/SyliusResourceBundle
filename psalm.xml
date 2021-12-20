@@ -33,6 +33,12 @@
             </errorLevel>
         </DeprecatedMethod>
 
+        <DuplicateClass>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/Parameters.php" />
+            </errorLevel>
+        </DuplicateClass>
+
         <InternalMethod>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Controller/ParametersParser.php" />
