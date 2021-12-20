@@ -43,6 +43,7 @@ final class CookieStorage implements StorageInterface, EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
+        /** @phpstan-ignore-next-line */
         if (\method_exists($event, 'isMainRequest')) {
             $isMainRequest = $event->isMainRequest();
         } else {
@@ -58,6 +59,7 @@ final class CookieStorage implements StorageInterface, EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
+        /** @phpstan-ignore-next-line */
         if (\method_exists($event, 'isMainRequest')) {
             $isMainRequest = $event->isMainRequest();
         } else {
