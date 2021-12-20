@@ -26,7 +26,8 @@ final class RegisterFormBuilderPassTest extends AbstractCompilerPassTestCase
     {
         $this->setDefinition('sylius.registry.form_builder', new Definition());
 
-        $this->setDefinition('default_form_builder',
+        $this->setDefinition(
+            'default_form_builder',
             (new Definition())
                 ->addTag('sylius.default_resource_form.builder', ['type' => 'foo'])
                 ->addTag('sylius.default_resource_form.builder', ['type' => 'bar'])

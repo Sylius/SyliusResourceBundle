@@ -21,14 +21,12 @@ use JMS\Serializer\Annotation as Serializer;
 final class Author
 {
     /**
-     *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */
     private ?string $firstName = null;
 
     /**
-     *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */

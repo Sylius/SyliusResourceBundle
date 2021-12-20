@@ -225,7 +225,8 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $session->getBag('flashes')->willReturn($flashBag);
 
-        $flashBag->add(ResourceControllerEvent::TYPE_WARNING,
+        $flashBag->add(
+            ResourceControllerEvent::TYPE_WARNING,
             [
                 'message' => 'sylius.channel.cannot_be_deleted',
                 'parameters' => ['%name%' => 'Germany Sylius Webshop'],

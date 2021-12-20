@@ -22,7 +22,7 @@ use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 final class RegisterStateMachinePass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(ContainerBuilder $container): void
     {
