@@ -10,8 +10,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
 
     excludePaths:
-        - %currentWorkingDirectory%/src/Bundle/Controller/ControllerTrait.php
-        - %currentWorkingDirectory%/src/Bundle/Controller/Parameters.php
+        - %currentWorkingDirectory%/src/Bundle/Controller/*
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/PagerfantaConfiguration.php
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php
