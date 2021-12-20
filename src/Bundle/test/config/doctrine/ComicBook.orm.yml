@@ -1,6 +1,7 @@
 App\Entity\ComicBook:
     type: mappedSuperclass
     table: app_comic_book
+    repositoryClass: App\Repository\ComicBookRepository
     id:
         id:
             type: integer
