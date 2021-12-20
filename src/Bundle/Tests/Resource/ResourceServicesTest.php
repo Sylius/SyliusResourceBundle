@@ -39,13 +39,13 @@ final class ResourceServicesTest extends WebTestCase
         $this->assertTrue($repository instanceof ServiceEntityRepository);
 
         $manager = $client->getContainer()->get('app.manager.book');
-        $this->assertTrue($repository instanceof EntityManager);
+        $this->assertTrue($manager instanceof EntityManager);
 
         $controller = $client->getContainer()->get('app.controller.book');
-        $this->assertTrue($repository instanceof ResourceController);
+        $this->assertTrue($controller instanceof ResourceController);
 
         $factory = $client->getContainer()->get('app.factory.book');
-        $this->assertTrue($repository instanceof FactoryInterface);
+        $this->assertTrue($factory instanceof FactoryInterface);
     }
 
     /**
