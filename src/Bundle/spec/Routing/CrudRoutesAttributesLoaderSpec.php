@@ -20,6 +20,7 @@ use Sylius\Bundle\ResourceBundle\Routing\ResourceLoader;
 use Sylius\Bundle\ResourceBundle\Routing\RouteFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -44,7 +45,8 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
         RouteFactoryInterface $routeFactory,
         Route $route,
         RouteCollection $routeCollection
-    ): void {
+    ): void
+    {
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');
@@ -56,7 +58,10 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
 
         $routeCollection->all()->willReturn([$route->getWrappedObject()]);
         $routeCollection->getResources()->willReturn([]);
-        $routeCollection->getAliases()->willReturn([]);
+
+        if (Kernel::MAJOR_VERSION >= 5) {
+            $routeCollection->getAliases()->willReturn([]);
+        }
 
         $routeCollection->add(Argument::type('string'), $route)->shouldBeCalled();
 
