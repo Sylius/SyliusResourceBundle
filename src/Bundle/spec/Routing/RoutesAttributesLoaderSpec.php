@@ -31,10 +31,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
     }
 
     function it_generates_routes_from_resource(): void {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -46,10 +42,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_methods(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_methods');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -62,10 +54,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_criteria(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_criteria');
         $route->getPath()->shouldReturn('/library/{libraryId}/book/{id}');
@@ -81,10 +69,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_template(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_template');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -98,10 +82,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_repository(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_repository');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -118,10 +98,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_serialization_groups(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_serialization_groups');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -134,10 +110,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
     }
 
     function it_generates_routes_from_resource_with_serialization_version(): void {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_serialization_version');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -150,10 +122,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
     }
 
     function it_generates_routes_from_resource_with_vars(): void {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_vars');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -169,10 +137,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_requirements(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_requirements');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -183,7 +147,7 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_priority(): void
     {
-        if (\PHP_VERSION_ID < 80000 || Kernel::MAJOR_VERSION < 5) {
+        if (Kernel::MAJOR_VERSION < 5) {
             return;
         }
 
@@ -195,10 +159,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_options(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_options');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -209,10 +169,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
     }
 
     function it_generates_routes_from_resource_with_host(): void {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_host');
         $route->getPath()->shouldReturn('/book/{id}');
@@ -221,10 +177,6 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_resource_with_schemes(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_schemes');
         $route->getPath()->shouldReturn('/book/{id}');

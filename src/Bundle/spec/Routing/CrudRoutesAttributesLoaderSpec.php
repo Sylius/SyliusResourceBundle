@@ -45,10 +45,6 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
         Route $route,
         RouteCollection $routeCollection
     ): void {
-        if (\PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');
         $metadata->getServiceId('controller')->willReturn('app.controller.book');

@@ -13,10 +13,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_alias(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -91,10 +87,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_section(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -129,10 +121,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_criteria(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -204,10 +192,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_templates(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -268,10 +252,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_grids(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -329,10 +309,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_vars(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -405,10 +381,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_redirect(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -467,10 +439,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_permission(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -527,10 +495,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_except(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
@@ -567,10 +531,6 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_crud_routes_from_resource_with_only(): void
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped();
-        }
-
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
