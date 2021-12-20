@@ -28,7 +28,6 @@ class Book implements ResourceInterface, TranslatableInterface
     }
 
     /**
-     *
      * @Serializer\Expose
      * @Serializer\Type("integer")
      * @Serializer\XmlAttribute
@@ -36,7 +35,6 @@ class Book implements ResourceInterface, TranslatableInterface
     private int $id;
 
     /**
-     *
      * @Serializer\Expose
      * @Serializer\Type("string")
      */

@@ -91,7 +91,8 @@ class DefaultParentListener
         if (null === $parentDocument) {
             throw new \RuntimeException(sprintf(
                 'Document at default parent path "%s" does not exist. `autocreate` was set to "%s"',
-                $this->parentPath, $this->autocreate ? 'true' : 'false'
+                $this->parentPath,
+                $this->autocreate ? 'true' : 'false'
             ));
         }
 

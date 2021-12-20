@@ -36,7 +36,8 @@ final class DebugResourceCommand extends Command
     {
         $this->setName('sylius:debug:resource');
         $this->setDescription('Debug resource metadata.');
-        $this->setHelp(<<<'EOT'
+        $this->setHelp(
+            <<<'EOT'
 List or show resource metadata.
 
 To list run the command without an agrument:

@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
-use Symfony\Bundle\TwigBundle\TwigBundle;
+use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
 use FOS\RestBundle\FOSRestBundle;
 use JMS\SerializerBundle\JMSSerializerBundle;
-use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
-use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
+use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 return [
