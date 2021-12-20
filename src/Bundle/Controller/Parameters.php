@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Parameters extends ParameterBag
 {
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key, $default = null)
     {
         $result = parent::get($key, $default);
 
