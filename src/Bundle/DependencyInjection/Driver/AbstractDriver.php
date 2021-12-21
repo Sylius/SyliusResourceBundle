@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver;
 
+use Sylius\Bundle\ResourceBundle\Controller\Action\ApplyStateMachineTransitionAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\BulkDeleteAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\CreateAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\DeleteAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\IndexAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\ShowAction;
+use Sylius\Bundle\ResourceBundle\Controller\Action\UpdateAction;
 use Sylius\Component\Resource\Factory\Factory;
 use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
@@ -58,6 +65,8 @@ abstract class AbstractDriver implements DriverInterface
 
     protected function addController(ContainerBuilder $container, MetadataInterface $metadata): void
     {
+        $this->registerActionServices($container, $metadata);
+
         $definition = new Definition($metadata->getClass('controller'));
         $definition
             ->setPublic(true)
@@ -137,6 +146,159 @@ abstract class AbstractDriver implements DriverInterface
         ;
 
         return $definition;
+    }
+
+    protected function registerActionServices(ContainerBuilder $container, MetadataInterface $metadata): void
+    {
+        $definition = new Definition(ShowAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference('sylius.resource_controller.single_resource_provider'),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.view_handler'),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.show'), $definition);
+
+        $definition = new Definition(IndexAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.resources_collection_provider'),
+                new Reference('sylius.resource_controller.view_handler'),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.index'), $definition);
+
+        $definition = new Definition(CreateAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference($metadata->getServiceId('factory')),
+                new Reference('sylius.resource_controller.new_resource_factory'),
+                new Reference('sylius.resource_controller.form_factory'),
+                new Reference('sylius.resource_controller.redirect_handler'),
+                new Reference('sylius.resource_controller.flash_helper'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.create'), $definition);
+
+        $definition = new Definition(UpdateAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference($metadata->getServiceId('manager')),
+                new Reference('sylius.resource_controller.single_resource_provider'),
+                new Reference('sylius.resource_controller.form_factory'),
+                new Reference('sylius.resource_controller.redirect_handler'),
+                new Reference('sylius.resource_controller.flash_helper'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.resource_update_handler'),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.update'), $definition);
+
+        $definition = new Definition(DeleteAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference('sylius.resource_controller.single_resource_provider'),
+                new Reference('sylius.resource_controller.redirect_handler'),
+                new Reference('sylius.resource_controller.flash_helper'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.resource_delete_handler'),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+                new Reference('security.csrf.token_manager'),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.delete'), $definition);
+
+        $definition = new Definition(BulkDeleteAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference('sylius.resource_controller.resources_collection_provider'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference('sylius.resource_controller.redirect_handler'),
+                new Reference('sylius.resource_controller.flash_helper'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.resource_delete_handler'),
+                new Reference('twig'),
+                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+                new Reference('security.csrf.token_manager'),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.bulk_delete'), $definition);
+
+        $definition = new Definition(ApplyStateMachineTransitionAction::class);
+        $definition
+            ->setPublic(true)
+            ->setArguments([
+                $this->getMetadataDefinition($metadata),
+                new Reference('sylius.resource_controller.request_configuration_factory'),
+                new Reference($metadata->getServiceId('repository')),
+                new Reference($metadata->getServiceId('factory')),
+                new Reference('sylius.resource_controller.new_resource_factory'),
+                new Reference($metadata->getServiceId('manager')),
+                new Reference('sylius.resource_controller.single_resource_provider'),
+                new Reference('sylius.resource_controller.resources_collection_provider'),
+                new Reference('sylius.resource_controller.form_factory'),
+                new Reference('sylius.resource_controller.redirect_handler'),
+                new Reference('sylius.resource_controller.flash_helper'),
+                new Reference('sylius.resource_controller.authorization_checker'),
+                new Reference('sylius.resource_controller.event_dispatcher'),
+                new Reference('sylius.resource_controller.resource_update_handler'),
+                new Reference('sylius.resource_controller.resource_delete_handler'),
+                new Reference('sylius.resource_controller.view_handler'),
+                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+                new Reference('security.csrf.token_manager'),
+            ])
+        ;
+
+        $container->setDefinition($metadata->getServiceId('action.apply_state_machine_transition'), $definition);
     }
 
     abstract protected function addManager(ContainerBuilder $container, MetadataInterface $metadata): void;
