@@ -19,6 +19,12 @@ app_book:
         alias: app.book
     type: sylius.resource_api
 
+app_poetry_book:
+    resource: |
+        alias: app.poetry_book
+        controller_type: actions
+    type: sylius.resource_api
+
 app_gedmo:
     resource: |
         alias: app.gedmo

@@ -50,6 +50,7 @@ final class Configuration implements ConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->variableNode('vars')->cannotBeEmpty()->end()
+                ->scalarNode('controller_type')->defaultValue('single_class')->end()
             ->end()
         ;
 

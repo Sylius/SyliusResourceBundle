@@ -126,9 +126,15 @@ final class ResourceLoader implements LoaderInterface
         array $methods,
         bool $isApi = false
     ): Route {
-        $defaults = [
-            '_controller' => $metadata->getServiceId('controller') . sprintf('::%sAction', $actionName),
-        ];
+        if (isset($configuration['controller_type']) && $configuration['controller_type'] === 'actions') {
+            $defaults = [
+                '_controller' => $metadata->getServiceId('action.'.$actionName),
+            ];
+        } else {
+            $defaults = [
+                '_controller' => $metadata->getServiceId('controller') . sprintf(':%sAction', $actionName),
+            ];
+        }
 
         if ($isApi && 'index' === $actionName) {
             $defaults['_sylius']['serialization_groups'] = ['Default'];
