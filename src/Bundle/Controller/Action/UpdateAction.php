@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Paweł Jędrzejewski
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
@@ -33,18 +42,31 @@ use Twig\Environment;
 class UpdateAction
 {
     protected MetadataInterface $metadata;
+
     protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+
     protected RepositoryInterface $repository;
+
     protected ObjectManager $manager;
+
     protected SingleResourceProviderInterface $singleResourceProvider;
+
     protected ResourceFormFactoryInterface $resourceFormFactory;
+
     protected RedirectHandlerInterface $redirectHandler;
+
     protected FlashHelperInterface $flashHelper;
+
     protected AuthorizationCheckerInterface $authorizationChecker;
+
     protected EventDispatcherInterface $eventDispatcher;
+
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
+
     protected Environment $twig;
+
     protected ?ViewHandlerInterface $viewHandler;
+
     protected ?StateMachineInterface $stateMachine;
 
     public function __construct(
@@ -196,21 +218,6 @@ class UpdateAction
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
     {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
-    }
-
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
+        return $this->viewHandler->handle($configuration, View::create($data, $statusCode));
     }
 }

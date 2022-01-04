@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Paweł Jędrzejewski
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
@@ -22,12 +31,19 @@ use Twig\Environment;
 class IndexAction
 {
     protected MetadataInterface $metadata;
+
     protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+
     protected EventDispatcherInterface $eventDispatcher;
+
     protected AuthorizationCheckerInterface $authorizationChecker;
+
     protected RepositoryInterface $repository;
+
     protected Environment $twig;
+
     protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+
     protected ?ViewHandlerInterface $viewHandler;
 
     public function __construct(

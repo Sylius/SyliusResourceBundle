@@ -128,7 +128,7 @@ final class ResourceLoader implements LoaderInterface
     ): Route {
         if (isset($configuration['controller_type']) && $configuration['controller_type'] === 'actions') {
             $defaults = [
-                '_controller' => $metadata->getServiceId('action.'.$actionName),
+                '_controller' => $metadata->getServiceId('action.' . $actionName),
             ];
         } else {
             $defaults = [

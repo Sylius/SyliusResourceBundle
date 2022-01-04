@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Paweł Jędrzejewski
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
@@ -30,17 +39,29 @@ use Twig\Environment;
 class BulkDeleteAction
 {
     protected MetadataInterface $metadata;
+
     protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+
     protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+
     protected RepositoryInterface $repository;
+
     protected RedirectHandlerInterface $redirectHandler;
+
     protected FlashHelperInterface $flashHelper;
+
     protected AuthorizationCheckerInterface $authorizationChecker;
+
     protected EventDispatcherInterface $eventDispatcher;
+
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
+
     protected Environment $twig;
+
     protected ?ViewHandlerInterface $viewHandler;
+
     protected ?StateMachineInterface $stateMachine;
+
     protected ?CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(

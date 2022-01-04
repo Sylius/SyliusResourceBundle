@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Paweł Jędrzejewski
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
@@ -38,22 +47,39 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 class ApplyStateMachineTransitionAction
 {
     protected MetadataInterface $metadata;
+
     protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+
     protected RepositoryInterface $repository;
+
     protected FactoryInterface $factory;
+
     protected NewResourceFactoryInterface $newResourceFactory;
+
     protected ObjectManager $manager;
+
     protected SingleResourceProviderInterface $singleResourceProvider;
+
     protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+
     protected ResourceFormFactoryInterface $resourceFormFactory;
+
     protected RedirectHandlerInterface $redirectHandler;
+
     protected FlashHelperInterface $flashHelper;
+
     protected AuthorizationCheckerInterface $authorizationChecker;
+
     protected EventDispatcherInterface $eventDispatcher;
+
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
+
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
-    protected ?ViewHandlerInterface $viewHandler;
-    protected ?StateMachineInterface $stateMachine;
+
+    protected ViewHandlerInterface $viewHandler;
+
+    protected StateMachineInterface $stateMachine;
+
     protected ?CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
@@ -72,8 +98,8 @@ class ApplyStateMachineTransitionAction
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine,
+        ViewHandlerInterface $viewHandler,
+        StateMachineInterface $stateMachine,
         ?CsrfTokenManagerInterface $csrfTokenManager
     ) {
         $this->metadata = $metadata;
@@ -98,13 +124,15 @@ class ApplyStateMachineTransitionAction
 
     public function __invoke(Request $request): Response
     {
-        $stateMachine = $this->getStateMachine();
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $request->get('_csrf_token'))) {
+        if (
+            $configuration->isCsrfProtectionEnabled() &&
+            !$this->isCsrfTokenValid((string) $resource->getId(), $request->get('_csrf_token'))
+        ) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid CSRF token.');
         }
 
@@ -124,7 +152,7 @@ class ApplyStateMachineTransitionAction
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
 
-        if (!$stateMachine->can($configuration, $resource)) {
+        if (!$this->stateMachine->can($configuration, $resource)) {
             throw new BadRequestHttpException();
         }
 
@@ -192,30 +220,11 @@ class ApplyStateMachineTransitionAction
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
     {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
-    }
-
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
+        return $this->viewHandler->handle($configuration, View::create($data, $statusCode));
     }
 
     protected function isCsrfTokenValid(string $id, ?string $token): bool
     {
-        if ($this->csrfTokenManager !== null) {
-            throw new \LogicException('CSRF protection is not enabled in your application. Enable it with the "csrf_protection" key in "config/packages/framework.yaml".');
-        }
-
         return $this->csrfTokenManager->isTokenValid(new CsrfToken($id, $token));
     }
 }
