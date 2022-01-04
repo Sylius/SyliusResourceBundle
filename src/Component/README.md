@@ -1,4 +1,4 @@
-Resource Component [![Build status...](https://secure.travis-ci.org/Sylius/Resource.png?branch=master)](http://travis-ci.org/Sylius/Resource)
+Resource Component
 ==================
 
 Resource management layer for Sylius and PHP apps.
