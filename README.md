@@ -1,4 +1,4 @@
-SyliusResourceBundle [![Build status...](https://secure.travis-ci.org/Sylius/SyliusResourceBundle.png?branch=master)](http://travis-ci.org/Sylius/SyliusResourceBundle)
+SyliusResourceBundle
 ====================
 
 Easy CRUD and persistence for Symfony apps.
