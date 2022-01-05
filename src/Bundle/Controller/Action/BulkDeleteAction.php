@@ -22,7 +22,6 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -34,7 +33,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Twig\Environment;
 
 class BulkDeleteAction
 {
@@ -56,13 +54,9 @@ class BulkDeleteAction
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
-    protected Environment $twig;
+    protected CsrfTokenManagerInterface $csrfTokenManager;
 
     protected ?ViewHandlerInterface $viewHandler;
-
-    protected ?StateMachineInterface $stateMachine;
-
-    protected ?CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -74,10 +68,8 @@ class BulkDeleteAction
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Environment $twig,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine,
-        ?CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -88,10 +80,8 @@ class BulkDeleteAction
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
-        $this->twig = $twig;
-        $this->viewHandler = $viewHandler;
-        $this->stateMachine = $stateMachine;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->viewHandler = $viewHandler;
     }
 
     public function __invoke(Request $request): Response
@@ -185,21 +175,8 @@ class BulkDeleteAction
         return $this->viewHandler->handle($configuration, $view);
     }
 
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
-    }
-
     protected function isCsrfTokenValid(string $id, ?string $token): bool
     {
-        if ($this->csrfTokenManager !== null) {
-            throw new \LogicException('CSRF protection is not enabled in your application. Enable it with the "csrf_protection" key in "config/packages/framework.yaml".');
-        }
-
         return $this->csrfTokenManager->isTokenValid(new CsrfToken($id, $token));
     }
 }

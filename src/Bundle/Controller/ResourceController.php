@@ -147,7 +147,7 @@ class ResourceController
     public function showAction(Request $request): Response
     {
         if ($this->showAction !== null) {
-            return $this->showAApplyStateMachineTransitionActionction->__invoke($request);
+            return $this->showAction->__invoke($request);
         }
 
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);

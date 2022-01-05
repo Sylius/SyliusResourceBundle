@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -26,7 +27,6 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 class IndexAction
 {
@@ -40,9 +40,9 @@ class IndexAction
 
     protected RepositoryInterface $repository;
 
-    protected Environment $twig;
-
     protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+
+    protected TemplateRendererInterface $templateRenderer;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -52,8 +52,8 @@ class IndexAction
         EventDispatcherInterface $eventDispatcher,
         AuthorizationCheckerInterface $authorizationChecker,
         RepositoryInterface $repository,
-        Environment $twig,
         ResourcesCollectionProviderInterface $resourcesCollectionProvider,
+        TemplateRendererInterface $templateRenderer,
         ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
@@ -61,8 +61,8 @@ class IndexAction
         $this->eventDispatcher = $eventDispatcher;
         $this->authorizationChecker = $authorizationChecker;
         $this->repository = $repository;
-        $this->twig = $twig;
         $this->resourcesCollectionProvider = $resourcesCollectionProvider;
+        $this->templateRenderer = $templateRenderer;
         $this->viewHandler = $viewHandler;
     }
 
@@ -76,7 +76,7 @@ class IndexAction
         $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
 
         if ($configuration->isHtmlRequest()) {
-            return new Response($this->twig->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
+            return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
                 'configuration' => $configuration,
                 'metadata' => $this->metadata,
                 'resources' => $resources,

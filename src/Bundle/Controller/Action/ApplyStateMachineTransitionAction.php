@@ -76,11 +76,11 @@ class ApplyStateMachineTransitionAction
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
-    protected ViewHandlerInterface $viewHandler;
+    protected CsrfTokenManagerInterface $csrfTokenManager;
 
-    protected StateMachineInterface $stateMachine;
+    protected ?ViewHandlerInterface $viewHandler;
 
-    protected ?CsrfTokenManagerInterface $csrfTokenManager;
+    protected ?StateMachineInterface $stateMachine;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -98,9 +98,9 @@ class ApplyStateMachineTransitionAction
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ViewHandlerInterface $viewHandler,
-        StateMachineInterface $stateMachine,
-        ?CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ?ViewHandlerInterface $viewHandler,
+        ?StateMachineInterface $stateMachine
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -117,9 +117,9 @@ class ApplyStateMachineTransitionAction
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
+        $this->csrfTokenManager = $csrfTokenManager;
         $this->viewHandler = $viewHandler;
         $this->stateMachine = $stateMachine;
-        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     public function __invoke(Request $request): Response
@@ -152,7 +152,7 @@ class ApplyStateMachineTransitionAction
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
 
-        if (!$this->stateMachine->can($configuration, $resource)) {
+        if (!$this->getStateMachine()->can($configuration, $resource)) {
             throw new BadRequestHttpException();
         }
 
@@ -220,7 +220,22 @@ class ApplyStateMachineTransitionAction
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
     {
-        return $this->viewHandler->handle($configuration, View::create($data, $statusCode));
+        if (null === $this->viewHandler) {
+            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
+        }
+
+        $view = View::create($data, $statusCode);
+
+        return $this->viewHandler->handle($configuration, $view);
+    }
+
+    protected function getStateMachine(): StateMachineInterface
+    {
+        if (null === $this->stateMachine) {
+            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
+        }
+
+        return $this->stateMachine;
     }
 
     protected function isCsrfTokenValid(string $id, ?string $token): bool

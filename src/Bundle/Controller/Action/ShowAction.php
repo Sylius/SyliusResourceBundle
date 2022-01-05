@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -28,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 class ShowAction
 {
@@ -44,7 +44,7 @@ class ShowAction
 
     protected SingleResourceProviderInterface $singleResourceProvider;
 
-    protected Environment $twig;
+    protected TemplateRendererInterface $templateRenderer;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -55,7 +55,7 @@ class ShowAction
         AuthorizationCheckerInterface $authorizationChecker,
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
-        Environment $twig,
+        TemplateRendererInterface $templateRenderer,
         ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
@@ -64,8 +64,8 @@ class ShowAction
         $this->authorizationChecker = $authorizationChecker;
         $this->repository = $repository;
         $this->singleResourceProvider = $singleResourceProvider;
-        $this->twig = $twig;
         $this->viewHandler = $viewHandler;
+        $this->templateRenderer = $templateRenderer;
     }
 
     public function __invoke(Request $request): Response
@@ -78,7 +78,7 @@ class ShowAction
         $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
 
         if ($configuration->isHtmlRequest()) {
-            return new Response($this->twig->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
+            return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
                 'configuration' => $configuration,
                 'metadata' => $this->metadata,
                 'resource' => $resource,

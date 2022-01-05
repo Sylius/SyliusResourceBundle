@@ -24,7 +24,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface
 use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -37,7 +37,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 class UpdateAction
 {
@@ -63,11 +62,9 @@ class UpdateAction
 
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
-    protected Environment $twig;
+    protected TemplateRendererInterface $templateRenderer;
 
     protected ?ViewHandlerInterface $viewHandler;
-
-    protected ?StateMachineInterface $stateMachine;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -81,9 +78,8 @@ class UpdateAction
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        Environment $twig,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine
+        TemplateRendererInterface $templateRenderer,
+        ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -96,9 +92,8 @@ class UpdateAction
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
-        $this->twig = $twig;
+        $this->templateRenderer = $templateRenderer;
         $this->viewHandler = $viewHandler;
-        $this->stateMachine = $stateMachine;
     }
 
     public function __invoke(Request $request): Response
@@ -179,7 +174,7 @@ class UpdateAction
             return $initializeEventResponse;
         }
 
-        return new Response($this->twig->render($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
+        return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $resource,
@@ -218,6 +213,12 @@ class UpdateAction
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
     {
-        return $this->viewHandler->handle($configuration, View::create($data, $statusCode));
+        if (null === $this->viewHandler) {
+            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
+        }
+
+        $view = View::create($data, $statusCode);
+
+        return $this->viewHandler->handle($configuration, $view);
     }
 }

@@ -23,6 +23,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -32,7 +33,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 class CreateAction
 {
@@ -56,7 +56,7 @@ class CreateAction
 
     protected EventDispatcherInterface $eventDispatcher;
 
-    protected Environment $twig;
+    protected TemplateRendererInterface $templateRenderer;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -73,7 +73,7 @@ class CreateAction
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
-        Environment $twig,
+        TemplateRendererInterface $templateRenderer,
         ?ViewHandlerInterface $viewHandler,
         ?StateMachineInterface $stateMachine
     ) {
@@ -87,7 +87,7 @@ class CreateAction
         $this->flashHelper = $flashHelper;
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
-        $this->twig = $twig;
+        $this->templateRenderer = $templateRenderer;
         $this->viewHandler = $viewHandler;
         $this->stateMachine = $stateMachine;
     }
@@ -122,8 +122,7 @@ class CreateAction
             }
 
             if ($configuration->hasStateMachine()) {
-                $stateMachine = $this->getStateMachine();
-                $stateMachine->apply($configuration, $newResource);
+                $this->getStateMachine()->apply($configuration, $newResource);
             }
 
             $this->repository->add($newResource);
@@ -156,7 +155,7 @@ class CreateAction
             return $initializeEventResponse;
         }
 
-        return new Response($this->twig->render($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
+        return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $newResource,

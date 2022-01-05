@@ -22,7 +22,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -36,7 +36,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Twig\Environment;
 
 class DeleteAction
 {
@@ -58,13 +57,11 @@ class DeleteAction
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
-    protected Environment $twig;
+    protected CsrfTokenManagerInterface $csrfTokenManager;
+
+    protected TemplateRendererInterface $templateRenderer;
 
     protected ?ViewHandlerInterface $viewHandler;
-
-    protected ?StateMachineInterface $stateMachine;
-
-    protected ?CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -76,10 +73,9 @@ class DeleteAction
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Environment $twig,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine,
-        ?CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        TemplateRendererInterface $templateRenderer,
+        ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -90,10 +86,9 @@ class DeleteAction
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
-        $this->twig = $twig;
-        $this->viewHandler = $viewHandler;
-        $this->stateMachine = $stateMachine;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->templateRenderer = $templateRenderer;
+        $this->viewHandler = $viewHandler;
     }
 
     public function __invoke(Request $request): Response
@@ -103,7 +98,10 @@ class DeleteAction
         $this->isGrantedOr403($configuration, ResourceActions::DELETE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get('_csrf_token'))) {
+        if (
+            $configuration->isCsrfProtectionEnabled() &&
+            !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get('_csrf_token'))
+        ) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid csrf token.');
         }
 
@@ -192,21 +190,8 @@ class DeleteAction
         return $this->viewHandler->handle($configuration, $view);
     }
 
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
-    }
-
     protected function isCsrfTokenValid(string $id, ?string $token): bool
     {
-        if ($this->csrfTokenManager !== null) {
-            throw new \LogicException('CSRF protection is not enabled in your application. Enable it with the "csrf_protection" key in "config/packages/framework.yaml".');
-        }
-
         return $this->csrfTokenManager->isTokenValid(new CsrfToken($id, $token));
     }
 }
