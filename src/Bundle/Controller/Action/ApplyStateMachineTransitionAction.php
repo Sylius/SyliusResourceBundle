@@ -16,22 +16,16 @@ namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
-use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -41,7 +35,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -53,17 +46,9 @@ class ApplyStateMachineTransitionAction
 
     protected RepositoryInterface $repository;
 
-    protected FactoryInterface $factory;
-
-    protected NewResourceFactoryInterface $newResourceFactory;
-
     protected ObjectManager $manager;
 
     protected SingleResourceProviderInterface $singleResourceProvider;
-
-    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
-
-    protected ResourceFormFactoryInterface $resourceFormFactory;
 
     protected RedirectHandlerInterface $redirectHandler;
 
@@ -72,8 +57,6 @@ class ApplyStateMachineTransitionAction
     protected EventDispatcherInterface $eventDispatcher;
 
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
-
-    protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
     protected CsrfTokenManagerInterface $csrfTokenManager;
 
@@ -87,17 +70,12 @@ class ApplyStateMachineTransitionAction
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RepositoryInterface $repository,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
         RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler,
@@ -106,17 +84,12 @@ class ApplyStateMachineTransitionAction
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
         $this->repository = $repository;
-        $this->factory = $factory;
-        $this->newResourceFactory = $newResourceFactory;
         $this->manager = $manager;
         $this->singleResourceProvider = $singleResourceProvider;
-        $this->resourcesCollectionProvider = $resourcesCollectionProvider;
-        $this->resourceFormFactory = $resourceFormFactory;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
-        $this->resourceDeleteHandler = $resourceDeleteHandler;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;

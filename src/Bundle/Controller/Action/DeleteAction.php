@@ -15,7 +15,6 @@ namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
@@ -23,7 +22,6 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -57,8 +55,6 @@ class DeleteAction
 
     protected CsrfTokenManagerInterface $csrfTokenManager;
 
-    protected TemplateRendererInterface $templateRenderer;
-
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
@@ -73,7 +69,6 @@ class DeleteAction
         EventDispatcherInterface $eventDispatcher,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
-        TemplateRendererInterface $templateRenderer,
         RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler
     ) {
@@ -86,7 +81,6 @@ class DeleteAction
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->templateRenderer = $templateRenderer;
         $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;
     }

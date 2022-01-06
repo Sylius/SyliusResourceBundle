@@ -26,7 +26,7 @@ final class RequestPermissionChecker implements RequestPermissionCheckerInterfac
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
+    public function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
     {
         if (!$configuration->hasPermission()) {
             return;

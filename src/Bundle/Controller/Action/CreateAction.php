@@ -15,7 +15,6 @@ namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
