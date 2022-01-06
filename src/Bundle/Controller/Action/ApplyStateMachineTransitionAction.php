@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
@@ -68,8 +69,6 @@ class ApplyStateMachineTransitionAction
 
     protected FlashHelperInterface $flashHelper;
 
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
     protected EventDispatcherInterface $eventDispatcher;
 
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
@@ -77,6 +76,8 @@ class ApplyStateMachineTransitionAction
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
     protected CsrfTokenManagerInterface $csrfTokenManager;
+
+    protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -94,11 +95,11 @@ class ApplyStateMachineTransitionAction
         ResourceFormFactoryInterface $resourceFormFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
+        RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler,
         ?StateMachineInterface $stateMachine
     ) {
@@ -113,11 +114,11 @@ class ApplyStateMachineTransitionAction
         $this->resourceFormFactory = $resourceFormFactory;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
-        $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;
         $this->stateMachine = $stateMachine;
     }
@@ -126,7 +127,7 @@ class ApplyStateMachineTransitionAction
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
+        $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
         if (
@@ -188,22 +189,6 @@ class ApplyStateMachineTransitionAction
         }
 
         return $this->redirectHandler->redirectToResource($configuration, $resource);
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    protected function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
-    {
-        if (!$configuration->hasPermission()) {
-            return;
-        }
-
-        $permission = $configuration->getPermission($permission);
-
-        if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
-            throw new AccessDeniedException();
-        }
     }
 
     /**

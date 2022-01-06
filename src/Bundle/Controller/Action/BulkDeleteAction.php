@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
@@ -30,7 +31,6 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -48,13 +48,13 @@ class BulkDeleteAction
 
     protected FlashHelperInterface $flashHelper;
 
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
     protected EventDispatcherInterface $eventDispatcher;
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
     protected CsrfTokenManagerInterface $csrfTokenManager;
+
+    protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -65,10 +65,10 @@ class BulkDeleteAction
         RepositoryInterface $repository,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
+        RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
@@ -77,10 +77,10 @@ class BulkDeleteAction
         $this->repository = $repository;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
-        $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;
     }
 
@@ -88,7 +88,7 @@ class BulkDeleteAction
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $this->isGrantedOr403($configuration, ResourceActions::BULK_DELETE);
+        $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::BULK_DELETE);
         $resources = $this->resourcesCollectionProvider->get($configuration, $this->repository);
 
         if (
@@ -146,22 +146,6 @@ class BulkDeleteAction
         }
 
         return $this->redirectHandler->redirectToIndex($configuration);
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    protected function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
-    {
-        if (!$configuration->hasPermission()) {
-            return;
-        }
-
-        $permission = $configuration->getPermission($permission);
-
-        if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
-            throw new AccessDeniedException();
-        }
     }
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response

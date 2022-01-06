@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
@@ -32,7 +33,6 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CreateAction
 {
@@ -52,11 +52,11 @@ class CreateAction
 
     protected FlashHelperInterface $flashHelper;
 
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
     protected EventDispatcherInterface $eventDispatcher;
 
     protected TemplateRendererInterface $templateRenderer;
+
+    protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -71,9 +71,9 @@ class CreateAction
         ResourceFormFactoryInterface $resourceFormFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         TemplateRendererInterface $templateRenderer,
+        RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler,
         ?StateMachineInterface $stateMachine
     ) {
@@ -85,9 +85,9 @@ class CreateAction
         $this->resourceFormFactory = $resourceFormFactory;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
-        $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->templateRenderer = $templateRenderer;
+        $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;
         $this->stateMachine = $stateMachine;
     }
@@ -96,7 +96,7 @@ class CreateAction
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $this->isGrantedOr403($configuration, ResourceActions::CREATE);
+        $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::CREATE);
         $newResource = $this->newResourceFactory->create($configuration, $this->factory);
 
         $form = $this->resourceFormFactory->create($configuration, $newResource);
@@ -162,22 +162,6 @@ class CreateAction
             $this->metadata->getName() => $newResource,
             'form' => $form->createView(),
         ]));
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    protected function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
-    {
-        if (!$configuration->hasPermission()) {
-            return;
-        }
-
-        $permission = $configuration->getPermission($permission);
-
-        if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
-            throw new AccessDeniedException();
-        }
     }
 
     protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response

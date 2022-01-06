@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
-use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
+use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
@@ -36,7 +36,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UpdateAction
 {
@@ -56,13 +55,13 @@ class UpdateAction
 
     protected FlashHelperInterface $flashHelper;
 
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
     protected EventDispatcherInterface $eventDispatcher;
 
     protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
     protected TemplateRendererInterface $templateRenderer;
+
+    protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -75,10 +74,10 @@ class UpdateAction
         ResourceFormFactoryInterface $resourceFormFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         TemplateRendererInterface $templateRenderer,
+        RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
@@ -89,10 +88,10 @@ class UpdateAction
         $this->resourceFormFactory = $resourceFormFactory;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
-        $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->templateRenderer = $templateRenderer;
+        $this->requestPermissionChecker = $requestPermissionChecker;
         $this->viewHandler = $viewHandler;
     }
 
@@ -100,7 +99,7 @@ class UpdateAction
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
+        $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
         $form = $this->resourceFormFactory->create($configuration, $resource);
@@ -181,22 +180,6 @@ class UpdateAction
             $this->metadata->getName() => $resource,
             'form' => $form->createView(),
         ]));
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    protected function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
-    {
-        if (!$configuration->hasPermission()) {
-            return;
-        }
-
-        $permission = $configuration->getPermission($permission);
-
-        if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
-            throw new AccessDeniedException();
-        }
     }
 
     /**

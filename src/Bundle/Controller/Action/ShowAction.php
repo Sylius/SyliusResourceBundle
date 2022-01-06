@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
@@ -28,7 +29,6 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ShowAction
 {
@@ -38,13 +38,13 @@ class ShowAction
 
     protected EventDispatcherInterface $eventDispatcher;
 
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
     protected RepositoryInterface $repository;
 
     protected SingleResourceProviderInterface $singleResourceProvider;
 
     protected TemplateRendererInterface $templateRenderer;
+
+    protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
     protected ?ViewHandlerInterface $viewHandler;
 
@@ -52,27 +52,27 @@ class ShowAction
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         EventDispatcherInterface $eventDispatcher,
-        AuthorizationCheckerInterface $authorizationChecker,
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         TemplateRendererInterface $templateRenderer,
+        RequestPermissionCheckerInterface $requestPermissionChecker,
         ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
         $this->eventDispatcher = $eventDispatcher;
-        $this->authorizationChecker = $authorizationChecker;
         $this->repository = $repository;
         $this->singleResourceProvider = $singleResourceProvider;
-        $this->viewHandler = $viewHandler;
         $this->templateRenderer = $templateRenderer;
+        $this->requestPermissionChecker = $requestPermissionChecker;
+        $this->viewHandler = $viewHandler;
     }
 
     public function __invoke(Request $request): Response
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $this->isGrantedOr403($configuration, ResourceActions::SHOW);
+        $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::SHOW);
         $resource = $this->findOr404($configuration);
 
         $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
@@ -87,22 +87,6 @@ class ShowAction
         }
 
         return $this->createRestView($configuration, $resource);
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    protected function isGrantedOr403(RequestConfiguration $configuration, string $permission): void
-    {
-        if (!$configuration->hasPermission()) {
-            return;
-        }
-
-        $permission = $configuration->getPermission($permission);
-
-        if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
-            throw new AccessDeniedException();
-        }
     }
 
     /**
