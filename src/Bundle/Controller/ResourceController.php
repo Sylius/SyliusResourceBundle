@@ -15,13 +15,6 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
-use Sylius\Bundle\ResourceBundle\Controller\Action\ApplyStateMachineTransitionAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\BulkDeleteAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\CreateAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\DeleteAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\IndexAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\ShowAction;
-use Sylius\Bundle\ResourceBundle\Controller\Action\UpdateAction;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -78,20 +71,6 @@ class ResourceController
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
-    protected ?ShowAction $showAction;
-
-    protected ?IndexAction $indexAction;
-
-    protected ?CreateAction $createAction;
-
-    protected ?UpdateAction $updateAction;
-
-    protected ?DeleteAction $deleteAction;
-
-    protected ?BulkDeleteAction $bulkDeleteAction;
-
-    protected ?ApplyStateMachineTransitionAction $applyStateMachineTransitionAction;
-
     public function __construct(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -109,14 +88,7 @@ class ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ?ShowAction $showAction = null,
-        ?IndexAction $indexAction = null,
-        ?CreateAction $createAction = null,
-        ?CreateAction $updateAction = null,
-        ?CreateAction $deleteAction = null,
-        ?CreateAction $bulkDeleteAction = null,
-        ?ApplyStateMachineTransitionAction $applyStateMachineTransitionAction = null
+        ResourceDeleteHandlerInterface $resourceDeleteHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -135,21 +107,10 @@ class ResourceController
         $this->stateMachine = $stateMachine;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
-        $this->showAction = $showAction;
-        $this->indexAction = $indexAction;
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
-        $this->bulkDeleteAction = $bulkDeleteAction;
-        $this->applyStateMachineTransitionAction = $applyStateMachineTransitionAction;
     }
 
     public function showAction(Request $request): Response
     {
-        if ($this->showAction !== null) {
-            return $this->showAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::SHOW);
@@ -175,10 +136,6 @@ class ResourceController
 
     public function indexAction(Request $request): Response
     {
-        if ($this->indexAction !== null) {
-            return $this->indexAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::INDEX);
@@ -204,10 +161,6 @@ class ResourceController
 
     public function createAction(Request $request): Response
     {
-        if ($this->createAction !== null) {
-            return $this->createAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::CREATE);
@@ -281,10 +234,6 @@ class ResourceController
 
     public function updateAction(Request $request): Response
     {
-        if ($this->updateAction !== null) {
-            return $this->updateAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
@@ -372,10 +321,6 @@ class ResourceController
 
     public function deleteAction(Request $request): Response
     {
-        if ($this->deleteAction !== null) {
-            return $this->deleteAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::DELETE);
@@ -433,10 +378,6 @@ class ResourceController
 
     public function bulkDeleteAction(Request $request): Response
     {
-        if ($this->bulkDeleteAction !== null) {
-            return $this->bulkDeleteAction->__invoke($request);
-        }
-
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::BULK_DELETE);
@@ -501,10 +442,6 @@ class ResourceController
 
     public function applyStateMachineTransitionAction(Request $request): Response
     {
-        if ($this->applyStateMachineTransitionAction !== null) {
-            return $this->applyStateMachineTransitionAction->__invoke($request);
-        }
-
         $stateMachine = $this->getStateMachine();
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
