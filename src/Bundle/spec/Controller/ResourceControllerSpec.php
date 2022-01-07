@@ -187,6 +187,40 @@ final class ResourceControllerSpec extends ObjectBehavior
         $this->showAction($request);
     }
 
+    function it_returns_event_response_if_exists_during_show(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        RepositoryInterface $repository,
+        SingleResourceProviderInterface $singleResourceProvider,
+        EventDispatcherInterface $eventDispatcher,
+        ViewHandlerInterface $viewHandler,
+        ResourceControllerEvent $event,
+        ResourceInterface $resource,
+        Request $request,
+        Response $response
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(true);
+        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+
+        $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->willReturn($event);
+
+        $event->getResponse()->willReturn($response);
+
+        $configuration->isHtmlRequest()->shouldNotBeCalled();
+        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
+
+        $this->showAction($request)->shouldReturn($response);
+    }
+
     function it_returns_a_response_for_non_html_view_of_single_resource(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -286,6 +320,43 @@ final class ResourceControllerSpec extends ObjectBehavior
         $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->indexAction($request);
+    }
+
+    function it_returns_event_response_if_exists_during_index(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        RepositoryInterface $repository,
+        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
+        EventDispatcherInterface $eventDispatcher,
+        ViewHandlerInterface $viewHandler,
+        ResourceControllerEvent $event,
+        ResourceInterface $resource1,
+        ResourceInterface $resource2,
+        Request $request,
+        Response $response
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::INDEX)->willReturn('sylius.product.index');
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.index')->willReturn(true);
+
+        $configuration->getTemplate(ResourceActions::INDEX . '.html')->willReturn('@SyliusShop/Product/index.html.twig');
+        $resourcesCollectionProvider->get($configuration, $repository)->willReturn([$resource1, $resource2]);
+
+        $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->willReturn($event);
+
+        $event->getResponse()->willReturn($response);
+
+        $configuration->isHtmlRequest()->shouldNotBeCalled();
+        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
+
+        $this->indexAction($request)->shouldReturn($response);
     }
 
     function it_throws_a_403_exception_if_user_is_unauthorized_to_create_a_new_resource(
