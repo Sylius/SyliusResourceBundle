@@ -195,6 +195,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         EventDispatcherInterface $eventDispatcher,
+        ViewHandlerInterface $viewHandler,
         ResourceControllerEvent $event,
         ResourceInterface $resource,
         Request $request,
@@ -215,7 +216,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $event->getResponse()->willReturn($response);
 
         $configuration->isHtmlRequest()->shouldNotBeCalled();
-        $this->createRestView($configuration, $resource)->shouldNotBeCalled();
+        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
 
         $this->showAction($request)->shouldReturn($response);
     }
@@ -329,6 +330,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ResourcesCollectionProviderInterface $resourcesCollectionProvider,
         EventDispatcherInterface $eventDispatcher,
+        ViewHandlerInterface $viewHandler,
         ResourceControllerEvent $event,
         ResourceInterface $resource1,
         ResourceInterface $resource2,
@@ -348,11 +350,11 @@ final class ResourceControllerSpec extends ObjectBehavior
         $resourcesCollectionProvider->get($configuration, $repository)->willReturn([$resource1, $resource2]);
 
         $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->willReturn($event);
-        
+
         $event->getResponse()->willReturn($response);
 
         $configuration->isHtmlRequest()->shouldNotBeCalled();
-        $this->createRestView($configuration, [$resource1, $resource2])->shouldNotBeCalled();
+        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
 
         $this->indexAction($request)->shouldReturn($response);
     }
