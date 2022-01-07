@@ -1,0 +1,33 @@
+---------------------------------------------------------------------------
+
+by maximehuran at 2021-05-24T08:31:40Z
+
+Hi, I added some PHP Spec tests. I am not sure about it but I don't know how to setup the test application for this plugin.
+I don't see PHP Unit tests actually managing some redirection on this plugin.
+
+---------------------------------------------------------------------------
+
+by loic425 at 2021-05-24T09:49:48Z
+
+> Hi, I added some PHP Spec tests. I am not sure about it but I don't know how to setup the test application for this plugin.
+> I don't see PHP Unit tests actually managing some redirection on this plugin.
+
+Just look at the CI to see how it is set up :)
+
+---------------------------------------------------------------------------
+
+by maximehuran at 2021-05-24T10:56:46Z
+
+I would like to run the CI to check my tests, I think it's the easiest solution
+
+---------------------------------------------------------------------------
+
+by maximehuran at 2021-06-10T13:21:53Z
+
+ping @lchrusciel I added PHP Spec tests :)
+
+---------------------------------------------------------------------------
+
+by Zales0123 at 2022-01-07T08:52:27Z
+
+Thanks, Maxime! :tada:
