@@ -168,7 +168,8 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_routes_from_resource_with_host(): void {
+    function it_generates_routes_from_resource_with_host(): void
+    {
         $routes = $this->__invoke();
         $route = $routes->get('show_book_with_host');
         $route->getPath()->shouldReturn('/book/{id}');

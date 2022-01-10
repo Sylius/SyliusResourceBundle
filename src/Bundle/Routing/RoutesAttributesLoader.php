@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class RoutesAttributesLoader
 {
     private array $mapping;
+
     public function __construct(array $mapping)
     {
         $this->mapping = $mapping;
