@@ -241,6 +241,10 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
      */
     public function it_generates_routes_from_resource_with_priority(): void
     {
+        if (Kernel::MAJOR_VERSION < 5) {
+            $this->markTestSkipped();
+        }
+
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = static::$container;
