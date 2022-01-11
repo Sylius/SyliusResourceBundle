@@ -11,8 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Dummy;
+namespace Sylius\Bundle\ResourceBundle\Routing;
 
-trait TraitPass
+use Symfony\Component\Routing\RouteCollection;
+
+interface RouteAttributesFactoryInterface
 {
+    public function createRouteForClass(RouteCollection $routeCollection, string $className): void;
 }

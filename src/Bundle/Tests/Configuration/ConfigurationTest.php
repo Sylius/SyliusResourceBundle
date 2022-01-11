@@ -47,7 +47,7 @@ class ConfigurationTest extends TestCase
                     'paths' => [
                         '%kernel.project_dir%/src/Entity',
                     ],
-                ]
+                ],
             ],
             'mapping'
         );
@@ -69,7 +69,7 @@ class ConfigurationTest extends TestCase
                     'paths' => [
                         'path/to/resources',
                     ],
-                ]
+                ],
             ],
             'mapping'
         );

@@ -17,11 +17,21 @@ use Symfony\Component\Finder\Finder;
 
 final class ClassReflection
 {
-    public static function getResourcesByPath(string $path): array
+    public static function getResourcesByPaths(array $paths): iterable
+    {
+        foreach ($paths as $resourceDirectory) {
+            $resources = self::getResourcesByPath($resourceDirectory);
+
+            foreach ($resources as $className) {
+                yield $className;
+            }
+        }
+    }
+
+    public static function getResourcesByPath(string $path): iterable
     {
         $finder = new Finder();
         $finder->files()->in($path)->name('*.php')->sortByName(true);
-        $classes = [];
 
         foreach ($finder as $file) {
             $fileContent = (string) file_get_contents((string) $file->getRealPath());
@@ -38,12 +48,20 @@ final class ClassReflection
             $className = trim($matches[1]);
 
             if (null !== $namespace) {
-                $classes[] = $namespace.'\\'.$className;
+                yield $namespace . '\\' . $className;
             } else {
-                $classes[] = $className;
+                yield $className;
             }
         }
+    }
 
-        return $classes;
+    /**
+     * @return \ReflectionAttribute[]
+     */
+    public static function getClassAttributes(string $className, string $attributeName): array
+    {
+        $reflectionClass = new \ReflectionClass($className);
+
+        return $reflectionClass->getAttributes($attributeName);
     }
 }

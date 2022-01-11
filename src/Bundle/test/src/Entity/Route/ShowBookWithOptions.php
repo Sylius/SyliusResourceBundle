@@ -15,7 +15,6 @@ namespace App\Entity\Route;
 
 use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
-use RectorPrefix20210817\template;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
 
 /**

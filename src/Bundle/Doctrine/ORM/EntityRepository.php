@@ -14,11 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM;
 
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /** @psalm-suppress DeprecatedInterface */

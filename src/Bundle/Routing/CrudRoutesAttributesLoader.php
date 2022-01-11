@@ -1,16 +1,22 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Paweł Jędrzejewski
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
 use Sylius\Component\Resource\Reflection\ClassReflection;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
-use Webmozart\Assert\Assert;
 
 final class CrudRoutesAttributesLoader
 {
@@ -29,44 +35,24 @@ final class CrudRoutesAttributesLoader
     public function __invoke(): RouteCollection
     {
         $routeCollection = new RouteCollection();
+        $paths = $this->mapping['paths'] ?? [];
 
-        /** @var \ReflectionClass $reflectionClass */
-        foreach ($this->getReflectionClasses() as $reflectionClass) {
-            $this->addRoutesForSyliusCrudRoutesAttributes($routeCollection, $reflectionClass);
+        /** @var string $className */
+        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+            $this->addRoutesForSyliusCrudRoutesAttributes($routeCollection, $className);
         }
 
         return $routeCollection;
     }
 
-    private function addRoutesForSyliusCrudRoutesAttributes(RouteCollection $routeCollection, \ReflectionClass $reflectionClass): void
+    private function addRoutesForSyliusCrudRoutesAttributes(RouteCollection $routeCollection, string $className): void
     {
-        foreach ($this->getClassAttributes($reflectionClass, SyliusCrudRoutes::class) as $reflectionAttribute) {
+        $attributes = ClassReflection::getClassAttributes($className, SyliusCrudRoutes::class);
+
+        foreach ($attributes as $reflectionAttribute) {
             $resource = Yaml::dump($reflectionAttribute->getArguments());
             $resourceRouteCollection = $this->resourceLoader->load($resource);
             $routeCollection->addCollection($resourceRouteCollection);
-        }
-    }
-
-    /**
-     * @return \ReflectionAttribute[]
-     */
-    private function getClassAttributes(\ReflectionClass $reflectionClass, string $attributeName): array
-    {
-        return $reflectionClass->getAttributes($attributeName);
-    }
-
-    private function getReflectionClasses(): iterable
-    {
-        $paths = $this->mapping['paths'] ?? [];
-
-        foreach ($paths as $resourceDirectory) {
-            $resources = ClassReflection::getResourcesByPath($resourceDirectory);
-
-            foreach ($resources as $className) {
-                $reflectionClass = new \ReflectionClass($className);
-
-                yield $className => $reflectionClass;
-            }
         }
     }
 }

@@ -13,23 +13,37 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Annotation;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class SyliusCrudRoutes
 {
     public ?string $alias = null;
+
     public ?string $path = null;
+
     public ?string $identifier = null;
+
     public ?array $criteria = null;
+
     public ?bool $filterable = null;
+
     public ?string $form = null;
+
     public ?string $serializationVersion = null;
+
     public ?string $section = null;
+
     public ?string $redirect = null;
+
     public ?string $templates = null;
+
     public ?string $grid = null;
+
     public ?bool $permission = null;
+
     public ?array $except = null;
+
     public ?array $only = null;
+
     public ?array $vars = null;
 
     public function __construct(
