@@ -16,11 +16,9 @@ namespace App\Tests\Controller;
 use ApiTestCase\JsonApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class PullRequestApiTest extends JsonApiTestCase
+final class PullRequestApiTest extends JsonApiTestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function it_allows_creating_a_pull_request()
     {
         $data =
@@ -34,9 +32,7 @@ EOT;
         $this->assertResponse($response, 'pull-requests/create_response', Response::HTTP_CREATED);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_allows_submitting_a_pull_request()
     {
         $objects = $this->loadFixturesFromFile('pull-requests.yml');
@@ -52,9 +48,7 @@ EOT;
         $this->assertResponse($response, 'pull-requests/submit_response', Response::HTTP_OK);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_allows_waiting_for_review_a_pull_request()
     {
         $objects = $this->loadFixturesFromFile('pull-requests.yml');
@@ -70,9 +64,7 @@ EOT;
         $this->assertResponse($response, 'pull-requests/wait_for_review_response', Response::HTTP_OK);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_does_not_allow_to_wait_for_review_on_pull_request_with_start_status()
     {
         $objects = $this->loadFixturesFromFile('pull-requests.yml');
