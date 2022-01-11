@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Workflow\Registry;
+use Webmozart\Assert\Assert;
 
 final class Workflow implements StateMachineInterface
 {
@@ -31,9 +32,7 @@ final class Workflow implements StateMachineInterface
      */
     public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool
     {
-        if (!$configuration->hasStateMachine()) {
-            throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
-        }
+        Assert::true($configuration->hasStateMachine(), 'State machine must be configured to apply transition, check your routing.');
 
         /** @var string $transitionName */
         $transitionName = $configuration->getStateMachineTransition();
@@ -46,9 +45,7 @@ final class Workflow implements StateMachineInterface
      */
     public function apply(RequestConfiguration $configuration, ResourceInterface $resource): void
     {
-        if (!$configuration->hasStateMachine()) {
-            throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
-        }
+        Assert::true($configuration->hasStateMachine(), 'State machine must be configured to apply transition, check your routing.');
 
         $graph = $configuration->getStateMachineGraph();
 

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
-use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Workflow\Workflow;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class RegisterStateMachinePass implements CompilerPassInterface
