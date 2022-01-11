@@ -17,11 +17,9 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 class PullRequest implements ResourceInterface
 {
-    /** @var int|null */
-    private $id;
+    private ?int $id = null;
 
-    /** @var string */
-    private $currentPlace = 'start';
+    private string $currentPlace = 'start';
 
     public function getId(): ?int
     {
