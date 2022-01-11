@@ -16,10 +16,10 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use SM\Factory\Factory;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
-use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Workflow\Workflow;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
