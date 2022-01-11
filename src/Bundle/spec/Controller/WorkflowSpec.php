@@ -22,7 +22,7 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow as SymfonyWorkflow;
 
-class WorkflowSpec extends ObjectBehavior
+final class WorkflowSpec extends ObjectBehavior
 {
     function let(Registry $registry): void
     {
