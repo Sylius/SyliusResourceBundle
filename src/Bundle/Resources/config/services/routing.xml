@@ -22,5 +22,20 @@
             </argument>
             <tag name="routing.loader" />
         </service>
+
+        <service id="sylius.routing.loader.crud_routes_attributes" class="Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader" public="false">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="sylius.routing.loader.resource" />
+            <tag name="routing.route_loader" />
+        </service>
+
+        <service id="sylius.routing.loader.routes_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" public="false">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="sylius.routing.factory.route_attributes" />
+            <tag name="routing.route_loader" />
+        </service>
+
+        <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
     </services>
 </container>

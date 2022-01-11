@@ -36,6 +36,48 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
+    public function it_has_default_mapping_paths()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [],
+            ],
+            [
+                'mapping' => [
+                    'paths' => [
+                        '%kernel.project_dir%/src/Entity',
+                    ],
+                ],
+            ],
+            'mapping'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function its_mapping_paths_can_be_customized()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['mapping' => [
+                    'paths' => ['path/to/resources'],
+                ]],
+            ],
+            [
+                'mapping' => [
+                    'paths' => [
+                        'path/to/resources',
+                    ],
+                ],
+            ],
+            'mapping'
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_has_default_authorization_checker()
     {
         $this->assertProcessedConfigurationEquals(

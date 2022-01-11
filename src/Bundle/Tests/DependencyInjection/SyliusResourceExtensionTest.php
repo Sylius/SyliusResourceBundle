@@ -116,6 +116,27 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasAlias(sprintf('%s $comicBookFactory', BookFactory::class), 'app.factory.comic_book');
     }
 
+    /**
+     * @test
+     */
+    public function it_registers_parameter_for_paths(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load([
+            'mapping' => [
+                'paths' => [
+                    'path/to/resources',
+                ],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.mapping', [
+            'paths' => [
+                'path/to/resources',
+            ],
+        ]);
+    }
+
     protected function getContainerExtensions(): array
     {
         return [
