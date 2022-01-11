@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
+use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\Workflow as SymfonyWorkflow;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class RegisterStateMachinePass implements CompilerPassInterface
@@ -84,7 +85,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
     private function setSymfonyWorkflowAsStateMachine(ContainerBuilder $container): void
     {
         if (!$this->isSymfonyWorkflowEnabled($container)) {
-            if (class_exists(Workflow::class)) {
+            if (class_exists(SymfonyWorkflow::class)) {
                 throw new \LogicException('You can not use "Symfony" for your state machine if it is not enabled on framework bundle.');
             }
 
