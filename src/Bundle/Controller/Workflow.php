@@ -28,7 +28,7 @@ final class Workflow implements StateMachineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool
     {
@@ -41,7 +41,7 @@ final class Workflow implements StateMachineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply(RequestConfiguration $configuration, ResourceInterface $resource): void
     {
