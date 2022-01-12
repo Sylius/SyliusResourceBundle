@@ -216,8 +216,8 @@ abstract class AbstractDriver implements DriverInterface
                 new Reference('sylius.resource_controller.event_dispatcher'),
                 new Reference('sylius.resource_controller.template_renderer'),
                 new Reference('sylius.checker.request_permission'),
+                new Reference('sylius.provider.state_machine'),
                 new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
-                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
             ])
         ;
 
@@ -300,8 +300,8 @@ abstract class AbstractDriver implements DriverInterface
                 new Reference('sylius.resource_controller.resource_update_handler'),
                 new Reference('security.csrf.token_manager'),
                 new Reference('sylius.checker.request_permission'),
+                new Reference('sylius.provider.state_machine'),
                 new Reference('sylius.resource_controller.view_handler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
-                new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
             ])
         ;
 

@@ -60,5 +60,9 @@
         <service id="sylius.checker.request_permission" class="Sylius\Bundle\ResourceBundle\Checker\RequestPermissionChecker">
             <argument type="service" id="sylius.resource_controller.authorization_checker.disabled" />
         </service>
+
+        <service id="sylius.provider.state_machine" class="Sylius\Bundle\ResourceBundle\Provider\StateMachineProvider">
+            <argument type="service" id="sylius.resource_controller.state_machine" on-invalid="null" />
+        </service>
     </services>
 </container>

@@ -25,6 +25,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Provider\StateMachineProviderInterface;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -62,9 +63,9 @@ class ApplyStateMachineTransitionAction
 
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected StateMachineProviderInterface $stateMachineProvider;
 
-    protected ?StateMachineInterface $stateMachine;
+    protected ?ViewHandlerInterface $viewHandler;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -78,8 +79,8 @@ class ApplyStateMachineTransitionAction
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
         RequestPermissionCheckerInterface $requestPermissionChecker,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine
+        StateMachineProviderInterface $stateMachineProvider,
+        ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -92,8 +93,8 @@ class ApplyStateMachineTransitionAction
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->requestPermissionChecker = $requestPermissionChecker;
+        $this->stateMachineProvider = $stateMachineProvider;
         $this->viewHandler = $viewHandler;
-        $this->stateMachine = $stateMachine;
     }
 
     public function __invoke(Request $request): Response
@@ -126,7 +127,8 @@ class ApplyStateMachineTransitionAction
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
 
-        if (!$this->getStateMachine()->can($configuration, $resource)) {
+        $stateMachine = $this->stateMachineProvider->getStateMachine();
+        if (!$stateMachine->can($configuration, $resource)) {
             throw new BadRequestHttpException();
         }
 
@@ -185,15 +187,6 @@ class ApplyStateMachineTransitionAction
         $view = View::create($data, $statusCode);
 
         return $this->viewHandler->handle($configuration, $view);
-    }
-
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
     }
 
     protected function isCsrfTokenValid(string $id, ?string $token): bool

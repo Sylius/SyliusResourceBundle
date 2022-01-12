@@ -25,6 +25,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Provider\StateMachineProviderInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -57,9 +58,9 @@ class CreateAction
 
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected StateMachineProviderInterface $stateMachineProvider;
 
-    protected ?StateMachineInterface $stateMachine;
+    protected ?ViewHandlerInterface $viewHandler;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -73,8 +74,8 @@ class CreateAction
         EventDispatcherInterface $eventDispatcher,
         TemplateRendererInterface $templateRenderer,
         RequestPermissionCheckerInterface $requestPermissionChecker,
-        ?ViewHandlerInterface $viewHandler,
-        ?StateMachineInterface $stateMachine
+        StateMachineProviderInterface $stateMachineProvider,
+        ?ViewHandlerInterface $viewHandler
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -87,8 +88,8 @@ class CreateAction
         $this->eventDispatcher = $eventDispatcher;
         $this->templateRenderer = $templateRenderer;
         $this->requestPermissionChecker = $requestPermissionChecker;
+        $this->stateMachineProvider = $stateMachineProvider;
         $this->viewHandler = $viewHandler;
-        $this->stateMachine = $stateMachine;
     }
 
     public function __invoke(Request $request): Response
@@ -121,7 +122,8 @@ class CreateAction
             }
 
             if ($configuration->hasStateMachine()) {
-                $this->getStateMachine()->apply($configuration, $newResource);
+                $stateMachine = $this->stateMachineProvider->getStateMachine();
+                $stateMachine->apply($configuration, $newResource);
             }
 
             $this->repository->add($newResource);
@@ -172,14 +174,5 @@ class CreateAction
         $view = View::create($data, $statusCode);
 
         return $this->viewHandler->handle($configuration, $view);
-    }
-
-    protected function getStateMachine(): StateMachineInterface
-    {
-        if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
-        }
-
-        return $this->stateMachine;
     }
 }
