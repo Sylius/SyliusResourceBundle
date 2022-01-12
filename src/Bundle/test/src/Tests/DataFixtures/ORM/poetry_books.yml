@@ -1,0 +1,15 @@
+App\Entity\PoetryBook:
+    poetry-book1:
+        title:  "Romantyczność"
+        author: "@mickiewicz"
+    poetry-book2:
+        title:  "Poezje"
+        author: "@slowacki"
+
+App\Entity\Author:
+    mickiewicz:
+        firstName: "Adam"
+        lastName: "Mickiewicz"
+    slowacki:
+        firstName: "Juliusz"
+        lastName: "Słowacki"

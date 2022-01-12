@@ -1,0 +1,8 @@
+{
+    "id": @integer@,
+    "author": {
+        "first_name": "Adam",
+        "last_name": "Mickiewicz"
+    },
+    "title": "Romantyczność"
+}
