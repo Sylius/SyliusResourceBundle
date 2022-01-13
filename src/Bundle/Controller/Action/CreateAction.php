@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
-use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Creator\RestViewCreatorInterface;
 use Sylius\Bundle\ResourceBundle\Provider\StateMachineProviderInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -59,7 +57,7 @@ class CreateAction
 
     protected StateMachineProviderInterface $stateMachineProvider;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -74,7 +72,7 @@ class CreateAction
         TemplateRendererInterface $templateRenderer,
         RequestPermissionCheckerInterface $requestPermissionChecker,
         StateMachineProviderInterface $stateMachineProvider,
-        ?ViewHandlerInterface $viewHandler
+        RestViewCreatorInterface $restViewCreator
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -88,7 +86,7 @@ class CreateAction
         $this->templateRenderer = $templateRenderer;
         $this->requestPermissionChecker = $requestPermissionChecker;
         $this->stateMachineProvider = $stateMachineProvider;
-        $this->viewHandler = $viewHandler;
+        $this->restViewCreator = $restViewCreator;
     }
 
     public function __invoke(Request $request): Response
@@ -134,7 +132,7 @@ class CreateAction
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
 
             if (!$configuration->isHtmlRequest()) {
-                return $this->createRestView($configuration, $newResource, Response::HTTP_CREATED);
+                return $this->restViewCreator->createRestView($configuration, $newResource, Response::HTTP_CREATED);
             }
 
             $postEventResponse = $postEvent->getResponse();
@@ -146,7 +144,7 @@ class CreateAction
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
+            return $this->restViewCreator->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource);
@@ -162,16 +160,5 @@ class CreateAction
             $this->metadata->getName() => $newResource,
             'form' => $form->createView(),
         ]));
-    }
-
-    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
-    {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
     }
 }

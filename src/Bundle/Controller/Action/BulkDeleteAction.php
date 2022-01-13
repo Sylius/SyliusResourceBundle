@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
-use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Creator\RestViewCreatorInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -55,7 +53,7 @@ class BulkDeleteAction
 
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -68,7 +66,7 @@ class BulkDeleteAction
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
         RequestPermissionCheckerInterface $requestPermissionChecker,
-        ?ViewHandlerInterface $viewHandler
+        RestViewCreatorInterface $restViewCreator
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -80,7 +78,7 @@ class BulkDeleteAction
         $this->resourceDeleteHandler = $resourceDeleteHandler;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->requestPermissionChecker = $requestPermissionChecker;
-        $this->viewHandler = $viewHandler;
+        $this->restViewCreator = $restViewCreator;
     }
 
     public function __invoke(Request $request): Response
@@ -120,7 +118,7 @@ class BulkDeleteAction
                 $this->resourceDeleteHandler->handle($resource, $this->repository);
             } catch (DeleteHandlingException $exception) {
                 if (!$configuration->isHtmlRequest()) {
-                    return $this->createRestView($configuration, null, $exception->getApiResponseCode());
+                    return $this->restViewCreator->createRestView($configuration, null, $exception->getApiResponseCode());
                 }
 
                 $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -132,7 +130,7 @@ class BulkDeleteAction
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
+            return $this->restViewCreator->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
         }
 
         $this->flashHelper->addSuccessFlash($configuration, ResourceActions::BULK_DELETE);
@@ -145,17 +143,6 @@ class BulkDeleteAction
         }
 
         return $this->redirectHandler->redirectToIndex($configuration);
-    }
-
-    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
-    {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
     }
 
     protected function isCsrfTokenValid(string $id, ?string $token): bool

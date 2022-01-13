@@ -64,5 +64,9 @@
         <service id="sylius.provider.state_machine" class="Sylius\Bundle\ResourceBundle\Provider\StateMachineProvider">
             <argument type="service" id="sylius.resource_controller.state_machine" on-invalid="null" />
         </service>
+
+        <service id="sylius.creator.rest_view" class="Sylius\Bundle\ResourceBundle\Creator\RestViewCreator">
+            <argument type="service" id="sylius.resource_controller.view_handler" on-invalid="null" />
+        </service>
     </services>
 </container>

@@ -13,14 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
-use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Creator\RestViewCreatorInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
@@ -43,7 +41,7 @@ class IndexAction
 
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -53,7 +51,7 @@ class IndexAction
         ResourcesCollectionProviderInterface $resourcesCollectionProvider,
         TemplateRendererInterface $templateRenderer,
         RequestPermissionCheckerInterface $requestPermissionChecker,
-        ?ViewHandlerInterface $viewHandler
+        RestViewCreatorInterface $restViewCreator
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -62,7 +60,7 @@ class IndexAction
         $this->resourcesCollectionProvider = $resourcesCollectionProvider;
         $this->templateRenderer = $templateRenderer;
         $this->requestPermissionChecker = $requestPermissionChecker;
-        $this->viewHandler = $viewHandler;
+        $this->restViewCreator = $restViewCreator;
     }
 
     public function __invoke(Request $request): Response
@@ -83,17 +81,6 @@ class IndexAction
             ]));
         }
 
-        return $this->createRestView($configuration, $resources);
-    }
-
-    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
-    {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->restViewCreator->createRestView($configuration, $resources);
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller\Action;
 
 use Doctrine\Persistence\ObjectManager;
-use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
@@ -25,7 +24,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Creator\RestViewCreatorInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -63,7 +62,7 @@ class UpdateAction
 
     protected RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected ?ViewHandlerInterface $viewHandler;
+    protected RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -78,7 +77,7 @@ class UpdateAction
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         TemplateRendererInterface $templateRenderer,
         RequestPermissionCheckerInterface $requestPermissionChecker,
-        ?ViewHandlerInterface $viewHandler
+        RestViewCreatorInterface $restViewCreator
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -92,7 +91,7 @@ class UpdateAction
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->templateRenderer = $templateRenderer;
         $this->requestPermissionChecker = $requestPermissionChecker;
-        $this->viewHandler = $viewHandler;
+        $this->restViewCreator = $restViewCreator;
     }
 
     public function __invoke(Request $request): Response
@@ -133,7 +132,7 @@ class UpdateAction
                 $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
             } catch (UpdateHandlingException $exception) {
                 if (!$configuration->isHtmlRequest()) {
-                    return $this->createRestView($configuration, $form, $exception->getApiResponseCode());
+                    return $this->restViewCreator->createRestView($configuration, $form, $exception->getApiResponseCode());
                 }
 
                 $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
@@ -149,10 +148,10 @@ class UpdateAction
 
             if (!$configuration->isHtmlRequest()) {
                 if ($configuration->getParameters()->get('return_content', false)) {
-                    return $this->createRestView($configuration, $resource, Response::HTTP_OK);
+                    return $this->restViewCreator->createRestView($configuration, $resource, Response::HTTP_OK);
                 }
 
-                return $this->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
+                return $this->restViewCreator->createRestView($configuration, null, Response::HTTP_NO_CONTENT);
             }
 
             $postEventResponse = $postEvent->getResponse();
@@ -164,7 +163,7 @@ class UpdateAction
         }
 
         if (!$configuration->isHtmlRequest()) {
-            return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
+            return $this->restViewCreator->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
         }
 
         $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
@@ -192,16 +191,5 @@ class UpdateAction
         }
 
         return $resource;
-    }
-
-    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
-    {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
-        }
-
-        $view = View::create($data, $statusCode);
-
-        return $this->viewHandler->handle($configuration, $view);
     }
 }
