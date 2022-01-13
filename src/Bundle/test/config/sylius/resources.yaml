@@ -3,6 +3,11 @@ sylius_resource:
         locale_provider: test.translation_locale_provider
 
     resources:
+        app.blog_post:
+            classes:
+                model: App\Entity\BlogPost
+                form: App\Form\Type\BlogPostType
+
         app.book:
             classes:
                 model: App\Entity\Book

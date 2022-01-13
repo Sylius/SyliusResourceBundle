@@ -37,3 +37,26 @@ framework:
                 reopen:
                     from: closed
                     to: review
+        blog_publishing:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'currentPlace'
+            supports:
+                - App\Entity\BlogPost
+            initial_marking: draft
+            places:
+                - draft
+                - reviewed
+                - rejected
+                - published
+            transitions:
+                to_review:
+                    from: draft
+                    to: reviewed
+                publish:
+                    from: reviewed
+                    to: published
+                reject:
+                    from: reviewed
+                    to: rejected

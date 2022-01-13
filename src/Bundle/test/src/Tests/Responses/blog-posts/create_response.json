@@ -1,0 +1,6 @@
+{
+    "id": @integer@,
+    "current_place": {
+        "draft": 1
+    }
+}

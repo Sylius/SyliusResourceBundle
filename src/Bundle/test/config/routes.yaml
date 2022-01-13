@@ -1,3 +1,19 @@
+app_blog_post:
+    resource: |
+        alias: app.blog_post
+    type: sylius.resource_api
+
+app_blog_post_apply_transition:
+    path: /blog-posts/{id}/{transition}
+    methods: [PUT]
+    defaults:
+        _controller: app.controller.blog_post:applyStateMachineTransitionAction
+        _sylius:
+            csrf_protection: false
+            state_machine:
+                graph: blog_publishing
+                transition: $transition
+
 app_book:
     resource: |
         alias: app.book
