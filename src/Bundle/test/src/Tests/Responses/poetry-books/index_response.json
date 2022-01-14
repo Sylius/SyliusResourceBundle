@@ -22,7 +22,8 @@
                     "first_name": "Adam",
                     "last_name": "Mickiewicz"
                 },
-                "title": "Romantyczność"
+                "title": "Romantyczność",
+                "state": "published"
             },
             {
                 "id": @integer@,
@@ -30,7 +31,8 @@
                     "first_name": "Juliusz",
                     "last_name": "Słowacki"
                 },
-                "title": "Poezje"
+                "title": "Poezje",
+                "state": "published"
             }
         ]
     }

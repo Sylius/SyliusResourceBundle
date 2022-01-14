@@ -57,6 +57,14 @@ services:
             - '%app.model.book.class%'
         tags: ['form.type']
 
+    App\Form\Type\AuthorType:
+        tags: ['form.type']
+
+    App\Form\Type\PoetryBookType:
+        arguments:
+            - '%app.model.poetry_book.class%'
+        tags: ['form.type']
+
     app.form.type.book_translation:
         class: App\Form\Type\BookTranslationType
         arguments:

@@ -25,6 +25,17 @@ app_poetry_book:
         controller_type: actions
     type: sylius.resource_api
 
+app_poetry_book_cancel:
+    path: /poetry-books/{id}/cancel
+    methods: [PUT]
+    defaults:
+        _controller: app.action.apply_state_machine_transition.poetry_book
+        _sylius:
+            state_machine:
+                graph: app_poetry_book
+                transition: cancel
+            csrf_protection: false
+
 app_gedmo:
     resource: |
         alias: app.gedmo

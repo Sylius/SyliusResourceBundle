@@ -11,6 +11,10 @@ App\Entity\PoetryBook:
         title:
             type: string
             length: 255
+        state:
+            type: string
+            length: 255
+            nullable: true
     embedded:
         author:
             class: App\Entity\Author

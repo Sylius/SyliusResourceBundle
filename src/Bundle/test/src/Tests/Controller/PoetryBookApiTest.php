@@ -111,4 +111,15 @@ EOT;
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'poetry-books/index_response');
     }
+
+    /** @test */
+    public function it_allows_changing_state_of_a_poetry_book(): void
+    {
+        $objects = $this->loadFixturesFromFile('poetry_books.yml');
+
+        $this->client->request('PUT', sprintf('/poetry-books/%d/cancel', $objects['poetry-book1']->getId()), [], [], ['CONTENT_TYPE' => 'application/json']);
+        $response = $this->client->getResponse();
+        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponse($response, 'poetry-books/show_cancelled_book_response');
+    }
 }

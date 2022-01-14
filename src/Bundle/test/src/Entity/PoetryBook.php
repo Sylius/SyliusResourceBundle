@@ -23,6 +23,8 @@ class PoetryBook implements ResourceInterface
 
     private ?string $title = null;
 
+    private string $state = 'published';
+
     public function getId()
     {
         return $this->id;
@@ -46,5 +48,15 @@ class PoetryBook implements ResourceInterface
     public function setAuthor(?Author $author): void
     {
         $this->author = $author;
+    }
+
+    public function getState(): string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): void
+    {
+        $this->state = $state;
     }
 }

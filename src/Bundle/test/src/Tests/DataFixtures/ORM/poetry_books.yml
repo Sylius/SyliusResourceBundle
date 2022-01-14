@@ -2,9 +2,11 @@ App\Entity\PoetryBook:
     poetry-book1:
         title:  "Romantyczność"
         author: "@mickiewicz"
+        state: 'published'
     poetry-book2:
         title:  "Poezje"
         author: "@slowacki"
+        state: 'published'
 
 App\Entity\Author:
     mickiewicz:
