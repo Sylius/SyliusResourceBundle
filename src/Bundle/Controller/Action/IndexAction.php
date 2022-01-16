@@ -25,23 +25,23 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IndexAction
+final class IndexAction
 {
-    protected MetadataInterface $metadata;
+    private MetadataInterface $metadata;
 
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+    private RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    protected RepositoryInterface $repository;
+    private RepositoryInterface $repository;
 
-    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+    private ResourcesCollectionProviderInterface $resourcesCollectionProvider;
 
-    protected TemplateRendererInterface $templateRenderer;
+    private TemplateRendererInterface $templateRenderer;
 
-    protected RequestPermissionCheckerInterface $requestPermissionChecker;
+    private RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected RestViewCreatorInterface $restViewCreator;
+    private RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -72,15 +72,15 @@ class IndexAction
 
         $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
 
-        if ($configuration->isHtmlRequest()) {
-            return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resources' => $resources,
-                $this->metadata->getPluralName() => $resources,
-            ]));
+        if (!$configuration->isHtmlRequest()) {
+            return $this->restViewCreator->createRestView($configuration, $resources);
         }
 
-        return $this->restViewCreator->createRestView($configuration, $resources);
+        return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resources' => $resources,
+            $this->metadata->getPluralName() => $resources,
+        ]));
     }
 }

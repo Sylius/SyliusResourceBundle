@@ -34,33 +34,33 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class ApplyStateMachineTransitionAction
+final class ApplyStateMachineTransitionAction
 {
-    protected MetadataInterface $metadata;
+    private MetadataInterface $metadata;
 
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+    private RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    protected RepositoryInterface $repository;
+    private RepositoryInterface $repository;
 
-    protected ObjectManager $manager;
+    private ObjectManager $manager;
 
-    protected SingleResourceFinderInterface $singleResourceFinder;
+    private SingleResourceFinderInterface $singleResourceFinder;
 
-    protected RedirectHandlerInterface $redirectHandler;
+    private RedirectHandlerInterface $redirectHandler;
 
-    protected FlashHelperInterface $flashHelper;
+    private FlashHelperInterface $flashHelper;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
+    private ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
-    protected CsrfTokenManagerInterface $csrfTokenManager;
+    private CsrfTokenManagerInterface $csrfTokenManager;
 
-    protected RequestPermissionCheckerInterface $requestPermissionChecker;
+    private RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected StateMachineProviderInterface $stateMachineProvider;
+    private StateMachineProviderInterface $stateMachineProvider;
 
-    protected RestViewCreatorInterface $restViewCreator;
+    private RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -161,7 +161,7 @@ class ApplyStateMachineTransitionAction
         return $this->redirectHandler->redirectToResource($configuration, $resource);
     }
 
-    protected function isCsrfTokenValid(string $id, ?string $token): bool
+    private function isCsrfTokenValid(string $id, ?string $token): bool
     {
         return $this->csrfTokenManager->isTokenValid(new CsrfToken($id, $token));
     }

@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class PoetryBookApiTest extends JsonApiTestCase
 {
@@ -115,11 +116,21 @@ EOT;
     /** @test */
     public function it_allows_changing_state_of_a_poetry_book(): void
     {
+        $this->markAsSkippedIfNecessary();
         $objects = $this->loadFixturesFromFile('poetry_books.yml');
 
         $this->client->request('PUT', sprintf('/poetry-books/%d/cancel', $objects['poetry-book1']->getId()), [], [], ['CONTENT_TYPE' => 'application/json']);
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_OK);
         $this->assertResponse($response, 'poetry-books/show_cancelled_book_response');
+    }
+
+    private function markAsSkippedIfNecessary(): void
+    {
+        $bundles = $this->client->getKernel()->getBundles();
+
+        if (!in_array(winzouStateMachineBundle::class, $bundles)) {
+            $this->markTestSkipped();
+        }
     }
 }

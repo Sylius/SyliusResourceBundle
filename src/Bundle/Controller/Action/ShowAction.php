@@ -25,23 +25,23 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ShowAction
+final class ShowAction
 {
-    protected MetadataInterface $metadata;
+    private MetadataInterface $metadata;
 
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+    private RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    protected RepositoryInterface $repository;
+    private RepositoryInterface $repository;
 
-    protected SingleResourceFinderInterface $singleResourceFinder;
+    private SingleResourceFinderInterface $singleResourceFinder;
 
-    protected TemplateRendererInterface $templateRenderer;
+    private TemplateRendererInterface $templateRenderer;
 
-    protected RequestPermissionCheckerInterface $requestPermissionChecker;
+    private RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected RestViewCreatorInterface $restViewCreator;
+    private RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -72,15 +72,15 @@ class ShowAction
 
         $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
 
-        if ($configuration->isHtmlRequest()) {
-            return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $resource,
-                $this->metadata->getName() => $resource,
-            ]));
+        if (!$configuration->isHtmlRequest()) {
+            return $this->restViewCreator->createRestView($configuration, $resource);
         }
 
-        return $this->restViewCreator->createRestView($configuration, $resource);
+        return new Response($this->templateRenderer->render($configuration->getTemplate(ResourceActions::SHOW . '.html'), [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resource' => $resource,
+            $this->metadata->getName() => $resource,
+        ]));
     }
 }

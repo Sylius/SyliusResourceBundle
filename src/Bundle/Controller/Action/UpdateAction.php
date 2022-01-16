@@ -33,33 +33,33 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class UpdateAction
+final class UpdateAction
 {
-    protected MetadataInterface $metadata;
+    private MetadataInterface $metadata;
 
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+    private RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    protected RepositoryInterface $repository;
+    private RepositoryInterface $repository;
 
-    protected ObjectManager $manager;
+    private ObjectManager $manager;
 
-    protected SingleResourceFinderInterface $singleResourceFinder;
+    private SingleResourceFinderInterface $singleResourceFinder;
 
-    protected ResourceFormFactoryInterface $resourceFormFactory;
+    private ResourceFormFactoryInterface $resourceFormFactory;
 
-    protected RedirectHandlerInterface $redirectHandler;
+    private RedirectHandlerInterface $redirectHandler;
 
-    protected FlashHelperInterface $flashHelper;
+    private FlashHelperInterface $flashHelper;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
+    private ResourceUpdateHandlerInterface $resourceUpdateHandler;
 
-    protected TemplateRendererInterface $templateRenderer;
+    private TemplateRendererInterface $templateRenderer;
 
-    protected RequestPermissionCheckerInterface $requestPermissionChecker;
+    private RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected RestViewCreatorInterface $restViewCreator;
+    private RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,

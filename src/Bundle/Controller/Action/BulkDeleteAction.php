@@ -31,29 +31,29 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class BulkDeleteAction
+final class BulkDeleteAction
 {
-    protected MetadataInterface $metadata;
+    private MetadataInterface $metadata;
 
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
+    private RequestConfigurationFactoryInterface $requestConfigurationFactory;
 
-    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
+    private ResourcesCollectionProviderInterface $resourcesCollectionProvider;
 
-    protected RepositoryInterface $repository;
+    private RepositoryInterface $repository;
 
-    protected RedirectHandlerInterface $redirectHandler;
+    private RedirectHandlerInterface $redirectHandler;
 
-    protected FlashHelperInterface $flashHelper;
+    private FlashHelperInterface $flashHelper;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
+    private ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
-    protected CsrfTokenManagerInterface $csrfTokenManager;
+    private CsrfTokenManagerInterface $csrfTokenManager;
 
-    protected RequestPermissionCheckerInterface $requestPermissionChecker;
+    private RequestPermissionCheckerInterface $requestPermissionChecker;
 
-    protected RestViewCreatorInterface $restViewCreator;
+    private RestViewCreatorInterface $restViewCreator;
 
     public function __construct(
         MetadataInterface $metadata,
@@ -145,7 +145,7 @@ class BulkDeleteAction
         return $this->redirectHandler->redirectToIndex($configuration);
     }
 
-    protected function isCsrfTokenValid(string $id, ?string $token): bool
+    private function isCsrfTokenValid(string $id, ?string $token): bool
     {
         return $this->csrfTokenManager->isTokenValid(new CsrfToken($id, $token));
     }
