@@ -18,22 +18,19 @@ use Sylius\Bundle\ResourceBundle\Checker\RequestPermissionCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Creator\RestViewCreatorInterface;
+use Sylius\Bundle\ResourceBundle\Finder\SingleResourceFinderInterface;
 use Sylius\Bundle\ResourceBundle\Provider\StateMachineProviderInterface;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -47,7 +44,7 @@ class ApplyStateMachineTransitionAction
 
     protected ObjectManager $manager;
 
-    protected SingleResourceProviderInterface $singleResourceProvider;
+    protected SingleResourceFinderInterface $singleResourceFinder;
 
     protected RedirectHandlerInterface $redirectHandler;
 
@@ -70,7 +67,7 @@ class ApplyStateMachineTransitionAction
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RepositoryInterface $repository,
         ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
+        SingleResourceFinderInterface $singleResourceFinder,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         EventDispatcherInterface $eventDispatcher,
@@ -84,7 +81,7 @@ class ApplyStateMachineTransitionAction
         $this->requestConfigurationFactory = $requestConfigurationFactory;
         $this->repository = $repository;
         $this->manager = $manager;
-        $this->singleResourceProvider = $singleResourceProvider;
+        $this->singleResourceFinder = $singleResourceFinder;
         $this->redirectHandler = $redirectHandler;
         $this->flashHelper = $flashHelper;
         $this->eventDispatcher = $eventDispatcher;
@@ -100,7 +97,7 @@ class ApplyStateMachineTransitionAction
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->requestPermissionChecker->isGrantedOr403($configuration, ResourceActions::UPDATE);
-        $resource = $this->findOr404($configuration);
+        $resource = $this->singleResourceFinder->findOr404($configuration, $this->repository, $this->metadata->getHumanizedName());
 
         if (
             $configuration->isCsrfProtectionEnabled() &&
@@ -162,18 +159,6 @@ class ApplyStateMachineTransitionAction
         }
 
         return $this->redirectHandler->redirectToResource($configuration, $resource);
-    }
-
-    /**
-     * @throws NotFoundHttpException
-     */
-    protected function findOr404(RequestConfiguration $configuration): ResourceInterface
-    {
-        if (null === $resource = $this->singleResourceProvider->get($configuration, $this->repository)) {
-            throw new NotFoundHttpException(sprintf('The "%s" has not been found', $this->metadata->getHumanizedName()));
-        }
-
-        return $resource;
     }
 
     protected function isCsrfTokenValid(string $id, ?string $token): bool

@@ -68,5 +68,9 @@
         <service id="sylius.creator.rest_view" class="Sylius\Bundle\ResourceBundle\Creator\RestViewCreator">
             <argument type="service" id="sylius.resource_controller.view_handler" on-invalid="null" />
         </service>
+
+        <service id="sylius.finder.single_resource" class="Sylius\Bundle\ResourceBundle\Finder\SingleResourceFinder">
+            <argument type="service" id="sylius.resource_controller.single_resource_provider" />
+        </service>
     </services>
 </container>
