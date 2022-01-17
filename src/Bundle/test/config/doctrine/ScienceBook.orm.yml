@@ -1,0 +1,16 @@
+App\Entity\ScienceBook:
+    type: mappedSuperclass
+    table: app_science_book
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+    embedded:
+        author:
+            class: App\Entity\Author
