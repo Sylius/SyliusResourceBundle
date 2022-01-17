@@ -23,9 +23,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function it_registers_alias_for_resource_controller_as_a_FQCN(): void
     {
         $this->setDefinition('sylius.resource_registry', new Definition());
@@ -46,9 +44,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService(BookTestController::class);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_skips_the_alias_if_controller_class_is_not_defined(): void
     {
         $this->setDefinition('sylius.resource_registry', new Definition());
@@ -69,9 +65,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderNotHasService(BookTestController::class);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_throws_exception_if_class_does_not_implement_resource_interface(): void
     {
         $this->expectException(InvalidArgumentException::class);

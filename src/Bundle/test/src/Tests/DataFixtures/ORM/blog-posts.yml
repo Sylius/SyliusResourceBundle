@@ -1,0 +1,7 @@
+App\Entity\BlogPost:
+    blog_post_draft:
+        currentPlace:
+          draft: 1
+    blog_post_reviewed:
+        currentPlace:
+            reviewed: 1
