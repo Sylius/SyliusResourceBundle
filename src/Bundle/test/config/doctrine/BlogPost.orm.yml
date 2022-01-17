@@ -1,0 +1,12 @@
+App\Entity\BlogPost:
+    type: mappedSuperclass
+    table: app_blog_post
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        currentPlace:
+            type: array

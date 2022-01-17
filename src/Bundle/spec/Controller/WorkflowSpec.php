@@ -14,17 +14,24 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use PhpSpec\ObjectBehavior;
-use SM\Factory\FactoryInterface;
-use SM\StateMachine\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface as ResourceStateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Workflow\Marking;
+use Symfony\Component\Workflow\Registry;
+use Symfony\Component\Workflow\Workflow as SymfonyWorkflow;
 
-final class StateMachineSpec extends ObjectBehavior
+final class WorkflowSpec extends ObjectBehavior
 {
-    function let(FactoryInterface $stateMachineFactory): void
+    function let(Registry $registry): void
     {
-        $this->beConstructedWith($stateMachineFactory);
+        $this->beConstructedWith($registry);
+    }
+
+    function it_is_initializable(): void
+    {
+        $this->shouldHaveType(Workflow::class);
     }
 
     function it_implements_state_machine_interface(): void
@@ -54,49 +61,52 @@ final class StateMachineSpec extends ObjectBehavior
 
     function it_returns_if_configured_state_machine_can_transition(
         RequestConfiguration $requestConfiguration,
+        Registry $registry,
         ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        SymfonyWorkflow $workflow
     ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn(null);
         $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-
-        $stateMachineFactory->get($resource, 'sylius_product_review_state')->willReturn($stateMachine);
-        $stateMachine->can('reject')->willReturn(true);
+        $registry->get($resource, null)->willReturn($workflow);
+        $workflow->can($resource, 'reject')->willReturn(true);
 
         $this->can($requestConfiguration, $resource)->shouldReturn(true);
     }
 
     function it_applies_configured_state_machine_transition_without_graph_configuration(
         RequestConfiguration $requestConfiguration,
+        Registry $registry,
         ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        SymfonyWorkflow $workflow,
+        Marking $marking
     ): void {
-        $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineGraph()->willReturn(null);
+        $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $stateMachineFactory->get($resource, 'default')->willReturn($stateMachine);
+        $registry->get($resource, null)->willReturn($workflow);
+        $workflow->apply($resource, 'reject')->willReturn($marking);
 
-        $stateMachineFactory->get($resource, 'default')->shouldBeCalled();
-        $stateMachine->apply('reject')->shouldBeCalled();
+        $workflow->apply($resource, 'reject')->shouldBeCalled();
 
         $this->apply($requestConfiguration, $resource);
     }
 
     function it_applies_configured_state_machine_transition_with_graph_configuration(
         RequestConfiguration $requestConfiguration,
+        Registry $registry,
         ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        SymfonyWorkflow $workflow,
+        Marking $marking
     ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
         $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+        $registry->get($resource, 'pull_request')->willReturn($workflow);
+        $workflow->apply($resource, 'reject')->willReturn($marking);
 
-        $stateMachineFactory->get($resource, 'sylius_product_review_state')->willReturn($stateMachine);
-        $stateMachine->apply('reject')->shouldBeCalled();
+        $registry->get($resource, 'pull_request')->shouldBeCalled();
+        $workflow->apply($resource, 'reject')->shouldBeCalled();
 
         $this->apply($requestConfiguration, $resource);
     }
