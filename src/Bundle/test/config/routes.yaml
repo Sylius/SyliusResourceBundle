@@ -87,3 +87,9 @@ app_show_book_with_custom_repository:
             repository:
                 method: ["expr:service('test.custom_book_repository')", "findCustomBook"]
                 arguments: ["J.R.R. Tolkien"]
+
+app_science_book:
+    resource: |
+        alias: app.science_book
+        templates: 'ScienceBook'
+    type: sylius.resource

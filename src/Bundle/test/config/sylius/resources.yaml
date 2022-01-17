@@ -24,6 +24,10 @@ sylius_resource:
             classes:
                 model: App\Entity\ComicBook
 
+        app.science_book:
+            classes:
+                model: App\Entity\ScienceBook
+
         app.gedmo:
             classes:
                 model: App\Entity\GedmoExtendedExample
