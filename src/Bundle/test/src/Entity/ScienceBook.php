@@ -17,13 +17,13 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 class ScienceBook implements ResourceInterface
 {
-    private ?int $id;
+    private ?int $id = null;
 
     private ?Author $author = null;
 
     private ?string $title = null;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -33,19 +33,19 @@ class ScienceBook implements ResourceInterface
         return $this->title;
     }
 
-    public function setTitle($title): void
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
     public function getAuthorFirstName(): ?string
     {
-        return $this->author ? $this->author->getFirstName() : null;
+        return $this->author?->getFirstName();
     }
 
     public function getAuthorLastName(): ?string
     {
-        return $this->author ? $this->author->getLastName() : null;
+        return $this->author?->getLastName();
     }
 
     public function getAuthor(): ?Author
