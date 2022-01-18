@@ -1,0 +1,15 @@
+<h1>Books</h1>
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Title</td>
+            <td>Author</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for book in resources %}
+        <tr><td>{{ book.id }}</td><td>{{ book.title }}</td><td>{{ book.authorFirstName }} {{ book.authorLastName }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
