@@ -30,6 +30,21 @@ return [
     new winzou\Bundle\StateMachineBundle\winzouStateMachineBundle(),
 ];
 ```
+
+```yaml
+# config/routes.yaml
+
+# [...]
+
+sylius_crud_routes:
+    resource: 'sylius.routing.loader.crud_routes_attributes'
+    type: service
+
+sylius_routes:
+    resource: 'sylius.routing.loader.routes_attributes'
+    type: service
+```
+
 That's it! Now you can configure your first resource.
 
 **[Go back to the documentation's index](index.md)**
