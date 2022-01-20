@@ -30,7 +30,7 @@ final class SyliusRoute
 
     public ?array $criteria = null;
 
-    public ?string $serializationGroups = null;
+    public ?array $serializationGroups = null;
 
     public ?string $serializationVersion = null;
 
@@ -54,7 +54,7 @@ final class SyliusRoute
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
-        ?string $serializationGroups = null,
+        ?array $serializationGroups = null,
         ?string $serializationVersion = null,
         ?array $requirements = null,
         ?array $options = null,
