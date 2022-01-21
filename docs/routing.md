@@ -40,10 +40,11 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ -------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ -------------------------
-app_book_show            GET             ANY      ANY    /books/{id}
 app_book_index           GET             ANY      ANY    /books/
 app_book_create          GET|POST        ANY      ANY    /books/new
 app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{id}/edit
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_bulk_delete     DELETE          ANY      ANY    /books/bulk-delete
 app_book_delete          DELETE          ANY      ANY    /books/{id}
 ```
 ## Using a Custom Path
@@ -86,10 +87,11 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ -------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ -------------------------
-app_book_show            GET             ANY      ANY    /library/{id}
 app_book_index           GET             ANY      ANY    /library/
 app_book_create          GET|POST        ANY      ANY    /library/new
 app_book_update          GET|PUT|PATCH   ANY      ANY    /library/{id}/edit
+app_book_show            GET             ANY      ANY    /library/{id}
+app_book_bulk_delete     DELETE          ANY      ANY    /library/bulk-delete
 app_book_delete          DELETE          ANY      ANY    /library/{id}
 ```
 ## Generating API CRUD Routing
@@ -157,9 +159,10 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ -------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ -------------------------
-app_book_show            GET             ANY      ANY    /books/{id}
 app_book_index           GET             ANY      ANY    /books/
 app_book_create          GET|POST        ANY      ANY    /books/new
+app_book_show            GET             ANY      ANY    /books/{id}
+app_book_bulk_delete     DELETE          ANY      ANY    /books/bulk-delete
 ```
 ## Generating Only Specific Routes
 
@@ -201,8 +204,8 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ -------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ -------------------------
-app_book_show            GET             ANY      ANY    /books/{id}
 app_book_index           GET             ANY      ANY    /books/
+app_book_show            GET             ANY      ANY    /books/{id}
 ```
 ## Generating Routing for a Section
 
@@ -256,16 +259,17 @@ The generation results in the following routes:
 php bin/console debug:router
 ```
 ```
------------------------- --------------- -------- ------ -------------------------
-Name                     Method          Scheme   Host   Path
------------------------- --------------- -------- ------ -------------------------
-app_admin_book_show      GET             ANY      ANY    /admin/books/{id}
-app_admin_book_index     GET             ANY      ANY    /admin/books/
-app_admin_book_create    GET|POST        ANY      ANY    /admin/books/new
-app_admin_book_update    GET|PUT|PATCH   ANY      ANY    /admin/books/{id}/edit
-app_admin_book_delete    DELETE          ANY      ANY    /admin/books/{id}
-app_library_book_show    GET             ANY      ANY    /library/books/{id}
-app_library_book_index   GET             ANY      ANY    /library/books/
+-------------------------- --------------- -------- ------ -------------------------
+Name                        Method          Scheme   Host   Path
+-------------------------- --------------- -------- ------ -------------------------
+app_admin_book_index        GET             ANY      ANY    /admin/books/
+app_admin_book_create       GET|POST        ANY      ANY    /admin/books/new
+app_admin_book_update       GET|PUT|PATCH   ANY      ANY    /admin/books/{id}/edit
+app_admin_book_show         GET             ANY      ANY    /admin/books/{id}
+app_admin_book_bulk_delete  DELETE          ANY      ANY    /admin/books/bulk-delete
+app_admin_book_delete       DELETE          ANY      ANY    /admin/books/{id}
+app_library_book_show       GET             ANY      ANY    /library/books/{id}
+app_library_book_index      GET             ANY      ANY    /library/books/
 ```
 ## Using Custom Templates
 
@@ -297,7 +301,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
     alias: 'app.book',
     path: '/admin/books',
     section: 'admin',
-    templates: ['Admin/Book']
+    templates: 'Admin/Book',
 )]
 ```
 
@@ -414,6 +418,7 @@ Assuming that the path prefix is `/libraries/{libraryId}`, if you would like to 
 app_book:
     resource: |
         alias: app.book
+        path: '/libraries/{libraryId}/books'
         criteria:
             library: $libraryId
     type: sylius.resource
@@ -430,8 +435,9 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
+    path: '/library/{libraryId}/books',
     criteria: [
-        'library': '$libraryId',
+        'library' => '$libraryId',
     ],
 )]
 ```
@@ -447,10 +453,11 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ ---------------------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ ---------------------------------------
-app_book_show            GET             ANY      ANY    /libraries/{libraryId}/books/{id}
 app_book_index           GET             ANY      ANY    /libraries/{libraryId}/books/
 app_book_create          GET|POST        ANY      ANY    /libraries/{libraryId}/books/new
 app_book_update          GET|PUT|PATCH   ANY      ANY    /libraries/{libraryId}/books/{id}/edit
+app_book_show            GET             ANY      ANY    /libraries/{libraryId}/books/{id}
+app_book_bulk_delete     DELETE          ANY      ANY    /libraries/{libraryId}/books/bulk-delete
 app_book_delete          DELETE          ANY      ANY    /libraries/{libraryId}/books/{id}
 ```
 
@@ -484,7 +491,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
     identifier: 'isbn',
     alias: 'app.book',
     criteria: [
-        'isbn': '$isbn',
+        'isbn' => '$isbn',
     ],
 )]
 ```
@@ -500,10 +507,11 @@ php bin/console debug:router
 ------------------------ --------------- -------- ------ -------------------------
 Name                     Method          Scheme   Host   Path
 ------------------------ --------------- -------- ------ -------------------------
-app_book_show            GET             ANY      ANY    /books/{isbn}
 app_book_index           GET             ANY      ANY    /books/
 app_book_create          GET|POST        ANY      ANY    /books/new
 app_book_update          GET|PUT|PATCH   ANY      ANY    /books/{isbn}/edit
+app_book_show            GET             ANY      ANY    /books/{isbn}
+app_book_bulk_delete     DELETE          ANY      ANY    /books/bulk-delete
 app_book_delete          DELETE          ANY      ANY    /books/{isbn}
 ```
 
