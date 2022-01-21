@@ -1,0 +1,53 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2022-01-20T16:01:13Z
+
+> Can we write super simple case for that to avoid issues in the future?
+
+There's already a simple test.... But I don't even know how it keeps working with the wrong type.
+https://github.com/Sylius/SyliusResourceBundle/blob/master/src/Bundle/Tests/Routing/RoutesAttributesLoaderTest.php#L147
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2022-01-20T16:03:36Z
+
+thats the worst type of bugs - you know, that tests should fail, but they are green :(
+
+---------------------------------------------------------------------------
+
+by loic425 at 2022-01-20T16:04:37Z
+
+> thats the worst type of bugs - you know, that tests should fail, but they are green :(
+
+Yes but the result is ok, even with the wrong type, I also test it manually 🗡️
+
+---------------------------------------------------------------------------
+
+by loic425 at 2022-01-20T16:06:21Z
+
+@lchrusciel I think there is some "magic" somewhere :)
+
+---------------------------------------------------------------------------
+
+by vvasiloi at 2022-01-20T16:20:25Z
+
+It works... must be a bug (or feature) of PHP: https://3v4l.org/fOejp#v8.0.15
+
+<details>
+<summary>Screenshot</summary>
+
+![image](https://user-images.githubusercontent.com/7114562/150378941-f7f007a6-175f-4d1c-8626-f5ad686602d1.png)
+
+</details>
+
+---------------------------------------------------------------------------
+
+by vvasiloi at 2022-01-20T16:24:16Z
+
+And although I only defined the `serializationGroups` in the attribute class, I also passed (unintentionally, copy/paste) name, path and controller and all were returned as a result.
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2022-01-21T08:37:57Z
+
+Thanks, Loïc! :1st_place_medal:
