@@ -1,5 +1,37 @@
 ## CHANGELOG
 
+### v1.9.0-ALPHA.1 (2022-01-25)
+
+#### TL;DR
+
+- Bump required PHP version to ^8.0 and use PHP 7.4 syntax
+- Generate Sylius Resource routes with PHP attributes
+- Add support for Symfony Workflow
+
+#### Details
+
+- [#287](https://github.com/Sylius/SyliusResourceBundle/issues/287) Manage event response in show and index action to be able to redirect ([@maximehuran](https://github.com/maximehuran), [@Zales0123](https://github.com/Zales0123))
+- [#298](https://github.com/Sylius/SyliusResourceBundle/issues/298) Allow use with Pagerfanta 3.0 ([@mbabker](https://github.com/mbabker))
+- [#310](https://github.com/Sylius/SyliusResourceBundle/issues/310) Upgrade to GitHub-native Dependabot ([@dependabot-preview](https://github.com/dependabot-preview)[[@bot](https://github.com/bot)])
+- [#328](https://github.com/Sylius/SyliusResourceBundle/issues/328) Use PHP 7.4 syntax ([@Zales0123](https://github.com/Zales0123))
+- [#330](https://github.com/Sylius/SyliusResourceBundle/issues/330) Add a simple way to use the new service entity repository ([@loic425](https://github.com/loic425))
+- [#332](https://github.com/Sylius/SyliusResourceBundle/issues/332) Change all MasterRequest calls to MainRequest ([@Roshyo](https://github.com/Roshyo), [@Zales0123](https://github.com/Zales0123))
+- [#333](https://github.com/Sylius/SyliusResourceBundle/issues/333) Don't use deprecated Twig `spaceless` tag ([@stloyd](https://github.com/stloyd))
+- [#334](https://github.com/Sylius/SyliusResourceBundle/issues/334) Sylius route with attributes ([@loic425](https://github.com/loic425))
+- [#334](https://github.com/Sylius/SyliusResourceBundle/issues/334) Symfony workflow ([@loic425](https://github.com/loic425))
+- [#340](https://github.com/Sylius/SyliusResourceBundle/issues/340) Allow jms/serializer-bundle 4 ([@dannyvw](https://github.com/dannyvw))
+- [#343](https://github.com/Sylius/SyliusResourceBundle/issues/343) Change ECS config to php and run it ([@Zales0123](https://github.com/Zales0123))
+- [#344](https://github.com/Sylius/SyliusResourceBundle/issues/344) Remove travis build status from README ([@GSadee](https://github.com/GSadee))
+- [#345](https://github.com/Sylius/SyliusResourceBundle/issues/345) Update phpstan/phpstan requirement from 0.12.94 to 0.12.99 ([@dependabot](https://github.com/dependabot)[[@bot](https://github.com/bot)])
+- [#347](https://github.com/Sylius/SyliusResourceBundle/issues/347) Update phpstan/phpstan-webmozart-assert requirement from 0.12.12 to 0.12.16 ([@dependabot](https://github.com/dependabot)[[@bot](https://github.com/bot)])
+- [#348](https://github.com/Sylius/SyliusResourceBundle/issues/348) Update phpstan/phpstan-phpunit requirement from 0.12.18 to 0.12.22 ([@dependabot](https://github.com/dependabot)[[@bot](https://github.com/bot)])
+- [#349](https://github.com/Sylius/SyliusResourceBundle/issues/349) Update winzou/state-machine-bundle requirement from ^0.5 to ^0.6 ([@dependabot](https://github.com/dependabot)[[@bot](https://github.com/bot)])
+- [#353](https://github.com/Sylius/SyliusResourceBundle/issues/353) Require symfony/routing and symfony/http-foundation 4.4 and 5.4 ([@Zales0123](https://github.com/Zales0123))
+- [#354](https://github.com/Sylius/SyliusResourceBundle/issues/354) Reactivate checking coding standard ([@loic425](https://github.com/loic425))
+- [#356](https://github.com/Sylius/SyliusResourceBundle/issues/356) Add documentation for Routes with attributes ([@loic425](https://github.com/loic425))
+- [#358](https://github.com/Sylius/SyliusResourceBundle/issues/358) Fix docs for crud routes with attributes ([@loic425](https://github.com/loic425))
+- [#359](https://github.com/Sylius/SyliusResourceBundle/issues/359) Fix type of serialization groups ([@loic425](https://github.com/loic425))
+
 ### v1.8.2 (2021-04-08)
 
 #### Details
