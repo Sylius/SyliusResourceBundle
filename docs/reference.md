@@ -15,8 +15,7 @@ sylius_resource:
                     validation_groups: [sylius]
             options:
                 object_manager: default
-            templates:
-                form: Book/_form.html.twig
+            templates: 'book' # Templates namespace for this resource, default value is empty
             translation:
                 classes:
                     model: ~

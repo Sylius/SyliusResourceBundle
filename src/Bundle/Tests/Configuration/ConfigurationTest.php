@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Configuration;
 
+use App\Entity\Book;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Configuration;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Component\Resource\Factory\Factory;
 
 class ConfigurationTest extends TestCase
 {
@@ -113,6 +117,40 @@ class ConfigurationTest extends TestCase
                 ['authorization_checker' => ''],
             ],
             'authorization_checker'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function its_templates_for_a_specific_resource_can_be_customized(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['resources' => [
+                    'app.book' => [
+                        'classes' => [
+                            'model' => Book::class,
+                        ],
+                        'templates' => 'book',
+                    ],
+                ]],
+            ],
+            [
+                'resources' => [
+                    'app.book' => [
+                        'classes' => [
+                            'model' => Book::class,
+                            'controller' => ResourceController::class,
+                            'factory' => Factory::class,
+                            'form' => DefaultResourceType::class,
+                        ],
+                        'templates' => 'book',
+                        'driver' => 'doctrine/orm',
+                    ],
+                ],
+            ],
+            'resources'
         );
     }
 
