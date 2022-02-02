@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader;
+use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 
 final class RoutesAttributesLoaderSpec extends ObjectBehavior
@@ -29,6 +30,11 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
     function it_is_initializable(): void
     {
         $this->shouldHaveType(RoutesAttributesLoader::class);
+    }
+
+    function it_is_a_route_loader(): void
+    {
+        $this->shouldImplement(RouteLoaderInterface::class);
     }
 
     function it_generates_routes_from_paths(RouteAttributesFactoryInterface $routeAttributesFactory): void
