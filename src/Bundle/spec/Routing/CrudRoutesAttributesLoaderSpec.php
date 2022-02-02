@@ -20,6 +20,7 @@ use Sylius\Bundle\ResourceBundle\Routing\ResourceLoader;
 use Sylius\Bundle\ResourceBundle\Routing\RouteFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -37,6 +38,11 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
     function it_is_initializable(): void
     {
         $this->shouldHaveType(CrudRoutesAttributesLoader::class);
+    }
+
+    function it_is_a_route_loader(): void
+    {
+        $this->shouldImplement(RouteLoaderInterface::class);
     }
 
     function it_generates_routes_from_resource(

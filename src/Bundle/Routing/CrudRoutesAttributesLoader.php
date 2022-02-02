@@ -15,10 +15,11 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 use Sylius\Component\Resource\Reflection\ClassReflection;
+use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 
-final class CrudRoutesAttributesLoader
+final class CrudRoutesAttributesLoader implements RouteLoaderInterface
 {
     private array $mapping;
 
