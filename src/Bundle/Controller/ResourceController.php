@@ -374,7 +374,7 @@ class ResourceController
             return $postEventResponse;
         }
 
-        return $this->redirectHandler->redirectToIndex($configuration, $resource);
+        return $this->redirectHandler->redirectToIndex($configuration);
     }
 
     public function bulkDeleteAction(Request $request): Response
