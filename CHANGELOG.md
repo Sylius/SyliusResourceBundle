@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### v1.9.0-BETA.1 (2022-02-10)
+
+#### Details
+
+- [#365](https://github.com/Sylius/SyliusResourceBundle/issues/365) Fix route loaders ([@loic425](https://github.com/loic425))
+
 ### v1.9.0-ALPHA.1 (2022-01-25)
 
 #### TL;DR
