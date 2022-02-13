@@ -1923,7 +1923,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $postEvent->getResponse()->willReturn(null);
 
         $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldBeCalled();
-        $redirectHandler->redirectToIndex($configuration, $resource)->willReturn($redirectResponse);
+        $redirectHandler->redirectToIndex($configuration)->willReturn($redirectResponse);
 
         $this->deleteAction($request)->shouldReturn($redirectResponse);
     }
