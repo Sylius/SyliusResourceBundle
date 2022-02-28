@@ -36,7 +36,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/books/', $bookIndex->getPath());
         $this->assertEquals(['GET'], $bookIndex->getMethods());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:indexAction',
+            '_controller' => 'app.controller.book::indexAction',
             '_sylius' => [
                 'permission' => false,
             ],
@@ -48,7 +48,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/books/new', $bookCreate->getPath());
         $this->assertEquals(['GET', 'POST'], $bookCreate->getMethods());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:createAction',
+            '_controller' => 'app.controller.book::createAction',
             '_sylius' => [
                 'permission' => false,
             ],
@@ -60,7 +60,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/books/{id}', $bookShow->getPath());
         $this->assertEquals(['GET'], $bookShow->getMethods());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'permission' => false,
             ],
@@ -72,7 +72,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals(['GET', 'PUT', 'PATCH'], $bookUpdate->getMethods());
         $this->assertEquals('/books/{id}/edit', $bookUpdate->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:updateAction',
+            '_controller' => 'app.controller.book::updateAction',
             '_sylius' => [
                 'permission' => false,
             ],
@@ -84,7 +84,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/books/{id}', $bookDelete->getPath());
         $this->assertEquals(['DELETE'], $bookDelete->getMethods());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:deleteAction',
+            '_controller' => 'app.controller.book::deleteAction',
             '_sylius' => [
                 'permission' => false,
             ],
