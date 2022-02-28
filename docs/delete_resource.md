@@ -9,7 +9,7 @@ app_book_delete:
     path: /books/{id}
     methods: [DELETE]
     defaults:
-        _controller: app.controller.book:deleteAction
+        _controller: app.controller.book::deleteAction
 ```
 ## Calling an Action with DELETE method
 
@@ -39,7 +39,7 @@ app_book_delete:
     path: /genre/{genreId}/books/{id}
     methods: [DELETE]
     defaults:
-        _controller: app.controller.book:deleteAction
+        _controller: app.controller.book::deleteAction
         _sylius:
             criteria:
                 id: $id
@@ -58,7 +58,7 @@ app_book_delete:
     path: /genre/{genreId}/books/{id}
     methods: [DELETE]
     defaults:
-        _controller: app.controller.book:deleteAction
+        _controller: app.controller.book::deleteAction
         _sylius:
             redirect:
                 route: app_genre_show
@@ -78,7 +78,7 @@ app_book_customer_delete:
     path: /customer/book-delete/{id}
     methods: [DELETE]
     defaults:
-        _controller: app.controller.book:deleteAction
+        _controller: app.controller.book::deleteAction
         _sylius:
             event: customer_delete
 ```
@@ -96,7 +96,7 @@ app_genre_book_remove:
     path: /{genreName}/books/{id}/remove
     methods: [DELETE]
     defaults:
-        _controller: app.controller.book:deleteAction
+        _controller: app.controller.book::deleteAction
         _sylius:
             event: book_delete
             repository:

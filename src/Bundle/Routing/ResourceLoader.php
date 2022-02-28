@@ -105,6 +105,8 @@ final class ResourceLoader implements LoaderInterface
 
     /**
      * @psalm-suppress InvalidReturnType Symfony docblocks are messing with us
+     *
+     * @return LoaderResolverInterface
      */
     public function getResolver()
     {
@@ -125,7 +127,7 @@ final class ResourceLoader implements LoaderInterface
         bool $isApi = false
     ): Route {
         $defaults = [
-            '_controller' => $metadata->getServiceId('controller') . sprintf(':%sAction', $actionName),
+            '_controller' => $metadata->getServiceId('controller') . sprintf('::%sAction', $actionName),
         ];
 
         if ($isApi && 'index' === $actionName) {

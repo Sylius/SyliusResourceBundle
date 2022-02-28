@@ -15,7 +15,7 @@ app_book_show:
     path: /books/{id}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
 ```
 
 </details>
@@ -56,7 +56,7 @@ app_admin_book_show:
     path: /admin/books/{id}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
         _sylius:
             template: Admin/Book/show.html.twig
 ```
@@ -97,7 +97,7 @@ app_book_show:
     path: /books/{title}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
         _sylius:
             criteria:
                 title: $title
@@ -144,7 +144,7 @@ app_book_show:
     path: /books/{author}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
         _sylius:
             repository:
                 method: findOneNewestByAuthor
@@ -189,7 +189,7 @@ app_book_show:
     path: /books/{author}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
         _sylius:
             repository:
                 method: ["expr:service('app.repository.custom_book_repository')", "findOneNewestByAuthor"]
@@ -232,7 +232,7 @@ app_book_show:
     path: /books/{author}
     methods: [GET]
     defaults:
-        _controller: app.controller.book:showAction
+        _controller: app.controller.book::showAction
         _sylius:
             template: Book/show.html.twig
             repository:

@@ -27,42 +27,42 @@ final class RecursiveTransformer implements DataTransformerInterface
         $this->decoratedTransformer = $decoratedTransformer;
     }
 
-    public function transform($values): Collection
+    public function transform($value): Collection
     {
-        if (null === $values) {
+        if (null === $value) {
             return new ArrayCollection();
         }
 
-        $this->assertTransformationValueType($values, Collection::class);
+        $this->assertTransformationValueType($value, Collection::class);
 
-        return $values->map(
+        return $value->map(
             /**
-             * @param mixed $value
+             * @param mixed $currentValue
              *
              * @return mixed
              */
-            function ($value) {
-                return $this->decoratedTransformer->transform($value);
+            function ($currentValue) {
+                return $this->decoratedTransformer->transform($currentValue);
             }
         );
     }
 
-    public function reverseTransform($values): Collection
+    public function reverseTransform($value): Collection
     {
-        if (null === $values) {
+        if (null === $value) {
             return new ArrayCollection();
         }
 
-        $this->assertTransformationValueType($values, Collection::class);
+        $this->assertTransformationValueType($value, Collection::class);
 
-        return $values->map(
+        return $value->map(
             /**
-             * @param mixed $value
+             * @param mixed $currentValue
              *
              * @return mixed
              */
-            function ($value) {
-                return $this->decoratedTransformer->reverseTransform($value);
+            function ($currentValue) {
+                return $this->decoratedTransformer->reverseTransform($currentValue);
             }
         );
     }
