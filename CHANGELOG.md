@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v1.9.0-RC.1 (2022-02-28)
+
+#### Details
+
+- [#338](https://github.com/Sylius/SyliusResourceBundle/issues/338) Fix some Symfony Deprecations ([@dannyvw](https://github.com/dannyvw))
+- [#373](https://github.com/Sylius/SyliusResourceBundle/issues/373) Fix the build after #338 ([@Zales0123](https://github.com/Zales0123))
+
 ### v1.9.0-BETA.1 (2022-02-10)
 
 #### Details
