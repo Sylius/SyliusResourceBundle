@@ -78,6 +78,53 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
+    public function it_has_default_translation()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [],
+            ],
+            [
+                'translation' => [
+                    'enabled' => true,
+                    'available_locales' => ['en'],
+                    'default_locale' => 'en',
+                    'locale_provider' => 'sylius.translation_locale_provider.immutable',
+                ],
+            ],
+            'translation'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function its_translation_can_be_customized()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['translation' => [
+                    'enabled' => false,
+                    'available_locales' => ['fr', 'pl'],
+                    'default_locale' => 'fr',
+                    'locale_provider' => 'app.locale_provider.custom',
+                ]],
+            ],
+            [
+                'translation' => [
+                    'enabled' => false,
+                    'available_locales' => ['fr', 'pl'],
+                    'default_locale' => 'fr',
+                    'locale_provider' => 'app.locale_provider.custom',
+                ],
+            ],
+            'translation'
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_has_default_authorization_checker()
     {
         $this->assertProcessedConfigurationEquals(

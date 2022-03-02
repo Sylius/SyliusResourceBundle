@@ -17,9 +17,9 @@
 
         <service id="sylius.translation_locale_provider.immutable" class="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider">
             <argument type="collection">
-                <argument>%locale%</argument>
+                <argument>%sylius.resource.translation.available_locales%</argument>
             </argument>
-            <argument>%locale%</argument>
+            <argument>%sylius.resource.translation.default_locale%</argument>
         </service>
 
         <service id="sylius.translation.translatable_listener.doctrine.orm" class="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener">

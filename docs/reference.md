@@ -2,6 +2,23 @@
 
 ```yaml
 sylius_resource:
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity'] # Used for Routes with PHP attributes
+    translation:
+        enabled: true
+        available_locales: ['en']
+        default_locale: 'en'
+        locale_provider: 'sylius.translation_locale_provider.immutable'
+    settings:
+        paginate: ~
+        limit: ~
+        allowed_paginate: [10, 20, 30]
+        default_page_size: 10
+        sortable: false
+        sorting: ~
+        filterable: false
+        criteria: ~
+        state_machine_component: winzou # or symfony
     resources:
         app.book:
             driver: doctrine/orm

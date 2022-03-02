@@ -1,3 +1,28 @@
+## UPGRADE FOR `1.9.x`
+
+### FROM `1.8.x` TO `1.9.x`
+
+- `translations`:
+
+If you are using translations, the default locale provider `sylius.translation_locale_provider.immutable` is using two new translation options.
+
+```yaml
+sylius_resource:
+    translation:
+        available_locales: ['en']
+        default_locale: 'en'
+```
+
+Before `1.9.x` it was configured with `%locale%` parameter.
+If you still use this `%locale%`parameter, you can configure translation like this:
+
+```yaml
+sylius_resource:
+    translation:
+        available_locales: ['%locale%']
+        default_locale: '%locale%'
+```
+
 ## UPGRADE FOR `1.7.x`
 
 ### FROM `1.6.x` TO `1.7.x`
