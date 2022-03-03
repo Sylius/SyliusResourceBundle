@@ -16,9 +16,7 @@
         <defaults public="true" />
 
         <service id="sylius.translation_locale_provider.immutable" class="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider">
-            <argument type="collection">
-                <argument>%sylius.resource.translation.enabled_locales%</argument>
-            </argument>
+            <argument>%sylius.resource.translation.enabled_locales%</argument>
             <argument>%sylius.resource.translation.default_locale%</argument>
         </service>
 
