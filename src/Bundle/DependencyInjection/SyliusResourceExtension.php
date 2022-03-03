@@ -46,12 +46,11 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $loader->load('services/integrations/translation.xml');
 
             $container->setAlias('sylius.translation_locale_provider', $config['translation']['locale_provider'])->setPublic(true);
+            $this->createTranslationParameters($config, $container);
         }
 
         $container->setParameter('sylius.resource.mapping', $config['mapping']);
         $container->setParameter('sylius.resource.settings', $config['settings']);
-        $container->setParameter('sylius.resource.translation.available_locales', $config['translation']['available_locales']);
-        $container->setParameter('sylius.resource.translation.default_locale', $config['translation']['default_locale']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 
         $this->loadPersistence($config['drivers'], $config['resources'], $loader);
@@ -136,5 +135,69 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 DriverProvider::get($metadata)->load($container, $metadata);
             }
         }
+    }
+
+    private function createTranslationParameters(array $config, ContainerBuilder $container): void
+    {
+        $this->createEnabledLocalesParameter($config, $container);
+        $this->createDefaultLocaleParameter($config, $container);
+    }
+
+    private function createEnabledLocalesParameter(array $config, ContainerBuilder $container): void
+    {
+        $enabledLocales = $config['translation']['enabled_locales'];
+
+        if (count($enabledLocales) > 0) {
+            $container->setParameter('sylius.resource.translation.enabled_locales', $enabledLocales);
+
+            return;
+        }
+
+        if ($container->hasParameter('locale')) {
+            $container->setParameter('sylius.resource.translation.enabled_locales', [$container->getParameter('locale')]);
+
+            return;
+        }
+
+        if ($container->hasParameter('kernel.enabled_locales')) {
+            $kernelEnabledLocales = $container->getParameter('kernel.enabled_locales');
+
+            if (count($kernelEnabledLocales) > 0) {
+                $container->setParameter('sylius.resource.translation.enabled_locales', $container->getParameter('kernel.enabled_locales'));
+
+                return;
+            }
+        }
+
+        $container->setParameter('sylius.resource.translation.enabled_locales', ['en']);
+    }
+
+    private function createDefaultLocaleParameter(array $config, ContainerBuilder $container): void
+    {
+        $defaultLocale = $config['translation']['default_locale'];
+
+        if (is_string($defaultLocale)) {
+            $container->setParameter('sylius.resource.translation.default_locale', $defaultLocale);
+
+            return;
+        }
+
+        if ($container->hasParameter('locale')) {
+            $container->setParameter('sylius.resource.translation.default_locale', $container->getParameter('locale'));
+
+            return;
+        }
+
+        if ($container->hasParameter('kernel.default_locale')) {
+            $kernelDefaultLocale = $container->getParameter('kernel.default_locale');
+
+            if (is_string($kernelDefaultLocale)) {
+                $container->setParameter('sylius.resource.translation.default_locale', $kernelDefaultLocale);
+
+                return;
+            }
+        }
+
+        $container->setParameter('sylius.resource.translation.default_locale', 'en');
     }
 }

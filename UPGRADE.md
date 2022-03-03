@@ -9,8 +9,8 @@ If you are using translations, the default locale provider `sylius.translation_l
 ```yaml
 sylius_resource:
     translation:
-        available_locales: ['en']
-        default_locale: 'en'
+        enabled_locales: []
+        default_locale: null
 ```
 
 Before `1.9.x` it was configured with `%locale%` parameter.
@@ -19,7 +19,17 @@ If you still use this `%locale%`parameter, you can configure translation like th
 ```yaml
 sylius_resource:
     translation:
-        available_locales: ['%locale%']
+        enabled_locales: ['%locale%']
+        default_locale: '%locale%'
+```
+
+If you still use this `%kernel.default_locale%` and `%kernel.enabled_locales%` parameters, you can configure translation like this:
+
+
+```yaml
+sylius_resource:
+    translation:
+        enabled_locales: ['%locale%']
         default_locale: '%locale%'
 ```
 
