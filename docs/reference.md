@@ -6,8 +6,8 @@ sylius_resource:
         paths: ['%kernel.project_dir%/src/Entity'] # Used for Routes with PHP attributes
     translation:
         enabled: true
-        enabled_locales: ['en']
-        default_locale: 'en'
+        enabled_locales: '%kernel.enabled_locales%'
+        default_locale: '%kernel.default_locale%'
         locale_provider: 'sylius.translation_locale_provider.immutable'
     settings:
         paginate: ~
