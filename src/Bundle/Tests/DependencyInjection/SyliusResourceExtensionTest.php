@@ -106,7 +106,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_registers_translation_enabled_locales_parameter(): void
+    public function it_registers_translation_enabled_locales_parameter_with_given_locales(): void
     {
         $this->setParameter('kernel.bundles', []);
 
@@ -117,6 +117,22 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['fr', 'pl']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_enabled_locales_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'enabled_locales' => [],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['en']);
     }
 
     /**
@@ -156,7 +172,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_registers_translation_default_locale_parameter(): void
+    public function it_registers_translation_default_locale_parameter_with_given_locale(): void
     {
         $this->setParameter('kernel.bundles', []);
 
@@ -167,6 +183,22 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'fr');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_default_locale_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'default_locale' => null,
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'en');
     }
 
     /**
