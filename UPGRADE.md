@@ -27,7 +27,6 @@ sylius_resource:
 
 Starting with version 2.0, the default values will be set from  `kernel.default_locale` and `kernel.enabled_locales` parameters.
 
-
 ```yaml
 sylius_resource:
     translation:

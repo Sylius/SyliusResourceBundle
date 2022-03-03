@@ -154,6 +154,8 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         if ($container->hasParameter('locale')) {
+            trigger_deprecation('sylius/resource-bundle', '1.9', 'Locale parameter usage to defined the enabled locales will no longer used in 2.0, you should use %kernel.enabled_locales% instead.');
+
             $container->setParameter('sylius.resource.translation.enabled_locales', [$container->getParameter('locale')]);
 
             return;
@@ -183,6 +185,8 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         if ($container->hasParameter('locale')) {
+            trigger_deprecation('sylius/resource-bundle', '1.9', 'Locale parameter usage to define the translation default locale will no longer used in 2.0, you should use %kernel.default_locale% instead.');
+
             $container->setParameter('sylius.resource.translation.default_locale', $container->getParameter('locale'));
 
             return;
