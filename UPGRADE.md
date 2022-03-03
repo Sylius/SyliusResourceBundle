@@ -4,7 +4,7 @@
 
 - `translations`:
 
-If you are using translations, the default locale provider `sylius.translation_locale_provider.immutable` is using two new translation options.
+New configuration options were introduced to set the default and the defined (enabled) locales used by the default translation locale provider (`sylius.translation_locale_provider.immutable` service):
 
 ```yaml
 sylius_resource:
@@ -13,8 +13,10 @@ sylius_resource:
         default_locale: null
 ```
 
-Before `1.9.x` it was configured with `%locale%` parameter.
-If you still use this `%locale%`parameter, you can configure translation like this:
+Before version `1.9.x` the provider was configured with `locale` parameter.
+If those options are not configured, for backward compatibility, it will fallback to the `locale` parameter if it's defined.
+This is deprecated and will be removed in version 2.0.
+If you want to keep using the `locale` parameter starting with version 2.0, then add the following configuration:
 
 ```yaml
 sylius_resource:
@@ -23,13 +25,13 @@ sylius_resource:
         default_locale: '%locale%'
 ```
 
-If you use `%kernel.default_locale%` and `%kernel.enabled_locales%` parameters, you can configure translation like this:
+Starting with version 2.0, the default values will be set from  `kernel.default_locale` and `kernel.enabled_locales` parameters.
 
 
 ```yaml
 sylius_resource:
     translation:
-        enabled_locales: '%kernel.enabled_locales%'
+        enabled_locales: ['%kernel.enabled_locales%']
         default_locale: '%kernel.default_locale%'
 ```
 
