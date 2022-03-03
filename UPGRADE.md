@@ -23,14 +23,14 @@ sylius_resource:
         default_locale: '%locale%'
 ```
 
-If you still use this `%kernel.default_locale%` and `%kernel.enabled_locales%` parameters, you can configure translation like this:
+If you use `%kernel.default_locale%` and `%kernel.enabled_locales%` parameters, you can configure translation like this:
 
 
 ```yaml
 sylius_resource:
     translation:
-        enabled_locales: ['%locale%']
-        default_locale: '%locale%'
+        enabled_locales: '%kernel.enabled_locales%'
+        default_locale: '%kernel.default_locale%'
 ```
 
 ## UPGRADE FOR `1.7.x`
