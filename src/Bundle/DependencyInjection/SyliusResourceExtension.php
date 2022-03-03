@@ -160,7 +160,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         if ($container->hasParameter('kernel.enabled_locales')) {
-            $kernelEnabledLocales = $container->getParameter('kernel.enabled_locales');
+            $kernelEnabledLocales = (array) $container->getParameter('kernel.enabled_locales');
 
             if (count($kernelEnabledLocales) > 0) {
                 $container->setParameter('sylius.resource.translation.enabled_locales', $container->getParameter('kernel.enabled_locales'));
