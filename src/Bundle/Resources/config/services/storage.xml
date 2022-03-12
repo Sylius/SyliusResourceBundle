@@ -16,7 +16,7 @@
         <defaults public="true" />
 
         <service id="sylius.storage.session" class="Sylius\Bundle\ResourceBundle\Storage\SessionStorage">
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="sylius.storage.cookie" class="Sylius\Bundle\ResourceBundle\Storage\CookieStorage">
