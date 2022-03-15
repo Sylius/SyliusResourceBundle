@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -40,7 +41,7 @@ final class ORMRepositoryClassSubscriber extends AbstractDoctrineSubscriber
         }
 
         if ($resourceMetadata->hasClass('repository')) {
-            /** @psalm-var class-string $repository */
+            /** @psalm-var class-string<EntityRepository>|null $repository */
             $repository = $resourceMetadata->getClass('repository');
             $metadata->setCustomRepositoryClass($repository);
         }

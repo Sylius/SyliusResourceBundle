@@ -29,6 +29,17 @@ jobs:
                         php: 8.0
                         symfony: ^5.4
                         twig: ^3.0
+                    -
+                        php: 8.1
+                        symfony: ^4.4
+                    -
+                        php: 8.1
+                        symfony: ^5.4
+                        twig: ^2.12
+                    -
+                        php: 8.1
+                        symfony: ^5.4
+                        twig: ^3.0
 
         steps:
             -
