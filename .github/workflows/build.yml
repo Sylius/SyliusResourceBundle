@@ -26,11 +26,15 @@ jobs:
                     -
                         php: 8.0
                         symfony: ^4.4
-                        composer-flags: --ignore-platform-req=php
                     -
                         php: 8.0
                         symfony: ^5.2
-                        composer-flags: --ignore-platform-req=php
+                    -
+                        php: 8.1
+                        symfony: ^4.4
+                    -
+                        php: 8.1
+                        symfony: ^5.2
                     -
                         php: 7.4
                         symfony: ^4.4
