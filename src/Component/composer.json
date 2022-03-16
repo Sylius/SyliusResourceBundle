@@ -32,8 +32,8 @@
         "doctrine/inflector": "^1.4 || ^2.0",
         "gedmo/doctrine-extensions": "^2.4.12 || ^3.0",
         "pagerfanta/core": "^3.0",
-        "symfony/event-dispatcher": "^4.4 || ^5.4",
-        "symfony/property-access": "^4.4 || ^5.4",
+        "symfony/event-dispatcher": "^4.4 || ^5.2",
+        "symfony/property-access": "^4.4 || ^5.2",
         "winzou/state-machine": "^0.4"
     },
     "require-dev": {
