@@ -48,6 +48,18 @@
             </errorLevel>
         </InternalMethod>
 
+        <InvalidScalarArgument>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </InvalidScalarArgument>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </InvalidArgument>
+
         <InvalidDocblock>
             <errorLevel type="suppress">
                 <file name="vendor/doctrine/orm/lib/Doctrine/ORM/EntityRepository.php" />
@@ -99,12 +111,42 @@
             </errorLevel>
         </PropertyNotSetInConstructor>
 
+        <ReservedWord>
+            <errorLevel type="suppress">
+                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php" />
+            </errorLevel>
+        </ReservedWord>
+
+        <TooFewArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </TooFewArguments>
+
         <TooManyArguments>
             <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
                 <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ResourceController.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/DoctrineTargetEntitiesResolverPass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/PagerfantaBridgePass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/RegisterFqcnControllersPass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/RegisterResourceRepositoryPass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php" />
+                <file name="src/Bundle/DependencyInjection/Compiler/WinzouStateMachinePass.php" />
+                <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php" />
+                <file name="src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php" />
+                <file name="src/Bundle/DependencyInjection/SyliusResourceExtension.php" />
+            </errorLevel>
+        </UndefinedDocblockClass>
 
         <UndefinedClass>
             <errorLevel type="suppress">
@@ -115,5 +157,11 @@
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>
         </UndefinedClass>
+
+        <UndefinedMethod>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Storage/CookieStorage.php" />
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
 </psalm>

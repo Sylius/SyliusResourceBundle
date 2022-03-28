@@ -19,33 +19,39 @@ jobs:
             matrix:
                 include:
                     -
-                        php: 7.4
-                        symfony: ^4.4
+                        php: "7.4"
+                        symfony: "^4.4"
                     -
-                        php: 7.4
-                        symfony: ^5.4
+                        php: "7.4"
+                        symfony: "^5.4"
                     -
-                        php: 8.0
-                        symfony: ^4.4
+                        php: "8.0"
+                        symfony: "^4.4"
                     -
-                        php: 8.0
-                        symfony: ^4.4
+                        php: "8.0"
+                        symfony: "^4.4"
                     -
-                        php: 8.0
-                        symfony: ^5.4
+                        php: "8.0"
+                        symfony: "^5.4"
                     -
-                        php: 8.1
-                        symfony: ^4.4
+                        php: "8.0"
+                        symfony: "^6.0"
                     -
-                        php: 8.1
-                        symfony: ^5.2
+                        php: "8.1"
+                        symfony: "^4.4"
                     -
-                        php: 7.4
-                        symfony: ^4.4
+                        php: "8.1"
+                        symfony: "^5.4"
                     -
-                        php: 7.4
-                        symfony: ^5.4
-                        twig: ^2.12
+                        php: "8.1"
+                        symfony: "^6.0"
+                    -
+                        php: "7.4"
+                        symfony: "^4.4"
+                    -
+                        php: "7.4"
+                        symfony: "^5.4"
+                        twig: "^2.12"
 
         steps:
             -
@@ -82,6 +88,10 @@ jobs:
                 run: |
                     (cd src/Bundle/test && bin/console doctrine:database:create)
                     (cd src/Bundle/test && bin/console doctrine:schema:create)
+
+            -
+                name: Run Psalm
+                run: vendor/bin/psalm --php-version=${{ matrix.php }}
 
             -
                 name: Run analysis

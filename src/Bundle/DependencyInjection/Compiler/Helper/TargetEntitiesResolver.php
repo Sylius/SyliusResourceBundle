@@ -17,11 +17,11 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
 {
-    public function resolve(array $resources): array
+    public function resolve(array $resourcesConfiguration): array
     {
         $interfaces = [];
 
-        foreach ($resources as $alias => $configuration) {
+        foreach ($resourcesConfiguration as $alias => $configuration) {
             $model = $this->getModel($alias, $configuration);
 
             $modelInterfaces = class_implements($model) ?: [];
@@ -43,7 +43,7 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
             return (string) current($classes);
         }, $interfaces);
 
-        foreach ($resources as $alias => $configuration) {
+        foreach ($resourcesConfiguration as $alias => $configuration) {
             if (isset($configuration['classes']['interface'])) {
                 $model = $this->getModel($alias, $configuration);
                 $interface = $configuration['classes']['interface'];
