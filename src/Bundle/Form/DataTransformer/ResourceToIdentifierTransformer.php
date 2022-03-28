@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Form\DataTransformer;
 
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -32,7 +33,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
     }
 
     /**
-     * @return string|null
+     * @psalm-suppress MissingParamType
      */
     public function transform($value)
     {
@@ -46,10 +47,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
-    /**
-     * @return object|null
-     */
-    public function reverseTransform($value)
+    public function reverseTransform($value): ?ResourceInterface
     {
         if (null === $value) {
             return null;
