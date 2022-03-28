@@ -40,12 +40,12 @@ class ScienceBook implements ResourceInterface
 
     public function getAuthorFirstName(): ?string
     {
-        return $this->author?->getFirstName();
+        return $this->author ? $this->author->getFirstName() : null;
     }
 
     public function getAuthorLastName(): ?string
     {
-        return $this->author?->getLastName();
+        return $this->author ? $this->author->getLastName() : null;
     }
 
     public function getAuthor(): ?Author
