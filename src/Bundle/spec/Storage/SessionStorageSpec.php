@@ -15,18 +15,44 @@ namespace spec\Sylius\Bundle\ResourceBundle\Storage;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Kernel;
 
 final class SessionStorageSpec extends ObjectBehavior
 {
-    function let(): void
+    function let(RequestStack $requestStack): void
     {
-        $this->beConstructedWith(new Session(new MockArraySessionStorage()));
+        $this->beConstructedWith(new Session(new MockArraySessionStorage()), $requestStack);
     }
 
     function it_is_a_storage(): void
     {
+        $this->shouldImplement(StorageInterface::class);
+    }
+
+    function its_session_can_be_retrieved_from_container(RequestStack $requestStack): void
+    {
+        if (Kernel::MAJOR_VERSION > 4) {
+            $requestStack->getSession()->shouldNotBeCalled();
+        }
+
+        $this->beConstructedWith(new Session(new MockArraySessionStorage()), $requestStack);
+
+        $this->shouldImplement(StorageInterface::class);
+    }
+
+    function its_session_can_be_retrieved_from_request_stack(RequestStack $requestStack): void
+    {
+        if (Kernel::MAJOR_VERSION === 4) {
+            return;
+        }
+
+        $requestStack->getSession()->shouldBeCalled();
+
+        $this->beConstructedWith(null, $requestStack);
+
         $this->shouldImplement(StorageInterface::class);
     }
 
