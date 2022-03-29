@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Storage;
 
 use Sylius\Component\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SessionStorage implements StorageInterface
 {
     private SessionInterface $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(?SessionInterface $session, RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->session = $session ?: $requestStack->getSession();
     }
 
     public function has(string $name): bool
