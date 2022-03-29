@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
+use MongoDB\Driver\Session;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
@@ -20,21 +21,50 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelperSpec extends ObjectBehavior
 {
-    function let(SessionInterface $session, TranslatorInterface $translator): void
+    function let(SessionInterface $session, RequestStack $requestStack, TranslatorInterface $translator): void
     {
-        $this->beConstructedWith($session, $translator, 'en');
+        $this->beConstructedWith($session, $translator, 'en', $requestStack);
     }
 
-    function it_implements_flash_helper_interface(): void
+    function it_implements_flash_helper_interface(RequestStack $requestStack, SessionInterface $session): void
     {
+        $this->shouldImplement(FlashHelperInterface::class);
+    }
+
+    function its_session_can_be_retrieved_from_container(SessionInterface $session, RequestStack $requestStack, TranslatorInterface $translator): void
+    {
+        if (Kernel::MAJOR_VERSION > 4) {
+            $requestStack->getSession()->shouldNotBeCalled();
+        }
+
+        $this->beConstructedWith($session, $translator, 'en', $requestStack);
+
+        $this->shouldImplement(FlashHelperInterface::class);
+    }
+
+    function its_session_can_be_retrieved_from_request_stack(SessionInterface $session, RequestStack $requestStack, TranslatorInterface $translator): void
+    {
+        if (Kernel::MAJOR_VERSION === 4) {
+            return;
+        }
+
+        $requestStack->getSession()->willReturn($session);
+
+        $requestStack->getSession()->shouldBeCalled();
+
+        $this->beConstructedWith(null, $translator, 'en', $requestStack);
+
         $this->shouldImplement(FlashHelperInterface::class);
     }
 

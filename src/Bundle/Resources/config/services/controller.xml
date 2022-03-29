@@ -40,9 +40,10 @@
         </service>
         <service id="sylius.resource_controller.authorization_checker.disabled" class="Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker" public="false" />
         <service id="sylius.resource_controller.flash_helper" class="Sylius\Bundle\ResourceBundle\Controller\FlashHelper" public="false">
-            <argument type="service" id="session" />
+            <argument type="service" id="session" on-invalid="null" />
             <argument type="service" id="translator" />
             <argument>%locale%</argument>
+            <argument type="service" id="request_stack" />
         </service>
         <service id="sylius.resource_controller.event_dispatcher" class="Sylius\Bundle\ResourceBundle\Controller\EventDispatcher" public="false">
             <argument type="service" id="event_dispatcher" />

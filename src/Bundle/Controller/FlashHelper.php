@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
@@ -29,9 +30,13 @@ final class FlashHelper implements FlashHelperInterface
 
     private string $defaultLocale;
 
-    public function __construct(SessionInterface $session, TranslatorInterface $translator, string $defaultLocale)
-    {
-        $this->session = $session;
+    public function __construct(
+        ?SessionInterface $session,
+        TranslatorInterface $translator,
+        string $defaultLocale,
+        RequestStack $requestStack
+    ) {
+        $this->session = $session ?: $requestStack->getSession();
         $this->translator = $translator;
         $this->defaultLocale = $defaultLocale;
     }
