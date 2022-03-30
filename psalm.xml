@@ -114,6 +114,7 @@
         <ReservedWord>
             <errorLevel type="suppress">
                 <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Bundle/Controller/RequestConfiguration.php" />
                 <file name="src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php" />
             </errorLevel>
         </ReservedWord>
