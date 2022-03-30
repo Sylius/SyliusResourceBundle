@@ -70,4 +70,3 @@ if (\Symfony\Component\HttpKernel\Kernel::MAJOR_VERSION === 4) {
         use MicroKernelTrait;
     }
 }
-
