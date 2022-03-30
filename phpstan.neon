@@ -41,6 +41,8 @@ parameters:
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolverInterface::getResources\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent::stop\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has parameter \$request with no typehint specified./'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::isFileUpload\(\) has parameter \$data with no typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
