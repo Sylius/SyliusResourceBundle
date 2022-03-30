@@ -50,10 +50,6 @@ final class FlashHelperSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource
     ): void {
-        if (Kernel::MAJOR_VERSION > 4) {
-            $requestStack->getSession()->shouldNotBeCalled();
-        }
-
         $this->beConstructedWith($session, $translator, 'en', $requestStack);
 
         $metadata->getApplicationName()->willReturn('sylius');
@@ -67,7 +63,9 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $session->getBag('flashes')->willReturn($flashBag);
 
-        $requestStack->getSession()->shouldNotBeCalled();
+        if (Kernel::MAJOR_VERSION > 4) {
+            $requestStack->getSession()->shouldNotBeCalled();
+        }
 
         $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
     }
