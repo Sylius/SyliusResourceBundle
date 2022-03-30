@@ -111,6 +111,12 @@
             </errorLevel>
         </PropertyNotSetInConstructor>
 
+        <RedundantCondition>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ResourceController.php" />
+            </errorLevel>
+        </RedundantCondition>
+
         <ReservedWord>
             <errorLevel type="suppress">
                 <file name="src/Component/Repository/InMemoryRepository.php" />
