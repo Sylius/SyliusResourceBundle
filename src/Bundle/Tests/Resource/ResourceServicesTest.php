@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Resource;
 
 use App\Entity\Book;
 use App\Entity\ComicBook;
+use App\Kernel;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManager;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
@@ -50,7 +51,12 @@ final class ResourceServicesTest extends WebTestCase
     public function it_will_return_the_same_repository_instance()
     {
         $client = parent::createClient();
-        $repository = self::$container->get(BookRepository::class);
+
+        if (Kernel::MAJOR_VERSION === 4) {
+            $repository = self::$container->get(BookRepository::class);
+        } else {
+            $repository = self::getContainer()->get(BookRepository::class);
+        }
 
         $repositoryAlias = $client->getContainer()->get('app.repository.book');
         $this->assertSame($repository, $repositoryAlias);
