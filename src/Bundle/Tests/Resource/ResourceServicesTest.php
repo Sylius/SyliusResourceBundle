@@ -22,6 +22,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\Kernel;
 
 final class ResourceServicesTest extends WebTestCase
 {
@@ -54,7 +55,12 @@ final class ResourceServicesTest extends WebTestCase
     public function it_will_return_the_same_repository_instance()
     {
         $client = parent::createClient();
-        $repository = self::$container->get(BookRepository::class);
+
+        if (Kernel::MAJOR_VERSION === 4) {
+            $repository = self::$container->get(BookRepository::class);
+        } else {
+            $repository = self::getContainer()->get(BookRepository::class);
+        }
 
         $repositoryAlias = $client->getContainer()->get('app.repository.book');
         $this->assertSame($repository, $repositoryAlias);
