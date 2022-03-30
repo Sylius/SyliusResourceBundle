@@ -40,30 +40,70 @@ final class FlashHelperSpec extends ObjectBehavior
         $this->shouldImplement(FlashHelperInterface::class);
     }
 
-    function its_session_can_be_retrieved_from_container(SessionInterface $session, RequestStack $requestStack, TranslatorInterface $translator): void
-    {
+    function its_session_can_be_retrieved_from_container(
+        SessionInterface $session,
+        RequestStack $requestStack,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+        FlashBagInterface $flashBag,
+        MetadataInterface $metadata,
+        RequestConfiguration $requestConfiguration,
+        ResourceInterface $resource
+    ): void {
         if (Kernel::MAJOR_VERSION > 4) {
             $requestStack->getSession()->shouldNotBeCalled();
         }
 
         $this->beConstructedWith($session, $translator, 'en', $requestStack);
 
-        $this->shouldImplement(FlashHelperInterface::class);
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getHumanizedName()->willReturn('product');
+
+        $requestConfiguration->getMetadata()->willReturn($metadata);
+        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
+
+        $translator->getCatalogue('en')->willReturn($messageCatalogue);
+        $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $requestStack->getSession()->shouldNotBeCalled();
+
+        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
     }
 
-    function its_session_can_be_retrieved_from_request_stack(SessionInterface $session, RequestStack $requestStack, TranslatorInterface $translator): void
-    {
+    function its_session_can_be_retrieved_from_request_stack(
+        SessionInterface $session,
+        RequestStack $requestStack,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+        FlashBagInterface $flashBag,
+        MetadataInterface $metadata,
+        RequestConfiguration $requestConfiguration,
+        ResourceInterface $resource
+    ): void {
         if (Kernel::MAJOR_VERSION === 4) {
             return;
         }
+
+        $this->beConstructedWith(null, $translator, 'en', $requestStack);
+
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getHumanizedName()->willReturn('product');
+
+        $requestConfiguration->getMetadata()->willReturn($metadata);
+        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
+
+        $translator->getCatalogue('en')->willReturn($messageCatalogue);
+        $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
+
+        $session->getBag('flashes')->willReturn($flashBag);
 
         $requestStack->getSession()->willReturn($session);
 
         $requestStack->getSession()->shouldBeCalled();
 
-        $this->beConstructedWith(null, $translator, 'en', $requestStack);
-
-        $this->shouldImplement(FlashHelperInterface::class);
+        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
     }
 
     function it_adds_resource_message_by_default(

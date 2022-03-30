@@ -24,11 +24,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelper implements FlashHelperInterface
 {
-    private SessionInterface $session;
+    private ?SessionInterface $session;
 
     private TranslatorInterface $translator;
 
     private string $defaultLocale;
+
+    private RequestStack $requestStack;
 
     public function __construct(
         ?SessionInterface $session,
@@ -36,9 +38,10 @@ final class FlashHelper implements FlashHelperInterface
         string $defaultLocale,
         RequestStack $requestStack
     ) {
-        $this->session = $session ?: $requestStack->getSession();
+        $this->session = $session;
         $this->translator = $translator;
         $this->defaultLocale = $defaultLocale;
+        $this->requestStack = $requestStack;
     }
 
     public function addSuccessFlash(
@@ -95,7 +98,7 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         /** @var FlashBagInterface $flashBag */
-        $flashBag = $this->session->getBag('flashes');
+        $flashBag = $this->getSession()->getBag('flashes');
         $flashBag->add($type, $message);
     }
 
@@ -130,5 +133,10 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         return ['%resource%' => ucfirst($metadata->getHumanizedName())];
+    }
+
+    private function getSession(): SessionInterface
+    {
+        return $this->session ?: $this->requestStack->getSession();
     }
 }
