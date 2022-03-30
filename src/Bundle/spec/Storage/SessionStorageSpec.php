@@ -40,7 +40,7 @@ final class SessionStorageSpec extends ObjectBehavior
 
         $this->beConstructedWith(new Session(new MockArraySessionStorage()), $requestStack);
 
-        $this->shouldImplement(StorageInterface::class);
+        $this->get('name');
     }
 
     function its_session_can_be_retrieved_from_request_stack(RequestStack $requestStack): void
@@ -53,7 +53,7 @@ final class SessionStorageSpec extends ObjectBehavior
 
         $this->beConstructedWith(null, $requestStack);
 
-        $this->shouldImplement(StorageInterface::class);
+        $this->get('name');
     }
 
     function it_does_not_have_a_named_value_if_it_was_not_set_previously(): void

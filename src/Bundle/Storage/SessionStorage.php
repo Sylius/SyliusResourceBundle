@@ -19,35 +19,43 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SessionStorage implements StorageInterface
 {
-    private SessionInterface $session;
+    private ?SessionInterface $session;
+
+    private RequestStack $requestStack;
 
     public function __construct(?SessionInterface $session, RequestStack $requestStack)
     {
-        $this->session = $session ?: $requestStack->getSession();
+        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     public function has(string $name): bool
     {
-        return $this->session->has($name);
+        return $this->getSession()->has($name);
     }
 
     public function get(string $name, $default = null)
     {
-        return $this->session->get($name, $default);
+        return $this->getSession()->get($name, $default);
     }
 
     public function set(string $name, $value): void
     {
-        $this->session->set($name, $value);
+        $this->getSession()->set($name, $value);
     }
 
     public function remove(string $name): void
     {
-        $this->session->remove($name);
+        $this->getSession()->remove($name);
     }
 
     public function all(): array
     {
-        return $this->session->all();
+        return $this->getSession()->all();
+    }
+
+    private function getSession(): SessionInterface
+    {
+        return $this->session ?: $this->requestStack->getSession();
     }
 }
