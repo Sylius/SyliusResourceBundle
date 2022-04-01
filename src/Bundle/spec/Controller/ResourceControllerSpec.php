@@ -74,7 +74,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ContainerInterface $container
+        ContainerInterface $container,
+        Environment $twig
     ): void {
         $this->beConstructedWith(
             $metadata,
@@ -93,7 +94,8 @@ final class ResourceControllerSpec extends ObjectBehavior
             $eventDispatcher,
             $stateMachine,
             $resourceUpdateHandler,
-            $resourceDeleteHandler
+            $resourceDeleteHandler,
+            $twig
         );
 
         $this->setContainer($container);

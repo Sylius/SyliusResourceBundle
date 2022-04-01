@@ -31,6 +31,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ResourceController
 {
@@ -72,6 +73,8 @@ class ResourceController
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
+    protected ?Environment $twig;
+
     public function __construct(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -89,7 +92,8 @@ class ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler
+        ResourceDeleteHandlerInterface $resourceDeleteHandler,
+        ?Environment $twig
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -108,6 +112,7 @@ class ResourceController
         $this->stateMachine = $stateMachine;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
+        $this->twig = $twig;
     }
 
     public function showAction(Request $request): Response
@@ -564,5 +569,25 @@ class ResourceController
         }
 
         return $this->stateMachine;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    {
+        if (null === $this->twig) {
+            throw new \LogicException('You can not use the "render" method if the Templating Component or the Twig Bundle are not available. Try running "composer require symfony/twig-bundle".');
+        }
+
+        $content = $this->twig->render($view, $parameters);
+
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        $response->setContent($content);
+
+        return $response;
     }
 }
