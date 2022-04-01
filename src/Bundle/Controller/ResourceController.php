@@ -572,7 +572,7 @@ class ResourceController
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function render(string $view, array $parameters = [], Response $response = null): Response
     {
