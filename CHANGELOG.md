@@ -45,6 +45,14 @@
 - [#358](https://github.com/Sylius/SyliusResourceBundle/issues/358) Fix docs for crud routes with attributes ([@loic425](https://github.com/loic425))
 - [#359](https://github.com/Sylius/SyliusResourceBundle/issues/359) Fix type of serialization groups ([@loic425](https://github.com/loic425))
 
+### v1.8.3 (2022-04-07)
+
+#### Details
+
+- [#375](https://github.com/Sylius/SyliusResourceBundle/issues/375) Testing build with PHP 8.1 ([@loic425](https://github.com/loic425))
+- [#381](https://github.com/Sylius/SyliusResourceBundle/issues/381) Bump Pagerfanta from 2.x to 3.x ([@mbabker](https://github.com/mbabker))
+- [#406](https://github.com/Sylius/SyliusResourceBundle/issues/406) Allow to run GitHub actions manually + fix build on 1.8 ([@Zales0123](https://github.com/Zales0123))
+
 ### v1.8.2 (2021-04-08)
 
 #### Details
