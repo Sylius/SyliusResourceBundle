@@ -56,6 +56,10 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['serialization_version'] = $arguments['serializationVersion'];
             }
 
+            if (isset($arguments['form'])) {
+                $syliusOptions['form'] = $arguments['form'];
+            }
+
             $route = new Route(
                 $arguments['path'],
                 [

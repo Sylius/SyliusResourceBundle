@@ -46,6 +46,8 @@ final class SyliusRoute
 
     public ?array $vars = null;
 
+    public ?string $form = null;
+
     public function __construct(
         ?string $name = null,
         ?string $path = null,
@@ -61,7 +63,8 @@ final class SyliusRoute
         ?string $host = null,
         ?array $schemes = null,
         ?int $priority = null,
-        ?array $vars = null
+        ?array $vars = null,
+        ?string $form = null
     ) {
         $this->name = $name;
         $this->path = $path;
@@ -78,5 +81,6 @@ final class SyliusRoute
         $this->schemes = $schemes;
         $this->vars = $vars;
         $this->priority = $priority;
+        $this->form = $form;
     }
 }

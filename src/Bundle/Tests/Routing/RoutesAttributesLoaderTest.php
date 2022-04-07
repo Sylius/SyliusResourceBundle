@@ -317,4 +317,28 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals(['https'], $route->getSchemes());
     }
+
+    /**
+     * @test
+     */
+    public function it_generates_routes_from_resource_with_form(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('register_user_with_form');
+        $this->assertNotNull($route);
+        $this->assertEquals('/users/register', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'form' => 'App\Form\Type\RegisterType',
+            ],
+        ], $route->getDefaults());
+    }
 }

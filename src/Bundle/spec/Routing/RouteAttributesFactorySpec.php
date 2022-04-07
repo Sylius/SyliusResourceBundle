@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
+use App\Entity\Route\RegisterUserWithForm;
 use App\Entity\Route\ShowBook;
 use App\Entity\Route\ShowBookWithCriteria;
 use App\Entity\Route\ShowBookWithHost;
@@ -236,5 +237,21 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_schemes');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getSchemes(), ['https']);
+    }
+
+    function it_generates_routes_from_resource_with_form(): void
+    {
+        $routeCollection = new RouteCollection();
+
+        $this->createRouteForClass($routeCollection, RegisterUserWithForm::class);
+
+        $route = $routeCollection->get('register_user_with_form');
+        Assert::eq($route->getPath(), '/users/register');
+        Assert::eq($route->getDefaults(), [
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'form' => 'App\Form\Type\RegisterType',
+            ],
+        ]);
     }
 }
