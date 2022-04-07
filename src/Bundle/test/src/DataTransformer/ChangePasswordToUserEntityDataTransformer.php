@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\DataTransformer;
 
-use App\Dto\UpdateProfile;
+use App\Dto\ChangePassword;
 use App\Entity\User;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\DataTransformer\DataTransformerInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Webmozart\Assert\Assert;
 
-final class UpdateProfileToUserDataTransformer implements DataTransformerInterface
+final class ChangePasswordToUserEntityDataTransformer implements DataTransformerInterface
 {
     private RequestStack $requestStack;
 
@@ -36,8 +36,6 @@ final class UpdateProfileToUserDataTransformer implements DataTransformerInterfa
 
     public function transform(object $data, string $to, RequestConfiguration $configuration): User
     {
-        Assert::isInstanceOf($data, UpdateProfile::class);
-
         $id = $this->requestStack->getCurrentRequest()->attributes->get('id');
         Assert::notNull($id, 'No id was found on request');
 
@@ -48,13 +46,13 @@ final class UpdateProfileToUserDataTransformer implements DataTransformerInterfa
             throw new NotFoundHttpException('No user was found.');
         }
 
-        $user->setUsername($data->username);
+        $user->setPassword($data->password);
 
         return $user;
     }
 
     public function supportsTransformation(object $data, string $to, RequestConfiguration $configuration): bool
     {
-        return $data instanceof UpdateProfile && is_a($to, User::class, true);
+        return $data instanceof ChangePassword && is_a($to, User::class, true);
     }
 }

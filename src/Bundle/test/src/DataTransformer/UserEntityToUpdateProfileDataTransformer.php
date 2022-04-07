@@ -19,7 +19,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\DataTransformer\DataTransformerInterface;
 use Webmozart\Assert\Assert;
 
-final class UserToUpdateProfileDataTransformer implements DataTransformerInterface
+final class UserEntityToUpdateProfileDataTransformer implements DataTransformerInterface
 {
     public function transform(object $data, string $to, RequestConfiguration $configuration): UpdateProfile
     {

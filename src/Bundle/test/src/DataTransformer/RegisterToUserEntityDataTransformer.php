@@ -13,23 +13,27 @@ declare(strict_types=1);
 
 namespace App\DataTransformer;
 
-use App\Dto\User;
-use App\Entity\User as UserEntity;
+use App\Dto\Register;
+use App\Entity\User;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\DataTransformer\DataTransformerInterface;
 use Webmozart\Assert\Assert;
 
-final class UserDataTransformer implements DataTransformerInterface
+final class RegisterToUserEntityDataTransformer implements DataTransformerInterface
 {
     public function transform(object $data, string $to, RequestConfiguration $configuration): User
     {
-        Assert::isInstanceOf($data, UserEntity::class);
+        Assert::isInstanceOf($data, Register::class);
 
-        return new User($data->getUsername() ?: '');
+        $user = new User();
+        $user->setUsername($data->username);
+        $user->setPassword($data->password);
+
+        return $user;
     }
 
     public function supportsTransformation(object $data, string $to, RequestConfiguration $configuration): bool
     {
-        return $data instanceof UserEntity && is_a($to, User::class, true);
+        return $data instanceof Register && is_a($to, User::class, true);
     }
 }
