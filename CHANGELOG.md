@@ -1,5 +1,27 @@
 ## CHANGELOG
 
+### v1.9.0 (2022-04-07)
+
+#### TL;DR
+
+Stable 1.9.0 release 🎉🎉🎉
+
+- PHP bumped to ^8.0
+- PHP 7.4 syntaxt
+- Sylius Resource routes generated with PHP attributes
+- Support for Symfony Workflow
+- Simpler usage of new service entity repository
+- Multiple bug fixes and improvements
+
+#### Details
+
+- [#375](https://github.com/Sylius/SyliusResourceBundle/issues/375) Testing build with PHP 8.1 ([@loic425](https://github.com/loic425))
+- [#378](https://github.com/Sylius/SyliusResourceBundle/issues/378) Fix phpdoc for getTranslations ([@dannyvw](https://github.com/dannyvw))
+- [#381](https://github.com/Sylius/SyliusResourceBundle/issues/381) Bump Pagerfanta from 2.x to 3.x ([@mbabker](https://github.com/mbabker))
+- [#403](https://github.com/Sylius/SyliusResourceBundle/issues/403) Add form attribute on SyliusCrudRoute ([@loic425](https://github.com/loic425))
+- [#405](https://github.com/Sylius/SyliusResourceBundle/issues/405) Fix the build ([@loic425](https://github.com/loic425))
+- [#406](https://github.com/Sylius/SyliusResourceBundle/issues/406) Allow to run GitHub actions manually + fix build on 1.8 ([@Zales0123](https://github.com/Zales0123))
+
 ### v1.9.0-RC.1 (2022-02-28)
 
 #### Details
