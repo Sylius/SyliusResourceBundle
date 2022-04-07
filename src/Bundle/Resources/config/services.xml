@@ -48,6 +48,11 @@
             <tag name="form.type" />
         </service>
 
+        <service id="sylius.form_factory" class="Sylius\Bundle\ResourceBundle\Form\Factory\FormFactory" public="false">
+            <argument type="service" id="form.factory" />
+        </service>
+        <service id="Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface" alias="sylius.form_factory" />
+
         <service id="sylius.registry.resource_repository" class="Sylius\Component\Registry\ServiceRegistry" public="false">
             <argument>Sylius\Component\Resource\Repository\RepositoryInterface</argument>
             <argument>resource repository</argument>
@@ -56,5 +61,10 @@
             <argument>Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface</argument>
             <argument>form builder</argument>
         </service>
+
+        <service id="sylius.data_transformer.chain"
+                 class="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformer"
+                 public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformerInterface" alias="sylius.data_transformer.chain" />
     </services>
 </container>

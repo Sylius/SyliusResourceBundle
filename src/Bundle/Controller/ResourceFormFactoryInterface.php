@@ -16,6 +16,9 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @deprecated Use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface instead
+ */
 interface ResourceFormFactoryInterface
 {
     public function create(RequestConfiguration $requestConfiguration, ResourceInterface $resource): FormInterface;

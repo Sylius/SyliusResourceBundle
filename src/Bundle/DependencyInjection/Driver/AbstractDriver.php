@@ -59,6 +59,7 @@ abstract class AbstractDriver implements DriverInterface
     protected function addController(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $definition = new Definition($metadata->getClass('controller'));
+
         $definition
             ->setPublic(true)
             ->setArguments([
@@ -79,6 +80,8 @@ abstract class AbstractDriver implements DriverInterface
                 new Reference('sylius.resource_controller.state_machine', ContainerInterface::NULL_ON_INVALID_REFERENCE),
                 new Reference('sylius.resource_controller.resource_update_handler'),
                 new Reference('sylius.resource_controller.resource_delete_handler'),
+                new Reference('sylius.data_transformer.chain'),
+                new Reference('sylius.form_factory'),
             ])
             ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')

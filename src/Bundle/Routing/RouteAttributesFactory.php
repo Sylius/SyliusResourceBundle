@@ -60,6 +60,14 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['form'] = $arguments['form'];
             }
 
+            if (isset($arguments['input'])) {
+                $syliusOptions['input'] = $arguments['input'];
+            }
+
+            if (isset($arguments['output'])) {
+                $syliusOptions['output'] = $arguments['output'];
+            }
+
             $route = new Route(
                 $arguments['path'],
                 [

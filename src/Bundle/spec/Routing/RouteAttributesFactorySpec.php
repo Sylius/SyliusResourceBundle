@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use App\Entity\Route\RegisterUserWithForm;
+use App\Entity\Route\RegisterUserWithInput;
 use App\Entity\Route\ShowBook;
 use App\Entity\Route\ShowBookWithCriteria;
 use App\Entity\Route\ShowBookWithHost;
@@ -251,6 +252,22 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
             '_controller' => 'app.controller.user:createAction',
             '_sylius' => [
                 'form' => 'App\Form\Type\RegisterType',
+            ],
+        ]);
+    }
+
+    function it_generates_routes_from_resource_with_input(): void
+    {
+        $routeCollection = new RouteCollection();
+
+        $this->createRouteForClass($routeCollection, RegisterUserWithInput::class);
+
+        $route = $routeCollection->get('register_user_with_input');
+        Assert::eq($route->getPath(), '/users/register');
+        Assert::eq($route->getDefaults(), [
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'input' => 'App\Dto\Register',
             ],
         ]);
     }

@@ -15,7 +15,9 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
+use Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\Factory\FactoryInterface;
@@ -25,12 +27,14 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Webmozart\Assert\Assert;
 
 class ResourceController
 {
@@ -72,6 +76,10 @@ class ResourceController
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
+    protected ?ChainDataTransformerInterface $chainDataTransformer;
+
+    protected ?FormFactoryInterface $formFactory;
+
     public function __construct(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -89,7 +97,9 @@ class ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler
+        ResourceDeleteHandlerInterface $resourceDeleteHandler,
+        ?ChainDataTransformerInterface $chainDataTransformer = null,
+        ?FormFactoryInterface $formFactory = null
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -108,6 +118,8 @@ class ResourceController
         $this->stateMachine = $stateMachine;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
+        $this->chainDataTransformer = $chainDataTransformer;
+        $this->formFactory = $formFactory;
     }
 
     public function showAction(Request $request): Response
@@ -165,13 +177,33 @@ class ResourceController
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::CREATE);
-        $newResource = $this->newResourceFactory->create($configuration, $this->factory);
 
-        $form = $this->resourceFormFactory->create($configuration, $newResource);
+        $newResource = null;
+
+        if (null === $configuration->getInput()) {
+            $newResource = $this->newResourceFactory->create($configuration, $this->factory);
+        }
+
+        $form = $this->createFormForConfiguration($configuration, $newResource);
         $form->handleRequest($request);
 
         if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             $newResource = $form->getData();
+
+            if (!$newResource instanceof ResourceInterface) {
+                /** @psalm-var class-string $to */
+                $to = $this->metadata->getClass('model');
+
+                $transformedResource = $this->transform($newResource, $to, $configuration);
+
+                Assert::notNull($transformedResource, sprintf(
+                    'No data transformer was found to convert an object of type %s to %s.',
+                    $newResource::class,
+                    $to
+                ));
+
+                $newResource = $transformedResource;
+            }
 
             $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource);
 
@@ -201,6 +233,10 @@ class ResourceController
             }
 
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
+
+            if (null !== $output = $configuration->getOutput()) {
+                $newResource = $this->transform($newResource, $output, $configuration);
+            }
 
             if (!$configuration->isHtmlRequest()) {
                 return $this->createRestView($configuration, $newResource, Response::HTTP_CREATED);
@@ -240,7 +276,11 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
-        $form = $this->resourceFormFactory->create($configuration, $resource);
+        if (null !== $input = $configuration->getInput()) {
+            $resource = $this->transform($resource, $input, $configuration);
+        }
+
+        $form = $this->createFormForConfiguration($configuration, $resource);
         $form->handleRequest($request);
 
         if (
@@ -249,6 +289,21 @@ class ResourceController
             && $form->isValid()
         ) {
             $resource = $form->getData();
+
+            if (null !== $input) {
+                /** @psalm-var class-string $to */
+                $to = $this->metadata->getClass('model');
+
+                $transformedResource = $this->transform($resource, $to, $configuration);
+
+                Assert::notNull($transformedResource, sprintf(
+                    'No data transformer was found to convert an object of type %s to %s.',
+                    $resource::class,
+                    $to
+                ));
+
+                $resource = $transformedResource;
+            }
 
             /** @var ResourceControllerEvent $event */
             $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
@@ -287,6 +342,10 @@ class ResourceController
 
             if (!$configuration->isHtmlRequest()) {
                 if ($configuration->getParameters()->get('return_content', false)) {
+                    if (null !== $output = $configuration->getOutput()) {
+                        $resource = $this->transform($resource, $output, $configuration);
+                    }
+
                     return $this->createRestView($configuration, $resource, Response::HTTP_OK);
                 }
 
@@ -572,5 +631,30 @@ class ResourceController
         }
 
         return $this->stateMachine;
+    }
+
+    /**
+     * @psalm-param class-string $to
+     */
+    protected function transform(object $data, string $to, RequestConfiguration $configuration): ?object
+    {
+        if (null === $this->chainDataTransformer) {
+            throw new \LogicException('You can not use DTOs without configuring a chain data transformer.');
+        }
+
+        return $this->chainDataTransformer->transform($data, $to, $configuration);
+    }
+
+    protected function createFormForConfiguration(RequestConfiguration $configuration, ?object $data): FormInterface
+    {
+        if (null !== $this->formFactory) {
+            return $this->formFactory->create($configuration, $data);
+        }
+
+        if (!$data instanceof ResourceInterface) {
+            throw new \LogicException(sprintf('You have to inject a form factory of type %s.', FormFactoryInterface::class));
+        }
+
+        return $this->resourceFormFactory->create($configuration, $data);
     }
 }

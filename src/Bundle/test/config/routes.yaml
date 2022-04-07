@@ -93,3 +93,31 @@ app_science_book:
         alias: app.science_book
         templates: 'ScienceBook'
     type: sylius.resource
+
+app_register_user:
+    path: /users/register
+    methods: [POST]
+    defaults:
+        _controller: app.controller.user:createAction
+        _sylius:
+            input: App\Dto\Register
+            output: App\Dto\User
+            form: App\Form\Type\RegisterType
+
+app_user_change_password:
+    path: /users/{id}/change_password
+    methods: [PATCH]
+    defaults:
+        _controller: app.controller.user:updateAction
+        _sylius:
+            input: App\Dto\ChangePassword
+            form: App\Form\Type\ChangePasswordType
+
+app_user_update_profile:
+    path: /users/{id}
+    methods: [PATCH]
+    defaults:
+        _controller: app.controller.user:updateAction
+        _sylius:
+            input: App\Dto\UpdateProfile
+            form: App\Form\Type\UpdateProfileType

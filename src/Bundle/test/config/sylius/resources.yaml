@@ -36,3 +36,7 @@ sylius_resource:
             classes:
                 model: App\Entity\PullRequest
                 form: App\Form\Type\PullRequestType
+
+        app.user:
+            classes:
+                model: App\Entity\User

@@ -32,6 +32,9 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    App\DataTransformer\:
+        resource: '../src/DataTransformer'
+
     test.translation_locale_provider:
         class: Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider
         arguments:

@@ -135,6 +135,36 @@ class RequestConfiguration
     }
 
     /**
+     * @psalm-return class-string|null
+     */
+    public function getInput(): ?string
+    {
+        /** @psalm-var class-string|null */
+        $input = $this->parameters->get('input');
+
+        if (!is_string($input)) {
+            return null;
+        }
+
+        return $input;
+    }
+
+    /**
+     * @psalm-return class-string|null
+     */
+    public function getOutput(): ?string
+    {
+        /** @psalm-var class-string|null */
+        $output = $this->parameters->get('output');
+
+        if (!is_string($output)) {
+            return null;
+        }
+
+        return $output;
+    }
+
+    /**
      * @param string $name
      *
      * @return string

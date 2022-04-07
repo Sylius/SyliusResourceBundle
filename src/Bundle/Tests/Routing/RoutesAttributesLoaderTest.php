@@ -341,4 +341,52 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
             ],
         ], $route->getDefaults());
     }
+
+    /**
+     * @test
+     */
+    public function it_generates_routes_from_resource_with_input(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('register_user_with_input');
+        $this->assertNotNull($route);
+        $this->assertEquals('/users/register', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'input' => 'App\Dto\Register',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_routes_from_resource_with_output(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('register_user_with_output');
+        $this->assertNotNull($route);
+        $this->assertEquals('/users/register', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'output' => 'App\Dto\User',
+            ],
+        ], $route->getDefaults());
+    }
 }

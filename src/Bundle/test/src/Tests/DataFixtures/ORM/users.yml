@@ -1,0 +1,4 @@
+App\Entity\User:
+    marty:
+        username: "marty1985"
+        password: "ThisIsHeavy"

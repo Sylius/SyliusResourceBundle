@@ -32,7 +32,9 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -74,7 +76,9 @@ final class ResourceControllerSpec extends ObjectBehavior
         StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ContainerInterface $container
+        ContainerInterface $container,
+        ChainDataTransformerInterface $chainDataTransformer,
+        FormFactoryInterface $formFactory
     ): void {
         $this->beConstructedWith(
             $metadata,
@@ -93,7 +97,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             $eventDispatcher,
             $stateMachine,
             $resourceUpdateHandler,
-            $resourceDeleteHandler
+            $resourceDeleteHandler,
+            $chainDataTransformer,
+            $formFactory
         );
 
         $this->setContainer($container);
@@ -383,11 +389,10 @@ final class ResourceControllerSpec extends ObjectBehavior
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RequestConfiguration $configuration,
         AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -402,6 +407,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -409,7 +415,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -446,7 +452,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -461,6 +467,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -468,7 +475,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -507,7 +514,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -522,6 +529,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -529,7 +537,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -568,7 +576,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         Request $request,
         Response $response
@@ -579,6 +587,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -586,7 +595,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -609,7 +618,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         Request $request,
         Response $response
@@ -620,6 +629,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -627,7 +637,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -650,7 +660,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
@@ -665,6 +675,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -672,7 +683,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -705,7 +716,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         FlashHelperInterface $flashHelper,
         EventDispatcherInterface $eventDispatcher,
@@ -719,6 +730,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -726,7 +738,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -759,7 +771,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         StateMachineInterface $stateMachine,
         Form $form,
         RedirectHandlerInterface $redirectHandler,
@@ -777,6 +789,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
         $configuration->hasStateMachine()->willReturn(true);
+        $configuration->getInput()->willReturn(null);
+        $configuration->getOutput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -784,7 +798,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -817,7 +831,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         StateMachineInterface $stateMachine,
         Form $form,
         FlashHelperInterface $flashHelper,
@@ -839,9 +853,11 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $configuration->isHtmlRequest()->willReturn(true);
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $configuration->getInput()->willReturn(null);
+        $configuration->getOutput()->willReturn(null);
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -874,7 +890,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         FlashHelperInterface $flashHelper,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
@@ -890,6 +906,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
         $configuration->hasStateMachine()->willReturn(true);
+        $configuration->getInput()->willReturn(null);
+        $configuration->getOutput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -897,7 +915,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -922,6 +940,127 @@ final class ResourceControllerSpec extends ObjectBehavior
         $this->createAction($request)->shouldReturn($response);
     }
 
+    function it_uses_input_class_to_create_resource_on_non_html_request(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ViewHandlerInterface $viewHandler,
+        RepositoryInterface $repository,
+        ResourceInterface $newResource,
+        FormFactoryInterface $formFactory,
+        FlashHelperInterface $flashHelper,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceControllerEvent $event,
+        StateMachineInterface $stateMachine,
+        Form $form,
+        Request $request,
+        Response $response
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->hasStateMachine()->willReturn(true);
+        $configuration->getInput()->willReturn(\stdClass::class);
+        $configuration->getOutput()->willReturn(null);
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+
+        $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+
+        $formFactory->create($configuration, null)->willReturn($form);
+
+        $request->isMethod('POST')->willReturn(true);
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
+        $form->isValid()->willReturn(true);
+        $form->getData()->willReturn($newResource);
+
+        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+
+        $stateMachine->apply($configuration, $newResource)->shouldBeCalled();
+
+        $repository->add($newResource)->shouldBeCalled();
+        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldBeCalled();
+
+        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
+
+        $expectedView = View::create($newResource, 201);
+
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->createAction($request)->shouldReturn($response);
+    }
+
+    function it_uses_output_class_to_create_resource_on_non_html_request(
+        MetadataInterface $metadata,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        RequestConfiguration $configuration,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ViewHandlerInterface $viewHandler,
+        FactoryInterface $factory,
+        NewResourceFactoryInterface $newResourceFactory,
+        RepositoryInterface $repository,
+        ResourceInterface $newResource,
+        FormFactoryInterface $formFactory,
+        FlashHelperInterface $flashHelper,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceControllerEvent $event,
+        StateMachineInterface $stateMachine,
+        Form $form,
+        Request $request,
+        Response $response,
+        ChainDataTransformerInterface $chainDataTransformer,
+        \stdClass $output
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->hasStateMachine()->willReturn(true);
+        $configuration->getInput()->willReturn(null);
+        $configuration->getOutput()->willReturn(\stdClass::class);
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+
+        $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+
+        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
+
+        $request->isMethod('POST')->willReturn(true);
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
+        $form->isValid()->willReturn(true);
+        $form->getData()->willReturn($newResource);
+
+        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+
+        $chainDataTransformer->transform($newResource, \stdClass::class, $configuration)->willReturn($output);
+
+        $stateMachine->apply($configuration, $newResource)->shouldBeCalled();
+
+        $repository->add($newResource)->shouldBeCalled();
+        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldBeCalled();
+
+        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
+
+        $expectedView = View::create($output, 201);
+
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->createAction($request)->shouldReturn($response);
+    }
+
     function it_does_not_create_the_resource_and_throws_http_exception_for_non_html_requests_stopped_via_event(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -931,7 +1070,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         NewResourceFactoryInterface $newResourceFactory,
         RepositoryInterface $repository,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         FlashHelperInterface $flashHelper,
         EventDispatcherInterface $eventDispatcher,
         Form $form,
@@ -944,6 +1083,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -951,7 +1091,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(true);
         $form->handleRequest($request)->willReturn($form);
@@ -1024,7 +1164,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -1040,6 +1180,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1047,7 +1188,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -1087,7 +1228,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -1102,6 +1243,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1109,7 +1251,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -1151,7 +1293,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -1166,6 +1308,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1173,7 +1316,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
         $event->isStopped()->willReturn(false);
@@ -1215,7 +1358,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         Request $request,
         Response $response
@@ -1227,11 +1370,12 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(true);
         $request->getMethod()->willReturn('PATCH');
@@ -1255,7 +1399,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         Request $request,
         Response $response
@@ -1267,11 +1411,12 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(true);
         $request->getMethod()->willReturn('PATCH');
@@ -1294,7 +1439,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         Form $form,
         EventDispatcherInterface $eventDispatcher,
         RedirectHandlerInterface $redirectHandler,
@@ -1309,13 +1454,14 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
         $configuration->isHtmlRequest()->willReturn(true);
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1346,7 +1492,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -1367,6 +1513,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1374,7 +1521,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1405,7 +1552,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -1426,6 +1573,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1433,7 +1581,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1469,7 +1617,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $initializeEvent,
         Form $form,
@@ -1484,6 +1632,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
 
@@ -1491,7 +1640,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
 
         $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $formFactory->create($configuration, $newResource)->willReturn($form);
 
         $request->isMethod('POST')->willReturn(false);
         $form->createView()->shouldNotBeCalled();
@@ -1522,7 +1671,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -1542,6 +1691,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1549,7 +1699,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->getMethod()->willReturn('GET');
 
@@ -1578,7 +1728,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
@@ -1597,6 +1747,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isHtmlRequest()->willReturn(false);
         $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $configuration->getParameters()->willReturn($parameterBag);
         $parameterBag->get('return_content', false)->willReturn(false);
@@ -1604,7 +1755,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1626,6 +1777,144 @@ final class ResourceControllerSpec extends ObjectBehavior
         $this->updateAction($request)->shouldReturn($response);
     }
 
+    function it_uses_input_class_to_update_resource_on_non_html_request(
+        MetadataInterface $metadata,
+        ParameterBagInterface $parameterBag,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        ViewHandlerInterface $viewHandler,
+        RepositoryInterface $repository,
+        ObjectManager $manager,
+        SingleResourceProviderInterface $singleResourceProvider,
+        FormFactoryInterface $formFactory,
+        AuthorizationCheckerInterface $authorizationChecker,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceUpdateHandlerInterface $resourceUpdateHandler,
+        RequestConfiguration $configuration,
+        ResourceInterface $resource,
+        ResourceInterface $transformedResource,
+        ResourceControllerEvent $event,
+        Form $form,
+        Request $request,
+        Response $response,
+        ChainDataTransformerInterface $chainDataTransformer
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+        $metadata->getClass('model')->willReturn('App\Entity\User');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(\stdClass::class);
+
+        $configuration->getParameters()->willReturn($parameterBag);
+        $parameterBag->get('return_content', false)->willReturn(false);
+
+        $input = new \stdClass();
+
+        $chainDataTransformer->transform($resource, \stdClass::class, $configuration)->willReturn($input);
+        $chainDataTransformer->transform($resource, 'App\Entity\User', $configuration)->willReturn($transformedResource);
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+
+        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $formFactory->create($configuration, $input)->willReturn($form);
+
+        $request->isMethod('PATCH')->willReturn(false);
+        $request->getMethod()->willReturn('PUT');
+
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
+        $form->isValid()->willReturn(true);
+        $form->getData()->willReturn($resource);
+
+        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $transformedResource)->willReturn($event);
+        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $transformedResource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+
+        $chainDataTransformer->transform($resource, \stdClass::class, $configuration)->shouldBeCalled();
+        $chainDataTransformer->transform($resource, 'App\Entity\User', $configuration)->shouldBeCalled();
+
+        $resourceUpdateHandler->handle($transformedResource, $configuration, $manager)->shouldBeCalled();
+        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $transformedResource)->shouldBeCalled();
+        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $transformedResource)->shouldBeCalled();
+
+        $expectedView = View::create(null, 204);
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->updateAction($request)->shouldReturn($response);
+    }
+
+    function it_uses_output_class_to_update_resource_on_non_html_request(
+        MetadataInterface $metadata,
+        ParameterBagInterface $parameterBag,
+        RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        ViewHandlerInterface $viewHandler,
+        RepositoryInterface $repository,
+        ObjectManager $manager,
+        SingleResourceProviderInterface $singleResourceProvider,
+        FormFactoryInterface $formFactory,
+        AuthorizationCheckerInterface $authorizationChecker,
+        EventDispatcherInterface $eventDispatcher,
+        ResourceUpdateHandlerInterface $resourceUpdateHandler,
+        RequestConfiguration $configuration,
+        ResourceInterface $resource,
+        ResourceControllerEvent $event,
+        Form $form,
+        Request $request,
+        Response $response,
+        ChainDataTransformerInterface $chainDataTransformer
+    ): void {
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+        $metadata->getClass('model')->willReturn('App\Entity\User');
+
+        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
+        $configuration->hasPermission()->willReturn(true);
+        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->hasStateMachine()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
+        $configuration->getOutput()->willReturn(\stdClass::class);
+
+        $configuration->getParameters()->willReturn($parameterBag);
+        $parameterBag->get('return_content', false)->willReturn(true);
+
+        $output = new \stdClass();
+
+        $chainDataTransformer->transform($resource, \stdClass::class, $configuration)->willReturn($output);
+
+        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+
+        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $formFactory->create($configuration, $resource)->willReturn($form);
+
+        $request->isMethod('PATCH')->willReturn(false);
+        $request->getMethod()->willReturn('PUT');
+
+        $form->handleRequest($request)->willReturn($form);
+        $form->isSubmitted()->willReturn(true);
+        $form->isValid()->willReturn(true);
+        $form->getData()->willReturn($resource);
+
+        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
+        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
+        $event->isStopped()->willReturn(false);
+
+        $chainDataTransformer->transform($resource, \stdClass::class, $configuration)->shouldBeCalled();
+
+        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
+        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldBeCalled();
+        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldBeCalled();
+
+        $expectedView = View::create($output, 200);
+        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+
+        $this->updateAction($request)->shouldReturn($response);
+    }
+
     function it_does_not_update_the_resource_throws_a_http_exception_for_non_html_requests_stopped_via_event(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -1635,7 +1924,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         EventDispatcherInterface $eventDispatcher,
         ResourceControllerEvent $event,
         Form $form,
@@ -1648,11 +1937,12 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isHtmlRequest()->willReturn(false);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');
@@ -1682,7 +1972,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ObjectManager $manager,
         SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
+        FormFactoryInterface $formFactory,
         RedirectHandlerInterface $redirectHandler,
         FlashHelperInterface $flashHelper,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -1703,6 +1993,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->hasStateMachine()->willReturn(true);
+        $configuration->getInput()->willReturn(null);
 
         $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
 
@@ -1710,7 +2001,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->getTemplate(ResourceActions::UPDATE)->willReturn('@SyliusShop/Product/update.html.twig');
 
         $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $formFactory->create($configuration, $resource)->willReturn($form);
 
         $request->isMethod('PATCH')->willReturn(false);
         $request->getMethod()->willReturn('PUT');

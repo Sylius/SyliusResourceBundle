@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection;
 
+use Sylius\Bundle\ResourceBundle\DataTransformer\DataTransformerInterface;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
@@ -35,6 +36,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load('services.xml');
+
+        $container->registerForAutoconfiguration(DataTransformerInterface::class)
+            ->addTag('sylius.data_transformer');
 
         /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');

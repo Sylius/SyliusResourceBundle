@@ -13,12 +13,20 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use JMS\Serializer\Annotation as Serializer;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
+/**
+ * @Serializer\ExclusionPolicy("all")
+ */
 class User implements ResourceInterface
 {
     private ?int $id = null;
 
+    /**
+     * @Serializer\Expose
+     * @Serializer\Type("string")
+     */
     private ?string $username = null;
 
     private ?string $password = null;

@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Dto\Register;
+use App\Dto\ChangePassword;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class RegisterType extends AbstractType
+final class ChangePasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
             ->add('password')
         ;
     }
@@ -32,13 +31,13 @@ final class RegisterType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => Register::class,
+                'data_class' => ChangePassword::class,
             ])
         ;
     }
 
     public function getBlockPrefix(): string
     {
-        return 'app_register';
+        return 'app_change_password';
     }
 }

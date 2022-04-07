@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle;
 
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\ChainDataTransformerPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineContainerRepositoryFactoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
@@ -48,6 +49,7 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
+        $container->addCompilerPass(new ChainDataTransformerPass());
 
         $container->registerExtension(new PagerfantaExtension());
         $container->addCompilerPass(new PagerfantaBridgePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle

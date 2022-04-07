@@ -32,9 +32,11 @@
             <argument type="service" id="sylius.resource_controller.resources_resolver" />
             <argument type="service" id="sylius.resource_controller.pagerfanta_representation_factory" />
         </service>
+
         <service id="sylius.resource_controller.form_factory" class="Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactory" public="false">
             <argument type="service" id="form.factory" />
         </service>
+
         <service id="sylius.resource_controller.redirect_handler" class="Sylius\Bundle\ResourceBundle\Controller\RedirectHandler" public="false">
             <argument type="service" id="router" />
         </service>
