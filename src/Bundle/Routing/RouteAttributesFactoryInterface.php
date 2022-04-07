@@ -17,5 +17,6 @@ use Symfony\Component\Routing\RouteCollection;
 
 interface RouteAttributesFactoryInterface
 {
+    /** @psalm-param class-string $className */
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void;
 }

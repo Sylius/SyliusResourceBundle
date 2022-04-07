@@ -65,6 +65,10 @@ jobs:
                     (cd src/Bundle/test && bin/console doctrine:schema:create)
 
             -
+                name: Run Psalm
+                run: vendor/bin/psalm --php-version=${{ matrix.php }}
+
+            -
                 name: Run analysis
                 run: |
                     composer analyse
