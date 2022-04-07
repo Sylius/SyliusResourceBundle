@@ -73,7 +73,7 @@
         "symfony/workflow": "^4.4 || ^5.4 || ^6.0",
         "symplify/easy-coding-standard": "^9.4",
         "twig/twig": "^2.12 || ^3.0",
-        "vimeo/psalm": "4.7.0",
+        "vimeo/psalm": "^4.22",
         "rector/rector": "^0.11.47"
     },
     "suggest": {
@@ -102,8 +102,7 @@
         "analyse": [
             "@composer validate --strict",
             "vendor/bin/ecs check src",
-            "vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src",
-            "vendor/bin/psalm"
+            "vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src"
         ],
         "fix": [
             "vendor/bin/ecs check src --fix"
