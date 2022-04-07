@@ -11,7 +11,8 @@ parameters:
 services:
     # Gets rid of "[error] Uncaught PHP Exception Symfony\Component\HttpKernel\Exception\NotFoundHttpException"
     # errors in PHPUnit output when testing 404 errors.
-    logger: "@Psr\Log\NullLogger"
+    Psr\Log\NullLogger: ~
+    logger: '@Psr\Log\NullLogger'
 
     # Default configuration for services in *this* file
     _defaults:
