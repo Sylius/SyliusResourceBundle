@@ -133,5 +133,11 @@
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>
         </UndefinedClass>
+
+        <UndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getSession"/>
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
 </psalm>
