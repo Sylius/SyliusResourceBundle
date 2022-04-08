@@ -62,6 +62,12 @@
             </errorLevel>
         </InvalidDocblock>
 
+        <InvalidScalarArgument>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </InvalidScalarArgument>
+
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
@@ -110,6 +116,7 @@
 
         <TooManyArguments>
             <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
                 <referencedFunction name="Symfony\Component\HttpFoundation\HeaderBag::all" />
                 <referencedFunction name="Symfony\Component\Routing\RouteCollection::add" />
                 <referencedFunction name="Symfony\Component\Finder\Finder::sortByName" />
