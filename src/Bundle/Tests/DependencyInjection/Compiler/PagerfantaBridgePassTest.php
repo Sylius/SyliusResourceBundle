@@ -26,7 +26,7 @@ final class PagerfantaBridgePassTest extends AbstractCompilerPassTestCase
      */
     public function it_creates_aliased_services_and_changes_the_view_factory_class(): void
     {
-        $this->registerService('pagerfanta.twig_extension', PagerfantaExtension::class);
+        $this->registerService('pagerfanta.twig_extension', class_exists('Pagerfanta\Twig\Extension\PagerfantaExtension') ? 'Pagerfanta\Twig\Extension\PagerfantaExtension' : 'BabDev\PagerfantaBundle\Twig\PagerfantaExtension');
         $this->registerService('pagerfanta.view_factory', ViewFactory::class);
 
         $this->setParameter('white_october_pagerfanta.view_factory.class', 'My\ViewFactory');
