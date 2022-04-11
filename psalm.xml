@@ -151,6 +151,7 @@
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getSession"/>
+                <referencedMethod name="Symfony\Component\HttpKernel\Event\RequestEvent::isMasterRequest"/>
                 <referencedMethod name="Symfony\Component\HttpKernel\Event\ResponseEvent::isMasterRequest"/>
             </errorLevel>
         </UndefinedMethod>
