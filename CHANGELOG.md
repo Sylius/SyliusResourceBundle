@@ -67,6 +67,12 @@ Stable 1.9.0 release 🎉🎉🎉
 - [#358](https://github.com/Sylius/SyliusResourceBundle/issues/358) Fix docs for crud routes with attributes ([@loic425](https://github.com/loic425))
 - [#359](https://github.com/Sylius/SyliusResourceBundle/issues/359) Fix type of serialization groups ([@loic425](https://github.com/loic425))
 
+### v1.8.4 (2022-04-11)
+
+#### Details
+
+- [#416](https://github.com/Sylius/SyliusResourceBundle/issues/416) Revert "Bump Pagerfanta from 2.x to 3.x" ([@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.8.3 (2022-04-07)
 
 #### Details
