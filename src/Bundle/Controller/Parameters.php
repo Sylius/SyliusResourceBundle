@@ -19,10 +19,7 @@ use Symfony\Component\HttpKernel\Kernel;
 if (Kernel::MAJOR_VERSION === 6) {
     class Parameters extends ParameterBag
     {
-        /**
-         * @param mixed $default
-         */
-        public function get(string $key, $default = null): mixed
+        public function get(string $key, mixed $default = null): mixed
         {
             $result = parent::get($key, $default);
 

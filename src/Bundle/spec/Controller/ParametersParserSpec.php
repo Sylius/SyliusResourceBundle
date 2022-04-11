@@ -193,10 +193,10 @@ final class ParametersParserSpec extends ObjectBehavior
         ;
     }
 
-    function it_throws_an_exception_if_object_parameter_is_injected_into_expression(): void
+    function it_throws_an_exception_if_object_parameter_is_injected_into_expression(\Stringable $object): void
     {
         $request = new Request();
-        $request->request->set('object', new \stdClass());
+        $request->request->set('object', $object->getWrappedObject());
 
         $this
             ->shouldThrow(\InvalidArgumentException::class)

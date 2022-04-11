@@ -417,6 +417,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(false);
         $form->createView()->willReturn($formView);
+        $form->handleRequest($request)->willReturn($form);
 
         $container->has('templating')->willReturn(false);
         $container->has('twig')->willReturn(true);
@@ -1495,6 +1496,7 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $request->isMethod('POST')->willReturn(false);
         $form->createView()->shouldNotBeCalled();
+        $form->handleRequest($request)->willReturn($form);
 
         $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($initializeEvent);
         $initializeEvent->hasResponse()->willReturn(true);
