@@ -76,7 +76,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $paginator->setMaxPerPage(5)->shouldBeCalled();
         $paginator->setCurrentPage(6)->shouldBeCalled();
-        $paginator->getCurrentPageResults()->shouldBeCalled();
+        $paginator->getCurrentPageResults()->willReturn([]);
 
         $this->get($requestConfiguration, $repository)->shouldReturn($paginator);
     }
@@ -109,7 +109,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $paginator->setMaxPerPage(99)->shouldBeCalled();
         $paginator->setCurrentPage(1)->shouldBeCalled();
-        $paginator->getCurrentPageResults()->shouldBeCalled();
+        $paginator->getCurrentPageResults()->willReturn([]);
 
         $this->get($requestConfiguration, $repository)->shouldReturn($gridView);
     }
@@ -143,7 +143,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $paginator->setMaxPerPage(8)->shouldBeCalled();
         $paginator->setCurrentPage(6)->shouldBeCalled();
-        $paginator->getCurrentPageResults()->shouldBeCalled();
+        $paginator->getCurrentPageResults()->willReturn([]);
 
         $pagerfantaRepresentationFactory->createRepresentation($paginator, Argument::type(Route::class))->willReturn($paginatedRepresentation);
 
@@ -177,7 +177,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $paginator->setMaxPerPage(5)->shouldBeCalled();
         $paginator->setCurrentPage(6)->shouldBeCalled();
-        $paginator->getCurrentPageResults()->shouldBeCalled();
+        $paginator->getCurrentPageResults()->willReturn([]);
 
         $this->get($requestConfiguration, $repository)->shouldReturn($resourceGridView);
     }
