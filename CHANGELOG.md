@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### v1.8.4 (2022-04-11)
+
+#### Details
+
+- [#416](https://github.com/Sylius/SyliusResourceBundle/issues/416) Revert "Bump Pagerfanta from 2.x to 3.x" ([@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.8.3 (2022-04-07)
 
 #### Details
