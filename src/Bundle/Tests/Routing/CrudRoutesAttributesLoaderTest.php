@@ -24,7 +24,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -98,7 +98,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -132,7 +132,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -203,7 +203,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -263,7 +263,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -320,7 +320,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -392,7 +392,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -450,7 +450,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -506,7 +506,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
@@ -542,7 +542,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
 
         $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
 
