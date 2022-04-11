@@ -21,6 +21,7 @@ use Webmozart\Assert\Assert;
 
 final class UniqueWithinCollectionConstraintValidator extends ConstraintValidator
 {
+    /** @psalm-param mixed $value */
     public function validate($value, Constraint $constraint): void
     {
         Assert::isInstanceOf($constraint, UniqueWithinCollectionConstraint::class);

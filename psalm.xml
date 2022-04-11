@@ -56,6 +56,12 @@
             </errorLevel>
         </InternalMethod>
 
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </InvalidArgument>
+
         <InvalidDocblock>
             <errorLevel type="suppress">
                 <file name="vendor/doctrine/orm/lib/Doctrine/ORM/EntityRepository.php" />
@@ -102,6 +108,8 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::scalarNode" />
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::variableNode" />
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::end" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\VariableNodeDefinition::scalarNode" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\VariableNodeDefinition::variableNode" />
             </errorLevel>
         </PossiblyUndefinedMethod>
 
@@ -113,6 +121,12 @@
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
             </errorLevel>
         </PropertyNotSetInConstructor>
+
+        <TooFewArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
+            </errorLevel>
+        </TooFewArguments>
 
         <TooManyArguments>
             <errorLevel type="suppress">
@@ -137,6 +151,7 @@
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getSession"/>
+                <referencedMethod name="Symfony\Component\HttpKernel\Event\ResponseEvent::isMasterRequest"/>
             </errorLevel>
         </UndefinedMethod>
     </issueHandlers>
