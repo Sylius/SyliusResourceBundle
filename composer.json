@@ -58,7 +58,6 @@
         "doctrine/orm": "^2.5",
         "lchrusciel/api-test-case": "^5.0",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2.1",
-        "pagerfanta/pagerfanta": "^3.0",
         "pamil/phpspec-skip-example-extension": "^4.2",
         "phpspec/phpspec": "^7.2",
         "phpspec/prophecy-phpunit": "^2.0",
