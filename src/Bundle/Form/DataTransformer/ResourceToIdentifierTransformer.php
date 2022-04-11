@@ -53,6 +53,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
+        /** @var ResourceInterface|null $resource */
         $resource = $this->repository->findOneBy([$this->identifier => $value]);
         if (null === $resource) {
             throw new TransformationFailedException(sprintf(
