@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
@@ -23,17 +24,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelper implements FlashHelperInterface
 {
-    private SessionInterface $session;
+    private ?SessionInterface $session;
 
     private TranslatorInterface $translator;
 
     private string $defaultLocale;
 
-    public function __construct(SessionInterface $session, TranslatorInterface $translator, string $defaultLocale)
-    {
+    private RequestStack $requestStack;
+
+    public function __construct(
+        ?SessionInterface $session,
+        TranslatorInterface $translator,
+        string $defaultLocale,
+        RequestStack $requestStack
+    ) {
         $this->session = $session;
         $this->translator = $translator;
         $this->defaultLocale = $defaultLocale;
+        $this->requestStack = $requestStack;
     }
 
     public function addSuccessFlash(
@@ -90,7 +98,7 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         /** @var FlashBagInterface $flashBag */
-        $flashBag = $this->session->getBag('flashes');
+        $flashBag = $this->getSession()->getBag('flashes');
         $flashBag->add($type, $message);
     }
 
@@ -125,5 +133,10 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         return ['%resource%' => ucfirst($metadata->getHumanizedName())];
+    }
+
+    private function getSession(): SessionInterface
+    {
+        return $this->session ?: $this->requestStack->getSession();
     }
 }
