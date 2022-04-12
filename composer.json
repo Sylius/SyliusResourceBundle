@@ -74,7 +74,8 @@
         "symplify/easy-coding-standard": "^9.4",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "4.7.0",
-        "rector/rector": "^0.11.47"
+        "rector/rector": "^0.11.47",
+        "symfony/maker-bundle": "^1.38"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
@@ -95,7 +96,8 @@
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
-            "App\\": "src/Bundle/test/src/"
+            "App\\": "src/Bundle/test/src/",
+            "App\\Tests\\Tmp\\": "src/Bundle/test/tmp"
         }
     },
     "scripts": {

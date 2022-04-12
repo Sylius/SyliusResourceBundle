@@ -20,6 +20,7 @@ use JMS\SerializerBundle\JMSSerializerBundle;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
@@ -35,4 +36,5 @@ return [
     FidryAliceDataFixturesBundle::class => ['test' => true],
     NelmioAliceBundle::class => ['test' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
+    MakerBundle::class => ['all' => true, 'test_without_maker' => false],
 ];

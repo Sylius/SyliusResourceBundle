@@ -9,6 +9,7 @@
         <ignoreFiles>
             <directory name="vendor" />
             <directory name="src/Bundle/Doctrine/ODM" />
+            <directory name="src/Bundle/Resources/config/skeleton" />
             <directory name="src/Bundle/spec" />
             <directory name="src/Bundle/test" />
             <directory name="src/Bundle/Tests" />

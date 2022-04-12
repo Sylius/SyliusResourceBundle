@@ -66,5 +66,10 @@
                  class="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformer"
                  public="false" />
         <service id="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformerInterface" alias="sylius.data_transformer.chain" />
+
+        <service id="sylius.resource_transformer.maker" class="Sylius\Bundle\ResourceBundle\Maker\MakeResourceTransformer">
+            <argument type="service" id="doctrine" />
+            <tag name="maker.command" />
+        </service>
     </services>
 </container>

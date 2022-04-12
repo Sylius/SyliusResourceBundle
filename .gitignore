@@ -6,3 +6,5 @@
 /symfony.lock
 
 /.phpunit.result.cache
+
+/src/Bundle/test/tmp
