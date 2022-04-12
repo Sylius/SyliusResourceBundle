@@ -27,6 +27,7 @@ final class RegisterStubCommandsPass implements CompilerPassInterface
     {
         if (!$this->isMakerEnabled($container)) {
             $container->register(StubMakeResourceTransformer::class)->setClass(StubMakeResourceTransformer::class)->addTag('console.command');
+            $container->removeDefinition('sylius.resource_transformer.maker');
         }
     }
 
