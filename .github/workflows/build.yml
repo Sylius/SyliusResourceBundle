@@ -96,12 +96,6 @@ jobs:
                 run: (cd src/Bundle/test && bin/console lint:container)
 
             -
-                name: Run lint container without maker bundle
-                run: |
-                    APP_ENV=test_without_maker composer remove --dev symfony/maker-bundle
-                    (cd src/Bundle/test && bin/console lint:container --env=test_without_maker)
-
-            -
                 name: Run state machine tests with winzou/state-machine package
                 run: |
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
@@ -137,3 +131,10 @@ jobs:
                     composer remove symfony/twig-bundle --no-scripts ${{ matrix.composer-flags }}
                     (cd src/Bundle/test && bin/console cache:clear --env=test_without_twig)
                     composer require symfony/twig-bundle --no-scripts ${{ matrix.composer-flags }}
+
+            -
+                name: Run lint container without symfony/maker-bundle package
+                run: |
+                    composer remove --dev symfony/maker-bundle --no-scripts ${{ matrix.composer-flags }}
+                    (cd src/Bundle/test && bin/console lint:container --env=test_without_maker)
+                    composer require symfony/maker-bundle --no-scripts ${{ matrix.composer-flags }}

@@ -32,9 +32,9 @@ return [
     TwigBundle::class => ['all' => true, 'test_without_twig' => false],
     FOSRestBundle::class => ['all' => true, 'test_without_fosrest' => false],
     JMSSerializerBundle::class => ['all' => true, 'test_without_fosrest' => false],
-    BazingaHateoasBundle::class => ['test' => true],
-    FidryAliceDataFixturesBundle::class => ['test' => true],
-    NelmioAliceBundle::class => ['test' => true],
+    BazingaHateoasBundle::class => ['all' => true],
+    FidryAliceDataFixturesBundle::class => ['all' => true],
+    NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
     MakerBundle::class => ['all' => true, 'test_without_maker' => false],
 ];
