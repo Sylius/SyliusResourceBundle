@@ -23,7 +23,7 @@ app_book_show:
 <details open><summary>PHP</summary>
 
 ```php
-# src/Entity/Book
+// src/Entity/Book
 
 use Sylius\Component\Resource\Annotation\SyliusRoute;
 

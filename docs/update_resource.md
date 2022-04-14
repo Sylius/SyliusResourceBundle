@@ -2,6 +2,8 @@
 
 To display an edit form of a particular resource, change it or update it via API, you should use the **updateAction** action of your **app.controller.book** service.
 
+<details open><summary>Yaml</summary>
+
 ```yaml
 # config/routes.yaml
 
@@ -11,6 +13,26 @@ app_book_update:
     defaults:
         _controller: app.controller.book::updateAction
 ```
+
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+)]
+```
+
+</details>
+
 Done! Now when you go to ``/books/5/edit``, ResourceController will use the repository (``app.repository.book``) to find the book with id == **5**.
 If found it will create the ``app_book`` form, and set the existing book as data.
 
@@ -31,6 +53,8 @@ When validation fails, it will simply render the form again, but with error mess
 
 Just like for other actions, you can customize the template.
 
+<details open><summary>Yaml</summary>
+
 ```yaml
 # config/routes.yaml
 
@@ -43,9 +67,31 @@ app_book_update:
             template: Admin/Book/update.html.twig
 ```
 
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    template: 'Admin/book/update.html.twig',
+)]
+```
+
+</details>
+
 ## Using Custom Form
 
 Same way like for **createAction** you can override the default form.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -58,11 +104,35 @@ app_book_update:
         _sylius:
             form: App\Form\BookType
 ```
+
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    form: BookType::class,
+)]
+```
+
+</details>
+
 ## Passing Custom Options to Form
 
 Same way like for **createAction** you can pass options to the form.
 
 Below you can see how to specify custom options, in this case, ``validation_groups``, but you can pass any option accepted by the form.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -79,9 +149,35 @@ app_book_update:
                     validation_groups: [sylius, my_custom_group]
 ```
 
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    form: [
+        'type' => BookType::class,
+        'validation_groups' => ['sylius', 'my_custom_group'],
+    ],
+)]
+```
+
+</details>
+
 ## Overriding the Criteria
 
 By default, the **updateAction** will look for the resource by id. You can easily change that criteria.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -95,9 +191,34 @@ app_book_update:
             criteria: { title: $title }
 ```
 
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    criteria: [
+        'title' => '$title',
+    ],
+)]
+```
+
+</details>
+
 ## Custom Redirect After Success
 
 By default the controller will try to get the id of resource and redirect to the "show" route. To change that, use the following configuration.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -110,7 +231,31 @@ app_book_update:
         _sylius:
             redirect: app_book_index
 ```
+
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    redirect: 'app_book_index',
+)]
+```
+
+</details>
+
 You can also perform more complex redirects, with parameters. For example:
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -126,11 +271,37 @@ app_book_update:
                 parameters: { id: $genreId }
 ```
 
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/genre/{genreId}/books/{id}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    redirect: [
+        'route' => 'app_genre_show',
+        'parameters' => ['id' => '$genreId'],
+    ],
+)]
+```
+
+</details>
+
 ## Custom Event Name
 
 By default, there are two events dispatched during resource update, one before setting new data, the other after successful update.
 The pattern is always the same - ``{applicationName}.{resourceName}.pre/post_update``. However, you can customize the last part of the event, to provide your
 own action name.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -143,6 +314,28 @@ app_book_customer_update:
         _sylius:
             event: customer_update
 ```
+
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_customer_update',
+    path: '/customer/book-update/{id}',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    event: 'customer_update',
+)]
+```
+
+</details>
+
 This way, you can listen to ``app.book.pre_customer_update`` and ``app.book.post_customer_update`` events. It's especially useful, when you use
 ``ResourceController:updateAction`` in more than one route.
 
@@ -151,6 +344,8 @@ This way, you can listen to ``app.book.pre_customer_update`` and ``app.book.post
 
 Depending on your app approach it can be useful to return a changed object or only the ``204 HTTP Code``, which indicates that everything worked smoothly.
 Sylius, by default is returning the ``204 HTTP Code``, which indicates an empty response. If you would like to receive a whole object as a response you should set a ``return_content`` option to true.
+
+<details open><summary>Yaml</summary>
 
 ```yaml
 # config/routes.yaml
@@ -164,6 +359,28 @@ app_book_update:
             criteria: { title: $title }
             return_content: true
 ```
+
+</details>
+
+<details open><summary>PHP</summary>
+
+```php
+// src/Entity/Book
+
+use App\Form\BookType;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
+
+#[SyliusRoute(
+    name: 'app_book_update',
+    path: '/books/{title}/edit',
+    methods: ['GET', 'PUT'],
+    controller: 'app.controller.book::updateAction',
+    criteria: ['title' => '$title'],
+    returnContent: true,
+)]
+```
+
+</details>
 
 ### **Warning**
 The ``return_content`` flag is available for the ``applyStateMachineTransitionAction`` method as well. But these are the only ones which can be configured this way.

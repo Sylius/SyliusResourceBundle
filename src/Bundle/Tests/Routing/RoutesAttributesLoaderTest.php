@@ -19,9 +19,7 @@ use Symfony\Component\Routing\RouteCompiler;
 
 final class RoutesAttributesLoaderTest extends KernelTestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -41,9 +39,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_methods(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -64,9 +60,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_criteria(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -90,9 +84,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_template(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -114,9 +106,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_repository(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -141,9 +131,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_serialization_groups(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -165,9 +153,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_serialization_version(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -189,9 +175,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_vars(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -215,9 +199,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getDefaults());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_requirements(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -236,9 +218,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getRequirements());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_priority(): void
     {
         if (Kernel::MAJOR_VERSION < 5) {
@@ -258,9 +238,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertSame($route, array_values($routesCollection->all())[0]);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_options(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -280,9 +258,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         ], $route->getOptions());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_host(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -299,9 +275,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('m.example.com', $route->getHost());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_schemes(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -318,9 +292,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals(['https'], $route->getSchemes());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_generates_routes_from_resource_with_form(): void
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
@@ -338,6 +310,237 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
             '_controller' => 'app.controller.user:createAction',
             '_sylius' => [
                 'form' => 'App\Form\Type\RegisterType',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_form_options(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('register_user_with_form_options');
+        $this->assertNotNull($route);
+        $this->assertEquals('/users/register', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.user:createAction',
+            '_sylius' => [
+                'form' => [
+                    'type' => 'App\Form\Type\RegisterType',
+                    'options' => [
+                        'validation_groups' => ['sylius', 'my_custom_group'],
+                    ],
+                ],
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_section(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_section');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::showAction',
+            '_sylius' => [
+                'section' => 'admin',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_permission(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_permission');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::showAction',
+            '_sylius' => [
+                'permission' => true,
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_grid(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_grid');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::showAction',
+            '_sylius' => [
+                'grid' => 'book',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_csrf_protection(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_csrf_protection');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::showAction',
+            '_sylius' => [
+                'csrf_protection' => false,
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_redirect(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('update_book_with_redirect');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::showAction',
+            '_sylius' => [
+                'redirect' => 'referer',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_redirect_options(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('update_book_with_redirect_options');
+        $this->assertNotNull($route);
+        $this->assertEquals('/genre/{genreId}/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::updateAction',
+            '_sylius' => [
+                'redirect' => [
+                    'route' => 'app_genre_show',
+                    'parameters' => ['id' => '$genreId'],
+                ],
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_state_machine(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('publish_book');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::applyStateMachineTransitionAction',
+            '_sylius' => [
+                'state_machine' => [
+                    'graph' => 'app_book',
+                    'transition' => 'publish',
+                ],
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_custom_event_name(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('update_book_with_custom_event_name');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::updateAction',
+            '_sylius' => [
+                'event' => 'customer_update',
+            ],
+        ], $route->getDefaults());
+    }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_return_content(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = static::$container;
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('update_book_with_return_content');
+        $this->assertNotNull($route);
+        $this->assertEquals('/books/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book::updateAction',
+            '_sylius' => [
+                'return_content' => true,
             ],
         ], $route->getDefaults());
     }
