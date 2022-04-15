@@ -15,13 +15,9 @@ namespace App\Dto;
 
 final class Register
 {
-    public ?string $username = null;
-
-    public ?string $password = null;
-
-    public function __construct(?string $username = null, ?string $password = null)
-    {
-        $this->username = $username;
-        $this->password = $password;
+    public function __construct(
+        public ?string $username = null, 
+        public ?string $password = null,
+    ) {
     }
 }

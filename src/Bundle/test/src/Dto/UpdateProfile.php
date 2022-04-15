@@ -15,10 +15,7 @@ namespace App\Dto;
 
 final class UpdateProfile
 {
-    public ?string $username = null;
-
-    public function __construct(?string $username = null)
+    public function __construct(public ?string $username = null)
     {
-        $this->username = $username;
     }
 }

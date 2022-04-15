@@ -15,10 +15,7 @@ namespace App\Dto;
 
 final class User
 {
-    public string $username;
-
-    public function __construct(string $username)
+    public function __construct(public string $username)
     {
-        $this->username = $username;
     }
 }

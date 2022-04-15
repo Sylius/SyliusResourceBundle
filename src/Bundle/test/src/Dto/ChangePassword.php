@@ -15,10 +15,7 @@ namespace App\Dto;
 
 final class ChangePassword
 {
-    public ?string $password = null;
-
-    public function __construct(?string $password = null)
+    public function __construct(public ?string $password = null)
     {
-        $this->password = $password;
     }
 }
