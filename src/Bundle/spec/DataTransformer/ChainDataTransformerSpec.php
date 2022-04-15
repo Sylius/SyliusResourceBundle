@@ -21,6 +21,13 @@ use Sylius\Bundle\ResourceBundle\DataTransformer\DataTransformerInterface;
 
 final class ChainDataTransformerSpec extends ObjectBehavior
 {
+    function let(
+        DataTransformerInterface $firstDataTransformer,
+        DataTransformerInterface $secondDataTransformer,
+    ): void {
+        $this->beConstructedWith([$firstDataTransformer, $secondDataTransformer]);
+    }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(ChainDataTransformer::class);
@@ -31,14 +38,6 @@ final class ChainDataTransformerSpec extends ObjectBehavior
         $this->shouldImplement(ChainDataTransformerInterface::class);
     }
 
-    function it_adds_data_transformers(
-        DataTransformerInterface $firstDataTransformer,
-        DataTransformerInterface $secondDataTransformer
-    ): void {
-        $this->addDataTransformer($firstDataTransformer);
-        $this->addDataTransformer($secondDataTransformer);
-    }
-
     function it_transforms_data_to_an_another_object(
         \stdClass $object,
         \stdClass $output,
@@ -46,9 +45,6 @@ final class ChainDataTransformerSpec extends ObjectBehavior
         DataTransformerInterface $secondDataTransformer,
         RequestConfiguration $configuration
     ): void {
-        $this->addDataTransformer($firstDataTransformer);
-        $this->addDataTransformer($secondDataTransformer);
-
         $firstDataTransformer->supportsTransformation($object, \stdClass::class, $configuration)->willReturn(false);
         $secondDataTransformer->supportsTransformation($object, \stdClass::class, $configuration)->willReturn(true);
 
@@ -59,8 +55,13 @@ final class ChainDataTransformerSpec extends ObjectBehavior
 
     function it_returns_null_when_no_data_transformer_was_found(
         \stdClass $object,
+        DataTransformerInterface $firstDataTransformer,
+        DataTransformerInterface $secondDataTransformer,
         RequestConfiguration $configuration
     ): void {
+        $firstDataTransformer->supportsTransformation($object, \stdClass::class, $configuration)->willReturn(false);
+        $secondDataTransformer->supportsTransformation($object, \stdClass::class, $configuration)->willReturn(false);
+
         $this->transform($object, \stdClass::class, $configuration)->shouldReturn(null);
     }
 }

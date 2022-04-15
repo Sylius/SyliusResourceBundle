@@ -64,7 +64,9 @@
 
         <service id="sylius.data_transformer.chain"
                  class="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformer"
-                 public="false" />
+                 public="false">
+            <argument type="tagged_iterator" tag="sylius.data_transformer" />
+        </service>
         <service id="Sylius\Bundle\ResourceBundle\DataTransformer\ChainDataTransformerInterface" alias="sylius.data_transformer.chain" />
     </services>
 </container>

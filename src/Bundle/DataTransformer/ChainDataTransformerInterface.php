@@ -17,8 +17,6 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 
 interface ChainDataTransformerInterface
 {
-    public function addDataTransformer(DataTransformerInterface $dataTransformer): void;
-
     /** @psalm-param class-string $to */
     public function transform(object $data, string $to, RequestConfiguration $configuration): ?object;
 }
