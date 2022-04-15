@@ -39,7 +39,7 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
 
     function it_generates_routes_from_paths(RouteAttributesFactoryInterface $routeAttributesFactory): void
     {
-        $routeAttributesFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(14);
+        $routeAttributesFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(24);
 
         $this->__invoke();
     }

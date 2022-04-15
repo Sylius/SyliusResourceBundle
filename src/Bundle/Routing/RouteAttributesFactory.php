@@ -60,6 +60,38 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['form'] = $arguments['form'];
             }
 
+            if (isset($arguments['section'])) {
+                $syliusOptions['section'] = $arguments['section'];
+            }
+
+            if (isset($arguments['permission'])) {
+                $syliusOptions['permission'] = $arguments['permission'];
+            }
+
+            if (isset($arguments['grid'])) {
+                $syliusOptions['grid'] = $arguments['grid'];
+            }
+
+            if (isset($arguments['csrfProtection'])) {
+                $syliusOptions['csrf_protection'] = $arguments['csrfProtection'];
+            }
+
+            if (isset($arguments['redirect'])) {
+                $syliusOptions['redirect'] = $arguments['redirect'];
+            }
+
+            if (isset($arguments['stateMachine'])) {
+                $syliusOptions['state_machine'] = $arguments['stateMachine'];
+            }
+
+            if (isset($arguments['event'])) {
+                $syliusOptions['event'] = $arguments['event'];
+            }
+
+            if (isset($arguments['returnContent'])) {
+                $syliusOptions['return_content'] = $arguments['returnContent'];
+            }
+
             $route = new Route(
                 $arguments['path'],
                 [
