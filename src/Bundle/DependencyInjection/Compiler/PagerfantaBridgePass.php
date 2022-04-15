@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -48,12 +49,23 @@ final class PagerfantaBridgePass implements CompilerPassInterface
     {
         if ($container->hasDefinition('pagerfanta.twig_extension')) {
             $container->setAlias('twig.extension.pagerfanta', 'pagerfanta.twig_extension')
-                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.twig_extension" service ID instead.');
+                ->setDeprecated(...$this->getDeprecationMessage());
         }
 
         if ($container->hasDefinition('pagerfanta.view_factory')) {
             $container->setAlias('white_october_pagerfanta.view_factory', 'pagerfanta.view_factory')
-                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.view_factory" service ID instead.');
+                ->setDeprecated(...$this->getDeprecationMessage());
         }
+    }
+
+    private function getDeprecationMessage(): array
+    {
+        $message = 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.view_factory" service ID instead.';
+
+        if (method_exists(Alias::class, 'getDeprecation')) {
+            return ['sylius/resource-bundle', '1.8', $message];
+        }
+
+        return [$message];
     }
 }
