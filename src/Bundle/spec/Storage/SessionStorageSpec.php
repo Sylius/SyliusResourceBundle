@@ -15,13 +15,21 @@ namespace spec\Sylius\Bundle\ResourceBundle\Storage;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 final class SessionStorageSpec extends ObjectBehavior
 {
-    function let(): void
+    function let(RequestStack $requestStack): void
     {
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn(new Session(new MockArraySessionStorage()));
+            $this->beConstructedWith($requestStack);
+
+            return;
+        }
+
         $this->beConstructedWith(new Session(new MockArraySessionStorage()));
     }
 

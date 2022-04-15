@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
@@ -23,15 +24,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelper implements FlashHelperInterface
 {
-    private SessionInterface $session;
+    /** @var RequestStack|SessionInterface */
+    private $requestStack;
 
     private TranslatorInterface $translator;
 
     private string $defaultLocale;
 
-    public function __construct(SessionInterface $session, TranslatorInterface $translator, string $defaultLocale)
+    /**
+     * @param RequestStack|SessionInterface $requestStack
+     */
+    public function __construct(/* RequestStack */ $requestStack, TranslatorInterface $translator, string $defaultLocale)
     {
-        $this->session = $session;
+        /** @phpstan-ignore-next-line */
+        if (!$requestStack instanceof SessionInterface && !$requestStack instanceof RequestStack) {
+            throw new \InvalidArgumentException(sprintf('The first argument of "%s" should be instance of "%s" or "%s"', __METHOD__, SessionInterface::class, RequestStack::class));
+        }
+
+        if ($requestStack instanceof SessionInterface) {
+            @trigger_error(sprintf('Passing an instance of %s as constructor argument for %s is deprecated as of Sylius 1.9 and will be removed in 2.0. Pass an instance of %s instead.', SessionInterface::class, self::class, RequestStack::class), \E_USER_DEPRECATED);
+        }
+
+        $this->requestStack = $requestStack;
         $this->translator = $translator;
         $this->defaultLocale = $defaultLocale;
     }
@@ -89,8 +103,14 @@ final class FlashHelper implements FlashHelperInterface
             $message = $this->prepareMessage($message, $parameters);
         }
 
+        if ($this->requestStack instanceof SessionInterface) {
+            $session = $this->requestStack;
+        } else {
+            $session = $this->requestStack->getSession();
+        }
+
         /** @var FlashBagInterface $flashBag */
-        $flashBag = $this->session->getBag('flashes');
+        $flashBag = $session->getBag('flashes');
         $flashBag->add($type, $message);
     }
 

@@ -14,39 +14,63 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Storage;
 
 use Sylius\Component\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SessionStorage implements StorageInterface
 {
-    private SessionInterface $session;
+    /** @var RequestStack|SessionInterface */
+    private $requestStack;
 
-    public function __construct(SessionInterface $session)
+    /**
+     * @param RequestStack|SessionInterface $requestStack
+     */
+    public function __construct(/* RequestStack */ $requestStack)
     {
-        $this->session = $session;
+        /** @phpstan-ignore-next-line */
+        if (!$requestStack instanceof SessionInterface && !$requestStack instanceof RequestStack) {
+            throw new \InvalidArgumentException(sprintf('The first argument of "%s" should be instance of "%s" or "%s"', __METHOD__, SessionInterface::class, RequestStack::class));
+        }
+
+        if ($requestStack instanceof SessionInterface) {
+            @trigger_error(sprintf('Passing an instance of %s as constructor argument for %s is deprecated as of Sylius 1.9 and will be removed in 2.0. Pass an instance of %s instead.', SessionInterface::class, self::class, RequestStack::class), \E_USER_DEPRECATED);
+        }
+
+        $this->requestStack = $requestStack;
     }
 
     public function has(string $name): bool
     {
-        return $this->session->has($name);
+        return $this->getSession()->has($name);
     }
 
     public function get(string $name, $default = null)
     {
-        return $this->session->get($name, $default);
+        return $this->getSession()->get($name, $default);
     }
 
     public function set(string $name, $value): void
     {
-        $this->session->set($name, $value);
+        $this->getSession()->set($name, $value);
     }
 
     public function remove(string $name): void
     {
-        $this->session->remove($name);
+        $this->getSession()->remove($name);
     }
 
     public function all(): array
     {
-        return $this->session->all();
+        return $this->getSession()->all();
+    }
+
+    private function getSession(): SessionInterface
+    {
+        if ($this->requestStack instanceof SessionInterface) {
+            return $this->requestStack;
+        }
+
+        /** @phpstan-ignore-next-line */
+        return $this->requestStack->getSession();
     }
 }

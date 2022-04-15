@@ -20,6 +20,7 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\MessageCatalogueInterface;
@@ -28,8 +29,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelperSpec extends ObjectBehavior
 {
-    function let(SessionInterface $session, TranslatorInterface $translator): void
+    function let(RequestStack $requestStack, SessionInterface $session, TranslatorInterface $translator): void
     {
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $this->beConstructedWith($requestStack, $translator, 'en');
+
+            return;
+        }
+
         $this->beConstructedWith($session, $translator, 'en');
     }
 
@@ -39,6 +46,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_resource_message_by_default(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
@@ -56,6 +64,9 @@ final class FlashHelperSpec extends ObjectBehavior
         $translator->getCatalogue('en')->willReturn($messageCatalogue);
         $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add(
             'success',
@@ -69,6 +80,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_resource_message_when_catalogue_is_unavailable_and_given_message_cannot_be_translated(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorInterface $translator,
         FlashBagInterface $flashBag,
@@ -86,6 +98,9 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $translator->trans('sylius.product.create', $parameters, 'flashes')->willReturn('sylius.product.create');
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add(
             'success',
@@ -99,6 +114,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_resource_message_when_catalogue_is_unavailable_and_given_message_can_be_translated(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorInterface $translator,
         FlashBagInterface $flashBag,
@@ -120,6 +136,9 @@ final class FlashHelperSpec extends ObjectBehavior
             ->willReturn('Spoon is the best cutlery of them all!')
         ;
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add(
             'success',
@@ -133,6 +152,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_resource_message_if_message_was_not_found_in_the_catalogue(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
@@ -151,6 +171,9 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add(
             'success',
@@ -164,6 +187,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_overwritten_message(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
@@ -182,6 +206,9 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(true);
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add('success', 'sylius.product.create')->shouldBeCalled();
 
@@ -189,6 +216,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_custom_message(
+        RequestStack $requestStack,
         SessionInterface $session,
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
@@ -207,6 +235,9 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $messageCatalogue->has('app.book.send', 'flashes')->willReturn(true);
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
         $flashBag->add('success', 'app.book.send')->shouldBeCalled();
 
@@ -214,6 +245,7 @@ final class FlashHelperSpec extends ObjectBehavior
     }
 
     function it_adds_message_from_event(
+        RequestStack $requestStack,
         SessionInterface $session,
         FlashBagInterface $flashBag,
         RequestConfiguration $requestConfiguration,
@@ -223,6 +255,9 @@ final class FlashHelperSpec extends ObjectBehavior
         $event->getMessageType()->willReturn(ResourceControllerEvent::TYPE_WARNING);
         $event->getMessageParameters()->willReturn(['%name%' => 'Germany Sylius Webshop']);
 
+        if (method_exists(RequestStack::class, 'getSession')) {
+            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+        }
         $session->getBag('flashes')->willReturn($flashBag);
 
         $flashBag->add(
