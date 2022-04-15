@@ -35,7 +35,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ResourceController
 {
     use ControllerTrait;
-
     use ContainerAwareTrait;
 
     protected MetadataInterface $metadata;
