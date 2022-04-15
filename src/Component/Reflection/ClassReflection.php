@@ -56,6 +56,8 @@ final class ClassReflection
     }
 
     /**
+     * @psalm-param class-string $className
+     *
      * @return \ReflectionAttribute[]
      */
     public static function getClassAttributes(string $className, string $attributeName): array
