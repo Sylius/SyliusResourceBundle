@@ -16,7 +16,7 @@ namespace App\Dto;
 final class Register
 {
     public function __construct(
-        public ?string $username = null, 
+        public ?string $username = null,
         public ?string $password = null,
     ) {
     }
