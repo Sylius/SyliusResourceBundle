@@ -33,13 +33,6 @@ jobs:
                     coverage: none
 
             -
-                name: Configure session storage for Symfony 4
-                if: matrix.symfony == '^4.4'
-                run: |
-                    sed -i -e 's/#storage_id:/storage_id:/g' src/Bundle/test/config/packages/framework.yaml
-                    sed -i -e 's/storage_factory_id:/#storage_factory_id:/g' src/Bundle/test/config/packages/framework.yaml
-
-            -
                 name: Restrict Symfony version
                 if: matrix.symfony != ''
                 run: |
