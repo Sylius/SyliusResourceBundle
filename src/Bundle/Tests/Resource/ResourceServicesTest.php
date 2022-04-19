@@ -54,7 +54,7 @@ final class ResourceServicesTest extends WebTestCase
     public function it_will_return_the_same_repository_instance()
     {
         $client = parent::createClient();
-        $repository = self::$container->get(BookRepository::class);
+        $repository = self::getContainer()->get(BookRepository::class);
 
         $repositoryAlias = $client->getContainer()->get('app.repository.book');
         $this->assertSame($repository, $repositoryAlias);
