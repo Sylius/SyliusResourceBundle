@@ -67,7 +67,7 @@
         "phpstan/phpstan-webmozart-assert": "0.12.16",
         "phpunit/phpunit": "^9.5",
         "sylius-labs/coding-standard": "^4.0",
-        "sylius/grid-bundle": "^1.7",
+        "sylius/grid-bundle": "^1.7 || dev-symfony-6",
         "symfony/dependency-injection": "^5.4 || ^6.0",
         "symfony/dotenv": "^5.4 || ^6.0",
         "symfony/workflow": "^5.4 || ^6.0",
