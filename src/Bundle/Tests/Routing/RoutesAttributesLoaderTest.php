@@ -71,7 +71,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = \method_exists($this, 'getContainer') ? static::getContainer() : static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
