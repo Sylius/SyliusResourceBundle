@@ -36,9 +36,6 @@
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::stopPropagation" />
             </errorLevel>
-            <errorLevel type="info">
-                <referencedMethod name="Symfony\Component\HttpKernel\Event\KernelEvent::isMasterRequest" />
-            </errorLevel>
         </DeprecatedMethod>
 
         <DuplicateClass>
