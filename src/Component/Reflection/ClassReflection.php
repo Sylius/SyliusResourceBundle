@@ -64,6 +64,7 @@ final class ClassReflection
     {
         $reflectionClass = new \ReflectionClass($className);
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         return $reflectionClass->getAttributes($attributeName);
     }
 }

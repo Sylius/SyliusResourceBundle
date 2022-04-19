@@ -33,6 +33,7 @@ parameters:
         - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'
         - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
         - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
+        - '/Method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\)/'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::get\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProviderInterface::get\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
