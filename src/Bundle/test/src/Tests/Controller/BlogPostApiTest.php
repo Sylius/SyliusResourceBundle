@@ -91,7 +91,9 @@ final class BlogPostApiTest extends JsonApiTestCase
 
     private function markAsSkippedIfNecessary(): void
     {
-        $stateMachine = $this::$container->getParameter('sylius.resource.settings')['state_machine_component'];
+        $container = self::getContainer();
+
+        $stateMachine = $container->getParameter('sylius.resource.settings')['state_machine_component'];
 
         if (ResourceBundleInterface::STATE_MACHINE_SYMFONY !== $stateMachine) {
             $this->markTestSkipped();
