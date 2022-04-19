@@ -43,10 +43,10 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $resource->getCode()->willReturn(null);
 
-        $form->add('code', Argument::any(), Argument::withEntry('disabled', false))->willReturn($form);
 
         $form
-            ->add('code', Argument::any(), Argument::withEntry('disabled', false))
+            ->add('code', TextType::class, Argument::withEntry('disabled', false))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -63,7 +63,6 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $resource->getCode()->willReturn('Code12');
 
-        $form->add('code', TextType::class, Argument::withEntry('disabled', true))->willReturn($form);
 
         $form
             ->add('code', TextType::class, Argument::withEntry('disabled', true))
