@@ -319,7 +319,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -346,7 +346,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -368,7 +368,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -390,7 +390,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -412,7 +412,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -434,7 +434,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -456,7 +456,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -481,7 +481,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -506,7 +506,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
@@ -528,7 +528,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     {
         self::bootKernel(['environment' => 'test_with_attributes']);
 
-        $container = static::$container;
+        $container = self::getContainer();
 
         $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
 
