@@ -21,7 +21,7 @@ use Webmozart\Assert\Assert;
 
 final class EnabledValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         Assert::isInstanceOf($constraint, Enabled::class);
 
