@@ -37,11 +37,13 @@ final class ContainerRepositoryFactory implements RepositoryFactory
         $this->genericEntities = $genericEntities;
     }
 
+    /** @psalm-suppress InvalidReturnType */
     public function getRepository(EntityManagerInterface $entityManager, $entityName): ObjectRepository
     {
         $metadata = $entityManager->getClassMetadata($entityName);
 
         if ($metadata->customRepositoryClassName === null && in_array($entityName, $this->genericEntities, true)) {
+            /** @psalm-suppress InvalidReturnStatement */
             return $this->getOrCreateRepository($entityManager, $metadata);
         }
 
