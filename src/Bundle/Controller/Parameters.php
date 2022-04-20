@@ -33,7 +33,7 @@ if (Kernel::MAJOR_VERSION === 6) {
             return $result;
         }
     }
-} elseif (Kernel::MAJOR_VERSION === 5) {
+} else {
     class Parameters extends ParameterBag
     {
         /**
@@ -42,26 +42,6 @@ if (Kernel::MAJOR_VERSION === 6) {
          * @return mixed
          */
         public function get(string $key, $default = null)
-        {
-            $result = parent::get($key, $default);
-
-            if (null === $result && $default !== null && $this->has($key)) {
-                $result = $default;
-            }
-
-            return $result;
-        }
-    }
-} else {
-    class Parameters extends ParameterBag
-    {
-        /**
-         * @param string $key
-         * @param mixed $default
-         *
-         * @return mixed
-         */
-        public function get($key, $default = null)
         {
             $result = parent::get($key, $default);
 
