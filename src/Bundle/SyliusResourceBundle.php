@@ -22,6 +22,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnContro
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -48,6 +49,7 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
+        $container->addCompilerPass(new TwigPass());
 
         $container->registerExtension(new PagerfantaExtension());
         $container->addCompilerPass(new PagerfantaBridgePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
