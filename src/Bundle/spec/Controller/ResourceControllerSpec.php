@@ -31,6 +31,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
@@ -74,7 +75,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ContainerInterface $container
+        ContainerInterface $container,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $this->beConstructedWith(
             $metadata,
@@ -93,7 +95,8 @@ final class ResourceControllerSpec extends ObjectBehavior
             $eventDispatcher,
             $stateMachine,
             $resourceUpdateHandler,
-            $resourceDeleteHandler
+            $resourceDeleteHandler,
+            $templateRenderer,
         );
 
         $this->setContainer($container);
@@ -150,9 +153,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
         EventDispatcherInterface $eventDispatcher,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -167,10 +169,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->isHtmlRequest()->willReturn(true);
         $configuration->getTemplate(ResourceActions::SHOW . '.html')->willReturn('@SyliusShop/Product/show.html.twig');
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -178,11 +176,11 @@ final class ResourceControllerSpec extends ObjectBehavior
             'product' => $resource,
         ];
 
-        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/show.html.twig', $expectedContext)->willReturn('view');
 
         $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->shouldBeCalled();
 
-        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/show.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->showAction($request);
     }
@@ -284,9 +282,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         ResourceInterface $resource1,
         ResourceInterface $resource2,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -304,10 +301,6 @@ final class ResourceControllerSpec extends ObjectBehavior
 
         $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->shouldBeCalled();
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -315,9 +308,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'products' => [$resource1, $resource2],
         ];
 
-        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/index.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/index.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->indexAction($request);
     }
@@ -383,7 +376,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RequestConfiguration $configuration,
         AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
         FactoryInterface $factory,
         NewResourceFactoryInterface $newResourceFactory,
         ResourceInterface $newResource,
@@ -392,9 +384,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -419,10 +410,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->createView()->willReturn($formView);
         $form->handleRequest($request)->willReturn($form);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -431,10 +418,10 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
 
         $form->handleRequest($request)->shouldBeCalled();
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->createAction($request);
     }
@@ -452,9 +439,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -481,10 +467,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isValid()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -493,9 +475,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->createAction($request);
     }
@@ -513,9 +495,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -541,10 +522,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isSubmitted()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -553,9 +530,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->createAction($request);
     }
@@ -1030,9 +1007,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -1060,10 +1036,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->handleRequest($request)->willReturn($form);
         $form->createView()->willReturn($formView);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -1072,9 +1044,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->updateAction($request);
     }
@@ -1084,7 +1056,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
         RequestConfiguration $configuration,
         AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
         RepositoryInterface $repository,
         SingleResourceProviderInterface $singleResourceProvider,
         ResourceInterface $resource,
@@ -1093,9 +1064,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -1125,10 +1095,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isValid()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -1137,9 +1103,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->updateAction($request);
     }
@@ -1157,9 +1123,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         ResourceControllerEvent $event,
         Form $form,
         FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request
+        Request $request,
+        TemplateRendererInterface $templateRenderer,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getName()->willReturn('product');
@@ -1188,10 +1153,6 @@ final class ResourceControllerSpec extends ObjectBehavior
         $form->isSubmitted()->willReturn(false);
         $form->createView()->willReturn($formView);
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
         $expectedContext = [
             'configuration' => $configuration,
             'metadata' => $metadata,
@@ -1200,9 +1161,9 @@ final class ResourceControllerSpec extends ObjectBehavior
             'form' => $formView,
         ];
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
 
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
+        $templateRenderer->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
 
         $this->updateAction($request);
     }

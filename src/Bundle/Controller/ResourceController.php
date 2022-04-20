@@ -71,6 +71,8 @@ class ResourceController
 
     protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
 
+    protected TemplateRendererInterface $templateRenderer;
+
     public function __construct(
         MetadataInterface $metadata,
         RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -88,7 +90,8 @@ class ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler
+        ResourceDeleteHandlerInterface $resourceDeleteHandler,
+        TemplateRendererInterface $templateRenderer,
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -107,6 +110,7 @@ class ResourceController
         $this->stateMachine = $stateMachine;
         $this->resourceUpdateHandler = $resourceUpdateHandler;
         $this->resourceDeleteHandler = $resourceDeleteHandler;
+        $this->templateRenderer = $templateRenderer;
     }
 
     public function showAction(Request $request): Response
@@ -571,5 +575,21 @@ class ResourceController
         }
 
         return $this->stateMachine;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    {
+        $content = $this->templateRenderer->render($view, $parameters);
+
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        $response->setContent($content);
+
+        return $response;
     }
 }

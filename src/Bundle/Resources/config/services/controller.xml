@@ -54,5 +54,10 @@
             <argument type="service" id="sylius.resource_controller.state_machine" on-invalid="null" />
         </service>
         <service id="sylius.resource_controller.resource_delete_handler" class="Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandler" public="false" />
+
+        <service id="sylius.resource_controller.template_renderer" class="Sylius\Bundle\ResourceBundle\Controller\TemplateRenderer" public="false">
+            <argument type="service" id="twig" on-invalid="null" />
+        </service>
+        <service id="Sylius\Bundle\ResourceBundle\Controller\TemplateRendererInterface" alias="sylius.resource_controller.template_renderer" />
     </services>
 </container>
