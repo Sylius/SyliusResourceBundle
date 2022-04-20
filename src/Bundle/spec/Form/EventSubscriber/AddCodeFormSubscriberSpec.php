@@ -44,7 +44,8 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
         $resource->getCode()->willReturn(null);
 
         $form
-            ->add('code', Argument::type('string'), Argument::withEntry('disabled', false))
+            ->add('code', TextType::class, Argument::withEntry('disabled', false))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -62,7 +63,8 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
         $resource->getCode()->willReturn('Code12');
 
         $form
-            ->add('code', Argument::type('string'), Argument::withEntry('disabled', true))
+            ->add('code', TextType::class, Argument::withEntry('disabled', true))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -84,6 +86,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $form
             ->add('code', TextType::class, Argument::withEntry('disabled', false))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -101,6 +104,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $form
             ->add('code', FormType::class, Argument::withEntry('disabled', true))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -116,6 +120,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $form
             ->add('code', TextType::class, Argument::withEntry('disabled', true))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -134,6 +139,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $form
             ->add('code', TextType::class, Argument::withEntry('label', 'sylius.ui.code'))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 
@@ -154,6 +160,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
         $form
             ->add('code', FormType::class, Argument::withEntry('label', 'sylius.ui.name'))
+            ->willReturn($form)
             ->shouldBeCalled()
         ;
 

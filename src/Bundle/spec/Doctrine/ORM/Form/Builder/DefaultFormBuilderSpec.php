@@ -67,6 +67,10 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+
         $formBuilder->add('id', Argument::cetera())->shouldNotBeCalled();
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -93,6 +97,11 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
+        $formBuilder->add('id', null, [])->willReturn($formBuilder);
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+
         $formBuilder->add('id', null, [])->shouldBeCalled();
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -117,6 +126,10 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
         $formBuilder->add('enabled', null, [])->shouldBeCalled();
@@ -140,6 +153,11 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
         $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
+
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->willReturn($formBuilder);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
@@ -169,6 +187,13 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
         $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->willReturn($formBuilder);
+        $formBuilder->add('category', null, ['choice_label' => 'id'])->willReturn($formBuilder);
+        $formBuilder->add('users', Argument::cetera())->willReturn($formBuilder);
+
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
         $formBuilder->add('enabled', null, [])->shouldBeCalled();
@@ -196,6 +221,12 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
         $classMetadataInfo->getTypeOfField('createdAt')->willReturn(Types::DATETIME_MUTABLE);
         $classMetadataInfo->getTypeOfField('updatedAt')->willReturn(Types::DATETIME_MUTABLE);
+
+        $formBuilder->add('name', null, [])->willReturn($formBuilder);
+        $formBuilder->add('description', null, [])->willReturn($formBuilder);
+        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $formBuilder->add('createdAt', Argument::cetera())->willReturn($formBuilder);
+        $formBuilder->add('updatedAt', Argument::cetera())->willReturn($formBuilder);
 
         $formBuilder->add('name', null, [])->shouldBeCalled();
         $formBuilder->add('description', null, [])->shouldBeCalled();
