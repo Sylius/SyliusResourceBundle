@@ -133,6 +133,7 @@
                 <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
                 <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
                 <referencedClass name="Doctrine\Common\Persistence\ObjectManager" />
+                <referencedClass name="Sylius\Bundle\ResourceBundle\Controller\EngineInterface" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheAdapter" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>

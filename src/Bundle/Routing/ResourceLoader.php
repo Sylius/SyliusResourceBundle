@@ -132,7 +132,7 @@ final class ResourceLoader implements LoaderInterface
             ];
         } else {
             $defaults = [
-                '_controller' => $metadata->getServiceId('controller') . sprintf(':%sAction', $actionName),
+                '_controller' => $metadata->getServiceId('controller') . sprintf('::%sAction', $actionName),
             ];
         }
 

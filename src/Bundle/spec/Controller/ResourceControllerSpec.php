@@ -2353,7 +2353,8 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
+
+        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2412,7 +2413,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
+        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2469,7 +2470,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
+        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2524,7 +2525,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
+        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2579,7 +2580,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
         $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
+        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);

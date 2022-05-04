@@ -101,7 +101,7 @@ final class ApplyStateMachineTransitionAction
 
         if (
             $configuration->isCsrfProtectionEnabled() &&
-            !$this->isCsrfTokenValid((string) $resource->getId(), $request->get('_csrf_token'))
+            !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get('_csrf_token'))
         ) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid CSRF token.');
         }

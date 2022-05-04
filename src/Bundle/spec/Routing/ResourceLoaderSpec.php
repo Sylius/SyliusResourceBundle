@@ -86,18 +86,6 @@ EOT;
 alias: sylius.product
 EOT;
 
-        $showDefaults = [
-            '_controller' => 'sylius.controller.product::showAction',
-            '_sylius' => [
-                'permission' => false,
-            ],
-        ];
-        $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
-            ->willReturn($showRoute)
-        ;
-        $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
-
         $indexDefaults = [
             '_controller' => 'sylius.controller.product::indexAction',
             '_sylius' => [
@@ -133,6 +121,18 @@ EOT;
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
+
+        $showDefaults = [
+            '_controller' => 'sylius.controller.product::showAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->willReturn($showRoute)
+        ;
+        $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
 
         $bulkDeleteDefaults = [
             '_controller' => 'sylius.controller.product::bulkDeleteAction',
