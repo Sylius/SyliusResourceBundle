@@ -17,8 +17,6 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.8. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in Sylius 2.0.', PagerfantaConfiguration::class), \E_USER_DEPRECATED);
-
 /**
  * Container configuration to bridge the configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle
  *
@@ -34,6 +32,7 @@ final class PagerfantaConfiguration implements ConfigurationInterface
 
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
+        $rootNode->setDeprecated('sylius/resource-bundle', '1.7', 'The "%node%" configuration node is deprecated, migrate your configuration to the "babdev_pagerfanta" configuration node.');
 
         $this->addExceptionsStrategySection($rootNode);
 

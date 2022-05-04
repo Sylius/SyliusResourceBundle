@@ -20,7 +20,7 @@ use Pagerfanta\Pagerfanta;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.3. Doctrine MongoDB and PHPCR support will no longer be supported in Sylius 2.0.', DocumentRepository::class), \E_USER_DEPRECATED);
+trigger_deprecation('sylius/resource-bundle', '1.3', 'The "%s" class is deprecated. Doctrine MongoDB and PHPCR support will no longer be supported in 2.0.', DocumentRepository::class);
 
 /**
  * Doctrine PHPCR-ODM driver document repository.

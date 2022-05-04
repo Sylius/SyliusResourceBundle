@@ -27,7 +27,14 @@ final class ExpressionLanguage extends BaseExpressionLanguage
     {
         if (null !== $cache) {
             if ($cache instanceof ParserCacheInterface) {
-                @trigger_error(sprintf('Passing an instance of %s as constructor argument for %s is deprecated as of Sylius 1.2 and will be removed in 2.0. Pass an instance of %s instead.', ParserCacheInterface::class, self::class, CacheItemPoolInterface::class), \E_USER_DEPRECATED);
+                trigger_deprecation(
+                    'sylius/resource-bundle',
+                    '1.2',
+                    'Passing an instance of "%s" as the first constructor argument of "%s" is deprecated. Pass an instance of "%s" instead.',
+                    ParserCacheInterface::class,
+                    self::class,
+                    CacheItemPoolInterface::class,
+                );
 
                 /** @var CacheItemPoolInterface $cache */
                 $cache = new ParserCacheAdapter($cache);

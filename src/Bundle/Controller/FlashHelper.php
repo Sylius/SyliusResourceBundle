@@ -42,7 +42,14 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         if ($requestStack instanceof SessionInterface) {
-            @trigger_error(sprintf('Passing an instance of %s as constructor argument for %s is deprecated as of Sylius 1.9 and will be removed in 2.0. Pass an instance of %s instead.', SessionInterface::class, self::class, RequestStack::class), \E_USER_DEPRECATED);
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.10',
+                'Passing an instance of "%s" as the first constructor argument for "%s" is deprecated and will not be supported in 2.0. Pass an instance of "%s" instead.',
+                SessionInterface::class,
+                self::class,
+                RequestStack::class,
+            );
         }
 
         $this->requestStack = $requestStack;

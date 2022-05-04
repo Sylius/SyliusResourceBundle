@@ -22,13 +22,23 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.3. Doctrine MongoDB and PHPCR support will no longer be supported in Sylius 2.0.', DoctrineODMDriver::class), \E_USER_DEPRECATED);
-
 final class DoctrineODMDriver extends AbstractDoctrineDriver
 {
     public function getType(): string
     {
         return SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM;
+    }
+
+    public function load(ContainerBuilder $container, MetadataInterface $metadata): void
+    {
+        trigger_deprecation(
+            'sylius/resource-bundle',
+            '1.3',
+            'The "%s" class is deprecated. Doctrine MongoDB and PHPCR will no longer be supported in 2.0.',
+            self::class,
+        );
+
+        parent::load($container, $metadata);
     }
 
     protected function addRepository(ContainerBuilder $container, MetadataInterface $metadata): void

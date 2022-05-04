@@ -48,16 +48,13 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
                 $model = $this->getModel($alias, $configuration);
                 $interface = $configuration['classes']['interface'];
 
-                @trigger_error(
-                    sprintf(
-                        'Specifying interface for resources is deprecated since ResourceBundle v1.6 and will be removed in v2.0. ' .
-                        'Please rely on autodiscovering entity interfaces instead. ' .
-                        'Triggered by resource "%s" with model "%s" and interface "%s".',
-                        $alias,
-                        $model,
-                        $interface,
-                    ),
-                    \E_USER_DEPRECATED,
+                trigger_deprecation(
+                    'sylius/resource-bundle',
+                    '1.6',
+                    'Specifying the interface for resources is deprecated and will be removed in 2.0. Please rely on auto-discovering interfaces instead. Triggered by resource "%s" with model "%s" and interface "%s".',
+                    $alias,
+                    $model,
+                    $interface,
                 );
 
                 $interfaces[$interface] = $model;
