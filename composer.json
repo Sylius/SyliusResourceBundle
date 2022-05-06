@@ -95,6 +95,7 @@
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
+            "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/",
             "App\\": "src/Bundle/test/src/"
         }
     },

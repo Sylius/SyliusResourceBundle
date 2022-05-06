@@ -37,6 +37,11 @@ final class SyliusResourceBundle extends Bundle
 
     public const DRIVER_DOCTRINE_PHPCR_ODM = 'doctrine/phpcr-odm';
 
+    public function getPath(): string
+    {
+        return \dirname(__DIR__, 2);
+    }
+
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
