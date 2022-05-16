@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.9.1 (2022-05-16)
+
+#### Details
+
+- [#407](https://github.com/Sylius/SyliusResourceBundle/issues/407) [1.8] Correct branch alias to 1.8-dev ([@Zales0123](https://github.com/Zales0123))
+- [#409](https://github.com/Sylius/SyliusResourceBundle/issues/409) Document supported branches ([@Zales0123](https://github.com/Zales0123))
+- [#416](https://github.com/Sylius/SyliusResourceBundle/issues/416) Revert "Bump Pagerfanta from 2.x to 3.x" ([@lchrusciel](https://github.com/lchrusciel))
+- [#417](https://github.com/Sylius/SyliusResourceBundle/issues/417) Revert "Revert "Bump Pagerfanta from 2.x to 3.x"" ([@lchrusciel](https://github.com/lchrusciel))
+- [#424](https://github.com/Sylius/SyliusResourceBundle/issues/424) Run lint container instead of smoke test for twig ([@loic425](https://github.com/loic425))
+- [#425](https://github.com/Sylius/SyliusResourceBundle/issues/425) Run lint container for state machine instead of smoke tests ([@loic425](https://github.com/loic425))
+- [#432](https://github.com/Sylius/SyliusResourceBundle/issues/432) [Maintenance] Correct branch alias to 1.9-dev ([@lchrusciel](https://github.com/lchrusciel))
+- [#446](https://github.com/Sylius/SyliusResourceBundle/issues/446) [Maintenance] Simplify GitHub action workflow ([@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.9.0 (2022-04-07)
 
 #### TL;DR
