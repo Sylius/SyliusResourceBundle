@@ -1,5 +1,37 @@
 ## CHANGELOG
 
+### v1.10.0-ALPHA.1 (2022-05-16)
+
+#### TL;DR
+
+Drop Symfony 4 support, add Symfony 6 support 🚀
+
+#### Details
+
+- [#379](https://github.com/Sylius/SyliusResourceBundle/issues/379) Fix setDeprecated deprecation ([@dannyvw](https://github.com/dannyvw))
+- [#380](https://github.com/Sylius/SyliusResourceBundle/issues/380) Fix session deprecation ([@dannyvw](https://github.com/dannyvw))
+- [#399](https://github.com/Sylius/SyliusResourceBundle/issues/399) [Symfony 6] Fix Kernel on test app ([@loic425](https://github.com/loic425))
+- [#401](https://github.com/Sylius/SyliusResourceBundle/issues/401) [Symfony 6] Use storage factory id option on test app ([@loic425](https://github.com/loic425))
+- [#402](https://github.com/Sylius/SyliusResourceBundle/issues/402) [Symfony 6] Fix http foundation request handler typehints ([@loic425](https://github.com/loic425))
+- [#408](https://github.com/Sylius/SyliusResourceBundle/issues/408) [1.10] Correct branch alias to 1.10-dev ([@Zales0123](https://github.com/Zales0123))
+- [#411](https://github.com/Sylius/SyliusResourceBundle/issues/411) [Symfony 6] Bump Psalm version from 4.7 to 4.22 ([@loic425](https://github.com/loic425))
+- [#412](https://github.com/Sylius/SyliusResourceBundle/issues/412) [Symfony 6] Fix bootstrap on test app ([@loic425](https://github.com/loic425))
+- [#413](https://github.com/Sylius/SyliusResourceBundle/issues/413) [Symfony 6] Fix setting deprecations on pagerfanta bridge pass ([@loic425](https://github.com/loic425))
+- [#418](https://github.com/Sylius/SyliusResourceBundle/issues/418) [Symfony 6] Fix getting container on PHPUnit tests ([@loic425](https://github.com/loic425))
+- [#419](https://github.com/Sylius/SyliusResourceBundle/issues/419) [Symfony 6] Fix routes on test app ([@loic425](https://github.com/loic425))
+- [#426](https://github.com/Sylius/SyliusResourceBundle/issues/426) Add missing options on sylius route attribute ([@loic425](https://github.com/loic425))
+- [#428](https://github.com/Sylius/SyliusResourceBundle/issues/428) Add support for Symfony 6  ([@loic425](https://github.com/loic425), [@lchrusciel](https://github.com/lchrusciel))
+- [#430](https://github.com/Sylius/SyliusResourceBundle/issues/430) Drop Symfony 4 support ([@loic425](https://github.com/loic425))
+- [#431](https://github.com/Sylius/SyliusResourceBundle/issues/431) Simplify Kernel on test app ([@loic425](https://github.com/loic425))
+- [#433](https://github.com/Sylius/SyliusResourceBundle/issues/433) Remove session pass ([@loic425](https://github.com/loic425))
+- [#434](https://github.com/Sylius/SyliusResourceBundle/issues/434) [Maintenance] Bump EasyCodingStandard dependency ([@lchrusciel](https://github.com/lchrusciel))
+- [#435](https://github.com/Sylius/SyliusResourceBundle/issues/435) [Maintenance] Removal of Sf4.4 BC layer leftovers ([@lchrusciel](https://github.com/lchrusciel))
+- [#437](https://github.com/Sylius/SyliusResourceBundle/issues/437) Remove is master request usage ([@loic425](https://github.com/loic425))
+- [#439](https://github.com/Sylius/SyliusResourceBundle/issues/439) Fix Phpspec for symfony 6 ([@loic425](https://github.com/loic425))
+- [#440](https://github.com/Sylius/SyliusResourceBundle/issues/440) Fix some other getting container deprecations ([@loic425](https://github.com/loic425))
+- [#444](https://github.com/Sylius/SyliusResourceBundle/issues/444) [Symfony 6] Third solution to fix resource controllers ([@loic425](https://github.com/loic425))
+- [#445](https://github.com/Sylius/SyliusResourceBundle/issues/445) [Maintenance] Drop Sf4 ACL on parameters class due to lack of its support ([@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.9.1 (2022-05-16)
 
 #### Details
