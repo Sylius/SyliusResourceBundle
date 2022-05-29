@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
+/**
+ * @template T of object
+ */
 interface FactoryInterface
 {
     /**
-     * @return object
+     * @return T
      */
     public function createNew();
 }
