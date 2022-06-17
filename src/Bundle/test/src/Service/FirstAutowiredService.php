@@ -28,7 +28,7 @@ final class FirstAutowiredService
     public function __construct(
         FactoryInterface $bookFactory,
         RepositoryInterface $bookRepository,
-        ObjectManager $bookManager
+        ObjectManager $bookManager,
     ) {
         $this->bookFactory = $bookFactory;
         $this->bookRepository = $bookRepository;

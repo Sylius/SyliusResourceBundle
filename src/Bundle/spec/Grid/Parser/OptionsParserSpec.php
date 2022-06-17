@@ -26,7 +26,7 @@ final class OptionsParserSpec extends ObjectBehavior
     function let(
         ContainerInterface $container,
         ExpressionLanguage $expression,
-        PropertyAccessorInterface $propertyAccessor
+        PropertyAccessorInterface $propertyAccessor,
     ): void {
         $this->beConstructedWith($container, $expression, $propertyAccessor);
     }
@@ -49,7 +49,7 @@ final class OptionsParserSpec extends ObjectBehavior
     function it_parses_options_with_expression(
         ContainerInterface $container,
         ExpressionLanguage $expression,
-        Request $request
+        Request $request,
     ): void {
         $expression->evaluate('service("demo_service")', ['container' => $container])->willReturn('demo_object');
 
@@ -63,7 +63,7 @@ final class OptionsParserSpec extends ObjectBehavior
                         ],
                     ],
                 ],
-                $request
+                $request,
             )
             ->shouldReturn(
                 [
@@ -73,14 +73,15 @@ final class OptionsParserSpec extends ObjectBehavior
                             'demo_object',
                         ],
                     ],
-                ]
-            );
+                ],
+            )
+        ;
     }
 
     function it_parses_options_with_parameter_from_resource(
         PropertyAccessorInterface $propertyAccessor,
         Request $request,
-        ResourceInterface $data
+        ResourceInterface $data,
     ): void {
         $propertyAccessor->getValue($data, 'id')->willReturn(21);
 
@@ -93,7 +94,7 @@ final class OptionsParserSpec extends ObjectBehavior
     function it_parses_options_with_array(
         PropertyAccessorInterface $propertyAccessor,
         Request $request,
-        ResourceInterface $data
+        ResourceInterface $data,
     ): void {
         $arrayData = [
             0 => $data,

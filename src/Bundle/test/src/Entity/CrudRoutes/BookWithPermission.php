@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'permission',
-    permission: true
+    permission: true,
 )]
 class BookWithPermission extends Book
 {

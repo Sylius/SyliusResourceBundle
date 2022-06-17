@@ -53,7 +53,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getHumanizedName()->willReturn('product');
@@ -73,7 +73,7 @@ final class FlashHelperSpec extends ObjectBehavior
             [
                 'message' => 'sylius.resource.create',
                 'parameters' => ['%resource%' => 'Product'],
-            ]
+            ],
         )->shouldBeCalled();
 
         $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
@@ -86,7 +86,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $parameters = ['%resource%' => 'Product'];
 
@@ -107,7 +107,7 @@ final class FlashHelperSpec extends ObjectBehavior
             [
                 'message' => 'sylius.resource.create',
                 'parameters' => $parameters,
-            ]
+            ],
         )->shouldBeCalled();
 
         $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
@@ -120,7 +120,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $parameters = ['%resource%' => 'Spoon'];
 
@@ -145,7 +145,7 @@ final class FlashHelperSpec extends ObjectBehavior
             [
                 'message' => '%resource% is the best cutlery of them all!',
                 'parameters' => $parameters,
-            ]
+            ],
         )->shouldBeCalled();
 
         $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
@@ -159,7 +159,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getHumanizedName()->willReturn('product');
@@ -180,7 +180,7 @@ final class FlashHelperSpec extends ObjectBehavior
             [
                 'message' => 'sylius.resource.create',
                 'parameters' => ['%resource%' => 'Product'],
-            ]
+            ],
         )->shouldBeCalled();
 
         $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
@@ -194,7 +194,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $metadata->getApplicationName()->willReturn('sylius');
         $metadata->getHumanizedName()->willReturn('product');
@@ -223,7 +223,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $metadata->getApplicationName()->willReturn('app');
         $metadata->getHumanizedName()->willReturn('book');
@@ -249,7 +249,7 @@ final class FlashHelperSpec extends ObjectBehavior
         SessionInterface $session,
         FlashBagInterface $flashBag,
         RequestConfiguration $requestConfiguration,
-        ResourceControllerEvent $event
+        ResourceControllerEvent $event,
     ): void {
         $event->getMessage()->willReturn('sylius.channel.cannot_be_deleted');
         $event->getMessageType()->willReturn(ResourceControllerEvent::TYPE_WARNING);
@@ -265,7 +265,7 @@ final class FlashHelperSpec extends ObjectBehavior
             [
                 'message' => 'sylius.channel.cannot_be_deleted',
                 'parameters' => ['%name%' => 'Germany Sylius Webshop'],
-            ]
+            ],
         )->shouldBeCalled();
 
         $this->addFlashFromEvent($requestConfiguration, $event);

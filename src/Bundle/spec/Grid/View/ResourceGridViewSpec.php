@@ -25,7 +25,7 @@ final class ResourceGridViewSpec extends ObjectBehavior
     function let(
         Grid $gridDefinition,
         MetadataInterface $resourceMetadata,
-        RequestConfiguration $requestConfiguration
+        RequestConfiguration $requestConfiguration,
     ): void {
         $this->beConstructedWith(['foo', 'bar'], $gridDefinition, new Parameters(), $resourceMetadata, $requestConfiguration);
     }

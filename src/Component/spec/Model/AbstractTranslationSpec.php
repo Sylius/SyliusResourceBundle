@@ -39,7 +39,7 @@ final class AbstractTranslationSpec extends ObjectBehavior
 
     function its_detaches_from_its_translatable_correctly(
         TranslatableInterface $translatable1,
-        TranslatableInterface $translatable2
+        TranslatableInterface $translatable2,
     ): void {
         $translatable1->addTranslation(Argument::type(AbstractTranslation::class));
         $this->setTranslatable($translatable1);

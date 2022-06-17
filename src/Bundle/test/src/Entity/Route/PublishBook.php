@@ -25,7 +25,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     path: '/books/{id}',
     methods: ['PATCH'],
     controller: 'app.controller.book::applyStateMachineTransitionAction',
-    stateMachine: ['graph' => 'app_book', 'transition' => 'publish']
+    stateMachine: ['graph' => 'app_book', 'transition' => 'publish'],
 )]
 class PublishBook extends Book
 {

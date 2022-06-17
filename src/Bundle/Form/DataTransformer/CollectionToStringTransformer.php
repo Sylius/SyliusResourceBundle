@@ -34,8 +34,8 @@ final class CollectionToStringTransformer implements DataTransformerInterface
                 sprintf(
                     'Expected "%s", but got "%s"',
                     Collection::class,
-                    is_object($value) ? get_class($value) : gettype($value)
-                )
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
             );
         }
 
@@ -52,8 +52,8 @@ final class CollectionToStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException(
                 sprintf(
                     'Expected string, but got "%s"',
-                    is_object($value) ? get_class($value) : gettype($value)
-                )
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
             );
         }
 

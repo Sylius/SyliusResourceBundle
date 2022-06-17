@@ -39,7 +39,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     function it_redirects_to_resource(
         RouterInterface $router,
         RequestConfiguration $configuration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $configuration->getRedirectParameters($resource)->willReturn([]);
         $configuration->getRedirectRoute('show')->willReturn('my_route');
@@ -55,7 +55,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     function it_fallbacks_to_index_route_if_show_does_not_exist(
         RouterInterface $router,
         RequestConfiguration $configuration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $configuration->getRedirectParameters($resource)->willReturn([]);
         $configuration->getRedirectRoute('show')->willReturn('app_resource_show');
@@ -73,7 +73,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     function it_redirects_to_index(
         RouterInterface $router,
         RequestConfiguration $configuration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $configuration->getRedirectRoute('index')->willReturn('my_route');
         $configuration->getRedirectParameters($resource)->willReturn([]);

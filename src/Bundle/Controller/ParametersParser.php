@@ -45,7 +45,7 @@ final class ParametersParser implements ParametersParserInterface
 
                 return $this->parseRequestValue($parameter, $request);
             },
-            $parameters
+            $parameters,
         );
     }
 
@@ -90,13 +90,13 @@ final class ParametersParser implements ParametersParserInterface
                     throw new \InvalidArgumentException(sprintf(
                         'Cannot use %s ($%s) as parameter in expression.',
                         gettype($variable),
-                        $matches[1]
+                        $matches[1],
                     ));
                 }
 
                 return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },
-            $expression
+            $expression,
         );
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);

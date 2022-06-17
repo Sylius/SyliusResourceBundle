@@ -38,7 +38,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -54,7 +54,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -83,7 +83,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -114,7 +114,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -141,7 +141,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -171,7 +171,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
@@ -208,7 +208,7 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo
+        ClassMetadataInfo $classMetadataInfo,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
         $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);

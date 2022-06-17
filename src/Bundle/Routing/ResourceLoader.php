@@ -124,7 +124,7 @@ final class ResourceLoader implements LoaderInterface
         string $path,
         string $actionName,
         array $methods,
-        bool $isApi = false
+        bool $isApi = false,
     ): Route {
         $defaults = [
             '_controller' => $metadata->getServiceId('controller') . sprintf('::%sAction', $actionName),
@@ -161,7 +161,7 @@ final class ResourceLoader implements LoaderInterface
             $defaults['_sylius']['template'] = sprintf(
                 false === strpos($configuration['templates'], ':') ? '%s/%s.html.twig' : '%s:%s.html.twig',
                 $configuration['templates'],
-                $actionName
+                $actionName,
             );
         }
         if (isset($configuration['redirect']) && in_array($actionName, ['create', 'update'], true)) {

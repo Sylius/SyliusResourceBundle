@@ -30,7 +30,7 @@ final class RegisterFormBuilderPassTest extends AbstractCompilerPassTestCase
             'default_form_builder',
             (new Definition())
                 ->addTag('sylius.default_resource_form.builder', ['type' => 'foo'])
-                ->addTag('sylius.default_resource_form.builder', ['type' => 'bar'])
+                ->addTag('sylius.default_resource_form.builder', ['type' => 'bar']),
         );
 
         $this->compile();
@@ -38,13 +38,13 @@ final class RegisterFormBuilderPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'sylius.registry.form_builder',
             'register',
-            ['foo', new Reference('default_form_builder')]
+            ['foo', new Reference('default_form_builder')],
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'sylius.registry.form_builder',
             'register',
-            ['bar', new Reference('default_form_builder')]
+            ['bar', new Reference('default_form_builder')],
         );
     }
 

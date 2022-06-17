@@ -33,7 +33,7 @@ class RegisterResourcesPassTest extends AbstractCompilerPassTestCase
             [
                 'app.book' => ['classes' => ['model' => BookClass::class]],
                 'app.author' => ['classes' => ['model' => AuthorClass::class]],
-            ]
+            ],
         );
 
         $this->compile();
@@ -41,13 +41,13 @@ class RegisterResourcesPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'sylius.resource_registry',
             'addFromAliasAndConfiguration',
-            ['app.book', ['classes' => ['model' => BookClass::class]]]
+            ['app.book', ['classes' => ['model' => BookClass::class]]],
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'sylius.resource_registry',
             'addFromAliasAndConfiguration',
-            ['app.author', ['classes' => ['model' => AuthorClass::class]]]
+            ['app.author', ['classes' => ['model' => AuthorClass::class]]],
         );
     }
 

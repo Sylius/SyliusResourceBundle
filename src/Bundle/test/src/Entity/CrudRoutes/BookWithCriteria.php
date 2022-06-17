@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'criteria',
-    criteria: ['library' => '$libraryId']
+    criteria: ['library' => '$libraryId'],
 )]
 class BookWithCriteria extends Book
 {

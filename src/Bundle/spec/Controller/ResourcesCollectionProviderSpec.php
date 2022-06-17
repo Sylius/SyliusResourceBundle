@@ -46,7 +46,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
         ResourceInterface $firstResource,
-        ResourceInterface $secondResource
+        ResourceInterface $secondResource,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
 
@@ -61,7 +61,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         RepositoryInterface $repository,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters
+        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(5);
@@ -89,7 +89,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         Grid $grid,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters
+        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(1000);
@@ -123,7 +123,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         ParameterBag $queryParameters,
         ParameterBag $requestAttributes,
         PagerfantaFactory $pagerfantaRepresentationFactory,
-        PaginatedRepresentation $paginatedRepresentation
+        PaginatedRepresentation $paginatedRepresentation,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(false);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(8);
@@ -158,7 +158,7 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         Grid $grid,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters
+        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(5);

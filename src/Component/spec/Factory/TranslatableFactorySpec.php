@@ -45,7 +45,7 @@ final class TranslatableFactorySpec extends ObjectBehavior
     function it_creates_translatable_and_sets_locales(
         FactoryInterface $factory,
         TranslationLocaleProviderInterface $localeProvider,
-        TranslatableInterface $resource
+        TranslatableInterface $resource,
     ): void {
         $localeProvider->getDefaultLocaleCode()->willReturn('pl_PL');
 

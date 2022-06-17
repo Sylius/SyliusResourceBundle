@@ -27,7 +27,7 @@ final class CrudRoutesAttributesLoader implements RouteLoaderInterface
 
     public function __construct(
         array $mapping,
-        ResourceLoader $resourceLoader
+        ResourceLoader $resourceLoader,
     ) {
         $this->mapping = $mapping;
         $this->resourceLoader = $resourceLoader;

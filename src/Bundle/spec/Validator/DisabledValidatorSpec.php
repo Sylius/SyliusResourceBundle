@@ -48,7 +48,7 @@ final class DisabledValidatorSpec extends ObjectBehavior
 
     function it_adds_violation_if_subject_is_enabled(
         ExecutionContextInterface $context,
-        ToggleableInterface $subject
+        ToggleableInterface $subject,
     ): void {
         $subject->isEnabled()->shouldBeCalled()->willReturn(true);
 
@@ -59,7 +59,7 @@ final class DisabledValidatorSpec extends ObjectBehavior
 
     function it_does_not_add_violation_if_subject_is_disabled(
         ExecutionContextInterface $context,
-        ToggleableInterface $subject
+        ToggleableInterface $subject,
     ): void {
         $subject->isEnabled()->shouldBeCalled()->willReturn(false);
 

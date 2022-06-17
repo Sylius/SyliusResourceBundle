@@ -86,7 +86,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
 
     function it_returns_all_objects_when_finding_by_an_empty_parameter_array(
         SampleBookResourceInterface $book,
-        SampleBookResourceInterface $shirt
+        SampleBookResourceInterface $shirt,
     ): void {
         $book->getId()->willReturn(10);
         $book->getName()->willReturn('Book');
@@ -106,7 +106,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
         SampleBookResourceInterface $thirdBook,
         SampleBookResourceInterface $fourthBook,
         SampleBookResourceInterface $wrongIdBook,
-        SampleBookResourceInterface $wrongNameBook
+        SampleBookResourceInterface $wrongNameBook,
     ): void {
         $id = 80;
         $name = 'Book';
@@ -152,7 +152,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
                 'title' => RepositoryInterface::ORDER_DESCENDING,
             ],
             $limit = 2,
-            $offset = 1
+            $offset = 1,
         )->shouldReturn([$thirdBook, $firstBook]);
     }
 
@@ -174,7 +174,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
 
     function it_returns_first_result_while_finding_one_by_parameters(
         SampleBookResourceInterface $book,
-        SampleBookResourceInterface $secondBook
+        SampleBookResourceInterface $secondBook,
     ): void {
         $book->getName()->willReturn('Book');
         $secondBook->getName()->willReturn('Book');

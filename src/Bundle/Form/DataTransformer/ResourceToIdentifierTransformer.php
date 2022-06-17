@@ -60,7 +60,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
                 'Object "%s" with identifier "%s"="%s" does not exist.',
                 $this->repository->getClassName(),
                 $this->identifier,
-                $value
+                $value,
             ));
         }
 

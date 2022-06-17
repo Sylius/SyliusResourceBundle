@@ -32,7 +32,7 @@ final class NoInterfaceAutowiredService
         BookFactory $bookFactory,
         BookRepository $bookRepository,
         Factory $comicBookFactory,
-        EntityRepository $comicBookRepository
+        EntityRepository $comicBookRepository,
     ) {
         $this->bookFactory = $bookFactory;
         $this->bookRepository = $bookRepository;

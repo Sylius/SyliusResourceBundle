@@ -27,7 +27,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     repository: [
         'method' => 'findOneNewestByAuthor',
         'arguments' => '[$author]',
-    ]
+    ],
 )]
 class ShowBookWithRepository extends Book
 {

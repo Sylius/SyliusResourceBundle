@@ -43,7 +43,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->transform($currentValue);
-            }
+            },
         );
     }
 
@@ -63,7 +63,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->reverseTransform($currentValue);
-            }
+            },
         );
     }
 
@@ -79,8 +79,8 @@ final class RecursiveTransformer implements DataTransformerInterface
                 sprintf(
                     'Expected "%s", but got "%s"',
                     $expectedType,
-                    is_object($value) ? get_class($value) : gettype($value)
-                )
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
             );
         }
     }

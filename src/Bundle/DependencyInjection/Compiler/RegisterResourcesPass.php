@@ -45,7 +45,7 @@ final class RegisterResourcesPass implements CompilerPassInterface
             throw new InvalidArgumentException(sprintf(
                 'Class "%s" must implement "%s" to be registered as a Sylius resource.',
                 $class,
-                ResourceInterface::class
+                ResourceInterface::class,
             ));
         }
     }
