@@ -111,5 +111,10 @@
             "vendor/bin/phpspec run --ansi --no-interaction",
             "vendor/bin/phpunit --colors=always"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
