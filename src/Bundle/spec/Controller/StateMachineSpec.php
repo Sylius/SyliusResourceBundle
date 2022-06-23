@@ -56,7 +56,7 @@ final class StateMachineSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        StateMachineInterface $stateMachine,
     ): void {
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');
@@ -72,7 +72,7 @@ final class StateMachineSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        StateMachineInterface $stateMachine,
     ): void {
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineGraph()->willReturn(null);
@@ -89,7 +89,7 @@ final class StateMachineSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine
+        StateMachineInterface $stateMachine,
     ): void {
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');

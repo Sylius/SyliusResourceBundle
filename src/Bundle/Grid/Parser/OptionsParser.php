@@ -29,7 +29,7 @@ final class OptionsParser implements OptionsParserInterface
     public function __construct(
         ContainerInterface $container,
         ExpressionLanguage $expression,
-        PropertyAccessorInterface $propertyAccessor
+        PropertyAccessorInterface $propertyAccessor,
     ) {
         $this->container = $container;
         $this->expression = $expression;
@@ -51,7 +51,7 @@ final class OptionsParser implements OptionsParserInterface
 
                 return $this->parseOption($parameter, $request, $data);
             },
-            $parameters
+            $parameters,
         );
     }
 
@@ -101,7 +101,7 @@ final class OptionsParser implements OptionsParserInterface
 
                 return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },
-            $expression
+            $expression,
         );
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);

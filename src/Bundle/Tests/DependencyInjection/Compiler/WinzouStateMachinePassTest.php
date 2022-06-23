@@ -45,7 +45,7 @@ final class WinzouStateMachinePassTest extends WebTestCase
         foreach ($services as $id) {
             Assert::assertNotNull(
                 $container->get($id, ContainerInterface::NULL_ON_INVALID_REFERENCE),
-                sprintf('Service "%s" could not be found', $id)
+                sprintf('Service "%s" could not be found', $id),
             );
         }
     }

@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'redirect',
-    redirect: 'update'
+    redirect: 'update',
 )]
 class BookWithRedirect extends Book
 {

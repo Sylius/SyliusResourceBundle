@@ -32,7 +32,7 @@ final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
 
     function it_should_assign_current_and_default_locale_to_given_translatable_entity(
         TranslationLocaleProviderInterface $translationLocaleProvider,
-        TranslatableInterface $translatableEntity
+        TranslatableInterface $translatableEntity,
     ): void {
         $translationLocaleProvider->getDefaultLocaleCode()->willReturn('en_US');
 

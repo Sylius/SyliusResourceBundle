@@ -31,7 +31,7 @@ class NameResolverListener
     private $documentManager;
 
     public function __construct(
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ) {
         $this->documentManager = $documentManager;
     }
@@ -47,7 +47,7 @@ class NameResolverListener
                 'Document of class "%s" must be using the GENERATOR_TYPE_PARENT identificatio strategy (value %s), it is current using "%s" (this may be an automatic configuration: be sure to map both the `nodename` and the `parentDocument`).',
                 get_class($document),
                 ClassMetadata::GENERATOR_TYPE_PARENT,
-                $metadata->idGenerator
+                $metadata->idGenerator,
             ));
         }
 

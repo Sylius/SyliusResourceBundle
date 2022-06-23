@@ -32,7 +32,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         Request $request,
         ParameterBag $requestAttributes,
-        RepositoryInterface $repository
+        RepositoryInterface $repository,
     ): void {
         $requestConfiguration->getCriteria()->willReturn([]);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -52,7 +52,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $requestAttributes,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getCriteria()->willReturn([]);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -72,7 +72,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $requestAttributes,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getCriteria()->willReturn([]);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -92,7 +92,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $requestAttributes,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getCriteria()->willReturn(['request-configuration-criteria' => '1']);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -111,7 +111,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $requestAttributes,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getCriteria()->willReturn(['request-configuration-criteria' => '1']);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -131,7 +131,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $requestAttributes,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getCriteria()->willReturn(['id' => 5]);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);
@@ -148,7 +148,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
     function it_uses_a_custom_method_if_configured(
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getRepositoryMethod()->willReturn('findAll');
         $requestConfiguration->getRepositoryArguments()->willReturn(['foo']);
@@ -162,7 +162,7 @@ final class SingleResourceProviderSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
         RepositoryInterface $customRepository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getRepositoryMethod()->willReturn([$customRepository, 'findAll']);
         $requestConfiguration->getRepositoryArguments()->willReturn(['foo']);

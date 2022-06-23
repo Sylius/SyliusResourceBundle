@@ -62,7 +62,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             null,
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code']
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code'],
         );
 
         $form->submit('mug');
@@ -85,7 +85,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             null,
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'id']
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'id'],
         );
 
         $form->submit('1');
@@ -108,7 +108,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             null,
-            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code']
+            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code'],
         );
 
         $form->submit('eu');
@@ -131,7 +131,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             null,
-            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code']
+            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code'],
         );
 
         $form->submit('eu');
@@ -154,7 +154,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             null,
-            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code']
+            ['resource' => 'sylius.zone', 'choice_name' => 'name', 'choice_value' => 'code'],
         );
 
         $formViewVars = $form->createView()->vars;
@@ -184,14 +184,14 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => true]
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => true],
         );
 
         $form->submit('mug,book,sticker');
 
         $this->assertEquals(
             new ArrayCollection([$mug->reveal(), $book->reveal(), $sticker->reveal()]),
-            $form->getData()
+            $form->getData(),
         );
     }
 
@@ -205,7 +205,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 1, 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => true]
+            ['resource' => 1, 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => true],
         );
     }
 
@@ -219,7 +219,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 1, 'choice_name' => 1, 'choice_value' => 'code', 'multiple' => true]
+            ['resource' => 1, 'choice_name' => 1, 'choice_value' => 'code', 'multiple' => true],
         );
     }
 
@@ -233,7 +233,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 1, 'multiple' => true]
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 1, 'multiple' => true],
         );
     }
 
@@ -247,7 +247,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => 'yes']
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'multiple' => 'yes'],
         );
     }
 
@@ -261,7 +261,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'placeholder' => 1]
+            ['resource' => 'sylius.resource', 'choice_name' => 'name', 'choice_value' => 'code', 'placeholder' => 1],
         );
     }
 
@@ -275,7 +275,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['choice_name' => 'name', 'choice_value' => 'code']
+            ['choice_name' => 'name', 'choice_value' => 'code'],
         );
     }
 
@@ -289,7 +289,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_value' => 'code']
+            ['resource' => 'sylius.resource', 'choice_value' => 'code'],
         );
     }
 
@@ -303,7 +303,7 @@ final class ResourceAutocompleteChoiceTypeTest extends TypeTestCase
         $this->factory->create(
             ResourceAutocompleteChoiceType::class,
             new ArrayCollection(),
-            ['resource' => 'sylius.resource', 'choice_name' => 'name']
+            ['resource' => 'sylius.resource', 'choice_name' => 'name'],
         );
     }
 }

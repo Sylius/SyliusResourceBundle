@@ -21,7 +21,7 @@ interface FlashHelperInterface
     public function addSuccessFlash(
         RequestConfiguration $requestConfiguration,
         string $actionName,
-        ?ResourceInterface $resource = null
+        ?ResourceInterface $resource = null,
     ): void;
 
     public function addErrorFlash(RequestConfiguration $requestConfiguration, string $actionName): void;

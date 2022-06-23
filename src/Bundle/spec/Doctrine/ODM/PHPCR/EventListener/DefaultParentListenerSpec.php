@@ -34,58 +34,58 @@ final class DefaultParentListenerSpec extends ObjectBehavior
     function it_should_throw_an_exception_if_no_parent_mapping_exists(
         ResourceControllerEvent $event,
         ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ): void {
         $event->getSubject()->willReturn(new \stdClass());
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
         $documentMetadata->parentMapping = null;
 
         $this->shouldThrow(new \RuntimeException(
-            'A default parent path has been specified, but no parent mapping has been applied to document "stdClass"'
+            'A default parent path has been specified, but no parent mapping has been applied to document "stdClass"',
         ))->during(
             'onPreCreate',
-            [$event]
+            [$event],
         );
     }
 
     function it_should_throw_an_exception_if_the_parent_does_not_exist_and_autocreate_is_false(
         ResourceControllerEvent $event,
         ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ): void {
         $this->beConstructedWith(
             $documentManager,
             '/path/to',
-            false
+            false,
         );
         $event->getSubject()->willReturn(new \stdClass());
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
         $documentMetadata->parentMapping = 'parent';
         $documentManager->find(null, '/path/to')->willReturn(null);
 
         $this->shouldThrow(new \RuntimeException(
-            'Document at default parent path "/path/to" does not exist. `autocreate` was set to "false"'
+            'Document at default parent path "/path/to" does not exist. `autocreate` was set to "false"',
         ))->during(
             'onPreCreate',
-            [$event]
+            [$event],
         );
     }
 
     function it_should_set_the_parent_document(
         ResourceControllerEvent $event,
         ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ): void {
         $subjectDocument = new \stdClass();
         $parentDocument = new \stdClass();
 
         $event->getSubject()->willReturn($subjectDocument);
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
         $documentMetadata->parentMapping = 'parent';
         $documentMetadata->getFieldValue($subjectDocument, 'parent')->willReturn(null);
@@ -100,12 +100,12 @@ final class DefaultParentListenerSpec extends ObjectBehavior
         ClassMetadata $documentMetadata,
         DocumentManagerInterface $documentManager,
         SessionInterface $session,
-        NodeInterface $node
+        NodeInterface $node,
     ): void {
         $this->beConstructedWith(
             $documentManager,
             '/path/to',
-            true
+            true,
         );
 
         $subjectDocument = new \stdClass();
@@ -113,7 +113,7 @@ final class DefaultParentListenerSpec extends ObjectBehavior
 
         $event->getSubject()->willReturn($subjectDocument);
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
         $documentMetadata->parentMapping = 'parent';
         $documentManager->find(null, '/path/to')->willReturn(null, $parentDocument);
@@ -125,7 +125,8 @@ final class DefaultParentListenerSpec extends ObjectBehavior
         $node->hasNode(Argument::cetera())->willReturn(true);
         $node->getNode(Argument::cetera())
             ->willReturn($node)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(2)
+        ;
 
         $documentMetadata->setFieldValue($subjectDocument, 'parent', $parentDocument);
         $this->onPreCreate($event);
@@ -134,13 +135,13 @@ final class DefaultParentListenerSpec extends ObjectBehavior
     function it_should_set_the_parent_document_if_force_is_true_and_the_parent_is_already_set(
         ResourceControllerEvent $event,
         ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ): void {
         $this->beConstructedWith(
             $documentManager,
             '/path/to',
             false,
-            true
+            true,
         );
 
         $subjectDocument = new \stdClass();
@@ -149,7 +150,7 @@ final class DefaultParentListenerSpec extends ObjectBehavior
         $event->getSubject()->willReturn($subjectDocument);
 
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
 
         $documentMetadata->getFieldValue($subjectDocument, 'parent')->shouldNotBeCalled();
@@ -163,18 +164,19 @@ final class DefaultParentListenerSpec extends ObjectBehavior
     function it_should_return_early_if_force_is_false_and_subject_already_has_a_parent(
         ResourceControllerEvent $event,
         ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager
+        DocumentManagerInterface $documentManager,
     ): void {
         $subjectDocument = new \stdClass();
 
         $event->getSubject()->willReturn($subjectDocument);
 
         $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata
+            $documentMetadata,
         );
         $documentMetadata->parentMapping = 'parent';
         $documentMetadata->getFieldValue($subjectDocument, 'parent')
-            ->willReturn(new \stdClass());
+            ->willReturn(new \stdClass())
+        ;
 
         $documentManager->find(null, '/path/to')->shouldNotBeCalled();
 

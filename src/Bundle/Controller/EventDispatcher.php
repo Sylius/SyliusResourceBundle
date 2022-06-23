@@ -29,7 +29,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatch(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -43,7 +43,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchMultiple(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        $resources
+        $resources,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -57,7 +57,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchPreEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -71,7 +71,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchPostEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -85,7 +85,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchInitializeEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -93,7 +93,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
         $this->eventDispatcher->dispatch(
             $event,
-            sprintf('%s.%s.initialize_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName)
+            sprintf('%s.%s.initialize_%s', $metadata->getApplicationName(), $metadata->getName(), $eventName),
         );
 
         return $event;

@@ -58,13 +58,13 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
         if ($diff = array_diff(array_keys($metadataOptions), array_keys($defaultOptions))) {
             throw new InvalidArgumentException(sprintf(
                 'Unknown PHPCR-ODM configuration options: "%s"',
-                implode('", "', $diff)
+                implode('", "', $diff),
             ));
         }
 
         $options = array_merge(
             $defaultOptions,
-            $metadataOptions
+            $metadataOptions,
         );
 
         $createEventName = sprintf('%s.%s.pre_%s', $metadata->getApplicationName(), $metadata->getName(), 'create');
@@ -87,9 +87,9 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
                 sprintf(
                     '%s.resource.%s.doctrine.odm.phpcr.event_listener.default_path',
                     $metadata->getApplicationName(),
-                    $metadata->getName()
+                    $metadata->getName(),
                 ),
-                $defaultPath
+                $defaultPath,
             );
         }
 
@@ -111,9 +111,9 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
                 sprintf(
                     '%s.resource.%s.doctrine.odm.phpcr.event_listener.name_filter',
                     $metadata->getApplicationName(),
-                    $metadata->getName()
+                    $metadata->getName(),
                 ),
-                $nameFilter
+                $nameFilter,
             );
         }
 
@@ -135,9 +135,9 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
                 sprintf(
                     '%s.resource.%s.doctrine.odm.phpcr.event_listener.name_resolver',
                     $metadata->getApplicationName(),
-                    $metadata->getName()
+                    $metadata->getName(),
                 ),
-                $nameResolver
+                $nameResolver,
             );
         }
     }

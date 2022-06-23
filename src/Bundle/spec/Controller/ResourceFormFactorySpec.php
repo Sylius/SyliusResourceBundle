@@ -37,7 +37,7 @@ final class ResourceFormFactorySpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FormFactoryInterface $formFactory,
-        FormInterface $form
+        FormInterface $form,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getFormType()->willReturn('sylius_product_pricing');
@@ -51,7 +51,7 @@ final class ResourceFormFactorySpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
         FormFactoryInterface $formFactory,
-        FormInterface $form
+        FormInterface $form,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(false);
         $requestConfiguration->getFormType()->willReturn('sylius_product_api');

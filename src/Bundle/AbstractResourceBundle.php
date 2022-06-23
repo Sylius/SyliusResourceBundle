@@ -38,7 +38,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
                 if (class_exists($compilerPassClassName)) {
                     if (!method_exists($compilerPassClassName, $compilerPassMethod)) {
                         throw new InvalidConfigurationException(
-                            "The 'mappingFormat' value is invalid, must be 'xml', 'yaml' or 'annotation'."
+                            "The 'mappingFormat' value is invalid, must be 'xml', 'yaml' or 'annotation'.",
                         );
                     }
 
@@ -48,7 +48,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
                             $container->addCompilerPass($compilerPassClassName::$compilerPassMethod(
                                 [$this->getConfigFilesPath() => $this->getModelNamespace()],
                                 [$this->getObjectManagerParameter()],
-                                sprintf('%s.driver.%s', $this->getBundlePrefix(), $driver)
+                                sprintf('%s.driver.%s', $this->getBundlePrefix(), $driver),
                             ));
 
                             break;
@@ -57,7 +57,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
                                 [$this->getModelNamespace()],
                                 [$this->getConfigFilesPath()],
                                 [sprintf('%s.object_manager', $this->getBundlePrefix())],
-                                sprintf('%s.driver.%s', $this->getBundlePrefix(), $driver)
+                                sprintf('%s.driver.%s', $this->getBundlePrefix(), $driver),
                             ));
 
                             break;
@@ -106,7 +106,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
             case SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM:
                 @trigger_error(sprintf(
                     'The "%s" driver is deprecated in Sylius 1.3. Doctrine MongoDB and PHPCR will no longer be supported in Sylius 2.0.',
-                    $driverType
+                    $driverType,
                 ), \E_USER_DEPRECATED);
 
                 $mappingsPassClassname = DoctrineMongoDBMappingsPass::class;
@@ -119,7 +119,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
             case SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM:
                 @trigger_error(sprintf(
                     'The "%s" driver is deprecated in Sylius 1.3. Doctrine MongoDB and PHPCR will no longer be supported in Sylius 2.0.',
-                    $driverType
+                    $driverType,
                 ), \E_USER_DEPRECATED);
 
                 $mappingsPassClassname = DoctrinePhpcrMappingsPass::class;
@@ -142,7 +142,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
         return sprintf(
             '%s/Resources/config/doctrine/%s',
             $this->getPath(),
-            strtolower($this->getDoctrineMappingDirectory())
+            strtolower($this->getDoctrineMappingDirectory()),
         );
     }
 

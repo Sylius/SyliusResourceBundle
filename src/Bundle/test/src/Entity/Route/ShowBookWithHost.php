@@ -24,7 +24,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     name: 'show_book_with_host',
     path: '/book/{id}',
     controller: 'app.controller.book:showAction',
-    host: 'm.example.com'
+    host: 'm.example.com',
 )]
 class ShowBookWithHost extends Book
 {

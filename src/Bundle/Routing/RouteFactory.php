@@ -31,7 +31,7 @@ final class RouteFactory implements RouteFactoryInterface
         string $host = '',
         array $schemes = [],
         array $methods = [],
-        string $condition = ''
+        string $condition = '',
     ): Route {
         return new Route($path, $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
     }

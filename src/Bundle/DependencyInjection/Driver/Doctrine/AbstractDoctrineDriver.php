@@ -40,7 +40,7 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
     {
         $container->setAlias(
             $metadata->getServiceId('manager'),
-            new Alias($this->getManagerServiceId($metadata), true)
+            new Alias($this->getManagerServiceId($metadata), true),
         );
 
         foreach ([DeprecatedObjectManager::class, ObjectManager::class] as $objectManagerClass) {
@@ -51,7 +51,7 @@ abstract class AbstractDoctrineDriver extends AbstractDriver
             $container->registerAliasForArgument(
                 $metadata->getServiceId('manager'),
                 $objectManagerClass,
-                $metadata->getHumanizedName() . ' manager'
+                $metadata->getHumanizedName() . ' manager',
             );
         }
     }

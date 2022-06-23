@@ -35,13 +35,13 @@ final class RedirectHandler implements RedirectHandlerInterface
             return $this->redirectToRoute(
                 $configuration,
                 (string) $configuration->getRedirectRoute(ResourceActions::SHOW),
-                $configuration->getRedirectParameters($resource)
+                $configuration->getRedirectParameters($resource),
             );
         } catch (RouteNotFoundException $exception) {
             return $this->redirectToRoute(
                 $configuration,
                 (string) $configuration->getRedirectRoute(ResourceActions::INDEX),
-                $configuration->getRedirectParameters($resource)
+                $configuration->getRedirectParameters($resource),
             );
         }
     }
@@ -51,7 +51,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->redirectToRoute(
             $configuration,
             (string) $configuration->getRedirectRoute('index'),
-            $configuration->getRedirectParameters($resource)
+            $configuration->getRedirectParameters($resource),
         );
     }
 

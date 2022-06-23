@@ -47,7 +47,7 @@ final class ResourceTranslationsTypeTest extends TypeTestCase
         $form = $this->factory->create(
             ResourceTranslationsType::class,
             null,
-            ['entry_type' => TextType::class, 'entry_options' => ['empty_data' => 'Default']]
+            ['entry_type' => TextType::class, 'entry_options' => ['empty_data' => 'Default']],
         );
 
         // Testing child type because of `$event->getForm()->getParent()->getData()` inside ResourceTranslationsType::submit()

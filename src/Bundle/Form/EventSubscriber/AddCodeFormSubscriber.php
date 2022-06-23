@@ -57,7 +57,7 @@ final class AddCodeFormSubscriber implements EventSubscriberInterface
         $form->add('code', $this->type, array_merge(
             ['label' => 'sylius.ui.code'],
             $this->options,
-            ['disabled' => $disabled]
+            ['disabled' => $disabled],
         ));
     }
 }

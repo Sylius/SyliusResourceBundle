@@ -73,7 +73,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
 
         $allowedSerializationGroups = array_merge(
             $parameters['allowed_serialization_groups'] ?? [],
-            $parameters['serialization_groups'] ?? []
+            $parameters['serialization_groups'] ?? [],
         );
 
         /** @var string[] $apiGroupsHeaders */

@@ -32,7 +32,7 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
     public function __construct(
         Environment $twig,
         OptionsParserInterface $optionsParser,
-        array $bulkActionTemplates = []
+        array $bulkActionTemplates = [],
     ) {
         $this->twig = $twig;
         $this->optionsParser = $optionsParser;
@@ -51,7 +51,7 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
         $options = $this->optionsParser->parseOptions(
             $bulkAction->getOptions(),
             $gridView->getRequestConfiguration()->getRequest(),
-            $data
+            $data,
         );
 
         return $this->twig->render($this->bulkActionTemplates[$type], [

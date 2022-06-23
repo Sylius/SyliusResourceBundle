@@ -35,7 +35,7 @@ class NameFilterListener
 
     public function __construct(
         DocumentManagerInterface $documentManager,
-        $replacementCharacter = ' '
+        $replacementCharacter = ' ',
     ) {
         $this->documentManager = $documentManager;
         $this->replacementCharacter = $replacementCharacter;
@@ -50,7 +50,7 @@ class NameFilterListener
         if (null === $nameField = $metadata->nodename) {
             throw new \RuntimeException(sprintf(
                 'In order to use the node name filter on "%s" it is necessary to map a field as the "nodename"',
-                get_class($document)
+                get_class($document),
             ));
         }
 
