@@ -149,6 +149,7 @@ class InMemoryRepository implements RepositoryInterface
      */
     private function applyCriteria(array $resources, array $criteria): array
     {
+        /** @var array|object $object */
         foreach ($this->arrayObject as $object) {
             foreach ($criteria as $criterion => $value) {
                 if ($value !== $this->accessor->getValue($object, $criterion)) {

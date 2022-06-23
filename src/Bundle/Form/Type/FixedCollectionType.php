@@ -22,7 +22,10 @@ final class FixedCollectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach ($options['entries'] as $entry) {
+        /** @var iterable $entries */
+        $entries = $options['entries'];
+
+        foreach ($entries as $entry) {
             $entryType = $options['entry_type']($entry);
             $entryName = $options['entry_name']($entry);
             $entryOptions = $options['entry_options']($entry);

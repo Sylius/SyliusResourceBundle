@@ -17,6 +17,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
         - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
         - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
+        - %currentWorkingDirectory%/src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
         - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
@@ -25,9 +26,6 @@ parameters:
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/vendor/*
-        - %currentWorkingDirectory%/vendor/symfony/console/Command/Command.php
-        - %currentWorkingDirectory%/vendor/symfony/dependency-injection/ContainerBuilder.php
-        - %currentWorkingDirectory%/vendor/symfony/expression-language/ExpressionFunction.php
 
     ignoreErrors:
         - '/Call to method getArguments\(\) on an unknown class ReflectionAttribute./'
@@ -60,3 +58,13 @@ parameters:
         - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\RoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
         - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
         - '/is deprecated since Sylius 1\.8/'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent\:\:stop\(\) has no return type specified\./'
+        - '/Trying to invoke mixed/'
+        - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver\:\:getResources\(\) has no return type specified\./'
+        - '/Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<int\|string\, string\>\): string, Closure\(array\)\: mixed given\./'
+        - '/Parameter \#1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface\:\:getValue\(\) expects array\|object, array\|object\|null given\./'
+        - '/Parameter \#1 \$min \(0\) of function random_int expects lower number than parameter \#2 \$max \(int\<\-1, max\>\)\./'
+        - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface\:\:getId\(\) has no return type specified\./'
+        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
+        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
+        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository\:\:findAll\(\) should return array\<object\> but returns array\./'

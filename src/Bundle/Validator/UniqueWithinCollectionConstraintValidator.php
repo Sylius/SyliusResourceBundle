@@ -21,6 +21,7 @@ use Webmozart\Assert\Assert;
 
 final class UniqueWithinCollectionConstraintValidator extends ConstraintValidator
 {
+    /** @param iterable $value */
     public function validate(mixed $value, Constraint $constraint): void
     {
         Assert::isInstanceOf($constraint, UniqueWithinCollectionConstraint::class);
@@ -29,6 +30,7 @@ final class UniqueWithinCollectionConstraintValidator extends ConstraintValidato
         $collectionOfEntitiesCodes = [];
 
         foreach ($value as $key => $entity) {
+            /** @var int|string|null $checkingAttribute */
             $checkingAttribute = $propertyAccessor->getValue($entity, $constraint->attributePath);
 
             if (null === $checkingAttribute) {

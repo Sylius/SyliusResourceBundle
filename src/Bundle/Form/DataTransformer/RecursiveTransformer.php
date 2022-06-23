@@ -27,6 +27,7 @@ final class RecursiveTransformer implements DataTransformerInterface
         $this->decoratedTransformer = $decoratedTransformer;
     }
 
+    /** @param Collection|null $value */
     public function transform($value): Collection
     {
         if (null === $value) {
@@ -47,6 +48,7 @@ final class RecursiveTransformer implements DataTransformerInterface
         );
     }
 
+    /** @param Collection|null $value */
     public function reverseTransform($value): Collection
     {
         if (null === $value) {

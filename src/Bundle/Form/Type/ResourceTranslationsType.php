@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Form\Type;
 
+use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Symfony\Component\Form\AbstractType;
@@ -44,6 +45,7 @@ final class ResourceTranslationsType extends AbstractType
             $parentForm = $event->getForm()->getParent();
             Assert::notNull($parentForm);
 
+            /** @var TranslatableInterface $translatable */
             $translatable = $parentForm->getData();
 
             foreach ($translations as $localeCode => $translation) {

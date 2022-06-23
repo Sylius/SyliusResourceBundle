@@ -17,6 +17,7 @@ use Sylius\Bundle\ResourceBundle\Form\DataTransformer\CollectionToStringTransfor
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\RecursiveTransformer;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Component\Registry\ServiceRegistryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,12 +37,14 @@ class ResourceAutocompleteChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var RepositoryInterface $repository */
+        $repository = $options['repository'];
+        /** @var string $choiceValue */
+        $choiceValue = $options['choice_value'];
+
         if (!$options['multiple']) {
             $builder->addModelTransformer(
-                new ResourceToIdentifierTransformer(
-                    $options['repository'],
-                    $options['choice_value'],
-                ),
+                new ResourceToIdentifierTransformer($repository, $choiceValue),
             );
         }
 
@@ -49,10 +52,7 @@ class ResourceAutocompleteChoiceType extends AbstractType
             $builder
                 ->addModelTransformer(
                     new RecursiveTransformer(
-                        new ResourceToIdentifierTransformer(
-                            $options['repository'],
-                            $options['choice_value'],
-                        ),
+                        new ResourceToIdentifierTransformer($repository, $choiceValue),
                     ),
                 )
                 ->addViewTransformer(new CollectionToStringTransformer(','))
@@ -84,7 +84,10 @@ class ResourceAutocompleteChoiceType extends AbstractType
                 'error_bubbling' => false,
                 'placeholder' => '',
                 'repository' => function (Options $options) {
-                    return $this->resourceRepositoryRegistry->get($options['resource']);
+                    /** @var string $identifier */
+                    $identifier = $options['resource'];
+
+                    return $this->resourceRepositoryRegistry->get($identifier);
                 },
             ])
             ->setAllowedTypes('resource', ['string'])

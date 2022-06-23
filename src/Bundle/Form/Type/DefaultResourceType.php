@@ -33,7 +33,9 @@ final class DefaultResourceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $metadata = $this->metadataRegistry->getByClass($options['data_class']);
+        /** @var string $dataClass */
+        $dataClass = $options['data_class'];
+        $metadata = $this->metadataRegistry->getByClass($dataClass);
 
         /** @var DefaultFormBuilderInterface $formBuilder */
         $formBuilder = $this->formBuilderRegistry->get($metadata->getDriver());

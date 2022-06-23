@@ -36,6 +36,9 @@ final class OptionsParser implements OptionsParserInterface
         $this->propertyAccessor = $propertyAccessor;
     }
 
+    /**
+     * @param null $data
+     */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
         return array_map(
@@ -57,7 +60,7 @@ final class OptionsParser implements OptionsParserInterface
 
     /**
      * @param mixed $parameter
-     * @param mixed $data
+     * @param array|object|null $data
      *
      * @return mixed
      */
@@ -93,9 +96,7 @@ final class OptionsParser implements OptionsParserInterface
     {
         $expression = (string) preg_replace_callback(
             '/\$(\w+)/',
-            /**
-             * @return mixed
-             */
+            /** @return callable */
             function (array $matches) use ($request) {
                 $variable = $request->get($matches[1]);
 
@@ -108,7 +109,7 @@ final class OptionsParser implements OptionsParserInterface
     }
 
     /**
-     * @param mixed $data
+     * @param array|object|null $data
      *
      * @return mixed
      */
