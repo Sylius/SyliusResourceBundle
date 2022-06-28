@@ -37,7 +37,7 @@ final class OptionsParser implements OptionsParserInterface
     }
 
     /**
-     * @param null $data
+     * @param array|object|null $data
      */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
