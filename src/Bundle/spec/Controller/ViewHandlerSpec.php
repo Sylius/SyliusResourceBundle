@@ -36,7 +36,7 @@ final class ViewHandlerSpec extends ObjectBehavior
     function it_handles_view_normally_for_html_requests(
         RequestConfiguration $requestConfiguration,
         ConfigurableViewHandlerInterface $restViewHandler,
-        Response $response
+        Response $response,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $view = View::create();
@@ -49,7 +49,7 @@ final class ViewHandlerSpec extends ObjectBehavior
     function it_sets_proper_values_for_non_html_requests(
         RequestConfiguration $requestConfiguration,
         ConfigurableViewHandlerInterface $restViewHandler,
-        Response $response
+        Response $response,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(false);
         $view = View::create();

@@ -27,6 +27,7 @@ final class RecursiveTransformer implements DataTransformerInterface
         $this->decoratedTransformer = $decoratedTransformer;
     }
 
+    /** @param Collection|null $value */
     public function transform($value): Collection
     {
         if (null === $value) {
@@ -43,10 +44,11 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->transform($currentValue);
-            }
+            },
         );
     }
 
+    /** @param Collection|null $value */
     public function reverseTransform($value): Collection
     {
         if (null === $value) {
@@ -63,7 +65,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->reverseTransform($currentValue);
-            }
+            },
         );
     }
 
@@ -79,8 +81,8 @@ final class RecursiveTransformer implements DataTransformerInterface
                 sprintf(
                     'Expected "%s", but got "%s"',
                     $expectedType,
-                    is_object($value) ? get_class($value) : gettype($value)
-                )
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
             );
         }
     }

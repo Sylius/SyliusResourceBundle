@@ -28,7 +28,7 @@ final class SecondAutowiredService
     public function __construct(
         BookFactoryInterface $bookFactory,
         BookRepositoryInterface $bookRepository,
-        EntityManagerInterface $bookManager
+        EntityManagerInterface $bookManager,
     ) {
         $this->bookFactory = $bookFactory;
         $this->bookRepository = $bookRepository;

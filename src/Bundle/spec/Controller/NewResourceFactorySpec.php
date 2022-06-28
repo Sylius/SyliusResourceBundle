@@ -29,7 +29,7 @@ final class NewResourceFactorySpec extends ObjectBehavior
     function it_calls_create_new_by_default_if_no_custom_method_configured(
         RequestConfiguration $requestConfiguration,
         FactoryInterface $factory,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getFactoryMethod()->willReturn(null);
 
@@ -41,7 +41,7 @@ final class NewResourceFactorySpec extends ObjectBehavior
     function it_calls_proper_factory_methods_based_on_configuration(
         RequestConfiguration $requestConfiguration,
         FactoryInterface $factory,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getFactoryMethod()->willReturn('createNew');
         $requestConfiguration->getFactoryArguments()->willReturn(['00032']);
@@ -55,7 +55,7 @@ final class NewResourceFactorySpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         FactoryInterface $factory,
         FactoryInterface $customFactory,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getFactoryMethod()->willReturn([$customFactory, 'createNew']);
         $requestConfiguration->getFactoryArguments()->willReturn(['foo', 'bar']);

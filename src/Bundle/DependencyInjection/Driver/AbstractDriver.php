@@ -116,14 +116,14 @@ abstract class AbstractDriver implements DriverInterface
         $typehintClasses = array_merge(
             $factoryInterfaces,
             [$factoryClass],
-            $factoryParents
+            $factoryParents,
         );
 
         foreach ($typehintClasses as $typehintClass) {
             $container->registerAliasForArgument(
                 $metadata->getServiceId('factory'),
                 $typehintClass,
-                $metadata->getHumanizedName() . ' factory'
+                $metadata->getHumanizedName() . ' factory',
             );
         }
     }

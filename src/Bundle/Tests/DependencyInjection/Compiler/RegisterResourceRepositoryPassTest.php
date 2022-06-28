@@ -33,7 +33,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
 
         $this->setParameter(
             'sylius.resources',
-            ['sylius.product' => []]
+            ['sylius.product' => []],
         );
 
         $this->compile();
@@ -41,7 +41,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'sylius.registry.resource_repository',
             'register',
-            ['sylius.product', new Reference('sylius.repository.product')]
+            ['sylius.product', new Reference('sylius.repository.product')],
         );
     }
 
@@ -55,7 +55,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
 
         $this->setParameter(
             'sylius.resources',
-            ['sylius.product' => []]
+            ['sylius.product' => []],
         );
 
         $this->compile();
@@ -74,7 +74,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
         $this->assertContainerBuilderNotHasServiceDefinitionWithMethodCall(
             'sylius.registry.resource_repository',
             'register',
-            ['sylius.product', new Reference('sylius.repository.product')]
+            ['sylius.product', new Reference('sylius.repository.product')],
         );
     }
 
@@ -87,7 +87,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
 
         $this->setParameter(
             'sylius.resources',
-            ['sylius.product' => []]
+            ['sylius.product' => []],
         );
 
         $this->compile();
@@ -95,7 +95,7 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
         $this->assertContainerBuilderNotHasServiceDefinitionWithMethodCall(
             'sylius.registry.resource_repository',
             'register',
-            ['sylius.product', new Reference('sylius.repository.product')]
+            ['sylius.product', new Reference('sylius.repository.product')],
         );
     }
 
@@ -107,13 +107,13 @@ final class RegisterResourceRepositoryPassTest extends AbstractCompilerPassTestC
     private function assertContainerBuilderNotHasServiceDefinitionWithMethodCall(
         string $serviceId,
         string $method,
-        array $arguments
+        array $arguments,
     ): void {
         $definition = $this->container->findDefinition($serviceId);
 
         self::assertThat(
             $definition,
-            new LogicalNot(new DefinitionHasMethodCallConstraint($method, $arguments))
+            new LogicalNot(new DefinitionHasMethodCallConstraint($method, $arguments)),
         );
     }
 }

@@ -52,7 +52,7 @@ final class ResourcesCollectionProvider implements ResourcesCollectionProviderIn
             $paginator->setMaxPerPage($this->resolveMaxPerPage(
                 $request->query->has('limit') ? $request->query->getInt('limit') : null,
                 $requestConfiguration->getPaginationMaxPerPage(),
-                $paginationLimits
+                $paginationLimits,
             ));
             $currentPage = (int) $request->query->get('page', '1');
             $paginator->setCurrentPage($currentPage);

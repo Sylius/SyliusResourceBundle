@@ -31,7 +31,7 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
     {
         $this->beConstructedWith(
             ['paths' => [__DIR__ . '/../../test/src']],
-            new ResourceLoader($resourceRegistry->getWrappedObject(), $routeFactory->getWrappedObject())
+            new ResourceLoader($resourceRegistry->getWrappedObject(), $routeFactory->getWrappedObject()),
         );
     }
 
@@ -50,7 +50,7 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         RouteFactoryInterface $routeFactory,
         Route $route,
-        RouteCollection $routeCollection
+        RouteCollection $routeCollection,
     ): void {
         $resourceRegistry->get(Argument::cetera())->willReturn($metadata);
         $metadata->getPluralName()->willReturn('books');

@@ -29,13 +29,16 @@ final class OptionsParser implements OptionsParserInterface
     public function __construct(
         ContainerInterface $container,
         ExpressionLanguage $expression,
-        PropertyAccessorInterface $propertyAccessor
+        PropertyAccessorInterface $propertyAccessor,
     ) {
         $this->container = $container;
         $this->expression = $expression;
         $this->propertyAccessor = $propertyAccessor;
     }
 
+    /**
+     * @param array|object|null $data
+     */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
         return array_map(
@@ -51,13 +54,13 @@ final class OptionsParser implements OptionsParserInterface
 
                 return $this->parseOption($parameter, $request, $data);
             },
-            $parameters
+            $parameters,
         );
     }
 
     /**
      * @param mixed $parameter
-     * @param mixed $data
+     * @param array|object|null $data
      *
      * @return mixed
      */
@@ -93,22 +96,20 @@ final class OptionsParser implements OptionsParserInterface
     {
         $expression = (string) preg_replace_callback(
             '/\$(\w+)/',
-            /**
-             * @return mixed
-             */
+            /** @return callable */
             function (array $matches) use ($request) {
                 $variable = $request->get($matches[1]);
 
                 return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },
-            $expression
+            $expression,
         );
 
         return $this->expression->evaluate($expression, ['container' => $this->container]);
     }
 
     /**
-     * @param mixed $data
+     * @param array|object|null $data
      *
      * @return mixed
      */

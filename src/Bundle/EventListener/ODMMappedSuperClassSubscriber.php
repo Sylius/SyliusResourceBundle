@@ -77,7 +77,7 @@ final class ODMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 
             $parentMetadata = new ClassMetadata(
                 $parent,
-                $configuration->getNamingStrategy()
+                $configuration->getNamingStrategy(),
             );
 
             // Wakeup Reflection
@@ -128,7 +128,7 @@ final class ODMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
                 ClassMetadataInfo::EMBED_ONE,
                 ClassMetadataInfo::EMBED_MANY,
             ],
-            true
+            true,
         );
     }
 }

@@ -31,7 +31,7 @@ final class PagerfantaExtensionTest extends AbstractExtensionTestCase
             [
                 'BabDevPagerfantaBundle' => BabDevPagerfantaBundle::class,
                 'TwigBundle' => TwigBundle::class,
-            ]
+            ],
         );
 
         $bundleConfig = [

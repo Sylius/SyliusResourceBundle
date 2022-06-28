@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'only',
-    only: ['index', 'update']
+    only: ['index', 'update'],
 )]
 class BookWithOnly extends Book
 {

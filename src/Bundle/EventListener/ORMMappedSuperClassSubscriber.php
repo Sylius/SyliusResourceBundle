@@ -61,7 +61,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 
             $parentMetadata = new ClassMetadata(
                 $parent,
-                $configuration->getNamingStrategy()
+                $configuration->getNamingStrategy(),
             );
 
             // Wakeup Reflection
@@ -78,7 +78,9 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 
             if ($parentMetadata->isMappedSuperclass) {
                 foreach ($parentMetadata->getAssociationMappings() as $key => $value) {
-                    if ($this->isRelation($value['type']) && !isset($metadata->associationMappings[$key])) {
+                    /** @var int $type */
+                    $type = $value['type'];
+                    if ($this->isRelation($type) && !isset($metadata->associationMappings[$key])) {
                         $metadata->associationMappings[$key] = $value;
                     }
                 }
@@ -94,7 +96,9 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
         }
 
         foreach ($metadata->getAssociationMappings() as $key => $value) {
-            if ($this->isRelation($value['type'])) {
+            /** @var int $type */
+            $type = $value['type'];
+            if ($this->isRelation($type)) {
                 unset($metadata->associationMappings[$key]);
             }
         }
@@ -109,7 +113,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
                 ClassMetadataInfo::ONE_TO_MANY,
                 ClassMetadataInfo::ONE_TO_ONE,
             ],
-            true
+            true,
         );
     }
 }

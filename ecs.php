@@ -4,15 +4,12 @@ use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use SlevomatCodingStandard\Sniffs\Commenting\InlineDocCommentDeclarationSniff;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import('vendor/sylius-labs/coding-standard/ecs.php');
+return static function (ECSConfig $ecsConfig): void {
+    $ecsConfig->import('vendor/sylius-labs/coding-standard/ecs.php');
 
-    $containerConfigurator
-        ->services()
-        ->set(HeaderCommentFixer::class)->call('configure', [[
+    $ecsConfig->ruleWithConfiguration(HeaderCommentFixer::class, [
             'location' => 'after_open',
             'header' =>
 'This file is part of the Sylius package.
@@ -21,14 +18,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.',
-        ]])
-        ->set(NoSuperfluousPhpdocTagsFixer::class)->call('configure', [['allow_mixed' => true]])
+        ])
     ;
+    $ecsConfig->ruleWithConfiguration(NoSuperfluousPhpdocTagsFixer::class, ['allow_mixed' => true]);
 
-    $containerConfigurator->parameters()->set(Option::SKIP, [
+    $ecsConfig->skip([
         InlineDocCommentDeclarationSniff::class . '.MissingVariable',
         VisibilityRequiredFixer::class => ['*Spec.php'],
         'src/Bundle/Controller/ControllerTrait.php',
+        'src/Bundle/EventListener/ODMMappedSuperClassSubscriber.php', // hot-fix to fix the build
+        'src/Component/vendor/*',
+        'src/Component/Reflection/ClassReflection.php',
         '**/var/*',
     ]);
 };

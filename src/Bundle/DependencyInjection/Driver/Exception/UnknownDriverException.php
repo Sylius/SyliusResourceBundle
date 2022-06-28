@@ -19,7 +19,7 @@ class UnknownDriverException extends \Exception
     {
         parent::__construct(sprintf(
             'Unknown driver "%s".',
-            $driver
+            $driver,
         ));
     }
 }

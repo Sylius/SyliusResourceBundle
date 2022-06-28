@@ -22,7 +22,7 @@ class RaceConditionException extends UpdateHandlingException
             'race_condition_error',
             409,
             null !== $previous ? (int) $previous->getCode() : 0,
-            $previous
+            $previous,
         );
     }
 }

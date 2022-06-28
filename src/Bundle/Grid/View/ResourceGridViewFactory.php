@@ -36,7 +36,7 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
         Grid $grid,
         Parameters $parameters,
         MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration
+        RequestConfiguration $requestConfiguration,
     ): ResourceGridView {
         $driverConfiguration = $grid->getDriverConfiguration();
         $request = $requestConfiguration->getRequest();

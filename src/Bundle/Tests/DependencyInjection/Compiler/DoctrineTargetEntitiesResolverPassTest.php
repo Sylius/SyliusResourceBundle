@@ -30,7 +30,7 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
 
         $this->setParameter(
             'sylius.resources',
-            ['app.loremipsum' => ['classes' => ['model' => \stdClass::class, 'interface' => \Countable::class]]]
+            ['app.loremipsum' => ['classes' => ['model' => \stdClass::class, 'interface' => \Countable::class]]],
         );
 
         $this->compile();
@@ -38,7 +38,7 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'doctrine.orm.listeners.resolve_target_entity',
             'addResolveTargetEntity',
-            [\Countable::class, \stdClass::class, []]
+            [\Countable::class, \stdClass::class, []],
         );
     }
 
@@ -55,7 +55,7 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'doctrine.orm.listeners.resolve_target_entity',
             'doctrine.event_listener',
-            ['event' => 'loadClassMetadata']
+            ['event' => 'loadClassMetadata'],
         );
     }
 

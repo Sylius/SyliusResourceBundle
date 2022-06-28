@@ -34,7 +34,7 @@ final class ORMTranslatableListener implements EventSubscriber
 
     public function __construct(
         RegistryInterface $resourceMetadataRegistry,
-        object $translatableEntityLocaleAssigner
+        object $translatableEntityLocaleAssigner,
     ) {
         $this->resourceMetadataRegistry = $resourceMetadataRegistry;
         $this->translatableEntityLocaleAssigner = $this->processTranslatableEntityLocaleAssigner($translatableEntityLocaleAssigner);
@@ -195,9 +195,9 @@ final class ORMTranslatableListener implements EventSubscriber
                 sprintf(
                     'Passing an instance of "%s" is deprecated since 1.4. Use "%s" instead.',
                     ContainerInterface::class,
-                    TranslatableEntityLocaleAssignerInterface::class
+                    TranslatableEntityLocaleAssignerInterface::class,
                 ),
-                \E_USER_DEPRECATED
+                \E_USER_DEPRECATED,
             );
 
             /** @var object $translatableEntityLocaleAssigner */
@@ -208,7 +208,7 @@ final class ORMTranslatableListener implements EventSubscriber
             throw new \InvalidArgumentException(sprintf(
                 '`$translatableEntityLocaleAssigner` was expected to return an instance of "%s" , "%s" found',
                 TranslatableEntityLocaleAssignerInterface::class,
-                get_class($translatableEntityLocaleAssigner)
+                get_class($translatableEntityLocaleAssigner),
             ));
         }
 

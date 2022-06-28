@@ -36,7 +36,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
                     'driver' => 'doctrine/orm',
                     'classes' => ['model' => BookTestClass::class, 'controller' => BookTestController::class],
                 ],
-            ]
+            ],
         );
 
         $this->compile();
@@ -57,7 +57,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
                     'driver' => 'doctrine/orm',
                     'classes' => ['model' => BookTestClass::class],
                 ],
-            ]
+            ],
         );
 
         $this->compile();
@@ -77,7 +77,7 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
                     'driver' => 'doctrine/orm',
                     'classes' => ['model' => NormalClass::class, 'controller' => BookTestController::class],
                 ],
-            ]
+            ],
         );
 
         $this->compile();

@@ -29,7 +29,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     name: 'show_book_with_priority',
     path: '/book/{id}',
     controller: 'app.controller.book:showAction',
-    priority: 2
+    priority: 2,
 )]
 class ShowBookWithPriority extends Book
 {

@@ -24,7 +24,7 @@ abstract class AbstractResourceExtension extends Extension
         string $applicationName,
         string $driver,
         array $registeredResources,
-        ContainerBuilder $container
+        ContainerBuilder $container,
     ): void {
         $container->setParameter(sprintf('%s.driver.%s', $this->getAlias(), $driver), true);
         $container->setParameter(sprintf('%s.driver', $this->getAlias()), $driver);

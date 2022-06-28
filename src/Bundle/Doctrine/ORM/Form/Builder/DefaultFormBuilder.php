@@ -70,7 +70,9 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
         foreach ($classMetadata->embeddedClasses as $fieldName => $embeddedMapping) {
             $nestedFormBuilder = $formBuilder->create($fieldName, null, ['data_class' => $embeddedMapping['class'], 'compound' => true]);
 
-            $this->doBuild($this->entityManager->getClassMetadata($embeddedMapping['class']), $nestedFormBuilder);
+            /** @var string $class */
+            $class = $embeddedMapping['class'];
+            $this->doBuild($this->entityManager->getClassMetadata($class), $nestedFormBuilder);
 
             $formBuilder->add($nestedFormBuilder);
         }

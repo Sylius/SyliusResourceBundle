@@ -34,6 +34,8 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
 
     /**
      * @psalm-suppress MissingParamType
+     *
+     * @param object|null $value
      */
     public function transform($value)
     {
@@ -47,6 +49,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
+    /** @param int|string|null $value */
     public function reverseTransform($value): ?ResourceInterface
     {
         if (null === $value) {
@@ -60,7 +63,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
                 'Object "%s" with identifier "%s"="%s" does not exist.',
                 $this->repository->getClassName(),
                 $this->identifier,
-                $value
+                $value,
             ));
         }
 

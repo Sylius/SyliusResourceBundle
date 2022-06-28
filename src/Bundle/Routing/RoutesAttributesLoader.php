@@ -41,17 +41,4 @@ final class RoutesAttributesLoader implements RouteLoaderInterface
 
         return $routeCollection;
     }
-
-    private function getClasses(): iterable
-    {
-        $paths = $this->mapping['paths'] ?? [];
-
-        foreach ($paths as $resourceDirectory) {
-            $resources = ClassReflection::getResourcesByPath($resourceDirectory);
-
-            foreach ($resources as $className) {
-                yield $className;
-            }
-        }
-    }
 }

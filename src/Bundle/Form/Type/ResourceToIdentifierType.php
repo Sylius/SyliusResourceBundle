@@ -35,8 +35,11 @@ final class ResourceToIdentifierType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var string $identifier */
+        $identifier = $options['identifier'];
+
         $builder->addModelTransformer(
-            new ResourceToIdentifierTransformer($this->repository, $options['identifier'])
+            new ResourceToIdentifierTransformer($this->repository, $identifier),
         );
     }
 

@@ -21,6 +21,6 @@ interface ResourceUpdateHandlerInterface
     public function handle(
         ResourceInterface $resource,
         RequestConfiguration $requestConfiguration,
-        ObjectManager $manager
+        ObjectManager $manager,
     ): void;
 }

@@ -39,7 +39,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -60,7 +60,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -81,7 +81,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -97,7 +97,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
                     'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
                     'serialization_groups' => ['Default', 'Detailed'],
                 ],
-                $request
+                $request,
             )
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
@@ -110,7 +110,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -126,7 +126,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
                     'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
                     'serialization_groups' => ['Default', 'Detailed'],
                 ],
-                $request
+                $request,
             )
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
@@ -139,7 +139,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         ParameterBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -155,7 +155,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
                     'allowed_serialization_groups' => ['Default'],
                     'serialization_groups' => ['Default'],
                 ],
-                $request
+                $request,
             )
             ->willReturn(['serialization_groups' => ['Default']])
         ;
@@ -168,7 +168,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         ParameterBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -185,7 +185,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
                     'allowed_serialization_groups' => ['Default'],
                     'serialization_groups' => ['Default', 'Detailed'],
                 ],
-                $request
+                $request,
             )
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
@@ -198,7 +198,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         ParameterBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -221,7 +221,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -243,7 +243,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
         $request->attributes = $attributesBag;
@@ -265,7 +265,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         MetadataInterface $metadata,
         Request $request,
         HeaderBag $headersBag,
-        ParameterBag $attributesBag
+        ParameterBag $attributesBag,
     ): void {
         $this->beConstructedWith($parametersParser, RequestConfiguration::class, ['sortable' => true]);
 

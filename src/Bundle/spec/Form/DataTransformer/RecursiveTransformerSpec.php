@@ -32,14 +32,14 @@ final class RecursiveTransformerSpec extends ObjectBehavior
     }
 
     function it_returns_an_empty_array_collection_when_transforming_a_null(
-        DataTransformerInterface $decoratedTransformer
+        DataTransformerInterface $decoratedTransformer,
     ): void {
         $this->transform(null)->shouldBeLike(new ArrayCollection());
         $decoratedTransformer->transform(Argument::any())->shouldNotBeCalled();
     }
 
     function it_returns_an_empty_array_collection_when_reverse_transforming_a_null(
-        DataTransformerInterface $decoratedTransformer
+        DataTransformerInterface $decoratedTransformer,
     ): void {
         $this->reverseTransform(null)->shouldBeLike(new ArrayCollection());
         $decoratedTransformer->reverseTransform(Argument::any())->shouldNotBeCalled();

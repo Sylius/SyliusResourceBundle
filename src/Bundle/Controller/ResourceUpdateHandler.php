@@ -28,7 +28,7 @@ final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
     public function handle(
         ResourceInterface $resource,
         RequestConfiguration $requestConfiguration,
-        ObjectManager $manager
+        ObjectManager $manager,
     ): void {
         if (null !== $this->stateMachine && $requestConfiguration->hasStateMachine()) {
             $this->stateMachine->apply($requestConfiguration, $resource);
