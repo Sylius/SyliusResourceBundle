@@ -37,7 +37,7 @@ final class TwigGridRenderer implements GridRendererInterface
         GridRendererInterface $gridRenderer,
         Environment $twig,
         OptionsParserInterface $optionsParser,
-        array $actionTemplates = []
+        array $actionTemplates = [],
     ) {
         $this->gridRenderer = $gridRenderer;
         $this->twig = $twig;
@@ -73,7 +73,7 @@ final class TwigGridRenderer implements GridRendererInterface
         $options = $this->optionsParser->parseOptions(
             $action->getOptions(),
             $gridView->getRequestConfiguration()->getRequest(),
-            $data
+            $data,
         );
 
         return $this->twig->render($this->actionTemplates[$type], [

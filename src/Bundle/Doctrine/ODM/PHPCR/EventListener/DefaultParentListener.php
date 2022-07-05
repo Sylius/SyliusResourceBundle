@@ -43,7 +43,7 @@ class DefaultParentListener
         DocumentManagerInterface $documentManager,
         $parentPath,
         $autocreate = false,
-        $force = false
+        $force = false,
     ) {
         $this->documentManager = $documentManager;
         $this->parentPath = $parentPath;
@@ -58,18 +58,18 @@ class DefaultParentListener
 
         $this->resolveParent(
             $document,
-            $this->documentManager->getClassMetadata($class)
+            $this->documentManager->getClassMetadata($class),
         );
     }
 
     private function resolveParent(
         $document,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
     ) {
         if (!$parentField = $metadata->parentMapping) {
             throw new \RuntimeException(sprintf(
                 'A default parent path has been specified, but no parent mapping has been applied to document "%s"',
-                get_class($document)
+                get_class($document),
             ));
         }
 
@@ -92,7 +92,7 @@ class DefaultParentListener
             throw new \RuntimeException(sprintf(
                 'Document at default parent path "%s" does not exist. `autocreate` was set to "%s"',
                 $this->parentPath,
-                $this->autocreate ? 'true' : 'false'
+                $this->autocreate ? 'true' : 'false',
             ));
         }
 

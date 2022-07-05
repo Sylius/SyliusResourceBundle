@@ -31,7 +31,7 @@ final class NameFilterListenerSpec extends ObjectBehavior
     function it_throws_an_exception_if_nodename_is_not_mapped(
         ResourceControllerEvent $event,
         DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
     ): void {
         $document = new \stdClass();
         $event->getSubject()->willReturn($document);
@@ -44,7 +44,7 @@ final class NameFilterListenerSpec extends ObjectBehavior
     function it_should_clean_the_name(
         ResourceControllerEvent $event,
         DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
     ): void {
         $document = new \stdClass();
         $event->getSubject()->willReturn($document);
@@ -59,7 +59,7 @@ final class NameFilterListenerSpec extends ObjectBehavior
     function it_should_use_the_given_replacement_char(
         ResourceControllerEvent $event,
         DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
     ): void {
         $this->beConstructedWith($documentManager, '_');
 

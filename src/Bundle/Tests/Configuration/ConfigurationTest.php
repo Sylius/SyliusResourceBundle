@@ -29,7 +29,7 @@ class ConfigurationTest extends TestCase
         $this->assertConfigurationIsValid(
             [
                 [],
-            ]
+            ],
         );
     }
 
@@ -49,7 +49,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'mapping'
+            'mapping',
         );
     }
 
@@ -71,7 +71,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'mapping'
+            'mapping',
         );
     }
 
@@ -85,7 +85,7 @@ class ConfigurationTest extends TestCase
                 [],
             ],
             ['authorization_checker' => 'sylius.resource_controller.authorization_checker.disabled'],
-            'authorization_checker'
+            'authorization_checker',
         );
     }
 
@@ -99,7 +99,7 @@ class ConfigurationTest extends TestCase
                 ['authorization_checker' => 'custom_service'],
             ],
             ['authorization_checker' => 'custom_service'],
-            'authorization_checker'
+            'authorization_checker',
         );
     }
 
@@ -112,7 +112,7 @@ class ConfigurationTest extends TestCase
             [
                 ['authorization_checker' => ''],
             ],
-            'authorization_checker'
+            'authorization_checker',
         );
     }
 

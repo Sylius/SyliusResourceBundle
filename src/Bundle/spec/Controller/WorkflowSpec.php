@@ -63,7 +63,7 @@ final class WorkflowSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         Registry $registry,
         ResourceInterface $resource,
-        SymfonyWorkflow $workflow
+        SymfonyWorkflow $workflow,
     ): void {
         $requestConfiguration->getStateMachineGraph()->willReturn(null);
         $requestConfiguration->hasStateMachine()->willReturn(true);
@@ -79,7 +79,7 @@ final class WorkflowSpec extends ObjectBehavior
         Registry $registry,
         ResourceInterface $resource,
         SymfonyWorkflow $workflow,
-        Marking $marking
+        Marking $marking,
     ): void {
         $requestConfiguration->getStateMachineGraph()->willReturn(null);
         $requestConfiguration->hasStateMachine()->willReturn(true);
@@ -97,7 +97,7 @@ final class WorkflowSpec extends ObjectBehavior
         Registry $registry,
         ResourceInterface $resource,
         SymfonyWorkflow $workflow,
-        Marking $marking
+        Marking $marking,
     ): void {
         $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
         $requestConfiguration->hasStateMachine()->willReturn(true);

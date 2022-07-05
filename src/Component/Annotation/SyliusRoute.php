@@ -64,7 +64,7 @@ final class SyliusRoute
         ?array $schemes = null,
         ?int $priority = null,
         ?array $vars = null,
-        ?string $form = null
+        ?string $form = null,
     ) {
         $this->name = $name;
         $this->path = $path;

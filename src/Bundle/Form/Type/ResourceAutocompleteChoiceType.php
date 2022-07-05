@@ -40,8 +40,8 @@ class ResourceAutocompleteChoiceType extends AbstractType
             $builder->addModelTransformer(
                 new ResourceToIdentifierTransformer(
                     $options['repository'],
-                    $options['choice_value']
-                )
+                    $options['choice_value'],
+                ),
             );
         }
 
@@ -51,9 +51,9 @@ class ResourceAutocompleteChoiceType extends AbstractType
                     new RecursiveTransformer(
                         new ResourceToIdentifierTransformer(
                             $options['repository'],
-                            $options['choice_value']
-                        )
-                    )
+                            $options['choice_value'],
+                        ),
+                    ),
                 )
                 ->addViewTransformer(new CollectionToStringTransformer(','))
             ;

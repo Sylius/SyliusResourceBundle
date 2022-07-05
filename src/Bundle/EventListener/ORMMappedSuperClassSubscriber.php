@@ -61,7 +61,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
 
             $parentMetadata = new ClassMetadata(
                 $parent,
-                $configuration->getNamingStrategy()
+                $configuration->getNamingStrategy(),
             );
 
             // Wakeup Reflection
@@ -109,7 +109,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
                 ClassMetadataInfo::ONE_TO_MANY,
                 ClassMetadataInfo::ONE_TO_ONE,
             ],
-            true
+            true,
         );
     }
 }

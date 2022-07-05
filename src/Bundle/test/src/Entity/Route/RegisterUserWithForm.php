@@ -22,7 +22,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     path: '/users/register',
     methods: ['GET', 'POST'],
     controller: 'app.controller.user:createAction',
-    form: RegisterType::class
+    form: RegisterType::class,
 )]
 final class RegisterUserWithForm extends User
 {

@@ -33,7 +33,7 @@ class ResourceGridView extends GridView
         Grid $gridDefinition,
         Parameters $parameters,
         MetadataInterface $resourceMetadata,
-        RequestConfiguration $requestConfiguration
+        RequestConfiguration $requestConfiguration,
     ) {
         parent::__construct($data, $gridDefinition, $parameters);
 

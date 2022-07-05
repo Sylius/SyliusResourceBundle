@@ -24,7 +24,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     name: 'show_book_with_vars',
     path: '/book/{id}',
     controller: 'app.controller.book:showAction',
-    vars: ['foo' => 'bar']
+    vars: ['foo' => 'bar'],
 )]
 class ShowBookWithVars extends Book
 {

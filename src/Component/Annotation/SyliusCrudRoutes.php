@@ -61,7 +61,7 @@ final class SyliusCrudRoutes
         ?bool $permission = null,
         ?array $except = null,
         ?array $only = null,
-        ?array $vars = null
+        ?array $vars = null,
     ) {
         $this->alias = $alias;
         $this->path = $path;

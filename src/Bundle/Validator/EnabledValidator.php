@@ -33,7 +33,7 @@ final class EnabledValidator extends ConstraintValidator
             throw new \InvalidArgumentException(sprintf(
                 '"%s" validates "%s" instances only',
                 __CLASS__,
-                ToggleableInterface::class
+                ToggleableInterface::class,
             ));
         }
 

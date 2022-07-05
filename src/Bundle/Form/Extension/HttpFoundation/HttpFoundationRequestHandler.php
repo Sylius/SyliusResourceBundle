@@ -72,7 +72,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                 $form->addError(new FormError(
                     call_user_func($form->getConfig()->getOption('upload_max_size_message')),
                     null,
-                    ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()]
+                    ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()],
                 ));
 
                 return;

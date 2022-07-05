@@ -24,7 +24,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     name: 'show_book_with_schemes',
     path: '/book/{id}',
     controller: 'app.controller.book:showAction',
-    schemes: ['https']
+    schemes: ['https'],
 )]
 class ShowBookWithSchemes extends Book
 {

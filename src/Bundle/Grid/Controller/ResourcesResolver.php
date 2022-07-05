@@ -31,7 +31,7 @@ final class ResourcesResolver implements ResourcesResolverInterface
     public function __construct(
         ResourcesResolverInterface $decoratedResolver,
         GridProviderInterface $gridProvider,
-        ResourceGridViewFactoryInterface $gridViewFactory
+        ResourceGridViewFactoryInterface $gridViewFactory,
     ) {
         $this->decoratedResolver = $decoratedResolver;
         $this->gridProvider = $gridProvider;

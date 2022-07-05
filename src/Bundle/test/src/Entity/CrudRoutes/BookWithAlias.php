@@ -21,7 +21,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
  * @Serializer\ExclusionPolicy("all")
  */
 #[SyliusCrudRoutes(
-    alias: 'app.book'
+    alias: 'app.book',
 )]
 class BookWithAlias extends Book
 {

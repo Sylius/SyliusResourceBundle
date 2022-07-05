@@ -20,7 +20,7 @@ class InvalidDriverException extends \Exception
         parent::__construct(sprintf(
             'Driver "%s" is not supported by %s.',
             $driver,
-            $className
+            $className,
         ));
     }
 }

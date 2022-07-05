@@ -22,7 +22,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
  */
 #[SyliusCrudRoutes(
     alias: 'app.book',
-    section: 'admin'
+    section: 'admin',
 )]
 class BookWithSection extends Book
 {

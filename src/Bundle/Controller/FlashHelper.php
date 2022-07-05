@@ -39,7 +39,7 @@ final class FlashHelper implements FlashHelperInterface
     public function addSuccessFlash(
         RequestConfiguration $requestConfiguration,
         string $actionName,
-        ?ResourceInterface $resource = null
+        ?ResourceInterface $resource = null,
     ): void {
         $this->addFlashWithType($requestConfiguration, $actionName, 'success');
     }
@@ -79,7 +79,7 @@ final class FlashHelper implements FlashHelperInterface
         $this->addFlash(
             $type,
             $this->getResourceMessage($actionName),
-            $parameters
+            $parameters,
         );
     }
 

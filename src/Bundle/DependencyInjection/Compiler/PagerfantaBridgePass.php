@@ -41,19 +41,22 @@ final class PagerfantaBridgePass implements CompilerPassInterface
         $viewFactoryClass = $container->getParameter('white_october_pagerfanta.view_factory.class');
 
         $container->getDefinition('pagerfanta.view_factory')
-            ->setClass($viewFactoryClass);
+            ->setClass($viewFactoryClass)
+        ;
     }
 
     private function aliasRenamedServices(ContainerBuilder $container): void
     {
         if ($container->hasDefinition('pagerfanta.twig_extension')) {
             $container->setAlias('twig.extension.pagerfanta', 'pagerfanta.twig_extension')
-                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.twig_extension" service ID instead.');
+                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.twig_extension" service ID instead.')
+            ;
         }
 
         if ($container->hasDefinition('pagerfanta.view_factory')) {
             $container->setAlias('white_october_pagerfanta.view_factory', 'pagerfanta.view_factory')
-                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.view_factory" service ID instead.');
+                ->setDeprecated(true, 'The "%alias_id%" service alias is deprecated since Sylius 1.8, use the "pagerfanta.view_factory" service ID instead.')
+            ;
         }
     }
 }

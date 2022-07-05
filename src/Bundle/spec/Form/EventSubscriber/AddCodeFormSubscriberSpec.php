@@ -54,7 +54,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
     function it_sets_code_as_disabled_when_resource_is_not_new(
         FormEvent $event,
         FormInterface $form,
-        CodeAwareInterface $resource
+        CodeAwareInterface $resource,
     ): void {
         $event->getData()->willReturn($resource);
         $event->getForm()->willReturn($form);
@@ -77,7 +77,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
 
     function it_sets_code_as_enabled_when_there_is_no_resource(
         FormEvent $event,
-        FormInterface $form
+        FormInterface $form,
     ): void {
         $event->getData()->willReturn(null);
         $event->getForm()->willReturn($form);
@@ -125,7 +125,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
     function it_adds_code_with_label_sylius_ui_code_by_default(
         FormEvent $event,
         FormInterface $form,
-        CodeAwareInterface $resource
+        CodeAwareInterface $resource,
     ): void {
         $event->getData()->willReturn($resource);
         $event->getForm()->willReturn($form);
@@ -143,7 +143,7 @@ final class AddCodeFormSubscriberSpec extends ObjectBehavior
     function it_adds_code_with_specified_type_and_label(
         FormEvent $event,
         FormInterface $form,
-        CodeAwareInterface $resource
+        CodeAwareInterface $resource,
     ): void {
         $this->beConstructedWith(FormType::class, ['label' => 'sylius.ui.name']);
 

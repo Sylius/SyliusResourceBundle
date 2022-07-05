@@ -31,7 +31,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
         ResourceInterface $firstResource,
-        ResourceInterface $secondResource
+        ResourceInterface $secondResource,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRepositoryMethod(null)->willReturn(null);
@@ -51,7 +51,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         RepositoryInterface $repository,
         ResourceInterface $firstResource,
         ResourceInterface $secondResource,
-        ResourceInterface $thirdResource
+        ResourceInterface $thirdResource,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRepositoryMethod(null)->willReturn(null);
@@ -73,7 +73,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
     function it_uses_custom_method_and_arguments_if_specified(
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
-        ResourceInterface $firstResource
+        ResourceInterface $firstResource,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRepositoryMethod()->willReturn('findAll');
@@ -92,7 +92,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
         RepositoryInterface $customRepository,
-        ResourceInterface $firstResource
+        ResourceInterface $firstResource,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRepositoryMethod()->willReturn([$customRepository, 'findBy']);
@@ -110,7 +110,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
     function it_creates_paginator_by_default(
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
-        Pagerfanta $paginator
+        Pagerfanta $paginator,
     ): void {
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRepositoryMethod()->willReturn(null);

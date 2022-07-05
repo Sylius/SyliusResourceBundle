@@ -42,7 +42,7 @@ final class NotNullExpressionFunctionProvider implements ExpressionFunctionProvi
                     }
 
                     return $result;
-                }
+                },
             ),
         ];
     }

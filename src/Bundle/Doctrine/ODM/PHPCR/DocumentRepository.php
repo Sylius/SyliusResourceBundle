@@ -71,13 +71,15 @@ class DocumentRepository extends BaseDocumentRepository implements RepositoryInt
                         ->andWhere()
                             ->eq()
                                 ->localName($this->getAlias())
-                                ->literal($value);
+                                ->literal($value)
+                    ;
                 } else {
                     $queryBuilder
                         ->andWhere()
                             ->eq()
                                 ->field($this->getPropertyName($property))
-                                ->literal($value);
+                                ->literal($value)
+                    ;
                 }
             }
         }

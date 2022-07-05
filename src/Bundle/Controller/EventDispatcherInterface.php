@@ -21,31 +21,31 @@ interface EventDispatcherInterface
     public function dispatch(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     /** @param mixed $resources */
     public function dispatchMultiple(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        $resources
+        $resources,
     ): ResourceControllerEvent;
 
     public function dispatchPreEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     public function dispatchPostEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     public function dispatchInitializeEvent(
         string $eventName,
         RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent;
 }

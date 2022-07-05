@@ -19,7 +19,7 @@ class UnsupportedMethodException extends \Exception
     {
         parent::__construct(sprintf(
             'The method "%s" is not supported.',
-            $methodName
+            $methodName,
         ));
     }
 }

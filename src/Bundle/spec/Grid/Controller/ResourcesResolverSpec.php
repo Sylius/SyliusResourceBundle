@@ -34,7 +34,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
     function let(
         ResourcesResolverInterface $decoratedResolver,
         GridProviderInterface $gridProvider,
-        ResourceGridViewFactoryInterface $gridViewFactory
+        ResourceGridViewFactoryInterface $gridViewFactory,
     ): void {
         $this->beConstructedWith($decoratedResolver, $gridProvider, $gridViewFactory);
     }
@@ -48,7 +48,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         ResourcesResolverInterface $decoratedResolver,
         RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->hasGrid()->willReturn(false);
 
@@ -66,7 +66,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         ResourceGridView $gridView,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $queryParameters
+        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->hasGrid()->willReturn(true);
         $requestConfiguration->getGrid()->willReturn('sylius_admin_tax_category');
@@ -93,7 +93,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         Pagerfanta $paginator,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $queryParameters
+        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->hasGrid()->willReturn(true);
         $requestConfiguration->getGrid()->willReturn('sylius_admin_tax_category');

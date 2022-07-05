@@ -42,7 +42,7 @@ final class ResourceGridViewFactorySpec extends ObjectBehavior
         Grid $grid,
         MetadataInterface $resourceMetadata,
         Request $request,
-        RequestConfiguration $requestConfiguration
+        RequestConfiguration $requestConfiguration,
     ): void {
         $parameters = new Parameters();
 
@@ -51,7 +51,7 @@ final class ResourceGridViewFactorySpec extends ObjectBehavior
             $grid->getWrappedObject(),
             $parameters,
             $resourceMetadata->getWrappedObject(),
-            $requestConfiguration->getWrappedObject()
+            $requestConfiguration->getWrappedObject(),
         );
 
         $requestConfiguration->getRequest()->willReturn($request);
