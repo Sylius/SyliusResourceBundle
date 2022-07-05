@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Webmozart\Assert\Assert;
 
 class DefaultFormBuilder implements DefaultFormBuilderInterface
 {
@@ -69,6 +70,8 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
 
         foreach ($classMetadata->embeddedClasses as $fieldName => $embeddedMapping) {
             $nestedFormBuilder = $formBuilder->create($fieldName, null, ['data_class' => $embeddedMapping['class'], 'compound' => true]);
+
+            Assert::stringNotEmpty($embeddedMapping['class']);
 
             $this->doBuild($this->entityManager->getClassMetadata($embeddedMapping['class']), $nestedFormBuilder);
 
