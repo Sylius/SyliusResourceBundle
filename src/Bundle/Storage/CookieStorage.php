@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Webmozart\Assert\Assert;
 
 final class CookieStorage implements StorageInterface, EventSubscriberInterface
 {
@@ -60,6 +61,8 @@ final class CookieStorage implements StorageInterface, EventSubscriberInterface
         $response = $event->getResponse();
         /** @var string|null $value */
         foreach ($this->responseCookies as $name => $value) {
+            Assert::nullOrString($value);
+
             $response->headers->setCookie(new Cookie($name, $value));
         }
 

@@ -37,7 +37,9 @@ class ResourceControllerEvent extends GenericEvent
 
     private ?Response $response = null;
 
-    /** @psalm-suppress MissingReturnType */
+    /**
+     * @psalm-suppress MissingReturnType
+     */
     public function stop(string $message, string $type = self::TYPE_ERROR, array $parameters = [], int $errorCode = 500)
     {
         $this->messageType = $type;

@@ -17,15 +17,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class FixedCollectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var iterable $entries */
-        $entries = $options['entries'];
+        Assert::isIterable($options['entries']);
 
-        foreach ($entries as $entry) {
+        foreach ($options['entries'] as $entry) {
+            Assert::isCallable($options['entry_type']);
+            Assert::isCallable($options['entry_name']);
+            Assert::isCallable($options['entry_options']);
+
             $entryType = $options['entry_type']($entry);
             $entryName = $options['entry_name']($entry);
             $entryOptions = $options['entry_options']($entry);

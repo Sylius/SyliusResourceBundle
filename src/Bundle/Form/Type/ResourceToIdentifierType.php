@@ -20,6 +20,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierType extends AbstractType
 {
@@ -35,8 +36,8 @@ final class ResourceToIdentifierType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var string $identifier */
         $identifier = $options['identifier'];
+        Assert::nullOrString($identifier);
 
         $builder->addModelTransformer(
             new ResourceToIdentifierTransformer($this->repository, $identifier),

@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\Exception\ExistingResourceException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Webmozart\Assert\Assert;
 
 class InMemoryRepository implements RepositoryInterface
 {
@@ -84,7 +85,11 @@ class InMemoryRepository implements RepositoryInterface
 
     public function findAll(): array
     {
-        return $this->arrayObject->getArrayCopy();
+        $arrayCopy = $this->arrayObject->getArrayCopy();
+
+        Assert::allObject($arrayCopy);
+
+        return $arrayCopy;
     }
 
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array

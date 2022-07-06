@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Generator;
 
+use Webmozart\Assert\Assert;
+
 final class RandomnessGenerator implements RandomnessGeneratorInterface
 {
     private string $uriSafeAlphabet;
@@ -49,6 +51,9 @@ final class RandomnessGenerator implements RandomnessGeneratorInterface
     private function generateStringOfLength(int $length, string $alphabet): string
     {
         $alphabetMaxIndex = strlen($alphabet) - 1;
+
+        Assert::greaterThanEq($alphabetMaxIndex, 1);
+
         $randomString = '';
 
         for ($i = 0; $i < $length; ++$i) {

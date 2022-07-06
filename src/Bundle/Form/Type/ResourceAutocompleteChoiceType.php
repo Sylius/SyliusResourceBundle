@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 class ResourceAutocompleteChoiceType extends AbstractType
 {
@@ -37,14 +38,15 @@ class ResourceAutocompleteChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var RepositoryInterface $repository */
-        $repository = $options['repository'];
-        /** @var string $choiceValue */
-        $choiceValue = $options['choice_value'];
+        Assert::isInstanceOf($options['repository'], RepositoryInterface::class);
+        Assert::nullOrString($options['choice_value']);
 
         if (!$options['multiple']) {
             $builder->addModelTransformer(
-                new ResourceToIdentifierTransformer($repository, $choiceValue),
+                new ResourceToIdentifierTransformer(
+                    $options['repository'],
+                    $options['choice_value'],
+                ),
             );
         }
 
@@ -52,7 +54,10 @@ class ResourceAutocompleteChoiceType extends AbstractType
             $builder
                 ->addModelTransformer(
                     new RecursiveTransformer(
-                        new ResourceToIdentifierTransformer($repository, $choiceValue),
+                        new ResourceToIdentifierTransformer(
+                            $options['repository'],
+                            $options['choice_value'],
+                        ),
                     ),
                 )
                 ->addViewTransformer(new CollectionToStringTransformer(','))
@@ -84,10 +89,9 @@ class ResourceAutocompleteChoiceType extends AbstractType
                 'error_bubbling' => false,
                 'placeholder' => '',
                 'repository' => function (Options $options) {
-                    /** @var string $identifier */
-                    $identifier = $options['resource'];
+                    Assert::string($options['resource']);
 
-                    return $this->resourceRepositoryRegistry->get($identifier);
+                    return $this->resourceRepositoryRegistry->get($options['resource']);
                 },
             ])
             ->setAllowedTypes('resource', ['string'])
