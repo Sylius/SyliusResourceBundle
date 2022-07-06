@@ -15,7 +15,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN composer update --with-all-dependencies  --no-interaction --no-progress
+RUN composer update --with-all-dependencies --no-interaction --no-progress
 
 WORKDIR /app/src/Bundle/test
 
