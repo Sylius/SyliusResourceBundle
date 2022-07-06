@@ -70,7 +70,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $arguments['options'] ?? [],
                 $arguments['host'] ?? '',
                 $arguments['schemes'] ?? [],
-                $arguments['methods'] ?? []
+                $arguments['methods'] ?? [],
             );
 
             $routeCollection->add($arguments['name'], $route, $arguments['priority'] ?? 0);

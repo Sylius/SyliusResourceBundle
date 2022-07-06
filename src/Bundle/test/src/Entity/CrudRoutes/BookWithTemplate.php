@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'template',
-    templates: 'backend/crud'
+    templates: 'backend/crud',
 )]
 class BookWithTemplate extends Book
 {

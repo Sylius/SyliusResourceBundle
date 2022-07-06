@@ -29,7 +29,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
         $this->beConstructedWith(
             $twig,
             $optionsParser,
-            ['delete' => '@SyliusGrid/BulkAction/_delete.html.twig']
+            ['delete' => '@SyliusGrid/BulkAction/_delete.html.twig'],
         );
     }
 
@@ -44,7 +44,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
         ResourceGridView $gridView,
         Action $bulkAction,
         RequestConfiguration $requestConfiguration,
-        Request $request
+        Request $request,
     ): void {
         $bulkAction->getType()->willReturn('delete');
         $bulkAction->getOptions()->willReturn([]);
@@ -69,7 +69,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
 
     function it_throws_an_exception_if_template_is_not_configured_for_given_bulk_action_type(
         ResourceGridView $gridView,
-        Action $bulkAction
+        Action $bulkAction,
     ): void {
         $bulkAction->getType()->willReturn('foo');
 

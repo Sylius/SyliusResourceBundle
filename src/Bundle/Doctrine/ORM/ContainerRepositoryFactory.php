@@ -50,7 +50,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
 
     private function getOrCreateRepository(
         EntityManagerInterface $entityManager,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
     ): ObjectRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
 

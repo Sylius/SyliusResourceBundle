@@ -27,7 +27,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
     function let(
         GridRendererInterface $gridRenderer,
         Environment $twig,
-        OptionsParserInterface $optionsParser
+        OptionsParserInterface $optionsParser,
     ): void {
         $actionTemplates = [
             'link' => '@SyliusGrid/Action/_link.html.twig',
@@ -38,7 +38,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
             $gridRenderer,
             $twig,
             $optionsParser,
-            $actionTemplates
+            $actionTemplates,
         );
     }
 
@@ -53,7 +53,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
         ResourceGridView $gridView,
         Action $action,
         RequestConfiguration $requestConfiguration,
-        Request $request
+        Request $request,
     ): void {
         $action->getType()->willReturn('link');
         $action->getOptions()->willReturn([]);
@@ -78,7 +78,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
 
     function it_throws_an_exception_if_template_is_not_configured_for_given_action_type(
         ResourceGridView $gridView,
-        Action $action
+        Action $action,
     ): void {
         $action->getType()->willReturn('foo');
 

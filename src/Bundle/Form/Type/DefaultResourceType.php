@@ -18,6 +18,7 @@ use Sylius\Component\Registry\ServiceRegistryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Webmozart\Assert\Assert;
 
 final class DefaultResourceType extends AbstractType
 {
@@ -33,6 +34,8 @@ final class DefaultResourceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        Assert::string($options['data_class']);
+
         $metadata = $this->metadataRegistry->getByClass($options['data_class']);
 
         /** @var DefaultFormBuilderInterface $formBuilder */

@@ -36,7 +36,7 @@ final class ResourceUpdateHandlerSpec extends ObjectBehavior
         StateMachineInterface $stateMachine,
         ResourceInterface $resource,
         RequestConfiguration $configuration,
-        ObjectManager $manager
+        ObjectManager $manager,
     ): void {
         $configuration->hasStateMachine()->willReturn(true);
         $stateMachine->apply($configuration, $resource)->shouldBeCalled();
@@ -50,7 +50,7 @@ final class ResourceUpdateHandlerSpec extends ObjectBehavior
         StateMachineInterface $stateMachine,
         ResourceInterface $resource,
         RequestConfiguration $configuration,
-        ObjectManager $manager
+        ObjectManager $manager,
     ): void {
         $configuration->hasStateMachine()->willReturn(false);
         $stateMachine->apply($configuration, $resource)->shouldNotBeCalled();

@@ -40,7 +40,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn(null);
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -56,7 +56,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn('register');
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -72,7 +72,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        Collection $resources
+        Collection $resources,
     ): void {
         $requestConfiguration->getEvent()->willReturn('register');
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -88,7 +88,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn(null);
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -104,7 +104,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn('register');
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -120,7 +120,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn(null);
         $requestConfiguration->getMetadata()->willReturn($metadata);
@@ -136,7 +136,7 @@ final class EventDispatcherSpec extends ObjectBehavior
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
         EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $requestConfiguration->getEvent()->willReturn('register');
         $requestConfiguration->getMetadata()->willReturn($metadata);

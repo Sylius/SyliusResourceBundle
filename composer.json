@@ -54,6 +54,9 @@
     "replace": {
         "sylius/resource": "self.version"
     },
+    "conflict": {
+        "phpstan/phpdoc-parser": "^1.6.0"
+    },
     "require-dev": {
         "doctrine/orm": "^2.5",
         "lchrusciel/api-test-case": "^5.0",
@@ -62,9 +65,10 @@
         "pamil/phpspec-skip-example-extension": "^4.2",
         "phpspec/phpspec": "^7.2",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "0.12.99",
-        "phpstan/phpstan-phpunit": "0.12.22",
-        "phpstan/phpstan-webmozart-assert": "0.12.16",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-doctrine": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
         "sylius-labs/coding-standard": "^4.0",
         "sylius/grid-bundle": "^1.7",
@@ -74,11 +78,17 @@
         "symplify/easy-coding-standard": "^9.4",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "4.7.0",
-        "rector/rector": "^0.11.47"
+        "rector/rector": "^0.12.20"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
         "sylius/locale": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true,
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
     },
     "extra": {
         "branch-alias": {

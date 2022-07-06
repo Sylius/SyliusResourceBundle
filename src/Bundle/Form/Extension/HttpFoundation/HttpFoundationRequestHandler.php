@@ -20,6 +20,7 @@ use Symfony\Component\Form\RequestHandlerInterface;
 use Symfony\Component\Form\Util\ServerParams;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Webmozart\Assert\Assert;
 
 /**
  * Does not compare the form's method with the request's method.
@@ -69,10 +70,17 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                 // Submit the form, but don't clear the default values
                 $form->submit(null, false);
 
+                $uploadMaxSizeMessageCallable = $form->getConfig()->getOption('upload_max_size_message');
+
+                Assert::isCallable($uploadMaxSizeMessageCallable);
+
+                $uploadMaxSizeMessage = call_user_func($uploadMaxSizeMessageCallable);
+                Assert::string($uploadMaxSizeMessage);
+
                 $form->addError(new FormError(
-                    call_user_func($form->getConfig()->getOption('upload_max_size_message')),
+                    $uploadMaxSizeMessage,
                     null,
-                    ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()]
+                    ['{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()],
                 ));
 
                 return;

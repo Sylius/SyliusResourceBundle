@@ -89,14 +89,14 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $typehintClasses = array_merge(
             $repositoryInterfaces,
             [$repositoryClass],
-            $repositoryParents
+            $repositoryParents,
         );
 
         foreach ($typehintClasses as $typehintClass) {
             $container->registerAliasForArgument(
                 $metadata->getServiceId('repository'),
                 $typehintClass,
-                $metadata->getHumanizedName() . ' repository'
+                $metadata->getHumanizedName() . ' repository',
             );
         }
 
@@ -117,7 +117,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $container->registerAliasForArgument(
                 $metadata->getServiceId('manager'),
                 $typehintClass,
-                $metadata->getHumanizedName() . ' manager'
+                $metadata->getHumanizedName() . ' manager',
             );
         }
     }

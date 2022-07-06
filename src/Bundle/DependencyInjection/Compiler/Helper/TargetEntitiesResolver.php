@@ -55,9 +55,9 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
                         'Triggered by resource "%s" with model "%s" and interface "%s".',
                         $alias,
                         $model,
-                        $interface
+                        $interface,
                     ),
-                    \E_USER_DEPRECATED
+                    \E_USER_DEPRECATED,
                 );
 
                 $interfaces[$interface] = $model;

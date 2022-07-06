@@ -30,7 +30,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
         'index' => [
             'icon' => 'book',
         ],
-    ]
+    ],
 )]
 class BookWithVars extends Book
 {

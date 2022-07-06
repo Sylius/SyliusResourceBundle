@@ -24,7 +24,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
     name: 'show_book_with_template',
     path: '/book/{id}',
     controller: 'app.controller.book:showAction',
-    template: 'book/show.html.twig'
+    template: 'book/show.html.twig',
 )]
 class ShowBookWithTemplate extends Book
 {

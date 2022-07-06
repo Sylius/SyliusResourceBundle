@@ -17,6 +17,7 @@ use Sylius\Bundle\ResourceBundle\Form\DataTransformer\CollectionToStringTransfor
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\RecursiveTransformer;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Component\Registry\ServiceRegistryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,6 +25,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 class ResourceAutocompleteChoiceType extends AbstractType
 {
@@ -36,12 +38,15 @@ class ResourceAutocompleteChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        Assert::isInstanceOf($options['repository'], RepositoryInterface::class);
+        Assert::nullOrString($options['choice_value']);
+
         if (!$options['multiple']) {
             $builder->addModelTransformer(
                 new ResourceToIdentifierTransformer(
                     $options['repository'],
-                    $options['choice_value']
-                )
+                    $options['choice_value'],
+                ),
             );
         }
 
@@ -51,9 +56,9 @@ class ResourceAutocompleteChoiceType extends AbstractType
                     new RecursiveTransformer(
                         new ResourceToIdentifierTransformer(
                             $options['repository'],
-                            $options['choice_value']
-                        )
-                    )
+                            $options['choice_value'],
+                        ),
+                    ),
                 )
                 ->addViewTransformer(new CollectionToStringTransformer(','))
             ;
@@ -84,6 +89,8 @@ class ResourceAutocompleteChoiceType extends AbstractType
                 'error_bubbling' => false,
                 'placeholder' => '',
                 'repository' => function (Options $options) {
+                    Assert::string($options['resource']);
+
                     return $this->resourceRepositoryRegistry->get($options['resource']);
                 },
             ])

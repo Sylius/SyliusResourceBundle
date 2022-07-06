@@ -33,7 +33,15 @@ final class RecursiveTransformer implements DataTransformerInterface
             return new ArrayCollection();
         }
 
-        $this->assertTransformationValueType($value, Collection::class);
+        if (!$value instanceof Collection) {
+            throw new TransformationFailedException(
+                sprintf(
+                    'Expected "%s", but got "%s"',
+                    Collection::class,
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
+            );
+        }
 
         return $value->map(
             /**
@@ -43,7 +51,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->transform($currentValue);
-            }
+            },
         );
     }
 
@@ -53,7 +61,15 @@ final class RecursiveTransformer implements DataTransformerInterface
             return new ArrayCollection();
         }
 
-        $this->assertTransformationValueType($value, Collection::class);
+        if (!$value instanceof Collection) {
+            throw new TransformationFailedException(
+                sprintf(
+                    'Expected "%s", but got "%s"',
+                    Collection::class,
+                    is_object($value) ? get_class($value) : gettype($value),
+                ),
+            );
+        }
 
         return $value->map(
             /**
@@ -63,25 +79,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              */
             function ($currentValue) {
                 return $this->decoratedTransformer->reverseTransform($currentValue);
-            }
+            },
         );
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @throws TransformationFailedException
-     */
-    private function assertTransformationValueType($value, string $expectedType): void
-    {
-        if (!($value instanceof $expectedType)) {
-            throw new TransformationFailedException(
-                sprintf(
-                    'Expected "%s", but got "%s"',
-                    $expectedType,
-                    is_object($value) ? get_class($value) : gettype($value)
-                )
-            );
-        }
     }
 }

@@ -92,7 +92,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 throw new InvalidArgumentException(sprintf(
                     'Resource "%s" uses driver "%s", but this driver has not been enabled.',
                     $alias,
-                    $resource['driver']
+                    $resource['driver'],
                 ));
             }
         }
@@ -101,7 +101,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             if (in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true)) {
                 @trigger_error(sprintf(
                     'The "%s" driver is deprecated in Sylius 1.3. Doctrine MongoDB and PHPCR will no longer be supported in Sylius 2.0.',
-                    $driver
+                    $driver,
                 ), \E_USER_DEPRECATED);
             }
 

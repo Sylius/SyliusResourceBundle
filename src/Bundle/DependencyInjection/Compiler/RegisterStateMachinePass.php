@@ -41,8 +41,8 @@ final class RegisterStateMachinePass implements CompilerPassInterface
 
         // No state machine enabled
         if (
-            !$this->isSymfonyWorkflowEnabled($container)
-            && !$this->isWinzouStateMachineEnabled($container)
+            !$this->isSymfonyWorkflowEnabled($container) &&
+            !$this->isWinzouStateMachineEnabled($container)
         ) {
             return;
         }

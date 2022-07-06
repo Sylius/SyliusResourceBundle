@@ -48,11 +48,11 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
             sprintf('<tr><td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td></tr>', $scienceBooks['science-book1']->getId()),
-            $content
+            $content,
         );
         $this->assertStringContainsString(
             sprintf('<tr><td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td></tr>', $scienceBooks['science-book2']->getId()),
-            $content
+            $content,
         );
     }
 

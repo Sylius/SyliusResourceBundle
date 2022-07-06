@@ -89,7 +89,7 @@ class ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler
+        ResourceDeleteHandlerInterface $resourceDeleteHandler,
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -244,9 +244,9 @@ class ResourceController
         $form->handleRequest($request);
 
         if (
-            in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)
-            && $form->isSubmitted()
-            && $form->isValid()
+            in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) &&
+            $form->isSubmitted() &&
+            $form->isValid()
         ) {
             $resource = $form->getData();
 
@@ -516,7 +516,7 @@ class ResourceController
             throw new \RuntimeException(sprintf(
                 'Container passed to "%s" has to implements "%s".',
                 self::class,
-                ContainerInterface::class
+                ContainerInterface::class,
             ));
         }
 

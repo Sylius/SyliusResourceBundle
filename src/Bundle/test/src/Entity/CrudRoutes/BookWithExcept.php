@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'except',
-    except: ['show', 'create']
+    except: ['show', 'create'],
 )]
 class BookWithExcept extends Book
 {

@@ -358,7 +358,7 @@ class RequestConfiguration
     {
         return array_replace_recursive(
             $defaults,
-            $this->request->get($parameter, [])
+            $this->request->get($parameter, []),
         );
     }
 
