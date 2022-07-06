@@ -1,0 +1,55 @@
+name: Build Docker Image
+
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+        paths-ignore:
+            - "*.md"
+    pull_request:
+        paths-ignore:
+            - "*.md"
+    schedule:
+        -   cron: "0 1 * * 6" # Run at 1am every Saturday
+    workflow_dispatch: ~
+
+jobs:
+    build-image:
+        name: Build Docker Image and Test Docker Compose
+        env:
+            DOCKER_BUILDKIT: 1 # Requires Latest Buildx in docker CLI
+            COMPOSE_DOCKER_CLI_BUILD: 1 # Requires Latest Buildx in docker compose CLI
+        strategy:
+            fail-fast: false
+            matrix:
+                platform: [linux/amd64,linux/arm64]
+
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Set Up QEMU
+                uses: docker/setup-qemu-action@v2
+            -
+                name: Set Up Docker Buildx
+                uses: docker/setup-buildx-action@v2
+            -
+                name: Build Image
+                uses: docker/build-push-action@v3
+                with:
+                    push: false
+                    platforms: ${{ matrix.platform }}
+                    cache-from: type=gha
+                    cache-to: type=gha
+                    load: true
+            -
+                name: Shutdown Default MySQL
+                run: sudo service mysql stop
+            -
+                name: Checkout Code
+                uses: actions/checkout@v3
+            -
+                name: Analyze Package
+                run: make analyze
+            -
+                name: Run Tests
+                run: make test
