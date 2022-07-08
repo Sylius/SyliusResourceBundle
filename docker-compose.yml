@@ -1,0 +1,11 @@
+services:
+    package:
+        build:
+            context: .
+            target: php
+            args:
+                COMPOSER_VERSION: "2.3"
+                PHP_VERSION: "8.0"
+        command: ["composer", "test"]
+        volumes:
+            - ./:/package:delegate

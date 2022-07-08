@@ -1,0 +1,10 @@
+*
+
+!/src
+!/composer.json
+!/ecs.php
+!/phpspec.yml.dist
+!/phpstan.neon
+!/phpunit.xml.dist
+!/psalm.xml
+!/rector.php
