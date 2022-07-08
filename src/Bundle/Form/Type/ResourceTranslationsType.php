@@ -48,8 +48,6 @@ final class ResourceTranslationsType extends AbstractType
             /** @var TranslatableInterface $translatable */
             $translatable = $parentForm->getData();
 
-            Assert::nullOrIsInstanceOf($translatable, TranslatableInterface::class);
-
             foreach ($translations as $localeCode => $translation) {
                 if (null === $translation) {
                     unset($translations[$localeCode]);
