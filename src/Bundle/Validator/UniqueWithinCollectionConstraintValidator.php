@@ -29,23 +29,12 @@ final class UniqueWithinCollectionConstraintValidator extends ConstraintValidato
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $collectionOfEntitiesCodes = [];
 
-        Assert::isIterable($value);
-
         foreach ($value as $key => $entity) {
             /** @var int|string|null $checkingAttribute */
             $checkingAttribute = $propertyAccessor->getValue($entity, $constraint->attributePath);
 
             if (null === $checkingAttribute) {
                 continue;
-            }
-
-            if (!is_string($checkingAttribute) && !is_int($checkingAttribute)) {
-                throw new \InvalidArgumentException(
-                    \sprintf(
-                        'Expected a string or integer. Got: %s',
-                        \is_object($checkingAttribute) ? \get_class($checkingAttribute) : \gettype($checkingAttribute),
-                    ),
-                );
             }
 
             if (!array_key_exists($checkingAttribute, $collectionOfEntitiesCodes)) {
