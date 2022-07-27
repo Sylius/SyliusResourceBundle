@@ -51,6 +51,17 @@ app_poc_book_index:
             template: 'ScienceBook/index.html.twig'
             provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider
 
+app_poc_book_show:
+    path: /poc/books/{id}
+    methods: [GET]
+    controller: sylius.action.placeholder
+    defaults:
+        _sylius:
+            alias: app.science_book
+            operation: show
+            template: 'ScienceBook/show.html.twig'
+            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
+
 app_book_sortable_index:
     path: /sortable-books/
     methods: [GET]

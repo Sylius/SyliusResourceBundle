@@ -55,6 +55,8 @@
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider">
+            <argument type="service" id="sylius.resource_controller.single_resource_provider" />
+            <argument type="service" id="doctrine" />
             <tag name="sylius.state_provider" />
         </service>
 

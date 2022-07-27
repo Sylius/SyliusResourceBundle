@@ -40,18 +40,26 @@ final class RespondListener
             return;
         }
 
+        $metadata = $this->resourceRegistry->get($alias);
+        $configuration = $this->requestConfigurationFactory->create($metadata, $request);
+
         /** @var PagerfantaInterface $data */
         $data = $request->attributes->get('data');
 
         if (!$request->isXmlHttpRequest()) {
         }
 
-        $metadata = $this->resourceRegistry->get($alias);
-        $configuration = $this->requestConfigurationFactory->create($metadata, $request);
+        $context = [];
 
-        $content = $this->twig->render($configuration->getTemplate($configuration->getOperation()), [
-            'resources' => $data,
-        ]);
+        if ('index' === $configuration->getOperation()) {
+            $context = ['resources' => $data];
+        }
+
+        if ('show' === $configuration->getOperation()) {
+            $context = ['resource' => $data];
+        }
+
+        $content = $this->twig->render($configuration->getTemplate($configuration->getOperation()), $context);
 
         $response = new Response();
         $response->setContent($content);

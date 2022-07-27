@@ -32,11 +32,9 @@ final class CollectionProvider implements ProviderInterface
         /** @var RepositoryInterface $repository */
         $repository = $this->managerRegistry->getRepository($configuration->getMetadata()->getClass('model'));
 
-        $data = $this->resourcesCollectionProvider->get(
+        return $this->resourcesCollectionProvider->get(
             $configuration,
             $repository,
         );
-
-        return $data;
     }
 }
