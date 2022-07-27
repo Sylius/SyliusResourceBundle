@@ -49,7 +49,7 @@ app_poc_book_index:
             alias: app.science_book
             operation: index
             template: 'ScienceBook/index.html.twig'
-            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\ItemProvider
+            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider
 
 app_book_sortable_index:
     path: /sortable-books/
