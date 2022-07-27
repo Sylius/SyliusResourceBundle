@@ -14,24 +14,24 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Bundle\ResourceBundle\State\ProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 
-final class ReadListener
+final class FormListener
 {
     use RequestConfigurationInitiatorTrait;
 
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ProviderInterface $provider,
+        private ?ResourceFormFactoryInterface $formFactory,
     ) {
     }
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelView(ViewEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -39,12 +39,14 @@ final class ReadListener
             return;
         }
 
-        $data = $this->provider->provide($configuration);
-
-        if (null === $data) {
-            throw new NotFoundHttpException('Not Found');
+        if (!in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
+            return;
         }
 
-        $request->attributes->set('data', $data);
+        $data = $request->attributes->get('data');
+        $form = $this->formFactory->create($configuration, $data);
+        $form->handleRequest($request);
+
+        $request->attributes->set('form', $form);
     }
 }

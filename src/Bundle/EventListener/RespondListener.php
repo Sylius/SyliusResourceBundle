@@ -13,15 +13,20 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Pagerfanta\PagerfantaInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\ResourceActions;
+use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Twig\Environment;
 
 final class RespondListener
 {
+    use RequestConfigurationInitiatorTrait;
+
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
@@ -33,37 +38,47 @@ final class RespondListener
     {
         $request = $event->getRequest();
 
-        $attributes = $request->attributes->get('_sylius');
-        $alias = $attributes['alias'] ?? null;
-
-        if (null === $alias) {
+        if (null === $configuration = $this->initializeConfiguration($request)) {
             return;
         }
-
-        $metadata = $this->resourceRegistry->get($alias);
-        $configuration = $this->requestConfigurationFactory->create($metadata, $request);
-
-        /** @var PagerfantaInterface $data */
-        $data = $request->attributes->get('data');
 
         if (!$request->isXmlHttpRequest()) {
         }
 
-        $context = [];
-
-        if ('index' === $configuration->getOperation()) {
-            $context = ['resources' => $data];
-        }
-
-        if ('show' === $configuration->getOperation()) {
-            $context = ['resource' => $data];
-        }
-
-        $content = $this->twig->render($configuration->getTemplate($configuration->getOperation()), $context);
+        $content = $this->twig->render(
+            $configuration->getTemplate($configuration->getOperation()),
+            $this->getContext($configuration),
+        );
 
         $response = new Response();
         $response->setContent($content);
 
         $event->setResponse($response);
+    }
+
+    private function getContext(RequestConfiguration $configuration): array
+    {
+        $request = $configuration->getRequest();
+        $data = $request->attributes->get('data');
+
+        /** @var FormInterface|null $form */
+        $form = $request->attributes->get('form');
+
+        if (ResourceActions::INDEX === $configuration->getOperation()) {
+            return ['resources' => $data];
+        }
+
+        if (ResourceActions::SHOW === $configuration->getOperation()) {
+            return ['resource' => $data];
+        }
+
+        if (ResourceActions::CREATE === $configuration->getOperation()) {
+            return [
+                'resource' => $data,
+                'form' => $form->createView(),
+            ];
+        }
+
+        return [];
     }
 }

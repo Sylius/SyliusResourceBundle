@@ -33,14 +33,27 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.state_provider" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
+        </service>
+
+        <service id="sylius.listener.form" class="Sylius\Bundle\ResourceBundle\EventListener\FormListener">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.resource_controller.form_factory" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="80" />
+        </service>
+
+        <service id="sylius.listener.validate" class="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="80" />
         </service>
 
         <service id="sylius.listener.respond" class="Sylius\Bundle\ResourceBundle\EventListener\RespondListener">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="twig" on-invalid="null" />
-            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
         </service>
 
         <service id="sylius.state_provider.locator" class="Sylius\Bundle\ResourceBundle\State\CallableProvider">
