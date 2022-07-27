@@ -17,6 +17,7 @@ use Psr\Link\LinkInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -244,6 +245,36 @@ trait ControllerTrait
         $response->setContent($content);
 
         return $response;
+    }
+
+    /**
+     * Renders a view and sets the appropriate status code when a form is listed in parameters.
+     *
+     * If an invalid form is found in the list of parameters, a 422 status code is returned.
+     */
+    protected function renderForm(string $view, array $parameters = [], Response $response = null): Response
+    {
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        foreach ($parameters as $k => $v) {
+            if ($v instanceof FormView) {
+                throw new \LogicException(sprintf('Passing a FormView to "%s::renderForm()" is not supported, pass directly the form instead for parameter "%s".', get_debug_type($this), $k));
+            }
+
+            if (!$v instanceof FormInterface) {
+                continue;
+            }
+
+            $parameters[$k] = $v->createView();
+
+            if (200 === $response->getStatusCode() && $v->isSubmitted() && !$v->isValid()) {
+                $response->setStatusCode(422);
+            }
+        }
+
+        return $this->render($view, $parameters, $response);
     }
 
     /**
