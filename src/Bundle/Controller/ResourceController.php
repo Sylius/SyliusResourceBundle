@@ -223,12 +223,12 @@ class ResourceController
             return $initializeEventResponse;
         }
 
-        return $this->render($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
+        return $this->renderForm($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $newResource,
             $this->metadata->getName() => $newResource,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -310,12 +310,12 @@ class ResourceController
             return $initializeEventResponse;
         }
 
-        return $this->render($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
+        return $this->renderForm($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $resource,
             $this->metadata->getName() => $resource,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
