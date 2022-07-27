@@ -27,6 +27,34 @@
     <services>
         <defaults public="true" />
 
+        <service id="sylius.action.placeholder" class="Sylius\Bundle\ResourceBundle\Action\PlaceHolderAction" />
+
+        <service id="sylius.listener.read" class="Sylius\Bundle\ResourceBundle\EventListener\ReadListener">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.state_provider" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+
+        <service id="sylius.listener.respond" class="Sylius\Bundle\ResourceBundle\EventListener\RespondListener">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="twig" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
+        </service>
+
+        <service id="sylius.state_provider.locator" class="Sylius\Bundle\ResourceBundle\State\CallableProvider">
+            <argument type="tagged_locator" tag="sylius.state_provider"/>
+        </service>
+        <service id="sylius.state_provider" alias="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider" />
+<!--        <service id="sylius.state_provider" alias="sylius.state_provider.locator" />-->
+
+        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider">
+            <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.state_provider" />
+        </service>
+
         <service id="sylius.random_generator" class="Sylius\Component\Resource\Generator\RandomnessGenerator" />
         <service id="Sylius\Component\Resource\Generator\RandomnessGeneratorInterface" alias="sylius.random_generator" />
 

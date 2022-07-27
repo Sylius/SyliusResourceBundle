@@ -40,6 +40,17 @@ app_pull_request_apply_transition:
                 graph: pull_request
                 transition: $transition
 
+app_poc_book_index:
+    path: /poc/books/
+    methods: [GET]
+    controller: sylius.action.placeholder
+    defaults:
+        _sylius:
+            alias: app.science_book
+            operation: index
+            template: 'ScienceBook/index.html.twig'
+            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\ItemProvider
+
 app_book_sortable_index:
     path: /sortable-books/
     methods: [GET]

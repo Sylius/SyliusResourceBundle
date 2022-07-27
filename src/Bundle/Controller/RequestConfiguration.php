@@ -135,6 +135,28 @@ class RequestConfiguration
         return [];
     }
 
+    public function getOperation(): ?string
+    {
+        $operation = $this->parameters->get('operation');
+
+        if (!is_string($operation)) {
+            return null;
+        }
+
+        return $operation;
+    }
+
+    public function getProvider(): ?string
+    {
+        $provider = $this->parameters->get('provider');
+
+        if (!is_string($provider)) {
+            return null;
+        }
+
+        return $provider;
+    }
+
     /**
      * @param string $name
      *
