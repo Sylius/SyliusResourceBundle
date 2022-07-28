@@ -39,6 +39,10 @@ final class ReadListener
             return;
         }
 
+//        if ('create' === $configuration->getOperation()) {
+//            return;
+//        }
+
         $data = $this->provider->provide($configuration);
 
         if (null === $data) {

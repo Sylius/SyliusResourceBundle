@@ -62,6 +62,18 @@ app_poc_book_create:
             template: 'ScienceBook/create.html.twig'
             provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
 
+app_poc_book_update:
+    path: /poc/books/{id}/edit
+    methods: [GET, PUT]
+    controller: sylius.action.placeholder
+    defaults:
+        _sylius:
+            alias: app.science_book
+            operation: update
+            template: 'ScienceBook/update.html.twig'
+            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
+            processor: Sylius\Bundle\ResourceBundle\Doctrine\Common\State\PersistProcessor
+
 app_poc_book_show:
     path: /poc/books/{id}
     methods: [GET]
@@ -72,6 +84,7 @@ app_poc_book_show:
             operation: show
             template: 'ScienceBook/show.html.twig'
             provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
+            processor: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
 
 app_book_sortable_index:
     path: /sortable-books/

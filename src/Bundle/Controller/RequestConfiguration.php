@@ -146,15 +146,26 @@ class RequestConfiguration
         return $operation;
     }
 
-    public function getProvider(): ?string
+    public function getProvider(): string|callable|null
     {
         $provider = $this->parameters->get('provider');
 
-        if (!is_string($provider)) {
+        if (!is_string($provider) && !is_callable($provider)) {
             return null;
         }
 
         return $provider;
+    }
+
+    public function getProcessor(): string|callable|null
+    {
+        $processor = $this->parameters->get('processor');
+
+        if (!is_string($processor) && !is_callable($processor)) {
+            return null;
+        }
+
+        return $processor;
     }
 
     /**

@@ -7,6 +7,7 @@ fos_rest:
         rules:
             - { path: '^/science-books/*', priorities: ['html'], fallback_format: html }
             - { path: '^/poc/books/*', priorities: ['html'], fallback_format: html }
+            - { path: '^/$', priorities: ['html'], fallback_format: html }
             - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: true }
     exception:
         enabled: false

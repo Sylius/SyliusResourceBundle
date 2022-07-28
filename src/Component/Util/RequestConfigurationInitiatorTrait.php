@@ -29,7 +29,10 @@ trait RequestConfigurationInitiatorTrait
 
     private function initializeConfiguration(Request $request): ?RequestConfiguration
     {
-        $attributes = $request->attributes->get('_sylius');
+        if (null === $attributes = $request->attributes->get('_sylius')) {
+            return null;
+        }
+
         $alias = $attributes['alias'] ?? null;
 
         if (null === $alias) {

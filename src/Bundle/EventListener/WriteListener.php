@@ -14,24 +14,23 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
+use Sylius\Bundle\ResourceBundle\State\ProcessorInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-final class FormListener
+final class WriteListener
 {
     use RequestConfigurationInitiatorTrait;
 
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ?ResourceFormFactoryInterface $formFactory,
+        private ProcessorInterface $processor,
     ) {
     }
 
-    public function onKernelView(ViewEvent $event): void
+    public function onKernelView(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -39,14 +38,14 @@ final class FormListener
             return;
         }
 
-        if (!in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
+        if (null === $data = $request->attributes->get('data')) {
             return;
         }
 
-        $data = $request->attributes->get('data');
-        $form = $this->formFactory->create($configuration, $data);
-        $form->handleRequest($request);
+        if (!$request->attributes->get('is_valid')) {
+            return;
+        }
 
-        $request->attributes->set('form', $form);
+        $this->processor->process($data, $configuration);
     }
 }
