@@ -56,6 +56,32 @@ final class ScienceBookUiTest extends ApiTestCase
         );
     }
 
+    /** @test */
+    public function it_allows_creating_a_book(): void
+    {
+        $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/new');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseCode($response, Response::HTTP_OK);
+        $content = $response->getContent();
+        $this->assertStringContainsString('New Science Book', $content);
+    }
+
+    /** @test */
+    public function it_allows_updating_a_book(): void
+    {
+        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseCode($response, Response::HTTP_OK);
+        $content = $response->getContent();
+        $this->assertStringContainsString('Edit Science Book', $content);
+    }
+
     protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->createMatcher(new VoidBacktrace());
