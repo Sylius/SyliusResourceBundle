@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Repository;
 use ArrayObject;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
+use Pagerfanta\PagerfantaInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\Exception\ExistingResourceException;
@@ -132,6 +133,9 @@ class InMemoryRepository implements RepositoryInterface
         return $this->interface;
     }
 
+    /**
+     * @return PagerfantaInterface
+     */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable
     {
         $resources = $this->findAll();

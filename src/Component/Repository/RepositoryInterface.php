@@ -29,6 +29,7 @@ interface RepositoryInterface extends ObjectRepository
     /**
      * @param array<string, mixed> $criteria
      * @param array<string, string> $sorting
+     *
      * @return iterable<T>
      */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable;
