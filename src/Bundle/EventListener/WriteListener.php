@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Component\Resource\State\ProcessorInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class WriteListener

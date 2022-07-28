@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\State;
+namespace Sylius\Component\Resource\State;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 

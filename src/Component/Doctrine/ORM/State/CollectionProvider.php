@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Doctrine\ORM\State;
+namespace Sylius\Component\Resource\Doctrine\ORM\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\State\ProviderInterface;
 
 final class CollectionProvider implements ProviderInterface
 {

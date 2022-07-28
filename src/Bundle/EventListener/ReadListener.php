@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Sylius\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\State\ProviderInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

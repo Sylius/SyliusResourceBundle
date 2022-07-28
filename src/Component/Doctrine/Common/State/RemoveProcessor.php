@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Doctrine\Common\State;
+namespace Sylius\Component\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Component\Resource\State\ProcessorInterface;
 
 final class RemoveProcessor implements ProcessorInterface
 {
