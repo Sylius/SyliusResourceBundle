@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Action;
+namespace Sylius\Resource\State;
 
-final class PlaceHolderAction
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+
+interface ProviderInterface
 {
-    public function __invoke(mixed $data): mixed
-    {
-        return $data;
-    }
+    public function provide(RequestConfiguration $configuration);
 }

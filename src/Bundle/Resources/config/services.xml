@@ -27,7 +27,7 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.action.placeholder" class="Sylius\Bundle\ResourceBundle\Action\PlaceHolderAction" />
+        <service id="sylius.action.placeholder" class="Sylius\Resource\Action\PlaceHolderAction" />
 
         <service id="sylius.listener.read" class="Sylius\Bundle\ResourceBundle\EventListener\ReadListener">
             <argument type="service" id="sylius.resource_registry" />
@@ -57,35 +57,35 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
         </service>
 
-        <service id="sylius.state_provider.locator" class="Sylius\Bundle\ResourceBundle\State\CallableProvider">
+        <service id="sylius.state_provider.locator" class="Sylius\Resource\State\CallableProvider">
             <argument type="tagged_locator" tag="sylius.state_provider"/>
         </service>
         <service id="sylius.state_provider" alias="sylius.state_provider.locator" />
 
-        <service id="sylius.state_processor.locator" class="Sylius\Bundle\ResourceBundle\State\CallableProcessor">
+        <service id="sylius.state_processor.locator" class="Sylius\Resource\State\CallableProcessor">
             <argument type="tagged_locator" tag="sylius.state_processor"/>
         </service>
         <service id="sylius.state_processor" alias="sylius.state_processor.locator" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Doctrine\Common\State\RemoveProcessor" class="Sylius\Bundle\ResourceBundle\Doctrine\Common\State\RemoveProcessor">
+        <service id="Sylius\Resource\Doctrine\Common\State\RemoveProcessor" class="Sylius\Resource\Doctrine\Common\State\RemoveProcessor">
             <argument type="service" id="doctrine" />
 
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
-        <service id="Sylius\Bundle\ResourceBundle\Doctrine\Common\State\PersistProcessor" class="Sylius\Bundle\ResourceBundle\Doctrine\Common\State\PersistProcessor">
+        <service id="Sylius\Resource\Doctrine\Common\State\PersistProcessor" class="Sylius\Resource\Doctrine\Common\State\PersistProcessor">
             <argument type="service" id="doctrine" />
 
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
-        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider">
+        <service id="Sylius\Resource\Doctrine\ORM\State\CollectionProvider" class="Sylius\Resource\Doctrine\ORM\State\CollectionProvider">
             <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
             <argument type="service" id="doctrine" />
             <tag name="sylius.state_provider" />
         </service>
 
-        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider">
+        <service id="Sylius\Resource\Doctrine\ORM\State\ItemProvider" class="Sylius\Resource\Doctrine\ORM\State\ItemProvider">
             <argument type="service" id="sylius.resource_controller.single_resource_provider" />
             <argument type="service" id="doctrine" />
             <tag name="sylius.state_provider" />

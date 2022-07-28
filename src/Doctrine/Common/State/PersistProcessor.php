@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Doctrine\Common\State;
+namespace Sylius\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\State\ProcessorInterface;
+use Sylius\Resource\State\ProcessorInterface;
 
-final class RemoveProcessor implements ProcessorInterface
+final class PersistProcessor implements ProcessorInterface
 {
     public function __construct(private ManagerRegistry $managerRegistry)
     {
@@ -31,7 +31,13 @@ final class RemoveProcessor implements ProcessorInterface
             return;
         }
 
-        $manager->remove($data);
+        if (!$manager->contains($data)) {
+            $manager->persist($data);
+        }
+
         $manager->flush();
+        $manager->refresh($data);
+
+        return $data;
     }
 }
