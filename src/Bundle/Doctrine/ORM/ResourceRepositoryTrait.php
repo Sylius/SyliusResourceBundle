@@ -44,6 +44,9 @@ trait ResourceRepositoryTrait
         }
     }
 
+    /**
+     * @return iterable<int, ResourceInterface>
+     */
     public function createPaginator(array $criteria = [], array $sorting = []): iterable
     {
         $queryBuilder = $this->createQueryBuilder('o');
