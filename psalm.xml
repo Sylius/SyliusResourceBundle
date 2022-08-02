@@ -68,9 +68,28 @@
 
         <InvalidReturnStatement>
             <errorLevel type="suppress">
+                <file name="src/Component/Repository/InMemoryRepository.php" />
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </InvalidReturnStatement>
+
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Component/Repository/InMemoryRepository.php" />
+            </errorLevel>
+        </InvalidReturnType>
+
+        <LessSpecificImplementedReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Component/Repository/InMemoryRepository.php" />
+            </errorLevel>
+        </LessSpecificImplementedReturnType>
+
+        <LessSpecificReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Component/Repository/InMemoryRepository.php" />
+            </errorLevel>
+        </LessSpecificReturnStatement>
 
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
