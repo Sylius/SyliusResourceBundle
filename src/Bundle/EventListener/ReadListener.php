@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Sylius\Component\Resource\State\ProviderInterface;
@@ -28,6 +29,7 @@ final class ReadListener
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private ProviderInterface $provider,
+        private FactoryInterface $factory,
     ) {
     }
 
@@ -39,9 +41,13 @@ final class ReadListener
             return;
         }
 
-//        if ('create' === $configuration->getOperation()) {
-//            return;
-//        }
+        if ('create' === $configuration->getOperation()) {
+            $data = $this->factory->createNew($configuration);
+
+            $request->attributes->set('data', $data);
+
+            return;
+        }
 
         $data = $this->provider->provide($configuration);
 

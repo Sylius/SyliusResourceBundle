@@ -49,7 +49,7 @@ app_poc_book_index:
             alias: app.science_book
             operation: index
             template: 'ScienceBook/index.html.twig'
-            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\CollectionProvider
+            provider: Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider
 
 app_poc_book_create:
     path: /poc/books/new
@@ -59,8 +59,9 @@ app_poc_book_create:
         _sylius:
             alias: app.science_book
             operation: create
+            factory: app.factory.science_book
             template: 'ScienceBook/create.html.twig'
-            provider: Sylius\Bundle\ResourceBundle\Doctrine\ORM\State\ItemProvider
+            provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
 
 app_poc_book_update:
     path: /poc/books/{id}/edit

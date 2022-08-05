@@ -107,6 +107,7 @@ abstract class AbstractDriver implements DriverInterface
         }
 
         $definition->setArguments($definitionArgs);
+        $definition->addTag('sylius.factory');
 
         $container->setDefinition($metadata->getServiceId('factory'), $definition);
 

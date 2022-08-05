@@ -33,6 +33,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.state_provider" />
+            <argument type="service" id="sylius.factory" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
         </service>
 
@@ -56,6 +57,11 @@
             <argument type="service" id="twig" on-invalid="null" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
         </service>
+
+        <service id="sylius.factory.locator" class="Sylius\Component\Resource\Factory\CallableFactory">
+            <argument type="tagged_locator" tag="sylius.factory"/>
+        </service>
+        <service id="sylius.factory" alias="sylius.factory.locator" />
 
         <service id="sylius.state_provider.locator" class="Sylius\Component\Resource\State\CallableProvider">
             <argument type="tagged_locator" tag="sylius.state_provider"/>

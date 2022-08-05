@@ -146,6 +146,17 @@ class RequestConfiguration
         return $operation;
     }
 
+    public function getFactory(): string|callable|null
+    {
+        $factory = $this->parameters->get('factory');
+
+        if (!is_string($factory) && !is_callable($factory)) {
+            return null;
+        }
+
+        return $factory;
+    }
+
     public function getProvider(): string|callable|null
     {
         $provider = $this->parameters->get('provider');
