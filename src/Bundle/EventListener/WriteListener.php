@@ -46,6 +46,7 @@ final class WriteListener
             return;
         }
 
-        $this->processor->process($data, $configuration);
+        $data = $this->processor->process($data, $configuration);
+        $request->attributes->set('data', $data);
     }
 }

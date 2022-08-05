@@ -62,6 +62,7 @@ app_poc_book_create:
             factory: app.factory.science_book
             template: 'ScienceBook/create.html.twig'
             provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
+            processor: Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor
 
 app_poc_book_update:
     path: /poc/books/{id}/edit

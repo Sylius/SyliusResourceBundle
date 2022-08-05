@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -30,6 +31,7 @@ final class RespondListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        private RedirectHandlerInterface $redirectHandler,
         private ?Environment $twig,
     ) {
     }
@@ -37,12 +39,21 @@ final class RespondListener
     public function onKernelView(ViewEvent $event): void
     {
         $request = $event->getRequest();
+        $isValid = $request->attributes->get('is_valid', false);
+        $data = $request->attributes->get('data');
 
         if (null === $configuration = $this->initializeConfiguration($request)) {
             return;
         }
 
         if (!$request->isXmlHttpRequest()) {
+        }
+
+        if ($isValid) {
+            $response = $this->redirectHandler->redirectToResource($configuration, $data);
+            $event->setResponse($response);
+
+            return;
         }
 
         $content = $this->twig->render(
