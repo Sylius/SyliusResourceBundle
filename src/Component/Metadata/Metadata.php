@@ -151,6 +151,6 @@ final class Metadata implements MetadataInterface
             throw new \InvalidArgumentException(sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
         }
 
-        return explode('.', $alias);
+        return explode('.', $alias, 2);
     }
 }
