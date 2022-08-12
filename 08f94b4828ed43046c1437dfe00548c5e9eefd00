@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------
+
+by Prometee at 2022-08-11T14:23:18Z
+
+@lchrusciel build errors are fixed now 😉
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2022-08-11T21:57:47Z
+
+The base of this pull-request was changed, you need fetch and reset your local branch
+if you want to add new commits to this pull request. **Reset before you pull, else commits
+may become messed-up.**
+
+Unless you added new commits (to this branch) locally that you did not push yet,
+execute `git fetch origin && git reset "more-than-2-dots"` to update your local branch.
+
+Feel free to ask for assistance when you get stuck :+1:
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2022-08-11T22:08:57Z
+
+I've moved your fix to 1.9, to have it available earlier, but can you add one more spec case here: https://github.com/Sylius/SyliusResourceBundle/blob/1.9/src/Component/spec/Metadata/MetadataSpec.php, to avoid regression in future?
+
+---------------------------------------------------------------------------
+
+by GSadee at 2022-08-12T09:41:07Z
+
+Thank you, Francis! :tada:
