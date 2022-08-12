@@ -47,6 +47,29 @@ final class MetadataSpec extends ObjectBehavior
         $this->getAlias()->shouldReturn('app.product');
     }
 
+    function it_allows_to_have_alias_with_dot_in_name(): void
+    {
+        $this->beConstructedThrough('fromAliasAndConfiguration', [
+            'app.product.with.dots',
+            [
+                'driver' => 'doctrine/orm',
+                'templates' => 'AppBundle:Resource',
+                'classes' => [
+                    'model' => 'AppBundle\Model\Resource',
+                    'form' => [
+                        'default' => 'AppBundle\Form\Type\ResourceType',
+                        'choice' => 'AppBundle\Form\Type\ResourceChoiceType',
+                        'autocomplete' => 'AppBundle\Type\ResourceAutocompleteType',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->getAlias()->shouldReturn('app.product.with.dots');
+        $this->getApplicationName()->shouldReturn('app');
+        $this->getName()->shouldReturn('product.with.dots');
+    }
+
     function it_has_application_name(): void
     {
         $this->getApplicationName()->shouldReturn('app');
