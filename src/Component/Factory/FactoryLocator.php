@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Factory;
 
 use Psr\Container\ContainerInterface;
 
-final class FactoryRegistry implements ContainerInterface
+final class FactoryLocator implements ContainerInterface
 {
     public function __construct(private ContainerInterface $locator)
     {

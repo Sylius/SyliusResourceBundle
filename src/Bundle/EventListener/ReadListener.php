@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Psr\Container\ContainerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -29,7 +31,8 @@ final class ReadListener
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private ProviderInterface $provider,
-        private FactoryInterface $factory,
+        private ContainerInterface $factoryLocator,
+        private NewResourceFactory $newResourceFactory,
     ) {
     }
 
@@ -42,7 +45,13 @@ final class ReadListener
         }
 
         if ('create' === $configuration->getOperation()) {
-            $data = $this->factory->createNew($configuration);
+            $factoryId = sprintf('%s.factory.%s', $configuration->getMetadata()->getApplicationName(), $configuration->getMetadata()->getName());
+
+            if (!$this->factoryLocator->has($factoryId)) {
+                throw new \RuntimeException(sprintf('Factory "%s" not found on operation "%s"', $factoryId, $configuration->getOperation()));
+            }
+
+            $data = $this->newResourceFactory->create($configuration, $this->factoryLocator->get($factoryId));
 
             $request->attributes->set('data', $data);
 

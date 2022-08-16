@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-
 /**
  * @template T of object
  */
 interface FactoryInterface
 {
     /**
-     * @param RequestConfiguration|null $configuration
-     *
      * @return T
      */
-    public function createNew(/** RequestConfiguration $configuration */);
+    public function createNew();
 }

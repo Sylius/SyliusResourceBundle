@@ -37,7 +37,7 @@ final class CallableProcessor implements ProcessorInterface
 
         if (\is_string($processor)) {
             if (!$this->locator->has($processor)) {
-                throw new \RuntimeException(sprintf('Processor "%s" not found on operation "%s"', $processor, $configuration->getName()));
+                throw new \RuntimeException(sprintf('Processor "%s" not found on operation "%s"', $processor, $configuration->getOperation()));
             }
 
             /** @var ProcessorInterface $processor */
