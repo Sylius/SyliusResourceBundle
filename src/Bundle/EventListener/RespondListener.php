@@ -86,7 +86,10 @@ final class RespondListener
         /** @var FormInterface|null $form */
         $form = $request->attributes->get('form');
 
-        $context = ['metadata' => $configuration->getMetadata()];
+        $context = [
+            'configuration' => $configuration,
+            'metadata' => $configuration->getMetadata(),
+        ];
 
         if (ResourceActions::INDEX === $configuration->getOperation()) {
             $context['resources'] = $data;
