@@ -92,13 +92,13 @@
 
         <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider">
             <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="sylius.repository.locator" />
             <tag name="sylius.state_provider" />
         </service>
 
         <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider">
             <argument type="service" id="sylius.resource_controller.single_resource_provider" />
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="sylius.repository.locator" />
             <tag name="sylius.state_provider" />
         </service>
 
