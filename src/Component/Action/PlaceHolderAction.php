@@ -15,7 +15,10 @@ namespace Sylius\Component\Resource\Action;
 
 final class PlaceHolderAction
 {
-    public function __invoke(mixed $data): mixed
+    /**
+     * @param mixed $data
+     */
+    public function __invoke($data): mixed
     {
         return $data;
     }

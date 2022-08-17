@@ -86,19 +86,25 @@ final class RespondListener
         /** @var FormInterface|null $form */
         $form = $request->attributes->get('form');
 
+        $context = ['metadata' => $configuration->getMetadata()];
+
         if (ResourceActions::INDEX === $configuration->getOperation()) {
-            return ['resources' => $data];
+            $context['resources'] = $data;
+
+            return $context;
         }
 
         if (ResourceActions::SHOW === $configuration->getOperation()) {
-            return ['resource' => $data];
+            $context['resource'] = $data;
+
+            return $context;
         }
 
         if (in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
-            return [
-                'resource' => $data,
-                'form' => $form?->createView(),
-            ];
+            $context['resource'] = $data;
+            $context['form'] = $form?->createView();
+
+            return $context;
         }
 
         return [];
