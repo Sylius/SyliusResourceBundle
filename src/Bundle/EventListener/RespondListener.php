@@ -38,11 +38,22 @@ final class RespondListener
 
     public function onKernelView(ViewEvent $event): void
     {
+        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $isValid = $request->attributes->get('is_valid', false);
         $data = $request->attributes->get('data');
 
         if (null === $configuration = $this->initializeConfiguration($request)) {
+            return;
+        }
+
+        if ($controllerResult instanceof Response && $configuration->canRespond()) {
+            $event->setResponse($controllerResult);
+
+            return;
+        }
+
+        if ($controllerResult instanceof Response || !$configuration->canRespond()) {
             return;
         }
 

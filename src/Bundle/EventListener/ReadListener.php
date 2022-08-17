@@ -43,7 +43,7 @@ final class ReadListener
             return;
         }
 
-        if (!($configuration->canRead() ?? true)) {
+        if (!$configuration->canRead()) {
             return;
         }
 

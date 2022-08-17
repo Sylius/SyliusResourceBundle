@@ -179,15 +179,14 @@ class RequestConfiguration
         return $processor;
     }
 
-    public function canRead(): ?bool
+    public function canRead(): bool
     {
-        $read = $this->parameters->get('read');
+        return $this->parameters->getBoolean('read', true);
+    }
 
-        if (!is_bool($read)) {
-            return null;
-        }
-
-        return $read;
+    public function canRespond(): bool
+    {
+        return $this->parameters->getBoolean('respond', true);
     }
 
     /**
