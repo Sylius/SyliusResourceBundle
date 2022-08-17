@@ -46,7 +46,7 @@ app_poc_book_index:
     controller: sylius.action.placeholder
     defaults:
         _sylius:
-            alias: app.science_book
+            resource: app.science_book
             operation: index
             template: 'ScienceBook/index.html.twig'
             provider: Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider
@@ -57,7 +57,7 @@ app_poc_book_create:
     controller: sylius.action.placeholder
     defaults:
         _sylius:
-            alias: app.science_book
+            resource: app.science_book
             operation: create
             template: 'ScienceBook/create.html.twig'
             provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
@@ -69,7 +69,7 @@ app_poc_book_update:
     controller: sylius.action.placeholder
     defaults:
         _sylius:
-            alias: app.science_book
+            resource: app.science_book
             operation: update
             template: 'ScienceBook/update.html.twig'
             provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
@@ -81,7 +81,7 @@ app_poc_book_show:
     controller: sylius.action.placeholder
     defaults:
         _sylius:
-            alias: app.science_book
+            resource: app.science_book
             operation: show
             template: 'ScienceBook/show.html.twig'
             provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider

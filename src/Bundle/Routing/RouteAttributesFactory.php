@@ -48,6 +48,10 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['repository'] = $arguments['repository'];
             }
 
+            if (isset($arguments['operation'])) {
+                $syliusOptions['operation'] = $arguments['operation'];
+            }
+
             if (isset($arguments['provider'])) {
                 $syliusOptions['provider'] = $arguments['provider'];
             }

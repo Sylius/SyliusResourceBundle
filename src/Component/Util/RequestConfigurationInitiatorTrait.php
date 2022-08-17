@@ -33,13 +33,17 @@ trait RequestConfigurationInitiatorTrait
             return null;
         }
 
-        $alias = $attributes['alias'] ?? null;
+        $resource = $attributes['resource'] ?? null;
 
-        if (null === $alias) {
+        if (null === $resource) {
             return null;
         }
 
-        $metadata = $this->resourceRegistry->get($alias);
+        if (str_contains($resource, '.')) {
+            $metadata = $this->resourceRegistry->get($resource);
+        } else {
+            $metadata = $this->resourceRegistry->getByClass($resource);
+        }
 
         return $this->requestConfigurationFactory->create($metadata, $request);
     }
