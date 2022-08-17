@@ -179,6 +179,17 @@ class RequestConfiguration
         return $processor;
     }
 
+    public function canRead(): ?bool
+    {
+        $read = $this->parameters->get('read');
+
+        if (!is_bool($read)) {
+            return null;
+        }
+
+        return $read;
+    }
+
     /**
      * @param string $name
      *

@@ -43,6 +43,10 @@ final class ReadListener
             return;
         }
 
+        if (!($configuration->canRead() ?? true)) {
+            return;
+        }
+
         if ('create' === $configuration->getOperation()) {
             $factoryId = sprintf('%s.factory.%s', $configuration->getMetadata()->getApplicationName(), $configuration->getMetadata()->getName());
 
