@@ -56,6 +56,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
         $definition->setPublic(true);
+        $definition->addTag('sylius.repository');
 
         if ($repositoryClass === EntityRepository::class) {
             /** @var string $entityClass */

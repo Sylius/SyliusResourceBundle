@@ -64,6 +64,10 @@
             <argument type="tagged_locator" tag="sylius.factory"/>
         </service>
 
+        <service id="sylius.repository.locator" class="Sylius\Component\Resource\Repository\RepositoryLocator">
+            <argument type="tagged_locator" tag="sylius.repository"/>
+        </service>
+
         <service id="sylius.state_provider.locator" class="Sylius\Component\Resource\State\CallableProvider">
             <argument type="tagged_locator" tag="sylius.state_provider"/>
         </service>
