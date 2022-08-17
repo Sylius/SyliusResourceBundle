@@ -184,6 +184,11 @@ class RequestConfiguration
         return $this->parameters->getBoolean('read', true);
     }
 
+    public function canValidate(): bool
+    {
+        return $this->parameters->getBoolean('validate', true);
+    }
+
     public function canRespond(): bool
     {
         return $this->parameters->getBoolean('respond', true);

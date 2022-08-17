@@ -39,6 +39,10 @@ final class ValidateListener
             return;
         }
 
+        if (!$configuration->canValidate()) {
+            return;
+        }
+
         if (!in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
             return;
         }

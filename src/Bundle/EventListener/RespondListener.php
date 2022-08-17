@@ -97,7 +97,7 @@ final class RespondListener
         if (in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
             return [
                 'resource' => $data,
-                'form' => $form->createView(),
+                'form' => $form?->createView(),
             ];
         }
 
