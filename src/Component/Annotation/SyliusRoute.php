@@ -41,6 +41,12 @@ final class SyliusRoute
         public ?array $stateMachine = null,
         public ?string $event = null,
         public ?bool $returnContent = null,
+        public ?string $provider = null,
+        public ?string $processor = null,
+        public ?bool $read = null,
+        public ?bool $validate = null,
+        public ?bool $write = null,
+        public ?bool $respond = null,
     ) {
     }
 }
