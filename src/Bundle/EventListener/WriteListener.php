@@ -38,6 +38,10 @@ final class WriteListener
             return;
         }
 
+        if (!$configuration->canWrite()) {
+            return;
+        }
+
         if (null === $data = $request->attributes->get('data')) {
             return;
         }
