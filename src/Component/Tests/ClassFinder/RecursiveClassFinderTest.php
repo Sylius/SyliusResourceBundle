@@ -15,6 +15,7 @@ namespace ClassFinder;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Sylius\Component\Resource\Annotation\SyliusResource;
 use Sylius\Component\Resource\ClassFinder\RecursiveClassFinder;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassTwo;
@@ -36,6 +37,18 @@ final class RecursiveClassFinderTest extends TestCase
         self::assertArrayHasKey(DummyClassThree::class, $classesArray);
         self::assertInstanceOf(ReflectionClass::class, $classesArray[DummyClassOne::class]);
         self::assertInstanceOf(ReflectionClass::class, $classesArray[DummyClassTwo::class]);
+        self::assertInstanceOf(ReflectionClass::class, $classesArray[DummyClassThree::class]);
+    }
+
+    /** @test */
+    public function it_returns_all_classes_from_directory_recursively_with_attribute(): void
+    {
+        $classFinder = new RecursiveClassFinder(new Finder());
+        $classesInDirectory = $classFinder->getFromDirectoriesWithAttribute([__DIR__ . '/../Dummy'], SyliusResource::class);
+        $classesArray = iterator_to_array($classesInDirectory);
+
+        self::assertCount(1, $classesArray);
+        self::assertArrayHasKey(DummyClassThree::class, $classesArray);
         self::assertInstanceOf(ReflectionClass::class, $classesArray[DummyClassThree::class]);
     }
 }

@@ -23,4 +23,11 @@ interface RecursiveClassFinderInterface
      * @return Iterator<string, ReflectionClass>
      */
     public function getFromDirectories(array $directories): Iterator;
+
+    /**
+     * @param array $directories
+     * @param string $attribute
+     * @return Iterator<string, ReflectionClass>
+     */
+    public function getFromDirectoriesWithAttribute(array $directories, string $attribute): Iterator;
 }

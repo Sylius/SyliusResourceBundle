@@ -56,4 +56,16 @@ final class RecursiveClassFinder implements RecursiveClassFinderInterface
             }
         }
     }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function getFromDirectoriesWithAttribute(array $directories, string $attribute): Iterator
+    {
+        foreach ($this->getFromDirectories($directories) as $className => $reflectionClass) {
+            if ($reflectionClass->getAttributes($attribute)) {
+                yield $className => $reflectionClass;
+            }
+        }
+    }
 }

@@ -13,6 +13,17 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy\Nested;
 
-final class DummyClassThree
+use Sylius\Component\Resource\Annotation\SyliusResource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[SyliusResource(
+    name: 'app.dummy_class_three',
+    model: self::class,
+)]
+final class DummyClassThree implements ResourceInterface
 {
+    public function getId(): string
+    {
+        return 'dummy';
+    }
 }
