@@ -18,6 +18,8 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORM
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Annotation\SyliusResource;
+use Sylius\Component\Resource\ClassFinder\RecursiveClassFinder;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -26,6 +28,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\Finder\Finder;
 
 final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
 {
@@ -54,6 +57,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $this->loadPersistence($config['drivers'], $config['resources'], $loader);
         $this->loadResources($config['resources'], $container);
+        $this->loadResourcesConfiguredViaAttribute($config['resources'], $container);
 
         $container->addObjectResource(Metadata::class);
         $container->addObjectResource(DriverProvider::class);
@@ -134,5 +138,24 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 DriverProvider::get($metadata)->load($container, $metadata);
             }
         }
+    }
+
+    private function loadResourcesConfiguredViaAttribute(array $loadedResources, ContainerBuilder $container): void
+    {
+        $paths = array_map(function (string $path) use ($container): string {
+            return str_replace('%kernel.project_dir%', $container->getParameter('kernel.project_dir'), $path);
+        }, $container->getParameter('sylius.resource.mapping')['paths'] ?? []);
+        $classFinder = new RecursiveClassFinder(new Finder());
+        $metadata = [];
+
+        foreach ($classFinder->getFromDirectoriesWithAttribute($paths, SyliusResource::class) as $reflectionClass) {
+            $reflectionAttribute = $reflectionClass->getAttributes(SyliusResource::class)[0];
+            /** @var SyliusResource $syliusResourceAttribute */
+            $syliusResourceAttribute = $reflectionAttribute->newInstance();
+
+            $metadata = array_merge($metadata, $syliusResourceAttribute->asArray());
+        }
+
+        $container->setParameter('sylius.resources', array_replace_recursive($loadedResources, $metadata));
     }
 }
