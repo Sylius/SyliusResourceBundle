@@ -14,7 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Annotation;
 
 use Attribute;
-use Sylius\Component\Resource\Annotation\SyliusResource\Translation;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Factory\Factory;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -24,55 +28,50 @@ final class SyliusResource
     public function __construct(
         public string $name,
         public string $model,
-        public ?string $controller = null,
-        public ?string $factory = null,
-        public ?string $form = null,
-        public ?string $repository = null,
-        public ?Translation $translation = null,
+        public string $controller = ResourceController::class,
+        public string $factory = Factory::class,
+        public string $form = DefaultResourceType::class,
+        public string $repository = EntityRepository::class,
+        public string $driver = SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
+        public ?string $translationModel = null,
+        public string $translationController = ResourceController::class,
+        public string $translationFactory = Factory::class,
+        public string $translationForm = DefaultResourceType::class,
     ) {
-        Assert::classExists($model);
+        Assert::allClassExists([$this->model, $this->controller, $this->factory, $this->form, $this->repository]);
         Assert::isAOf($model, ResourceInterface::class, sprintf('"%s" is not a valid resource model class.', $model));
-        Assert::nullOrClassExists(
-            $factory,
-            sprintf('Factory class "%s" tried to be set for resource "%s" does not exist.', $factory, $name)
-        );
-        Assert::nullOrClassExists(
-            $controller,
-            sprintf('Controller class "%s" tried to be set for resource for resource "%s" does not exist.', $controller, $name)
-        );
-        Assert::nullOrClassExists(
-            $repository,
-            sprintf('Repository class "%s" tried to be set for resource for resource "%s" does not exist.', $repository, $name)
-        );
-        Assert::nullOrClassExists(
-            $form,
-            sprintf('Form type class "%s" tried to be set for resource for resource "%s" does not exist.', $form, $name)
-        );
+
+        if ($this->translationModel) {
+            Assert::allClassExists([
+                $this->translationModel,
+                $this->translationController,
+                $this->translationFactory,
+                $this->translationForm
+            ]);
+        }
     }
 
     public function asArray(): array
     {
         $result = [];
-        $result['classes']['model'] = $this->model;
+        $result[$this->name] = [
+            'classes' => [
+                'model' => $this->model,
+                'controller' => $this->controller,
+                'factory' => $this->factory,
+                'form' => $this->form,
+                'repository' => $this->repository,
+            ],
+            'driver' => $this->driver,
+        ];
 
-        if (null !== $this->controller) {
-            $result['classes']['controller'] = $this->controller;
-        }
-
-        if (null !== $this->factory) {
-            $result['classes']['factory'] = $this->factory;
-        }
-
-        if (null !== $this->form) {
-            $result['classes']['form'] = $this->form;
-        }
-
-        if (null !== $this->repository) {
-            $result['classes']['repository'] = $this->repository;
-        }
-
-        if (null !== $this->translation) {
-            $result['translation'] = $this->translation->asArray();
+        if ($this->translationModel) {
+            $result[$this->name]['translation']['classes'] = [
+                'model' => $this->translationModel,
+                'controller' => $this->translationController,
+                'factory' => $this->translationFactory,
+                'form' => $this->translationForm,
+            ];
         }
 
         return $result;
