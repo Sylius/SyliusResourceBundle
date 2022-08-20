@@ -30,7 +30,7 @@ final class RecursiveClassFinder implements RecursiveClassFinderInterface
      * @return Iterator<string, ReflectionClass>
      * @throws ReflectionException
      */
-    public function getFromDirectories(array $directories): Iterator
+    public function findInDirectories(array $directories): Iterator
     {
         $this->finder->files()->name('*.php')->in($directories);
         $includedFiles = [];
@@ -60,9 +60,9 @@ final class RecursiveClassFinder implements RecursiveClassFinderInterface
     /**
      * @throws ReflectionException
      */
-    public function getFromDirectoriesWithAttribute(array $directories, string $attribute): Iterator
+    public function findInDirectoriesWithAttribute(array $directories, string $attribute): Iterator
     {
-        foreach ($this->getFromDirectories($directories) as $className => $reflectionClass) {
+        foreach ($this->findInDirectories($directories) as $className => $reflectionClass) {
             if ($reflectionClass->getAttributes($attribute)) {
                 yield $className => $reflectionClass;
             }

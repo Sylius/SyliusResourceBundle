@@ -148,7 +148,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $classFinder = new RecursiveClassFinder(new Finder());
         $metadata = [];
 
-        foreach ($classFinder->getFromDirectoriesWithAttribute($paths, SyliusResource::class) as $reflectionClass) {
+        foreach ($classFinder->findInDirectoriesWithAttribute($paths, SyliusResource::class) as $reflectionClass) {
             $reflectionAttribute = $reflectionClass->getAttributes(SyliusResource::class)[0];
             /** @var SyliusResource $syliusResourceAttribute */
             $syliusResourceAttribute = $reflectionAttribute->newInstance();

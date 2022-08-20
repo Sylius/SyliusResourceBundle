@@ -17,6 +17,9 @@ use Symfony\Component\Finder\Finder;
 
 final class ClassReflection
 {
+    /**
+     * @deprecated since 1.10, will be removed in 2.0. Use \Sylius\Component\Resource\ClassFinder\RecursiveClassFinder::getFromDirectories::findInDirectories instead.
+     */
     public static function getResourcesByPaths(array $paths): iterable
     {
         foreach ($paths as $resourceDirectory) {
@@ -28,6 +31,9 @@ final class ClassReflection
         }
     }
 
+    /**
+     * @deprecated since 1.10, will be removed in 2.0. Use \Sylius\Component\Resource\ClassFinder\RecursiveClassFinder::getFromDirectories::findInDirectories instead.
+     */
     public static function getResourcesByPath(string $path): iterable
     {
         $finder = new Finder();

@@ -28,7 +28,7 @@ final class RecursiveClassFinderTest extends TestCase
     public function it_returns_all_classes_from_directory_recursively(): void
     {
         $classFinder = new RecursiveClassFinder(new Finder());
-        $classesInDirectory = $classFinder->getFromDirectories([__DIR__ . '/../Dummy']);
+        $classesInDirectory = $classFinder->findInDirectories([__DIR__ . '/../Dummy']);
         $classesArray = iterator_to_array($classesInDirectory);
 
         self::assertCount(3, $classesArray);
@@ -44,7 +44,7 @@ final class RecursiveClassFinderTest extends TestCase
     public function it_returns_all_classes_from_directory_recursively_with_attribute(): void
     {
         $classFinder = new RecursiveClassFinder(new Finder());
-        $classesInDirectory = $classFinder->getFromDirectoriesWithAttribute([__DIR__ . '/../Dummy'], SyliusResource::class);
+        $classesInDirectory = $classFinder->findInDirectoriesWithAttribute([__DIR__ . '/../Dummy'], SyliusResource::class);
         $classesArray = iterator_to_array($classesInDirectory);
 
         self::assertCount(1, $classesArray);
