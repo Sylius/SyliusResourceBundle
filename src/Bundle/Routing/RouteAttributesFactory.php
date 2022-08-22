@@ -195,7 +195,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
         }
 
         if ('create' === $operation) {
-            return sprintf('%s/{id}/new', $rootPath);
+            return sprintf('%s/new', $rootPath);
         }
 
         if ('update' === $operation) {
