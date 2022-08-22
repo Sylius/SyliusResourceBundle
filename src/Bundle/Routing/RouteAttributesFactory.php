@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Gedmo\Sluggable\Util\Urlizer;
+use Sylius\Bundle\GridBundle\Builder\Action\ShowAction;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Annotation\CreateAction;
 use Sylius\Component\Resource\Annotation\DeleteAction;
@@ -37,6 +38,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
     {
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, SyliusRoute::class));
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class), 'create', ['GET', 'POST']);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, ShowAction::class), 'show', ['GET']);
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class), 'index', ['GET']);
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class), 'update', ['GET', 'PUT']);
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, DeleteAction::class), 'delete', ['DELETE']);
