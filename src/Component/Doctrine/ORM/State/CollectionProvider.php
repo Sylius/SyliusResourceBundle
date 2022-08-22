@@ -27,7 +27,7 @@ final class CollectionProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(RequestConfiguration $configuration)
+    public function provide(RequestConfiguration $configuration): mixed
     {
         $metadata = $configuration->getMetadata();
         $repositoryId = $metadata->getServiceId('repository');

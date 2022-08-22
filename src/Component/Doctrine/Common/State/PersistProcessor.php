@@ -23,12 +23,12 @@ final class PersistProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, RequestConfiguration $configuration)
+    public function process(mixed $data, RequestConfiguration $configuration): mixed
     {
         $manager = $this->managerRegistry->getManagerForClass($configuration->getMetadata()->getClass('model'));
 
         if (null === $manager) {
-            return;
+            return $data;
         }
 
         if (!$manager->contains($data)) {

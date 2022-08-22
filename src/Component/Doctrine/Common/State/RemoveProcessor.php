@@ -23,7 +23,7 @@ final class RemoveProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, RequestConfiguration $configuration)
+    public function process(mixed $data, RequestConfiguration $configuration): void
     {
         $manager = $this->managerRegistry->getManagerForClass($configuration->getMetadata()->getClass('model'));
 

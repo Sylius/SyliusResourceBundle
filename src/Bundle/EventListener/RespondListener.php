@@ -80,7 +80,7 @@ final class RespondListener
         $event->setResponse($response);
     }
 
-    private function getContext(ResourceInterface $controllerResult, RequestConfiguration $configuration): array
+    private function getContext(object $controllerResult, RequestConfiguration $configuration): array
     {
         $request = $configuration->getRequest();
 

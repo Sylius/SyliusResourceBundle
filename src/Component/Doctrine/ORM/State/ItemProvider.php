@@ -28,7 +28,7 @@ final class ItemProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(RequestConfiguration $configuration)
+    public function provide(RequestConfiguration $configuration): ?object
     {
         $metadata = $configuration->getMetadata();
         $repositoryId = sprintf('%s.repository.%s', $metadata->getApplicationName(), $metadata->getName());
