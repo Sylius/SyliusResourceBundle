@@ -188,7 +188,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
     {
         Assert::notNull($metadata, 'Impossible to get default route path without resource. Please define a resource.');
 
-        $rootPath = sprintf('/%s/', Urlizer::urlize($metadata->getPluralName()));
+        $rootPath = sprintf('%s', Urlizer::urlize($metadata->getPluralName()));
 
         if ('index' === $operation) {
             return sprintf('%s', $rootPath);
