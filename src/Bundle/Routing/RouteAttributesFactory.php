@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
+use Sylius\Bundle\GridBundle\Builder\Action\UpdateAction;
+use Sylius\Component\Resource\Annotation\CreateAction;
+use Sylius\Component\Resource\Annotation\IndexAction;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
@@ -23,8 +26,15 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
 {
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
-        $attributes = ClassReflection::getClassAttributes($className, SyliusRoute::class);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, SyliusRoute::class));
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class));
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class));
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class));
+    }
 
+    /** @param \ReflectionAttribute[] $attributes */
+    private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes): void
+    {
         foreach ($attributes as $reflectionAttribute) {
             $arguments = $reflectionAttribute->getArguments();
 

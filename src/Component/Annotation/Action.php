@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Annotation;
 
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class SyliusRoute
+abstract class Action
 {
     public function __construct(
         public ?string $name = null,
@@ -41,6 +40,14 @@ final class SyliusRoute
         public ?array $stateMachine = null,
         public ?string $event = null,
         public ?bool $returnContent = null,
+        public ?string $resource = null,
+        public ?string $operation = null,
+        public ?string $provider = null,
+        public ?string $processor = null,
+        public ?bool $read = null,
+        public ?bool $validate = null,
+        public ?bool $write = null,
+        public ?bool $respond = null,
     ) {
     }
 }
