@@ -15,6 +15,9 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
+use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
 
 final class CallableProvider implements ProviderInterface
 {
@@ -31,6 +34,10 @@ final class CallableProvider implements ProviderInterface
             return $provider($configuration);
         }
 
+        if (null === $provider) {
+            $provider = $this->getDefaultProvider($configuration);
+        }
+
         if (\is_string($provider)) {
             if (!$this->locator->has($provider)) {
                 throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $configuration->getOperation()));
@@ -43,5 +50,20 @@ final class CallableProvider implements ProviderInterface
         }
 
         throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $configuration->getOperation()));
+    }
+
+    private function getDefaultProvider(RequestConfiguration $configuration): ?string
+    {
+        $driver = $configuration->getMetadata()->getDriver();
+
+        if (SyliusResourceBundle::DRIVER_DOCTRINE_ORM === $driver) {
+            if ($configuration->getOperation() === 'index') {
+                return CollectionProvider::class;
+            }
+
+            return ItemProvider::class;
+        }
+
+        return null;
     }
 }

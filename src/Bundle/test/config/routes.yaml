@@ -49,7 +49,6 @@ app_poc_book_index:
             resource: app.science_book
             operation: index
             template: 'ScienceBook/index.html.twig'
-            provider: Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider
 
 app_poc_book_create:
     path: /poc/books/new
@@ -60,8 +59,6 @@ app_poc_book_create:
             resource: app.science_book
             operation: create
             template: 'ScienceBook/create.html.twig'
-            provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
-            processor: Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor
 
 app_poc_book_update:
     path: /poc/books/{id}/edit
@@ -72,8 +69,6 @@ app_poc_book_update:
             resource: app.science_book
             operation: update
             template: 'ScienceBook/update.html.twig'
-            provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
-            processor: Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor
 
 app_poc_book_show:
     path: /poc/books/{id}
@@ -84,8 +79,6 @@ app_poc_book_show:
             resource: app.science_book
             operation: show
             template: 'ScienceBook/show.html.twig'
-            provider: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
-            processor: Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider
 
 app_book_sortable_index:
     path: /sortable-books/

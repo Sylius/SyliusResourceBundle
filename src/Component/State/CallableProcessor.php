@@ -15,6 +15,9 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
+use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 
 final class CallableProcessor implements ProcessorInterface
 {
@@ -27,12 +30,12 @@ final class CallableProcessor implements ProcessorInterface
      */
     public function process(mixed $data, RequestConfiguration $configuration)
     {
-        if (!($processor = $configuration->getProcessor())) {
-            return null;
+        if (\is_callable($processor = $configuration->getProcessor())) {
+            return $processor($data, $configuration);
         }
 
-        if (\is_callable($processor)) {
-            return $processor($data, $configuration);
+        if (null === $processor) {
+            $processor = $this->getDefaultProcessor($configuration);
         }
 
         if (\is_string($processor)) {
@@ -44,6 +47,25 @@ final class CallableProcessor implements ProcessorInterface
             $processor = $this->locator->get($processor);
 
             return $processor->process($data, $configuration);
+        }
+
+        return null;
+    }
+
+    private function getDefaultProcessor(RequestConfiguration $configuration): ?string
+    {
+        $driver = $configuration->getMetadata()->getDriver();
+
+        if (in_array($driver, [
+            SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
+            SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM,
+            SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM,
+        ], true)) {
+            if ($configuration->getOperation() === 'delete') {
+                return RemoveProcessor::class;
+            }
+
+            return PersistProcessor::class;
         }
 
         return null;
