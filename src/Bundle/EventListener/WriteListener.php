@@ -15,9 +15,11 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class WriteListener
 {
@@ -30,11 +32,19 @@ final class WriteListener
     ) {
     }
 
-    public function onKernelView(RequestEvent $event): void
+    public function onKernelView(ViewEvent $event): void
     {
+        /** @var Response|ResourceInterface $controllerResult */
+        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
 
         if (null === $configuration = $this->initializeConfiguration($request)) {
+            return;
+        }
+
+        if (
+            $controllerResult instanceof Response
+        ) {
             return;
         }
 
@@ -42,15 +52,11 @@ final class WriteListener
             return;
         }
 
-        if (null === $data = $request->attributes->get('data')) {
-            return;
-        }
-
         if (!$request->attributes->get('is_valid')) {
             return;
         }
 
-        $data = $this->processor->process($data, $configuration);
-        $request->attributes->set('data', $data);
+        $data = $this->processor->process($controllerResult, $configuration);
+        $event->setControllerResult($data);
     }
 }

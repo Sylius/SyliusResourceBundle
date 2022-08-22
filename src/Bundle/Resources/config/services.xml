@@ -41,7 +41,7 @@
         <service id="sylius.listener.validate" class="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.resource_controller.form_factory" on-invalid="null" />
+            <argument type="service" id="sylius.resource_controller.form_factory" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
         </service>
 

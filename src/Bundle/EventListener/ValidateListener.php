@@ -16,8 +16,10 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class ValidateListener
@@ -27,15 +29,24 @@ final class ValidateListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ?ResourceFormFactoryInterface $formFactory,
+        private ResourceFormFactoryInterface $formFactory,
     ) {
     }
 
     public function onKernelView(ViewEvent $event): void
     {
+        /** @var Response|ResourceInterface $controllerResult */
+        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
 
         if (null === $configuration = $this->initializeConfiguration($request)) {
+            return;
+        }
+
+        if (
+            $controllerResult instanceof Response ||
+            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
+        ) {
             return;
         }
 
@@ -43,13 +54,7 @@ final class ValidateListener
             return;
         }
 
-        if (!in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
-            return;
-        }
-
-        $data = $request->attributes->get('data');
-
-        $form = $this->formFactory->create($configuration, $data);
+        $form = $this->formFactory->create($configuration, $controllerResult);
         $form->handleRequest($request);
 
         $request->attributes->set('form', $form);
@@ -60,7 +65,7 @@ final class ValidateListener
             $form->isValid()
         ) {
             $request->attributes->set('is_valid', true);
-            $request->attributes->set('data', $form->getData());
+            $event->setControllerResult($form->getData());
 
             return;
         }
