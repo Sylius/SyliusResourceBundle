@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
+use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Annotation\CreateAction;
+use Sylius\Component\Resource\Annotation\DeleteAction;
 use Sylius\Component\Resource\Annotation\IndexAction;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
 use Sylius\Component\Resource\Annotation\UpdateAction;
@@ -30,6 +32,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class), 'create', ['GET', 'POST']);
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class), 'index', ['GET']);
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class), 'update', ['GET', 'PUT']);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, DeleteAction::class), 'delete', ['DELETE']);
     }
 
     /** @param \ReflectionAttribute[] $attributes */
@@ -137,7 +140,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
             $route = new Route(
                 $arguments['path'],
                 [
-                    '_controller' => $arguments['controller'] ?? null,
+                    '_controller' => $arguments['controller'] ?? PlaceHolderAction::class,
                     '_sylius' => $syliusOptions,
                 ],
                 $arguments['requirements'] ?? [],

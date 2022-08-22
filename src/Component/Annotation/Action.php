@@ -18,7 +18,6 @@ abstract class Action
     public function __construct(
         public ?string $name = null,
         public ?string $path = null,
-        public ?array $methods = null,
         public ?string $controller = null,
         public ?string $template = null,
         public ?array $repository = null,
