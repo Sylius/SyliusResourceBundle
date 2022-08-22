@@ -48,7 +48,7 @@ final class ReadListener
         }
 
         if ('create' === $configuration->getOperation()) {
-            $factoryId = sprintf('%s.factory.%s', $configuration->getMetadata()->getApplicationName(), $configuration->getMetadata()->getName());
+            $factoryId = $configuration->getMetadata()->getServiceId('factory');
 
             if (!$this->factoryLocator->has($factoryId)) {
                 throw new \RuntimeException(sprintf('Factory "%s" not found on operation "%s"', $factoryId, $configuration->getOperation()));

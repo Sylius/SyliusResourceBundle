@@ -30,7 +30,7 @@ final class CollectionProvider implements ProviderInterface
     public function provide(RequestConfiguration $configuration)
     {
         $metadata = $configuration->getMetadata();
-        $repositoryId = sprintf('%s.repository.%s', $metadata->getApplicationName(), $metadata->getName());
+        $repositoryId = $metadata->getServiceId('repository');
 
         if (!$this->repositoryLocator->has($repositoryId)) {
             throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repositoryId, $configuration->getOperation()));
