@@ -41,7 +41,6 @@ abstract class Action
         public ?string $event = null,
         public ?bool $returnContent = null,
         public ?string $resource = null,
-        public ?string $operation = null,
         public ?string $provider = null,
         public ?string $processor = null,
         public ?bool $read = null,

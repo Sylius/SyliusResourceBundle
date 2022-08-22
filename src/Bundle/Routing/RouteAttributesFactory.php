@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
-use Sylius\Bundle\GridBundle\Builder\Action\UpdateAction;
 use Sylius\Component\Resource\Annotation\CreateAction;
 use Sylius\Component\Resource\Annotation\IndexAction;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Component\Resource\Annotation\UpdateAction;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -27,13 +27,13 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, SyliusRoute::class));
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class));
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class));
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class));
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class), 'create', ['GET', 'POST']);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class), 'index', ['GET']);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class), 'update', ['GET', 'PUT']);
     }
 
     /** @param \ReflectionAttribute[] $attributes */
-    private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes): void
+    private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes, ?string $operation = null, array $methods = []): void
     {
         foreach ($attributes as $reflectionAttribute) {
             $arguments = $reflectionAttribute->getArguments();
@@ -62,8 +62,8 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['resource'] = $arguments['resource'];
             }
 
-            if (isset($arguments['operation'])) {
-                $syliusOptions['operation'] = $arguments['operation'];
+            if (null !== $operation) {
+                $syliusOptions['operation'] = $operation;
             }
 
             if (isset($arguments['provider'])) {
@@ -144,7 +144,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $arguments['options'] ?? [],
                 $arguments['host'] ?? '',
                 $arguments['schemes'] ?? [],
-                $arguments['methods'] ?? [],
+                $arguments['methods'] ?? $methods,
             );
 
             $routeCollection->add($arguments['name'], $route, $arguments['priority'] ?? 0);
