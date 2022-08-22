@@ -173,8 +173,9 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
         return sprintf('%s_%s_%s', $metadata->getApplicationName(), $metadata->getName(), $operation);
     }
 
-    private function getDefaultRoutePath(?MetadataInterface $metadata, array $arguments, string $operation): string
+    private function getDefaultRoutePath(?MetadataInterface $metadata, array $arguments, ?string $operation): string
     {
+        Assert::notNull($operation, 'Impossible to get default route path without operation. Please define an operation.');
         $defaultPath = $this->getDefaultRoutePathForOperation($metadata, $operation);
 
         if (isset($arguments['section'])) {
