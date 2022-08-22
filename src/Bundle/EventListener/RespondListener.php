@@ -17,6 +17,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\Form\FormInterface;
@@ -38,6 +39,7 @@ final class RespondListener
 
     public function onKernelView(ViewEvent $event): void
     {
+        /** @var Response|ResourceInterface $controllerResult */
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $isValid = $request->attributes->get('is_valid', false);
@@ -69,7 +71,7 @@ final class RespondListener
 
         $content = $this->twig->render(
             $configuration->getTemplate($configuration->getOperation()),
-            $this->getContext($configuration),
+            $this->getContext($controllerResult, $configuration),
         );
 
         $response = new Response();
@@ -78,10 +80,9 @@ final class RespondListener
         $event->setResponse($response);
     }
 
-    private function getContext(RequestConfiguration $configuration): array
+    private function getContext(ResourceInterface $controllerResult, RequestConfiguration $configuration): array
     {
         $request = $configuration->getRequest();
-        $data = $request->attributes->get('data');
 
         /** @var FormInterface|null $form */
         $form = $request->attributes->get('form');
@@ -92,19 +93,19 @@ final class RespondListener
         ];
 
         if (ResourceActions::INDEX === $configuration->getOperation()) {
-            $context['resources'] = $data;
+            $context['resources'] = $controllerResult;
 
             return $context;
         }
 
         if (ResourceActions::SHOW === $configuration->getOperation()) {
-            $context['resource'] = $data;
+            $context['resource'] = $controllerResult;
 
             return $context;
         }
 
         if (in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
-            $context['resource'] = $data;
+            $context['resource'] = $controllerResult;
             $context['form'] = $form?->createView();
 
             return $context;
