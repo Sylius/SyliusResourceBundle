@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\ApiTestCase;
+use App\Entity\ScienceBook;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +55,60 @@ final class ScienceBookUiTest extends ApiTestCase
             sprintf('<tr><td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td></tr>', $scienceBooks['science-book2']->getId()),
             $content,
         );
+    }
+
+    /** @test */
+    public function it_allows_creating_a_book(): void
+    {
+        $newBookTitle = 'The Book of Why';
+        $newBookAuthorFirstName = 'Judea';
+        $newBookAuthorLastName = 'Pearl';
+
+        $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/new');
+        $this->client->submitForm('Create', [
+            'sylius_resource[title]' => $newBookTitle,
+            'sylius_resource[author][firstName]' => $newBookAuthorFirstName,
+            'sylius_resource[author][lastName]' => $newBookAuthorLastName,
+        ]);
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var ScienceBook $book */
+        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+
+        $this->assertNotNull($book);
+        $this->assertSame($newBookTitle, $book->getTitle());
+        $this->assertSame($newBookAuthorFirstName, $book->getAuthorFirstName());
+        $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
+    }
+
+    /** @test */
+    public function it_allows_updating_a_book(): void
+    {
+        $newBookTitle = 'The Book of Why';
+        $newBookAuthorFirstName = 'Judea';
+        $newBookAuthorLastName = 'Pearl';
+
+        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
+        $this->client->submitForm('Save changes', [
+            'sylius_resource[title]' => $newBookTitle,
+            'sylius_resource[author][firstName]' => $newBookAuthorFirstName,
+            'sylius_resource[author][lastName]' => $newBookAuthorLastName,
+        ]);
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var ScienceBook $book */
+        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+
+        $this->assertNotNull($book);
+        $this->assertSame($newBookTitle, $book->getTitle());
+        $this->assertSame($newBookAuthorFirstName, $book->getAuthorFirstName());
+        $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
     }
 
     protected function buildMatcher(): Matcher
