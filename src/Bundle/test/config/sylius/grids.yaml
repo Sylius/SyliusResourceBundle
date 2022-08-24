@@ -1,0 +1,23 @@
+sylius_grid:
+    grids:
+        science_book_grid:
+            driver:
+                options:
+                    class: '%app.model.science_book.class%'
+            sorting:
+                title: asc
+            fields:
+                title:
+                    type: string
+                    sortable: ~
+                authorFirstName:
+                    type: string
+                    sortable: author.firstName
+                authorLastName:
+                    type: string
+                    sortable: author.firstName
+            filters:
+                search:
+                    type: string
+                    options:
+                        fields: [title, author.firstName, author.lastName]
