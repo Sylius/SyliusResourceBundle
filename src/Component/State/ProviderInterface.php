@@ -15,6 +15,11 @@ namespace Sylius\Component\Resource\State;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 
+/**
+ * Retrieves data from a persistence layer.
+ *
+ * @experimental
+ */
 interface ProviderInterface
 {
     public function provide(RequestConfiguration $configuration);
