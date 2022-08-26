@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Annotation;
 
+use Sylius\Component\Resource\Metadata\Operation;
+
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class CreateAction extends Action
+final class Show extends Operation
 {
 }

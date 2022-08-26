@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Annotation;
+namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class DeleteAction extends Action
+final class Delete extends Operation
 {
 }

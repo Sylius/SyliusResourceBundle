@@ -15,13 +15,15 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
-use Sylius\Component\Resource\Annotation\CreateAction;
-use Sylius\Component\Resource\Annotation\DeleteAction;
-use Sylius\Component\Resource\Annotation\IndexAction;
-use Sylius\Component\Resource\Annotation\ShowAction;
+use Sylius\Component\Resource\Annotation\Index;
+use Sylius\Component\Resource\Annotation\Show;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
-use Sylius\Component\Resource\Annotation\UpdateAction;
+use Sylius\Component\Resource\Annotation\Update;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Delete;
+use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
@@ -30,25 +32,32 @@ use Webmozart\Assert\Assert;
 
 final class RouteAttributesFactory implements RouteAttributesFactoryInterface
 {
-    public function __construct(private RegistryInterface $resourceRegistry)
-    {
+    public function __construct(
+        private RegistryInterface $resourceRegistry,
+    ) {
     }
 
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, SyliusRoute::class));
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, CreateAction::class), 'create', ['GET', 'POST']);
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, IndexAction::class), 'index', ['GET']);
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, UpdateAction::class), 'update', ['GET', 'PUT']);
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, ShowAction::class), 'show', ['GET']);
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, DeleteAction::class), 'delete', ['DELETE']);
+        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Create::class), 'create', ['GET', 'POST']);
+        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Index::class), 'index', ['GET']);
+        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Update::class), 'update', ['GET', 'PUT']);
+        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Show::class), 'show', ['GET']);
+        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Delete::class), 'delete', ['DELETE']);
     }
 
     /** @param \ReflectionAttribute[] $attributes */
     private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes, ?string $operation = null, array $methods = []): void
     {
-        foreach ($attributes as $reflectionAttribute) {
-            $arguments = $reflectionAttribute->getArguments();
+        foreach ($attributes as $attribute) {
+            if (
+                !is_a($operationClass = $attribute->getName(), Operation::class, true)
+            ) {
+                $this->getParametersMap($operationClass);
+            }
+
+            $arguments = $attribute->getArguments();
 
             $syliusOptions = [];
 
@@ -214,5 +223,18 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
         }
 
         throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with operation "%s". Please define a path.', $operation));
+    }
+
+    private function getParametersMap(string $operationClass): array
+    {
+        $reflection = new \ReflectionClass($operationClass);
+
+        $values = [];
+
+        foreach ($reflection->getConstructor()->getParameters() as $reflectionParameter) {
+            $values[$reflectionParameter->getName()] = $reflectionParameter->getDefaultValue();
+        }
+
+        return $values;
     }
 }

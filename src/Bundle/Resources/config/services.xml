@@ -16,7 +16,10 @@
         <import resource="services/console.xml" />
         <import resource="services/controller.xml" />
         <import resource="services/form.xml" />
+        <import resource="services/listener.xml" />
+        <import resource="services/metadata.xml" />
         <import resource="services/routing.xml" />
+        <import resource="services/state.xml" />
         <import resource="services/storage.xml" />
     </imports>
 
@@ -29,77 +32,12 @@
 
         <service id="sylius.action.placeholder" class="Sylius\Component\Resource\Action\PlaceHolderAction" />
 
-        <service id="sylius.listener.read" class="Sylius\Bundle\ResourceBundle\EventListener\ReadListener">
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.state_provider" />
-            <argument type="service" id="sylius.factory.locator" />
-            <argument type="service" id="sylius.resource_controller.new_resource_factory" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
-        </service>
-
-        <service id="sylius.listener.validate" class="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener">
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.resource_controller.form_factory" />
-            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
-        </service>
-
-        <service id="sylius.listener.write" class="Sylius\Bundle\ResourceBundle\EventListener\WriteListener">
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.state_processor" />
-            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="32" />
-        </service>
-
-        <service id="sylius.listener.respond" class="Sylius\Bundle\ResourceBundle\EventListener\RespondListener">
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.resource_controller.redirect_handler" />
-            <argument type="service" id="twig" on-invalid="null" />
-            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
-        </service>
-
-        <service id="sylius.factory.locator" class="Sylius\Component\Resource\Factory\FactoryLocator">
+        <service id="sylius.factory.locator" class="Sylius\Component\Resource\Factory\FactoryLocator" public="false">
             <argument type="tagged_locator" tag="sylius.factory"/>
         </service>
 
-        <service id="sylius.repository.locator" class="Sylius\Component\Resource\Repository\RepositoryLocator">
+        <service id="sylius.repository.locator" class="Sylius\Component\Resource\Repository\RepositoryLocator" public="false">
             <argument type="tagged_locator" tag="sylius.repository"/>
-        </service>
-
-        <service id="sylius.state_provider.locator" class="Sylius\Component\Resource\State\CallableProvider">
-            <argument type="tagged_locator" tag="sylius.state_provider"/>
-        </service>
-        <service id="sylius.state_provider" alias="sylius.state_provider.locator" />
-
-        <service id="sylius.state_processor.locator" class="Sylius\Component\Resource\State\CallableProcessor">
-            <argument type="tagged_locator" tag="sylius.state_processor"/>
-        </service>
-        <service id="sylius.state_processor" alias="sylius.state_processor.locator" />
-
-        <service id="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor" class="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor">
-            <argument type="service" id="doctrine" />
-
-            <tag name="sylius.state_processor" priority="-100" />
-        </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" class="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor">
-            <argument type="service" id="doctrine" />
-
-            <tag name="sylius.state_processor" priority="-100" />
-        </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider">
-            <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
-            <argument type="service" id="sylius.repository.locator" />
-            <tag name="sylius.state_provider" />
-        </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider">
-            <argument type="service" id="sylius.resource_controller.single_resource_provider" />
-            <argument type="service" id="sylius.repository.locator" />
-            <tag name="sylius.state_provider" />
         </service>
 
         <service id="sylius.random_generator" class="Sylius\Component\Resource\Generator\RandomnessGenerator" />

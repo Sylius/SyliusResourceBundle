@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true" />
+
+        <service id="sylius.listener.read" class="Sylius\Bundle\ResourceBundle\EventListener\ReadListener" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.state_provider" />
+            <argument type="service" id="sylius.factory.locator" />
+            <argument type="service" id="sylius.resource_controller.new_resource_factory" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
+        </service>
+
+        <service id="sylius.listener.validate" class="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.resource_controller.form_factory" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
+        </service>
+
+        <service id="sylius.listener.write" class="Sylius\Bundle\ResourceBundle\EventListener\WriteListener" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.state_processor" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="32" />
+        </service>
+
+        <service id="sylius.listener.respond" class="Sylius\Bundle\ResourceBundle\EventListener\RespondListener" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.resource_controller.redirect_handler" />
+            <argument type="service" id="twig" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
+        </service>
+    </services>
+</container>

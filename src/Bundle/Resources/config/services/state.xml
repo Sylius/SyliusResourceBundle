@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true" />
+
+        <service id="sylius.state_provider.locator" class="Sylius\Component\Resource\State\CallableProvider" public="false">
+            <argument type="tagged_locator" tag="sylius.state_provider"/>
+        </service>
+        <service id="sylius.state_provider" alias="sylius.state_provider.locator" />
+
+        <service id="sylius.state_processor.locator" class="Sylius\Component\Resource\State\CallableProcessor" public="false">
+            <argument type="tagged_locator" tag="sylius.state_processor"/>
+        </service>
+        <service id="sylius.state_processor" alias="sylius.state_processor.locator" />
+
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor" class="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor" public="false">
+            <argument type="service" id="doctrine" />
+
+            <tag name="sylius.state_processor" priority="-100" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" class="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" public="false">
+            <argument type="service" id="doctrine" />
+
+            <tag name="sylius.state_processor" priority="-100" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider" public="false">
+            <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
+            <argument type="service" id="sylius.repository.locator" />
+            <tag name="sylius.state_provider" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider" class="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider" public="false">
+            <argument type="service" id="sylius.resource_controller.single_resource_provider" />
+            <argument type="service" id="sylius.repository.locator" />
+            <tag name="sylius.state_provider" />
+        </service>
+    </services>
+</container>

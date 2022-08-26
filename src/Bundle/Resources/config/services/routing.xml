@@ -37,6 +37,7 @@
 
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false">
             <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.metadata_factory.operation" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
     </services>
