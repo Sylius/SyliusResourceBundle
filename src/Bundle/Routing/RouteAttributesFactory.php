@@ -13,50 +13,23 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
-use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
-use Sylius\Component\Resource\Annotation\Index;
-use Sylius\Component\Resource\Annotation\Show;
 use Sylius\Component\Resource\Annotation\SyliusRoute;
-use Sylius\Component\Resource\Annotation\Update;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Webmozart\Assert\Assert;
 
 final class RouteAttributesFactory implements RouteAttributesFactoryInterface
 {
-    public function __construct(
-        private RegistryInterface $resourceRegistry,
-    ) {
-    }
-
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
         $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, SyliusRoute::class));
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Create::class), 'create', ['GET', 'POST']);
-        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Index::class), 'index', ['GET']);
-        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Update::class), 'update', ['GET', 'PUT']);
-        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Show::class), 'show', ['GET']);
-        // $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className, Delete::class), 'delete', ['DELETE']);
     }
 
     /** @param \ReflectionAttribute[] $attributes */
     private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes, ?string $operation = null, array $methods = []): void
     {
         foreach ($attributes as $attribute) {
-            if (
-                !is_a($operationClass = $attribute->getName(), Operation::class, true)
-            ) {
-                $this->getParametersMap($operationClass);
-            }
-
             $arguments = $attribute->getArguments();
 
             $syliusOptions = [];
@@ -75,38 +48,6 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
 
             if (isset($arguments['repository'])) {
                 $syliusOptions['repository'] = $arguments['repository'];
-            }
-
-            if (isset($arguments['resource'])) {
-                $syliusOptions['resource'] = $arguments['resource'];
-            }
-
-            if (null !== $operation) {
-                $syliusOptions['operation'] = $operation;
-            }
-
-            if (isset($arguments['provider'])) {
-                $syliusOptions['provider'] = $arguments['provider'];
-            }
-
-            if (isset($arguments['processor'])) {
-                $syliusOptions['processor'] = $arguments['processor'];
-            }
-
-            if (isset($arguments['read'])) {
-                $syliusOptions['read'] = $arguments['read'];
-            }
-
-            if (isset($arguments['validate'])) {
-                $syliusOptions['validate'] = $arguments['validate'];
-            }
-
-            if (isset($arguments['write'])) {
-                $syliusOptions['write'] = $arguments['write'];
-            }
-
-            if (isset($arguments['respond'])) {
-                $syliusOptions['respond'] = $arguments['respond'];
             }
 
             if (isset($arguments['serializationGroups'])) {
@@ -153,10 +94,8 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $syliusOptions['return_content'] = $arguments['returnContent'];
             }
 
-            $metadata = isset($arguments['resource']) ? $this->resourceRegistry->get($arguments['resource']) : null;
-
             $route = new Route(
-                $arguments['path'] ?? $this->getDefaultRoutePath($metadata, $arguments, $operation),
+                $arguments['path'] ?? '',
                 [
                     '_controller' => $arguments['controller'] ?? PlaceHolderAction::class,
                     '_sylius' => $syliusOptions,
@@ -168,73 +107,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
                 $arguments['methods'] ?? $methods,
             );
 
-            $routeCollection->add($arguments['name'] ?? $this->getDefaultRouteName($metadata, $arguments, $operation), $route, $arguments['priority'] ?? 0);
+            $routeCollection->add($arguments['name'] ?? '', $route, $arguments['priority'] ?? 0);
         }
-    }
-
-    private function getDefaultRouteName(?MetadataInterface $metadata, array $arguments, ?string $operation): string
-    {
-        Assert::notNull($operation, 'Impossible to get default route name without operation. Please define an operation.');
-        Assert::notNull($metadata, 'Impossible to get default route name without resource. Please define a resource.');
-
-        if (isset($arguments['section'])) {
-            return sprintf('%s_%s_%s_%s', $metadata->getApplicationName(), $arguments['section'], $metadata->getName(), $operation);
-        }
-
-        return sprintf('%s_%s_%s', $metadata->getApplicationName(), $metadata->getName(), $operation);
-    }
-
-    private function getDefaultRoutePath(?MetadataInterface $metadata, array $arguments, ?string $operation): string
-    {
-        Assert::notNull($operation, 'Impossible to get default route path without operation. Please define an operation.');
-        $defaultPath = $this->getDefaultRoutePathForOperation($metadata, $operation);
-
-        if (isset($arguments['section'])) {
-            return sprintf('%s/%s', $arguments['section'], $defaultPath);
-        }
-
-        return $defaultPath;
-    }
-
-    private function getDefaultRoutePathForOperation(?MetadataInterface $metadata, string $operation): string
-    {
-        Assert::notNull($metadata, 'Impossible to get default route path without resource. Please define a resource.');
-
-        $rootPath = sprintf('%s', Urlizer::urlize($metadata->getPluralName()));
-
-        if ('index' === $operation) {
-            return sprintf('%s', $rootPath);
-        }
-
-        if ('create' === $operation) {
-            return sprintf('%s/new', $rootPath);
-        }
-
-        if ('update' === $operation) {
-            return sprintf('%s/{id}/edit', $rootPath);
-        }
-
-        if ('delete' === $operation) {
-            return sprintf('%s/{id}', $rootPath);
-        }
-
-        if ('show' === $operation) {
-            return sprintf('%s/{id}', $rootPath);
-        }
-
-        throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with operation "%s". Please define a path.', $operation));
-    }
-
-    private function getParametersMap(string $operationClass): array
-    {
-        $reflection = new \ReflectionClass($operationClass);
-
-        $values = [];
-
-        foreach ($reflection->getConstructor()->getParameters() as $reflectionParameter) {
-            $values[$reflectionParameter->getName()] = $reflectionParameter->getDefaultValue();
-        }
-
-        return $values;
     }
 }
