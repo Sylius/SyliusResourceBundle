@@ -43,7 +43,6 @@ final class RespondListener
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $isValid = $request->attributes->get('is_valid', false);
-        $data = $request->attributes->get('data');
 
         if (null === $configuration = $this->initializeConfiguration($request)) {
             return;
@@ -63,7 +62,7 @@ final class RespondListener
         }
 
         if ($isValid) {
-            $response = $this->redirectHandler->redirectToResource($configuration, $data);
+            $response = $this->redirectHandler->redirectToResource($configuration, $controllerResult);
             $event->setResponse($response);
 
             return;
