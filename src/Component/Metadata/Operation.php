@@ -131,6 +131,11 @@ abstract class Operation
         return $this->resource;
     }
 
+    public function getProvider(): ?string
+    {
+        return $this->provider;
+    }
+
     public function getProcessor(): ?string
     {
         return $this->processor;
