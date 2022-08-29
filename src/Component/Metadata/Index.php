@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Delete extends Operation
+final class Index extends Operation
 {
     public function __construct(
         ?string $name = null,
@@ -48,6 +48,6 @@ final class Delete extends Operation
         ?bool $write = null,
         ?bool $respond = null,
     ) {
-        parent::__construct('delete', ['DELETE'], ...\func_get_args());
+        parent::__construct('index', ['GET'], ...\func_get_args());
     }
 }
