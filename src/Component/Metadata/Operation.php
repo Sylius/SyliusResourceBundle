@@ -121,8 +121,18 @@ abstract class Operation
         return $this->section;
     }
 
+    public function getGrid(): ?string
+    {
+        return $this->grid;
+    }
+
     public function getResource(): ?string
     {
         return $this->resource;
+    }
+
+    public function isRead(): ?bool
+    {
+        return $this->read;
     }
 }

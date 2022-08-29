@@ -115,9 +115,9 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //            $syliusOptions['processor'] = $arguments['processor'];
 //        }
 //
-//        if (isset($arguments['read'])) {
-//            $syliusOptions['read'] = $arguments['read'];
-//        }
+        if (null !== $read = $operation->isRead()) {
+            $syliusOptions['read'] = $read;
+        }
 //
 //        if (isset($arguments['validate'])) {
 //            $syliusOptions['validate'] = $arguments['validate'];
@@ -143,17 +143,17 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //            $syliusOptions['form'] = $arguments['form'];
 //        }
 //
-//        if (isset($arguments['section'])) {
-//            $syliusOptions['section'] = $arguments['section'];
-//        }
+        if (null !== $section = $operation->getSection()) {
+            $syliusOptions['section'] = $section;
+        }
 //
 //        if (isset($arguments['permission'])) {
 //            $syliusOptions['permission'] = $arguments['permission'];
 //        }
 //
-//        if (isset($arguments['grid'])) {
-//            $syliusOptions['grid'] = $arguments['grid'];
-//        }
+        if (null !== $grid = $operation->getGrid()) {
+            $syliusOptions['grid'] = $grid;
+        }
 //
 //        if (isset($arguments['csrfProtection'])) {
 //            $syliusOptions['csrf_protection'] = $arguments['csrfProtection'];
