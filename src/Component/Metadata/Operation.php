@@ -131,6 +131,11 @@ abstract class Operation
         return $this->resource;
     }
 
+    public function getProcessor(): ?string
+    {
+        return $this->processor;
+    }
+
     public function isRead(): ?bool
     {
         return $this->read;

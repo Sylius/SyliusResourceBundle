@@ -111,9 +111,9 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //            $syliusOptions['provider'] = $arguments['provider'];
 //        }
 //
-//        if (isset($arguments['processor'])) {
-//            $syliusOptions['processor'] = $arguments['processor'];
-//        }
+        if (null !== $processor = $operation->getPath()) {
+            $syliusOptions['processor'] = $processor;
+        }
 //
         if (null !== $read = $operation->isRead()) {
             $syliusOptions['read'] = $read;
