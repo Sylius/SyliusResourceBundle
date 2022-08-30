@@ -38,9 +38,9 @@ final class DeserializeListener
         $request = $event->getRequest();
 
         if (
-            (null === $configuration = $this->initializeConfiguration($request))
-            || $controllerResult instanceof Response
-            || !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
+            (null === $configuration = $this->initializeConfiguration($request)) ||
+            $controllerResult instanceof Response ||
+            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
         ) {
             return;
         }

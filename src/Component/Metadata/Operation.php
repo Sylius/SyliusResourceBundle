@@ -49,7 +49,6 @@ abstract class Operation
         protected ?bool $write = null,
         protected ?bool $respond = null,
         protected ?string $input = null,
-        protected ?string $output = null,
     ) {
     }
 
@@ -156,10 +155,5 @@ abstract class Operation
     public function getInput(): ?string
     {
         return $this->input;
-    }
-
-    public function getOutput(): ?string
-    {
-        return $this->output;
     }
 }

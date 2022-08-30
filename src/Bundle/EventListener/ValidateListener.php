@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
@@ -40,8 +39,8 @@ final class ValidateListener
         $form = $request->attributes->get('form');
 
         if (
-            (null === $configuration = $this->initializeConfiguration($request))
-            || null === $form
+            (null === $configuration = $this->initializeConfiguration($request)) ||
+            null === $form
         ) {
             return;
         }

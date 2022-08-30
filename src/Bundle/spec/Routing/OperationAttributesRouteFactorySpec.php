@@ -17,7 +17,6 @@ use App\Dto\Book;
 use App\Entity\Operation\CreateBook;
 use App\Entity\Operation\CreateBookWithCriteria;
 use App\Entity\Operation\CreateBookWithInput;
-use App\Entity\Operation\CreateBookWithOutput;
 use App\Entity\Operation\CreateBookWithTemplate;
 use App\Entity\Operation\CreateBookWithVars;
 use PhpSpec\ObjectBehavior;
@@ -177,33 +176,6 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'create',
                 'input' => Book::class,
-            ],
-        ]);
-    }
-
-    function it_generates_create_route_from_resource_with_output(
-        RegistryInterface $resourceRegistry,
-        MetadataInterface $metadata,
-    ): void {
-        $routeCollection = new RouteCollection();
-
-        $resourceRegistry->get('app.book')->willReturn($metadata);
-
-        $metadata->getApplicationName()->willReturn('app');
-        $metadata->getName()->willReturn('book');
-        $metadata->getPluralName()->willReturn('books');
-
-        $this->createRouteForClass($routeCollection, CreateBookWithOutput::class);
-
-        $route = $routeCollection->get('app_book_create');
-        Assert::notNull($route);
-        Assert::eq($route->getPath(), '/books/new');
-        Assert::eq($route->getDefaults(), [
-            '_controller' => PlaceHolderAction::class,
-            '_sylius' => [
-                'resource' => 'app.book',
-                'operation' => 'create',
-                'output' => Book::class,
             ],
         ]);
     }

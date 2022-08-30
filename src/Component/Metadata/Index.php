@@ -48,7 +48,6 @@ final class Index extends Operation
         ?bool $write = null,
         ?bool $respond = null,
         ?string $input = null,
-        ?string $output = null,
     ) {
         parent::__construct('index', ['GET'], ...\func_get_args());
     }

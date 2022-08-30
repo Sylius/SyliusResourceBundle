@@ -184,17 +184,6 @@ class RequestConfiguration
         return $input;
     }
 
-    public function getOutput(): ?string
-    {
-        $output = $this->parameters->get('output');
-
-        if (!is_string($output)) {
-            return null;
-        }
-
-        return $output;
-    }
-
     public function canRead(): bool
     {
         return $this->parameters->getBoolean('read', true);

@@ -48,7 +48,6 @@ final class Create extends Operation
         ?bool $write = null,
         ?bool $respond = null,
         ?string $input = null,
-        ?string $output = null,
     ) {
         parent::__construct('create', ['GET', 'POST'], ...\func_get_args());
     }
