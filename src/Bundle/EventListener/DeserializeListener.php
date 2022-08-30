@@ -16,8 +16,10 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class DeserializeListener
 {
@@ -30,19 +32,22 @@ final class DeserializeListener
     ) {
     }
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelView(ViewEvent $event): void
     {
+        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
 
-        if (null === $configuration = $this->initializeConfiguration($request)) {
+        if (
+            (null === $configuration = $this->initializeConfiguration($request))
+            || $controllerResult instanceof Response
+            || !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
+        ) {
             return;
         }
 
-        $data = $request->attributes->get('data');
-        $form = $this->formFactory->create($configuration, $data);
+        $form = $this->formFactory->create($configuration, $controllerResult);
         $form->handleRequest($request);
 
         $request->attributes->set('form', $form);
-        $request->attributes->set('data', $form->getData());
     }
 }
