@@ -10,5 +10,10 @@
             <argument type="service" id="sylius.registry.resource_repository" />
             <tag name="form.type" />
         </service>
+
+        <service id="sylius.form_factory" class="Sylius\Bundle\ResourceBundle\Form\Factory\FormFactory" public="false">
+            <argument type="service" id="form.factory" />
+        </service>
+        <service id="Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface" alias="sylius.form_factory" />
     </services>
 </container>

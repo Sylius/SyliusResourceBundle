@@ -48,6 +48,8 @@ abstract class Operation
         protected ?bool $validate = null,
         protected ?bool $write = null,
         protected ?bool $respond = null,
+        protected ?string $input = null,
+        protected ?string $output = null,
     ) {
     }
 
@@ -116,6 +118,11 @@ abstract class Operation
         return $this->vars;
     }
 
+    public function getForm(): array|string|null
+    {
+        return $this->form;
+    }
+
     public function getSection(): ?string
     {
         return $this->section;
@@ -144,5 +151,15 @@ abstract class Operation
     public function isRead(): ?bool
     {
         return $this->read;
+    }
+
+    public function getInput(): ?string
+    {
+        return $this->input;
+    }
+
+    public function getOutput(): ?string
+    {
+        return $this->output;
     }
 }

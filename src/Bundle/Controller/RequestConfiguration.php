@@ -20,17 +20,11 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RequestConfiguration
 {
-    private Request $request;
-
-    private MetadataInterface $metadata;
-
-    private Parameters $parameters;
-
-    public function __construct(MetadataInterface $metadata, Request $request, Parameters $parameters)
-    {
-        $this->metadata = $metadata;
-        $this->request = $request;
-        $this->parameters = $parameters;
+    public function __construct(
+        private MetadataInterface $metadata,
+        private Request $request,
+        private Parameters $parameters,
+    ) {
     }
 
     /**
@@ -177,6 +171,28 @@ class RequestConfiguration
         }
 
         return $processor;
+    }
+
+    public function getInput(): ?string
+    {
+        $input = $this->parameters->get('input');
+
+        if (!is_string($input)) {
+            return null;
+        }
+
+        return $input;
+    }
+
+    public function getOutput(): ?string
+    {
+        $output = $this->parameters->get('output');
+
+        if (!is_string($output)) {
+            return null;
+        }
+
+        return $output;
     }
 
     public function canRead(): bool

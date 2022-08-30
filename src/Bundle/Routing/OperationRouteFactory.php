@@ -114,7 +114,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         if (null !== $processor = $operation->getProcessor()) {
             $syliusOptions['processor'] = $processor;
         }
-//
+
         if (null !== $read = $operation->isRead()) {
             $syliusOptions['read'] = $read;
         }
@@ -139,10 +139,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //            $syliusOptions['serialization_version'] = $arguments['serializationVersion'];
 //        }
 //
-//        if (isset($arguments['form'])) {
-//            $syliusOptions['form'] = $arguments['form'];
-//        }
-//
+        if (null !== $form = $operation->getForm()) {
+            $syliusOptions['form'] = $form;
+        }
+
         if (null !== $section = $operation->getSection()) {
             $syliusOptions['section'] = $section;
         }
@@ -174,6 +174,14 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //        if (isset($arguments['returnContent'])) {
 //            $syliusOptions['return_content'] = $arguments['returnContent'];
 //        }
+
+        if (null !== $input = $operation->getInput()) {
+            $syliusOptions['input'] = $input;
+        }
+
+        if (null !== $output = $operation->getOutput()) {
+            $syliusOptions['output'] = $output;
+        }
 
         return $syliusOptions;
     }

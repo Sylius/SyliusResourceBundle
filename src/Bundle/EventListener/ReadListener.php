@@ -47,7 +47,7 @@ final class ReadListener
             return;
         }
 
-        if ('create' === $configuration->getOperation()) {
+        if ('create' === $configuration->getOperation() && null === $configuration->getInput()) {
             $factoryId = $configuration->getMetadata()->getServiceId('factory');
 
             if (!$this->factoryLocator->has($factoryId)) {

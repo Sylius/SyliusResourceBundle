@@ -47,6 +47,8 @@ final class Update extends Operation
         ?bool $validate = null,
         ?bool $write = null,
         ?bool $respond = null,
+        ?string $input = null,
+        ?string $output = null,
     ) {
         parent::__construct('update', ['GET', 'PUT'], ...\func_get_args());
     }

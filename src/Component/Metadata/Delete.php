@@ -47,6 +47,8 @@ final class Delete extends Operation
         ?bool $validate = null,
         ?bool $write = null,
         ?bool $respond = null,
+        ?string $input = null,
+        ?string $output = null,
     ) {
         parent::__construct('delete', ['DELETE'], ...\func_get_args());
     }

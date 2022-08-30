@@ -29,7 +29,6 @@ final class ValidateListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ResourceFormFactoryInterface $formFactory,
     ) {
     }
 
@@ -38,8 +37,12 @@ final class ValidateListener
         /** @var Response|ResourceInterface $controllerResult */
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
+        $form = $request->attributes->get('form');
 
-        if (null === $configuration = $this->initializeConfiguration($request)) {
+        if (
+            (null === $configuration = $this->initializeConfiguration($request))
+            || null === $form
+        ) {
             return;
         }
 
@@ -53,11 +56,6 @@ final class ValidateListener
         if (!$configuration->canValidate()) {
             return;
         }
-
-        $form = $this->formFactory->create($configuration, $controllerResult);
-        $form->handleRequest($request);
-
-        $request->attributes->set('form', $form);
 
         if (
             ($request->isMethod('POST') || $request->isMethod('PUT')) &&
