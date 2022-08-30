@@ -179,10 +179,6 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $syliusOptions['input'] = $input;
         }
 
-        if (null !== $output = $operation->getOutput()) {
-            $syliusOptions['output'] = $output;
-        }
-
         return $syliusOptions;
     }
 }
