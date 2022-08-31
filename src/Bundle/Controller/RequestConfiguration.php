@@ -145,17 +145,6 @@ class RequestConfiguration
         return $operation;
     }
 
-    public function getFactory(): string|callable|null
-    {
-        $factory = $this->parameters->get('factory');
-
-        if (!is_string($factory) && !is_callable($factory)) {
-            return null;
-        }
-
-        return $factory;
-    }
-
     public function getProvider(): string|callable|null
     {
         $provider = $this->parameters->get('provider');
@@ -470,7 +459,7 @@ class RequestConfiguration
     }
 
     /**
-     * @return array|string|null
+     * @return array|string|false|null
      */
     public function getFactoryMethod()
     {
@@ -479,6 +468,10 @@ class RequestConfiguration
         }
 
         $factory = $this->parameters->get('factory');
+
+        if (false === $factory) {
+            return false;
+        }
 
         return is_array($factory) ? $factory['method'] : $factory;
     }

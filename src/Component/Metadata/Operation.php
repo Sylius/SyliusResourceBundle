@@ -33,6 +33,7 @@ abstract class Operation
         protected ?int $priority = null,
         protected ?array $vars = null,
         protected string | array | bool | null $form = null,
+        protected string | array | bool | null $factory = null,
         protected ?string $section = null,
         protected ?bool $permission = null,
         protected ?string $grid = null,
@@ -120,6 +121,11 @@ abstract class Operation
     public function getForm(): array|string|bool|null
     {
         return $this->form;
+    }
+
+    public function getFactory(): bool|array|string|null
+    {
+        return $this->factory;
     }
 
     public function getSection(): ?string

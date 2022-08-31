@@ -13,22 +13,23 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Psr\Container\ContainerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\ResourceActions;
-use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class ReadListener
+final class CreateListener
 {
     use RequestConfigurationInitiatorTrait;
 
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ProviderInterface $provider,
+        private ContainerInterface $factoryLocator,
+        private NewResourceFactory $newResourceFactory,
     ) {
     }
 
@@ -38,17 +39,20 @@ final class ReadListener
 
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
-            !$configuration->canRead() ||
-            ResourceActions::CREATE === $configuration->getOperation()
+            false === $configuration->getFactoryMethod() ||
+            null !== $configuration->getInput() ||
+            ResourceActions::CREATE !== $configuration->getOperation()
         ) {
             return;
         }
 
-        $data = $this->provider->provide($configuration);
+        $factoryId = $configuration->getMetadata()->getServiceId('factory');
 
-        if (null === $data) {
-            throw new NotFoundHttpException('Not Found');
+        if (!$this->factoryLocator->has($factoryId)) {
+            throw new \RuntimeException(sprintf('Factory "%s" not found on operation "%s"', $factoryId, $configuration->getOperation()));
         }
+
+        $data = $this->newResourceFactory->create($configuration, $this->factoryLocator->get($factoryId));
 
         $request->attributes->set('data', $data);
     }

@@ -143,6 +143,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $syliusOptions['form'] = $form;
         }
 
+        if (null !== $factory = $operation->getFactory()) {
+            $syliusOptions['factory'] = $factory;
+        }
+
         if (null !== $section = $operation->getSection()) {
             $syliusOptions['section'] = $section;
         }

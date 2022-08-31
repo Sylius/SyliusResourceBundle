@@ -32,6 +32,7 @@ final class Create extends Operation
         ?int $priority = null,
         ?array $vars = null,
         string | array | bool | null $form = null,
+        string | array | bool | null $factory = null,
         ?string $section = null,
         ?bool $permission = null,
         ?string $grid = null,
