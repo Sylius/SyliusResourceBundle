@@ -38,21 +38,12 @@ final class WriteListener
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
 
-        if (null === $configuration = $this->initializeConfiguration($request)) {
-            return;
-        }
-
         if (
-            $controllerResult instanceof Response
+            (null === $configuration = $this->initializeConfiguration($request)) ||
+            $controllerResult instanceof Response ||
+            !$configuration->canWrite() ||
+            !$request->attributes->getBoolean('is_valid', true)
         ) {
-            return;
-        }
-
-        if (!$configuration->canWrite()) {
-            return;
-        }
-
-        if (!$request->attributes->get('is_valid')) {
             return;
         }
 

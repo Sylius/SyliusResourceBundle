@@ -40,19 +40,11 @@ final class ValidateListener
 
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
-            null === $form
-        ) {
-            return;
-        }
-
-        if (
             $controllerResult instanceof Response ||
-            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
+            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
+            null === $form ||
+            !$configuration->canValidate()
         ) {
-            return;
-        }
-
-        if (!$configuration->canValidate()) {
             return;
         }
 
