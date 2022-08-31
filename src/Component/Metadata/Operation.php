@@ -32,7 +32,7 @@ abstract class Operation
         protected ?array $schemes = null,
         protected ?int $priority = null,
         protected ?array $vars = null,
-        protected string | array | null $form = null,
+        protected string | array | bool | null $form = null,
         protected ?string $section = null,
         protected ?bool $permission = null,
         protected ?string $grid = null,
@@ -117,7 +117,7 @@ abstract class Operation
         return $this->vars;
     }
 
-    public function getForm(): array|string|null
+    public function getForm(): array|string|bool|null
     {
         return $this->form;
     }
