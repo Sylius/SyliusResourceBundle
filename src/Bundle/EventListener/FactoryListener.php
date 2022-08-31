@@ -21,7 +21,7 @@ use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-final class CreateListener
+final class FactoryListener
 {
     use RequestConfigurationInitiatorTrait;
 

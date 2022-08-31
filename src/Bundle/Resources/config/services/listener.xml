@@ -13,7 +13,7 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
         </service>
 
-        <service id="sylius.listener.create" class="Sylius\Bundle\ResourceBundle\EventListener\CreateListener" public="false">
+        <service id="sylius.listener.factory" class="Sylius\Bundle\ResourceBundle\EventListener\FactoryListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.factory.locator" />
