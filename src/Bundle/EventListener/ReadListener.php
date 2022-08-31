@@ -17,6 +17,7 @@ use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -47,7 +48,7 @@ final class ReadListener
             return;
         }
 
-        if ('create' === $configuration->getOperation() && null === $configuration->getInput()) {
+        if (ResourceActions::CREATE === $configuration->getOperation() && null === $configuration->getInput()) {
             $factoryId = $configuration->getMetadata()->getServiceId('factory');
 
             if (!$this->factoryLocator->has($factoryId)) {

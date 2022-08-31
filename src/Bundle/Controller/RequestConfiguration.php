@@ -105,8 +105,13 @@ class RequestConfiguration
     public function getFormType()
     {
         $form = $this->parameters->get('form');
+
         if (isset($form['type'])) {
             return $form['type'];
+        }
+
+        if (false === $form) {
+            return null;
         }
 
         if (is_string($form)) {

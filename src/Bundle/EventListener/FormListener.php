@@ -21,7 +21,7 @@ use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
-final class DeserializeListener
+final class FormListener
 {
     use RequestConfigurationInitiatorTrait;
 
@@ -40,7 +40,8 @@ final class DeserializeListener
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
             $controllerResult instanceof Response ||
-            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)
+            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
+            null === $configuration->getFormType()
         ) {
             return;
         }
