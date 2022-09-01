@@ -43,8 +43,8 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
     {
         $defaultPath = $this->getDefaultRoutePathForOperation($metadata, $operation);
 
-        if (null !== $section = $operation->getSection()) {
-            return sprintf('%s/%s', $section, $defaultPath);
+        if (null !== $routePrefix = $operation->getRoutePrefix()) {
+            return sprintf('%s/%s', $routePrefix, $defaultPath);
         }
 
         return $defaultPath;

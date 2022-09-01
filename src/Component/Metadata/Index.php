@@ -19,6 +19,7 @@ final class Index extends Operation
     public function __construct(
         ?string $name = null,
         ?string $path = null,
+        ?string $routePrefix = null,
         ?string $controller = null,
         ?string $template = null,
         ?array $repository = null,

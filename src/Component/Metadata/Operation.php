@@ -20,6 +20,7 @@ abstract class Operation
         protected ?array $methods = null,
         protected ?string $name = null,
         protected ?string $path = null,
+        protected ?string $routePrefix = null,
         protected ?string $controller = null,
         protected ?string $template = null,
         protected ?array $repository = null,
@@ -71,6 +72,11 @@ abstract class Operation
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getRoutePrefix(): ?string
+    {
+        return $this->routePrefix;
     }
 
     public function getController(): ?string
