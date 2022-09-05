@@ -62,6 +62,10 @@ class DoctrineOrmOperationFactory implements OperationFactoryInterface
 
     private function getProvider(Operation $operation): string
     {
+        if (null !== $provider = $operation->getProvider()) {
+            return $provider;
+        }
+
         if ('index' === $operation->getAction()) {
             return CollectionProvider::class;
         }
@@ -71,6 +75,10 @@ class DoctrineOrmOperationFactory implements OperationFactoryInterface
 
     private function getProcessor(Operation $operation): string
     {
+        if (null !== $processor = $operation->getProcessor()) {
+            return $processor;
+        }
+
         if ('delete' === $operation->getAction()) {
             return RemoveProcessor::class;
         }
