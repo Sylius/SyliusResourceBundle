@@ -8,5 +8,10 @@
 
         <service id="sylius.metadata_factory.operation" class="Sylius\Component\Resource\Metadata\Factory\OperationFactory" public="false" />
         <service id="Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface" alias="sylius.metadata_factory.operation" />
+
+        <service id="sylius.metadata_factory.doctrine_orm_operation" class="Sylius\Component\Resource\Doctrine\ORM\Metadata\Factory\DoctrineOrmOperationFactory" decorates="sylius.metadata_factory.operation">
+            <argument type="service" id="sylius.metadata_factory.doctrine_orm_operation.inner" />
+            <argument type="service" id="sylius.resource_registry" />
+        </service>
     </services>
 </container>

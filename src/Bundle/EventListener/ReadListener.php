@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,10 +26,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class ReadListener
 {
     use RequestConfigurationInitiatorTrait;
+    use OperationRequestInitiatorTrait;
 
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        private OperationFactoryInterface $operationFactory,
         private ProviderInterface $provider,
     ) {
     }
@@ -38,13 +42,14 @@ final class ReadListener
 
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
-            !$configuration->canRead() ||
-            ResourceActions::CREATE === $configuration->getOperation()
+            (null === $operation = $this->initializeOperation($request)) ||
+            !($operation->canRead() ?? true) ||
+            ResourceActions::CREATE === $operation
         ) {
             return;
         }
 
-        $data = $this->provider->provide($configuration);
+        $data = $this->provider->provide($operation, $configuration);
 
         if (null === $data) {
             throw new NotFoundHttpException('Not Found');

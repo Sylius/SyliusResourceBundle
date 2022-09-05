@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
-abstract class Operation
+class Operation
 {
     public function __construct(
         protected ?string $action = null,
@@ -154,14 +154,45 @@ abstract class Operation
         return $this->provider;
     }
 
+    public function withProvider(callable|string|null $provider): self
+    {
+        $self = clone $this;
+        $self->provider = $provider;
+
+        return $self;
+    }
+
     public function getProcessor(): ?string
     {
         return $this->processor;
     }
 
-    public function isRead(): ?bool
+    public function withProcessor(callable|string|null $processor): self
+    {
+        $self = clone $this;
+        $self->processor = $processor;
+
+        return $self;
+    }
+
+    public function canRead(): ?bool
     {
         return $this->read;
+    }
+
+    public function canValidate(): ?bool
+    {
+        return $this->validate;
+    }
+
+    public function canWrite(): ?bool
+    {
+        return $this->write;
+    }
+
+    public function canRespond(): ?bool
+    {
+        return $this->respond;
     }
 
     public function getInput(): ?string

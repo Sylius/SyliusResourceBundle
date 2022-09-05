@@ -29,13 +29,11 @@ trait RequestConfigurationInitiatorTrait
 
     private function initializeConfiguration(Request $request): ?RequestConfiguration
     {
-        if (null === $attributes = $request->attributes->get('_sylius')) {
+        if ([] === $attributes = $request->attributes->all('_sylius')) {
             return null;
         }
 
-        $resource = $attributes['resource'] ?? null;
-
-        if (null === $resource) {
+        if (null === ($resource = $attributes['resource'] ?? null)) {
             return null;
         }
 

@@ -13,21 +13,19 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
-use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
+use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class ValidateListener
 {
-    use RequestConfigurationInitiatorTrait;
+    use OperationRequestInitiatorTrait;
 
     public function __construct(
-        private RegistryInterface $resourceRegistry,
-        private RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        private OperationFactoryInterface $operationFactory,
     ) {
     }
 
@@ -39,11 +37,11 @@ final class ValidateListener
         $form = $request->attributes->get('form');
 
         if (
-            (null === $configuration = $this->initializeConfiguration($request)) ||
             $controllerResult instanceof Response ||
-            !in_array($configuration->getOperation(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
+            (null === $operation = $this->initializeOperation($request)) ||
+            !in_array($operation->getAction(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
             null === $form ||
-            !$configuration->canValidate()
+            !($operation->canValidate() ?? true)
         ) {
             return;
         }

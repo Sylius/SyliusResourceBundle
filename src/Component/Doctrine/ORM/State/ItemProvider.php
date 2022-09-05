@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Doctrine\ORM\State;
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
+use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,7 +29,7 @@ final class ItemProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(RequestConfiguration $configuration): ?object
+    public function provide(Operation $operation, RequestConfiguration $configuration): ?object
     {
         $metadata = $configuration->getMetadata();
         $repositoryId = sprintf('%s.repository.%s', $metadata->getApplicationName(), $metadata->getName());

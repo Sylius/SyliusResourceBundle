@@ -15,9 +15,7 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
-use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
-use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
+use Sylius\Component\Resource\Metadata\Operation;
 
 final class CallableProvider implements ProviderInterface
 {
@@ -28,42 +26,23 @@ final class CallableProvider implements ProviderInterface
     /**
      * @inheritDoc
      */
-    public function provide(RequestConfiguration $configuration)
+    public function provide(Operation $operation, RequestConfiguration $configuration): object|iterable|null
     {
-        if (\is_callable($provider = $configuration->getProvider())) {
-            return $provider($configuration);
-        }
-
-        if (null === $provider) {
-            $provider = $this->getDefaultProvider($configuration);
+        if (\is_callable($provider = $operation->getProvider())) {
+            return $provider($operation, $configuration);
         }
 
         if (\is_string($provider)) {
             if (!$this->locator->has($provider)) {
-                throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $configuration->getOperation()));
+                throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $operation->getAction()));
             }
 
             /** @var ProviderInterface $provider */
             $provider = $this->locator->get($provider);
 
-            return $provider->provide($configuration);
+            return $provider->provide($operation, $configuration);
         }
 
-        throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $configuration->getOperation()));
-    }
-
-    private function getDefaultProvider(RequestConfiguration $configuration): ?string
-    {
-        $driver = $configuration->getMetadata()->getDriver();
-
-        if (SyliusResourceBundle::DRIVER_DOCTRINE_ORM === $driver) {
-            if ($configuration->getOperation() === 'index') {
-                return CollectionProvider::class;
-            }
-
-            return ItemProvider::class;
-        }
-
-        return null;
+        throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $operation->getAction()));
     }
 }

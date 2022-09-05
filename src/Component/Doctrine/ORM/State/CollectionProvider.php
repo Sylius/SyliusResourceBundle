@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Doctrine\ORM\State;
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
+use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 
@@ -27,13 +28,13 @@ final class CollectionProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(RequestConfiguration $configuration): mixed
+    public function provide(Operation $operation, RequestConfiguration $configuration): iterable
     {
         $metadata = $configuration->getMetadata();
         $repositoryId = $metadata->getServiceId('repository');
 
         if (!$this->repositoryLocator->has($repositoryId)) {
-            throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repositoryId, $configuration->getOperation()));
+            throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repositoryId, $operation->getAction()));
         }
 
         /** @var RepositoryInterface $repository */

@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProcessorInterface;
 
 final class PersistProcessor implements ProcessorInterface
@@ -23,7 +24,7 @@ final class PersistProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, RequestConfiguration $configuration): mixed
+    public function process(mixed $data, Operation $operation, RequestConfiguration $configuration): mixed
     {
         $manager = $this->managerRegistry->getManagerForClass($configuration->getMetadata()->getClass('model'));
 
