@@ -28,7 +28,7 @@ final class CollectionProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, RequestConfiguration $configuration): iterable
+    public function provide(Operation $operation, RequestConfiguration $configuration): object|iterable
     {
         $metadata = $configuration->getMetadata();
         $repositoryId = $metadata->getServiceId('repository');
