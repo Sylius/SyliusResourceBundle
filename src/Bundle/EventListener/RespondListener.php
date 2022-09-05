@@ -51,8 +51,7 @@ final class RespondListener
 
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
-            (null === $operation = $this->initializeOperation($request)) ||
-            !$request->isXmlHttpRequest()
+            (null === $operation = $this->initializeOperation($request))
         ) {
             return;
         }
