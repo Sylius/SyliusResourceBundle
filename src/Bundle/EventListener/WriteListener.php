@@ -52,7 +52,7 @@ final class WriteListener
             return;
         }
 
-        $data = $this->processor->process($controllerResult, $configuration);
+        $data = $this->processor->process($controllerResult, $operation, $configuration);
         $event->setControllerResult($data);
     }
 }
