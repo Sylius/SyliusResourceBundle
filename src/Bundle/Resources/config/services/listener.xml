@@ -36,6 +36,14 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
         </service>
 
+        <service id="sylius.listener.pre_event" class="Sylius\Bundle\ResourceBundle\EventListener\PreEventListener" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="sylius.metadata_factory.operation" />
+            <argument type="service" id="sylius.resource_controller.event_dispatcher" />
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="42" />
+        </service>
+
         <service id="sylius.listener.write" class="Sylius\Bundle\ResourceBundle\EventListener\WriteListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
