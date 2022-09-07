@@ -6,6 +6,11 @@
     <services>
         <defaults public="true" />
 
+        <service id="sylius.metadata_factory.resource" class="Sylius\Component\Resource\Metadata\Factory\AttributesResourceMetadataFactory">
+            <argument type="service" id="sylius.metadata_factory.operation" />
+        </service>
+        <service id="Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface" alias="sylius.metadata_factory.resource" />
+
         <service id="sylius.metadata_factory.operation" class="Sylius\Component\Resource\Metadata\Factory\OperationFactory" public="false" />
         <service id="Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface" alias="sylius.metadata_factory.operation" />
 

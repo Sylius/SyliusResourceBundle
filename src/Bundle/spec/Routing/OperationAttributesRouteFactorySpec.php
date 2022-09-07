@@ -24,6 +24,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationAttributesRouteFactory;
 use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
+use Sylius\Component\Resource\Metadata\Factory\AttributesResourceMetadataFactory;
 use Sylius\Component\Resource\Metadata\Factory\OperationFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -34,7 +35,11 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
 {
     function let(RegistryInterface $resourceRegistry): void
     {
-        $this->beConstructedWith($resourceRegistry, new OperationFactory(), new OperationRouteFactory());
+        $this->beConstructedWith(
+            $resourceRegistry,
+            new OperationRouteFactory(),
+            new AttributesResourceMetadataFactory(new OperationFactory()),
+        );
     }
 
     function it_is_initializable(): void

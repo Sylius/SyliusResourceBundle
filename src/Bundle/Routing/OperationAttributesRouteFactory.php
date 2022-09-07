@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
@@ -27,56 +26,23 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
 {
     public function __construct(
         private RegistryInterface $resourceRegistry,
-        private OperationFactoryInterface $operationFactory,
         private OperationRouteFactoryInterface $operationRouteFactory,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
     ) {
     }
 
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
-        $this->createRouteForAttributes($routeCollection, ClassReflection::getClassAttributes($className));
+        $resource = $this->resourceMetadataFactory->create($className);
+
+        $this->createRoutesForResource($routeCollection, $resource);
     }
 
-    /** @param \ReflectionAttribute[] $attributes */
-    private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes): void
+    private function createRoutesForResource(RouteCollection $routeCollection, Resource $resource): void
     {
-        $resourceArguments = $this->getResourceArguments($attributes);
-        $attributes = $this->filterAttributes($attributes, Operation::class);
-
-        foreach ($attributes as $attribute) {
-            if (!is_a($operationClassName = $attribute->getName(), Operation::class, true)) {
-                continue;
-            }
-
-            $arguments = array_merge($attribute->getArguments(), $resourceArguments);
-            $operation = $this->operationFactory->create($operationClassName, $arguments);
-
+        foreach ($resource->getOperations() as $operation) {
             $this->addRouteForOperation($routeCollection, $operation);
         }
-    }
-
-    private function getResourceArguments($attributes): array
-    {
-        $resourceAttributes = $this->filterAttributes($attributes, Resource::class);
-
-        foreach ($resourceAttributes as $resourceAttribute) {
-            $arguments = $resourceAttribute->getArguments();
-
-            $arguments['resource'] = $arguments['alias'];
-            unset($arguments['alias']);
-
-            return $arguments;
-        }
-
-        return [];
-    }
-
-    /** @param \ReflectionAttribute[] $attributes */
-    private function filterAttributes(array $attributes, $className): array
-    {
-        return array_filter($attributes, function (\ReflectionAttribute $attribute) use ($className): bool {
-            return is_a($attribute->getName(), $className, true);
-        });
     }
 
     private function addRouteForOperation(RouteCollection $routeCollection, Operation $operation): void
