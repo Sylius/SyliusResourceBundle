@@ -19,6 +19,7 @@ use App\Entity\Operation\CreateBookWithCriteria;
 use App\Entity\Operation\CreateBookWithInput;
 use App\Entity\Operation\CreateBookWithTemplate;
 use App\Entity\Operation\CreateBookWithVars;
+use App\Entity\Operation\CreateResourceBook;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationAttributesRouteFactory;
 use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
@@ -41,7 +42,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $this->shouldHaveType(OperationAttributesRouteFactory::class);
     }
 
-    function it_generates_create_route_from_resource(
+    function it_generates_create_route(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
@@ -68,7 +69,34 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_create_route_from_resource_with_template(
+    function it_generates_create_route_from_resource(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateResourceBook::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_template(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
@@ -95,7 +123,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_create_route_from_resource_with_vars(
+    function it_generates_create_route_with_vars(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
@@ -124,7 +152,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_create_route_from_resource_with_criteria(
+    function it_generates_create_route_with_criteria(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
@@ -153,7 +181,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_create_route_from_resource_with_input(
+    function it_generates_create_route_with_input(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {

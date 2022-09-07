@@ -17,6 +17,7 @@ use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -39,24 +40,42 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
     /** @param \ReflectionAttribute[] $attributes */
     private function createRouteForAttributes(RouteCollection $routeCollection, array $attributes): void
     {
-        $attributes = $this->filterOperationAttributes($attributes);
+        $resourceArguments = $this->getResourceArguments($attributes);
+        $attributes = $this->filterAttributes($attributes, Operation::class);
 
         foreach ($attributes as $attribute) {
             if (!is_a($operationClassName = $attribute->getName(), Operation::class, true)) {
                 continue;
             }
 
-            $operation = $this->operationFactory->create($operationClassName, $attribute->getArguments());
+            $arguments = array_merge($attribute->getArguments(), $resourceArguments);
+            $operation = $this->operationFactory->create($operationClassName, $arguments);
 
             $this->addRouteForOperation($routeCollection, $operation);
         }
     }
 
-    /** @param \ReflectionAttribute[] $attributes */
-    private function filterOperationAttributes(array $attributes): array
+    private function getResourceArguments($attributes): array
     {
-        return array_filter($attributes, function (\ReflectionAttribute $attribute): bool {
-            return is_a($attribute->getName(), Operation::class, true);
+        $resourceAttributes = $this->filterAttributes($attributes, Resource::class);
+
+        foreach ($resourceAttributes as $resourceAttribute) {
+            $arguments = $resourceAttribute->getArguments();
+
+            $arguments['resource'] = $arguments['alias'];
+            unset($arguments['alias']);
+
+            return $arguments;
+        }
+
+        return [];
+    }
+
+    /** @param \ReflectionAttribute[] $attributes */
+    private function filterAttributes(array $attributes, $className): array
+    {
+        return array_filter($attributes, function (\ReflectionAttribute $attribute) use ($className): bool {
+            return is_a($attribute->getName(), $className, true);
         });
     }
 

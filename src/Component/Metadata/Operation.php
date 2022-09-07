@@ -119,6 +119,19 @@ class Operation
         return $this->schemes;
     }
 
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    public function withPriority(int $priority = 0): self
+    {
+        $self = clone $this;
+        $self->priority = $priority;
+
+        return $self;
+    }
+
     public function getVars(): ?array
     {
         return $this->vars;
