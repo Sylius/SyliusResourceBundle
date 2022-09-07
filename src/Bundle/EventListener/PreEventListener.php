@@ -43,11 +43,14 @@ class PreEventListener
         if (
             !$controllerResult instanceof ResourceInterface ||
             (null === $configuration = $this->initializeConfiguration($request)) ||
-            (null === $operation = $this->initializeOperation($request))
+            (null === $operation = $this->initializeOperation($request)) ||
+            !$request->attributes->getBoolean('is_valid', true)
         ) {
             return;
         }
 
-        $this->eventDispatcher->dispatchPreEvent($operation->getAction(), $configuration, $controllerResult);
+        $event = $this->eventDispatcher->dispatchPreEvent($operation->getAction(), $configuration, $controllerResult);
+
+        $request->attributes->set('resource_event', $event);
     }
 }

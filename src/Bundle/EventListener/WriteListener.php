@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -41,7 +42,11 @@ final class WriteListener
     {
         /** @var Response|ResourceInterface $controllerResult */
         $controllerResult = $event->getControllerResult();
+
         $request = $event->getRequest();
+
+        /** @var ResourceControllerEvent|null $resourceEvent */
+        $resourceEvent = $request->attributes->get('resource_event');
 
         if (
             $controllerResult instanceof Response ||
@@ -49,7 +54,8 @@ final class WriteListener
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation->canWrite() ?? true) ||
             !in_array($operation->getAction(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
-            !$request->attributes->getBoolean('is_valid', true)
+            !$request->attributes->getBoolean('is_valid', true) ||
+            null !== $resourceEvent && $resourceEvent->isStopped()
         ) {
             return;
         }
