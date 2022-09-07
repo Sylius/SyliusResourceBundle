@@ -14,17 +14,15 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
-class PreEventListener
+class PostEventListener
 {
     use RequestConfigurationInitiatorTrait;
     use OperationRequestInitiatorTrait;
@@ -34,7 +32,6 @@ class PreEventListener
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private OperationFactoryInterface $operationFactory,
         private EventDispatcherInterface $eventDispatcher,
-        private RedirectHandlerInterface $redirectHandler,
     ) {
     }
 
@@ -52,21 +49,11 @@ class PreEventListener
             return;
         }
 
-        $resourceEvent = $this->eventDispatcher->dispatchPreEvent($operation->getAction(), $configuration, $controllerResult);
-        $request->attributes->set('resource_event', $resourceEvent);
+        $resourceEvent = $this->eventDispatcher->dispatchPostEvent($operation->getAction(), $configuration, $controllerResult);
+        $request->attributes->set('resource_post_event', $resourceEvent);
 
-        if (!$resourceEvent->isStopped()) {
-            return;
+        if (null !== $postEventResponse = $resourceEvent->getResponse()) {
+            $event->setControllerResult($postEventResponse);
         }
-
-        if (null !== $resourceEventResponse = $resourceEvent->getResponse()) {
-            $event->setControllerResult($resourceEventResponse);
-        }
-
-        if (ResourceActions::CREATE === $operation->getAction()) {
-            $event->setControllerResult($this->redirectHandler->redirectToIndex($configuration, $controllerResult));
-        }
-
-        $event->setControllerResult($this->redirectHandler->redirectToResource($configuration, $controllerResult));
     }
 }
