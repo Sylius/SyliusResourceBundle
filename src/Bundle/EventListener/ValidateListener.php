@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
@@ -25,7 +26,8 @@ final class ValidateListener
     use OperationRequestInitiatorTrait;
 
     public function __construct(
-        private OperationFactoryInterface $operationFactory,
+        private RegistryInterface $resourceRegistry,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
     ) {
     }
 

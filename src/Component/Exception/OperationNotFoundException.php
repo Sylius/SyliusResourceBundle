@@ -11,11 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Metadata\Factory;
+namespace Sylius\Component\Resource\Exception;
 
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
-
-interface ResourceMetadataFactoryInterface
+class OperationNotFoundException extends \InvalidArgumentException
 {
-    public function create(string $className): ResourceMetadata;
 }

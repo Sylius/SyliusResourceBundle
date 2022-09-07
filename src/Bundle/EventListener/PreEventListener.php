@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
@@ -32,7 +32,7 @@ class PreEventListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private OperationFactoryInterface $operationFactory,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private EventDispatcherInterface $eventDispatcher,
         private RedirectHandlerInterface $redirectHandler,
     ) {

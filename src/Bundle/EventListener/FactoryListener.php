@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
@@ -31,7 +31,7 @@ final class FactoryListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private OperationFactoryInterface $operationFactory,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private ContainerInterface $factoryLocator,
         private NewResourceFactory $newResourceFactory,
     ) {

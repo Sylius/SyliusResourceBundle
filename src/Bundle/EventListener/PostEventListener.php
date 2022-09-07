@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
@@ -31,7 +31,7 @@ class PostEventListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private OperationFactoryInterface $operationFactory,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private EventDispatcherInterface $eventDispatcher,
         private FlashHelperInterface $flashHelper,
     ) {

@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Metadata\Factory;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 
 final class AttributesResourceMetadataFactory implements ResourceMetadataFactoryInterface
@@ -24,9 +25,10 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
     {
     }
 
-    public function create(string $className): Resource
+    public function create(string $className): ResourceMetadata
     {
-        $resource = new Resource();
+        $resourceMetadata = new ResourceMetadata(new Resource());
+        $resource = $resourceMetadata->getResource();
 
         $attributes = ClassReflection::getClassAttributes($className);
         $resourceArguments = $this->getResourceArguments($attributes);
@@ -47,7 +49,9 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             $resource = $resource->withAlias($alias);
         }
 
-        return $resource->withOperations(new Operations($operations));
+        $resource = $resource->withOperations(new Operations($operations));
+
+        return $resourceMetadata->withResource($resource);
     }
 
     private function getResourceArguments($attributes): array

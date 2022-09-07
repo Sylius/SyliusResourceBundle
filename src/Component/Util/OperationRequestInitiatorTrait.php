@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Util;
 
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,7 +23,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 trait OperationRequestInitiatorTrait
 {
-    private OperationFactoryInterface $operationFactory;
+    private RegistryInterface $resourceRegistry;
+
+    private ResourceMetadataFactoryInterface $resourceMetadataFactory;
 
     private function initializeOperation(Request $request): ?Operation
     {
@@ -30,11 +33,18 @@ trait OperationRequestInitiatorTrait
 
         if (
             [] === $attributes ||
-            null === ($attributes['resource'] ?? null)
+            null === ($resource = $attributes['resource'] ?? null) ||
+            null === ($operationName = $attributes['operation'] ?? null)
         ) {
             return null;
         }
 
-        return $this->operationFactory?->createFromRequest($request);
+        if (str_contains($resource, '.')) {
+            $metadata = $this->resourceRegistry->get($resource);
+        } else {
+            $metadata = $this->resourceRegistry->getByClass($resource);
+        }
+
+        return $this->resourceMetadataFactory->create($metadata->getClass('model'))->getOperation($operationName);
     }
 }

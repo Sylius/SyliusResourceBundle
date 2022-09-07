@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
@@ -31,7 +31,7 @@ final class FormListener
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private OperationFactoryInterface $operationFactory,
+        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private FormFactoryInterface $formFactory,
     ) {
     }

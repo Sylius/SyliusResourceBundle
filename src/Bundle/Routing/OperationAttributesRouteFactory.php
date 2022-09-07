@@ -33,9 +33,9 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
 
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
-        $resource = $this->resourceMetadataFactory->create($className);
+        $resourceMetadata = $this->resourceMetadataFactory->create($className);
 
-        $this->createRoutesForResource($routeCollection, $resource);
+        $this->createRoutesForResource($routeCollection, $resourceMetadata->getResource());
     }
 
     private function createRoutesForResource(RouteCollection $routeCollection, Resource $resource): void
