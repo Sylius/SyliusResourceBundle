@@ -61,10 +61,14 @@ class PreEventListener
 
         if (null !== $resourceEventResponse = $resourceEvent->getResponse()) {
             $event->setControllerResult($resourceEventResponse);
+
+            return;
         }
 
         if (ResourceActions::CREATE === $operation->getAction()) {
             $event->setControllerResult($this->redirectHandler->redirectToIndex($configuration, $controllerResult));
+
+            return;
         }
 
         $event->setControllerResult($this->redirectHandler->redirectToResource($configuration, $controllerResult));
