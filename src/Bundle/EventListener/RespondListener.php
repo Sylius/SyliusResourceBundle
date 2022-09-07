@@ -66,6 +66,13 @@ final class RespondListener
             return;
         }
 
+        if (ResourceActions::DELETE === $operation->getAction()) {
+            $response = $this->redirectHandler->redirectToIndex($configuration, $controllerResult);
+            $event->setResponse($response);
+
+            return;
+        }
+
         if ($isValid) {
             $response = $this->redirectHandler->redirectToResource($configuration, $controllerResult);
             $event->setResponse($response);
