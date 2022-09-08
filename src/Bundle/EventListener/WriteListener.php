@@ -53,7 +53,7 @@ final class WriteListener
             (null === $configuration = $this->initializeConfiguration($request)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation->canWrite() ?? true) ||
-            !in_array($operation->getAction(), [ResourceActions::CREATE, ResourceActions::UPDATE], true) ||
+            in_array($operation->getAction(), [ResourceActions::INDEX, ResourceActions::SHOW], true) ||
             !$request->attributes->getBoolean('is_valid', true) ||
             null !== $resourceEvent && $resourceEvent->isStopped()
         ) {
