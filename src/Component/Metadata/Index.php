@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Index extends Operation
+final class Index extends Operation implements CollectionOperationInterface
 {
     public function __construct(
         ?string $name = null,
