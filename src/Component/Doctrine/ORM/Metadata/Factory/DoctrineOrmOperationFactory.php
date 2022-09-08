@@ -18,27 +18,31 @@ use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
 use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactoryInterface;
+use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
-class DoctrineOrmOperationFactory implements OperationFactoryInterface
+class DoctrineOrmOperationFactory implements ResourceMetadataFactoryInterface
 {
-    public function __construct(private OperationFactoryInterface $decorated, private RegistryInterface $resourceRegistry)
+    public function __construct(private RegistryInterface $resourceRegistry, private ResourceMetadataFactoryInterface $decorated)
     {
     }
 
-    public function create(string $operationClass, array $arguments): Operation
+    public function create(string $className): ResourceMetadata
     {
-        return $this->decorated->create($operationClass, $arguments);
-    }
+        $resourceMetadata = $this->decorated->create($className);
 
-    public function createFromRequest(Request $request): Operation
-    {
-        $operation = $this->decorated->createFromRequest($request);
+        $operations = $resourceMetadata->getResource()->getOperations();
 
-        return $this->addDefaults($operation);
+        foreach ($resourceMetadata->getResource()->getOperations() ?? [] as $name => $operation) {
+            $operation = $this->addDefaults($operation);
+            $operations->add($name, $operation);
+        }
+
+        $resource = $resourceMetadata->getResource()->withOperations($operations);
+
+        return $resourceMetadata->withResource($resource);
     }
 
     private function addDefaults(Operation $operation): Operation
