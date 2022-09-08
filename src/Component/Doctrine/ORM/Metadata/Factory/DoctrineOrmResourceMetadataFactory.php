@@ -18,6 +18,8 @@ use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
 use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
+use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -71,7 +73,7 @@ class DoctrineOrmResourceMetadataFactory implements ResourceMetadataFactoryInter
             return $provider;
         }
 
-        if ('index' === $operation->getAction()) {
+        if ($operation instanceof CollectionOperationInterface) {
             return CollectionProvider::class;
         }
 
@@ -84,7 +86,7 @@ class DoctrineOrmResourceMetadataFactory implements ResourceMetadataFactoryInter
             return $processor;
         }
 
-        if ('delete' === $operation->getAction()) {
+        if ($operation instanceof DeleteOperationInterface) {
             return RemoveProcessor::class;
         }
 
