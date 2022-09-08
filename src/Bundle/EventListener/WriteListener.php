@@ -60,7 +60,22 @@ final class WriteListener
             return;
         }
 
-        $data = $this->processor->process($controllerResult, $operation, $configuration);
-        $event->setControllerResult($data);
+        switch($request->getMethod()) {
+            case 'PUT':
+            case 'PATCH':
+            case 'POST':
+                $persistResult = $this->processor->process($controllerResult, $operation, $configuration);
+
+                if ($persistResult) {
+                    $controllerResult = $persistResult;
+                    $event->setControllerResult($controllerResult);
+                }
+
+                break;
+            case 'DELETE':
+                $this->processor->process($controllerResult, $operation, $configuration);
+                $event->setControllerResult(null);
+                break;
+        }
     }
 }
