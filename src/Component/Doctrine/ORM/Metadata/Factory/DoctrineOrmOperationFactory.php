@@ -35,9 +35,11 @@ class DoctrineOrmOperationFactory implements ResourceMetadataFactoryInterface
 
         $operations = $resourceMetadata->getResource()->getOperations();
 
-        foreach ($resourceMetadata->getResource()->getOperations() ?? [] as $name => $operation) {
+        foreach ($resourceMetadata->getResource()->getOperations() ?? [] as $operation) {
             $operation = $this->addDefaults($operation);
-            $operations->add($name, $operation);
+            $operationName = $operation->getAction() ?? $operation->getName();
+
+            $operations->add($operationName, $operation);
         }
 
         $resource = $resourceMetadata->getResource()->withOperations($operations);
