@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
@@ -44,7 +44,7 @@ final class ReadListener
             (null === $configuration = $this->initializeConfiguration($request)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation->canRead() ?? true) ||
-            ResourceActions::CREATE === $operation
+            $operation instanceof CreateOperationInterface
         ) {
             return;
         }

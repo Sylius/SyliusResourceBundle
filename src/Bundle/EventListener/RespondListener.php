@@ -16,11 +16,12 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\Form\FormInterface;
@@ -66,7 +67,7 @@ final class RespondListener
             return;
         }
 
-        if (ResourceActions::DELETE === $operation->getAction()) {
+        if ($operation instanceof DeleteOperationInterface) {
             $response = $this->redirectHandler->redirectToIndex($configuration, $controllerResult);
             $event->setResponse($response);
 
@@ -103,25 +104,16 @@ final class RespondListener
             'metadata' => $configuration->getMetadata(),
         ];
 
-        if (ResourceActions::INDEX === $operation->getAction()) {
+        if ($operation instanceof CollectionOperationInterface) {
             $context['resources'] = $controllerResult;
-
-            return $context;
-        }
-
-        if (ResourceActions::SHOW === $operation->getAction()) {
+        } else {
             $context['resource'] = $controllerResult;
-
-            return $context;
         }
 
-        if (in_array($operation->getAction(), [ResourceActions::CREATE, ResourceActions::UPDATE], true)) {
-            $context['resource'] = $controllerResult;
-            $context['form'] = $form?->createView();
-
-            return $context;
+        if (null !== $form) {
+            $context['form'] = $form->createView();
         }
 
-        return [];
+        return $context;
     }
 }

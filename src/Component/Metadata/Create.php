@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Create extends Operation
+final class Create extends Operation implements CreateOperationInterface
 {
     public function __construct(
         ?string $name = null,

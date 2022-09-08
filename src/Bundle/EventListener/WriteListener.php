@@ -60,7 +60,7 @@ final class WriteListener
             return;
         }
 
-        switch($request->getMethod()) {
+        switch ($request->getMethod()) {
             case 'PUT':
             case 'PATCH':
             case 'POST':
@@ -75,6 +75,7 @@ final class WriteListener
             case 'DELETE':
                 $this->processor->process($controllerResult, $operation, $configuration);
                 $event->setControllerResult(null);
+
                 break;
         }
     }
