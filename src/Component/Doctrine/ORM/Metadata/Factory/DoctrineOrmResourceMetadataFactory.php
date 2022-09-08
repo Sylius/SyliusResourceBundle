@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
-class DoctrineOrmOperationFactory implements ResourceMetadataFactoryInterface
+class DoctrineOrmResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
     public function __construct(private RegistryInterface $resourceRegistry, private ResourceMetadataFactoryInterface $decorated)
     {
@@ -36,10 +36,9 @@ class DoctrineOrmOperationFactory implements ResourceMetadataFactoryInterface
         $operations = $resourceMetadata->getResource()->getOperations();
 
         foreach ($resourceMetadata->getResource()->getOperations() ?? [] as $operation) {
-            $operation = $this->addDefaults($operation);
             $operationName = $operation->getAction() ?? $operation->getName();
 
-            $operations->add($operationName, $operation);
+            $operations->add($operationName, $this->addDefaults($operation));
         }
 
         $resource = $resourceMetadata->getResource()->withOperations($operations);

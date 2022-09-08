@@ -34,7 +34,7 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
         $resourceArguments = $this->getResourceArguments($attributes);
         $operationAttributes = $this->filterAttributes($attributes, Operation::class);
 
-        $operations = [];
+        $operations = $resourceMetadata->getResource()->getOperations() ?? new Operations();
 
         foreach ($operationAttributes as $attribute) {
             $arguments = array_merge($attribute->getArguments(), $resourceArguments);
@@ -42,14 +42,15 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             unset($arguments['alias']);
 
             $operation = $this->operationFactory->create($attribute->getName(), $arguments);
-            $operations[] = $operation;
+            $operationName = $operation->getAction() ?? $operation->getName();
+            $operations->add($operationName, $operation);
         }
 
         if (null !== $alias = ($resourceArguments['alias'] ?? null)) {
             $resource = $resource->withAlias($alias);
         }
 
-        $resource = $resource->withOperations(new Operations($operations));
+        $resource = $resource->withOperations($operations);
 
         return $resourceMetadata->withResource($resource);
     }
