@@ -82,7 +82,7 @@ final class RespondListener
         }
 
         $content = $this->twig->render(
-            $configuration->getTemplate($operation->getAction()),
+            $configuration->getTemplate($operation->getName()),
             $this->getContext($controllerResult, $operation, $configuration),
         );
 

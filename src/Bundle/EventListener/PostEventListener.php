@@ -51,13 +51,13 @@ class PostEventListener
             return;
         }
 
-        $resourceEvent = $this->eventDispatcher->dispatchPostEvent($operation->getAction(), $configuration, $controllerResult);
+        $resourceEvent = $this->eventDispatcher->dispatchPostEvent($operation->getName(), $configuration, $controllerResult);
         $request->attributes->set('resource_post_event', $resourceEvent);
 
         if (null !== $postEventResponse = $resourceEvent->getResponse()) {
             $event->setControllerResult($postEventResponse);
         }
 
-        $this->flashHelper->addSuccessFlash($configuration, $operation->getAction(), $controllerResult);
+        $this->flashHelper->addSuccessFlash($configuration, $operation->getName(), $controllerResult);
     }
 }

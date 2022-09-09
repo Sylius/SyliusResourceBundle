@@ -52,7 +52,7 @@ class PreEventListener
             return;
         }
 
-        $resourceEvent = $this->eventDispatcher->dispatchPreEvent($operation->getAction(), $configuration, $controllerResult);
+        $resourceEvent = $this->eventDispatcher->dispatchPreEvent($operation->getName(), $configuration, $controllerResult);
         $request->attributes->set('resource_event', $resourceEvent);
 
         if (!$resourceEvent->isStopped()) {

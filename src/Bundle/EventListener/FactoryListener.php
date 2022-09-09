@@ -16,9 +16,9 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -46,7 +46,7 @@ final class FactoryListener
             (null === $operation = $this->initializeOperation($request)) ||
             false === $configuration->getFactoryMethod() ||
             null !== $operation->getInput() ||
-            ResourceActions::CREATE !== $operation->getAction()
+            !$operation instanceof CreateOperationInterface
         ) {
             return;
         }
@@ -54,7 +54,7 @@ final class FactoryListener
         $factoryId = $configuration->getMetadata()->getServiceId('factory');
 
         if (!$this->factoryLocator->has($factoryId)) {
-            throw new \RuntimeException(sprintf('Factory "%s" not found on operation "%s"', $factoryId, $configuration->getOperation()));
+            throw new \RuntimeException(sprintf('Factory "%s" not found on operation "%s"', $factoryId, $operation->getName()));
         }
 
         $data = $this->newResourceFactory->create($configuration, $this->factoryLocator->get($factoryId));

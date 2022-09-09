@@ -34,7 +34,7 @@ final class CallableProvider implements ProviderInterface
 
         if (\is_string($provider)) {
             if (!$this->locator->has($provider)) {
-                throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $operation->getAction()));
+                throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $operation->getName()));
             }
 
             /** @var ProviderInterface $provider */
@@ -43,6 +43,6 @@ final class CallableProvider implements ProviderInterface
             return $provider->provide($operation, $configuration);
         }
 
-        throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $operation->getAction()));
+        throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $operation->getName()));
     }
 }

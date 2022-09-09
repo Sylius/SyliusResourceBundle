@@ -18,6 +18,7 @@ use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Symfony\Component\Routing\Route;
+use Webmozart\Assert\Assert;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
@@ -54,29 +55,30 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
     {
         $rootPath = sprintf('%s', Urlizer::urlize($metadata->getPluralName()));
 
-        $action = $operation->getAction();
+        $name = $operation->getName();
+        Assert::notNull($name, 'Operation should have a name');
 
-        if ('index' === $action) {
+        if ('index' === $name) {
             return sprintf('%s', $rootPath);
         }
 
-        if ('create' === $action) {
+        if ('create' === $name) {
             return sprintf('%s/new', $rootPath);
         }
 
-        if ('update' === $action) {
+        if ('update' === $name) {
             return sprintf('%s/{id}/edit', $rootPath);
         }
 
-        if ('delete' === $action) {
+        if ('delete' === $name) {
             return sprintf('%s/{id}', $rootPath);
         }
 
-        if ('show' === $action) {
+        if ('show' === $name) {
             return sprintf('%s/{id}', $rootPath);
         }
 
-        throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with action "%s". Please define a path.', $action ?? ''));
+        throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with action "%s". Please define a path.', $name ?? ''));
     }
 
     private function getSyliusOptions(Operation $operation): array
@@ -103,8 +105,8 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $syliusOptions['resource'] = $resource;
         }
 
-        if (null !== $action = $operation->getAction()) {
-            $syliusOptions['operation'] = $action;
+        if (null !== $name = $operation->getName()) {
+            $syliusOptions['operation'] = $name;
         }
 
         if (null !== $provider = $operation->getProvider()) {
@@ -129,14 +131,6 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //
 //        if (isset($arguments['respond'])) {
 //            $syliusOptions['respond'] = $arguments['respond'];
-//        }
-//
-//        if (isset($arguments['serializationGroups'])) {
-//            $syliusOptions['serialization_groups'] = $arguments['serializationGroups'];
-//        }
-//
-//        if (isset($arguments['serializationVersion'])) {
-//            $syliusOptions['serialization_version'] = $arguments['serializationVersion'];
 //        }
 //
         if (null !== $form = $operation->getForm()) {

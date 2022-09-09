@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Update extends Operation
+final class Update extends Operation implements UpdateOperationInterface
 {
     public function __construct(
         ?string $name = null,
@@ -24,8 +24,6 @@ final class Update extends Operation
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
-        ?array $serializationGroups = null,
-        ?string $serializationVersion = null,
         ?array $requirements = null,
         ?array $options = null,
         ?string $host = null,
@@ -51,6 +49,39 @@ final class Update extends Operation
         ?bool $respond = null,
         ?string $input = null,
     ) {
-        parent::__construct('update', ['GET', 'PUT'], ...\func_get_args());
+        parent::__construct(
+            name: $name ?? 'update',
+            methods: ['GET', 'PUT'],
+            path: $path,
+            routePrefix: $routePrefix,
+            controller: $controller,
+            template: $template,
+            repository: $repository,
+            criteria: $criteria,
+            requirements: $requirements,
+            options: $options,
+            host: $host,
+            schemes: $schemes,
+            priority: $priority,
+            vars: $vars,
+            form: $form,
+            factory: $factory,
+            section: $section,
+            permission: $permission,
+            grid: $grid,
+            csrfProtection: $csrfProtection,
+            redirect: $redirect,
+            stateMachine: $stateMachine,
+            event: $event,
+            returnContent: $returnContent,
+            resource: $resource,
+            provider: $provider,
+            processor: $processor,
+            read: $read,
+            validate: $validate,
+            write: $write,
+            respond: $respond,
+            input: $input,
+        );
     }
 }

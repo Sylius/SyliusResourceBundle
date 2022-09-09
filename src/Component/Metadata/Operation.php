@@ -16,9 +16,8 @@ namespace Sylius\Component\Resource\Metadata;
 class Operation
 {
     public function __construct(
-        protected ?string $action = null,
-        protected ?array $methods = null,
         protected ?string $name = null,
+        protected ?array $methods = null,
         protected ?string $path = null,
         protected ?string $routePrefix = null,
         protected ?string $controller = null,
@@ -52,11 +51,6 @@ class Operation
         protected ?bool $respond = null,
         protected ?string $input = null,
     ) {
-    }
-
-    public function getAction(): ?string
-    {
-        return $this->action;
     }
 
     public function getMethods(): ?array

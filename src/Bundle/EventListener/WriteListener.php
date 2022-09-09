@@ -18,7 +18,6 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
@@ -53,7 +52,7 @@ final class WriteListener
             (null === $configuration = $this->initializeConfiguration($request)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation->canWrite() ?? true) ||
-            in_array($operation->getAction(), [ResourceActions::INDEX, ResourceActions::SHOW], true) ||
+            'GET' === $request->getMethod() ||
             !$request->attributes->getBoolean('is_valid', true) ||
             null !== $resourceEvent && $resourceEvent->isStopped()
         ) {

@@ -51,7 +51,7 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
 
         $metadata = $this->resourceRegistry->get($operation->getResource());
 
-        $routeName = $operation->getName() ?? $this->getDefaultRouteName($metadata, $operation);
+        $routeName = $this->getRouteName($metadata, $operation);
 
         $route = $this->createRoute($metadata, $operation);
         $routeCollection->add($routeName, $route);
@@ -62,12 +62,12 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
         return $this->operationRouteFactory->create($metadata, $operation);
     }
 
-    private function getDefaultRouteName(MetadataInterface $metadata, Operation $operation): string
+    private function getRouteName(MetadataInterface $metadata, Operation $operation): string
     {
         if (null !== $section = $operation->getSection()) {
             $section = '_' . $section;
         }
 
-        return sprintf('%s%s_%s_%s', $metadata->getApplicationName(), $section ?? '', $metadata->getName(), $operation->getAction());
+        return sprintf('%s%s_%s_%s', $metadata->getApplicationName(), $section ?? '', $metadata->getName(), $operation->getName());
     }
 }

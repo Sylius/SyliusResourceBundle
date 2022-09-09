@@ -34,7 +34,7 @@ final class CollectionProvider implements ProviderInterface
         $repositoryId = $metadata->getServiceId('repository');
 
         if (!$this->repositoryLocator->has($repositoryId)) {
-            throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repositoryId, $operation->getAction()));
+            throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repositoryId, $operation->getName()));
         }
 
         /** @var RepositoryInterface $repository */

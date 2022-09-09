@@ -42,8 +42,7 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             unset($arguments['alias']);
 
             $operation = $this->operationFactory->create($attribute->getName(), $arguments);
-            $operationName = $operation->getAction() ?? $operation->getName();
-            $operations->add($operationName, $operation);
+            $operations->add($operation->getName(), $operation);
         }
 
         if (null !== $alias = ($resourceArguments['alias'] ?? null)) {
