@@ -1,5 +1,22 @@
 ## CHANGELOG
 
+### v1.10.0-ALPHA.2 (2022-09-09)
+
+#### Details
+
+- [#446](https://github.com/Sylius/SyliusResourceBundle/issues/446) [Maintenance] Add flex support to global composer ([@lchrusciel](https://github.com/lchrusciel))
+- [#454](https://github.com/Sylius/SyliusResourceBundle/issues/454) Add generic typehint to RepositoryInterface and FactoryInterface ([@MrSrsen](https://github.com/MrSrsen))
+- [#458](https://github.com/Sylius/SyliusResourceBundle/issues/458) Basic configuration of Gitbook ([@Zales0123](https://github.com/Zales0123))
+- [#459](https://github.com/Sylius/SyliusResourceBundle/issues/459) Fix coding standards to fix the build ([@Zales0123](https://github.com/Zales0123))
+- [#460](https://github.com/Sylius/SyliusResourceBundle/issues/460) [Maintenance] Allow flex plugin during plugin installation ([@lchrusciel](https://github.com/lchrusciel))
+- [#461](https://github.com/Sylius/SyliusResourceBundle/issues/461) [docker]Dockerized Resource Bundle ([@Ferror](https://github.com/Ferror), [@lchrusciel](https://github.com/lchrusciel))
+- [#462](https://github.com/Sylius/SyliusResourceBundle/issues/462) Configure global symfony/flex plugin ([@Zales0123](https://github.com/Zales0123))
+- [#465](https://github.com/Sylius/SyliusResourceBundle/issues/465) [Maintenance] Downgrade rector to fix build ([@lchrusciel](https://github.com/lchrusciel))
+- [#466](https://github.com/Sylius/SyliusResourceBundle/issues/466) Update rector/rector requirement from ^0.12.20 to ^0.13.5 ([@dependabot](https://github.com/dependabot)[[@bot](https://github.com/bot)])
+- [#470](https://github.com/Sylius/SyliusResourceBundle/issues/470) [CI] Fix the build for 1.10 ([@loic425](https://github.com/loic425))
+- [#471](https://github.com/Sylius/SyliusResourceBundle/issues/471) [Symfony 6] Fix submitting a form ([@loic425](https://github.com/loic425))
+- [#474](https://github.com/Sylius/SyliusResourceBundle/issues/474) Resource alias, always return 2 array items ([@Prometee](https://github.com/Prometee), [@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.10.0-ALPHA.1 (2022-05-16)
 
 #### TL;DR
