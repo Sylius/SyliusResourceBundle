@@ -30,27 +30,6 @@ final class OperationFactory implements OperationFactoryInterface
         return new $operationClass(...\array_values($values));
     }
 
-    public function createFromRequest(Request $request): Operation
-    {
-        $attributes = $request->attributes->all('_sylius');
-
-        return new Operation(
-            action: $attributes['operation'] ?? null,
-            methods: [$request->getMethod()],
-            path: $request->getRequestUri(),
-            vars: $attributes['vars'] ?? null,
-            section: $attributes['section'] ?? null,
-            resource: $attributes['resource'] ?? null,
-            provider: $attributes['provider'] ?? null,
-            processor: $attributes['processor'] ?? null,
-            read: $attributes['read'] ?? null,
-            validate: $attributes['validate'] ?? null,
-            write: $attributes['write'] ?? null,
-            respond: $attributes['respond'] ?? null,
-            input: $attributes['input'] ?? null,
-        );
-    }
-
     private function getParametersMap(string $operationClass): array
     {
         $reflection = new \ReflectionClass($operationClass);
