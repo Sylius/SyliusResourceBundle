@@ -46,10 +46,6 @@ final class ResourceMetadata
             if ($operationName === $operation->getName()) {
                 return $this->operationCache[$operationName] = $operation;
             }
-
-            if ($operationName === $operation->getAction()) {
-                return $this->operationCache[$operationName] = $operation;
-            }
         }
 
         throw new OperationNotFoundException(sprintf('Operation "%s" not found.', $operationName));
