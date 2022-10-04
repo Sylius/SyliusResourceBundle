@@ -16,9 +16,11 @@ namespace Sylius\Component\Resource\Model;
 trait TimestampableTrait
 {
     /** @var \DateTimeInterface|null */
+    #[\ReturnTypeWillChange]
     protected $createdAt;
 
     /** @var \DateTimeInterface|null */
+    #[\ReturnTypeWillChange]
     protected $updatedAt;
 
     public function getCreatedAt(): ?\DateTimeInterface
