@@ -1,5 +1,4 @@
 imports:
-    - { resource: "sylius/grids.yaml" }
     - { resource: "sylius/resources.yaml" }
 
 parameters:

@@ -36,5 +36,5 @@ return [
     FidryAliceDataFixturesBundle::class => ['all' => true],
     NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
-    SyliusGridBundle::class => ['all' => true],
+    SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
 ];
