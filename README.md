@@ -34,6 +34,21 @@ Sylius
 
 Sylius is an Open Source eCommerce solution built from decoupled components with powerful API and the highest quality code. [Read more on sylius.com](http://sylius.com).
 
+Development
+-----------
+
+#### Build: 
+
+```bash
+docker compose up -d --build
+```
+
+#### Test:
+
+```bash
+make test
+```
+
 Documentation
 -------------
 
@@ -56,16 +71,16 @@ If you want to keep up with the updates and latest features, follow us on the fo
 Bug tracking
 ------------
 
-Sylius uses [GitHub issues](https://github.com/Sylius/Sylius/issues).
+Sylius uses [GitHub issues](https://github.com/Sylius/SyliusResourceBundle/issues).
 If you have found bug, please create an issue.
 
 MIT License
 -----------
 
-License can be found [here](https://github.com/Sylius/Sylius/blob/master/LICENSE).
+License can be found [here](https://github.com/Sylius/SyliusResourceBundle/blob/1.10/LICENSE).
 
 Authors
 -------
 
 The bundle was originally created by [Paweł Jędrzejewski](http://pjedrzejewski.com).
-See the list of [contributors](https://github.com/Sylius/Sylius/contributors).
+See the list of [contributors](https://github.com/Sylius/SyliusResourceBundle/graphs/contributors).
