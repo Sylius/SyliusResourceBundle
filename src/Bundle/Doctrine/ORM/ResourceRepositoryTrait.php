@@ -47,12 +47,12 @@ trait ResourceRepositoryTrait
     /**
      * @return iterable<int, ResourceInterface>
      */
-    public function createPaginator(array $criteria = [], array $sorting = []): iterable
+    public function createPaginator(array $criteria = [], array $sorting = [], string $alias = 'o'): iterable
     {
-        $queryBuilder = $this->createQueryBuilder('o');
+        $queryBuilder = $this->createQueryBuilder($alias);
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $sorting);
+        $this->applyCriteria($queryBuilder, $criteria, $alias);
+        $this->applySorting($queryBuilder, $sorting, $alias);
 
         return $this->getPaginator($queryBuilder);
     }
@@ -71,14 +71,14 @@ trait ResourceRepositoryTrait
         return new Pagerfanta(new ArrayAdapter($objects));
     }
 
-    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = []): void
+    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = [], string $alias = 'o'): void
     {
         foreach ($criteria as $property => $value) {
             if (!in_array($property, array_merge($this->_class->getAssociationNames(), $this->_class->getFieldNames()), true)) {
                 continue;
             }
 
-            $name = $this->getPropertyName($property);
+            $name = $this->getPropertyName($property, $alias);
 
             if (null === $value) {
                 $queryBuilder->andWhere($queryBuilder->expr()->isNull($name));
@@ -94,7 +94,7 @@ trait ResourceRepositoryTrait
         }
     }
 
-    protected function applySorting(QueryBuilder $queryBuilder, array $sorting = []): void
+    protected function applySorting(QueryBuilder $queryBuilder, array $sorting = [], string $alias = 'o'): void
     {
         foreach ($sorting as $property => $order) {
             if (!in_array($property, array_merge($this->_class->getAssociationNames(), $this->_class->getFieldNames()), true)) {
@@ -102,15 +102,15 @@ trait ResourceRepositoryTrait
             }
 
             if (!empty($order)) {
-                $queryBuilder->addOrderBy($this->getPropertyName($property), $order);
+                $queryBuilder->addOrderBy($this->getPropertyName($property, $alias), $order);
             }
         }
     }
 
-    protected function getPropertyName(string $name): string
+    protected function getPropertyName(string $name, string $alias = 'o'): string
     {
         if (false === strpos($name, '.')) {
-            return 'o' . '.' . $name;
+            return $alias . '.' . $name;
         }
 
         return $name;
