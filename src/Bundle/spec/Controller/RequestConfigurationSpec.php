@@ -289,7 +289,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $attributesBag->get('criteria', $request)->willReturn($request);
         $queryBag->has('criteria')->willReturn(true);
         $queryBag->all()->willReturn(['criteria' => $criteria]);
-        $requestBag->get('criteria', [])->willReturn([]);
+        $requestBag->all()->willReturn(['criteria' => []]);
 
         $this->getCriteria()->shouldReturn($criteria);
     }
@@ -313,7 +313,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $attributesBag->get('criteria', $request)->willReturn($request);
         $queryBag->has('criteria')->willReturn(true);
         $queryBag->all()->willReturn(['criteria' => $overriddenCriteria]);
-        $requestBag->get('criteria', [])->willReturn([]);
+        $requestBag->all()->willReturn(['criteria' => []]);
 
         $this->getCriteria()->shouldReturn($combinedCriteria);
 
@@ -325,7 +325,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $attributesBag->get('criteria', $request)->willReturn($request);
         $queryBag->has('criteria')->willReturn(true);
         $queryBag->all()->willReturn(['criteria' => $overriddenCriteria]);
-        $requestBag->get('criteria', [])->willReturn([]);
+        $requestBag->all()->willReturn(['criteria' => []]);
 
         $this->getCriteria($defaultCriteria)->shouldReturn($combinedDefaultCriteria);
 
@@ -334,7 +334,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $attributesBag->get('criteria', $request)->willReturn($request);
         $queryBag->has('criteria')->willReturn(true);
         $queryBag->all()->willReturn(['criteria' => ['filter' => 'request']]);
-        $requestBag->get('criteria', [])->willReturn([]);
+        $requestBag->all()->willReturn(['criteria' => []]);
 
         $this->getCriteria(['filter' => 'default'])->shouldReturn(['filter' => 'request']);
     }
