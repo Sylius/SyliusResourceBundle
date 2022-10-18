@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.8. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in Sylius 2.0.', PagerfantaBridgePass::class), \E_USER_DEPRECATED);
-
 /**
  * Compiler pass to bridge the configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle
  *
@@ -26,8 +24,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class PagerfantaBridgePass implements CompilerPassInterface
 {
+    public function __construct(private bool $internalUse = false)
+    {
+    }
+
     public function process(ContainerBuilder $container): void
     {
+        if (false === $this->internalUse) {
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.7',
+                'The "%s" class is deprecated. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in 2.0.',
+                self::class,
+            );
+        }
+
         $this->changeViewFactoryClass($container);
         $this->aliasRenamedServices($container);
     }

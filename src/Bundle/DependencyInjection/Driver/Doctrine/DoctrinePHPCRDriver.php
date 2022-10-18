@@ -24,13 +24,19 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Sylius 1.3. Doctrine MongoDB and PHPCR support will no longer be supported in Sylius 2.0.', DoctrinePHPCRDriver::class), \E_USER_DEPRECATED);
-
 final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
 {
     public function load(ContainerBuilder $container, MetadataInterface $metadata): void
     {
+        trigger_deprecation(
+            'sylius/resource-bundle',
+            '1.3',
+            'The "%s" class is deprecated. Doctrine MongoDB and PHPCR will no longer be supported in 2.0.',
+            self::class,
+        );
+
         parent::load($container, $metadata);
+
         $this->addResourceListeners($container, $metadata);
     }
 

@@ -51,8 +51,8 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new RegisterFormBuilderPass());
         $container->addCompilerPass(new TwigPass());
 
-        $container->registerExtension(new PagerfantaExtension());
-        $container->addCompilerPass(new PagerfantaBridgePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
+        $container->registerExtension(new PagerfantaExtension(true));
+        $container->addCompilerPass(new PagerfantaBridgePass(true), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
     }
 
     /**

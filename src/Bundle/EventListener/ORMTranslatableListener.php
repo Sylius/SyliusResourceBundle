@@ -191,13 +191,12 @@ final class ORMTranslatableListener implements EventSubscriber
     private function processTranslatableEntityLocaleAssigner(object $translatableEntityLocaleAssigner): TranslatableEntityLocaleAssignerInterface
     {
         if ($translatableEntityLocaleAssigner instanceof ContainerInterface) {
-            @trigger_error(
-                sprintf(
-                    'Passing an instance of "%s" is deprecated since 1.4. Use "%s" instead.',
-                    ContainerInterface::class,
-                    TranslatableEntityLocaleAssignerInterface::class,
-                ),
-                \E_USER_DEPRECATED,
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.4',
+                'Passing an instance of "%s" is deprecated. Use "%s" instead.',
+                ContainerInterface::class,
+                TranslatableEntityLocaleAssignerInterface::class,
             );
 
             /** @var object $translatableEntityLocaleAssigner */

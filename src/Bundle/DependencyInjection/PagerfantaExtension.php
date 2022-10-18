@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-@trigger_error(sprintf('The "%s" class is deprecated since sylius/resource-bundle 1.7. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in Sylius 2.0.', PagerfantaExtension::class), \E_USER_DEPRECATED);
-
 /**
  * Container extension to bridge the configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle
  *
@@ -26,6 +24,10 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 final class PagerfantaExtension extends Extension implements PrependExtensionInterface
 {
+    public function __construct(private bool $internalUse = false)
+    {
+    }
+
     public function getAlias(): string
     {
         return 'white_october_pagerfanta';
@@ -38,6 +40,15 @@ final class PagerfantaExtension extends Extension implements PrependExtensionInt
 
     public function load(array $configs, ContainerBuilder $container): void
     {
+        if (false === $this->internalUse) {
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.7',
+                'The "%s" class is deprecated. Migrate your Pagerfanta configuration from WhiteOctoberPagerfantaBundle to BabDevPagerfantaBundle, the configuration bridge will be removed in 2.0.',
+                self::class,
+            );
+        }
+
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('white_october_pagerfanta.default_view', $config['default_view']);

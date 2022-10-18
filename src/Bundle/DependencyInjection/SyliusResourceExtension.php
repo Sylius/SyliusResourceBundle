@@ -99,10 +99,12 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         foreach ($drivers as $driver) {
             if (in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true)) {
-                @trigger_error(sprintf(
-                    'The "%s" driver is deprecated in Sylius 1.3. Doctrine MongoDB and PHPCR will no longer be supported in Sylius 2.0.',
+                trigger_deprecation(
+                    'sylius/resource-bundle',
+                    '1.3',
+                    'The "%s" driver is deprecated. Doctrine MongoDB and PHPCR will no longer be supported in 2.0.',
                     $driver,
-                ), \E_USER_DEPRECATED);
+                );
             }
 
             $loader->load(sprintf('services/integrations/%s.xml', $driver));
