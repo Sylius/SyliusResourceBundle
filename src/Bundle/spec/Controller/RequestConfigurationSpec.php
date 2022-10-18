@@ -276,9 +276,8 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributesBag,
         ParameterBag $queryBag,
-        ParameterBag $requestBag
-    ): void
-    {
+        ParameterBag $requestBag,
+    ): void {
         $criteria = ['property' => 'myNewValue'];
         $request->attributes = $attributesBag;
         $request->query = $queryBag;
@@ -300,7 +299,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributesBag,
         ParameterBag $queryBag,
-        ParameterBag $requestBag
+        ParameterBag $requestBag,
     ): void {
         $criteria = ['property' => 'myValue'];
         $overriddenCriteria = ['other_property' => 'myNewValue'];
@@ -354,9 +353,8 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributesBag,
         ParameterBag $queryBag,
-        ParameterBag $requestBag
-    ): void
-    {
+        ParameterBag $requestBag,
+    ): void {
         $sorting = ['property' => 'asc'];
         $request->attributes = $attributesBag;
         $request->query = $queryBag;
@@ -388,9 +386,8 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributesBag,
         ParameterBag $queryBag,
-        ParameterBag $requestBag
-    ): void
-    {
+        ParameterBag $requestBag,
+    ): void {
         $sorting = ['property' => 'desc'];
         $overriddenSorting = ['other_property' => 'asc'];
         $combinedSorting = ['other_property' => 'asc', 'property' => 'desc'];
