@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle;
 
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\CsrfTokenManagerPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineContainerRepositoryFactoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
@@ -41,15 +42,16 @@ final class SyliusResourceBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new WinzouStateMachinePass());
-        $container->addCompilerPass(new RegisterStateMachinePass());
-        $container->addCompilerPass(new RegisterResourcesPass());
-        $container->addCompilerPass(new RegisterFqcnControllersPass());
-        $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
+        $container->addCompilerPass(new CsrfTokenManagerPass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
-        $container->addCompilerPass(new RegisterResourceRepositoryPass());
+        $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterFormBuilderPass());
+        $container->addCompilerPass(new RegisterFqcnControllersPass());
+        $container->addCompilerPass(new RegisterResourceRepositoryPass());
+        $container->addCompilerPass(new RegisterResourcesPass());
+        $container->addCompilerPass(new RegisterStateMachinePass());
         $container->addCompilerPass(new TwigPass());
+        $container->addCompilerPass(new WinzouStateMachinePass());
 
         $container->registerExtension(new PagerfantaExtension(true));
         $container->addCompilerPass(new PagerfantaBridgePass(true), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
