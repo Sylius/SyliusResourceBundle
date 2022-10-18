@@ -212,6 +212,9 @@ class ResourceController
 
             return $this->redirectHandler->redirectToResource($configuration, $newResource);
         }
+        if ($request->isMethod('POST') && $form->isSubmitted() && !$form->isValid()) {
+            $responseCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        }
 
         if (!$configuration->isHtmlRequest()) {
             return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
@@ -229,7 +232,7 @@ class ResourceController
             'resource' => $newResource,
             $this->metadata->getName() => $newResource,
             'form' => $form->createView(),
-        ]);
+        ], null, $responseCode ?? Response::HTTP_OK);
     }
 
     public function updateAction(Request $request): Response
@@ -299,6 +302,9 @@ class ResourceController
 
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) && $form->isSubmitted() && !$form->isValid()) {
+            $responseCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        }
 
         if (!$configuration->isHtmlRequest()) {
             return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
@@ -316,7 +322,7 @@ class ResourceController
             'resource' => $resource,
             $this->metadata->getName() => $resource,
             'form' => $form->createView(),
-        ]);
+        ], null, $responseCode ?? Response::HTTP_OK);
     }
 
     public function deleteAction(Request $request): Response

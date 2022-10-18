@@ -57,6 +57,13 @@ services:
             - '%app.model.book.class%'
         tags: ['form.type']
 
+    app.form.type.science_book:
+        class: App\Form\Type\ScienceBookType
+        arguments:
+            - '%app.model.science_book.class%'
+            - ['sylius']
+        tags: [ 'form.type' ]
+
     app.form.type.book_translation:
         class: App\Form\Type\BookTranslationType
         arguments:

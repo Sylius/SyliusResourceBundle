@@ -225,8 +225,12 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
-    {
+    protected function render(
+        string $view,
+        array $parameters = [],
+        Response $response = null,
+        ?int $responseCode = null
+    ): Response {
         if ($this->container->has('templating')) {
             @trigger_error('Using the "templating" service is deprecated since Symfony 4.3 and will be removed in 5.0; use Twig instead.', \E_USER_DEPRECATED);
 
@@ -242,6 +246,9 @@ trait ControllerTrait
         }
 
         $response->setContent($content);
+        if ($responseCode !== null) {
+            $response->setStatusCode($responseCode);
+        }
 
         return $response;
     }

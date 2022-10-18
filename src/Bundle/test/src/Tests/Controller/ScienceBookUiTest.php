@@ -68,9 +68,9 @@ final class ScienceBookUiTest extends ApiTestCase
 
         $this->client->request('GET', '/science-books/new');
         $this->client->submitForm('Create', [
-            'sylius_resource[title]' => $newBookTitle,
-            'sylius_resource[author][firstName]' => $newBookAuthorFirstName,
-            'sylius_resource[author][lastName]' => $newBookAuthorLastName,
+            'science_book[title]' => $newBookTitle,
+            'science_book[author][firstName]' => $newBookAuthorFirstName,
+            'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
@@ -85,6 +85,28 @@ final class ScienceBookUiTest extends ApiTestCase
     }
 
     /** @test */
+    public function it_does_not_allow_to_create_a_book_if_there_is_a_validation_error(): void
+    {
+        $newBookTitle = 'The Book of Why';
+        $newBookAuthorLastName = 'Pearl';
+
+        $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/new');
+        $this->client->submitForm('Create', [
+            'science_book[title]' => $newBookTitle,
+            'science_book[author][lastName]' => $newBookAuthorLastName,
+        ]);
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        /** @var ScienceBook $book */
+        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+
+        $this->assertNull($book);
+    }
+
+    /** @test */
     public function it_allows_updating_a_book(): void
     {
         $newBookTitle = 'The Book of Why';
@@ -95,9 +117,9 @@ final class ScienceBookUiTest extends ApiTestCase
 
         $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
         $this->client->submitForm('Save changes', [
-            'sylius_resource[title]' => $newBookTitle,
-            'sylius_resource[author][firstName]' => $newBookAuthorFirstName,
-            'sylius_resource[author][lastName]' => $newBookAuthorLastName,
+            'science_book[title]' => $newBookTitle,
+            'science_book[author][firstName]' => $newBookAuthorFirstName,
+            'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
@@ -109,6 +131,29 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertSame($newBookTitle, $book->getTitle());
         $this->assertSame($newBookAuthorFirstName, $book->getAuthorFirstName());
         $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
+    }
+
+    /** @test */
+    public function it_does_not_allow_to_update_a_book_if_there_is_a_validation_error(): void
+    {
+        $newBookTitle = 'The Book of Why';
+        $newBookAuthorLastName = 'Pearl';
+
+        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
+        $this->client->submitForm('Save changes', [
+            'science_book[title]' => $newBookTitle,
+            'science_book[author][firstName]' => null,
+            'science_book[author][lastName]' => $newBookAuthorLastName,
+        ]);
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        /** @var ScienceBook $book */
+        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+
+        $this->assertNull($book);
     }
 
     /** @test */

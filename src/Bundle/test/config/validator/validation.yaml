@@ -1,0 +1,16 @@
+App\Entity\ScienceBook:
+    properties:
+        title:
+            - NotBlank:
+                  groups: [sylius]
+        author:
+            - Valid: ~
+
+App\Entity\Author:
+    properties:
+        firstName:
+            - NotBlank:
+                  groups: [sylius]
+        lastName:
+            - NotBlank:
+                  groups: [sylius]

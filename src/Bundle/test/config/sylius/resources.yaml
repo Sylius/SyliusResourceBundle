@@ -27,6 +27,7 @@ sylius_resource:
         app.science_book:
             classes:
                 model: App\Entity\ScienceBook
+                form: App\Form\Type\ScienceBookType
 
         app.gedmo:
             classes:
