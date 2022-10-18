@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### v1.10.0-BETA.1 (2022-10-18)
+
+#### Details
+
+- [#341](https://github.com/Sylius/SyliusResourceBundle/issues/341) Dropping usage of Request->get ([@loic425](https://github.com/loic425), [@Zales0123](https://github.com/Zales0123))
+- [#450](https://github.com/Sylius/SyliusResourceBundle/issues/450) Adjust when some runtime deprecation notices are triggered and use Symfony's trigger_deprecation() helper ([@mbabker](https://github.com/mbabker))
+- [#467](https://github.com/Sylius/SyliusResourceBundle/issues/467) [README] Add development section and update links ([@lchrusciel](https://github.com/lchrusciel))
+- [#478](https://github.com/Sylius/SyliusResourceBundle/issues/478) Add tests with grids ([@loic425](https://github.com/loic425))
+- [#487](https://github.com/Sylius/SyliusResourceBundle/issues/487) Make CsrfTokenManager public ([@Zales0123](https://github.com/Zales0123))
+- [#488](https://github.com/Sylius/SyliusResourceBundle/issues/488) Return 422 status code when the form fails ([@belmeopmenieuwesim](https://github.com/belmeopmenieuwesim), [@Zales0123](https://github.com/Zales0123))
+
 ### v1.10.0-ALPHA.2 (2022-09-09)
 
 #### Details
