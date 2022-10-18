@@ -294,6 +294,29 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $this->getCriteria()->shouldReturn($criteria);
     }
 
+    function it_has_criteria_parameter_in_request(
+        Parameters $parameters,
+        Request $request,
+        ParameterBag $attributesBag,
+        ParameterBag $queryBag,
+        ParameterBag $requestBag,
+    ): void {
+        $criteria = ['property' => 'myNewValue'];
+        $request->attributes = $attributesBag;
+        $request->query = $queryBag;
+        $request->request = $requestBag;
+
+        $parameters->get('filterable', false)->willReturn(true);
+        $parameters->get('criteria', Argument::any())->willReturn([]);
+
+        $attributesBag->get('criteria', $request)->willReturn($request);
+        $queryBag->has('criteria')->willReturn(false);
+        $requestBag->has('criteria')->willReturn(true);
+        $requestBag->all()->willReturn(['criteria' => $criteria]);
+
+        $this->getCriteria()->shouldReturn($criteria);
+    }
+
     function it_allows_to_override_criteria_parameter_in_route(
         Parameters $parameters,
         Request $request,
