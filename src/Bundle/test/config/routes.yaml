@@ -92,4 +92,5 @@ app_science_book:
     resource: |
         alias: app.science_book
         templates: 'ScienceBook'
+        grid: science_book_grid
     type: sylius.resource

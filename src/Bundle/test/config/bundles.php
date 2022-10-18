@@ -18,6 +18,7 @@ use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
 use FOS\RestBundle\FOSRestBundle;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
+use Sylius\Bundle\GridBundle\SyliusGridBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -35,4 +36,5 @@ return [
     FidryAliceDataFixturesBundle::class => ['all' => true],
     NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
+    SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
 ];

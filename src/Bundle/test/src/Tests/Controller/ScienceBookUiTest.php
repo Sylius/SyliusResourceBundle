@@ -111,6 +111,27 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
     }
 
+    /** @test */
+    public function it_allows_filtering_books(): void
+    {
+        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+
+        $this->client->request('GET', '/science-books/?criteria[search][value]=history of time');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseCode($response, Response::HTTP_OK);
+        $content = $response->getContent();
+        $this->assertStringContainsString('<h1>Books</h1>', $content);
+        $this->assertStringContainsString(
+            sprintf('<tr><td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td></tr>', $scienceBooks['science-book1']->getId()),
+            $content,
+        );
+        $this->assertStringNotContainsString(
+            sprintf('<tr><td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td></tr>', $scienceBooks['science-book2']->getId()),
+            $content,
+        );
+    }
+
     protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->createMatcher(new VoidBacktrace());
