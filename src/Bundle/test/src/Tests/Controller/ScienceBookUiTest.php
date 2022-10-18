@@ -48,11 +48,11 @@ final class ScienceBookUiTest extends ApiTestCase
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
-            sprintf('<tr><td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td></tr>', $scienceBooks['science-book1']->getId()),
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $scienceBooks['science-book1']->getId()),
             $content,
         );
         $this->assertStringContainsString(
-            sprintf('<tr><td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td></tr>', $scienceBooks['science-book2']->getId()),
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $scienceBooks['science-book2']->getId()),
             $content,
         );
     }
@@ -112,6 +112,22 @@ final class ScienceBookUiTest extends ApiTestCase
     }
 
     /** @test */
+    public function it_allows_deleting_a_book(): void
+    {
+        $this->loadFixturesFromFile('single_science_book.yml');
+
+        $this->client->request('GET', '/science-books/');
+        $this->client->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var ScienceBook[] $books */
+        $books = static::getContainer()->get('app.repository.science_book')->findAll();
+
+        $this->assertEmpty($books);
+    }
+
+    /** @test */
     public function it_allows_filtering_books(): void
     {
         $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
@@ -123,11 +139,11 @@ final class ScienceBookUiTest extends ApiTestCase
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
-            sprintf('<tr><td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td></tr>', $scienceBooks['science-book1']->getId()),
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $scienceBooks['science-book1']->getId()),
             $content,
         );
         $this->assertStringNotContainsString(
-            sprintf('<tr><td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td></tr>', $scienceBooks['science-book2']->getId()),
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $scienceBooks['science-book2']->getId()),
             $content,
         );
     }

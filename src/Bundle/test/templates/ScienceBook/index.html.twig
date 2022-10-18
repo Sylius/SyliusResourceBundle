@@ -5,11 +5,20 @@
             <td>ID</td>
             <td>Title</td>
             <td>Author</td>
+            <td>Actions</td>
         </tr>
     </thead>
     <tbody>
     {% for book in resources.data %}
-        <tr><td>{{ book.id }}</td><td>{{ book.title }}</td><td>{{ book.authorFirstName }} {{ book.authorLastName }}</td></tr>
+        <tr><td>{{ book.id }}</td><td>{{ book.title }}</td><td>{{ book.authorFirstName }} {{ book.authorLastName }}</td>
+            <td>
+                <form action="{{ path('app_science_book_delete', {'id': book.id}) }}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token(book.id) }}" />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

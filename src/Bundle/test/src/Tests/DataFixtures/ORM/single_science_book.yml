@@ -1,0 +1,9 @@
+App\Entity\ScienceBook:
+    science-book1:
+        title: "A Brief History of Time"
+        author: "@stephen-hawking"
+
+App\Entity\Author:
+    stephen-hawking:
+        firstName: "Stephen"
+        lastName: "Hawking"
