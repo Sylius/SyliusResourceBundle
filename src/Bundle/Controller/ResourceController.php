@@ -212,6 +212,9 @@ class ResourceController
 
             return $this->redirectHandler->redirectToResource($configuration, $newResource);
         }
+        if ($request->isMethod('POST') && $form->isSubmitted() && !$form->isValid()) {
+            $responseCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        }
 
         if (!$configuration->isHtmlRequest()) {
             return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
@@ -223,13 +226,13 @@ class ResourceController
             return $initializeEventResponse;
         }
 
-        return $this->renderForm($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
+        return $this->render($configuration->getTemplate(ResourceActions::CREATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $newResource,
             $this->metadata->getName() => $newResource,
-            'form' => $form,
-        ]);
+            'form' => $form->createView(),
+        ], null, $responseCode ?? Response::HTTP_OK);
     }
 
     public function updateAction(Request $request): Response
@@ -299,6 +302,9 @@ class ResourceController
 
             return $this->redirectHandler->redirectToResource($configuration, $resource);
         }
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) && $form->isSubmitted() && !$form->isValid()) {
+            $responseCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        }
 
         if (!$configuration->isHtmlRequest()) {
             return $this->createRestView($configuration, $form, Response::HTTP_BAD_REQUEST);
@@ -310,13 +316,13 @@ class ResourceController
             return $initializeEventResponse;
         }
 
-        return $this->renderForm($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
+        return $this->render($configuration->getTemplate(ResourceActions::UPDATE . '.html'), [
             'configuration' => $configuration,
             'metadata' => $this->metadata,
             'resource' => $resource,
             $this->metadata->getName() => $resource,
-            'form' => $form,
-        ]);
+            'form' => $form->createView(),
+        ], null, $responseCode ?? Response::HTTP_OK);
     }
 
     public function deleteAction(Request $request): Response
