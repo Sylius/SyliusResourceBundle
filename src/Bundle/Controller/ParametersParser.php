@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
+use Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,7 @@ final class ParametersParser implements ParametersParserInterface
         }
 
         if (0 === strpos($parameter, '$')) {
-            return $request->get(substr($parameter, 1));
+            return RequestParameterProvider::provide($request, substr($parameter, 1));
         }
 
         if (0 === strpos($parameter, 'expr:')) {
