@@ -34,10 +34,12 @@ final class Workflow implements StateMachineInterface
     {
         Assert::true($configuration->hasStateMachine(), 'State machine must be configured to apply transition, check your routing.');
 
+        $graph = $configuration->getStateMachineGraph();
+
         /** @var string $transitionName */
         $transitionName = $configuration->getStateMachineTransition();
 
-        return $this->registry->get($resource)->can($resource, $transitionName);
+        return $this->registry->get($resource, $graph)->can($resource, $transitionName);
     }
 
     /**

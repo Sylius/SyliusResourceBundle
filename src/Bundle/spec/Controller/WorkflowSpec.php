@@ -59,7 +59,7 @@ final class WorkflowSpec extends ObjectBehavior
         ;
     }
 
-    function it_returns_if_configured_state_machine_can_transition(
+    function it_returns_if_configured_state_machine_can_transition_without_graph_configuration(
         RequestConfiguration $requestConfiguration,
         Registry $registry,
         ResourceInterface $resource,
@@ -69,6 +69,21 @@ final class WorkflowSpec extends ObjectBehavior
         $requestConfiguration->hasStateMachine()->willReturn(true);
         $requestConfiguration->getStateMachineTransition()->willReturn('reject');
         $registry->get($resource, null)->willReturn($workflow);
+        $workflow->can($resource, 'reject')->willReturn(true);
+
+        $this->can($requestConfiguration, $resource)->shouldReturn(true);
+    }
+
+    function it_returns_if_configured_state_machine_can_transition_with_graph_configuration(
+        RequestConfiguration $requestConfiguration,
+        Registry $registry,
+        ResourceInterface $resource,
+        SymfonyWorkflow $workflow,
+    ): void {
+        $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
+        $requestConfiguration->hasStateMachine()->willReturn(true);
+        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+        $registry->get($resource, 'pull_request')->willReturn($workflow);
         $workflow->can($resource, 'reject')->willReturn(true);
 
         $this->can($requestConfiguration, $resource)->shouldReturn(true);
