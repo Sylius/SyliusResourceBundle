@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Configuration;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Configuration;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ConfigurationTest extends TestCase
 {
@@ -24,7 +25,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_break_if_not_customized()
+    public function it_does_not_break_if_not_customized(): void
     {
         $this->assertConfigurationIsValid(
             [
@@ -36,7 +37,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function it_has_default_mapping_paths()
+    public function it_has_default_mapping_paths(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -56,7 +57,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function its_mapping_paths_can_be_customized()
+    public function its_mapping_paths_can_be_customized(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -78,7 +79,54 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function it_has_default_authorization_checker()
+    public function it_has_default_translation(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [],
+            ],
+            [
+                'translation' => [
+                    'enabled' => true,
+                    'enabled_locales' => [],
+                    'default_locale' => null,
+                    'locale_provider' => 'sylius.translation_locale_provider.immutable',
+                ],
+            ],
+            'translation'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function its_translation_can_be_customized(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['translation' => [
+                    'enabled' => false,
+                    'enabled_locales' => ['fr', 'pl'],
+                    'default_locale' => 'fr',
+                    'locale_provider' => 'app.locale_provider.custom',
+                ]],
+            ],
+            [
+                'translation' => [
+                    'enabled' => false,
+                    'enabled_locales' => ['fr', 'pl'],
+                    'default_locale' => 'fr',
+                    'locale_provider' => 'app.locale_provider.custom',
+                ],
+            ],
+            'translation'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_default_authorization_checker(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -92,7 +140,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function its_authorization_checker_can_be_customized()
+    public function its_authorization_checker_can_be_customized(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -106,7 +154,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function its_authorization_checker_cannot_be_empty()
+    public function its_authorization_checker_cannot_be_empty(): void
     {
         $this->assertPartialConfigurationIsInvalid(
             [
@@ -116,7 +164,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    protected function getConfiguration()
+    protected function getConfiguration(): ConfigurationInterface
     {
         return new Configuration();
     }

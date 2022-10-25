@@ -72,7 +72,139 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_registers_default_translation_parameters()
+    public function it_registers_translation_enabled_locales_parameter_from_locale_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->setParameter('locale', 'pl');
+
+        $this->load([
+            'translation' => [
+                'enabled_locales' => [],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['pl']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_enabled_locales_parameter_from_kernel_enabled_locales_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->setParameter('kernel.enabled_locales', ['fr', 'pl']);
+
+        $this->load([
+            'translation' => [
+                'enabled_locales' => [],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['fr', 'pl']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_enabled_locales_parameter_with_given_locales(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'enabled_locales' => ['fr', 'pl'],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['fr', 'pl']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_enabled_locales_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'enabled_locales' => [],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.enabled_locales', ['en']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_default_locale_parameter_from_locale_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->setParameter('locale', 'pl');
+
+        $this->load([
+            'translation' => [
+                'default_locale' => null,
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'pl');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_default_locale_parameter_from_kernel_default_locale_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->setParameter('kernel.default_locale', 'pl');
+
+        $this->load([
+            'translation' => [
+                'default_locale' => null,
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'pl');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_default_locale_parameter_with_given_locale(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'default_locale' => 'fr',
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'fr');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_translation_default_locale_parameter(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'translation' => [
+                'default_locale' => null,
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.translation.default_locale', 'en');
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_default_translation_parameters(): void
     {
         // TODO: Move ResourceGrid integration to a dedicated compiler pass
         $this->setParameter('kernel.bundles', []);
