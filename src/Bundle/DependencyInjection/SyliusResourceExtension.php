@@ -19,6 +19,8 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHP
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\Metadata;
+use Sylius\Component\Resource\State\ProcessorInterface;
+use Sylius\Component\Resource\State\ProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -54,6 +56,14 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $this->loadPersistence($config['drivers'], $config['resources'], $loader);
         $this->loadResources($config['resources'], $container);
+
+        $container->registerForAutoconfiguration(ProviderInterface::class)
+            ->addTag('sylius.state_provider')
+        ;
+
+        $container->registerForAutoconfiguration(ProcessorInterface::class)
+            ->addTag('sylius.state_processor')
+        ;
 
         $container->addObjectResource(Metadata::class);
         $container->addObjectResource(DriverProvider::class);
