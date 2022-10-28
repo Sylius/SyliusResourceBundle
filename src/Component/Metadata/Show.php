@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Show extends Operation
+final class Show extends Operation implements ShowOperationInterface
 {
     public function __construct(
         ?string $name = null,

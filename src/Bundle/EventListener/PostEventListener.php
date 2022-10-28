@@ -16,8 +16,10 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
@@ -56,6 +58,13 @@ class PostEventListener
 
         if (null !== $postEventResponse = $resourceEvent->getResponse()) {
             $event->setControllerResult($postEventResponse);
+        }
+
+        if (
+            $operation instanceof ShowOperationInterface ||
+            $operation instanceof CollectionOperationInterface
+        ) {
+            return;
         }
 
         $this->flashHelper->addSuccessFlash($configuration, $operation->getName(), $controllerResult);
