@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### v1.10.0 (2022-10-31)
+
+#### Details
+
+- [#489](https://github.com/Sylius/SyliusResourceBundle/issues/489) Fix can apply a transition on workflow with a graph ([@loic425](https://github.com/loic425))
+- [#492](https://github.com/Sylius/SyliusResourceBundle/issues/492) [Maintenance] Out-of-date phpstan/phpdoc-parser conflict removed, docker static analysis memory limit increased ([@Rafikooo](https://github.com/Rafikooo))
+- [#495](https://github.com/Sylius/SyliusResourceBundle/issues/495) Inform about potential BC break after response code change ([@Zales0123](https://github.com/Zales0123))
+
 ### v1.10.0-BETA.1 (2022-10-18)
 
 #### Details
