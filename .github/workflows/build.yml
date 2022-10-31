@@ -13,13 +13,14 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}"
+        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}, Persistence: ${{ matrix.persistence }}"
         strategy:
             fail-fast: false
             matrix:
                 php: ["8.0", "8.1"]
                 symfony: ["^5.4", "~6.0.0", "~6.1.0"]
                 twig: ["^2.12", "^3.0"]
+                persistence: ["^1.3", "^2.0", "^3.0"]
                 exclude:
                     -
                         php: "8.0"
@@ -49,6 +50,11 @@ jobs:
                 name: Restrict twig/twig version
                 if: matrix.twig != ''
                 run: composer require "twig/twig:${{ matrix.twig }}" --no-update --no-scripts
+
+            -
+                name: Restrict doctrine/persistence version
+                if: matrix.persistence != ''
+                run: composer require "doctrine/persistence:${{ matrix.persistence }}" --no-update --no-scripts
 
             -
                 name: Install dependencies
