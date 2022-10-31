@@ -1,3 +1,12 @@
+## UPGRADE FOR `1.10.x`
+
+### FROM `1.9.x` to `1.10.x`
+
+- failed form response status code returned from the `ResourceController::createAction` and `ResourceController::updateAction` changed from `200` to `422`
+
+  see: https://github.com/Sylius/SyliusResourceBundle/pull/488. This is technically a bug fix, but could break the application
+  if your logic is based on this bugged previous status code  
+
 ## UPGRADE FOR `1.7.x`
 
 ### FROM `1.6.x` TO `1.7.x`
