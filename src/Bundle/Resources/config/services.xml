@@ -32,11 +32,11 @@
 
         <service id="sylius.action.placeholder" class="Sylius\Component\Resource\Action\PlaceHolderAction" />
 
-        <service id="sylius.factory.locator" class="Sylius\Component\Resource\Factory\FactoryLocator" public="false">
+        <service id="Sylius\Component\Resource\Factory\FactoryLocator" public="false">
             <argument type="tagged_locator" tag="sylius.factory"/>
         </service>
 
-        <service id="sylius.repository.locator" class="Sylius\Component\Resource\Repository\RepositoryLocator" public="false">
+        <service id="Sylius\Component\Resource\Repository\RepositoryLocator" public="false">
             <argument type="tagged_locator" tag="sylius.repository"/>
         </service>
 

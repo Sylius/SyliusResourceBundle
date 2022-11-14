@@ -6,7 +6,7 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.listener.read" class="Sylius\Bundle\ResourceBundle\EventListener\ReadListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\ReadListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
@@ -14,16 +14,16 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
         </service>
 
-        <service id="sylius.listener.factory" class="Sylius\Bundle\ResourceBundle\EventListener\FactoryListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\FactoryListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
-            <argument type="service" id="sylius.factory.locator" />
+            <argument type="service" id="Sylius\Component\Resource\Factory\FactoryLocator" />
             <argument type="service" id="sylius.resource_controller.new_resource_factory" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="2" />
         </service>
 
-        <service id="sylius.listener.form" class="Sylius\Bundle\ResourceBundle\EventListener\FormListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\FormListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
@@ -31,13 +31,13 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="128" />
         </service>
 
-        <service id="sylius.listener.validate" class="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.metadata_factory.resource" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
         </service>
 
-        <service id="sylius.listener.pre_event" class="Sylius\Bundle\ResourceBundle\EventListener\PreEventListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\PreEventListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
@@ -46,7 +46,7 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="42" />
         </service>
 
-        <service id="sylius.listener.write" class="Sylius\Bundle\ResourceBundle\EventListener\WriteListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\WriteListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
@@ -54,7 +54,7 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="32" />
         </service>
 
-        <service id="sylius.listener.post_event" class="Sylius\Bundle\ResourceBundle\EventListener\PostEventListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\PostEventListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
@@ -63,7 +63,7 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="24" />
         </service>
 
-        <service id="sylius.listener.respond" class="Sylius\Bundle\ResourceBundle\EventListener\RespondListener" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\RespondListener" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
