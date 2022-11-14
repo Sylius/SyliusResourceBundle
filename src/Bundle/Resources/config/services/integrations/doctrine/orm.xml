@@ -39,7 +39,7 @@
         <service id="sylius.form_builder.default" alias="Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder" public="false" />
 
         <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" decorates="doctrine.orm.container_repository_factory" public="false">
-            <argument type="service" id="sylius.doctrine.orm.container_repository_factory.inner" />
+            <argument type="service" id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory.inner" />
             <argument>%sylius.doctrine.orm.container_repository_factory.entities%</argument>
         </service>
         <service id="sylius.doctrine.orm.container_repository_factory" alias="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" public="false" />
