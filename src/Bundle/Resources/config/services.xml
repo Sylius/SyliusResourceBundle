@@ -35,7 +35,7 @@
                  decorates="form.type_extension.form.request_handler" decoration-priority="256" public="false" />
 
         <service id="sylius.resource_registry" class="Sylius\Component\Resource\Metadata\Registry" public="false" />
-        <service id="Sylius\Component\Resource\Metadata\RegistryInterface" alias="sylius.resource_registry" />
+        <service id="Sylius\Component\Resource\Metadata\RegistryInterface" alias="sylius.resource_registry" public="false" />
 
         <service id="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
         <service id="sylius.expression_language" alias="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
