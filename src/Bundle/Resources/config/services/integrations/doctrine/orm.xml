@@ -20,22 +20,28 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.event_subscriber.orm_mapped_super_class" class="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber">
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber">
             <argument type="service" id="sylius.resource_registry" />
             <tag name="doctrine.event_subscriber" priority="8192" />
         </service>
-        <service id="sylius.event_subscriber.orm_repository_class" class="Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber">
+        <service id="sylius.event_subscriber.orm_mapped_super_class" alias="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber" />
+
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber">
             <argument type="service" id="sylius.resource_registry" />
             <tag name="doctrine.event_subscriber" priority="8192" />
         </service>
-        <service id="sylius.form_builder.default" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder" public="false">
+        <service id="sylius.event_subscriber.orm_repository_class" alias="Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber" />
+
+        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder" public="false">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <tag name="sylius.default_resource_form.builder" type="doctrine/orm" />
         </service>
+        <service id="sylius.form_builder.default" alias="Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder" public="false" />
 
-        <service id="sylius.doctrine.orm.container_repository_factory" decorates="doctrine.orm.container_repository_factory" class="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" public="false">
+        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" decorates="doctrine.orm.container_repository_factory" public="false">
             <argument type="service" id="sylius.doctrine.orm.container_repository_factory.inner" />
             <argument>%sylius.doctrine.orm.container_repository_factory.entities%</argument>
         </service>
+        <service id="sylius.doctrine.orm.container_repository_factory" alias="Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory" public="false" />
     </services>
 </container>
