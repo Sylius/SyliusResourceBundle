@@ -74,7 +74,7 @@
         "symfony/workflow": "^5.4 || ^6.0",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "^4.22",
-        "rector/rector": "^0.13.5"
+        "rector/rector": "^0.14.8"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
