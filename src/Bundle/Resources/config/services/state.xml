@@ -4,35 +4,41 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults public="true" />
+        <defaults />
 
-        <service id="Sylius\Component\Resource\State\CallableProvider" class="Sylius\Component\Resource\State\CallableProvider" public="false">
+        <service id="Sylius\Component\Resource\State\CallableProvider" class="Sylius\Component\Resource\State\CallableProvider">
             <argument type="tagged_locator" tag="sylius.state_provider"/>
         </service>
         <service id="sylius.state_provider" alias="Sylius\Component\Resource\State\CallableProvider" />
 
-        <service id="Sylius\Component\Resource\State\CallableProcessor" public="false">
+        <service id="Sylius\Component\Resource\State\CallableProcessor">
             <argument type="tagged_locator" tag="sylius.state_processor"/>
         </service>
         <service id="sylius.state_processor" alias="Sylius\Component\Resource\State\CallableProcessor" />
 
-        <service id="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor" public="false">
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor">
             <argument type="service" id="doctrine" />
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
-        <service id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" public="false">
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor">
             <argument type="service" id="doctrine" />
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider" public="false">
+        <service id="Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor">
+            <argument type="service" id="sylius.resource_controller.state_machine" />
+            <argument type="service" id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" on-invalid="null" />
+            <tag name="sylius.state_processor" priority="-100" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider">
             <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
             <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
             <tag name="sylius.state_provider" />
         </service>
 
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider" public="false">
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider">
             <argument type="service" id="sylius.resource_controller.single_resource_provider" />
             <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
             <tag name="sylius.state_provider" />

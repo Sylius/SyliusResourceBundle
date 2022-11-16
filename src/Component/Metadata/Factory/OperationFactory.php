@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata\Factory;
 
 use Sylius\Component\Resource\Metadata\Operation;
-use Symfony\Component\HttpFoundation\Request;
 use Webmozart\Assert\Assert;
 
 final class OperationFactory implements OperationFactoryInterface
