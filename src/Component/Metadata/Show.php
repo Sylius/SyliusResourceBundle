@@ -18,6 +18,7 @@ final class Show extends Operation implements ShowOperationInterface
 {
     public function __construct(
         ?string $name = null,
+        ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -51,7 +52,7 @@ final class Show extends Operation implements ShowOperationInterface
     ) {
         parent::__construct(
             name: $name ?? 'show',
-            methods: ['GET'],
+            methods: $methods ?? ['GET'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,

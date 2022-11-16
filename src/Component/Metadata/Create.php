@@ -18,6 +18,7 @@ final class Create extends Operation implements CreateOperationInterface
 {
     public function __construct(
         ?string $name = null,
+        ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -51,7 +52,7 @@ final class Create extends Operation implements CreateOperationInterface
     ) {
         parent::__construct(
             name: $name ?? 'create',
-            methods: ['GET', 'POST'],
+            methods: $methods ?? ['GET', 'POST'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,

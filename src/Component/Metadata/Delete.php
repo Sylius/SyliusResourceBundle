@@ -18,6 +18,7 @@ final class Delete extends Operation implements DeleteOperationInterface
 {
     public function __construct(
         ?string $name = null,
+        ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -51,7 +52,7 @@ final class Delete extends Operation implements DeleteOperationInterface
     ) {
         parent::__construct(
             name: $name ?? 'delete',
-            methods: ['DELETE'],
+            methods: $methods ?? ['DELETE'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,

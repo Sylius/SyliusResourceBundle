@@ -18,6 +18,7 @@ final class Index extends Operation implements CollectionOperationInterface
 {
     public function __construct(
         ?string $name = null,
+        ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -51,7 +52,7 @@ final class Index extends Operation implements CollectionOperationInterface
     ) {
         parent::__construct(
             name: $name ?? 'index',
-            methods: ['GET'],
+            methods: $methods ?? ['GET'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,

@@ -18,6 +18,7 @@ final class Update extends Operation implements UpdateOperationInterface
 {
     public function __construct(
         ?string $name = null,
+        ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -51,7 +52,7 @@ final class Update extends Operation implements UpdateOperationInterface
     ) {
         parent::__construct(
             name: $name ?? 'update',
-            methods: ['GET', 'PUT'],
+            methods: $methods ?? ['GET', 'PUT'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,

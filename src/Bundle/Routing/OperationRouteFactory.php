@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
+use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
@@ -26,6 +27,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
     public function create(MetadataInterface $metadata, Operation $operation): Route
     {
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
+
+        if (null !== $routePrefix = $operation->getRoutePrefix()) {
+            $routePath = $routePrefix . '/' . $routePath;
+        }
 
         return new Route(
             $routePath,
@@ -43,13 +48,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 
     private function getDefaultRoutePath(MetadataInterface $metadata, Operation $operation): string
     {
-        $defaultPath = $this->getDefaultRoutePathForOperation($metadata, $operation);
-
-        if (null !== $routePrefix = $operation->getRoutePrefix()) {
-            return sprintf('%s/%s', $routePrefix, $defaultPath);
-        }
-
-        return $defaultPath;
+        return $this->getDefaultRoutePathForOperation($metadata, $operation);
     }
 
     private function getDefaultRoutePathForOperation(MetadataInterface $metadata, Operation $operation): string
@@ -63,8 +62,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return sprintf('%s', $rootPath);
         }
 
-        if ('create' === $name) {
-            return sprintf('%s/new', $rootPath);
+        if ($operation instanceof CreateOperationInterface) {
+            $path = $name === 'create' ? 'new' : $name;
+
+            return sprintf('%s/%s', $rootPath, $path);
         }
 
         if ($operation instanceof UpdateOperationInterface) {
