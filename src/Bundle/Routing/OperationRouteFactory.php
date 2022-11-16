@@ -155,11 +155,11 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         if (null !== $grid = $operation->getGrid()) {
             $syliusOptions['grid'] = $grid;
         }
-//
-//        if (isset($arguments['csrfProtection'])) {
-//            $syliusOptions['csrf_protection'] = $arguments['csrfProtection'];
-//        }
-//
+
+        if (null !== $csrfProtection = $operation->hasCsrfProtection()) {
+            $syliusOptions['csrf_protection'] = $csrfProtection;
+        }
+
 //        if (isset($arguments['redirect'])) {
 //            $syliusOptions['redirect'] = $arguments['redirect'];
 //        }

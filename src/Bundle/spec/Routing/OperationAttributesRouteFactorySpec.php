@@ -28,6 +28,7 @@ use App\Entity\Operation\IndexBookWithPersmission;
 use App\Entity\Operation\IndexBookWithSection;
 use App\Entity\Operation\PublishBook;
 use App\Entity\Operation\ShowBookWithoutReading;
+use App\Entity\Operation\UpdateBookWithCsrfProtection;
 use App\Entity\Operation\UpdateBookWithStateMachine;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationAttributesRouteFactory;
@@ -391,6 +392,34 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'index',
                 'grid' => 'app_book',
+            ],
+        ]);
+    }
+
+    function it_generates_update_route_with_csrf_protection(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, UpdateBookWithCsrfProtection::class);
+
+        $route = $routeCollection->get('app_book_update');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/{id}/edit');
+        Assert::eq($route->getMethods(), ['GET', 'PUT']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'update',
+                'csrf_protection' => true,
             ],
         ]);
     }

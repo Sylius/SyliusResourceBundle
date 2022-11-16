@@ -156,6 +156,11 @@ class Operation
         return $this->permission;
     }
 
+    public function hasCsrfProtection(): ?bool
+    {
+        return $this->csrfProtection;
+    }
+
     public function getStateMachine(): ?array
     {
         return $this->stateMachine;
