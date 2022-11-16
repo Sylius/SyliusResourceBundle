@@ -48,7 +48,7 @@ final class RespondListener
         /** @var Response|ResourceInterface $controllerResult */
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
-        $isValid = $request->attributes->get('is_valid', false);
+        $isValid = $request->attributes->get('is_valid', true);
 
         if (
             (null === $configuration = $this->initializeConfiguration($request)) ||
