@@ -17,10 +17,12 @@ use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
+use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
@@ -74,7 +76,7 @@ final class RespondListener
             return;
         }
 
-        if ($isValid) {
+        if ($isValid && ($operation instanceof UpdateOperationInterface || $operation instanceof CreateOperationInterface)) {
             $response = $this->redirectHandler->redirectToResource($configuration, $controllerResult);
             $event->setResponse($response);
 
