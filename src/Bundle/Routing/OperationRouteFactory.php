@@ -17,6 +17,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Symfony\Component\Routing\Route;
 use Webmozart\Assert\Assert;
 
@@ -66,8 +67,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return sprintf('%s/new', $rootPath);
         }
 
-        if ('update' === $name) {
-            return sprintf('%s/{id}/edit', $rootPath);
+        if ($operation instanceof UpdateOperationInterface) {
+            $path = $name === 'update' ? 'edit' : $name;
+
+            return sprintf('%s/{id}/%s', $rootPath, $path);
         }
 
         if ('delete' === $name) {

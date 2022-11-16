@@ -26,6 +26,7 @@ use App\Entity\Operation\CreateResourceBook;
 use App\Entity\Operation\IndexBookWithGrid;
 use App\Entity\Operation\IndexBookWithPersmission;
 use App\Entity\Operation\IndexBookWithSection;
+use App\Entity\Operation\PublishBook;
 use App\Entity\Operation\ShowBookWithoutReading;
 use App\Entity\Operation\UpdateBookWithStateMachine;
 use PhpSpec\ObjectBehavior;
@@ -36,6 +37,7 @@ use Sylius\Component\Resource\Metadata\Factory\AttributesResourceMetadataFactory
 use Sylius\Component\Resource\Metadata\Factory\OperationFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 
@@ -72,7 +74,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
-
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -99,7 +101,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
-
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -126,6 +128,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -153,6 +156,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -182,6 +186,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -211,6 +216,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_show');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/{id}');
+        Assert::eq($route->getMethods(), ['GET']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -238,7 +244,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
-
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -266,7 +272,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
-
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -294,7 +300,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
-
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -322,6 +328,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_admin_book_index');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -349,6 +356,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_index');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -376,6 +384,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_index');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -403,6 +412,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_update');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/{id}/edit');
+        Assert::eq($route->getMethods(), ['GET', 'PUT']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -432,12 +442,46 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('app_book_create');
         Assert::notNull($route);
         Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
         Assert::eq($route->getDefaults(), [
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.book',
                 'operation' => 'create',
                 'input' => Book::class,
+            ],
+        ]);
+    }
+
+    function it_generates_apply_state_machine_transition_route(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, PublishBook::class);
+
+        $route = $routeCollection->get('app_book_publish');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/{id}/publish');
+        Assert::eq($route->getMethods(), ['PUT', 'PATCH']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'publish',
+                'processor' => ApplyStateMachineProcessor::class,
+                'validate' => false,
+                'form' => false,
+                'state_machine' => [
+                    'transition' => 'publish',
+                ],
             ],
         ]);
     }

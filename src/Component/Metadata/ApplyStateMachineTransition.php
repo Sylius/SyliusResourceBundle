@@ -20,6 +20,8 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
 {
     public function __construct(
         ?string $name = null,
+        ?string $transition = null,
+        ?string $graph = null,
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $controller = null,
@@ -37,7 +39,7 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
         ?bool $permission = null,
         ?bool $csrfProtection = null,
         string | array | null $redirect = null,
-        ?array $stateMachine = null,
+        protected ?array $stateMachine = null,
         ?string $event = null,
         ?bool $returnContent = null,
         ?string $resource = null,
@@ -48,9 +50,17 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
         ?bool $respond = null,
         ?string $input = null,
     ) {
+        if (null !== $transition) {
+            $stateMachine = array_merge($stateMachine ?? [], ['transition' => $transition]);
+        }
+
+        if (null !== $graph) {
+            $stateMachine = array_merge($stateMachine ?? [], ['graph' => $graph]);
+        }
+
         parent::__construct(
-            name: $name ?? 'apply_transition',
-            methods: ['PUT'],
+            name: $name ?? $transition,
+            methods: ['PUT', 'PATCH'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,
