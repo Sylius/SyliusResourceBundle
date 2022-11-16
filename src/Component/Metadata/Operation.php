@@ -151,6 +151,11 @@ class Operation
         return $this->grid;
     }
 
+    public function hasPermission(): ?bool
+    {
+        return $this->permission;
+    }
+
     public function getStateMachine(): ?array
     {
         return $this->stateMachine;

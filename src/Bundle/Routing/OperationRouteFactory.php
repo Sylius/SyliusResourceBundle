@@ -120,19 +120,19 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         if (null !== $read = $operation->canRead()) {
             $syliusOptions['read'] = $read;
         }
-//
-//        if (isset($arguments['validate'])) {
-//            $syliusOptions['validate'] = $arguments['validate'];
-//        }
-//
-//        if (isset($arguments['write'])) {
-//            $syliusOptions['write'] = $arguments['write'];
-//        }
-//
-//        if (isset($arguments['respond'])) {
-//            $syliusOptions['respond'] = $arguments['respond'];
-//        }
-//
+
+        if (null !== $validate = $operation->canValidate()) {
+            $syliusOptions['validate'] = $validate;
+        }
+
+        if (null !== $write = $operation->canWrite()) {
+            $syliusOptions['write'] = $write;
+        }
+
+        if (null !== $respond = $operation->canRespond()) {
+            $syliusOptions['respond'] = $respond;
+        }
+
         if (null !== $form = $operation->getForm()) {
             $syliusOptions['form'] = $form;
         }
@@ -144,11 +144,11 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         if (null !== $section = $operation->getSection()) {
             $syliusOptions['section'] = $section;
         }
-//
-//        if (isset($arguments['permission'])) {
-//            $syliusOptions['permission'] = $arguments['permission'];
-//        }
-//
+
+        if (null !== $permission = $operation->hasPermission()) {
+            $syliusOptions['permission'] = $permission;
+        }
+
         if (null !== $grid = $operation->getGrid()) {
             $syliusOptions['grid'] = $grid;
         }
