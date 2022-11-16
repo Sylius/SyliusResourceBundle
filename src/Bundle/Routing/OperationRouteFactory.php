@@ -161,9 +161,9 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 //            $syliusOptions['redirect'] = $arguments['redirect'];
 //        }
 //
-//        if (isset($arguments['stateMachine'])) {
-//            $syliusOptions['state_machine'] = $arguments['stateMachine'];
-//        }
+        if (null !== $stateMachine = $operation->getStateMachine()) {
+            $syliusOptions['state_machine'] = $stateMachine;
+        }
 //
 //        if (isset($arguments['event'])) {
 //            $syliusOptions['event'] = $arguments['event'];

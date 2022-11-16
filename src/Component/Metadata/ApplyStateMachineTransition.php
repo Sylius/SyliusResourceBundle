@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
+
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class ApplyStateMachineTransition extends Operation implements UpdateOperationInterface
 {
@@ -72,7 +74,7 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
             returnContent: $returnContent,
             resource: $resource,
             provider: $provider,
-            processor: $processor,
+            processor: $processor ?? ApplyStateMachineProcessor::class,
             read: $read,
             validate: false,
             write: $write,

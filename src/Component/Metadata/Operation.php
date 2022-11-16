@@ -151,6 +151,11 @@ class Operation
         return $this->grid;
     }
 
+    public function getStateMachine(): ?array
+    {
+        return $this->stateMachine;
+    }
+
     public function getResource(): ?string
     {
         return $this->resource;
