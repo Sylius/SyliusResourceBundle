@@ -16,6 +16,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 use App\Dto\Book;
 use App\Entity\Operation\CreateBook;
 use App\Entity\Operation\CreateBookWithCriteria;
+use App\Entity\Operation\CreateBookWithEvent;
 use App\Entity\Operation\CreateBookWithInput;
 use App\Entity\Operation\CreateBookWithMethods;
 use App\Entity\Operation\CreateBookWithName;
@@ -684,6 +685,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
             ],
         ]);
     }
+
     function it_generates_create_route_with_redirect_and_parameters(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
@@ -714,6 +716,34 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                         'foo' => 'fighters',
                     ],
                 ],
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_event(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithEvent::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'event' => 'register',
             ],
         ]);
     }

@@ -171,6 +171,11 @@ class Operation
         return $this->stateMachine;
     }
 
+    public function getEvent(): ?string
+    {
+        return $this->event;
+    }
+
     public function getResource(): ?string
     {
         return $this->resource;
