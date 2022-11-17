@@ -21,6 +21,7 @@ use App\Entity\Operation\CreateBookWithInput;
 use App\Entity\Operation\CreateBookWithMethods;
 use App\Entity\Operation\CreateBookWithName;
 use App\Entity\Operation\CreateBookWithoutResponding;
+use App\Entity\Operation\CreateBookWithReturningContent;
 use App\Entity\Operation\CreateBookWithoutValidation;
 use App\Entity\Operation\CreateBookWithoutWriting;
 use App\Entity\Operation\CreateBookWithPath;
@@ -744,6 +745,34 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'create',
                 'event' => 'register',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_returning_content(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithReturningContent::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'return_content' => true,
             ],
         ]);
     }

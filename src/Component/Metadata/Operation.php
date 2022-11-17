@@ -176,6 +176,11 @@ class Operation
         return $this->event;
     }
 
+    public function hasReturnContent(): ?bool
+    {
+        return $this->returnContent;
+    }
+
     public function getResource(): ?string
     {
         return $this->resource;
