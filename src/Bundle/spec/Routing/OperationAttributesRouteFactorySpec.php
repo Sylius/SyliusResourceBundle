@@ -24,6 +24,8 @@ use App\Entity\Operation\CreateBookWithoutValidation;
 use App\Entity\Operation\CreateBookWithoutWriting;
 use App\Entity\Operation\CreateBookWithPath;
 use App\Entity\Operation\CreateBookWithPathAndRoutePrefix;
+use App\Entity\Operation\CreateBookWithRedirect;
+use App\Entity\Operation\CreateBookWithRedirectAndParameters;
 use App\Entity\Operation\CreateBookWithRoutePrefix;
 use App\Entity\Operation\CreateBookWithTemplate;
 use App\Entity\Operation\CreateBookWithVars;
@@ -650,6 +652,67 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'form' => false,
                 'state_machine' => [
                     'transition' => 'publish',
+                ],
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_redirect(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithRedirect::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'redirect' => 'update',
+            ],
+        ]);
+    }
+    function it_generates_create_route_with_redirect_and_parameters(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithRedirectAndParameters::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'redirect' => [
+                    'route' => 'update',
+                    'parameters' => [
+                        'id' => 'resource.id',
+                        'foo' => 'fighters',
+                    ],
                 ],
             ],
         ]);

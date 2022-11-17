@@ -161,6 +161,11 @@ class Operation
         return $this->csrfProtection;
     }
 
+    public function getRedirect(): array|string|null
+    {
+        return $this->redirect;
+    }
+
     public function getStateMachine(): ?array
     {
         return $this->stateMachine;

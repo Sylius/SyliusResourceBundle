@@ -161,10 +161,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $syliusOptions['csrf_protection'] = $csrfProtection;
         }
 
-//        if (isset($arguments['redirect'])) {
-//            $syliusOptions['redirect'] = $arguments['redirect'];
-//        }
-//
+        if (null !== $redirect = $operation->getRedirect()) {
+            $syliusOptions['redirect'] = $redirect;
+        }
+
         if (null !== $stateMachine = $operation->getStateMachine()) {
             $syliusOptions['state_machine'] = $stateMachine;
         }
