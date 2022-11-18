@@ -22,7 +22,7 @@ final class ApplyStateMachineProcessor implements ProcessorInterface
 {
     public function __construct(
         private StateMachineInterface $stateMachine,
-        private ?ProcessorInterface $writeProcessor = null
+        private ?ProcessorInterface $writeProcessor = null,
     ) {
     }
 

@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Factory;
 
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Section;
+use Sylius\Component\Resource\Metadata\Sections;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 
 final class AttributesResourceMetadataFactory implements ResourceMetadataFactoryInterface
@@ -32,9 +35,62 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
 
         $attributes = ClassReflection::getClassAttributes($className);
         $resourceArguments = $this->getResourceArguments($attributes);
-        $operationAttributes = $this->filterAttributes($attributes, Operation::class);
 
-        $operations = $resourceMetadata->getResource()->getOperations() ?? new Operations();
+        $resource = $this->createMetadataWithSections($resource, $resourceArguments, $attributes);
+        $resource = $this->createMetadataWithOperations($resource, $resourceArguments, $attributes);
+
+        return $resourceMetadata->withResource($resource);
+    }
+
+    private function createMetadataWithSections(
+        Resource $resource,
+        array $resourceArguments,
+        array $attributes
+    ): Resource {
+        $operations = $resource->getOperations() ?? new Operations();
+
+        $sectionAttributes = $this->filterAttributes($attributes, Section::class);
+
+        foreach ($sectionAttributes as $attribute) {
+            $arguments = $attribute->getArguments();
+
+            $section = new Section(
+                name: $arguments['name'],
+                routePrefix: $arguments['routePrefix'] ?? null,
+                templatesDir: $arguments['templatesDir'] ?? null,
+            );
+
+            /** @var Operation $operation */
+            foreach ($arguments['operations'] as $operation) {
+                $operation = $operation->withSection($section->getName());
+
+                if (null !== $routePrefix = $section->getRoutePrefix()) {
+                    $operation = $operation->withRoutePrefix($routePrefix);
+                }
+
+                if (null !== ($templatesDir = $section->getTemplatesDir()) && !($operation instanceof DeleteOperationInterface)) {
+                    $operation = $operation->withTemplate(sprintf('%s/%s.html.twig', $templatesDir, $operation->getName()));
+                }
+
+                if (null !== $alias = $resourceArguments['alias']) {
+                    $operation = $operation->withResource($alias);
+                }
+
+                $operations->add($operation->getName(), $operation);
+                $section = $section->withOperations($operations);
+            }
+        }
+
+        return $resource->withOperations($operations);
+    }
+
+    private function createMetadataWithOperations(
+        Resource $resource,
+        array $resourceArguments,
+        array $attributes
+    ): Resource {
+        $operations = $resource->getOperations() ?? new Operations();
+        $operationAttributes = $this->filterAttributes($attributes, Operation::class);
 
         foreach ($operationAttributes as $attribute) {
             $arguments = array_merge($attribute->getArguments(), $resourceArguments);
@@ -49,9 +105,7 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             $resource = $resource->withAlias($alias);
         }
 
-        $resource = $resource->withOperations($operations);
-
-        return $resourceMetadata->withResource($resource);
+        return $resource->withOperations($operations);
     }
 
     private function getResourceArguments($attributes): array

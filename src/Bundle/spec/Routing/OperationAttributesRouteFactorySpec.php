@@ -21,13 +21,13 @@ use App\Entity\Operation\CreateBookWithInput;
 use App\Entity\Operation\CreateBookWithMethods;
 use App\Entity\Operation\CreateBookWithName;
 use App\Entity\Operation\CreateBookWithoutResponding;
-use App\Entity\Operation\CreateBookWithReturningContent;
 use App\Entity\Operation\CreateBookWithoutValidation;
 use App\Entity\Operation\CreateBookWithoutWriting;
 use App\Entity\Operation\CreateBookWithPath;
 use App\Entity\Operation\CreateBookWithPathAndRoutePrefix;
 use App\Entity\Operation\CreateBookWithRedirect;
 use App\Entity\Operation\CreateBookWithRedirectAndParameters;
+use App\Entity\Operation\CreateBookWithReturningContent;
 use App\Entity\Operation\CreateBookWithRoutePrefix;
 use App\Entity\Operation\CreateBookWithTemplate;
 use App\Entity\Operation\CreateBookWithVars;
@@ -36,6 +36,7 @@ use App\Entity\Operation\IndexBookWithGrid;
 use App\Entity\Operation\IndexBookWithPersmission;
 use App\Entity\Operation\IndexBookWithSection;
 use App\Entity\Operation\PublishBook;
+use App\Entity\Operation\Resource\BookWithAdminSection;
 use App\Entity\Operation\ShowBookWithoutReading;
 use App\Entity\Operation\UpdateBookWithCsrfProtection;
 use App\Entity\Operation\UpdateBookWithStateMachine;
@@ -776,4 +777,79 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
             ],
         ]);
     }
+
+    function it_generates_resource_routes_with_admin_section(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, BookWithAdminSection::class);
+
+        // Create
+        $route = $routeCollection->get('app_admin_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'template' => 'admin/book/create.html.twig',
+                'section' => 'admin'
+            ],
+        ]);
+
+        // Update
+        $route = $routeCollection->get('app_admin_book_update');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/{id}/edit');
+        Assert::eq($route->getMethods(), ['GET', 'PUT']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'update',
+                'template' => 'admin/book/update.html.twig',
+                'section' => 'admin'
+            ],
+        ]);
+
+        // Delete
+        $route = $routeCollection->get('app_admin_book_delete');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/{id}');
+        Assert::eq($route->getMethods(), ['DELETE']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'delete',
+                'section' => 'admin'
+            ],
+        ]);
+
+        // Show
+        $route = $routeCollection->get('app_admin_book_show');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/{id}');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'show',
+                'template' => 'admin/book/show.html.twig',
+                'section' => 'admin'
+            ],
+        ]);
+    }
+
 }

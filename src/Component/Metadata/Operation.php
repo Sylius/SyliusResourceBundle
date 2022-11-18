@@ -73,6 +73,14 @@ class Operation
         return $this->routePrefix;
     }
 
+    public function withRoutePrefix(string $routePrefix): self
+    {
+        $self = clone $this;
+        $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
     public function getController(): ?string
     {
         return $this->controller;
@@ -81,6 +89,14 @@ class Operation
     public function getTemplate(): ?string
     {
         return $this->template;
+    }
+
+    public function withTemplate(string $template): self
+    {
+        $self = clone $this;
+        $self->template = $template;
+
+        return $self;
     }
 
     public function getRepository(): ?array
@@ -146,6 +162,14 @@ class Operation
         return $this->section;
     }
 
+    public function withSection(string $section): self
+    {
+        $self = clone $this;
+        $self->section = $section;
+
+        return $self;
+    }
+
     public function getGrid(): ?string
     {
         return $this->grid;
@@ -184,6 +208,14 @@ class Operation
     public function getResource(): ?string
     {
         return $this->resource;
+    }
+
+    public function withResource(string $resource): self
+    {
+        $self = clone $this;
+        $self->resource = $resource;
+
+        return $self;
     }
 
     public function getProvider(): ?string

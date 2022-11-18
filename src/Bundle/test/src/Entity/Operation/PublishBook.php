@@ -15,7 +15,6 @@ namespace App\Entity\Operation;
 
 use App\Entity\Book;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
-use Sylius\Component\Resource\Metadata\Index;
 
 #[ApplyStateMachineTransition(transition: 'publish', resource: 'app.book')]
 final class PublishBook extends Book
