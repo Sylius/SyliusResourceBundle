@@ -64,15 +64,24 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             foreach ($arguments['operations'] as $operation) {
                 $operation = $operation->withSection($section->getName());
 
-                if (null !== $routePrefix = $section->getRoutePrefix()) {
+                if (
+                    null === $operation->getRoutePrefix() &&
+                    null !== $routePrefix = $section->getRoutePrefix()
+                ) {
                     $operation = $operation->withRoutePrefix($routePrefix);
                 }
 
-                if (null !== ($templatesDir = $section->getTemplatesDir()) && !($operation instanceof DeleteOperationInterface)) {
+                if (
+                    null === $operation->getTemplate() &&
+                    null !== ($templatesDir = $section->getTemplatesDir()) && !($operation instanceof DeleteOperationInterface)
+                ) {
                     $operation = $operation->withTemplate(sprintf('%s/%s.html.twig', $templatesDir, $operation->getName()));
                 }
 
-                if (null !== $alias = $resourceArguments['alias']) {
+                if (
+                    null === $operation->getResource() &&
+                    null !== $alias = $resourceArguments['alias']
+                ) {
                     $operation = $operation->withResource($alias);
                 }
 

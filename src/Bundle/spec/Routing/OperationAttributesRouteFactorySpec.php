@@ -37,6 +37,7 @@ use App\Entity\Operation\IndexBookWithPersmission;
 use App\Entity\Operation\IndexBookWithSection;
 use App\Entity\Operation\PublishBook;
 use App\Entity\Operation\Resource\BookWithAdminSection;
+use App\Entity\Operation\Resource\BookWithAdminSectionAndCustomTemplate;
 use App\Entity\Operation\ShowBookWithoutReading;
 use App\Entity\Operation\UpdateBookWithCsrfProtection;
 use App\Entity\Operation\UpdateBookWithStateMachine;
@@ -852,4 +853,32 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_resource_routes_with_admin_section_and_custom_template(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, BookWithAdminSectionAndCustomTemplate::class);
+
+        $route = $routeCollection->get('app_admin_book_show');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/{id}');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'show',
+                'template' => 'admin/book/show.html.twig',
+                'section' => 'admin'
+            ],
+        ]);
+    }
 }
