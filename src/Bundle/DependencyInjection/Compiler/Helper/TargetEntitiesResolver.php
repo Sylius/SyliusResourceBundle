@@ -40,7 +40,7 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
         });
 
         $interfaces = array_map(static function (array $classes): string {
-            return (string) current($classes);
+            return current($classes);
         }, $interfaces);
 
         foreach ($resourcesConfiguration as $alias => $configuration) {
