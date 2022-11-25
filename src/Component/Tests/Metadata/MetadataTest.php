@@ -31,7 +31,9 @@ final class MetadataTest extends TestCase
 {
     /**
      * @test
+     *
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function it_uses_a_custom_inflector(): void
