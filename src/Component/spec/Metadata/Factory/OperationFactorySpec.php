@@ -28,6 +28,7 @@ class OperationFactorySpec extends ObjectBehavior
     {
         $operation = $this->create(Create::class, ['criteria' => ['foo' => 'fighters']]);
         $operation->shouldHaveType(Create::class);
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
         $operation->getCriteria()->shouldReturn([
             'foo' => 'fighters',
         ]);

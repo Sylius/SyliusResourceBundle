@@ -101,12 +101,18 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
         $operations = $resource->getOperations() ?? new Operations();
         $operationAttributes = $this->filterAttributes($attributes, Operation::class);
 
+        /** @var \ReflectionAttribute $attribute */
         foreach ($operationAttributes as $attribute) {
-            $arguments = array_merge($attribute->getArguments(), $resourceArguments);
-            $arguments['resource'] = $arguments['resource'] ?? $arguments['alias'];
-            unset($arguments['alias']);
+            $operationArguments = $attribute->getArguments();
+            $operation = $this->operationFactory->create($attribute->getName(), $operationArguments);
 
-            $operation = $this->operationFactory->create($attribute->getName(), $arguments);
+            if (
+                null === $operation->getResource()
+                && null !== $resourceAlias = ($resourceArguments['alias'] ?? null)
+            ) {
+                $operation = $operation->withResource($resourceAlias);
+            }
+
             $operations->add($operation->getName(), $operation);
         }
 

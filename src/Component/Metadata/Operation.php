@@ -58,14 +58,38 @@ class Operation
         return $this->methods;
     }
 
+    public function withMethods(array $methods): self
+    {
+        $self = clone $this;
+        $self->methods = $methods;
+
+        return $self;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    public function withName(string $name): self
+    {
+        $self = clone $this;
+        $self->name = $name;
+
+        return $self;
+    }
+
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function withPath(string $path): self
+    {
+        $self = clone $this;
+        $self->path = $path;
+
+        return $self;
     }
 
     public function getRoutePrefix(): ?string
@@ -109,6 +133,14 @@ class Operation
         return $this->criteria;
     }
 
+    public function withCriteria(array $criteria): self
+    {
+        $self = clone $this;
+        $self->criteria = $criteria;
+
+        return $self;
+    }
+
     public function getRequirements(): ?array
     {
         return $this->requirements;
@@ -147,6 +179,14 @@ class Operation
         return $this->vars;
     }
 
+    public function withVars(array $vars): self
+    {
+        $self = clone $this;
+        $self->vars = $vars;
+
+        return $self;
+    }
+
     public function getForm(): array|string|bool|null
     {
         return $this->form;
@@ -175,9 +215,25 @@ class Operation
         return $this->grid;
     }
 
+    public function withGrid(string $grid): self
+    {
+        $self = clone $this;
+        $self->grid = $grid;
+
+        return $self;
+    }
+
     public function hasPermission(): ?bool
     {
         return $this->permission;
+    }
+
+    public function withPermission(bool $permission): self
+    {
+        $self = clone $this;
+        $self->permission = $permission;
+
+        return $self;
     }
 
     public function hasCsrfProtection(): ?bool
@@ -185,9 +241,25 @@ class Operation
         return $this->csrfProtection;
     }
 
+    public function withCsrfProtection(bool $csrfProtection): self
+    {
+        $self = clone $this;
+        $self->csrfProtection = $csrfProtection;
+
+        return $self;
+    }
+
     public function getRedirect(): array|string|null
     {
         return $this->redirect;
+    }
+
+    public function withRedirect(array|string $redirect): self
+    {
+        $self = clone $this;
+        $self->redirect = $redirect;
+
+        return $self;
     }
 
     public function getStateMachine(): ?array
@@ -195,14 +267,38 @@ class Operation
         return $this->stateMachine;
     }
 
+    public function withStateMachine(array $stateMachine): self
+    {
+        $self = clone $this;
+        $self->stateMachine = $stateMachine;
+
+        return $self;
+    }
+
     public function getEvent(): ?string
     {
         return $this->event;
     }
 
+    public function withEvent(string $event): self
+    {
+        $self = clone $this;
+        $self->event = $event;
+
+        return $self;
+    }
+
     public function hasReturnContent(): ?bool
     {
         return $this->returnContent;
+    }
+
+    public function withReturnContent(bool $returnContent): self
+    {
+        $self = clone $this;
+        $self->returnContent = $returnContent;
+
+        return $self;
     }
 
     public function getResource(): ?string
@@ -249,9 +345,25 @@ class Operation
         return $this->read;
     }
 
+    public function withRead(bool $read): self
+    {
+        $self = clone $this;
+        $self->read = $read;
+
+        return $self;
+    }
+
     public function canValidate(): ?bool
     {
         return $this->validate;
+    }
+
+    public function withValidate(bool $validate): self
+    {
+        $self = clone $this;
+        $self->validate = $validate;
+
+        return $self;
     }
 
     public function canWrite(): ?bool
@@ -259,13 +371,37 @@ class Operation
         return $this->write;
     }
 
+    public function withWrite(bool $write): self
+    {
+        $self = clone $this;
+        $self->write = $write;
+
+        return $self;
+    }
+
     public function canRespond(): ?bool
     {
         return $this->respond;
     }
 
+    public function withRespond(bool $respond): self
+    {
+        $self = clone $this;
+        $self->respond = $respond;
+
+        return $self;
+    }
+
     public function getInput(): ?string
     {
         return $this->input;
+    }
+
+    public function withInput(string $input): self
+    {
+        $self = clone $this;
+        $self->input = $input;
+
+        return $self;
     }
 }

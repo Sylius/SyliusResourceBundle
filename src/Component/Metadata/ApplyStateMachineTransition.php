@@ -18,6 +18,9 @@ use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class ApplyStateMachineTransition extends Operation implements UpdateOperationInterface
 {
+    private ?string $transition;
+    private ?string $graph;
+
     public function __construct(
         ?string $name = null,
         ?string $transition = null,
@@ -50,13 +53,8 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
         ?bool $respond = null,
         ?string $input = null,
     ) {
-        if (null !== $transition) {
-            $stateMachine = array_merge($stateMachine ?? [], ['transition' => $transition]);
-        }
-
-        if (null !== $graph) {
-            $stateMachine = array_merge($stateMachine ?? [], ['graph' => $graph]);
-        }
+        $this->transition = $transition;
+        $this->graph = $graph;
 
         parent::__construct(
             name: $name ?? $transition,
@@ -91,5 +89,32 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
             respond: $respond,
             input: $input,
         );
+    }
+
+    public function getTransition(): ?string
+    {
+        return $this->transition;
+    }
+
+    public function withTransition(string $transition): self
+    {
+        $self = clone($this);
+        $self->name = $self->name ?? $transition;
+        $self->stateMachine = array_merge($self->stateMachine ?? [], ['transition' => $transition]);
+
+        return $self;
+    }
+
+    public function getGraph(): ?string
+    {
+        return $this->graph;
+    }
+
+    public function withGraph(string $transition): self
+    {
+        $self = clone($this);
+        $self->stateMachine = array_merge($self->stateMachine ?? [], ['graph' => $transition]);
+
+        return $self;
     }
 }
