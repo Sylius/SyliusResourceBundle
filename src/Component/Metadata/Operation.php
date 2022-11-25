@@ -383,7 +383,7 @@ class Operation
         return $this->provider;
     }
 
-    public function withProvider(callable|string|null $provider): self
+    public function withProvider(string|null $provider): self
     {
         $self = clone $this;
         $self->provider = $provider;
@@ -396,7 +396,7 @@ class Operation
         return $this->processor;
     }
 
-    public function withProcessor(callable|string|null $processor): self
+    public function withProcessor(string|null $processor): self
     {
         $self = clone $this;
         $self->processor = $processor;
