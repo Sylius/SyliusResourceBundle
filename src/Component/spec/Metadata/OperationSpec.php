@@ -7,7 +7,10 @@ namespace spec\Sylius\Component\Resource\Metadata;
 use App\Form\Type\BookType;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
 use Sylius\Component\Resource\Tests\Dummy\DummyController;
+use Sylius\Component\Resource\Tests\Dummy\DummyProcessor;
+use Sylius\Component\Resource\Tests\Dummy\DummyProvider;
 
 final class OperationSpec extends ObjectBehavior
 {
@@ -358,6 +361,197 @@ final class OperationSpec extends ObjectBehavior
         $this->withRedirect(['route' => 'app_admin_book_show', 'parameters' => ['id' => 'resource.id']])
             ->getRedirect()
             ->shouldReturn(['route' => 'app_admin_book_show', 'parameters' => ['id' => 'resource.id']])
+        ;
+    }
+
+    function it_has_no_state_machine_by_default(): void
+    {
+        $this->getStateMachine()->shouldReturn(null);
+    }
+
+    function it_could_have_a_state_machine_with_transition(): void
+    {
+        $this->withStateMachine(['transition' => 'publish'])
+            ->getStateMachine()
+            ->shouldReturn(['transition' => 'publish'])
+        ;
+    }
+
+    function it_could_have_a_state_machine_with_transition_and_graph(): void
+    {
+        $this->withStateMachine(['transition' => 'publish', 'graph' => 'app_book'])
+            ->getStateMachine()
+            ->shouldReturn(['transition' => 'publish', 'graph' => 'app_book'])
+        ;
+    }
+
+    function it_has_no_event_by_default(): void
+    {
+        $this->getEvent()->shouldReturn(null);
+    }
+
+    function it_could_have_an_event(): void
+    {
+        $this->withEvent('publish')
+            ->getEvent()
+            ->shouldReturn('publish')
+        ;
+    }
+
+    function it_has_no_return_content_by_default(): void
+    {
+        $this->hasReturnContent()->shouldReturn(null);
+    }
+
+    function it_could_have_return_content(): void
+    {
+        $this->withReturnContent(true)
+            ->hasReturnContent()
+            ->shouldReturn(true)
+        ;
+    }
+
+    function it_could_have_no_return_content(): void
+    {
+        $this->withReturnContent(false)
+            ->hasReturnContent()
+            ->shouldReturn(false)
+        ;
+    }
+
+    function it_has_no_resource_by_default(): void
+    {
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $this->withResource('app.book')
+            ->getResource()
+            ->shouldReturn('app.book')
+        ;
+    }
+
+    function it_has_no_provider_by_default(): void
+    {
+        $this->getProvider()->shouldReturn(null);
+    }
+
+    function it_could_have_a_provider(): void
+    {
+        $this->withProvider(DummyProvider::class)
+            ->getProvider()
+            ->shouldReturn(DummyProvider::class)
+        ;
+    }
+
+    function it_has_no_processor_by_default(): void
+    {
+        $this->getProcessor()->shouldReturn(null);
+    }
+
+    function it_could_have_a_processor(): void
+    {
+        $this->withProcessor(DummyProcessor::class)
+            ->getProcessor()
+            ->shouldReturn(DummyProcessor::class)
+        ;
+    }
+
+    function it_has_no_read_by_default(): void
+    {
+        $this->canRead()->shouldReturn(null);
+    }
+
+    function it_could_have_read_enabled(): void
+    {
+        $this->withRead(true)
+            ->canRead()
+            ->shouldReturn(true)
+        ;
+    }
+
+    function it_could_have_read_disabled(): void
+    {
+        $this->withRead(false)
+            ->canRead()
+            ->shouldReturn(false)
+        ;
+    }
+
+    function it_has_no_validate_by_default(): void
+    {
+        $this->canValidate()->shouldReturn(null);
+    }
+
+    function it_could_have_validate_enabled(): void
+    {
+        $this->withValidate(true)
+            ->canValidate()
+            ->shouldReturn(true)
+        ;
+    }
+
+    function it_could_have_validate_disabled(): void
+    {
+        $this->withValidate(false)
+            ->canValidate()
+            ->shouldReturn(false)
+        ;
+    }
+
+    function it_has_no_write_by_default(): void
+    {
+        $this->canWrite()->shouldReturn(null);
+    }
+
+    function it_could_have_write_enabled(): void
+    {
+        $this->withWrite(true)
+            ->canWrite()
+            ->shouldReturn(true)
+        ;
+    }
+
+    function it_could_have_write_disabled(): void
+    {
+        $this->withWrite(false)
+            ->canWrite()
+            ->shouldReturn(false)
+        ;
+    }
+
+    function it_has_no_respond_by_default(): void
+    {
+        $this->canRespond()->shouldReturn(null);
+    }
+
+    function it_could_have_respond_enabled(): void
+    {
+        $this->withRespond(true)
+            ->canRespond()
+            ->shouldReturn(true)
+        ;
+    }
+
+    function it_could_have_respond_disabled(): void
+    {
+        $this->withRespond(false)
+            ->canRespond()
+            ->shouldReturn(false)
+        ;
+    }
+
+    function it_has_no_input_by_default(): void
+    {
+        $this->getInput()->shouldReturn(null);
+    }
+
+    function it_could_have_an_input(): void
+    {
+        $this->withInput(DummyClassOne::class)
+            ->getInput()
+            ->shouldReturn(DummyClassOne::class)
         ;
     }
 }
