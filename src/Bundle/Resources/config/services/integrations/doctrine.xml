@@ -15,11 +15,11 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius_resource.doctrine.mapping_driver_chain"
-                 class="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain"
+        <service id="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain"
                  decorates="doctrine.orm.default_metadata_driver">
-            <argument type="service" id="sylius_resource.doctrine.mapping_driver_chain.inner" />
+            <argument type="service" id="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain.inner" />
             <argument type="service" id="sylius.resource_registry" />
         </service>
+        <service id="sylius_resource.doctrine.mapping_driver_chain" alias="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain" />
     </services>
 </container>

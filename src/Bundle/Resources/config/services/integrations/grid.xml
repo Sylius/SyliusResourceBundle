@@ -19,33 +19,38 @@
             <argument type="service" id="sylius.grid.data_provider" />
             <argument type="service" id="sylius.resource_controller.parameters_parser" />
         </service>
+        <service id="Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface" alias="sylius.grid.resource_view_factory" />
 
         <service id="sylius.resource_controller.resources_resolver.grid_aware" class="Sylius\Bundle\ResourceBundle\Grid\Controller\ResourcesResolver" decorates="sylius.resource_controller.resources_resolver" decoration-priority="256">
             <argument type="service" id="sylius.resource_controller.resources_resolver.grid_aware.inner" />
             <argument type="service" id="sylius.grid.provider" />
             <argument type="service" id="sylius.grid.resource_view_factory" />
         </service>
+        <service id="Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface" alias="sylius.resource_controller.resources_resolver.grid_aware" />
 
-        <service id="sylius.custom_grid_renderer.twig" class="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer" decorates="sylius.grid.renderer.twig" decoration-priority="256">
-            <argument type="service" id="sylius.custom_grid_renderer.twig.inner" />
+        <service id="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer" decorates="sylius.grid.renderer.twig" decoration-priority="256">
+            <argument type="service" id="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer.inner" />
             <argument type="service" id="twig" />
             <argument type="service" id="sylius.grid_options_parser" />
             <argument>%sylius.grid.templates.action%</argument>
         </service>
+        <service id="sylius.custom_grid_renderer.twig" alias="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer" />
 
-        <service id="sylius.custom_bulk_action_grid_renderer.twig"
-                 class="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer"
+        <service id="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer"
                  decorates="sylius.grid.bulk_action_renderer.twig" decoration-priority="256"
         >
             <argument type="service" id="twig" />
             <argument type="service" id="sylius.grid_options_parser" />
             <argument>%sylius.grid.templates.bulk_action%</argument>
         </service>
+        <service id="sylius.custom_bulk_action_grid_renderer.twig" alias="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer" />
 
         <service id="sylius.grid_options_parser" class="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser" public="false">
             <argument type="service" id="service_container" />
             <argument type="service" id="sylius.expression_language" />
             <argument type="service" id="property_accessor" />
         </service>
+        <service id="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface" alias="sylius.grid_options_parser" public="false" />
+
     </services>
 </container>
