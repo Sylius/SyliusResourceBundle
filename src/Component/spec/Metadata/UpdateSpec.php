@@ -40,7 +40,7 @@ final class UpdateSpec extends ObjectBehavior
         $this->getName()->shouldReturn('update');
     }
 
-    function it_has_get_and_post_methods_by_default(): void
+    function it_has_get_and_put_methods_by_default(): void
     {
         $this->getMethods()->shouldReturn(['GET', 'PUT']);
     }
