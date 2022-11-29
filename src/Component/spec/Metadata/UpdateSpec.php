@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
