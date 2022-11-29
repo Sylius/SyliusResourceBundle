@@ -17,7 +17,7 @@ namespace Sylius\Component\Resource\Metadata;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Create extends Operation implements CreateOperationInterface
+final class Delete extends Operation implements DeleteOperationInterface
 {
     public function __construct(
         ?string $name = null,
@@ -54,8 +54,8 @@ final class Create extends Operation implements CreateOperationInterface
         ?string $input = null,
     ) {
         parent::__construct(
-            name: $name ?? 'create',
-            methods: $methods ?? ['GET', 'POST'],
+            name: $name ?? 'delete',
+            methods: $methods ?? ['DELETE'],
             path: $path,
             routePrefix: $routePrefix,
             controller: $controller,
