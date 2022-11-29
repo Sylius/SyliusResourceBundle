@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Metadata;
 /**
  * @experimental
  */
- #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class Create extends Operation implements CreateOperationInterface
 {
     public function __construct(
