@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\ServiceRepositoryCompilerPass;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -56,7 +57,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
         $definition->setPublic(true);
-
         if ($repositoryClass === EntityRepository::class) {
             /** @var string $entityClass */
             $entityClass = $metadata->getClass('model');
@@ -68,7 +68,12 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
 
             $genericEntities[] = $entityClass;
         } else {
-            $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
+            if (is_a($repositoryClass, ServiceEntityRepository::class, true)) {
+                $definition->setArguments([new Reference('doctrine')]);
+                $container->setDefinition($serviceId, $definition);
+            } else {
+                $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
+            }
 
             $container->setDefinition($serviceId, $definition);
 
