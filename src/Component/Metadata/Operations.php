@@ -94,6 +94,7 @@ final class Operations implements \IteratorAggregate, \Countable
 
     public function sort(): self
     {
+        /** @psalm-suppress InvalidScalarArgument */
         usort($this->operations, fn ($a, $b): int|float => $b[1]->getPriority() - $a[1]->getPriority());
 
         return $this;
