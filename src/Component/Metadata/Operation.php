@@ -20,8 +20,6 @@ abstract class Operation
 {
     public function __construct(
         protected ?string $name = null,
-        protected ?string $path = null,
-        protected ?string $routePrefix = null,
         protected ?string $controller = null,
         protected ?string $template = null,
     ) {
@@ -36,32 +34,6 @@ abstract class Operation
     {
         $self = clone $this;
         $self->name = $name;
-
-        return $self;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function withPath(string $path): self
-    {
-        $self = clone $this;
-        $self->path = $path;
-
-        return $self;
-    }
-
-    public function getRoutePrefix(): ?string
-    {
-        return $this->routePrefix;
-    }
-
-    public function withRoutePrefix(string $routePrefix): self
-    {
-        $self = clone $this;
-        $self->routePrefix = $routePrefix;
 
         return $self;
     }
