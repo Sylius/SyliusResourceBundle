@@ -52,7 +52,7 @@ final class OperationSpec extends ObjectBehavior
 
     function it_has_no_path_by_default(): void
     {
-        $this->getName()->shouldReturn(null);
+        $this->getPath()->shouldReturn(null);
     }
 
     function it_could_have_a_path(): void
@@ -100,5 +100,12 @@ final class OperationSpec extends ObjectBehavior
             ->getTemplate()
             ->shouldReturn('book/show.html.twig')
         ;
+    }
+
+    function it_can_be_constructed_with_a_name(): void
+    {
+        $this->beConstructedWith('create');
+
+        $this->getName()->shouldReturn('create');
     }
 }
