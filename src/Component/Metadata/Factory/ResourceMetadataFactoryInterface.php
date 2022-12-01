@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Factory;
 
-use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
-/**
- * @experimental
- */
-interface OperationFactoryInterface
+interface ResourceMetadataFactoryInterface
 {
     /**
-     * @psalm-param class-string $operationClass
+     * @param class-string $className
      */
-    public function create(string $operationClass, array $options): Operation;
+    public function create(string $className): ResourceMetadata;
 }
