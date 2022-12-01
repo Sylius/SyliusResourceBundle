@@ -44,13 +44,11 @@ final class ResourceMetadataSpec extends ObjectBehavior
 
     function it_can_get_an_operation_by_name(): void
     {
-        $create = new Create();
-        $update = new Update();
-        $resource = new Resource(operations: [$create, $update]);
+        $resource = new Resource(operations: [new Create(), new Update()]);
 
         $metadata = $this->withResource($resource);
-        $metadata->getOperation('create')->shouldReturn($create);
-        $metadata->getOperation('update')->shouldReturn($update);
+        $metadata->getOperation('create')->shouldHaveType(Create::class);
+        $metadata->getOperation('update')->shouldHaveType(Update::class);
     }
 
     function it_throws_an_operation_not_found_exception_when_operation_is_not_found(): void
