@@ -104,7 +104,7 @@ final class HttpOperationSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_a_name(): void
     {
-        $this->beConstructedWith(null, null, 'create');
+        $this->beConstructedWith(null, null, null, 'create');
 
         $this->getName()->shouldReturn('create');
     }
