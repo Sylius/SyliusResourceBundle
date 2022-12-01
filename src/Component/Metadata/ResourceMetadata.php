@@ -15,6 +15,9 @@ namespace Sylius\Component\Resource\Metadata;
 
 use Sylius\Component\Resource\Exception\OperationNotFoundException;
 
+/**
+ * @experimental
+ */
 final class ResourceMetadata
 {
     private array $operationCache = [];
