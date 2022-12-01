@@ -16,11 +16,10 @@ namespace Sylius\Component\Resource\Metadata;
 /**
  * @experimental
  */
-class Operation
+abstract class Operation
 {
     public function __construct(
         protected ?string $name = null,
-        protected ?array $methods = null,
         protected ?string $path = null,
         protected ?string $routePrefix = null,
         protected ?string $controller = null,
@@ -37,19 +36,6 @@ class Operation
     {
         $self = clone $this;
         $self->name = $name;
-
-        return $self;
-    }
-
-    public function getMethods(): ?array
-    {
-        return $this->methods;
-    }
-
-    public function withMethods(array $methods): self
-    {
-        $self = clone $this;
-        $self->methods = $methods;
 
         return $self;
     }
