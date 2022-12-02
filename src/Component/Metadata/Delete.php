@@ -24,7 +24,6 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $name = null,
-        ?string $controller = null,
         ?string $template = null,
     ) {
         parent::__construct(
@@ -32,7 +31,6 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             path: $path,
             routePrefix: $routePrefix,
             name: $name ?? 'delete',
-            controller: $controller,
             template: $template,
         );
     }
