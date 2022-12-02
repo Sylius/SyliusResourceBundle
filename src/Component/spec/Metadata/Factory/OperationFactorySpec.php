@@ -42,8 +42,5 @@ final class OperationFactorySpec extends ObjectBehavior
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('register');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getCriteria()->shouldReturn([
-            'foo' => 'fighters',
-        ]);
     }
 }
