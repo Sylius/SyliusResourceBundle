@@ -15,7 +15,6 @@ namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Tests\Dummy\DummyController;
 
 final class HttpOperationSpec extends ObjectBehavior
 {
