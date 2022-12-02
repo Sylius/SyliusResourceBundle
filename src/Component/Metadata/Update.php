@@ -24,7 +24,6 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $name = null,
-        ?string $controller = null,
         ?string $template = null,
     ) {
         parent::__construct(
@@ -32,7 +31,6 @@ final class Update extends HttpOperation implements UpdateOperationInterface
             path: $path,
             routePrefix: $routePrefix,
             name: $name ?? 'update',
-            controller: $controller,
             template: $template,
         );
     }
