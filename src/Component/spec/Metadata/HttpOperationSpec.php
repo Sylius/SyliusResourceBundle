@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Tests\Dummy\DummyController;
 
-final class OperationSpec extends ObjectBehavior
+final class HttpOperationSpec extends ObjectBehavior
 {
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(Operation::class);
+        $this->shouldHaveType(HttpOperation::class);
     }
 
     function it_has_no_name_by_default(): void
@@ -104,7 +104,7 @@ final class OperationSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_a_name(): void
     {
-        $this->beConstructedWith('create');
+        $this->beConstructedWith(null, null, null, 'create');
 
         $this->getName()->shouldReturn('create');
     }
