@@ -76,19 +76,6 @@ final class HttpOperationSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_no_controller_by_default(): void
-    {
-        $this->getController()->shouldReturn(null);
-    }
-
-    function it_could_have_a_controller(): void
-    {
-        $this->withController(DummyController::class)
-            ->getController()
-            ->shouldReturn(DummyController::class)
-        ;
-    }
-
     function it_has_no_template_by_default(): void
     {
         $this->getTemplate()->shouldReturn(null);
