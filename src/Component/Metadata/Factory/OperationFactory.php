@@ -16,6 +16,9 @@ namespace Sylius\Component\Resource\Metadata\Factory;
 use Sylius\Component\Resource\Metadata\Operation;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class OperationFactory implements OperationFactoryInterface
 {
     public function create(string $operationClass, array $options): Operation
