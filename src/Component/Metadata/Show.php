@@ -24,7 +24,6 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?string $path = null,
         ?string $routePrefix = null,
         ?string $name = null,
-        ?string $controller = null,
         ?string $template = null,
     ) {
         parent::__construct(
@@ -32,7 +31,6 @@ final class Show extends HttpOperation implements ShowOperationInterface
             path: $path,
             routePrefix: $routePrefix,
             name: $name ?? 'show',
-            controller: $controller,
             template: $template,
         );
     }
