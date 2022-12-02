@@ -179,5 +179,11 @@
                 <referencedClass name="UnitEnum"/>
             </errorLevel>
         </UndefinedDocblockClass>
+
+        <UnsafeInstantiation>
+            <errorLevel type="info">
+                <file name="src/Component/Metadata/Factory/OperationFactory.php" />
+            </errorLevel>
+        </UnsafeInstantiation>
     </issueHandlers>
 </psalm>
