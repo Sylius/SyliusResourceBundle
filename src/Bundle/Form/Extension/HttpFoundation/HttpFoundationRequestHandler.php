@@ -60,7 +60,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                     return;
                 }
 
-                $data = $request->query->all()[$name];
+                $data = $request->query->all($name);
             }
         } else {
             // Mark the form with an error if the uploaded size was too large
