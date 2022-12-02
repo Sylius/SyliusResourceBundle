@@ -21,17 +21,17 @@ final class Update extends HttpOperation implements UpdateOperationInterface
 {
     public function __construct(
         ?array $methods = null,
-        ?string $name = null,
         ?string $path = null,
         ?string $routePrefix = null,
+        ?string $name = null,
         ?string $controller = null,
         ?string $template = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET', 'PUT'],
-            name: $name ?? 'update',
             path: $path,
             routePrefix: $routePrefix,
+            name: $name ?? 'update',
             controller: $controller,
             template: $template,
         );
