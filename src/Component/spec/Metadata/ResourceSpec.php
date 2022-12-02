@@ -35,7 +35,8 @@ final class ResourceSpec extends ObjectBehavior
     {
         $this->withAlias('app.book')
             ->getAlias()
-            ->shouldReturn('app.book');
+            ->shouldReturn('app.book')
+        ;
     }
 
     function it_has_no_operations_by_default(): void
@@ -49,7 +50,8 @@ final class ResourceSpec extends ObjectBehavior
 
         $this->withOperations($operations)
             ->getOperations()
-            ->shouldReturn($operations);
+            ->shouldReturn($operations)
+        ;
     }
 
     function it_can_be_constructed_with_an_alias(): void
