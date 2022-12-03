@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Index extends Operation implements CollectionOperationInterface
+final class Index extends HttpOperation implements CollectionOperationInterface
 {
     public function __construct(
-        ?string $name = null,
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $controller = null,
+        ?string $name = null,
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
@@ -51,10 +50,10 @@ final class Index extends Operation implements CollectionOperationInterface
         ?string $input = null,
     ) {
         parent::__construct(
-            name: $name ?? 'index',
             methods: $methods ?? ['GET'],
             path: $path,
             routePrefix: $routePrefix,
+            name: $name ?? 'index',
             controller: $controller,
             template: $template,
             repository: $repository,

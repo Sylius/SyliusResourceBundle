@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Metadata;
 use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class ApplyStateMachineTransition extends Operation implements UpdateOperationInterface
+final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface
 {
     private ?string $transition;
     private ?string $graph;
@@ -27,7 +27,6 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
         ?string $graph = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $controller = null,
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
@@ -57,11 +56,10 @@ final class ApplyStateMachineTransition extends Operation implements UpdateOpera
         $this->graph = $graph;
 
         parent::__construct(
-            name: $name ?? $transition,
             methods: ['PUT', 'PATCH'],
             path: $path,
             routePrefix: $routePrefix,
-            controller: $controller,
+            name: $name ?? $transition,
             template: $template,
             repository: $repository,
             criteria: $criteria,

@@ -17,10 +17,6 @@ class Operation
 {
     public function __construct(
         protected ?string $name = null,
-        protected ?array $methods = null,
-        protected ?string $path = null,
-        protected ?string $routePrefix = null,
-        protected ?string $controller = null,
         protected ?string $template = null,
         protected ?array $repository = null,
         protected ?array $criteria = null,
@@ -53,19 +49,6 @@ class Operation
     ) {
     }
 
-    public function getMethods(): ?array
-    {
-        return $this->methods;
-    }
-
-    public function withMethods(array $methods): self
-    {
-        $self = clone $this;
-        $self->methods = $methods;
-
-        return $self;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -77,42 +60,6 @@ class Operation
         $self->name = $name;
 
         return $self;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function withPath(string $path): self
-    {
-        $self = clone $this;
-        $self->path = $path;
-
-        return $self;
-    }
-
-    public function getRoutePrefix(): ?string
-    {
-        return $this->routePrefix;
-    }
-
-    public function withRoutePrefix(string $routePrefix): self
-    {
-        $self = clone $this;
-        $self->routePrefix = $routePrefix;
-
-        return $self;
-    }
-
-    public function getController(): ?string
-    {
-        return $this->controller;
-    }
-
-    public function getTemplate(): ?string
-    {
-        return $this->template;
     }
 
     public function withTemplate(string $template): self

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Create extends Operation implements CreateOperationInterface
+final class Create extends HttpOperation implements CreateOperationInterface
 {
     public function __construct(
-        ?string $name = null,
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $controller = null,
+        ?string $name = null,
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
@@ -51,11 +50,10 @@ final class Create extends Operation implements CreateOperationInterface
         ?string $input = null,
     ) {
         parent::__construct(
-            name: $name ?? 'create',
             methods: $methods ?? ['GET', 'POST'],
             path: $path,
             routePrefix: $routePrefix,
-            controller: $controller,
+            name: $name ?? 'create',
             template: $template,
             repository: $repository,
             criteria: $criteria,

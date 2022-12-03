@@ -13,17 +13,21 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Update extends Operation implements UpdateOperationInterface
+/**
+ * @experimental
+ */
+class HttpOperation extends Operation
 {
     public function __construct(
-        ?array $methods = null,
-        ?string $path = null,
-        ?string $routePrefix = null,
+        protected ?array $methods = null,
+        protected ?string $path = null,
+        protected ?string $routePrefix = null,
         ?string $name = null,
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
+        ?array $serializationGroups = null,
+        ?string $serializationVersion = null,
         ?array $requirements = null,
         ?array $options = null,
         ?string $host = null,
@@ -50,13 +54,12 @@ final class Update extends Operation implements UpdateOperationInterface
         ?string $input = null,
     ) {
         parent::__construct(
-            name: $name ?? 'update',
-            methods: $methods ?? ['GET', 'PUT'],
-            path: $path,
-            routePrefix: $routePrefix,
+            name: $name,
             template: $template,
             repository: $repository,
             criteria: $criteria,
+            serializationGroups: $serializationGroups,
+            serializationVersion: $serializationVersion,
             requirements: $requirements,
             options: $options,
             host: $host,
@@ -82,5 +85,44 @@ final class Update extends Operation implements UpdateOperationInterface
             respond: $respond,
             input: $input,
         );
+    }
+
+    public function getMethods(): ?array
+    {
+        return $this->methods;
+    }
+
+    public function withMethods(array $methods): self
+    {
+        $self = clone $this;
+        $self->methods = $methods;
+
+        return $self;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function withPath(string $path): self
+    {
+        $self = clone $this;
+        $self->path = $path;
+
+        return $self;
+    }
+
+    public function getRoutePrefix(): ?string
+    {
+        return $this->routePrefix;
+    }
+
+    public function withRoutePrefix(string $routePrefix): self
+    {
+        $self = clone $this;
+        $self->routePrefix = $routePrefix;
+
+        return $self;
     }
 }

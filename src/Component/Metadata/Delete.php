@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Delete extends Operation implements DeleteOperationInterface
+final class Delete extends HttpOperation implements DeleteOperationInterface
 {
     public function __construct(
-        ?string $name = null,
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $controller = null,
+        ?string $name = null,
         ?string $template = null,
         ?array $repository = null,
         ?array $criteria = null,
@@ -51,11 +50,10 @@ final class Delete extends Operation implements DeleteOperationInterface
         ?string $input = null,
     ) {
         parent::__construct(
-            name: $name ?? 'delete',
             methods: $methods ?? ['DELETE'],
             path: $path,
             routePrefix: $routePrefix,
-            controller: $controller,
+            name: $name ?? 'delete',
             template: $template,
             repository: $repository,
             criteria: $criteria,

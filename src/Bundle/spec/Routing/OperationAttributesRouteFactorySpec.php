@@ -69,564 +69,564 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
         $this->shouldHaveType(OperationAttributesRouteFactory::class);
     }
 
-//    function it_generates_create_route(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBook::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_from_resource(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateResourceBook::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_name(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithName::class);
-//
-//        $route = $routeCollection->get('app_book_add');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/add');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'add',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_methods(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithMethods::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_path(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithPath::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/create');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_route_prefix(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithRoutePrefix::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/admin/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_path_and_route_prefix(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithPathAndRoutePrefix::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/admin/books/create');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_template(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithTemplate::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'template' => 'book/create.html.twig',
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_vars(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithVars::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'vars' => [
-//                    'foo' => 'bar',
-//                ],
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_criteria(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithCriteria::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'criteria' => [
-//                    'library' => '$libraryId',
-//                ],
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_show_route_without_reading(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, ShowBookWithoutReading::class);
-//
-//        $route = $routeCollection->get('app_book_show');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/{id}');
-//        Assert::eq($route->getMethods(), ['GET']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'show',
-//                'read' => false,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_without_validation(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithoutValidation::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//                'validate' => false,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_without_writing(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithoutWriting::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//                'write' => false,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_without_responding(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithoutResponding::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//                'respond' => false,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_index_route_with_section(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, IndexBookWithSection::class);
-//
-//        $route = $routeCollection->get('app_admin_book_index');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books');
-//        Assert::eq($route->getMethods(), ['GET']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'index',
-//                'section' => 'admin',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_index_route_with_permission(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, IndexBookWithPersmission::class);
-//
-//        $route = $routeCollection->get('app_book_index');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books');
-//        Assert::eq($route->getMethods(), ['GET']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'index',
-//                'permission' => true,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_index_route_with_grid(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, IndexBookWithGrid::class);
-//
-//        $route = $routeCollection->get('app_book_index');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books');
-//        Assert::eq($route->getMethods(), ['GET']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'index',
-//                'grid' => 'app_book',
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_update_route_with_csrf_protection(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, UpdateBookWithCsrfProtection::class);
-//
-//        $route = $routeCollection->get('app_book_update');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/{id}/edit');
-//        Assert::eq($route->getMethods(), ['GET', 'PUT']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'update',
-//                'csrf_protection' => true,
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_update_route_with_state_machine(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, UpdateBookWithStateMachine::class);
-//
-//        $route = $routeCollection->get('app_book_update');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/{id}/edit');
-//        Assert::eq($route->getMethods(), ['GET', 'PUT']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'update',
-//                'state_machine' => [
-//                    'transition' => 'publish',
-//                ],
-//            ],
-//        ]);
-//    }
-//
-//    function it_generates_create_route_with_input(
-//        RegistryInterface $resourceRegistry,
-//        MetadataInterface $metadata,
-//    ): void {
-//        $routeCollection = new RouteCollection();
-//
-//        $resourceRegistry->get('app.book')->willReturn($metadata);
-//
-//        $metadata->getApplicationName()->willReturn('app');
-//        $metadata->getName()->willReturn('book');
-//        $metadata->getPluralName()->willReturn('books');
-//
-//        $this->createRouteForClass($routeCollection, CreateBookWithInput::class);
-//
-//        $route = $routeCollection->get('app_book_create');
-//        Assert::notNull($route);
-//        Assert::eq($route->getPath(), '/books/new');
-//        Assert::eq($route->getMethods(), ['GET', 'POST']);
-//        Assert::eq($route->getDefaults(), [
-//            '_controller' => PlaceHolderAction::class,
-//            '_sylius' => [
-//                'resource' => 'app.book',
-//                'operation' => 'create',
-//                'input' => Book::class,
-//            ],
-//        ]);
-//    }
+    function it_generates_create_route(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBook::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_from_resource(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateResourceBook::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_name(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithName::class);
+
+        $route = $routeCollection->get('app_book_add');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/add');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'add',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_methods(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithMethods::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_path(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithPath::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/create');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_route_prefix(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithRoutePrefix::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_path_and_route_prefix(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithPathAndRoutePrefix::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/admin/books/create');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_template(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithTemplate::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'template' => 'book/create.html.twig',
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_vars(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithVars::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'vars' => [
+                    'foo' => 'bar',
+                ],
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_criteria(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithCriteria::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'criteria' => [
+                    'library' => '$libraryId',
+                ],
+                'resource' => 'app.book',
+                'operation' => 'create',
+            ],
+        ]);
+    }
+
+    function it_generates_show_route_without_reading(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, ShowBookWithoutReading::class);
+
+        $route = $routeCollection->get('app_book_show');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/{id}');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'show',
+                'read' => false,
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_without_validation(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithoutValidation::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'validate' => false,
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_without_writing(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithoutWriting::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'write' => false,
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_without_responding(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithoutResponding::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'respond' => false,
+            ],
+        ]);
+    }
+
+    function it_generates_index_route_with_section(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, IndexBookWithSection::class);
+
+        $route = $routeCollection->get('app_admin_book_index');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'index',
+                'section' => 'admin',
+            ],
+        ]);
+    }
+
+    function it_generates_index_route_with_permission(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, IndexBookWithPersmission::class);
+
+        $route = $routeCollection->get('app_book_index');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'index',
+                'permission' => true,
+            ],
+        ]);
+    }
+
+    function it_generates_index_route_with_grid(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, IndexBookWithGrid::class);
+
+        $route = $routeCollection->get('app_book_index');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books');
+        Assert::eq($route->getMethods(), ['GET']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'index',
+                'grid' => 'app_book',
+            ],
+        ]);
+    }
+
+    function it_generates_update_route_with_csrf_protection(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, UpdateBookWithCsrfProtection::class);
+
+        $route = $routeCollection->get('app_book_update');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/{id}/edit');
+        Assert::eq($route->getMethods(), ['GET', 'PUT']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'update',
+                'csrf_protection' => true,
+            ],
+        ]);
+    }
+
+    function it_generates_update_route_with_state_machine(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, UpdateBookWithStateMachine::class);
+
+        $route = $routeCollection->get('app_book_update');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/{id}/edit');
+        Assert::eq($route->getMethods(), ['GET', 'PUT']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'update',
+                'state_machine' => [
+                    'transition' => 'publish',
+                ],
+            ],
+        ]);
+    }
+
+    function it_generates_create_route_with_input(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+    ): void {
+        $routeCollection = new RouteCollection();
+
+        $resourceRegistry->get('app.book')->willReturn($metadata);
+
+        $metadata->getApplicationName()->willReturn('app');
+        $metadata->getName()->willReturn('book');
+        $metadata->getPluralName()->willReturn('books');
+
+        $this->createRouteForClass($routeCollection, CreateBookWithInput::class);
+
+        $route = $routeCollection->get('app_book_create');
+        Assert::notNull($route);
+        Assert::eq($route->getPath(), '/books/new');
+        Assert::eq($route->getMethods(), ['GET', 'POST']);
+        Assert::eq($route->getDefaults(), [
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.book',
+                'operation' => 'create',
+                'input' => Book::class,
+            ],
+        ]);
+    }
 
     function it_generates_apply_state_machine_transition_route(
         RegistryInterface $resourceRegistry,
