@@ -54,7 +54,6 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             path: $path,
             routePrefix: $routePrefix,
             name: $name ?? 'index',
-            controller: $controller,
             template: $template,
             repository: $repository,
             criteria: $criteria,

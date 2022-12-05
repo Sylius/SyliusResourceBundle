@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Update extends Operation implements UpdateOperationInterface
+final class Update extends HttpOperation implements UpdateOperationInterface
 {
     public function __construct(
         ?array $methods = null,
