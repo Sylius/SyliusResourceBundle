@@ -10,7 +10,7 @@ But you can configure it explicitly:
 ## Configuring Symfony workflow as state machine`
 
 ```yaml
-sylius_resources:
+sylius_resource:
     settings:
         state_machine_component: symfony
 ```
@@ -22,7 +22,7 @@ If Winzou state machine is on your requirements you have nothing to do even if S
 But you can configure it explicitly:
 
 ```yaml
-sylius_resources:
+sylius_resource:
     settings:
         state_machine_component: winzou
 ```
