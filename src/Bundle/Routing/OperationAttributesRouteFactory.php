@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -53,11 +54,15 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
 
         $routeName = $this->getRouteName($metadata, $operation);
 
+        if (!$operation instanceof HttpOperation) {
+            return;
+        }
+
         $route = $this->createRoute($metadata, $operation);
         $routeCollection->add($routeName, $route);
     }
 
-    private function createRoute(MetadataInterface $metadata, Operation $operation): Route
+    private function createRoute(MetadataInterface $metadata, HttpOperation $operation): Route
     {
         return $this->operationRouteFactory->create($metadata, $operation);
     }

@@ -62,6 +62,11 @@ class Operation
         return $self;
     }
 
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
     public function withTemplate(string $template): self
     {
         $self = clone $this;

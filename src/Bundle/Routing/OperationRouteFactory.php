@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
@@ -24,7 +25,7 @@ use Webmozart\Assert\Assert;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
-    public function create(MetadataInterface $metadata, Operation $operation): Route
+    public function create(MetadataInterface $metadata, HttpOperation $operation): Route
     {
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
 
@@ -35,7 +36,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         return new Route(
             $routePath,
             [
-                '_controller' => $operation->getController() ?? PlaceHolderAction::class,
+                '_controller' => PlaceHolderAction::class,
                 '_sylius' => $this->getSyliusOptions($operation),
             ],
             $operation->getRequirements() ?? [],
@@ -85,7 +86,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with action "%s". Please define a path.', $name ?? ''));
     }
 
-    private function getSyliusOptions(Operation $operation): array
+    private function getSyliusOptions(HttpOperation $operation): array
     {
         $syliusOptions = [];
 
