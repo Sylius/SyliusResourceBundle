@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace App\Entity\Operation\Resource;
 
 use App\Entity\Book;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Section;
 use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 
 #[Resource(alias: 'app.book')]
 #[Section(name: 'admin', routePrefix: 'admin', templatesDir: '@SyliusUi/Crud', operations: [

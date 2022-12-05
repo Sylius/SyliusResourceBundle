@@ -804,7 +804,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'create',
                 'template' => 'admin/book/create.html.twig',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
 
@@ -819,7 +819,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'update',
                 'template' => 'admin/book/update.html.twig',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
 
@@ -833,7 +833,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
             '_sylius' => [
                 'resource' => 'app.book',
                 'operation' => 'delete',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
 
@@ -848,7 +848,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'show',
                 'template' => 'admin/book/show.html.twig',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
     }
@@ -877,7 +877,7 @@ final class OperationAttributesRouteFactorySpec extends ObjectBehavior
                 'resource' => 'app.book',
                 'operation' => 'show',
                 'template' => 'admin/book/show.html.twig',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
     }

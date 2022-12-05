@@ -19,7 +19,6 @@ use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Section;
-use Sylius\Component\Resource\Metadata\Sections;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 
 final class AttributesResourceMetadataFactory implements ResourceMetadataFactoryInterface
@@ -45,7 +44,7 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
     private function createMetadataWithSections(
         Resource $resource,
         array $resourceArguments,
-        array $attributes
+        array $attributes,
     ): Resource {
         $operations = $resource->getOperations() ?? new Operations();
 
@@ -96,7 +95,7 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
     private function createMetadataWithOperations(
         Resource $resource,
         array $resourceArguments,
-        array $attributes
+        array $attributes,
     ): Resource {
         $operations = $resource->getOperations() ?? new Operations();
         $operationAttributes = $this->filterAttributes($attributes, Operation::class);
@@ -107,8 +106,8 @@ final class AttributesResourceMetadataFactory implements ResourceMetadataFactory
             $operation = $this->operationFactory->create($attribute->getName(), $operationArguments);
 
             if (
-                null === $operation->getResource()
-                && null !== $resourceAlias = ($resourceArguments['alias'] ?? null)
+                null === $operation->getResource() &&
+                null !== $resourceAlias = ($resourceArguments['alias'] ?? null)
             ) {
                 $operation = $operation->withResource($resourceAlias);
             }

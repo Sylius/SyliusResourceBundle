@@ -32,7 +32,7 @@ final class OperationFactory implements OperationFactoryInterface
         $reflection = new \ReflectionClass($operation);
 
         foreach ($options as $key => $value) {
-            $method = 'with'.ucfirst($key);
+            $method = 'with' . ucfirst($key);
 
             if (!$reflection->hasMethod($method)) {
                 continue;

@@ -56,7 +56,7 @@ final class DebugResourceCommandTest extends TestCase
 +------------+
 
 EOT
-        , $display);
+            , $display);
     }
 
     /**
@@ -82,7 +82,7 @@ EOT
 +------------------------------+-----------------+
 
 EOT
-        , $display);
+            , $display);
     }
 
     private function createMetadata(string $suffix): MetadataInterface

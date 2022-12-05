@@ -19,6 +19,7 @@ use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
 final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface
 {
     private ?string $transition;
+
     private ?string $graph;
 
     public function __construct(
@@ -96,7 +97,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
 
     public function withTransition(string $transition): self
     {
-        $self = clone($this);
+        $self = clone $this;
         $self->name = $self->name ?? $transition;
         $self->stateMachine = array_merge($self->stateMachine ?? [], ['transition' => $transition]);
 
@@ -110,7 +111,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
 
     public function withGraph(string $transition): self
     {
-        $self = clone($this);
+        $self = clone $this;
         $self->stateMachine = array_merge($self->stateMachine ?? [], ['graph' => $transition]);
 
         return $self;
