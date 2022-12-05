@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+### v1.10.1 (2022-12-05)
+
+#### Details
+
+- [#498](https://github.com/Sylius/SyliusResourceBundle/issues/498) Add services' aliases to improve autowiring experience ([@loic425](https://github.com/loic425))
+- [#502](https://github.com/Sylius/SyliusResourceBundle/issues/502) Fix the build ([@loic425](https://github.com/loic425))
+- [#503](https://github.com/Sylius/SyliusResourceBundle/issues/503) Init gitattributes file to preserve the planet ([@loic425](https://github.com/loic425))
+- [#507](https://github.com/Sylius/SyliusResourceBundle/issues/507) Fix Symfony 6 Exception ([@mpysiak](https://github.com/mpysiak), [@lchrusciel](https://github.com/lchrusciel))
+
 ### v1.10.0 (2022-10-31)
 
 #### Details
