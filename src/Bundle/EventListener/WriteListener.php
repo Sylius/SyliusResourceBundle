@@ -65,7 +65,7 @@ final class WriteListener
             case 'PUT':
             case 'PATCH':
             case 'POST':
-                $persistResult = $this->processor->process($controllerResult, $operation, $configuration);
+                $persistResult = $this->processor->process($controllerResult, $operation, $context);
 
                 if ($persistResult) {
                     $controllerResult = $persistResult;
@@ -74,7 +74,7 @@ final class WriteListener
 
                 break;
             case 'DELETE':
-                $this->processor->process($controllerResult, $operation, $configuration);
+                $this->processor->process($controllerResult, $operation, $context);
                 $event->setControllerResult(null);
 
                 break;

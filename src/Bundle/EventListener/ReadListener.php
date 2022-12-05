@@ -51,7 +51,7 @@ final class ReadListener
             return;
         }
 
-        $data = $this->provider->provide($operation, $configuration);
+        $data = $this->provider->provide($operation, $context);
 
         if (null === $data) {
             throw new NotFoundHttpException('Not Found');
