@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 
 final class CallableProvider implements ProviderInterface
@@ -26,10 +26,10 @@ final class CallableProvider implements ProviderInterface
     /**
      * @inheritDoc
      */
-    public function provide(Operation $operation, RequestConfiguration $configuration): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|iterable|null
     {
         if (\is_callable($provider = $operation->getProvider())) {
-            return $provider($operation, $configuration);
+            return $provider($operation, $context);
         }
 
         if (\is_string($provider)) {
@@ -40,7 +40,7 @@ final class CallableProvider implements ProviderInterface
             /** @var ProviderInterface $provider */
             $provider = $this->locator->get($provider);
 
-            return $provider->provide($operation, $configuration);
+            return $provider->provide($operation, $context);
         }
 
         throw new \RuntimeException(sprintf('Provider not found on operation "%s"', $operation->getName()));

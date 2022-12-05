@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Symfony\State;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProcessorInterface;
 
@@ -26,8 +27,14 @@ final class ApplyStateMachineProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process(mixed $data, Operation $operation, RequestConfiguration $configuration): void
+    public function process(mixed $data, Operation $operation, Context $context): void
     {
+        $configuration = $context->get(RequestConfiguration::class);
+
+        if (null === $configuration) {
+            return;
+        }
+
         if ($this->stateMachine->can($configuration, $data)) {
             $this->stateMachine->apply($configuration, $data);
         }

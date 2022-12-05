@@ -15,19 +15,20 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Util\ContextInitiatorTrait;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
-use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class PostEventListener
 {
-    use RequestConfigurationInitiatorTrait;
+    use ContextInitiatorTrait;
     use OperationRequestInitiatorTrait;
 
     public function __construct(
@@ -43,10 +44,11 @@ class PostEventListener
     {
         $request = $event->getRequest();
         $controllerResult = $event->getControllerResult();
+        $context = $this->initializeContext($request);
 
         if (
             !$controllerResult instanceof ResourceInterface ||
-            (null === $configuration = $this->initializeConfiguration($request)) ||
+            (null === $configuration = $context->get(RequestConfiguration::class)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !$request->attributes->getBoolean('is_valid', true)
         ) {

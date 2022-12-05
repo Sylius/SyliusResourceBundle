@@ -24,8 +24,8 @@ use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Util\ContextInitiatorTrait;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
-use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -33,7 +33,7 @@ use Twig\Environment;
 
 final class RespondListener
 {
-    use RequestConfigurationInitiatorTrait;
+    use ContextInitiatorTrait;
     use OperationRequestInitiatorTrait;
 
     public function __construct(
@@ -51,9 +51,10 @@ final class RespondListener
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $isValid = $request->attributes->get('is_valid', true);
+        $context = $this->initializeContext($request);
 
         if (
-            (null === $configuration = $this->initializeConfiguration($request)) ||
+            (null === $configuration = $context->get(RequestConfiguration::class)) ||
             (null === $operation = $this->initializeOperation($request))
         ) {
             return;

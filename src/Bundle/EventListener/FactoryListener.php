@@ -15,17 +15,18 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Util\ContextInitiatorTrait;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
-use Sylius\Component\Resource\Util\RequestConfigurationInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class FactoryListener
 {
-    use RequestConfigurationInitiatorTrait;
+    use ContextInitiatorTrait;
     use OperationRequestInitiatorTrait;
 
     public function __construct(
@@ -40,9 +41,10 @@ final class FactoryListener
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        $context = $this->initializeContext($request);
 
         if (
-            (null === $configuration = $this->initializeConfiguration($request)) ||
+            (null === $configuration = $context->get(RequestConfiguration::class)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             false === $configuration->getFactoryMethod() ||
             null !== $operation->getInput() ||

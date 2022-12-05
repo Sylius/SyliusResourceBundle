@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\State;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 
 /**
@@ -23,5 +23,5 @@ use Sylius\Component\Resource\Metadata\Operation;
  */
 interface ProviderInterface
 {
-    public function provide(Operation $operation, RequestConfiguration $configuration): object|iterable|null;
+    public function provide(Operation $operation, Context $context): object|iterable|null;
 }

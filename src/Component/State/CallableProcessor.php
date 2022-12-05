@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 
 final class CallableProcessor implements ProcessorInterface
@@ -26,10 +26,10 @@ final class CallableProcessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(mixed $data, Operation $operation, RequestConfiguration $configuration)
+    public function process(mixed $data, Operation $operation, Context $context)
     {
         if (\is_callable($processor = $operation->getProcessor())) {
-            return $processor($data, $operation, $configuration);
+            return $processor($data, $operation, $context);
         }
 
         if (\is_string($processor)) {
@@ -40,7 +40,7 @@ final class CallableProcessor implements ProcessorInterface
             /** @var ProcessorInterface $processor */
             $processor = $this->locator->get($processor);
 
-            return $processor->process($data, $operation, $configuration);
+            return $processor->process($data, $operation, $context);
         }
 
         return null;

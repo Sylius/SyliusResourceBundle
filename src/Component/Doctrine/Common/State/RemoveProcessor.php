@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProcessorInterface;
 
@@ -24,8 +25,14 @@ final class RemoveProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, Operation $operation, RequestConfiguration $configuration): void
+    public function process(mixed $data, Operation $operation, Context $context): void
     {
+        $configuration = $context->get(RequestConfiguration::class);
+
+        if (null === $configuration) {
+            throw new \RuntimeException('Configuration was not found on the context');
+        }
+
         $manager = $this->managerRegistry->getManagerForClass($configuration->getMetadata()->getClass('model'));
 
         if (null === $manager) {
