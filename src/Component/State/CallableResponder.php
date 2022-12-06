@@ -37,7 +37,7 @@ final class CallableResponder implements ResponderInterface
             /** @var ResponderInterface $providerInstance */
             $responderInstance = $this->locator->get($responder);
 
-            return $responderInstance->provide($data, $operation, $context);
+            return $responderInstance->respond($data, $operation, $context);
         }
 
         throw new \RuntimeException(sprintf('Responder not found on operation "%s"', $operation->getName()));
