@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Context\Option;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 
-class RequestConfigurationOption
+final class RequestConfigurationOption
 {
     public function __construct(private RequestConfiguration $configuration)
     {

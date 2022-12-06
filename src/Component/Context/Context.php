@@ -21,26 +21,17 @@ final class Context implements \IteratorAggregate
     /** @var array<class-string, object> */
     private array $optionMap;
 
-    /**
-     * @param object|array<class-string, object> ...$options
-     */
-    public function __construct(object|array ...$options)
+    public function __construct(object ...$options)
     {
         $map = [];
         foreach ($options as $option) {
-            if (\is_array($option)) {
-                $map = array_merge($map, $option);
-
-                continue;
-            }
-
             $map[get_class($option)] = $option;
         }
 
         $this->optionMap = $map;
     }
 
-    public function with(object|array ...$options): self
+    public function with(object ...$options): self
     {
         /** @psalm-suppress DuplicateArrayKey */
         return new self(...[

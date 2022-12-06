@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Context\Option;
 
 use Symfony\Component\Console\Input\InputInterface;
 
-class InputOption
+final class InputOption
 {
     public function __construct(private InputInterface $input)
     {

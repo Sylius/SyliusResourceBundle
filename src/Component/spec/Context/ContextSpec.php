@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Context;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Controller\Parameters;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
+use Sylius\Component\Resource\Tests\Dummy\DummyClassTwo;
 
 final class ContextSpec extends ObjectBehavior
 {
@@ -32,50 +30,50 @@ final class ContextSpec extends ObjectBehavior
         $this->shouldImplement(\IteratorAggregate::class);
     }
 
-    function it_can_be_constructed_with_options(MetadataInterface $metadata): void
+    function it_can_be_constructed_with_options(): void
     {
-        $request = new Request();
-        $requestConfiguration = new RequestConfiguration($metadata->getWrappedObject(), $request, new Parameters([]));
+        $optionOne = new DummyClassOne();
+        $optionTwo = new DummyClassTwo();
 
-        $this->beConstructedWith($requestConfiguration, $request);
+        $this->beConstructedWith($optionOne, $optionTwo);
 
-        $this->get(RequestConfiguration::class)->shouldReturn($requestConfiguration);
-        $this->get(Request::class)->shouldReturn($request);
+        $this->get(DummyClassOne::class)->shouldReturn($optionOne);
+        $this->get(DummyClassTwo::class)->shouldReturn($optionTwo);
     }
 
-    function it_can_be_with_options(MetadataInterface $metadata): void
+    function it_can_be_with_options(): void
     {
-        $request = new Request();
-        $requestConfiguration = new RequestConfiguration($metadata->getWrappedObject(), $request, new Parameters([]));
+        $optionOne = new DummyClassOne();
+        $optionTwo = new DummyClassTwo();
 
-        $self = $this->with($requestConfiguration, $request);
+        $self = $this->with($optionOne, $optionTwo);
 
-        $self->get(RequestConfiguration::class)->shouldReturn($requestConfiguration);
-        $self->get(Request::class)->shouldReturn($request);
+        $self->get(DummyClassOne::class)->shouldReturn($optionOne);
+        $self->get(DummyClassTwo::class)->shouldReturn($optionTwo);
     }
 
-    function it_can_be_without_options(MetadataInterface $metadata): void
+    function it_can_be_without_options(): void
     {
-        $request = new Request();
-        $requestConfiguration = new RequestConfiguration($metadata->getWrappedObject(), $request, new Parameters([]));
+        $optionOne = new DummyClassOne();
+        $optionTwo = new DummyClassTwo();
 
-        $self = $this->with($requestConfiguration, $request);
-        $self = $self->without(RequestConfiguration::class, Request::class);
+        $self = $this->with($optionOne, $optionTwo);
+        $self = $self->without(DummyClassOne::class, DummyClassTwo::class);
 
-        $self->get(RequestConfiguration::class)->shouldReturn(null);
-        $self->get(Request::class)->shouldReturn(null);
+        $self->get(DummyClassOne::class)->shouldReturn(null);
+        $self->get(DummyClassTwo::class)->shouldReturn(null);
     }
 
-    function it_can_be_iterated(MetadataInterface $metadata): void
+    function it_can_be_iterated(): void
     {
-        $request = new Request();
-        $requestConfiguration = new RequestConfiguration($metadata->getWrappedObject(), $request, new Parameters([]));
+        $optionOne = new DummyClassOne();
+        $optionTwo = new DummyClassTwo();
 
-        $this->beConstructedWith($requestConfiguration, $request);
+        $this->beConstructedWith($optionOne, $optionTwo);
 
         $this->getIterator()->shouldHaveKey(0);
         $this->getIterator()->shouldHaveKey(1);
 
-        $this->getIterator()->current()->shouldReturn($requestConfiguration);
+        $this->getIterator()->current()->shouldReturn($optionOne);
     }
 }
