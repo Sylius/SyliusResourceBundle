@@ -67,8 +67,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
-            <argument type="service" id="sylius.resource_controller.redirect_handler" />
-            <argument type="service" id="twig" on-invalid="null" />
+            <argument type="service" id="Sylius\Component\Resource\State\ResponderInterface" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
         </service>
     </services>

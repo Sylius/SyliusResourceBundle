@@ -37,6 +37,12 @@
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
+        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\State\Responder">
+            <argument type="service" id="sylius.resource_controller.redirect_handler" />
+            <argument type="service" id="twig" on-invalid="null" />
+            <tag name="sylius.state_responder" priority="-100" />
+        </service>
+
         <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider">
             <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
             <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />

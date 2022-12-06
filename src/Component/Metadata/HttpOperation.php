@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+use Sylius\Component\Resource\Symfony\HttpFoundation\State\Responder;
+
 /**
  * @experimental
  */
@@ -47,6 +49,7 @@ class HttpOperation extends Operation
         ?string $resource = null,
         ?string $provider = null,
         ?string $processor = null,
+        ?string $responder = null,
         ?bool $read = null,
         ?bool $validate = null,
         ?bool $write = null,
@@ -79,6 +82,7 @@ class HttpOperation extends Operation
             resource: $resource,
             provider: $provider,
             processor: $processor,
+            responder: $responder ?? Responder::class,
             read: $read,
             validate: $validate,
             write: $write,

@@ -14,23 +14,17 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
-use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
-use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Util\ContextInitiatorTrait;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Twig\Environment;
+use Webmozart\Assert\Assert;
 
 final class RespondListener
 {
@@ -41,8 +35,7 @@ final class RespondListener
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private ResourceMetadataFactoryInterface $resourceMetadataFactory,
-        private RedirectHandlerInterface $redirectHandler,
-        private ?Environment $twig,
+        private ResponderInterface $responder,
     ) {
     }
 
@@ -51,75 +44,15 @@ final class RespondListener
         /** @var Response|ResourceInterface $controllerResult */
         $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
-        $isValid = $request->attributes->get('is_valid', true);
         $context = $this->initializeContext($request);
 
-        $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
-
-        if (
-            (null === $configuration = $requestConfigurationOption?->configuration()) ||
-            (null === $operation = $this->initializeOperation($request))
-        ) {
+        if (null === $operation = $this->initializeOperation($request)) {
             return;
         }
 
-        if ($controllerResult instanceof Response && ($operation->canRespond() ?? true)) {
-            $event->setResponse($controllerResult);
-
-            return;
-        }
-
-        if ($controllerResult instanceof Response || !($operation->canRespond() ?? true)) {
-            return;
-        }
-
-        if ($operation instanceof DeleteOperationInterface) {
-            $response = $this->redirectHandler->redirectToIndex($configuration, $controllerResult);
-            $event->setResponse($response);
-
-            return;
-        }
-
-        if ($isValid && ($operation instanceof UpdateOperationInterface || $operation instanceof CreateOperationInterface)) {
-            $response = $this->redirectHandler->redirectToResource($configuration, $controllerResult);
-            $event->setResponse($response);
-
-            return;
-        }
-
-        $content = $this->twig->render(
-            $configuration->getTemplate($operation->getName()),
-            $this->getContext($controllerResult, $operation, $configuration),
-        );
-
-        $response = new Response();
-        $response->setContent($content);
+        $response = $this->responder->respond($controllerResult, $operation, $context);
+        Assert::isInstanceOf($response, Response::class);
 
         $event->setResponse($response);
-    }
-
-    private function getContext(object $controllerResult, Operation $operation, RequestConfiguration $configuration): array
-    {
-        $request = $configuration->getRequest();
-
-        /** @var FormInterface|null $form */
-        $form = $request->attributes->get('form');
-
-        $context = [
-            'configuration' => $configuration,
-            'metadata' => $configuration->getMetadata(),
-        ];
-
-        if ($operation instanceof CollectionOperationInterface) {
-            $context['resources'] = $controllerResult;
-        } else {
-            $context['resource'] = $controllerResult;
-        }
-
-        if (null !== $form) {
-            $context['form'] = $form->createView();
-        }
-
-        return $context;
     }
 }
