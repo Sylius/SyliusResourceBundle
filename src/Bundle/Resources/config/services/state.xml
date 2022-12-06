@@ -9,12 +9,12 @@
         <service id="Sylius\Component\Resource\State\CallableProvider">
             <argument type="tagged_locator" tag="sylius.state_provider"/>
         </service>
-        <service id="sylius.state_provider" alias="Sylius\Component\Resource\State\CallableProvider" />
+        <service id="Sylius\Component\Resource\State\ProviderInterface" alias="Sylius\Component\Resource\State\CallableProvider" />
 
         <service id="Sylius\Component\Resource\State\CallableProcessor">
             <argument type="tagged_locator" tag="sylius.state_processor"/>
         </service>
-        <service id="sylius.state_processor" alias="Sylius\Component\Resource\State\CallableProcessor" />
+        <service id="Sylius\Component\Resource\State\ProcessorInterface" alias="Sylius\Component\Resource\State\CallableProcessor" />
 
         <service id="Sylius\Component\Resource\State\CallableResponder">
             <argument type="tagged_locator" tag="sylius.state_responder"/>

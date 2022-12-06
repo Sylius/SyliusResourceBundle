@@ -18,5 +18,10 @@ use Sylius\Component\Resource\Metadata\Operation;
 
 interface ResponderInterface
 {
-    public function respond(mixed $data, Operation $operation, Context $context): mixed;
+    /**
+     * Handle the response.
+     *
+     * @return mixed
+     */
+    public function respond(mixed $data, Operation $operation, Context $context);
 }

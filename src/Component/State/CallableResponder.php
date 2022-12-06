@@ -23,7 +23,10 @@ final class CallableResponder implements ResponderInterface
     {
     }
 
-    public function respond(mixed $data, Operation $operation, Context $context): mixed
+    /**
+     * {@inheritDoc}
+     */
+    public function respond(mixed $data, Operation $operation, Context $context)
     {
         if (\is_callable($responder = $operation->getResponder())) {
             return $responder($data, $operation, $context);

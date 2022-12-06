@@ -10,7 +10,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
-            <argument type="service" id="sylius.state_provider" />
+            <argument type="service" id="Sylius\Component\Resource\State\ProviderInterface" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
         </service>
 
@@ -50,7 +50,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.metadata_factory.resource" />
-            <argument type="service" id="sylius.state_processor" />
+            <argument type="service" id="Sylius\Component\Resource\State\ProcessorInterface" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="32" />
         </service>
 
