@@ -21,6 +21,7 @@ use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\State\ResponderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -63,6 +64,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $container->registerForAutoconfiguration(ProcessorInterface::class)
             ->addTag('sylius.state_processor')
+        ;
+
+        $container->registerForAutoconfiguration(ResponderInterface::class)
+            ->addTag('sylius.state_responder')
         ;
 
         $container->addObjectResource(Metadata::class);

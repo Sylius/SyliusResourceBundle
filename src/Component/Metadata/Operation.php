@@ -41,6 +41,7 @@ class Operation
         protected ?string $resource = null,
         protected ?string $provider = null,
         protected ?string $processor = null,
+        protected ?string $responder = null,
         protected ?bool $read = null,
         protected ?bool $validate = null,
         protected ?bool $write = null,
@@ -271,7 +272,7 @@ class Operation
         return $this->provider;
     }
 
-    public function withProvider(callable|string|null $provider): self
+    public function withProvider(string|null $provider): self
     {
         $self = clone $this;
         $self->provider = $provider;
@@ -284,10 +285,23 @@ class Operation
         return $this->processor;
     }
 
-    public function withProcessor(callable|string|null $processor): self
+    public function withProcessor(?string $processor): self
     {
         $self = clone $this;
         $self->processor = $processor;
+
+        return $self;
+    }
+
+    public function getResponder(): ?string
+    {
+        return $this->responder;
+    }
+
+    public function withResponder(?string $responder): self
+    {
+        $self = clone $this;
+        $self->responder = $responder;
 
         return $self;
     }
