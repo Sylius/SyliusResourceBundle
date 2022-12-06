@@ -43,7 +43,6 @@ final class FactoryListener
         $request = $event->getRequest();
         $context = $this->initializeContext($request);
 
-        /** @var RequestConfigurationOption|null $requestConfigurationOption */
         $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
 
         if (

@@ -46,7 +46,6 @@ class PostEventListener
         $controllerResult = $event->getControllerResult();
         $context = $this->initializeContext($request);
 
-        /** @var RequestConfigurationOption|null $requestConfigurationOption */
         $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
 
         if (

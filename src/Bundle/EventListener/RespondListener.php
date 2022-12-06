@@ -54,7 +54,6 @@ final class RespondListener
         $isValid = $request->attributes->get('is_valid', true);
         $context = $this->initializeContext($request);
 
-        /** @var RequestConfigurationOption|null $requestConfigurationOption */
         $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
 
         if (
