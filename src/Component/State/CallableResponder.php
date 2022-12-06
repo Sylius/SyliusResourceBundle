@@ -24,7 +24,7 @@ final class CallableResponder implements ResponderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function respond(mixed $data, Operation $operation, Context $context)
     {

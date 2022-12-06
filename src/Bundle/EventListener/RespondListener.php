@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
@@ -53,8 +54,11 @@ final class RespondListener
         $isValid = $request->attributes->get('is_valid', true);
         $context = $this->initializeContext($request);
 
+        /** @var RequestConfigurationOption|null $requestConfigurationOption */
+        $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
+
         if (
-            (null === $configuration = $context->get(RequestConfiguration::class)) ||
+            (null === $configuration = $requestConfigurationOption?->configuration()) ||
             (null === $operation = $this->initializeOperation($request))
         ) {
             return;

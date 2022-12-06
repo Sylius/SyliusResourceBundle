@@ -15,8 +15,8 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -45,9 +45,12 @@ class PreEventListener
         $controllerResult = $event->getControllerResult();
         $context = $this->initializeContext($request);
 
+        /** @var RequestConfigurationOption|null $requestConfigurationOption */
+        $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
+
         if (
             !$controllerResult instanceof ResourceInterface ||
-            (null === $configuration = $context->get(RequestConfiguration::class)) ||
+            (null === $configuration = $requestConfigurationOption?->configuration()) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !$request->attributes->getBoolean('is_valid', true)
         ) {

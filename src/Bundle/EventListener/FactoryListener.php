@@ -15,8 +15,8 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -43,8 +43,11 @@ final class FactoryListener
         $request = $event->getRequest();
         $context = $this->initializeContext($request);
 
+        /** @var RequestConfigurationOption|null $requestConfigurationOption */
+        $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
+
         if (
-            (null === $configuration = $context->get(RequestConfiguration::class)) ||
+            (null === $configuration = $requestConfigurationOption?->configuration()) ||
             (null === $operation = $this->initializeOperation($request)) ||
             false === $configuration->getFactoryMethod() ||
             null !== $operation->getInput() ||

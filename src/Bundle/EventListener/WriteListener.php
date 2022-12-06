@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
@@ -51,7 +50,6 @@ final class WriteListener
 
         if (
             $controllerResult instanceof Response ||
-            (null === $configuration = $context->get(RequestConfiguration::class)) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation->canWrite() ?? true) ||
             'GET' === $request->getMethod() ||

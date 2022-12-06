@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -44,9 +44,12 @@ final class FormListener
         $request = $event->getRequest();
         $context = $this->initializeContext($request);
 
+        /** @var RequestConfigurationOption|null $requestConfigurationOption */
+        $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
+
         if (
             $controllerResult instanceof Response ||
-            (null === $configuration = $context->get(RequestConfiguration::class)) ||
+            (null === $configuration = $requestConfigurationOption?->configuration()) ||
             (null === $operation = $this->initializeOperation($request)) ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
             null === $configuration->getFormType()

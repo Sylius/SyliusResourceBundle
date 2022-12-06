@@ -15,6 +15,8 @@ namespace Sylius\Component\Resource\Util;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Context\Context;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
+use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,7 +31,7 @@ trait ContextInitiatorTrait
 
     private function initializeContext(Request $request): Context
     {
-        $context = new Context($request);
+        $context = new Context(new RequestOption($request));
 
         if ([] === $attributes = $request->attributes->all('_sylius')) {
             return $context;
@@ -47,6 +49,6 @@ trait ContextInitiatorTrait
 
         $configuration = $this->requestConfigurationFactory->create($metadata, $request);
 
-        return $context->with($configuration);
+        return $context->with(new RequestConfigurationOption($configuration));
     }
 }
