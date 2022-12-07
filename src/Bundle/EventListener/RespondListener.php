@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
-use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -23,7 +22,6 @@ use Sylius\Component\Resource\Util\ContextInitiatorTrait;
 use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Twig\Environment;
 use Webmozart\Assert\Assert;
 
 final class RespondListener
