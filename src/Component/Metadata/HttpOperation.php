@@ -23,12 +23,10 @@ class HttpOperation extends Operation
         protected ?string $path = null,
         protected ?string $routePrefix = null,
         ?string $name = null,
-        ?string $controller = null,
         ?string $template = null,
     ) {
         parent::__construct(
             name: $name,
-            controller: $controller,
             template: $template,
         );
     }

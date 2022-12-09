@@ -20,7 +20,6 @@ abstract class Operation
 {
     public function __construct(
         protected ?string $name = null,
-        protected ?string $controller = null,
         protected ?string $template = null,
     ) {
     }
@@ -34,19 +33,6 @@ abstract class Operation
     {
         $self = clone $this;
         $self->name = $name;
-
-        return $self;
-    }
-
-    public function getController(): ?string
-    {
-        return $this->controller;
-    }
-
-    public function withController(string $controller): self
-    {
-        $self = clone $this;
-        $self->controller = $controller;
 
         return $self;
     }

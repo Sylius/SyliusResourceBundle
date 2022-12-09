@@ -15,7 +15,6 @@ namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Tests\Dummy\DummyController;
 
 final class HttpOperationSpec extends ObjectBehavior
 {
@@ -73,19 +72,6 @@ final class HttpOperationSpec extends ObjectBehavior
         $this->withRoutePrefix('/admin')
             ->getRoutePrefix()
             ->shouldReturn('/admin')
-        ;
-    }
-
-    function it_has_no_controller_by_default(): void
-    {
-        $this->getController()->shouldReturn(null);
-    }
-
-    function it_could_have_a_controller(): void
-    {
-        $this->withController(DummyController::class)
-            ->getController()
-            ->shouldReturn(DummyController::class)
         ;
     }
 
