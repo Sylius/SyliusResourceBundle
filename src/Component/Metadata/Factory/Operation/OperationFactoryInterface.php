@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Metadata\Factory;
+namespace Sylius\Component\Resource\Metadata\Factory\Operation;
 
 use Sylius\Component\Resource\Metadata\Operation;
 

@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Metadata\Factory;
+namespace spec\Sylius\Component\Resource\Metadata\Factory\Operation;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Factory\OperationFactory;
+use Sylius\Component\Resource\Metadata\Factory\Operation\OperationFactory;
 
 final class OperationFactorySpec extends ObjectBehavior
 {
