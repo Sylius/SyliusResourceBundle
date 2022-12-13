@@ -15,25 +15,18 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
-use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Util\ContextInitiatorTrait;
-use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class PreEventListener
 {
-    use ContextInitiatorTrait;
-
     public function __construct(
-        private OperationRequestInitiator $operationRequestInitiator,
-        private RegistryInterface $resourceRegistry,
-        private RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        private RequestOperationInitiator $operationInitiator,
+        private RequestContextInitiator $contextInitiator,
         private EventDispatcherInterface $eventDispatcher,
         private RedirectHandlerInterface $redirectHandler,
     ) {
@@ -43,14 +36,14 @@ class PreEventListener
     {
         $request = $event->getRequest();
         $controllerResult = $event->getControllerResult();
-        $context = $this->initializeContext($request);
+        $context = $this->contextInitiator->initializeContext($request);
 
         $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
 
         if (
             !$controllerResult instanceof ResourceInterface ||
             (null === $configuration = $requestConfigurationOption?->configuration()) ||
-            (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) ||
+            (null === $operation = $this->operationInitiator->initializeOperation($request)) ||
             !$request->attributes->getBoolean('is_valid', true)
         ) {
             return;

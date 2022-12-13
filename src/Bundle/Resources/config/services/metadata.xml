@@ -22,7 +22,7 @@
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
 
-        <service id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator">
+        <service id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" />
         </service>

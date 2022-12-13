@@ -15,26 +15,19 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
-use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
-use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator;
 use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Util\ContextInitiatorTrait;
-use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class PostEventListener
 {
-    use ContextInitiatorTrait;
-
     public function __construct(
-        private OperationRequestInitiator $operationRequestInitiator,
-        private RegistryInterface $resourceRegistry,
-        private RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        private RequestOperationInitiator $operationInitiator,
+        private RequestContextInitiator $contextInitiator,
         private EventDispatcherInterface $eventDispatcher,
         private FlashHelperInterface $flashHelper,
     ) {
@@ -44,14 +37,14 @@ class PostEventListener
     {
         $request = $event->getRequest();
         $controllerResult = $event->getControllerResult();
-        $context = $this->initializeContext($request);
+        $context = $this->contextInitiator->initializeContext($request);
 
         $requestConfigurationOption = $context->get(RequestConfigurationOption::class);
 
         if (
             !$controllerResult instanceof ResourceInterface ||
             (null === $configuration = $requestConfigurationOption?->configuration()) ||
-            (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) ||
+            (null === $operation = $this->operationInitiator->initializeOperation($request)) ||
             !$request->attributes->getBoolean('is_valid', true)
         ) {
             return;

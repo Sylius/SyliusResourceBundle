@@ -7,65 +7,58 @@
         <defaults public="false" />
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\ReadListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="Sylius\Component\Resource\State\ProviderInterface" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="4" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\FactoryListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="Sylius\Component\Resource\Factory\FactoryLocator" />
             <argument type="service" id="sylius.resource_controller.new_resource_factory" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="2" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\FormListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="sylius.form_factory" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="128" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\ValidateListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="64" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\PreEventListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="sylius.resource_controller.event_dispatcher" />
             <argument type="service" id="sylius.resource_controller.redirect_handler" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="42" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\WriteListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="Sylius\Component\Resource\State\ProcessorInterface" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="32" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\PostEventListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="sylius.resource_controller.event_dispatcher" />
             <argument type="service" id="sylius.resource_controller.flash_helper" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="24" />
         </service>
 
         <service id="Sylius\Bundle\ResourceBundle\EventListener\RespondListener">
-            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator" />
+            <argument type="service" id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
             <argument type="service" id="Sylius\Component\Resource\State\ResponderInterface" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" priority="8" />
         </service>

@@ -69,5 +69,10 @@
             <argument>Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface</argument>
             <argument>form builder</argument>
         </service>
+
+        <service id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+        </service>
     </services>
 </container>

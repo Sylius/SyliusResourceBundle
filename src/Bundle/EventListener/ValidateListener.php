@@ -14,19 +14,16 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
-use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Util\OperationRequestInitiatorTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class ValidateListener
 {
     public function __construct(
-        private OperationRequestInitiator $operationRequestInitiator,
+        private RequestOperationInitiator $operationRequestInitiator,
     ) {
     }
 

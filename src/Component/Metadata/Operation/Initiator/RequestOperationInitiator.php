@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class OperationRequestInitiator
+final class RequestOperationInitiator
 {
     public function __construct(
         private RegistryInterface $resourceRegistry,
