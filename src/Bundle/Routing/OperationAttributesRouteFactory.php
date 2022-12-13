@@ -45,15 +45,15 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
     private function createRoutesForResource(RouteCollection $routeCollection, ResourceMetadata $resource): void
     {
         foreach ($resource->getOperations() as $operation) {
-            $this->addRouteForOperation($routeCollection, $operation);
+            $this->addRouteForOperation($routeCollection, $resource, $operation);
         }
     }
 
-    private function addRouteForOperation(RouteCollection $routeCollection, Operation $operation): void
+    private function addRouteForOperation(RouteCollection $routeCollection, ResourceMetadata $resource, Operation $operation): void
     {
-        Assert::notNull($operation->getResource(), 'Impossible to get default route name without resource. Please define a resource.');
+        Assert::notNull($resource->getAlias(), 'Impossible to get default route name without resource. Please define a resource.');
 
-        $metadata = $this->resourceRegistry->get($operation->getResource());
+        $metadata = $this->resourceRegistry->get($resource->getAlias());
 
         $routeName = $this->getRouteName($metadata, $operation);
 

@@ -41,7 +41,7 @@ class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCo
             $operations = $resource->getOperations();
 
             foreach ($resource->getOperations() ?? [] as $operation) {
-                $operations->add($operation->getName(), $this->addDefaults($operation));
+                $operations->add($operation->getName(), $this->addDefaults($resource, $operation));
             }
 
             $resource = $resource->withOperations($operations);
@@ -52,9 +52,9 @@ class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCo
         return $resourceCollectionMetadata;
     }
 
-    private function addDefaults(Operation $operation): Operation
+    private function addDefaults(ResourceMetadata $resource, Operation $operation): Operation
     {
-        $metadata = $this->resourceRegistry->get($operation->getResource());
+        $metadata = $this->resourceRegistry->get($resource->getAlias());
 
         if (SyliusResourceBundle::DRIVER_DOCTRINE_ORM === $metadata->getDriver()) {
             $operation = $operation->withProvider($this->getProvider($operation));
