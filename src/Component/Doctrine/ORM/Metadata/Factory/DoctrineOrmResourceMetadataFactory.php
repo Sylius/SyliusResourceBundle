@@ -20,30 +20,37 @@ use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
 use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 
-class DoctrineOrmResourceMetadataFactory implements ResourceMetadataFactoryInterface
+class DoctrineOrmResourceMetadataFactory implements ResourceMetadataCollectionFactoryInterface
 {
-    public function __construct(private RegistryInterface $resourceRegistry, private ResourceMetadataFactoryInterface $decorated)
+    public function __construct(private RegistryInterface $resourceRegistry, private ResourceMetadataCollectionFactoryInterface $decorated)
     {
     }
 
-    public function create(string $className): ResourceMetadata
+    public function create(string $resourceClass): ResourceMetadataCollection
     {
-        $resourceMetadata = $this->decorated->create($className);
+        $resourceCollectionMetadata = $this->decorated->create($resourceClass);
 
-        $operations = $resourceMetadata->getResource()->getOperations();
+        /** @var ResourceMetadata $resource */
+        foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
+            $operations = $resource->getOperations();
 
-        foreach ($resourceMetadata->getResource()->getOperations() ?? [] as $operation) {
-            $operations->add($operation->getName(), $this->addDefaults($operation));
+            foreach ($resource->getOperations() ?? [] as $operation) {
+                $operations->add($operation->getName(), $this->addDefaults($operation));
+            }
+
+            $resource = $resource->withOperations($operations);
+
+            $resourceCollectionMetadata[$i] = $resource;
         }
 
-        $resource = $resourceMetadata->getResource()->withOperations($operations);
-
-        return $resourceMetadata->withResource($resource);
+        return $resourceCollectionMetadata;
     }
 
     private function addDefaults(Operation $operation): Operation
