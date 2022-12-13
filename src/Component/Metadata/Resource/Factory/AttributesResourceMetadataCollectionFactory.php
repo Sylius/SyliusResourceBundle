@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\Section;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
@@ -41,6 +43,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     {
         $resources = [];
         $index = -1;
+        $section = null;
 
         foreach ($attributes as $attribute) {
             if (is_a($attribute->getName(), Resource::class, true)) {
@@ -51,13 +54,19 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 continue;
             }
 
+            if (is_a($attribute->getName(), Section::class, true)) {
+                $section = $attribute->newInstance();
+
+                continue;
+            }
+
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
                 continue;
             }
 
             $operationAttribute = $attribute->newInstance();
 
-            [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operationAttribute);
+            [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operationAttribute, $section);
 
             $operations = $resources[$index]->getOperations() ?? new Operations();
 
@@ -68,9 +77,35 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
-    private function getOperationWithDefaults(Resource $resource, Operation $operation): array
+    private function getOperationWithDefaults(Resource $resource, Operation $operation, ?Section $section = null): array
     {
         $operationName = $operation->getName();
+
+        if (null === $section) {
+            return [$operationName, $operation];
+        }
+
+        if (null === $operation->getSection()) {
+            $operation = $operation->withSection($section->getName());
+        }
+
+        if (
+            null === $operation->getTemplate() &&
+            null !== $templateDir = $section->getTemplatesDir()
+        ) {
+            $operation = $operation->withTemplate(sprintf('%s/%s.html.twig', $templateDir, $operation->getName() ?? ''));
+        }
+
+        if (!$operation instanceof HttpOperation) {
+            return [$operationName, $operation];
+        }
+
+        if (
+            null === $operation->getRoutePrefix() &&
+            null !== $sectionRoutePrefix = $section->getRoutePrefix()
+        ) {
+            $operation = $operation->withRoutePrefix($sectionRoutePrefix);
+        }
 
         return [$operationName, $operation];
     }
