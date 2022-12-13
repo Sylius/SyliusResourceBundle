@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
-use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
@@ -28,7 +28,7 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private OperationRouteFactoryInterface $operationRouteFactory,
-        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
+        private ResourceMetadataCollectionFactoryInterface $resourceMetadataFactory,
     ) {
     }
 
@@ -36,10 +36,13 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
     {
         $resourceMetadata = $this->resourceMetadataFactory->create($className);
 
-        $this->createRoutesForResource($routeCollection, $resourceMetadata->getResource());
+        /** @var ResourceMetadata $resource */
+        foreach ($resourceMetadata->getIterator() as $resource) {
+            $this->createRoutesForResource($routeCollection, $resource);
+        }
     }
 
-    private function createRoutesForResource(RouteCollection $routeCollection, Resource $resource): void
+    private function createRoutesForResource(RouteCollection $routeCollection, ResourceMetadata $resource): void
     {
         foreach ($resource->getOperations() as $operation) {
             $this->addRouteForOperation($routeCollection, $operation);

@@ -9,9 +9,9 @@
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
 
-        <service id="Sylius\Component\Resource\Doctrine\ORM\Metadata\Factory\DoctrineOrmResourceMetadataFactory" decorates="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface">
+        <service id="Sylius\Component\Resource\Doctrine\ORM\Metadata\Resource\Factory\DoctrineOrmResourceMetadataCollectionFactory" decorates="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface">
             <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="Sylius\Component\Resource\Doctrine\ORM\Metadata\Factory\DoctrineOrmResourceMetadataFactory.inner" />
+            <argument type="service" id="Sylius\Component\Resource\Doctrine\ORM\Metadata\Resource\Factory\DoctrineOrmResourceMetadataCollectionFactory.inner" />
         </service>
 
         <service id="Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator">

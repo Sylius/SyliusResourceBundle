@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Doctrine\ORM\Metadata\Factory;
+namespace Sylius\Component\Resource\Doctrine\ORM\Metadata\Resource\Factory;
 
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
@@ -21,13 +21,12 @@ use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 
-class DoctrineOrmResourceMetadataFactory implements ResourceMetadataCollectionFactoryInterface
+class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
     public function __construct(private RegistryInterface $resourceRegistry, private ResourceMetadataCollectionFactoryInterface $decorated)
     {
