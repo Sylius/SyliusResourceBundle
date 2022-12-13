@@ -24,6 +24,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndEmbeddedOperations;
 
 class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {
@@ -100,6 +101,32 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_creates_resource_metadata_with_sections(): void
     {
         $metadataCollection = $this->create(DummyResourceWithSections::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $metadataCollection->count()->shouldReturn(1);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('index')->shouldReturn(true);
+        $operations->has('create')->shouldReturn(true);
+        $operations->has('update')->shouldReturn(true);
+        $operations->has('show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'index');
+        $operation->getSection()->shouldReturn('admin');
+        $operation->getRoutePrefix()->shouldReturn('/admin');
+        $operation->getTemplate()->shouldReturn('dummy/index.html.twig');
+    }
+
+    function it_creates_resource_metadata_with_sections_and_embedded_operations(): void
+    {
+        $metadataCollection = $this->create(DummyResourceWithSectionsAndEmbeddedOperations::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $metadataCollection->count()->shouldReturn(1);

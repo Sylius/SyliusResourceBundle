@@ -55,7 +55,19 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             }
 
             if (is_a($attribute->getName(), Section::class, true)) {
+                /** @var Section $section */
                 $section = $attribute->newInstance();
+
+                $operations = [];
+
+                foreach ($section->getOperations() ?? new Operations() as $operation) {
+                    [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operation, $section);
+                    $operations[$key] = $operation;
+                }
+
+                if ($operations) {
+                    $resources[$index] = $resources[$index]->withOperations(new Operations($operations));
+                }
 
                 continue;
             }
@@ -108,13 +120,5 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         }
 
         return [$operationName, $operation];
-    }
-
-    /** @param \ReflectionAttribute[] $attributes */
-    private function filterAttributes(array $attributes, $className): array
-    {
-        return array_filter($attributes, function (\ReflectionAttribute $attribute) use ($className): bool {
-            return is_a($attribute->getName(), $className, true);
-        });
     }
 }
