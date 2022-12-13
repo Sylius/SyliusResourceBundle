@@ -41,6 +41,17 @@ final class Operations implements \IteratorAggregate, \Countable
         })();
     }
 
+    public function get(string $key): ?Operation
+    {
+        foreach ($this->operations as [$operationName, $operation]) {
+            if ($operationName === $key) {
+                return $operation;
+            }
+        }
+
+        return null;
+    }
+
     public function add(string $key, Operation $value): self
     {
         foreach ($this->operations as $i => [$operationName, $operation]) {
