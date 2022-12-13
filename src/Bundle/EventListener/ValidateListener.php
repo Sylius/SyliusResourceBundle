@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -24,11 +25,8 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class ValidateListener
 {
-    use OperationRequestInitiatorTrait;
-
     public function __construct(
-        private RegistryInterface $resourceRegistry,
-        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
+        private OperationRequestInitiator $operationRequestInitiator,
     ) {
     }
 
@@ -41,7 +39,7 @@ final class ValidateListener
 
         if (
             $controllerResult instanceof Response ||
-            (null === $operation = $this->initializeOperation($request)) ||
+            (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
             null === $form ||
             !($operation->canValidate() ?? true)

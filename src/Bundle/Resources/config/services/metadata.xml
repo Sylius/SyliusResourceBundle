@@ -18,5 +18,13 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.metadata_factory.doctrine_orm_resource.inner" />
         </service>
+
+        <service id="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
+        <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory" />
+
+        <service id="Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" />
+        </service>
     </services>
 </container>

@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\State\ProcessorInterface;
@@ -27,12 +28,11 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 final class WriteListener
 {
     use ContextInitiatorTrait;
-    use OperationRequestInitiatorTrait;
 
     public function __construct(
+        private OperationRequestInitiator $operationRequestInitiator,
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private ProcessorInterface $processor,
     ) {
     }
@@ -50,7 +50,7 @@ final class WriteListener
 
         if (
             $controllerResult instanceof Response ||
-            (null === $operation = $this->initializeOperation($request)) ||
+            (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) ||
             !($operation->canWrite() ?? true) ||
             'GET' === $request->getMethod() ||
             !$request->attributes->getBoolean('is_valid', true) ||

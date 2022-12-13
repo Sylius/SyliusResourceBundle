@@ -18,6 +18,7 @@ use Sylius\Bundle\ResourceBundle\Form\Factory\FormFactoryInterface;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Util\ContextInitiatorTrait;
@@ -28,12 +29,11 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 final class FormListener
 {
     use ContextInitiatorTrait;
-    use OperationRequestInitiatorTrait;
 
     public function __construct(
+        private OperationRequestInitiator $operationRequestInitiator,
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private FormFactoryInterface $formFactory,
     ) {
     }
@@ -49,7 +49,7 @@ final class FormListener
         if (
             $controllerResult instanceof Response ||
             (null === $configuration = $requestConfigurationOption?->configuration()) ||
-            (null === $operation = $this->initializeOperation($request)) ||
+            (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
             null === $configuration->getFormType()
         ) {

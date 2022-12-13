@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Sylius\Component\Resource\Metadata\Operation\Initiator\OperationRequestInitiator;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
@@ -27,12 +28,11 @@ use Webmozart\Assert\Assert;
 final class RespondListener
 {
     use ContextInitiatorTrait;
-    use OperationRequestInitiatorTrait;
 
     public function __construct(
+        private OperationRequestInitiator $operationRequestInitiator,
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        private ResourceMetadataFactoryInterface $resourceMetadataFactory,
         private ResponderInterface $responder,
     ) {
     }
@@ -44,7 +44,7 @@ final class RespondListener
         $request = $event->getRequest();
         $context = $this->initializeContext($request);
 
-        if (null === $operation = $this->initializeOperation($request)) {
+        if (null === $operation = $this->operationRequestInitiator->initializeOperation($request)) {
             return;
         }
 
