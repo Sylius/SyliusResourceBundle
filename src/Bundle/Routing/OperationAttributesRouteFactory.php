@@ -61,13 +61,13 @@ final class OperationAttributesRouteFactory implements OperationAttributesRouteF
             return;
         }
 
-        $route = $this->createRoute($metadata, $operation);
+        $route = $this->createRoute($metadata, $resource, $operation);
         $routeCollection->add($routeName, $route);
     }
 
-    private function createRoute(MetadataInterface $metadata, HttpOperation $operation): Route
+    private function createRoute(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
     {
-        return $this->operationRouteFactory->create($metadata, $operation);
+        return $this->operationRouteFactory->create($metadata, $resource, $operation);
     }
 
     private function getRouteName(MetadataInterface $metadata, Operation $operation): string

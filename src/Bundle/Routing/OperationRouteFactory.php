@@ -19,13 +19,14 @@ use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Symfony\Component\Routing\Route;
 use Webmozart\Assert\Assert;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
-    public function create(MetadataInterface $metadata, HttpOperation $operation): Route
+    public function create(MetadataInterface $metadata, Resource $resource, HttpOperation $operation): Route
     {
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
 
@@ -37,7 +38,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $routePath,
             [
                 '_controller' => PlaceHolderAction::class,
-                '_sylius' => $this->getSyliusOptions($operation),
+                '_sylius' => $this->getSyliusOptions($resource, $operation),
             ],
             $operation->getRequirements() ?? [],
             $operation->getOptions() ?? [],
@@ -86,7 +87,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this route with action "%s". Please define a path.', $name ?? ''));
     }
 
-    private function getSyliusOptions(HttpOperation $operation): array
+    private function getSyliusOptions(Resource $resource, HttpOperation $operation): array
     {
         $syliusOptions = [];
 
@@ -106,8 +107,8 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $syliusOptions['repository'] = $repository;
         }
 
-        if (null !== $resource = $operation->getResource()) {
-            $syliusOptions['resource'] = $resource;
+        if (null !== $resourceAlias = $resource->getAlias()) {
+            $syliusOptions['resource'] = $resourceAlias;
         }
 
         if (null !== $name = $operation->getName()) {
