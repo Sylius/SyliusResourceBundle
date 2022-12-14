@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Context\Initiator;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Context\Context;
+use Sylius\Component\Resource\Context\Option\MetadataOption;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -48,6 +49,6 @@ final class RequestContextInitiator
 
         $configuration = $this->requestConfigurationFactory->create($metadata, $request);
 
-        return $context->with(new RequestConfigurationOption($configuration));
+        return $context->with(new MetadataOption($metadata), new RequestConfigurationOption($configuration));
     }
 }

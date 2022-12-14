@@ -17,6 +17,7 @@ use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Component\Resource\Context\Context;
+use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
@@ -31,7 +32,7 @@ final class CollectionProvider implements ProviderInterface
 
     public function provide(Operation $operation, Context $context): object|iterable
     {
-        $configuration = $context->get(RequestConfiguration::class);
+        $configuration = $context->get(RequestConfigurationOption::class)->configuration();
 
         if (null === $configuration) {
             throw new \RuntimeException('Configuration was not found on the context');
