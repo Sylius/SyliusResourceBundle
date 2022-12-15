@@ -54,5 +54,12 @@
             <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
             <tag name="sylius.state_provider" />
         </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\RequestSingleResourceProvider">
+            <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
+            <tag name="sylius.state_provider" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\SingleResourceProviderInterface" alias="Sylius\Component\Resource\Doctrine\ORM\State\RequestSingleResourceProvider" />
     </services>
 </container>
