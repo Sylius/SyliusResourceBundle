@@ -17,6 +17,7 @@ use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Component\Resource\Context\Context;
+use Sylius\Component\Resource\Context\Option\MetadataOption;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -33,12 +34,16 @@ final class CollectionProvider implements ProviderInterface
     public function provide(Operation $operation, Context $context): object|iterable
     {
         $configuration = $context->get(RequestConfigurationOption::class)->configuration();
+        $metadata = $context->get(MetadataOption::class)->metadata();
 
         if (null === $configuration) {
             throw new \RuntimeException('Configuration was not found on the context');
         }
 
-        $metadata = $configuration->getMetadata();
+        if (null === $metadata) {
+            throw new \RuntimeException('Metadata was not found on the context');
+        }
+
         $repositoryId = $metadata->getServiceId('repository');
 
         if (!$this->repositoryLocator->has($repositoryId)) {
