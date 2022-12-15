@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace spec\Sylius\Component\Resource\Symfony\HttpFoundation;
 
 use PhpSpec\ObjectBehavior;
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Context\Option;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration;
 
 final class RequestConfigurationOption
 {
