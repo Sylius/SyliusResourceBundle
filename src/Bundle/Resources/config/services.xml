@@ -70,6 +70,15 @@
             <argument>form builder</argument>
         </service>
 
+        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactoryInterface"
+                 class="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactory"
+                 public="false"
+        >
+            <argument type="service" id="sylius.resource_controller.parameters_parser" />
+            <argument>Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration</argument>
+            <argument>%sylius.resource.settings%</argument>
+        </service>
+
         <service id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />

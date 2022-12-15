@@ -16,6 +16,8 @@ namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
 use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
+use Sylius\Component\Resource\Symfony\Workflow\OperationStateMachine as SymfonyOperationStateMachine;
+use Sylius\Component\Resource\Winzou\StateMachine\OperationStateMachine as WinzouOperationStateMachine;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -77,9 +79,15 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             throw new \LogicException('You can not use "Winzou" for your state machine if it is not available. Try running "composer require winzou/state-machine-bundle".');
         }
 
-        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine', StateMachine::class);
-        $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('sm.factory'));
+        $container->register('sylius.resource_controller.state_machine', StateMachine::class)
+            ->setPublic(false)
+            ->addArgument(new Reference('sm.factory'))
+        ;
+
+        $container->register(WinzouOperationStateMachine::class)
+            ->setPublic(false)
+            ->addArgument(new Reference('sm.factory'))
+        ;
     }
 
     private function setSymfonyWorkflowAsStateMachine(ContainerBuilder $container): void
@@ -92,9 +100,15 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             throw new \LogicException('You can not use "Symfony" for your state machine if it is not available. Try running "composer require symfony/workflow".');
         }
 
-        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine', Workflow::class);
-        $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
+        $container->register('sylius.resource_controller.state_machine', Workflow::class)
+            ->setPublic(false)
+            ->addArgument(new Reference('workflow.registry'))
+        ;
+
+        $container->register(SymfonyOperationStateMachine::class)
+            ->setPublic(false)
+            ->addArgument(new Reference('workflow.registry'))
+        ;
     }
 
     private function isSymfonyWorkflowEnabled(ContainerBuilder $container): bool

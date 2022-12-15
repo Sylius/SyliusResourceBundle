@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Doctrine\ORM\Metadata\Resource\Factory;
 
-use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
 use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
@@ -56,14 +56,14 @@ class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCo
     {
         $metadata = $this->resourceRegistry->get($resource->getAlias());
 
-        if (SyliusResourceBundle::DRIVER_DOCTRINE_ORM === $metadata->getDriver()) {
+        if (MetadataInterface::DRIVER_DOCTRINE_ORM === $metadata->getDriver()) {
             $operation = $operation->withProvider($this->getProvider($operation));
         }
 
         if (in_array($metadata->getDriver(), [
-            SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
-            SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM,
-            SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM,
+            MetadataInterface::DRIVER_DOCTRINE_ORM,
+            MetadataInterface::DRIVER_DOCTRINE_MONGODB_ODM,
+            MetadataInterface::DRIVER_DOCTRINE_PHPCR_ODM,
         ], true)) {
             $operation = $operation->withProcessor($this->getProcessor($operation));
         }

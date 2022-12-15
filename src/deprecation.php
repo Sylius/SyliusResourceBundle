@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 $deprecatedClassesWithAliases = [
     Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration::class,
+    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactory::class,
     Sylius\Bundle\ResourceBundle\Controller\Parameters::class => Sylius\Component\Resource\Symfony\HttpFoundation\Parameters::class,
 ];
 

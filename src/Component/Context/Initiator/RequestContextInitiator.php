@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Context\Initiator;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\MetadataOption;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestContextInitiator
