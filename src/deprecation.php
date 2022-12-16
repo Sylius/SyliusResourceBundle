@@ -14,7 +14,10 @@ declare(strict_types=1);
 $deprecatedClassesWithAliases = [
     Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration::class,
     Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactory::class,
+    Sylius\Bundle\ResourceBundle\Controller\ParametersParser::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\Parser\ParametersParser::class,
     Sylius\Bundle\ResourceBundle\Controller\Parameters::class => Sylius\Component\Resource\Symfony\HttpFoundation\Parameters::class,
+
+    Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider::class => Sylius\Component\Resource\Symfony\HttpFoundation\Request\Provider\RequestParameterProvider::class,
 ];
 
 spl_autoload_register(function ($className) use ($deprecatedClassesWithAliases): void {

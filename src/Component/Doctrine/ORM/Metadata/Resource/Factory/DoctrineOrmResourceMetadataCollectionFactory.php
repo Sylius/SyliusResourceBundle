@@ -15,10 +15,11 @@ namespace Sylius\Component\Resource\Doctrine\ORM\Metadata\Resource\Factory;
 
 use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
-use Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider;
-use Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider;
+use Sylius\Component\Resource\Doctrine\ORM\State\Http\CollectionProvider;
+use Sylius\Component\Resource\Doctrine\ORM\State\Http\ItemProvider;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
@@ -56,8 +57,11 @@ class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCo
     {
         $metadata = $this->resourceRegistry->get($resource->getAlias());
 
-        if (MetadataInterface::DRIVER_DOCTRINE_ORM === $metadata->getDriver()) {
-            $operation = $operation->withProvider($this->getProvider($operation));
+        if (
+            MetadataInterface::DRIVER_DOCTRINE_ORM === $metadata->getDriver() &&
+            null !== $provider = $this->getProvider($operation)
+        ) {
+            $operation = $operation->withProvider($provider);
         }
 
         if (in_array($metadata->getDriver(), [
@@ -71,10 +75,14 @@ class DoctrineOrmResourceMetadataCollectionFactory implements ResourceMetadataCo
         return $operation;
     }
 
-    private function getProvider(Operation $operation): string
+    private function getProvider(Operation $operation): ?string
     {
         if (null !== $provider = $operation->getProvider()) {
             return $provider;
+        }
+
+        if (!$operation instanceof HttpOperation) {
+            return null;
         }
 
         if ($operation instanceof CollectionOperationInterface) {

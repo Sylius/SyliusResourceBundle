@@ -25,7 +25,7 @@
             <argument>%sylius.resource.settings%</argument>
         </service>
         <service id="sylius.resource_controller.new_resource_factory" class="Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory" public="false" />
-        <service id="sylius.resource_controller.single_resource_provider" class="RequestSingleResourceProvider" public="false" />
+        <service id="sylius.resource_controller.single_resource_provider" class="Sylius\Bundle\ResourceBundle\Controller\SingleResourceProvider" public="false" />
         <service id="sylius.resource_controller.pagerfanta_representation_factory" class="Hateoas\Representation\Factory\PagerfantaFactory" public="false" />
         <service id="sylius.resource_controller.resources_resolver" class="Sylius\Bundle\ResourceBundle\Controller\ResourcesResolver" public="false" />
         <service id="sylius.resource_controller.resources_collection_provider" class="Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProvider" public="false">

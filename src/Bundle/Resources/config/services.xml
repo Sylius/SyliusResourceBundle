@@ -70,18 +70,34 @@
             <argument>form builder</argument>
         </service>
 
-        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactoryInterface"
-                 class="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactory"
-                 public="false"
-        >
+        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactoryInterface" class="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Factory\RequestConfigurationFactory" public="false">
             <argument type="service" id="sylius.resource_controller.parameters_parser" />
             <argument>Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration</argument>
             <argument>%sylius.resource.settings%</argument>
+        </service>
+
+        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Parser\ParametersParserInterface" class="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Parser\ParametersParser" public="false">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="sylius.expression_language" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Symfony\HttpFoundation\Response\RedirectHandlerInterface" class="Sylius\Component\Resource\Symfony\HttpFoundation\Response\RedirectHandler" public="false">
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Resolver\ResourcesResolverInterface" class="Sylius\Component\Resource\Resolver\ResourcesResolver" public="false">
+            <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
         </service>
 
         <service id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
         </service>
+
+        <service id="Sylius\Component\Resource\Grid\View\RequestContextGridViewFactory">
+            <argument type="service" id="sylius.grid.data_provider" />
+            <argument type="service" id="Sylius\Component\Resource\Symfony\HttpFoundation\Request\Parser\ParametersParserInterface" />
+        </service>
+        <service id="Sylius\Component\Resource\Grid\View\ContextGridViewFactoryInterface" alias="Sylius\Component\Resource\Grid\View\RequestContextGridViewFactory" />
     </services>
 </container>

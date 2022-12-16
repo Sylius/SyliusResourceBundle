@@ -32,34 +32,26 @@
         </service>
 
         <service id="Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor">
-            <argument type="service" id="sylius.resource_controller.state_machine" />
+            <argument type="service" id="Sylius\Component\Resource\StateMachine\OperationStateMachineInterface" />
             <argument type="service" id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" on-invalid="null" />
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
         <service id="Sylius\Component\Resource\Symfony\HttpFoundation\State\Responder">
-            <argument type="service" id="sylius.resource_controller.redirect_handler" />
+            <argument type="service" id="Sylius\Component\Resource\Symfony\HttpFoundation\Response\RedirectHandlerInterface" />
             <argument type="service" id="twig" on-invalid="null" />
             <tag name="sylius.state_responder" priority="-100" />
         </service>
 
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\CollectionProvider">
-            <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\Http\CollectionProvider" public="false">
+            <argument type="service" id="Sylius\Component\Resource\Resolver\ResourcesResolverInterface" />
+            <argument type="service" id="sylius.resource_controller.pagerfanta_representation_factory" />
+            <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\ORM\State\Http\ItemProvider">
             <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
             <tag name="sylius.state_provider" />
         </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\ItemProvider">
-            <argument type="service" id="sylius.resource_controller.single_resource_provider" />
-            <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
-            <tag name="sylius.state_provider" />
-        </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\RequestSingleResourceProvider">
-            <argument type="service" id="Sylius\Component\Resource\Repository\RepositoryLocator" />
-            <tag name="sylius.state_provider" />
-        </service>
-
-        <service id="Sylius\Component\Resource\Doctrine\ORM\State\SingleResourceProviderInterface" alias="Sylius\Component\Resource\Doctrine\ORM\State\RequestSingleResourceProvider" />
     </services>
 </container>

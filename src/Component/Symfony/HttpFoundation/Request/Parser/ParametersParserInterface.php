@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Doctrine\ORM\State;
+namespace Sylius\Component\Resource\Symfony\HttpFoundation\Request\Parser;
 
-use Sylius\Component\Resource\State\ProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
-interface SingleResourceProviderInterface extends ProviderInterface
+interface ParametersParserInterface
 {
+    public function parseRequestValues(array $parameters, Request $request): array;
 }

@@ -13,24 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Provider;
 
-use Symfony\Component\HttpFoundation\Request;
+class_exists(\Sylius\Component\Resource\Symfony\HttpFoundation\Request\Provider\RequestParameterProvider::class);
 
-final class RequestParameterProvider
-{
-    public static function provide(Request $request, string $key, mixed $default = null): mixed
+if (false) {
+    final class RequestParameterProvider extends \Sylius\Component\Resource\Symfony\HttpFoundation\Request\Provider\RequestParameterProvider
     {
-        if ($request !== $result = $request->attributes->get($key, $request)) {
-            return $result;
-        }
-
-        if ($request->query->has($key)) {
-            return $request->query->all()[$key];
-        }
-
-        if ($request->request->has($key)) {
-            return $request->request->all()[$key];
-        }
-
-        return $default;
     }
 }

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Component\Resource\Context\Option\MetadataOption;
+use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\Initiator\RequestOperationInitiator;
 use Sylius\Component\Resource\State\ProviderInterface;
@@ -33,6 +35,7 @@ final class ReadListener
     {
         $request = $event->getRequest();
         $context = $this->contextInitiator->initializeContext($request);
+        $metadata = $context->get(MetadataOption::class)?->metadata();
 
         if (
             (null === $operation = $this->operationInitiator->initializeOperation($request)) ||
@@ -45,7 +48,13 @@ final class ReadListener
         $data = $this->provider->provide($operation, $context);
 
         if (null === $data) {
-            throw new NotFoundHttpException('Not Found');
+            $message = sprintf('The "%s" has not been found', $metadata?->getHumanizedName() ?? 'resource');
+
+            if ($operation instanceof CollectionOperationInterface) {
+                $message = sprintf('The "%s" has not been found', $metadata?->getPluralName() ?? 'resources');
+            }
+
+            throw new NotFoundHttpException($message);
         }
 
         $request->attributes->set('data', $data);

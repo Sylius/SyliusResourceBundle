@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Doctrine\ORM\State;
+namespace Sylius\Component\Resource\Doctrine\ORM\State\Http;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
@@ -20,8 +20,10 @@ use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\State\ProviderInterface;
+use function Sylius\Component\Resource\Doctrine\ORM\State\count;
 
-final class RequestSingleResourceProvider implements SingleResourceProviderInterface
+final class ItemProvider implements ProviderInterface
 {
     public function __construct(private ContainerInterface $repositoryLocator)
     {

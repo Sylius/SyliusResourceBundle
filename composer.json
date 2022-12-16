@@ -89,6 +89,9 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.10-dev"
+        },
+        "symfony": {
+            "require": "^5.4 || 6.1.*"
         }
     },
     "autoload": {

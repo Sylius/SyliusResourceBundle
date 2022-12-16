@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
 use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
+use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Component\Resource\Symfony\Workflow\OperationStateMachine as SymfonyOperationStateMachine;
 use Sylius\Component\Resource\Winzou\StateMachine\OperationStateMachine as WinzouOperationStateMachine;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -84,7 +85,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             ->addArgument(new Reference('sm.factory'))
         ;
 
-        $container->register(WinzouOperationStateMachine::class)
+        $container->register(OperationStateMachineInterface::class, WinzouOperationStateMachine::class)
             ->setPublic(false)
             ->addArgument(new Reference('sm.factory'))
         ;
@@ -105,7 +106,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             ->addArgument(new Reference('workflow.registry'))
         ;
 
-        $container->register(SymfonyOperationStateMachine::class)
+        $container->register(OperationStateMachineInterface::class, SymfonyOperationStateMachine::class)
             ->setPublic(false)
             ->addArgument(new Reference('workflow.registry'))
         ;

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\HttpFoundation\State;
 
-use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Context\Option\RequestOption;
@@ -24,6 +23,7 @@ use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Response\RedirectHandlerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -53,11 +53,11 @@ final class Responder implements ResponderInterface
         }
 
         if ($operation instanceof DeleteOperationInterface) {
-            return $this->redirectHandler->redirectToIndex($configuration, $data);
+            return $this->redirectHandler->redirectToIndex($operation, $context, $data);
         }
 
         if ($isValid && ($operation instanceof UpdateOperationInterface || $operation instanceof CreateOperationInterface)) {
-            return $this->redirectHandler->redirectToResource($configuration, $data);
+            return $this->redirectHandler->redirectToResource($operation, $context, $data);
         }
 
         $content = $this->twig->render(
