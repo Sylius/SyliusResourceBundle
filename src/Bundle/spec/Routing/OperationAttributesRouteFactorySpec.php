@@ -49,7 +49,7 @@ use Sylius\Component\Resource\Metadata\Factory\AttributesResourceMetadataFactory
 use Sylius\Component\Resource\Metadata\Factory\OperationFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
+use Sylius\Component\Resource\Symfony\Workflow\State\ApplyStateMachineProcessor;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 

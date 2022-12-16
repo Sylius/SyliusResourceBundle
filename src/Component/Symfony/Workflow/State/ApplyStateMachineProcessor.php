@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\State;
+namespace Sylius\Component\Resource\Symfony\Workflow\State;
 
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;

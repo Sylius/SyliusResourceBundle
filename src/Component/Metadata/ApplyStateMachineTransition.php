@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
-use Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor;
+use Sylius\Component\Resource\Symfony\Workflow\State\ApplyStateMachineProcessor;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface

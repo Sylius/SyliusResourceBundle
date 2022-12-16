@@ -31,7 +31,7 @@
             <tag name="sylius.state_processor" priority="-100" />
         </service>
 
-        <service id="Sylius\Component\Resource\Symfony\State\ApplyStateMachineProcessor">
+        <service id="Sylius\Component\Resource\Symfony\Workflow\State\ApplyStateMachineProcessor">
             <argument type="service" id="Sylius\Component\Resource\StateMachine\OperationStateMachineInterface" />
             <argument type="service" id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" on-invalid="null" />
             <tag name="sylius.state_processor" priority="-100" />
