@@ -31,6 +31,12 @@
             </errorLevel>
         </ArgumentTypeCoercion>
 
+        <DeprecatedClass>
+            <errorLevel type="info">
+                <referencedClass name="Doctrine\ORM\Event\LifecycleEventArgs" /> <!-- deprecated in doctrine/orm 2.14 -->
+            </errorLevel>
+        </DeprecatedClass>
+
         <DeprecatedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\EventDispatcher\Event::isPropagationStopped" />
