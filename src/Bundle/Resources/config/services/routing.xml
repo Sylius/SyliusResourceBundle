@@ -29,14 +29,26 @@
             <argument type="service" id="sylius.routing.loader.resource" />
             <tag name="routing.route_loader" />
         </service>
-        <service id="sylius.routing.loader.crud_routes_attributes" alias="Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader" public="false" />
+
+        <service id="sylius.routing.loader.crud_routes_attributes" class="Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader" public="false">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="sylius.routing.loader.resource" />
+            <tag name="routing.route_loader" />
+            <deprecated package="sylius/resource-bundle" version="1.10">The "%service_id%" service is deprecated since Sylius Resource 1.10 and will be removed in 2.0. Use Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader instead.</deprecated>
+        </service>
 
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" public="false">
             <argument>%sylius.resource.mapping%</argument>
             <argument type="service" id="sylius.routing.factory.route_attributes" />
             <tag name="routing.route_loader" />
         </service>
-        <service id="sylius.routing.loader.routes_attributes" alias="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" public="false" />
+
+        <service id="sylius.routing.loader.routes_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" public="false">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="sylius.routing.factory.route_attributes" />
+            <tag name="routing.route_loader" />
+            <deprecated package="sylius/resource-bundle" version="1.10">The "%service_id%" service is deprecated since Sylius Resource 1.10 and will be removed in 2.0. Use Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader instead.</deprecated>
+        </service>
 
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
