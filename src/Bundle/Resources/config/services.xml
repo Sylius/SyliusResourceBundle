@@ -37,20 +37,20 @@
         <service id="sylius.resource_registry" class="Sylius\Component\Resource\Metadata\Registry" public="false" />
         <service id="Sylius\Component\Resource\Metadata\RegistryInterface" alias="sylius.resource_registry" public="false" />
 
-        <service id="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
-        <service id="sylius.expression_language" alias="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
+        <service id="sylius.expression_language" class="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" alias="sylius.expression_language" public="false" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension">
+        <service id="sylius.form.extension.type.collection" class="Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension">
             <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\CollectionType" />
         </service>
-        <service id="sylius.form.extension.type.collection" alias="Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension" />
+        <service id="Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension" alias="sylius.form.extension.type.collection" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType" class="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType">
+        <service id="sylius.form.type.default" class="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.registry.form_builder" />
             <tag name="form.type" />
         </service>
-        <service id="sylius.form.type.default" alias="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType" />
+        <service id="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType" alias="sylius.form.type.default" />
 
         <service id="sylius.registry.resource_repository" class="Sylius\Component\Registry\ServiceRegistry" public="false">
             <argument>Sylius\Component\Resource\Repository\RepositoryInterface</argument>
