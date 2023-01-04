@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### v1.10.2 (2023-01-04)
+
+#### Details
+
+- [#510](https://github.com/Sylius/SyliusResourceBundle/issues/510) Fix declaring repository on resource when it is a service entity repository ([@loic425](https://github.com/loic425))
+- [#530](https://github.com/Sylius/SyliusResourceBundle/issues/530) [DOCS] Change configuration to correct one ([@arti0090](https://github.com/arti0090))
+- [#549](https://github.com/Sylius/SyliusResourceBundle/issues/549) Hotfix for Attributes routing system ([@loic425](https://github.com/loic425))
+- [#550](https://github.com/Sylius/SyliusResourceBundle/issues/550) Fix build on 1.10 ([@loic425](https://github.com/loic425))
+- [#551](https://github.com/Sylius/SyliusResourceBundle/issues/551) Flip back service ids and FQCN ([@loic425](https://github.com/loic425))
+
 ### v1.10.1 (2022-12-05)
 
 #### Details
