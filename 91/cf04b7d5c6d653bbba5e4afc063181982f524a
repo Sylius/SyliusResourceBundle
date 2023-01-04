@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+
+by loic425 at 2023-01-03T14:37:56Z
+
+@mbabker During internal discussions, we suggest to duplicate the services (both with IDs and FQCN) and adding deprecations to the IDs ones. WDYT?
+
+---------------------------------------------------------------------------
+
+by loic425 at 2023-01-03T14:40:12Z
+
+@mbabker Exactly what I did here for only 2 services for now #549
+
+---------------------------------------------------------------------------
+
+by mbabker at 2023-01-03T14:42:34Z
+
+I think that'd be a little overkill.  At that point, you have two independent services and an asinine number of logged container deprecations that you can't do anything about.
+
+The closest that Symfony suggests to a naming convention for service IDs in bundles in the [best practices](https://symfony.com/doc/current/bundles/best_practices.html#services) is prefixing service IDs.  That to me implies that it's better for bundles to not use FQCN's as service IDs, and to purposefully create aliases for the FQCN of interfaces that a service defines where it's feasible.
+
+---------------------------------------------------------------------------
+
+by GSadee at 2023-01-04T13:55:30Z
+
+Thank you, Loïc! :1st_place_medal:
