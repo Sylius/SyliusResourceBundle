@@ -15,26 +15,26 @@
     <services>
         <defaults public="true" />
 
-        <service id="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider">
+        <service id="sylius.translation_locale_provider.immutable" class="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider">
             <argument type="collection">
                 <argument>%locale%</argument>
             </argument>
             <argument>%locale%</argument>
         </service>
-        <service id="sylius.translation_locale_provider.immutable" alias="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider" />
+        <service id="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider" alias="sylius.translation_locale_provider.immutable" />
 
-        <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener">
+        <service id="sylius.translation.translatable_listener.doctrine.orm" class="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.translatable_entity_locale_assigner" />
             <tag name="doctrine.event_subscriber" connection="default" priority="99" />
         </service>
-        <service id="sylius.translation.translatable_listener.doctrine.orm" alias="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener" />
+        <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener" alias="sylius.translation.translatable_listener.doctrine.orm" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType">
+        <service id="sylius.form.type.resource_translations" class="Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType">
             <argument type="service" id="sylius.translation_locale_provider" />
             <tag name="form.type" />
         </service>
-        <service id="sylius.form.type.resource_translations" alias="Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType" />
+        <service id="Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType" alias="sylius.form.type.resource_translations" />
 
         <service id="sylius.translatable_entity_locale_assigner" class="Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner">
             <argument type="service" id="sylius.translation_locale_provider" />

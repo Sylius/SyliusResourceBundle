@@ -34,8 +34,8 @@
         <service id="sylius.resource_controller.single_resource_provider" class="Sylius\Bundle\ResourceBundle\Controller\SingleResourceProvider" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface" alias="sylius.resource_controller.single_resource_provider" public="false" />
 
-        <service id="Hateoas\Representation\Factory\PagerfantaFactory" public="false" />
-        <service id="sylius.resource_controller.pagerfanta_representation_factory" alias="Hateoas\Representation\Factory\PagerfantaFactory" public="false" />
+        <service id="sylius.resource_controller.pagerfanta_representation_factory" class="Hateoas\Representation\Factory\PagerfantaFactory" public="false" />
+        <service id="Hateoas\Representation\Factory\PagerfantaFactory" alias="sylius.resource_controller.pagerfanta_representation_factory" public="false" />
 
         <service id="sylius.resource_controller.resources_resolver" class="Sylius\Bundle\ResourceBundle\Controller\ResourcesResolver" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface" alias="sylius.resource_controller.resources_resolver" public="false" />
@@ -56,8 +56,8 @@
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface" alias="sylius.resource_controller.redirect_handler" public="false" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker" public="false" />
-        <service id="sylius.resource_controller.authorization_checker.disabled" alias="Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker" public="false" />
+        <service id="sylius.resource_controller.authorization_checker.disabled" class="Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker" public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker" alias="sylius.resource_controller.authorization_checker.disabled" public="false" />
 
         <service id="sylius.resource_controller.flash_helper" class="Sylius\Bundle\ResourceBundle\Controller\FlashHelper" public="false">
             <argument type="service" id="request_stack" />
