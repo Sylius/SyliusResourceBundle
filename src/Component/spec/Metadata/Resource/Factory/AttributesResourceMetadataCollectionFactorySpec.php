@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
@@ -141,6 +142,10 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            throw new SkippingException();
+        }
+
         $metadataCollection = $this->create(DummyResourceWithSectionsAndNestedOperations::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
