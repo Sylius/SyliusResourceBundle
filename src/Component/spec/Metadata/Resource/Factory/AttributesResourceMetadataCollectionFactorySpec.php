@@ -142,7 +142,7 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(): void
     {
-        if (PHP_VERSION_ID < 80100) {
+        if (\PHP_VERSION_ID < 80100) {
             throw new SkippingException();
         }
 
