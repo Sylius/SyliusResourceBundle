@@ -37,6 +37,8 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
     /**
      * @param \ReflectionAttribute[] $attributes
+     *
+     * @return ResourceMetadata[]
      */
     private function buildResourceOperations(array $attributes, string $resourceClass): array
     {
