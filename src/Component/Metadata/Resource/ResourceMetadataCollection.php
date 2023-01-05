@@ -29,6 +29,10 @@ final class ResourceMetadataCollection extends \ArrayObject
             return $current->getOperations()?->get($name);
         }
 
-        return null;
+        throw new \RuntimeException(sprintf(
+            'Operation "%" for "%s" resource was not found.',
+            $resourceAlias,
+            $name,
+        ));
     }
 }
