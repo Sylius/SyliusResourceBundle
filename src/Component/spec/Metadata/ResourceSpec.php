@@ -21,6 +21,11 @@ use Sylius\Component\Resource\Metadata\Update;
 
 final class ResourceSpec extends ObjectBehavior
 {
+    function let(): void
+    {
+        $this->beConstructedWith('app.book');
+    }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(Resource::class);
@@ -102,21 +107,21 @@ final class ResourceSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_a_section(): void
     {
-        $this->beConstructedWith('app.book', 'admin');
+        $this->beConstructedWith(null, 'admin');
 
         $this->getSection()->shouldReturn('admin');
     }
 
     function it_can_be_constructed_with_a_name(): void
     {
-        $this->beConstructedWith('app.book', null, 'book');
+        $this->beConstructedWith(null, null, 'book');
 
         $this->getName()->shouldReturn('book');
     }
 
     function it_can_be_constructed_with_an_application_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, 'app');
+        $this->beConstructedWith(null, null, null, 'app');
 
         $this->getApplicationName()->shouldReturn('app');
     }
