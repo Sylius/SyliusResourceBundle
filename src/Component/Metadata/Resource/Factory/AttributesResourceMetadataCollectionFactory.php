@@ -50,9 +50,9 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 /** @var ResourceMetadata $resource */
                 $resource = $attribute->newInstance();
                 $resources[++$index] = $resource;
-
                 $operations = [];
 
+                /** @var Operation $operation */
                 foreach ($resource->getOperations() ?? new Operations() as $operation) {
                     [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operation);
                     $operations[$key] = $operation;
