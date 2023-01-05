@@ -18,7 +18,6 @@ use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
-use Webmozart\Assert\Assert;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
@@ -52,10 +51,23 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 $resource = $attribute->newInstance();
                 $resources[++$index] = $resource;
 
+                $operations = [];
+
+                foreach ($resource->getOperations() ?? new Operations() as $operation) {
+                    [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operation);
+                    $operations[$key] = $operation;
+                }
+
+                if ($operations) {
+                    $resources[$index] = $resources[$index]->withOperations(new Operations($operations));
+                }
+
                 continue;
             }
 
-            Assert::notNull($resources[$index] ?? null, 'No Resource attribute was found');
+            if (null === ($resources[$index] ?? null)) {
+                throw new \RuntimeException(sprintf('No Resource attribute was found on %s', $resourceClass));
+            }
 
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
                 continue;
@@ -78,6 +90,11 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     private function getOperationWithDefaults(ResourceMetadata $resource, Operation $operation): array
     {
         $operationName = $operation->getName();
+
+        if (null !== $section = $resource->getSection()) {
+            $operationName = $section . '_' . $operationName;
+            $operation = $operation->withName($operationName);
+        }
 
         return [$operationName, $operation];
     }

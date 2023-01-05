@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource;
@@ -21,8 +22,11 @@ use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetada
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
+use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
 
 class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {
@@ -94,5 +98,90 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('show');
         $operation->getMethods()->shouldReturn(['GET']);
+    }
+
+    function it_creates_multi_resources_metadata_with_sections(): void
+    {
+        $metadataCollection = $this->create(DummyResourceWithSections::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $metadataCollection->count()->shouldReturn(2);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('admin_index')->shouldReturn(true);
+        $operations->has('admin_create')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'admin_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('admin_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'admin_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getName()->shouldReturn('admin_create');
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'shop_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('shop_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'shop_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getName()->shouldReturn('shop_show');
+        $operation->getMethods()->shouldReturn(['GET']);
+    }
+
+    function it_creates_multi_resources_metadata_with_sections_and_nested_operations(): void
+    {
+        $metadataCollection = $this->create(DummyResourceWithSectionsAndNestedOperations::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $metadataCollection->count()->shouldReturn(2);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('admin_index')->shouldReturn(true);
+        $operations->has('admin_create')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'admin_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('admin_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'admin_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getName()->shouldReturn('admin_create');
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'shop_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('shop_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'shop_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getName()->shouldReturn('shop_show');
+        $operation->getMethods()->shouldReturn(['GET']);
+    }
+
+    function it_throws_a_runtime_exception_when_no_resource_attribute_was_found(): void
+    {
+        $this->shouldThrow(new \RuntimeException(sprintf('No Resource attribute was found on %s', DummyOperationsWithoutResource::class)))
+            ->during('create', [DummyOperationsWithoutResource::class])
+        ;
     }
 }
