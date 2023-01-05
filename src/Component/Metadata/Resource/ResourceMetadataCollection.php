@@ -22,15 +22,18 @@ final class ResourceMetadataCollection extends \ArrayObject
     {
         /** @var ResourceMetadata $current */
         foreach ($this->getIterator() as $current) {
-            if ($current->getAlias() !== $resourceAlias) {
+            if (
+                $current->getAlias() !== $resourceAlias ||
+                null === $operation = $current->getOperations()?->get($name)
+            ) {
                 continue;
             }
 
-            return $current->getOperations()?->get($name);
+            return $operation;
         }
 
         throw new \RuntimeException(sprintf(
-            'Operation "%" for "%s" resource was not found.',
+            'Operation "%s" for "%s" resource was not found.',
             $resourceAlias,
             $name,
         ));
