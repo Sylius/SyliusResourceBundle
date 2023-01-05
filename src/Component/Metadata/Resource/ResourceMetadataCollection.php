@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 
 final class ResourceMetadataCollection extends \ArrayObject
 {
-    public function getOperation(string $resourceAlias, string $name): ?Operation
+    public function getOperation(string $resourceAlias, string $name): Operation
     {
         /** @var ResourceMetadata $current */
         foreach ($this->getIterator() as $current) {
