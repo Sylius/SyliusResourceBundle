@@ -143,7 +143,7 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(): void
     {
         if (\PHP_VERSION_ID < 80100) {
-            throw new SkippingException();
+            throw new SkippingException('Nested attributes are supported since PHP 8.1');
         }
 
         $metadataCollection = $this->create(DummyResourceWithSectionsAndNestedOperations::class);
