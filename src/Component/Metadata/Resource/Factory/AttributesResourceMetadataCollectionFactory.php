@@ -92,8 +92,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         $operationName = $operation->getName();
 
         if (null !== $section = $resource->getSection()) {
-            $operationName = $section . '_' . $operationName;
-            $operation = $operation->withName($operationName);
+            $operation = $operation->withSection($section);
         }
 
         return [$operationName, $operation];

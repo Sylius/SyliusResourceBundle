@@ -18,13 +18,14 @@ use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 
 final class ResourceMetadataCollection extends \ArrayObject
 {
-    public function getOperation(string $resourceAlias, string $name): Operation
+    public function getOperation(string $resourceAlias, string $name, ?string $section = null): Operation
     {
         /** @var ResourceMetadata $current */
         foreach ($this->getIterator() as $current) {
             if (
                 $current->getAlias() !== $resourceAlias ||
-                null === $operation = $current->getOperations()?->get($name)
+                $section !== $current->getSection() ||
+                null === ($operation = $current->getOperations()?->get($name))
             ) {
                 continue;
             }
