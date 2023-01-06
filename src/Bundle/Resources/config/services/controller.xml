@@ -21,7 +21,7 @@
         </service>
         <service id="sylius.resource_controller.request_configuration_factory" class="Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory" public="false">
             <argument type="service" id="sylius.resource_controller.parameters_parser" />
-            <argument>Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration</argument>
+            <argument>Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration</argument>
             <argument>%sylius.resource.settings%</argument>
         </service>
         <service id="sylius.resource_controller.new_resource_factory" class="Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory" public="false" />
