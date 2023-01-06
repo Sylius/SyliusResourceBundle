@@ -116,27 +116,27 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $operations->shouldHaveType(Operations::class);
 
         $operations->count()->shouldReturn(2);
-        $operations->has('admin_index')->shouldReturn(true);
-        $operations->has('admin_create')->shouldReturn(true);
+        $operations->has('index')->shouldReturn(true);
+        $operations->has('create')->shouldReturn(true);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'admin_index');
+        $operation = $metadataCollection->getOperation('app.dummy', 'index', 'admin');
         $operation->shouldHaveType(Index::class);
-        $operation->getName()->shouldReturn('admin_index');
+        $operation->getName()->shouldReturn('index');
         $operation->getMethods()->shouldReturn(['GET']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'admin_create');
+        $operation = $metadataCollection->getOperation('app.dummy', 'create', 'admin');
         $operation->shouldHaveType(Create::class);
-        $operation->getName()->shouldReturn('admin_create');
+        $operation->getName()->shouldReturn('create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'shop_index');
+        $operation = $metadataCollection->getOperation('app.dummy', 'index', 'shop');
         $operation->shouldHaveType(Index::class);
-        $operation->getName()->shouldReturn('shop_index');
+        $operation->getName()->shouldReturn('index');
         $operation->getMethods()->shouldReturn(['GET']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'shop_show');
+        $operation = $metadataCollection->getOperation('app.dummy', 'show', 'shop');
         $operation->shouldHaveType(Show::class);
-        $operation->getName()->shouldReturn('shop_show');
+        $operation->getName()->shouldReturn('show');
         $operation->getMethods()->shouldReturn(['GET']);
     }
 
@@ -159,27 +159,27 @@ class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $operations->shouldHaveType(Operations::class);
 
         $operations->count()->shouldReturn(2);
-        $operations->has('admin_index')->shouldReturn(true);
-        $operations->has('admin_create')->shouldReturn(true);
+        $operations->has('index')->shouldReturn(true);
+        $operations->has('create')->shouldReturn(true);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'admin_index');
+        $operation = $metadataCollection->getOperation('app.dummy', 'index', 'admin');
         $operation->shouldHaveType(Index::class);
-        $operation->getName()->shouldReturn('admin_index');
+        $operation->getName()->shouldReturn('index');
         $operation->getMethods()->shouldReturn(['GET']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'admin_create');
+        $operation = $metadataCollection->getOperation('app.dummy', 'create', 'admin');
         $operation->shouldHaveType(Create::class);
-        $operation->getName()->shouldReturn('admin_create');
+        $operation->getName()->shouldReturn('create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'shop_index');
+        $operation = $metadataCollection->getOperation('app.dummy', 'index', 'shop');
         $operation->shouldHaveType(Index::class);
-        $operation->getName()->shouldReturn('shop_index');
+        $operation->getName()->shouldReturn('index');
         $operation->getMethods()->shouldReturn(['GET']);
 
-        $operation = $metadataCollection->getOperation('app.dummy', 'shop_show');
+        $operation = $metadataCollection->getOperation('app.dummy', 'show', 'shop');
         $operation->shouldHaveType(Show::class);
-        $operation->getName()->shouldReturn('shop_show');
+        $operation->getName()->shouldReturn('show');
         $operation->getMethods()->shouldReturn(['GET']);
     }
 
