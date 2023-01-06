@@ -20,6 +20,9 @@ final class Resource
 
     public function __construct(
         private ?string $alias = null,
+        private ?string $section = null,
+        private ?string $routePrefix = null,
+        private ?string $templatesDir = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
@@ -34,6 +37,45 @@ final class Resource
     {
         $self = clone $this;
         $self->alias = $alias;
+
+        return $self;
+    }
+
+    public function getSection(): ?string
+    {
+        return $this->section;
+    }
+
+    public function withSection(string $section): self
+    {
+        $self = clone $this;
+        $self->section = $section;
+
+        return $self;
+    }
+
+    public function getRoutePrefix(): ?string
+    {
+        return $this->routePrefix;
+    }
+
+    public function withRoutePrefix(string $routePrefix): self
+    {
+        $self = clone $this;
+        $this->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    public function getTemplatesDir(): ?string
+    {
+        return $this->templatesDir;
+    }
+
+    public function withTemplatesDir(string $templatesDir): self
+    {
+        $self = clone $this;
+        $this->templatesDir = $templatesDir;
 
         return $self;
     }

@@ -50,18 +50,11 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 /** @var resource $resource */
                 $resource = $attribute->newInstance();
                 $resources[++$index] = $resource;
-
-                continue;
-            }
-
-            if (is_a($attribute->getName(), Section::class, true)) {
-                /** @var Section $section */
-                $section = $attribute->newInstance();
-
                 $operations = [];
 
-                foreach ($section->getOperations() ?? new Operations() as $operation) {
-                    [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operation, $section);
+                /** @var Operation $operation */
+                foreach ($resource->getOperations() ?? new Operations() as $operation) {
+                    [$key, $operation] = $this->getOperationWithDefaults($resources[$index], $operation);
                     $operations[$key] = $operation;
                 }
 
@@ -70,6 +63,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 }
 
                 continue;
+            }
+
+            if (null === ($resources[$index] ?? null)) {
+                throw new \RuntimeException(sprintf('No Resource attribute was found on %s', $resourceClass));
             }
 
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
@@ -89,21 +86,17 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
-    private function getOperationWithDefaults(Resource $resource, Operation $operation, ?Section $section = null): array
+    private function getOperationWithDefaults(Resource $resource, Operation $operation): array
     {
         $operationName = $operation->getName();
 
-        if (null === $section) {
-            return [$operationName, $operation];
-        }
-
-        if (null === $operation->getSection()) {
-            $operation = $operation->withSection($section->getName());
+        if (null !== $section = $resource->getSection()) {
+            $operation = $operation->withSection($section);
         }
 
         if (
             null === $operation->getTemplate() &&
-            null !== $templateDir = $section->getTemplatesDir()
+            null !== $templateDir = $resource->getTemplatesDir()
         ) {
             $operation = $operation->withTemplate(sprintf('%s/%s.html.twig', $templateDir, $operation->getName() ?? ''));
         }
@@ -114,9 +107,9 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
         if (
             null === $operation->getRoutePrefix() &&
-            null !== $sectionRoutePrefix = $section->getRoutePrefix()
+            null !== $routePrefix = $resource->getRoutePrefix()
         ) {
-            $operation = $operation->withRoutePrefix($sectionRoutePrefix);
+            $operation = $operation->withRoutePrefix($routePrefix);
         }
 
         return [$operationName, $operation];
