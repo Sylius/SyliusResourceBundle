@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Hateoas\Configuration\Route;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Pagerfanta\Pagerfanta;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
@@ -34,7 +35,7 @@ final class ResourcesCollectionProvider implements ResourcesCollectionProviderIn
     /**
      * @psalm-suppress MissingReturnType
      */
-    public function get(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)
+    public function get(ComponentRequestConfiguration $requestConfiguration, RepositoryInterface $repository)
     {
         $resources = $this->resourcesResolver->getResources($requestConfiguration, $repository);
         $paginationLimits = [];

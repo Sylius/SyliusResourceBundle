@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 interface ResourcesResolverInterface
 {
     /** @psalm-suppress MissingReturnType */
-    public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository);
+    public function getResources(ComponentRequestConfiguration $requestConfiguration, RepositoryInterface $repository);
 }
