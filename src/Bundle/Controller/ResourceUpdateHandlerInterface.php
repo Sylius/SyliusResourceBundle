@@ -15,12 +15,13 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 interface ResourceUpdateHandlerInterface
 {
     public function handle(
         ResourceInterface $resource,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ObjectManager $manager,
     ): void;
 }

@@ -15,10 +15,11 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 final class SingleResourceProvider implements SingleResourceProviderInterface
 {
-    public function get(RequestConfiguration $requestConfiguration, RepositoryInterface $repository): ?ResourceInterface
+    public function get(ComponentRequestConfiguration $requestConfiguration, RepositoryInterface $repository): ?ResourceInterface
     {
         $method = $requestConfiguration->getRepositoryMethod();
         if (null !== $method) {

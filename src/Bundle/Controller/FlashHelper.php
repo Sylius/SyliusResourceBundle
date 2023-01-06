@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -58,24 +59,24 @@ final class FlashHelper implements FlashHelperInterface
     }
 
     public function addSuccessFlash(
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         string $actionName,
         ?ResourceInterface $resource = null,
     ): void {
         $this->addFlashWithType($requestConfiguration, $actionName, 'success');
     }
 
-    public function addErrorFlash(RequestConfiguration $requestConfiguration, string $actionName): void
+    public function addErrorFlash(ComponentRequestConfiguration $requestConfiguration, string $actionName): void
     {
         $this->addFlashWithType($requestConfiguration, $actionName, 'error');
     }
 
-    public function addFlashFromEvent(RequestConfiguration $requestConfiguration, ResourceControllerEvent $event): void
+    public function addFlashFromEvent(ComponentRequestConfiguration $requestConfiguration, ResourceControllerEvent $event): void
     {
         $this->addFlash($event->getMessageType(), $event->getMessage(), $event->getMessageParameters());
     }
 
-    private function addFlashWithType(RequestConfiguration $requestConfiguration, string $actionName, string $type): void
+    private function addFlashWithType(ComponentRequestConfiguration $requestConfiguration, string $actionName, string $type): void
     {
         $metadata = $requestConfiguration->getMetadata();
         $parameters = $this->getParametersWithName($metadata, $actionName);

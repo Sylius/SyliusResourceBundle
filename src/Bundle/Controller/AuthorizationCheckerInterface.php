@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
+
 interface AuthorizationCheckerInterface
 {
     /**
@@ -25,5 +27,5 @@ interface AuthorizationCheckerInterface
      * - delete
      * - custom_action
      */
-    public function isGranted(RequestConfiguration $configuration, string $permission): bool;
+    public function isGranted(ComponentRequestConfiguration $configuration, string $permission): bool;
 }

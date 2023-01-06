@@ -15,16 +15,17 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 interface FlashHelperInterface
 {
     public function addSuccessFlash(
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         string $actionName,
         ?ResourceInterface $resource = null,
     ): void;
 
-    public function addErrorFlash(RequestConfiguration $requestConfiguration, string $actionName): void;
+    public function addErrorFlash(ComponentRequestConfiguration $requestConfiguration, string $actionName): void;
 
-    public function addFlashFromEvent(RequestConfiguration $requestConfiguration, ResourceControllerEvent $event): void;
+    public function addFlashFromEvent(ComponentRequestConfiguration $requestConfiguration, ResourceControllerEvent $event): void;
 }

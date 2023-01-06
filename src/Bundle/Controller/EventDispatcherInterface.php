@@ -15,37 +15,38 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 interface EventDispatcherInterface
 {
     public function dispatch(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     /** @param mixed $resources */
     public function dispatchMultiple(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         $resources,
     ): ResourceControllerEvent;
 
     public function dispatchPreEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     public function dispatchPostEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent;
 
     public function dispatchInitializeEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent;
 }

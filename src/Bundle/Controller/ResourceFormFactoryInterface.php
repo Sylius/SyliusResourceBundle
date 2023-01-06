@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\Form\FormInterface;
 
 interface ResourceFormFactoryInterface
 {
-    public function create(RequestConfiguration $requestConfiguration, ResourceInterface $resource): FormInterface;
+    public function create(ComponentRequestConfiguration $requestConfiguration, ResourceInterface $resource): FormInterface;
 }

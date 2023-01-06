@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 interface RedirectHandlerInterface
 {
-    public function redirectToResource(RequestConfiguration $configuration, ResourceInterface $resource): Response;
+    public function redirectToResource(ComponentRequestConfiguration $configuration, ResourceInterface $resource): Response;
 
-    public function redirectToIndex(RequestConfiguration $configuration, ?ResourceInterface $resource = null): Response;
+    public function redirectToIndex(ComponentRequestConfiguration $configuration, ?ResourceInterface $resource = null): Response;
 
-    public function redirectToRoute(RequestConfiguration $configuration, string $route, array $parameters = []): Response;
+    public function redirectToRoute(ComponentRequestConfiguration $configuration, string $route, array $parameters = []): Response;
 
-    public function redirect(RequestConfiguration $configuration, string $url, int $status = 302): Response;
+    public function redirect(ComponentRequestConfiguration $configuration, string $url, int $status = 302): Response;
 
-    public function redirectToReferer(RequestConfiguration $configuration): Response;
+    public function redirectToReferer(ComponentRequestConfiguration $configuration): Response;
 }

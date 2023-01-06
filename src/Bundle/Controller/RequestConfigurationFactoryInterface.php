@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\Request;
 
 interface RequestConfigurationFactoryInterface
@@ -21,5 +22,5 @@ interface RequestConfigurationFactoryInterface
     /**
      * @throws \InvalidArgumentException
      */
-    public function create(MetadataInterface $metadata, Request $request): RequestConfiguration;
+    public function create(MetadataInterface $metadata, Request $request): ComponentRequestConfiguration;
 }

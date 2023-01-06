@@ -15,8 +15,9 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 interface NewResourceFactoryInterface
 {
-    public function create(RequestConfiguration $requestConfiguration, FactoryInterface $factory): ResourceInterface;
+    public function create(ComponentRequestConfiguration $requestConfiguration, FactoryInterface $factory): ResourceInterface;
 }

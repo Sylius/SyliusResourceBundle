@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use SM\Factory\FactoryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 
 final class StateMachine implements StateMachineInterface
 {
@@ -25,7 +26,7 @@ final class StateMachine implements StateMachineInterface
         $this->stateMachineFactory = $stateMachineFactory;
     }
 
-    public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool
+    public function can(ComponentRequestConfiguration $configuration, ResourceInterface $resource): bool
     {
         if (!$configuration->hasStateMachine()) {
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');
@@ -39,7 +40,7 @@ final class StateMachine implements StateMachineInterface
         return $this->stateMachineFactory->get($resource, $graph)->can($transition);
     }
 
-    public function apply(RequestConfiguration $configuration, ResourceInterface $resource): void
+    public function apply(ComponentRequestConfiguration $configuration, ResourceInterface $resource): void
     {
         if (!$configuration->hasStateMachine()) {
             throw new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.');

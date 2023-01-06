@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use FOS\RestBundle\View\View;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 interface ViewHandlerInterface
 {
-    public function handle(RequestConfiguration $requestConfiguration, View $view): Response;
+    public function handle(ComponentRequestConfiguration $requestConfiguration, View $view): Response;
 }

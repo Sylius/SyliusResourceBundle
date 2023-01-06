@@ -15,7 +15,9 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as SymfonyEventDispatcherInterface;
+
 
 final class EventDispatcher implements EventDispatcherInterface
 {
@@ -28,7 +30,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
     public function dispatch(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
@@ -42,7 +44,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
     public function dispatchMultiple(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         $resources,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
@@ -56,7 +58,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
     public function dispatchPreEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
@@ -70,7 +72,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
     public function dispatchPostEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
@@ -84,7 +86,7 @@ final class EventDispatcher implements EventDispatcherInterface
 
     public function dispatchInitializeEvent(
         string $eventName,
-        RequestConfiguration $requestConfiguration,
+        ComponentRequestConfiguration $requestConfiguration,
         ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;

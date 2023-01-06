@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use FOS\RestBundle\View\ConfigurableViewHandlerInterface;
 use FOS\RestBundle\View\View;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface
@@ -26,7 +27,7 @@ final class ViewHandler implements ViewHandlerInterface
         $this->restViewHandler = $restViewHandler;
     }
 
-    public function handle(RequestConfiguration $requestConfiguration, View $view): Response
+    public function handle(ComponentRequestConfiguration $requestConfiguration, View $view): Response
     {
         if (!$requestConfiguration->isHtmlRequest()) {
             $this->restViewHandler->setExclusionStrategyGroups($requestConfiguration->getSerializationGroups() ?? []);

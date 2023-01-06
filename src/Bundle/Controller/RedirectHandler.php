@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
+use Sylius\Component\Resource\Symfony\HttpFoundation\Request\RequestConfiguration as ComponentRequestConfiguration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -29,7 +30,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         $this->router = $router;
     }
 
-    public function redirectToResource(RequestConfiguration $configuration, ResourceInterface $resource): Response
+    public function redirectToResource(ComponentRequestConfiguration $configuration, ResourceInterface $resource): Response
     {
         try {
             return $this->redirectToRoute(
@@ -46,7 +47,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         }
     }
 
-    public function redirectToIndex(RequestConfiguration $configuration, ?ResourceInterface $resource = null): Response
+    public function redirectToIndex(ComponentRequestConfiguration $configuration, ?ResourceInterface $resource = null): Response
     {
         return $this->redirectToRoute(
             $configuration,
@@ -55,7 +56,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         );
     }
 
-    public function redirectToRoute(RequestConfiguration $configuration, string $route, array $parameters = []): Response
+    public function redirectToRoute(ComponentRequestConfiguration $configuration, string $route, array $parameters = []): Response
     {
         if ('referer' === $route) {
             return $this->redirectToReferer($configuration);
@@ -64,7 +65,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->redirect($configuration, $this->router->generate($route, $parameters));
     }
 
-    public function redirect(RequestConfiguration $configuration, string $url, int $status = 302): Response
+    public function redirect(ComponentRequestConfiguration $configuration, string $url, int $status = 302): Response
     {
         if ($configuration->isHeaderRedirection()) {
             return new Response('', 200, [
@@ -75,7 +76,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return new RedirectResponse($url . $configuration->getRedirectHash(), $status);
     }
 
-    public function redirectToReferer(RequestConfiguration $configuration): Response
+    public function redirectToReferer(ComponentRequestConfiguration $configuration): Response
     {
         return $this->redirect($configuration, (string) $configuration->getRedirectReferer());
     }
