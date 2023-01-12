@@ -31,10 +31,19 @@ final class ResourceMetadataCollection extends \ArrayObject
             }
         }
 
+        if (null === $section)  {
+            throw new \RuntimeException(sprintf(
+                'Operation "%s" for "%s" resource was not found.',
+                $resourceAlias,
+                $name,
+            ));
+        }
+
         throw new \RuntimeException(sprintf(
-            'Operation "%s" for "%s" resource was not found.',
+            'Operation "%s" for "%s" resource with section "%s" was not found.',
             $resourceAlias,
             $name,
+            $section,
         ));
     }
 }
