@@ -24,14 +24,10 @@ final class ResourceMetadataCollection extends \ArrayObject
         foreach ($this->getIterator() as $current) {
             if (
                 $current->getAlias() !== $resourceAlias ||
-                $section !== $current->getSection() ||
-                null === ($operation = $current->getOperations()?->get($name))
+                $current->getSection() !== $section ||
             ) {
-                continue;
+                return $operation;
             }
-
-            return $operation;
-        }
 
         throw new \RuntimeException(sprintf(
             'Operation "%s" for "%s" resource was not found.',
