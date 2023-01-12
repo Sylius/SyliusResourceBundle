@@ -80,6 +80,20 @@ final class Resource
         return $self;
     }
 
+    public function hasOperation(string $name): bool
+    {
+        return $this->operations?->has($name) ?? false;
+    }
+
+    public function getOperation(string $name): Operation
+    {
+        if (null === $operations = $this->operations) {
+            throw new \RuntimeException(sprintf('No Operations were found on resource %s"', $this->alias));
+        }
+
+        return $operations->get($name);
+    }
+
     public function getOperations(): ?Operations
     {
         return $this->operations;
