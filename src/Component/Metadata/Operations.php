@@ -41,7 +41,7 @@ final class Operations implements \IteratorAggregate, \Countable
         })();
     }
 
-    public function get(string $key): ?Operation
+    public function get(string $key): Operation
     {
         foreach ($this->operations as [$operationName, $operation]) {
             if ($operationName === $key) {
@@ -49,7 +49,7 @@ final class Operations implements \IteratorAggregate, \Countable
             }
         }
 
-        return null;
+        throw new \RuntimeException(sprintf('No Operation with key "%s" was found', $key));
     }
 
     public function add(string $key, Operation $value): self
