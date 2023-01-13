@@ -201,10 +201,35 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getMethods()->shouldReturn(['GET']);
     }
 
-    function it_throws_a_runtime_exception_when_no_resource_attribute_was_found(): void
+    function it_creates_operations_even_if_there_is_no_resource_attribute(RegistryInterface $resourceRegistry): void
     {
-        $this->shouldThrow(new \RuntimeException(sprintf('No Resource attribute was found on %s', DummyOperationsWithoutResource::class)))
-            ->during('create', [DummyOperationsWithoutResource::class])
-        ;
+        $resourceRegistry->getByClass(DummyOperationsWithoutResource::class)->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+
+        $metadataCollection = $this->create(DummyOperationsWithoutResource::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $metadataCollection->count()->shouldReturn(1);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('app_dummy_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getName()->shouldReturn('app_dummy_create');
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
     }
 }

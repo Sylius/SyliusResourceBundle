@@ -17,6 +17,7 @@ use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
@@ -72,7 +73,9 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             }
 
             if (null === ($resources[$index] ?? null)) {
-                throw new \RuntimeException(sprintf('No Resource attribute was found on %s', $resourceClass));
+                $metadata = $this->resourceRegistry->getByClass($resourceClass);
+
+                $resources[++$index] = new Resource($metadata->getAlias());
             }
 
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
