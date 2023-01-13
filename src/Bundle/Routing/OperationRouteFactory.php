@@ -80,7 +80,6 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return sprintf('%s/{id}', $rootPath);
         }
 
-        return
         throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this operation "%s". Please define a path.', $operation::class));
     }
 
