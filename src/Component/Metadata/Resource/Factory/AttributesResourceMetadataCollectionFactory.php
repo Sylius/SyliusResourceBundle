@@ -13,14 +13,20 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
+use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
+use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
+    public function __construct(private RegistryInterface $resourceRegistry)
+    {
+    }
+
     public function create(string $resourceClass): ResourceMetadataCollection
     {
         $resourceMetadataCollection = new ResourceMetadataCollection();
@@ -89,12 +95,36 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
     private function getOperationWithDefaults(ResourceMetadata $resource, Operation $operation): array
     {
-        $operationName = $operation->getName();
-
         if (null !== $section = $resource->getSection()) {
             $operation = $operation->withSection($section);
         }
 
+        if ($operation instanceof HttpOperation) {
+            if (null === $routeName = $operation->getRouteName()) {
+                $routeName = $this->getDefaultRouteName($resource, $operation);
+                $operation = $operation->withRouteName($routeName);
+            }
+
+            $operation = $operation->withName($routeName);
+        }
+
+        $operationName = $operation->getName();
+
         return [$operationName, $operation];
+    }
+
+    private function getDefaultRouteName(ResourceMetadata $resource, HttpOperation $operation): string
+    {
+        $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+
+        if (null !== $section = $operation->getSection()) {
+            $section = '_' . $section;
+        }
+
+        if (null === $shortName = $operation->getShortName()) {
+            throw new \RuntimeException(sprintf('Operation "%s" should have a short name to build a route name', $operation::class));
+        }
+
+        return sprintf('%s%s_%s_%s', $resourceConfiguration->getApplicationName(), $section ?? '', $resourceConfiguration->getName(), $shortName);
     }
 }

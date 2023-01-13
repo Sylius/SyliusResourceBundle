@@ -18,32 +18,22 @@ use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 
 final class ResourceMetadataCollection extends \ArrayObject
 {
-    public function getOperation(string $resourceAlias, string $name, ?string $section = null): Operation
+    public function getOperation(string $resourceAlias, string $name): Operation
     {
         /** @var ResourceMetadata $current */
         foreach ($this->getIterator() as $current) {
             if (
                 $current->getAlias() === $resourceAlias &&
-                $current->getSection() === $section &&
                 $current->hasOperation($name)
             ) {
                 return $current->getOperation($name);
             }
         }
 
-        if (null === $section) {
-            throw new \RuntimeException(sprintf(
-                'Operation "%s" for "%s" resource was not found.',
-                $resourceAlias,
-                $name,
-            ));
-        }
-
         throw new \RuntimeException(sprintf(
-            'Operation "%s" for "%s" resource with section "%s" was not found.',
+            'Operation "%s" for "%s" resource was not found.',
             $resourceAlias,
             $name,
-            $section,
         ));
     }
 }
