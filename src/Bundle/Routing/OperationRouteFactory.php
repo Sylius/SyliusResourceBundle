@@ -41,7 +41,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         );
     }
 
-    private function getDefaultRoutePath(MetadataInterface $metadata, Operation $operation): string
+    private function getDefaultRoutePath(MetadataInterface $metadata, HttpOperation $operation): string
     {
         return $this->getDefaultRoutePathForOperation($metadata, $operation);
     }
@@ -61,13 +61,13 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         }
 
         if ($operation instanceof CreateOperationInterface) {
-            $path = $shortName === 'create' ? 'new' : $shortName;
+            $path = $shortName === 'create' ? 'new' : $shortName ?? '';
 
             return sprintf('%s/%s', $rootPath, $path);
         }
 
         if ($operation instanceof UpdateOperationInterface) {
-            $path = $shortName === 'update' ? 'edit' : $shortName;
+            $path = $shortName === 'update' ? 'edit' : $shortName ?? '';
 
             return sprintf('%s/{id}/%s', $rootPath, $path);
         }
