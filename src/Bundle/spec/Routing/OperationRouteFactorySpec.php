@@ -141,7 +141,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getDefaults()->shouldReturn([
             '_sylius' => [
                 'resource' => 'app.dummy',
-                'template' => 'dummy/show.html.twig'
+                'template' => 'dummy/show.html.twig',
             ],
         ]);
     }
@@ -161,10 +161,11 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getDefaults()->shouldReturn([
             '_sylius' => [
                 'resource' => 'app.dummy',
-                'section' => 'admin'
+                'section' => 'admin',
             ],
         ]);
     }
+
     function it_generates_custom_operations_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);

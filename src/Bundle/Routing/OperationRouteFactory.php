@@ -17,7 +17,6 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Symfony\Component\Routing\Route;
