@@ -126,46 +126,6 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_generates_routes_with_templates(): void
-    {
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
-
-        $route = $this->create(
-            $metadata,
-            new Resource('app.dummy'),
-            new Show(template: 'dummy/show.html.twig'),
-        );
-
-        $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['GET']);
-        $route->getDefaults()->shouldReturn([
-            '_sylius' => [
-                'resource' => 'app.dummy',
-                'template' => 'dummy/show.html.twig',
-            ],
-        ]);
-    }
-
-    function it_generates_routes_with_section(): void
-    {
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
-
-        $route = $this->create(
-            $metadata,
-            new Resource('app.dummy'),
-            new Show(section: 'admin'),
-        );
-
-        $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['GET']);
-        $route->getDefaults()->shouldReturn([
-            '_sylius' => [
-                'resource' => 'app.dummy',
-                'section' => 'admin',
-            ],
-        ]);
-    }
-
     function it_generates_custom_operations_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);

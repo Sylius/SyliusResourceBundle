@@ -84,16 +84,6 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 
     private function getSyliusOptions(Resource $resource, HttpOperation $operation): array
     {
-        $syliusOptions = ['resource' => $resource->getAlias()];
-
-        if (null !== $template = $operation->getTemplate()) {
-            $syliusOptions['template'] = $template;
-        }
-
-        if (null !== $section = $operation->getSection()) {
-            $syliusOptions['section'] = $section;
-        }
-
-        return $syliusOptions;
+        return ['resource' => $resource->getAlias()];
     }
 }
