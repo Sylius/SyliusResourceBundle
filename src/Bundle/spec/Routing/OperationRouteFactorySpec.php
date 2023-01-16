@@ -145,6 +145,20 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_throws_an_exception_when_operation_does_not_have_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $this->shouldThrow(new \InvalidArgumentException(sprintf('Operation "%s" should have a short name. Please define one.', HttpOperation::class)))->during(
+            'create',
+            [
+                $metadata,
+                new Resource('app.dummy'),
+                new HttpOperation(),
+            ],
+        );
+    }
+
     function it_throws_an_exception_when_operation_does_not_have_path(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -154,7 +168,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             [
                 $metadata,
                 new Resource('app.dummy'),
-                new HttpOperation(),
+                new HttpOperation(shortName: 'custom'),
             ],
         );
     }

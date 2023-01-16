@@ -53,20 +53,22 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return $path;
         }
 
-        $shortName = $operation->getShortName();
+        if (null === $shortName = $operation->getShortName()) {
+            throw new \InvalidArgumentException(sprintf('Operation "%s" should have a short name. Please define one.', $operation::class));
+        }
 
         if ('index' === $shortName) {
             return sprintf('%s', $rootPath);
         }
 
         if ($operation instanceof CreateOperationInterface) {
-            $path = $shortName === 'create' ? 'new' : $shortName ?? '';
+            $path = $shortName === 'create' ? 'new' : $shortName;
 
             return sprintf('%s/%s', $rootPath, $path);
         }
 
         if ($operation instanceof UpdateOperationInterface) {
-            $path = $shortName === 'update' ? 'edit' : $shortName ?? '';
+            $path = $shortName === 'update' ? 'edit' : $shortName;
 
             return sprintf('%s/{id}/%s', $rootPath, $path);
         }
