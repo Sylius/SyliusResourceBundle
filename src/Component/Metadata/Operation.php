@@ -18,10 +18,20 @@ namespace Sylius\Component\Resource\Metadata;
  */
 abstract class Operation
 {
+    /** @var string|callable|null */
+    protected $provider;
+
+    /** @var string|callable|null */
+    protected $processor;
+
     public function __construct(
         protected ?string $name = null,
         protected ?string $template = null,
+        string|callable|null $provider = null,
+        string|callable|null $processor = null,
     ) {
+        $this->provider = $provider;
+        $this->processor = $processor;
     }
 
     public function getName(): ?string
@@ -46,6 +56,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->template = $template;
+
+        return $self;
+    }
+
+    public function getProvider(): callable|string|null
+    {
+        return $this->provider;
+    }
+
+    public function withProvider(string|callable|null $provider): self
+    {
+        $self = clone $this;
+        $self->provider = $provider;
+
+        return $self;
+    }
+
+    public function getProcessor(): callable|string|null
+    {
+        return $this->processor;
+    }
+
+    public function withProcessor(string|callable|null $processor): self
+    {
+        $self = clone $this;
+        $self->processor = $processor;
 
         return $self;
     }
