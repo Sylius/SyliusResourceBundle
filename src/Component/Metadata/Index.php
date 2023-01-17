@@ -25,6 +25,8 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?string $routePrefix = null,
         ?string $name = null,
         ?string $template = null,
+        string|callable|null $provider = null,
+        string|callable|null $processor = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -32,6 +34,8 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             routePrefix: $routePrefix,
             name: $name ?? 'index',
             template: $template,
+            provider: $provider,
+            processor: $processor,
         );
     }
 }

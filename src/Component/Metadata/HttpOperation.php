@@ -24,10 +24,14 @@ class HttpOperation extends Operation
         protected ?string $routePrefix = null,
         ?string $name = null,
         ?string $template = null,
+        string|callable|null $provider = null,
+        string|callable|null $processor = null,
     ) {
         parent::__construct(
             name: $name,
             template: $template,
+            provider: $provider,
+            processor: $processor,
         );
     }
 
