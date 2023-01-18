@@ -15,14 +15,14 @@
     <services>
         <defaults public="true" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Storage\SessionStorage">
+        <service id="sylius.storage.session" class="Sylius\Bundle\ResourceBundle\Storage\SessionStorage">
             <argument type="service" id="request_stack" />
         </service>
-        <service id="sylius.storage.session" alias="Sylius\Bundle\ResourceBundle\Storage\SessionStorage" />
+        <service id="Sylius\Bundle\ResourceBundle\Storage\SessionStorage" alias="sylius.storage.session" />
 
-        <service id="Sylius\Bundle\ResourceBundle\Storage\CookieStorage">
+        <service id="sylius.storage.cookie" class="Sylius\Bundle\ResourceBundle\Storage\CookieStorage">
             <tag name="kernel.event_subscriber" />
         </service>
-        <service id="sylius.storage.cookie" alias="Sylius\Bundle\ResourceBundle\Storage\CookieStorage" />
+        <service id="Sylius\Bundle\ResourceBundle\Storage\CookieStorage" alias="sylius.storage.cookie" />
     </services>
 </container>
