@@ -28,10 +28,13 @@ final class HttpOperationInitiator
 
     public function initializeOperation(Request $request): ?HttpOperation
     {
+        /** @var string|null $operationName */
+        $operationName = $request->attributes->get('_route');
+
         if (
             [] === ($attributes = $request->attributes->all('_sylius')) ||
             null === ($resource = $attributes['resource'] ?? null) ||
-            null === ($operationName = $request->attributes->get('_route'))
+            null === $operationName
         ) {
             return null;
         }
