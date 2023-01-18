@@ -34,11 +34,22 @@
         <service id="sylius.routing.loader.routes_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" public="false">
             <argument>%sylius.resource.mapping%</argument>
             <argument type="service" id="sylius.routing.factory.route_attributes" />
+            <argument type="service" id="sylius.routing.factory.attributes_operation_route" />
             <tag name="routing.route_loader" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" alias="sylius.routing.loader.routes_attributes" public="false" />
 
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
+
+        <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory" public="false">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.routing.factory.operation_route" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
+        </service>
+        <service id="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
+
+        <service id="sylius.routing.factory.operation_route" class="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory" public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
     </services>
 </container>
