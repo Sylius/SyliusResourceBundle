@@ -49,11 +49,10 @@ final class HttpOperationInitiatorSpec extends ObjectBehavior
     ): void {
         $request->attributes = $parameterBag;
 
+        $parameterBag->get('_route')->willReturn('app_dummy_index');
         $parameterBag->all('_sylius')->willReturn([
             'resource' => 'app.dummy',
         ]);
-
-        $parameterBag->get('_route')->willReturn('app_dummy_index');
 
         $resourceRegistry->get('app.dummy')->willReturn($metadata);
 
@@ -79,6 +78,7 @@ final class HttpOperationInitiatorSpec extends ObjectBehavior
     ): void {
         $request->attributes = $parameterBag;
 
+        $parameterBag->get('_route')->willReturn('app_dummy_index');
         $parameterBag->all('_sylius')->willReturn([])->shouldBeCalled();
 
         $this->initializeOperation($request)->shouldReturn(null);
@@ -90,6 +90,7 @@ final class HttpOperationInitiatorSpec extends ObjectBehavior
     ): void {
         $request->attributes = $parameterBag;
 
+        $parameterBag->get('_route')->willReturn('app_dummy_index');
         $parameterBag->all('_sylius')->willReturn([
             'foo' => 'bar',
         ])->shouldBeCalled();
