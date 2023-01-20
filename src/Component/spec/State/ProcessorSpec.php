@@ -17,11 +17,11 @@ use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\CallableProcessor;
+use Sylius\Component\Resource\State\Processor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 
-final class CallableProcessorSpec extends ObjectBehavior
+final class ProcessorSpec extends ObjectBehavior
 {
     function let(ContainerInterface $locator): void
     {
@@ -30,7 +30,7 @@ final class CallableProcessorSpec extends ObjectBehavior
 
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(CallableProcessor::class);
+        $this->shouldHaveType(Processor::class);
     }
 
     function it_calls_process_method_from_operation_processor_as_string(
@@ -62,5 +62,20 @@ final class CallableProcessorSpec extends ObjectBehavior
         $context = new Context();
 
         $this->process([], $operation, $context)->shouldReturn(null);
+    }
+
+    function it_throws_an_exception_when_configured_processor_is_not_a_processor_instance(
+        ContainerInterface $locator,
+    ): void {
+        $operation = new Create(processor: '\stdClass');
+        $context = new Context();
+
+        $locator->has('\stdClass')->willReturn(true);
+        $locator->get('\stdClass')->willReturn(new \stdClass());
+
+
+        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Component\Resource\State\ProcessorInterface. Got: stdClass'))
+            ->during('process', [[], $operation, $context])
+        ;
     }
 }
