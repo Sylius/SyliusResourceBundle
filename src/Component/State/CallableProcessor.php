@@ -26,11 +26,11 @@ final class CallableProcessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(mixed $data, Operation $operation, Context $context)
+    public function process(mixed $data, Operation $operation, Context $context): mixed
     {
-        $processor = $operation->getProcessor()
-        
-        if (is_null($processor)) {
+        $processor = $operation->getProcessor();
+
+        if (null === $processor) {
             return null;
         }
 
