@@ -18,6 +18,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
         - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
         - %currentWorkingDirectory%/src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
+        - %currentWorkingDirectory%/src/Bundle/Provider/RequestParameterProvider.php
         - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
