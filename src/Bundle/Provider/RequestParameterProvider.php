@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Provider;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class_exists(\Sylius\Component\Resource\Symfony\Request\RequestParameterProvider::class);
 
 if (false) {
