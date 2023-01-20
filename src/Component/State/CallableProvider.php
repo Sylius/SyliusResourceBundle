@@ -25,10 +25,9 @@ final class CallableProvider implements ProviderInterface
 
     public function provide(Operation $operation, Context $context): object|iterable|null
     {
-        $provider = $operation->getProvider()
-        
-        if (is_null($provider)) {        
-        
+        $provider = $operation->getProvider();
+
+        if (null === $provider) {
             return null;
         }
 
