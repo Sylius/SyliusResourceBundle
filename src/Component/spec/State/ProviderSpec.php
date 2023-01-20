@@ -17,11 +17,11 @@ use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\CallableProvider;
+use Sylius\Component\Resource\State\Provider;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProviderWithCallable;
 
-final class CallableProviderSpec extends ObjectBehavior
+final class ProviderSpec extends ObjectBehavior
 {
     function let(ContainerInterface $locator): void
     {
@@ -30,7 +30,7 @@ final class CallableProviderSpec extends ObjectBehavior
 
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(CallableProvider::class);
+        $this->shouldHaveType(Provider::class);
     }
 
     function it_calls_provide_method_from_operation_provider_as_string(
@@ -62,5 +62,19 @@ final class CallableProviderSpec extends ObjectBehavior
         $context = new Context();
 
         $this->provide($operation, $context)->shouldReturn(null);
+    }
+
+    function it_throws_an_exception_when_configured_provider_is_not_a_provider_instance(
+        ContainerInterface $locator,
+    ): void {
+        $operation = new Create(provider: '\stdClass');
+        $context = new Context();
+
+        $locator->has('\stdClass')->willReturn(true);
+        $locator->get('\stdClass')->willReturn(new \stdClass());
+
+        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Component\Resource\State\ProviderInterface. Got: stdClass'))
+            ->during('provide', [$operation, $context])
+        ;
     }
 }
