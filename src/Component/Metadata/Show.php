@@ -25,6 +25,8 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?string $routePrefix = null,
         ?string $name = null,
         ?string $template = null,
+        string|callable|null $provider = null,
+        string|callable|null $processor = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -32,6 +34,8 @@ final class Show extends HttpOperation implements ShowOperationInterface
             routePrefix: $routePrefix,
             name: $name ?? 'show',
             template: $template,
+            provider: $provider,
+            processor: $processor,
         );
     }
 }
