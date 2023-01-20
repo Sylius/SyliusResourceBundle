@@ -25,8 +25,6 @@ interface ProcessorInterface
 {
     /**
      * Handle the state.
-     *
-     * @return mixed
      */
-    public function process(mixed $data, Operation $operation, Context $context);
+    public function process(mixed $data, Operation $operation, Context $context): mixed;
 }
