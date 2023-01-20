@@ -28,7 +28,9 @@ final class CallableProcessor implements ProcessorInterface
      */
     public function process(mixed $data, Operation $operation, Context $context)
     {
-        if (!($processor = $operation->getProcessor())) {
+        $processor = $operation->getProcessor()
+        
+        if (is_null($processor)) {
             return null;
         }
 
