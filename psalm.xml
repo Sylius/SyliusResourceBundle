@@ -54,7 +54,7 @@
             <errorLevel type="suppress">
                 <file name="src/Bundle/Controller/ResourceController.php" />
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
-                <file name="src/Component/Symfony/Request/ParametersParser.php" />
+                <file name="src/Component/Symfony/Request/Parser/ParametersParser.php" />
                 <file name="src/Component/Symfony/Request/RequestConfiguration.php" />
             </errorLevel>
         </InternalMethod>
