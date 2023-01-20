@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Symfony\Request;
 
 use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 

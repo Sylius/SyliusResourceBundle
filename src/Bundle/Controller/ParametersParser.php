@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-class_exists(\Sylius\Component\Resource\Symfony\Request\ParametersParser::class);
+class_exists(\Sylius\Component\Resource\Symfony\Request\Parser\ParametersParser::class);
 
 if (false) {
-    final class ParametersParser extends \Sylius\Component\Resource\Symfony\Request\ParametersParser
+    final class ParametersParser extends \Sylius\Component\Resource\Symfony\Request\Parser\ParametersParser
     {
     }
 }

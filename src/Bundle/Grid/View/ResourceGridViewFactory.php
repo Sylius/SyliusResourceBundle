@@ -17,7 +17,7 @@ use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Symfony\Request\ParametersParserInterface;
+use Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface;
 use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface

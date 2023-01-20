@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\Component\Resource\Symfony\Request\RequestParameterProvider;
+use Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestParameterProviderTest extends TestCase

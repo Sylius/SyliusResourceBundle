@@ -15,9 +15,9 @@ namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Symfony\Request\ParametersParserInterface;
+use Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactoryInterface;
+use Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface;
 use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
-use Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

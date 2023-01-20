@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-interface_exists(\Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface::class);
+interface_exists(\Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactoryInterface::class);
 
 if (false) {
-    interface RequestConfigurationFactoryInterface extends \Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface
+    interface RequestConfigurationFactoryInterface extends \Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactoryInterface
     {
     }
 }

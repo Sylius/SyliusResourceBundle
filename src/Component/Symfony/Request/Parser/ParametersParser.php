@@ -11,8 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Request;
+namespace Sylius\Component\Resource\Symfony\Request\Parser;
 
+use Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;

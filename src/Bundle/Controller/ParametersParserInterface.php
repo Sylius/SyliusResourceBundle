@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-interface_exists(\Sylius\Component\Resource\Symfony\Request\ParametersParserInterface::class);
+interface_exists(\Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface::class);
 
 if (false) {
-    interface ParametersParserInterface extends \Sylius\Component\Resource\Symfony\Request\ParametersParserInterface
+    interface ParametersParserInterface extends \Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface
     {
     }
 }

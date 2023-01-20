@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\Request\ParametersParserInterface;
+use Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;

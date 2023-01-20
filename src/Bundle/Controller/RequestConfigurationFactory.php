@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-class_exists(\Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactory::class);
+class_exists(\Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactory::class);
 
 if (false) {
-    final class RequestConfigurationFactory extends \Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactory
+    final class RequestConfigurationFactory extends \Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactory
     {
     }
 }

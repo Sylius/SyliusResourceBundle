@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Provider;
 
-class_exists(\Sylius\Component\Resource\Symfony\Request\RequestParameterProvider::class);
+class_exists(\Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider::class);
 
 if (false) {
-    final class RequestParameterProvider extends \Sylius\Component\Resource\Symfony\Request\RequestParameterProvider
+    final class RequestParameterProvider extends \Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider
     {
     }
 }

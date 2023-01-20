@@ -12,8 +12,8 @@
 declare(strict_types=1);
 
 $deprecatedInterfaces = [
-    Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface::class => Sylius\Component\Resource\Symfony\Request\ParametersParserInterface::class,
-    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface::class => Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface::class,
+    Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface::class => \Sylius\Component\Resource\Symfony\Request\Parser\ParametersParserInterface::class,
+    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface::class => \Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactoryInterface::class,
 ];
 
 foreach ($deprecatedInterfaces as $oldInterfaceName => $interfaceName) {
@@ -33,11 +33,11 @@ foreach ($deprecatedInterfaces as $oldInterfaceName => $interfaceName) {
 
 $deprecatedClassesWithAliases = [
     Sylius\Bundle\ResourceBundle\Controller\Parameters::class => Sylius\Component\Resource\Symfony\Request\Parameters::class,
-    Sylius\Bundle\ResourceBundle\Controller\ParametersParser::class => Sylius\Component\Resource\Symfony\Request\ParametersParser::class,
+    Sylius\Bundle\ResourceBundle\Controller\ParametersParser::class => \Sylius\Component\Resource\Symfony\Request\Parser\ParametersParser::class,
     Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration::class => Sylius\Component\Resource\Symfony\Request\RequestConfiguration::class,
-    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory::class => Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactory::class,
+    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory::class => \Sylius\Component\Resource\Symfony\Request\Factory\RequestConfigurationFactory::class,
 
-    Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider::class => Sylius\Component\Resource\Symfony\Request\RequestParameterProvider::class,
+    Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider::class => \Sylius\Component\Resource\Symfony\Request\Provider\RequestParameterProvider::class,
 ];
 
 spl_autoload_register(function ($className) use ($deprecatedClassesWithAliases): void {
