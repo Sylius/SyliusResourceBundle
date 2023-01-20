@@ -73,7 +73,6 @@ final class ProcessorSpec extends ObjectBehavior
         $locator->has('\stdClass')->willReturn(true);
         $locator->get('\stdClass')->willReturn(new \stdClass());
 
-
         $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Component\Resource\State\ProcessorInterface. Got: stdClass'))
             ->during('process', [[], $operation, $context])
         ;
