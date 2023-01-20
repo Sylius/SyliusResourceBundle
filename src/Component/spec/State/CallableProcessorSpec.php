@@ -56,7 +56,7 @@ final class CallableProcessorSpec extends ObjectBehavior
         $this->process([], $operation, $context)->shouldHaveType(\stdClass::class);
     }
 
-    function it_returns_null_if_operation_has_no_provider(): void
+    function it_returns_null_if_operation_has_no_processor(): void
     {
         $operation = new Create();
         $context = new Context();
