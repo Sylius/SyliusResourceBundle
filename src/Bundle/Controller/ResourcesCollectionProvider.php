@@ -18,6 +18,7 @@ use Hateoas\Representation\Factory\PagerfantaFactory;
 use Pagerfanta\Pagerfanta;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 final class ResourcesCollectionProvider implements ResourcesCollectionProviderInterface
 {

@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use FOS\RestBundle\View\ConfigurableViewHandlerInterface;
 use FOS\RestBundle\View\View;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface

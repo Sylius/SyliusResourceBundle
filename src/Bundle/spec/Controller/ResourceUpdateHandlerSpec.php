@@ -15,10 +15,10 @@ namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 final class ResourceUpdateHandlerSpec extends ObjectBehavior
 {

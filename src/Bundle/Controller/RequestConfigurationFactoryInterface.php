@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 use Symfony\Component\HttpFoundation\Request;
 
 interface RequestConfigurationFactoryInterface

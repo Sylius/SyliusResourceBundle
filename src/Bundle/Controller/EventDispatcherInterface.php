@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 interface EventDispatcherInterface
 {

@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 final class ResourceUpdateHandler implements ResourceUpdateHandlerInterface
 {

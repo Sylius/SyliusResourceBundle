@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 
 interface SingleResourceProviderInterface
 {

@@ -17,8 +17,8 @@ use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\View\ConfigurableViewHandlerInterface;
 use FOS\RestBundle\View\View;
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandlerSpec extends ObjectBehavior

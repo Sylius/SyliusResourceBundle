@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
+use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
+
 /**
  * This authorization checker always returns true. Useful if you don't want to have authorization checks at all.
  */
