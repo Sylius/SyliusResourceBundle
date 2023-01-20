@@ -18,6 +18,9 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class CallableProcessor implements ProcessorInterface
 {
     public function __construct(private ContainerInterface $locator)
