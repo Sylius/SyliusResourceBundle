@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\State;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
+use Webmozart\Assert\Assert;
 
 final class CallableProvider implements ProviderInterface
 {
@@ -39,8 +40,8 @@ final class CallableProvider implements ProviderInterface
             throw new \RuntimeException(sprintf('Provider "%s" not found on operation "%s"', $provider, $operation->getName() ?? ''));
         }
 
-        /** @var ProviderInterface $providerInstance */
         $providerInstance = $this->locator->get($provider);
+        Assert::isInstanceOf($providerInstance, ProviderInterface::class);
 
         return $providerInstance->provide($operation, $context);
     }

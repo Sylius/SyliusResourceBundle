@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\State;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
+use Webmozart\Assert\Assert;
 
 final class CallableProcessor implements ProcessorInterface
 {
@@ -42,8 +43,8 @@ final class CallableProcessor implements ProcessorInterface
             throw new \RuntimeException(sprintf('Processor "%s" not found on operation "%s"', $processor, $operation->getName() ?? ''));
         }
 
-        /** @var ProcessorInterface $processorInstance */
         $processorInstance = $this->locator->get($processor);
+        Assert::isInstanceOf($processorInstance, ProcessorInterface::class);
 
         return $processorInstance->process($data, $operation, $context);
     }
