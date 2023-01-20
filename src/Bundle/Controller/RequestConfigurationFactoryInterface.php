@@ -13,14 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Symfony\Request\RequestConfiguration;
-use Symfony\Component\HttpFoundation\Request;
+interface_exists(\Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface::class);
 
-interface RequestConfigurationFactoryInterface
-{
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function create(MetadataInterface $metadata, Request $request): RequestConfiguration;
+if (false) {
+    interface RequestConfigurationFactoryInterface extends \Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface
+    {
+    }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 $deprecatedInterfaces = [
     Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface::class => Sylius\Component\Resource\Symfony\Request\ParametersParserInterface::class,
+    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface::class => Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactoryInterface::class,
 ];
 
 foreach ($deprecatedInterfaces as $oldInterfaceName => $interfaceName) {

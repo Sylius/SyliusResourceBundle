@@ -196,6 +196,7 @@
         <UnrecognizedStatement>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Controller/ParametersParserInterface.php" />
+                <file name="src/Bundle/Controller/RequestConfigurationFactoryInterface.php" />
             </errorLevel>
         </UnrecognizedStatement>
     </issueHandlers>
