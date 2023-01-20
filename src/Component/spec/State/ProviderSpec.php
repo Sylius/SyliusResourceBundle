@@ -73,7 +73,6 @@ final class ProviderSpec extends ObjectBehavior
         $locator->has('\stdClass')->willReturn(true);
         $locator->get('\stdClass')->willReturn(new \stdClass());
 
-
         $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Component\Resource\State\ProviderInterface. Got: stdClass'))
             ->during('provide', [$operation, $context])
         ;
