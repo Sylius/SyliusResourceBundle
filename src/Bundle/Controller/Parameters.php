@@ -13,43 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpKernel\Kernel;
+class_exists(\Sylius\Component\Resource\Symfony\Request\Parameters::class);
 
-if (Kernel::MAJOR_VERSION === 6) {
-    class Parameters extends ParameterBag
+if (false) {
+    class Parameters extends \Sylius\Component\Resource\Symfony\Request\Parameters
     {
-        /**
-         * @param mixed $default
-         */
-        public function get(string $key, $default = null): mixed
-        {
-            $result = parent::get($key, $default);
-
-            if (null === $result && $default !== null && $this->has($key)) {
-                $result = $default;
-            }
-
-            return $result;
-        }
-    }
-} else {
-    class Parameters extends ParameterBag
-    {
-        /**
-         * @param mixed $default
-         *
-         * @return mixed
-         */
-        public function get(string $key, $default = null)
-        {
-            $result = parent::get($key, $default);
-
-            if (null === $result && $default !== null && $this->has($key)) {
-                $result = $default;
-            }
-
-            return $result;
-        }
     }
 }
