@@ -25,6 +25,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/test/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
         - %currentWorkingDirectory%/src/Component/Symfony/Request/RequestConfiguration.php
+        - %currentWorkingDirectory%/src/Component/Symfony/Request/RequestConfigurationFactory.php
         - %currentWorkingDirectory%/src/Component/Symfony/Request/Parameters.php
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*

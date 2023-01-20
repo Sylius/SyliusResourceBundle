@@ -35,6 +35,7 @@ $deprecatedClassesWithAliases = [
     Sylius\Bundle\ResourceBundle\Controller\Parameters::class => Sylius\Component\Resource\Symfony\Request\Parameters::class,
     Sylius\Bundle\ResourceBundle\Controller\ParametersParser::class => Sylius\Component\Resource\Symfony\Request\ParametersParser::class,
     Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration::class => Sylius\Component\Resource\Symfony\Request\RequestConfiguration::class,
+    Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory::class => Sylius\Component\Resource\Symfony\Request\RequestConfigurationFactory::class,
 
     Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider::class => Sylius\Component\Resource\Symfony\Request\RequestParameterProvider::class,
 ];
