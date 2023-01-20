@@ -95,7 +95,10 @@
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
             "Sylius\\Component\\Resource\\": "src/Component/"
-        }
+        },
+        "files": [
+            "src/deprecation.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

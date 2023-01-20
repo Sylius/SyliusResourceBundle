@@ -11,14 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Provider;
+namespace Sylius\Component\Resource\Symfony\Request;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class_exists(\Sylius\Component\Resource\Symfony\Request\RequestParameterProvider::class);
-
-if (false) {
-    final class RequestParameterProvider extends \Sylius\Component\Resource\Symfony\Request\RequestParameterProvider
-    {
-    }
+interface ParametersParserInterface
+{
+    public function parseRequestValues(array $parameters, Request $request): array;
 }

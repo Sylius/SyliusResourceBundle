@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+interface_exists(\Sylius\Component\Resource\Symfony\Request\ParametersParserInterface::class);
 
-interface ParametersParserInterface
-{
-    public function parseRequestValues(array $parameters, Request $request): array;
+if (false) {
+    interface ParametersParserInterface extends \Sylius\Component\Resource\Symfony\Request\ParametersParserInterface
+    {
+    }
 }
