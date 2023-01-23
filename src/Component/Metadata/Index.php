@@ -28,6 +28,8 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
+        ?bool $read = null,
+        ?bool $write = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -38,6 +40,8 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             name: $name,
             provider: $provider,
             processor: $processor,
+            read: $read,
+            write: $write,
         );
     }
 }
