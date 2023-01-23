@@ -32,6 +32,8 @@ abstract class Operation
         protected ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
+        protected ?bool $read = null,
+        protected ?bool $write = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -111,6 +113,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->processor = $processor;
+
+        return $self;
+    }
+
+    public function canRead(): ?bool
+    {
+        return $this->read;
+    }
+
+    public function withRead(bool $read): self
+    {
+        $self = clone $this;
+        $self->read = $read;
+
+        return $self;
+    }
+
+    public function canWrite(): ?bool
+    {
+        return $this->write;
+    }
+
+    public function withWrite(bool $write): self
+    {
+        $self = clone $this;
+        $self->write = $write;
 
         return $self;
     }

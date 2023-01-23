@@ -28,6 +28,8 @@ class HttpOperation extends Operation
         ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
+        ?bool $read = null,
+        ?bool $write = null,
     ) {
         parent::__construct(
             template: $template,
@@ -35,6 +37,8 @@ class HttpOperation extends Operation
             name: $name,
             provider: $provider,
             processor: $processor,
+            read: $read,
+            write: $write,
         );
     }
 
