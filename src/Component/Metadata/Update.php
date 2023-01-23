@@ -28,6 +28,8 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
+        ?bool $read = null,
+        ?bool $write = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET', 'PUT'],
@@ -38,6 +40,8 @@ final class Update extends HttpOperation implements UpdateOperationInterface
             name: $name,
             provider: $provider,
             processor: $processor,
+            read: $read,
+            write: $write,
         );
     }
 }
