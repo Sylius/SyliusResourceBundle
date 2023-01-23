@@ -34,6 +34,8 @@ abstract class Operation
         string|callable|null $processor = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
+        protected ?string $formType = null,
+        protected ?array $formOptions = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -139,6 +141,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->write = $write;
+
+        return $self;
+    }
+
+    public function getFormType(): ?string
+    {
+        return $this->formType;
+    }
+
+    public function withFormType(string $formType): self
+    {
+        $self = clone $this;
+        $self->formType = $formType;
+
+        return $self;
+    }
+
+    public function getFormOptions(): ?array
+    {
+        return $this->formOptions;
+    }
+
+    public function withFormOptions(array $formOptions): self
+    {
+        $self = clone $this;
+        $self->formOptions = $formOptions;
 
         return $self;
     }
