@@ -26,12 +26,16 @@ abstract class Operation
     /** @var string|callable|null */
     protected $processor;
 
+    /** @var string|callable|null */
+    protected $responder;
+
     public function __construct(
         protected ?string $template = null,
         protected ?string $shortName = null,
         protected ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
+        string|callable|null $responder = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
         protected ?string $formType = null,
@@ -39,6 +43,7 @@ abstract class Operation
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
+        $this->responder = $responder;
     }
 
     public function getResource(): ?Resource
@@ -115,6 +120,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->processor = $processor;
+
+        return $self;
+    }
+
+    public function getResponder(): callable|string|null
+    {
+        return $this->responder;
+    }
+
+    public function withResponder(string|callable|null $responder): self
+    {
+        $self = clone $this;
+        $self->responder = $responder;
 
         return $self;
     }
