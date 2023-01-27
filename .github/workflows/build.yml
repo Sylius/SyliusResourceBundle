@@ -20,17 +20,11 @@ jobs:
                 php: ["8.0", "8.1"]
                 symfony: ["^5.4", "~6.0.0", "~6.1.0"]
                 twig: ["^2.12", "^3.0"]
-                persistence: ["^1.3", "^2.0", "^3.0"]
+                persistence: ["^2.0", "^3.0"]
                 exclude:
                     -
                         php: "8.0"
                         symfony: "~6.1.0"
-                    -
-                        symfony: "~6.0.0"
-                        persistence: "^1.3"
-                    -
-                        symfony: "~6.1.0"
-                        persistence: "^1.3"
 
         steps:
             -
