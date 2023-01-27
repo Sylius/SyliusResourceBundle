@@ -46,6 +46,8 @@ parameters:
         - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
+        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
+        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
         - '/Method Symfony\\Component\\Routing\\RouteCollection::add\(\) invoked with 3 parameters, 2 required\./'
         - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
         - '/Parameter \#1 \$currentPage of method Pagerfanta\\Pagerfanta<mixed>::setCurrentPage\(\) expects int<1, max>, int given\./'
