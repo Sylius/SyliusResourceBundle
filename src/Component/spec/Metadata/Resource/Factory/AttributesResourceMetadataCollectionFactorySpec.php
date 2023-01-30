@@ -33,6 +33,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithTemplatesDir;
 
 final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {
@@ -334,5 +335,60 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getMethods()->shouldReturn(['GET', 'PUT']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getFormType()->shouldReturn('App\Form\DummyType');
+    }
+
+    function it_creates_resource_metadata_with_templates_dir(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithTemplatesDir::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getName()->shouldReturn('app_dummy_create');
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getTemplate()->shouldReturn('book/create.html.twig');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getName()->shouldReturn('app_dummy_update');
+        $operation->getMethods()->shouldReturn(['GET', 'PUT']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getTemplate()->shouldReturn('book/update.html.twig');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getName()->shouldReturn('app_dummy_index');
+        $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getTemplate()->shouldReturn('book/index.html.twig');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getName()->shouldReturn('app_dummy_show');
+        $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getTemplate()->shouldReturn('book/show.html.twig');
     }
 }
