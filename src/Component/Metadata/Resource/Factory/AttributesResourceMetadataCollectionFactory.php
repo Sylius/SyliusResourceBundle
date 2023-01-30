@@ -122,6 +122,12 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     {
         $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
 
+        if (null === $operation->getTemplate()) {
+            $templateDir = $resource->getTemplatesDir() ?? '';
+            $template = sprintf('%s/%s.html.twig', $templateDir, $operation->getShortName() ?? '');
+            $operation = $operation->withTemplate($template);
+        }
+
         if (null === $resource->getApplicationName()) {
             $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
         }

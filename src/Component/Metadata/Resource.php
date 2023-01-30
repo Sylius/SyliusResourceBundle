@@ -22,6 +22,7 @@ final class Resource
         private string $alias,
         private ?string $section = null,
         private ?string $formType = null,
+        private ?string $templatesDir = null,
         private ?string $name = null,
         private ?string $applicationName = null,
         ?array $operations = null,
@@ -90,6 +91,19 @@ final class Resource
     {
         $self = clone $this;
         $self->applicationName = $applicationName;
+
+        return $self;
+    }
+
+    public function getTemplatesDir(): ?string
+    {
+        return $this->templatesDir;
+    }
+
+    public function withTemplatesDir(string $templatesDir): self
+    {
+        $self = clone $this;
+        $self->templatesDir = $templatesDir;
 
         return $self;
     }
