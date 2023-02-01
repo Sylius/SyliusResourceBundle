@@ -51,9 +51,9 @@ final class DeleteSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_delete_name_by_default(): void
+    function it_has_delete_short_name_by_default(): void
     {
-        $this->getName()->shouldReturn('delete');
+        $this->getShortName()->shouldReturn('delete');
     }
 
     function it_has_delete_methods_by_default(): void

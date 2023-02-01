@@ -51,9 +51,9 @@ final class CreateSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_create_name_by_default(): void
+    function it_has_create_short_name_by_default(): void
     {
-        $this->getName()->shouldReturn('create');
+        $this->getShortName()->shouldReturn('create');
     }
 
     function it_has_get_and_post_methods_by_default(): void

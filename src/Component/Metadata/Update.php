@@ -23,8 +23,9 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
@@ -32,8 +33,9 @@ final class Update extends HttpOperation implements UpdateOperationInterface
             methods: $methods ?? ['GET', 'PUT'],
             path: $path,
             routePrefix: $routePrefix,
-            name: $name ?? 'update',
             template: $template,
+            shortName: $shortName ?? 'update',
+            name: $name,
             provider: $provider,
             processor: $processor,
         );
