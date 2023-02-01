@@ -14,18 +14,21 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
 use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
-    public function __construct(private RegistryInterface $resourceRegistry)
-    {
+    public function __construct(
+        private RegistryInterface $resourceRegistry,
+        private OperationRouteNameFactory $operationRouteNameFactory,
+    ) {
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
@@ -48,7 +51,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
      */
     private function buildResourceOperations(array $attributes, string $resourceClass): array
     {
-        /** @var ResourceMetadata[] $resources */
+        /** @var array<int, ResourceMetadata> $resources */
         $resources = [];
         $index = -1;
 
@@ -73,9 +76,12 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             }
 
             if (null === ($resources[$index] ?? null)) {
-                $metadata = $this->resourceRegistry->getByClass($resourceClass);
+                $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
 
-                $resources[++$index] = new Resource($metadata->getAlias());
+                $resource = new ResourceMetadata($resourceConfiguration->getAlias());
+                $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
+
+                $resources[++$index] = $resource;
             }
 
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
@@ -96,15 +102,36 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
+    private function getResourceWithDefaults(ResourceMetadata $resource, MetadataInterface $resourceConfiguration): ResourceMetadata
+    {
+        if (null === $resource->getApplicationName()) {
+            $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
+        }
+
+        if (null === $resource->getName()) {
+            $resource = $resource->withName($resourceConfiguration->getName());
+        }
+
+        return $resource;
+    }
+
     private function getOperationWithDefaults(ResourceMetadata $resource, Operation $operation): array
     {
-        if (null !== $section = $resource->getSection()) {
-            $operation = $operation->withSection($section);
+        $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+
+        if (null === $resource->getApplicationName()) {
+            $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
         }
+
+        if (null === $resource->getName()) {
+            $resource = $resource->withName($resourceConfiguration->getName());
+        }
+
+        $operation = $operation->withResource($resource);
 
         if ($operation instanceof HttpOperation) {
             if (null === $routeName = $operation->getRouteName()) {
-                $routeName = $this->getDefaultRouteName($resource, $operation);
+                $routeName = $this->operationRouteNameFactory->createRouteName($operation);
                 $operation = $operation->withRouteName($routeName);
             }
 
@@ -114,20 +141,5 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         $operationName = $operation->getName();
 
         return [$operationName, $operation];
-    }
-
-    private function getDefaultRouteName(ResourceMetadata $resource, HttpOperation $operation): string
-    {
-        $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
-
-        if (null !== $section = $operation->getSection()) {
-            $section = '_' . $section;
-        }
-
-        if (null === $shortName = $operation->getShortName()) {
-            throw new \RuntimeException(sprintf('Operation "%s" should have a short name to build a route name', $operation::class));
-        }
-
-        return sprintf('%s%s_%s_%s', $resourceConfiguration->getApplicationName(), $section ?? '', $resourceConfiguration->getName(), $shortName);
     }
 }

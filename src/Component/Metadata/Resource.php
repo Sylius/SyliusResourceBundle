@@ -19,7 +19,7 @@ final class Resource
     private ?Operations $operations;
 
     public function __construct(
-        private ?string $alias = null,
+        private string $alias,
         private ?string $section = null,
         private ?string $name = null,
         private ?string $applicationName = null,
@@ -28,7 +28,7 @@ final class Resource
         $this->operations = null === $operations ? null : new Operations($operations);
     }
 
-    public function getAlias(): ?string
+    public function getAlias(): string
     {
         return $this->alias;
     }

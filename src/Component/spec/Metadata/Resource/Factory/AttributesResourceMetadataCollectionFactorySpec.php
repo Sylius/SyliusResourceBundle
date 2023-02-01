@@ -24,6 +24,7 @@ use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
@@ -35,7 +36,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 {
     function let(RegistryInterface $resourceRegistry): void
     {
-        $this->beConstructedWith($resourceRegistry);
+        $this->beConstructedWith($resourceRegistry, new OperationRouteNameFactory());
     }
 
     function it_is_initializable(): void
