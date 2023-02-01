@@ -51,9 +51,9 @@ final class ShowSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_show_name_by_default(): void
+    function it_has_show_short_name_by_default(): void
     {
-        $this->getName()->shouldReturn('show');
+        $this->getShortName()->shouldReturn('show');
     }
 
     function it_has_get_methods_by_default(): void

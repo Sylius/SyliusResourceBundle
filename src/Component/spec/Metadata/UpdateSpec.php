@@ -53,7 +53,7 @@ final class UpdateSpec extends ObjectBehavior
 
     function it_has_update_name_by_default(): void
     {
-        $this->getName()->shouldReturn('update');
+        $this->getShortName()->shouldReturn('update');
     }
 
     function it_has_get_and_put_methods_by_default(): void
