@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
@@ -30,7 +31,10 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
         $this->beConstructedWith(
             $resourceRegistry,
             new OperationRouteFactory(),
-            new AttributesResourceMetadataCollectionFactory($resourceRegistry->getWrappedObject()),
+            new AttributesResourceMetadataCollectionFactory(
+                $resourceRegistry->getWrappedObject(),
+                new OperationRouteNameFactory(),
+            ),
         );
     }
 
