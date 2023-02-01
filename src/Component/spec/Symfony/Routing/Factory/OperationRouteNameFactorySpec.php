@@ -27,7 +27,7 @@ final class OperationRouteNameFactorySpec extends ObjectBehavior
 
     function it_create_a_route_name(): void
     {
-        $resource = new Resource(name: 'book', applicationName: 'app');
+        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
 
         $this->createRouteName($operation)->shouldReturn('app_book_create');
@@ -35,7 +35,7 @@ final class OperationRouteNameFactorySpec extends ObjectBehavior
 
     function it_create_a_route_name_with_a_section(): void
     {
-        $resource = new Resource(name: 'book', applicationName: 'app', section: 'admin');
+        $resource = new Resource(alias: 'app.book', section: 'admin', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
 
         $this->createRouteName($operation)->shouldReturn('app_admin_book_create');
