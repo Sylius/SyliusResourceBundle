@@ -51,9 +51,9 @@ final class IndexSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_index_name_by_default(): void
+    function it_has_index_short_name_by_default(): void
     {
-        $this->getName()->shouldReturn('index');
+        $this->getShortName()->shouldReturn('index');
     }
 
     function it_has_get_methods_by_default(): void

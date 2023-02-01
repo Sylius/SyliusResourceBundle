@@ -23,8 +23,9 @@ final class Create extends HttpOperation implements CreateOperationInterface
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
@@ -32,8 +33,9 @@ final class Create extends HttpOperation implements CreateOperationInterface
             methods: $methods ?? ['GET', 'POST'],
             path: $path,
             routePrefix: $routePrefix,
-            name: $name ?? 'create',
             template: $template,
+            shortName: $shortName ?? 'create',
+            name: $name,
             provider: $provider,
             processor: $processor,
         );

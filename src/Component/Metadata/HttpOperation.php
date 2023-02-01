@@ -22,14 +22,16 @@ class HttpOperation extends Operation
         protected ?array $methods = null,
         protected ?string $path = null,
         protected ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
         parent::__construct(
-            name: $name,
             template: $template,
+            name: $name,
+            shortName: $shortName,
             provider: $provider,
             processor: $processor,
         );

@@ -23,8 +23,9 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
@@ -32,8 +33,9 @@ final class Show extends HttpOperation implements ShowOperationInterface
             methods: $methods ?? ['GET'],
             path: $path,
             routePrefix: $routePrefix,
-            name: $name ?? 'show',
             template: $template,
+            shortName: $shortName ?? 'show',
+            name: $name,
             provider: $provider,
             processor: $processor,
         );
