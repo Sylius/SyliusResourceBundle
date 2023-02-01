@@ -39,6 +39,8 @@
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" alias="sylius.routing.loader.routes_attributes" public="false" />
 
+        <service id="sylius.routing.factory.operation_route_name_factory" class="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory" public="false" />
+
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
 

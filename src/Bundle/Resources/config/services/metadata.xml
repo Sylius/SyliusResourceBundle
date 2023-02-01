@@ -17,6 +17,7 @@
 
         <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
         </service>
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
     </services>
