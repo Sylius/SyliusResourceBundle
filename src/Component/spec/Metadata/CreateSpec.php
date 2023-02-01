@@ -43,7 +43,7 @@ final class CreateSpec extends ObjectBehavior
 
     function it_could_have_a_resource(): void
     {
-        $resource = new Resource();
+        $resource = new Resource(alias: 'app.book');
 
         $this->withResource($resource)
             ->getResource()
