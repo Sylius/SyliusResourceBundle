@@ -18,6 +18,8 @@ namespace Sylius\Component\Resource\Metadata;
  */
 abstract class Operation
 {
+    private ?Resource $resource = null;
+
     /** @var string|callable|null */
     protected $provider;
 
@@ -32,6 +34,19 @@ abstract class Operation
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
+    }
+
+    public function getResource(): ?Resource
+    {
+        return $this->resource;
+    }
+
+    public function withResource(Resource $resource): self
+    {
+        $self = clone $this;
+        $self->resource = $resource;
+
+        return $self;
     }
 
     public function getName(): ?string
