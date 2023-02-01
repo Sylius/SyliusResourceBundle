@@ -39,6 +39,45 @@ final class ResourceSpec extends ObjectBehavior
         ;
     }
 
+    function it_has_no_section_by_default(): void
+    {
+        $this->getSection()->shouldReturn(null);
+    }
+
+    function it_could_have_a_section(): void
+    {
+        $this->withSection('admin')
+            ->getSection()
+            ->shouldReturn('admin')
+        ;
+    }
+
+    function it_has_no_name_by_default(): void
+    {
+        $this->getName()->shouldReturn(null);
+    }
+
+    function it_could_have_a_name(): void
+    {
+        $this->withName('book')
+            ->getName()
+            ->shouldReturn('book')
+        ;
+    }
+
+    function it_has_no_application_name_by_default(): void
+    {
+        $this->getApplicationName()->shouldReturn(null);
+    }
+
+    function it_could_have_an_application_name(): void
+    {
+        $this->withApplicationName('app')
+            ->getApplicationName()
+            ->shouldReturn('app')
+        ;
+    }
+
     function it_has_no_operations_by_default(): void
     {
         $this->getOperations()->shouldReturn(null);
@@ -61,11 +100,32 @@ final class ResourceSpec extends ObjectBehavior
         $this->getAlias()->shouldReturn('app.book');
     }
 
+    function it_can_be_constructed_with_a_section(): void
+    {
+        $this->beConstructedWith('app.book', 'admin');
+
+        $this->getSection()->shouldReturn('admin');
+    }
+
+    function it_can_be_constructed_with_a_name(): void
+    {
+        $this->beConstructedWith('app.book', null, 'book');
+
+        $this->getName()->shouldReturn('book');
+    }
+
+    function it_can_be_constructed_with_an_application_name(): void
+    {
+        $this->beConstructedWith('app.book', null, null, 'app');
+
+        $this->getApplicationName()->shouldReturn('app');
+    }
+
     function it_can_be_constructed_with_operations(): void
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith(null, $operations);
+        $this->beConstructedWith(null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }
