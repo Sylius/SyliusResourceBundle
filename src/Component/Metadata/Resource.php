@@ -20,6 +20,9 @@ final class Resource
 
     public function __construct(
         private ?string $alias = null,
+        private ?string $section = null,
+        private ?string $name = null,
+        private ?string $applicationName = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
@@ -34,6 +37,45 @@ final class Resource
     {
         $self = clone $this;
         $self->alias = $alias;
+
+        return $self;
+    }
+
+    public function getSection(): ?string
+    {
+        return $this->section;
+    }
+
+    public function withSection(string $section): self
+    {
+        $self = clone $this;
+        $self->section = $section;
+
+        return $self;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function withName(string $name): self
+    {
+        $self = clone $this;
+        $self->name = $name;
+
+        return $self;
+    }
+
+    public function getApplicationName(): ?string
+    {
+        return $this->applicationName;
+    }
+
+    public function withApplicationName(string $applicationName): self
+    {
+        $self = clone $this;
+        $self->applicationName = $applicationName;
 
         return $self;
     }
