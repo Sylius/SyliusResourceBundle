@@ -26,6 +26,7 @@ use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
+use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
@@ -510,5 +511,44 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->getProvider()->shouldReturn(Provider::class);
+    }
+
+    function it_creates_resource_metadata_with_default_twig_provider_on_http_operations(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithTemplatesDir::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->getResponder()->shouldReturn(TwigResponder::class);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->getResponder()->shouldReturn(TwigResponder::class);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->getResponder()->shouldReturn(TwigResponder::class);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->getResponder()->shouldReturn(TwigResponder::class);
     }
 }
