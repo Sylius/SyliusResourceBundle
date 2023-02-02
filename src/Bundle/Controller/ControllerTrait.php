@@ -158,7 +158,7 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function addFlash(string $type, mixed $message): void
+    protected function addFlash(string $type, $message)
     {
         try {
             $session = $this->container->get('request_stack')->getSession();
