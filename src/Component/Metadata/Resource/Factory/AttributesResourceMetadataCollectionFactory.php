@@ -22,6 +22,7 @@ use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
+use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
@@ -170,6 +171,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
             if (null === $operation->getProvider()) {
                 $operation = $operation->withProvider(Provider::class);
+            }
+
+            if (null === $operation->getResponder()) {
+                $operation = $operation->withResponder(TwigResponder::class);
             }
 
             $operation = $operation->withName($routeName);
