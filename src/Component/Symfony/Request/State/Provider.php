@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Request\State;
 
+use Pagerfanta\Pagerfanta;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
@@ -60,6 +61,13 @@ final class Provider implements ProviderInterface
         $reflector = CallableReflection::from($repository);
         $arguments = $this->argumentResolver->getArguments($request, $reflector);
 
-        return $repository(...$arguments);
+        $data = $repository(...$arguments);
+
+        if ($data instanceof Pagerfanta) {
+            $currentPage = $request->query->getInt('page', 1);
+            $data->setCurrentPage($currentPage);
+        }
+
+        return $data;
     }
 }

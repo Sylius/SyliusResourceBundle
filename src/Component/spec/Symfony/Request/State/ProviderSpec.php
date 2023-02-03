@@ -89,10 +89,33 @@ final class ProviderSpec extends ObjectBehavior
         $locator->has('App\Repository')->willReturn(true);
         $locator->get('App\Repository')->willReturn($repository);
 
-        $repository->createPaginator()->willReturn($pagerfanta);
+        $repository->createPaginator()->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
 
         $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
         $response->shouldReturn($pagerfanta);
+    }
+
+    function it_sets_current_page_from_request_when_data_is_a_paginator(
+        Request $request,
+        ContainerInterface $locator,
+        RepositoryInterface $repository,
+        Pagerfanta $pagerfanta,
+    ): void {
+        $operation = new Index(repository: 'App\Repository');
+
+        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
+        $request->query = new InputBag(['page' => 42]);
+
+        $locator->has('App\Repository')->willReturn(true);
+        $locator->get('App\Repository')->willReturn($repository);
+
+        $repository->createPaginator()->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
+
+        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
+        $response->shouldReturn($pagerfanta);
+        $pagerfanta->getCurrentPage()->willReturn(42);
     }
 
     function it_calls_repository_as_string_with_specific_repository_method(
