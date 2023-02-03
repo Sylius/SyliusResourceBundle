@@ -108,6 +108,7 @@
         <MissingParamType>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Routing/ResourceLoader.php" />
+                <file name="src/Component/Repository/InMemoryRepository.php" />
             </errorLevel>
         </MissingParamType>
 
