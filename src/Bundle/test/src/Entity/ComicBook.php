@@ -23,19 +23,23 @@ class ComicBook implements ResourceInterface
 {
     /**
      * @Serializer\Expose
+     *
      * @Serializer\Type("integer")
+     *
      * @Serializer\XmlAttribute
      */
     private int $id;
 
     /**
      * @Serializer\Expose
+     *
      * @Serializer\Until("1.1")
      */
     private ?Author $author = null;
 
     /**
      * @Serializer\Expose
+     *
      * @Serializer\Type("string")
      */
     private ?string $title = null;
@@ -63,6 +67,7 @@ class ComicBook implements ResourceInterface
 
     /**
      * @Serializer\VirtualProperty()
+     *
      * @Serializer\Since("1.1")
      */
     public function getAuthorFirstName(): ?string
@@ -72,6 +77,7 @@ class ComicBook implements ResourceInterface
 
     /**
      * @Serializer\VirtualProperty()
+     *
      * @Serializer\Since("1.1")
      */
     public function getAuthorLastName(): ?string
