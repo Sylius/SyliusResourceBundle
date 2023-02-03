@@ -41,6 +41,7 @@ abstract class Operation
         string|callable|null $responder = null,
         string|callable|null $repository = null,
         protected ?string $repositoryMethod = null,
+        protected ?string $grid = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
         protected ?string $formType = null,
@@ -167,6 +168,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->repositoryMethod = $repositoryMethod;
+
+        return $self;
+    }
+
+    public function getGrid(): ?string
+    {
+        return $this->grid;
+    }
+
+    public function withGrid(string $grid): self
+    {
+        $self = clone $this;
+        $self->grid = $grid;
 
         return $self;
     }
