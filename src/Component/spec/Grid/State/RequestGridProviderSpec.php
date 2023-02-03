@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Component\Resource\Grid\State;
 
+use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
@@ -23,6 +24,7 @@ use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Component\Resource\Metadata\Index;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestGridProviderSpec extends ObjectBehavior
@@ -52,6 +54,30 @@ final class RequestGridProviderSpec extends ObjectBehavior
         $gridDefinition->getDriverConfiguration()->willReturn([]);
 
         $gridViewFactory->create($gridDefinition, new Parameters(), [])->willReturn($gridView);
+
+        $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())))
+            ->shouldReturn($gridView)
+        ;
+    }
+    function it_sets_current_page_from_request(
+        Request $request,
+        GridViewFactoryInterface $gridViewFactory,
+        GridProviderInterface $gridProvider,
+        Grid $gridDefinition,
+        GridView $gridView,
+        Pagerfanta $pagerfanta,
+    ): void {
+        $operation = new Index(grid: 'app_book');
+
+        $request->query = new InputBag(['page' => 42]);
+
+        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $gridDefinition->getDriverConfiguration()->willReturn([]);
+
+        $gridViewFactory->create($gridDefinition, new Parameters(), [])->willReturn($gridView);
+
+        $gridView->getData()->willReturn($pagerfanta);
+        $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
 
         $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())))
             ->shouldReturn($gridView)

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Grid\State;
 
+use Pagerfanta\Pagerfanta;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Resource\Context\Context;
@@ -46,6 +47,15 @@ final class RequestGridProvider implements ProviderInterface
         $gridDefinition = $this->gridProvider->get($grid);
         $gridConfiguration = $gridDefinition->getDriverConfiguration();
 
-        return $this->gridViewFactory->create($gridDefinition, new Parameters(), $gridConfiguration);
+        $gridView = $this->gridViewFactory->create($gridDefinition, new Parameters(), $gridConfiguration);
+
+        $data = $gridView->getData();
+
+        if ($data instanceof Pagerfanta) {
+            $currentPage = $request->query->getInt('page', 1);
+            $data->setCurrentPage($currentPage);
+        }
+
+        return $gridView;
     }
 }
