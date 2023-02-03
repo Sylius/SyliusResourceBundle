@@ -18,6 +18,8 @@ namespace Sylius\Component\Resource\Metadata;
  */
 abstract class Operation
 {
+    private ?Resource $resource = null;
+
     /** @var string|callable|null */
     protected $provider;
 
@@ -25,13 +27,40 @@ abstract class Operation
     protected $processor;
 
     public function __construct(
-        protected ?string $name = null,
         protected ?string $template = null,
+        protected ?string $shortName = null,
+        protected ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
+    }
+
+    public function getResource(): ?Resource
+    {
+        return $this->resource;
+    }
+
+    public function withResource(Resource $resource): self
+    {
+        $self = clone $this;
+        $self->resource = $resource;
+
+        return $self;
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    public function withTemplate(string $template): self
+    {
+        $self = clone $this;
+        $self->template = $template;
+
+        return $self;
     }
 
     public function getName(): ?string
@@ -47,15 +76,15 @@ abstract class Operation
         return $self;
     }
 
-    public function getTemplate(): ?string
+    public function getShortName(): ?string
     {
-        return $this->template;
+        return $this->shortName;
     }
 
-    public function withTemplate(string $template): self
+    public function withShortName(string $shortName): self
     {
         $self = clone $this;
-        $self->template = $template;
+        $self->shortName = $shortName;
 
         return $self;
     }

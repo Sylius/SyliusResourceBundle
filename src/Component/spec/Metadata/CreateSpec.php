@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 
 final class CreateSpec extends ObjectBehavior
 {
@@ -35,9 +36,24 @@ final class CreateSpec extends ObjectBehavior
         $this->shouldImplement(CreateOperationInterface::class);
     }
 
-    function it_has_create_name_by_default(): void
+    function it_has_no_resource_by_default(): void
     {
-        $this->getName()->shouldReturn('create');
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $resource = new Resource(alias: 'app.book');
+
+        $this->withResource($resource)
+            ->getResource()
+            ->shouldReturn($resource)
+        ;
+    }
+
+    function it_has_create_short_name_by_default(): void
+    {
+        $this->getShortName()->shouldReturn('create');
     }
 
     function it_has_get_and_post_methods_by_default(): void

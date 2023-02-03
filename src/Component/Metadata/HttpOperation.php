@@ -21,15 +21,18 @@ class HttpOperation extends Operation
     public function __construct(
         protected ?array $methods = null,
         protected ?string $path = null,
+        protected ?string $routeName = null,
         protected ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
         parent::__construct(
-            name: $name,
             template: $template,
+            shortName: $shortName,
+            name: $name,
             provider: $provider,
             processor: $processor,
         );
@@ -57,6 +60,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->path = $path;
+
+        return $self;
+    }
+
+    public function getRouteName(): ?string
+    {
+        return $this->routeName;
+    }
+
+    public function withRouteName(string $routeName): self
+    {
+        $self = clone $this;
+        $self->routeName = $routeName;
 
         return $self;
     }

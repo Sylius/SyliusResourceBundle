@@ -15,6 +15,7 @@ namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 
@@ -35,9 +36,24 @@ final class UpdateSpec extends ObjectBehavior
         $this->shouldImplement(UpdateOperationInterface::class);
     }
 
+    function it_has_no_resource_by_default(): void
+    {
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $resource = new Resource(alias: 'app.book');
+
+        $this->withResource($resource)
+            ->getResource()
+            ->shouldReturn($resource)
+        ;
+    }
+
     function it_has_update_name_by_default(): void
     {
-        $this->getName()->shouldReturn('update');
+        $this->getShortName()->shouldReturn('update');
     }
 
     function it_has_get_and_put_methods_by_default(): void

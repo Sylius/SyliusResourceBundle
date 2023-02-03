@@ -23,8 +23,9 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
@@ -32,8 +33,9 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             methods: $methods ?? ['DELETE'],
             path: $path,
             routePrefix: $routePrefix,
-            name: $name ?? 'delete',
             template: $template,
+            shortName: $shortName ?? 'delete',
+            name: $name,
             provider: $provider,
             processor: $processor,
         );

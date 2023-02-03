@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 
 final class IndexSpec extends ObjectBehavior
 {
@@ -35,9 +36,24 @@ final class IndexSpec extends ObjectBehavior
         $this->shouldImplement(CollectionOperationInterface::class);
     }
 
-    function it_has_index_name_by_default(): void
+    function it_has_no_resource_by_default(): void
     {
-        $this->getName()->shouldReturn('index');
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $resource = new Resource(alias: 'app.book');
+
+        $this->withResource($resource)
+            ->getResource()
+            ->shouldReturn($resource)
+        ;
+    }
+
+    function it_has_index_short_name_by_default(): void
+    {
+        $this->getShortName()->shouldReturn('index');
     }
 
     function it_has_get_methods_by_default(): void

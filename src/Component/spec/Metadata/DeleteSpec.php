@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 
 final class DeleteSpec extends ObjectBehavior
 {
@@ -35,9 +36,24 @@ final class DeleteSpec extends ObjectBehavior
         $this->shouldImplement(DeleteOperationInterface::class);
     }
 
-    function it_has_delete_name_by_default(): void
+    function it_has_no_resource_by_default(): void
     {
-        $this->getName()->shouldReturn('delete');
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $resource = new Resource(alias: 'app.book');
+
+        $this->withResource($resource)
+            ->getResource()
+            ->shouldReturn($resource)
+        ;
+    }
+
+    function it_has_delete_short_name_by_default(): void
+    {
+        $this->getShortName()->shouldReturn('delete');
     }
 
     function it_has_delete_methods_by_default(): void

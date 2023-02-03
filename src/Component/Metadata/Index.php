@@ -23,8 +23,9 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?array $methods = null,
         ?string $path = null,
         ?string $routePrefix = null,
-        ?string $name = null,
         ?string $template = null,
+        ?string $shortName = null,
+        ?string $name = null,
         string|callable|null $provider = null,
         string|callable|null $processor = null,
     ) {
@@ -32,8 +33,9 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             methods: $methods ?? ['GET'],
             path: $path,
             routePrefix: $routePrefix,
-            name: $name ?? 'index',
             template: $template,
+            shortName: $shortName ?? 'index',
+            name: $name,
             provider: $provider,
             processor: $processor,
         );

@@ -15,6 +15,7 @@ namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 
@@ -35,9 +36,24 @@ final class ShowSpec extends ObjectBehavior
         $this->shouldImplement(ShowOperationInterface::class);
     }
 
-    function it_has_show_name_by_default(): void
+    function it_has_no_resource_by_default(): void
     {
-        $this->getName()->shouldReturn('show');
+        $this->getResource()->shouldReturn(null);
+    }
+
+    function it_could_have_a_resource(): void
+    {
+        $resource = new Resource(alias: 'app.book');
+
+        $this->withResource($resource)
+            ->getResource()
+            ->shouldReturn($resource)
+        ;
+    }
+
+    function it_has_show_short_name_by_default(): void
+    {
+        $this->getShortName()->shouldReturn('show');
     }
 
     function it_has_get_methods_by_default(): void
