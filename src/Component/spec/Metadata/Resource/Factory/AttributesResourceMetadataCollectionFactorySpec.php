@@ -31,7 +31,9 @@ use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithPluralName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithTemplatesDir;
@@ -391,6 +393,84 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getTemplate()->shouldReturn('book/show.html.twig');
+    }
+
+    function it_creates_resource_metadata_with_resource_name(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithName::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_book_create')->shouldReturn(true);
+        $operations->has('app_book_update')->shouldReturn(true);
+        $operations->has('app_book_index')->shouldReturn(true);
+        $operations->has('app_book_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_book_create');
+        $operation->getResource()->getName()->shouldReturn('book');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_book_update');
+        $operation->getResource()->getName()->shouldReturn('book');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_book_index');
+        $operation->getResource()->getName()->shouldReturn('book');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_book_show');
+        $operation->getResource()->getName()->shouldReturn('book');
+    }
+
+    function it_creates_resource_metadata_with_resource_plural_name(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithPluralName::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->getResource()->getPluralName()->shouldReturn('books');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->getResource()->getPluralName()->shouldReturn('books');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->getResource()->getPluralName()->shouldReturn('books');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->getResource()->getPluralName()->shouldReturn('books');
     }
 
     function it_creates_resource_metadata_with_default_provider_on_http_operations(RegistryInterface $resourceRegistry): void
