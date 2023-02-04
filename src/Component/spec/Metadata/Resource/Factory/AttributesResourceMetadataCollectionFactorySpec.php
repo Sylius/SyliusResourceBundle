@@ -104,16 +104,19 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_order_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.order');
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_cart_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.cart');
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_cart_show');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.cart');
     }
 
     function it_creates_multi_resources_metadata_with_sections(RegistryInterface $resourceRegistry): void
@@ -140,21 +143,25 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
     }
 
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(RegistryInterface $resourceRegistry): void
@@ -185,27 +192,36 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
     }
 
     function it_creates_operations_even_if_there_is_no_resource_attribute(RegistryInterface $resourceRegistry): void
     {
         $resourceRegistry->getByClass(DummyOperationsWithoutResource::class)->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'repository' => 'app.repository.dummy',
+            ],
+        ]));
 
         $metadataCollection = $this->create(DummyOperationsWithoutResource::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -227,10 +243,12 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
     }
 }
