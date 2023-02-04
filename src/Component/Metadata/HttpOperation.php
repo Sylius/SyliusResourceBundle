@@ -30,6 +30,8 @@ class HttpOperation extends Operation
         string|callable|null $processor = null,
         ?bool $read = null,
         ?bool $write = null,
+        ?string $formType = null,
+        ?array $formOptions = null,
     ) {
         parent::__construct(
             template: $template,
@@ -39,6 +41,8 @@ class HttpOperation extends Operation
             processor: $processor,
             read: $read,
             write: $write,
+            formType: $formType,
+            formOptions: $formOptions,
         );
     }
 

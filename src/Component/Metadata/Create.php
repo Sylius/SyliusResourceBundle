@@ -30,6 +30,8 @@ final class Create extends HttpOperation implements CreateOperationInterface
         string|callable|null $processor = null,
         ?bool $read = null,
         ?bool $write = null,
+        ?string $formType = null,
+        ?array $formOptions = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET', 'POST'],
@@ -42,6 +44,8 @@ final class Create extends HttpOperation implements CreateOperationInterface
             processor: $processor,
             read: $read,
             write: $write,
+            formType: $formType,
+            formOptions: $formOptions,
         );
     }
 }

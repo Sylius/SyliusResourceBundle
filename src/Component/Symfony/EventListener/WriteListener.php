@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\EventListener;
+namespace Sylius\Component\Resource\Symfony\EventListener;
 
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
