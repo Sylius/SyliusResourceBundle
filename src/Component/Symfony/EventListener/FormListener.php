@@ -11,44 +11,41 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\EventListener;
+namespace Sylius\Component\Resource\Symfony\EventListener;
 
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
-use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
-use Sylius\Component\Resource\State\ProviderInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 
-final class ReadListener
+final class FormListener
 {
     public function __construct(
         private HttpOperationInitiator $operationInitiator,
         private RequestContextInitiator $contextInitiator,
-        private ProviderInterface $provider,
+        private FormFactoryInterface $formFactory,
     ) {
     }
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelView(ViewEvent $event): void
     {
+        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $context = $this->contextInitiator->initializeContext($request);
         $operation = $this->operationInitiator->initializeOperation($request);
 
         if (
+            $controllerResult instanceof Response ||
             null === $operation ||
-            $operation instanceof CreateOperationInterface ||
-            !($operation->canRead() ?? true)
+            null == $operation->getFormType()
         ) {
             return;
         }
 
-        $data = $this->provider->provide($operation, $context);
+        $form = $this->formFactory->create($operation, $context, $controllerResult);
+        $form->handleRequest($request);
 
-        if (null === $data) {
-            throw new NotFoundHttpException('Resource has not been found.');
-        }
-
-        $request->attributes->set('data', $data);
+        $request->attributes->set('form', $form);
     }
 }
