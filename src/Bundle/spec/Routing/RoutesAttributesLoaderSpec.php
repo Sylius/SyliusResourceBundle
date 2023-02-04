@@ -15,6 +15,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
@@ -22,9 +23,15 @@ use Symfony\Component\Routing\RouteCollection;
 
 final class RoutesAttributesLoaderSpec extends ObjectBehavior
 {
-    function let(RouteAttributesFactoryInterface $routeAttributesFactory): void
-    {
-        $this->beConstructedWith(['paths' => [__DIR__ . '/../../test/src/Entity/Route']], $routeAttributesFactory);
+    function let(
+        RouteAttributesFactoryInterface $routeAttributesFactory,
+        AttributesOperationRouteFactoryInterface $attributesOperationRouteFactory,
+    ): void {
+        $this->beConstructedWith(
+            ['paths' => [__DIR__ . '/../../test/src/Entity/Route']],
+            $routeAttributesFactory,
+            $attributesOperationRouteFactory,
+        );
     }
 
     function it_is_initializable(): void
@@ -37,9 +44,12 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
         $this->shouldImplement(RouteLoaderInterface::class);
     }
 
-    function it_generates_routes_from_paths(RouteAttributesFactoryInterface $routeAttributesFactory): void
-    {
+    function it_generates_routes_from_paths(
+        RouteAttributesFactoryInterface $routeAttributesFactory,
+        AttributesOperationRouteFactoryInterface $attributesOperationRouteFactory,
+    ): void {
         $routeAttributesFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(24);
+        $attributesOperationRouteFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(24);
 
         $this->__invoke();
     }
