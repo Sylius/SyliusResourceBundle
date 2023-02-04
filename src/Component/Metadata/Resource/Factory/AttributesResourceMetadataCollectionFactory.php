@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
+use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
@@ -157,6 +158,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             if (null === $routeName = $operation->getRouteName()) {
                 $routeName = $this->operationRouteNameFactory->createRouteName($operation);
                 $operation = $operation->withRouteName($routeName);
+            }
+
+            if (null === $operation->getProvider()) {
+                $operation = $operation->withProvider(Provider::class);
             }
 
             $operation = $operation->withName($routeName);
