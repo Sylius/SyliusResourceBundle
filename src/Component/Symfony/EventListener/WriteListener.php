@@ -37,7 +37,9 @@ final class WriteListener
 
         if (
             null === $operation ||
-            !($operation->canWrite() ?? true)
+            !($operation->canWrite() ?? true) ||
+            $request->isMethodSafe() ||
+            !$request->attributes->getBoolean('is_valid', true)
         ) {
             return;
         }
