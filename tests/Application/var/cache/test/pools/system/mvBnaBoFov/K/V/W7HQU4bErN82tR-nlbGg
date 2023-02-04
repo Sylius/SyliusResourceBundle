@@ -1,0 +1,19 @@
+<?php //App%255CEntity%255CAuthor
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['JMS\\Serializer\\Annotation\\ExclusionPolicy'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('JMS\\Serializer\\Annotation\\ExclusionPolicy')),
+    ],
+    null,
+    [
+        'stdClass' => [
+            'policy' => [
+                'ALL',
+            ],
+        ],
+    ],
+    [
+        $o[0],
+    ],
+    []
+); }];

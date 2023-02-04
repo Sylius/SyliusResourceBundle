@@ -35,6 +35,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $redirectToRoute = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['DELETE'],
@@ -52,6 +53,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            redirectToRoute: $redirectToRoute,
         );
     }
 }

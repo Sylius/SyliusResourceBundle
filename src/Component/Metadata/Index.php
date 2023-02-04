@@ -35,6 +35,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $redirectToRoute = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -52,6 +53,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            redirectToRoute: $redirectToRoute,
         );
     }
 }

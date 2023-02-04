@@ -121,7 +121,7 @@ final class ResourceSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_an_application_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, 'app');
+        $this->beConstructedWith('app.book', null, null, null, null, null, 'app');
 
         $this->getApplicationName()->shouldReturn('app');
     }
@@ -140,11 +140,18 @@ final class ResourceSpec extends ObjectBehavior
         $this->getTemplatesDir()->shouldReturn('book');
     }
 
+    function it_can_be_constructed_with_a_plural_name(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, 'books');
+
+        $this->getPluralName()->shouldReturn('books');
+    }
+
     function it_can_be_constructed_with_operations(): void
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, null, $operations);
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }
