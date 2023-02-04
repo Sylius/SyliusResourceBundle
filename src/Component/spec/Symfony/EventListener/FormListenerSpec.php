@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
-use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Sylius\Component\Resource\Metadata\Operations;
@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Symfony\EventListener\FormListener;
 use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -64,7 +65,6 @@ final class FormListenerSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributes,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        HttpOperation $operation,
         FormFactoryInterface $formFactory,
         FormInterface $form,
     ): void {
@@ -80,10 +80,10 @@ final class FormListenerSpec extends ObjectBehavior
         $attributes->get('_route')->willReturn('app_dummy_show');
         $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
+        $operation = new Create(formType: 'App\Type\DummyType');
 
-        $operation->getFormType()->willReturn('App\Type\DummyType');
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
@@ -107,7 +107,6 @@ final class FormListenerSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributes,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        HttpOperation $operation,
         FormFactoryInterface $formFactory,
         FormInterface $form,
         Response $response,
@@ -124,10 +123,10 @@ final class FormListenerSpec extends ObjectBehavior
         $attributes->get('_route')->willReturn('app_dummy_show');
         $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
+        $operation = new Create(formType: 'App\Type\DummyType');
 
-        $operation->getFormType()->willReturn('App\Type\DummyType');
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
@@ -151,7 +150,6 @@ final class FormListenerSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributes,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        HttpOperation $operation,
         FormFactoryInterface $formFactory,
         FormInterface $form,
     ): void {
@@ -167,10 +165,52 @@ final class FormListenerSpec extends ObjectBehavior
         $attributes->get('_route')->willReturn('app_dummy_show');
         $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
+        $operation = new Create();
 
-        $operation->getFormType()->willReturn(null)->shouldBeCalled();
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
+
+        $resourceMetadataCollection = new ResourceMetadataCollection();
+        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
+
+        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+
+        $formFactory->create($operation, Argument::type(Context::class), ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldNotBeCalled()
+        ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+
+        $attributes->set('form', $form)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_does_nothing_when_operation_is_not_a_create_or_update(
+        HttpKernelInterface $kernel,
+        Request $request,
+        ParameterBag $attributes,
+        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            ['foo' => 'fighters'],
+        );
+
+        $request->attributes = $attributes;
+
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new Show(formType: 'App\Form');
+
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
