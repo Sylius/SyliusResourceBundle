@@ -21,6 +21,7 @@ final class Resource
     public function __construct(
         private string $alias,
         private ?string $section = null,
+        private ?string $formType = null,
         private ?string $name = null,
         private ?string $applicationName = null,
         ?array $operations = null,
@@ -50,6 +51,19 @@ final class Resource
     {
         $self = clone $this;
         $self->section = $section;
+
+        return $self;
+    }
+
+    public function getFormType(): ?string
+    {
+        return $this->formType;
+    }
+
+    public function withFormType(string $formType): self
+    {
+        $self = clone $this;
+        $self->formType = $formType;
 
         return $self;
     }
