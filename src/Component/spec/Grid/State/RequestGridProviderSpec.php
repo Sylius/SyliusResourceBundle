@@ -81,7 +81,7 @@ final class RequestGridProviderSpec extends ObjectBehavior
         $gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
 
-        $gridViewFactory->create($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
+        $gridViewFactory->create($gridDefinition, $context, new Parameters(['page' => 42]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
