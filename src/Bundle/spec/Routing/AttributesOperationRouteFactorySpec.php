@@ -49,6 +49,7 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
     ): void {
         $routeCollection = new RouteCollection();
 
+        $metadata->getServiceId('repository')->willReturn('app.repository.dummy');
         $resourceRegistry->get('app.dummy')->willReturn($metadata);
 
         $metadata->getApplicationName()->willReturn('app');
