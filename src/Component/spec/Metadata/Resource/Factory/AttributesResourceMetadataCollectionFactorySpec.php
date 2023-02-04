@@ -24,10 +24,12 @@ use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
@@ -60,7 +62,13 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
     function it_creates_resource_metadata_with_operations(RegistryInterface $resourceRegistry): void
     {
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
 
         $metadataCollection = $this->create(DummyResourceWithOperations::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -81,8 +89,20 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
     function it_creates_multi_resources_metadata_with_operations(RegistryInterface $resourceRegistry): void
     {
-        $resourceRegistry->get('app.order')->willReturn(Metadata::fromAliasAndConfiguration('app.order', ['driver' => 'order_driver']));
-        $resourceRegistry->get('app.cart')->willReturn(Metadata::fromAliasAndConfiguration('app.cart', ['driver' => 'cart_driver']));
+        $resourceRegistry->get('app.order')->willReturn(Metadata::fromAliasAndConfiguration('app.order', [
+            'driver' => 'order_driver',
+            'classes' => [
+                'model' => 'App\Order',
+                'form' => 'App\Form\OrderType',
+            ],
+        ]));
+        $resourceRegistry->get('app.cart')->willReturn(Metadata::fromAliasAndConfiguration('app.cart', [
+            'driver' => 'cart_driver',
+            'classes' => [
+                'model' => 'App\Cart',
+                'form' => 'App\Form\CartType',
+            ],
+        ]));
 
         $metadataCollection = $this->create(DummyMultiResourcesWithOperations::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -105,23 +125,32 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getName()->shouldReturn('app_order_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.order');
+        $operation->getFormType()->shouldReturn('App\Form\OrderType');
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_cart_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.cart');
+        $operation->getFormType()->shouldReturn('App\Form\CartType');
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_cart_show');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.cart');
+        $operation->getFormType()->shouldReturn('App\Form\CartType');
     }
 
     function it_creates_multi_resources_metadata_with_sections(RegistryInterface $resourceRegistry): void
     {
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
 
         $metadataCollection = $this->create(DummyResourceWithSections::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -144,24 +173,28 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
     }
 
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(RegistryInterface $resourceRegistry): void
@@ -170,7 +203,13 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
             throw new SkippingException('Nested attributes are supported since PHP 8.1');
         }
 
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
 
         $metadataCollection = $this->create(DummyResourceWithSectionsAndNestedOperations::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -193,24 +232,28 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
     }
 
     function it_creates_operations_even_if_there_is_no_resource_attribute(RegistryInterface $resourceRegistry): void
@@ -219,7 +262,8 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
             'driver' => 'dummy_driver',
             'classes' => [
-                'repository' => 'app.repository.dummy',
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
             ],
         ]));
 
@@ -244,11 +288,51 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getName()->shouldReturn('app_dummy_index');
         $operation->getMethods()->shouldReturn(['GET']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_dummy_create');
         $operation->getMethods()->shouldReturn(['GET', 'POST']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form');
+    }
+
+    function it_creates_resource_metadata_with_form_type(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithFormType::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getName()->shouldReturn('app_dummy_create');
+        $operation->getMethods()->shouldReturn(['GET', 'POST']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form\DummyType');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getName()->shouldReturn('app_dummy_update');
+        $operation->getMethods()->shouldReturn(['GET', 'PUT']);
+        $operation->getRepository()->shouldReturn('app.repository.dummy');
+        $operation->getFormType()->shouldReturn('App\Form\DummyType');
     }
 }
