@@ -48,6 +48,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
+                'resource' => 'app.dummy',
             ],
         ]);
     }
@@ -148,6 +149,27 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_routes_with_sections(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource(alias: 'app.dummy', section: 'admin'),
+            new Show(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+                'section' => 'admin',
             ],
         ]);
     }
