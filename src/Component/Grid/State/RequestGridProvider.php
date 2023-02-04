@@ -47,7 +47,8 @@ final class RequestGridProvider implements ProviderInterface
         $gridDefinition = $this->gridProvider->get($grid);
         $gridConfiguration = $gridDefinition->getDriverConfiguration();
 
-        $gridView = $this->gridViewFactory->create($gridDefinition, $context, new Parameters(), $gridConfiguration);
+        $parameters = $request->query->all();
+        $gridView = $this->gridViewFactory->create($gridDefinition, $context, new Parameters($parameters), $gridConfiguration);
 
         $data = $gridView->getData();
 
