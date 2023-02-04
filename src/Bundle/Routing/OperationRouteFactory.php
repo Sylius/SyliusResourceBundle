@@ -88,6 +88,12 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 
     private function getSyliusOptions(Resource $resource, HttpOperation $operation): array
     {
-        return ['resource' => $resource->getAlias()];
+        $options = ['resource' => $resource->getAlias()];
+
+        if (null !== $section = $resource->getSection()) {
+            $options['section'] = $section;
+        }
+
+        return $options;
     }
 }
