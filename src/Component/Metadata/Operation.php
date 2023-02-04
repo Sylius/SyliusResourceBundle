@@ -29,6 +29,9 @@ abstract class Operation
     /** @var string|callable|null */
     protected $responder;
 
+    /** @var string|callable|null */
+    protected $repository;
+
     public function __construct(
         protected ?string $template = null,
         protected ?string $shortName = null,
@@ -36,6 +39,8 @@ abstract class Operation
         string|callable|null $provider = null,
         string|callable|null $processor = null,
         string|callable|null $responder = null,
+        string|callable|null $repository = null,
+        protected ?string $repositoryMethod = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
         protected ?string $formType = null,
@@ -44,6 +49,7 @@ abstract class Operation
         $this->provider = $provider;
         $this->processor = $processor;
         $this->responder = $responder;
+        $this->repository = $repository;
     }
 
     public function getResource(): ?Resource
@@ -133,6 +139,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->responder = $responder;
+
+        return $self;
+    }
+
+    public function getRepository(): callable|string|null
+    {
+        return $this->repository;
+    }
+
+    public function withRepository(string|callable|null $repository): self
+    {
+        $self = clone $this;
+        $self->repository = $repository;
+
+        return $self;
+    }
+
+    public function getRepositoryMethod(): ?string
+    {
+        return $this->repositoryMethod;
+    }
+
+    public function withRepositoryMethod(string $repositoryMethod): self
+    {
+        $self = clone $this;
+        $self->repositoryMethod = $repositoryMethod;
 
         return $self;
     }
