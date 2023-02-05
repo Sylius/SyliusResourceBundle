@@ -16,8 +16,9 @@ namespace Sylius\Component\Resource\Grid\View\Factory;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
+use Sylius\Component\Resource\Context\Context;
 
 interface GridViewFactoryInterface
 {
-    public function create(Grid $grid, Parameters $parameters, array $driverConfiguration): GridView;
+    public function create(Grid $grid, Context $context, Parameters $parameters, array $driverConfiguration): GridView;
 }
