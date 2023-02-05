@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Sylius\Component\Resource\State\ProviderInterface;
@@ -24,7 +24,7 @@ final class ReadListener
 {
     public function __construct(
         private HttpOperationInitiator $operationInitiator,
-        private RequestContextInitiator $contextInitiator,
+        private RequestContextInitiatorInterface $contextInitiator,
         private ProviderInterface $provider,
     ) {
     }

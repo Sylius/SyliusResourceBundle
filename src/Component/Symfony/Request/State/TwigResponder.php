@@ -15,7 +15,6 @@ namespace Sylius\Component\Resource\Symfony\Request\State;
 
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
-use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
@@ -23,8 +22,7 @@ use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -32,6 +30,7 @@ final class TwigResponder implements ResponderInterface
 {
     public function __construct(
         private RedirectHandler $redirectHandler,
+        private ContextFactoryInterface $contextFactory,
         private ?Environment $twig,
     ) {
     }
@@ -65,31 +64,9 @@ final class TwigResponder implements ResponderInterface
 
         $content = $this->twig->render(
             $operation->getTemplate() ?? '',
-            $this->getTwigContext($data, $operation, $request),
+            $this->contextFactory->create($data, $operation, $context),
         );
 
         return new Response($content);
-    }
-
-    private function getTwigContext(mixed $data, Operation $operation, Request $request): array
-    {
-        $context = ['operation' => $operation];
-
-        /** @var FormInterface|null $form */
-        $form = $request->attributes->get('form');
-
-        if (null !== $form) {
-            $context['form'] = $form->createView();
-        }
-
-        if ($operation instanceof CollectionOperationInterface) {
-            $context['resources'] = $data;
-            $context[$operation->getResource()?->getPluralName() ?? ''] = $data;
-        } else {
-            $context['resource'] = $data;
-            $context[$operation->getResource()?->getName() ?? ''] = $data;
-        }
-
-        return $context;
     }
 }
