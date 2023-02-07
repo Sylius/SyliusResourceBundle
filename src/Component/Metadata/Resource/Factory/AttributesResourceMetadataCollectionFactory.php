@@ -76,12 +76,15 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             }
 
             if (null === ($resources[$index] ?? null)) {
-                $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
+                try {
+                    $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
 
-                $resource = new ResourceMetadata($resourceConfiguration->getAlias());
-                $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
+                    $resource = new ResourceMetadata($resourceConfiguration->getAlias());
+                    $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
 
-                $resources[++$index] = $resource;
+                    $resources[++$index] = $resource;
+                } catch(\InvalidArgumentException) {
+                }
             }
 
             if (!is_subclass_of($attribute->getName(), Operation::class)) {
