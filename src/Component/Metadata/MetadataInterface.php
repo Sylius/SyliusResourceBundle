@@ -40,16 +40,18 @@ interface MetadataInterface
     public function getParameter(string $name);
 
     /**
+     * @return class-string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getClass(string $name): string;
+
+    /**
      * Return all the metadata parameters.
      */
     public function getParameters(): array;
 
     public function hasParameter(string $name): bool;
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function getClass(string $name): string;
 
     public function hasClass(string $name): bool;
 
