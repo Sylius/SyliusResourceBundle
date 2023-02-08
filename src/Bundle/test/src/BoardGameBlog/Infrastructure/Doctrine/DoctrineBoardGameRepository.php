@@ -26,11 +26,17 @@ final class DoctrineBoardGameRepository extends ServiceEntityRepository implemen
         parent::__construct($registry, BoardGame::class);
     }
 
-    public function save(BoardGame $book): void
+    public function save(BoardGame $boardGame): void
     {
-        $this->getEntityManager()->persist($book);
+        $this->getEntityManager()->persist($boardGame);
         $this->getEntityManager()->flush();
-        $this->getEntityManager()->refresh($book);
+        $this->getEntityManager()->refresh($boardGame);
+    }
+
+    public function remove(BoardGame $boardGame): void
+    {
+        $this->getEntityManager()->remove($boardGame);
+        $this->getEntityManager()->flush();
     }
 
     public function ofId(BoardGameId $id): ?BoardGame

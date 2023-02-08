@@ -22,7 +22,9 @@ use App\Shared\Domain\Repository\RepositoryInterface;
  */
 interface BoardGameRepositoryInterface extends RepositoryInterface
 {
-    public function save(BoardGame $book): void;
+    public function save(BoardGame $boardGame): void;
+
+    public function remove(BoardGame $boardGame): void;
 
     public function ofId(BoardGameId $id): ?BoardGame;
 }

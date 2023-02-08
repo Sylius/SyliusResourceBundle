@@ -15,6 +15,7 @@ namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
 use App\BoardGameBlog\Domain\Model\BoardGame;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\CreateBoardGameProcessor;
+use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\DeleteBoardGameProcessor;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\UpdateBoardGameProcessor;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameCollectionProvider;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameItemProvider;
@@ -50,7 +51,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             template: 'board_game/show.html.twig',
             provider: BoardGameItemProvider::class,
         ),
-        new Delete(),
+        new Delete(
+            provider: BoardGameItemProvider::class,
+            processor: DeleteBoardGameProcessor::class,
+        ),
     ],
 )]
 final class BoardGameResource implements ResourceInterface
