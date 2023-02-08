@@ -62,8 +62,8 @@ final class BoardGameResource implements ResourceInterface
     public function __construct(
         public ?AbstractUid $id = null,
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
+        #[Assert\NotNull]
+        #[Assert\Length(min: 1, max: 255)]
         public ?string $name = null,
     ) {
     }
