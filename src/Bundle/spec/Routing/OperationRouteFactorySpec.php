@@ -15,6 +15,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
+use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\HttpOperation;
@@ -44,6 +45,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies/new');
         $route->getMethods()->shouldReturn(['GET', 'POST']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
@@ -63,6 +65,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies');
         $route->getMethods()->shouldReturn(['GET']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
@@ -82,6 +85,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies/{id}');
         $route->getMethods()->shouldReturn(['GET']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
@@ -101,6 +105,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies/{id}/edit');
         $route->getMethods()->shouldReturn(['GET', 'PUT']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
@@ -120,6 +125,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies/{id}');
         $route->getMethods()->shouldReturn(['DELETE']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
@@ -139,6 +145,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         $route->getPath()->shouldReturn('/dummies/{id}/custom');
         $route->getMethods()->shouldReturn(['PATCH']);
         $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
