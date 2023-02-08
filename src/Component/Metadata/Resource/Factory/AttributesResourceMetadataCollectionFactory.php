@@ -136,6 +136,17 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withRepository($resourceConfiguration->getServiceId('repository'));
         }
 
+        if (null === $operation->getFormType()) {
+            $formType = $resource->getFormType() ?? $resourceConfiguration->getClass('form');
+            $operation = $operation->withFormType($formType);
+        }
+
+        if (null === $operation->getFormOptions()) {
+            $operation = $operation->withFormOptions([
+                'data_class' => $resourceConfiguration->getClass('model'),
+            ]);
+        }
+
         if ($operation instanceof HttpOperation) {
             if (null === $routeName = $operation->getRouteName()) {
                 $routeName = $this->operationRouteNameFactory->createRouteName($operation);
