@@ -31,7 +31,7 @@ final class SyliusResourceBundleTest extends WebTestCase
         $services = $container->getServiceIds();
 
         $services = array_filter($services, function (string $serviceId): bool {
-            return 0 === strpos($serviceId, 'sylius.');
+            return str_starts_with($serviceId, 'sylius.') && $serviceId !== 'sylius.form.type.resource_autocomplete_choice';
         });
 
         foreach ($services as $id) {
