@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class BoardGameName
+final class BoardGameName implements \Stringable
 {
     #[ORM\Column(name: 'name', length: 255)]
     public string $value;
@@ -27,5 +27,10 @@ final class BoardGameName
         Assert::lengthBetween($value, 1, 255);
 
         $this->value = $value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
     }
 }

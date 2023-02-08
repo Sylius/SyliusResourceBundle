@@ -47,6 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             grid: 'app_board_game',
         ),
         new Show(
+            template: 'board_game/show.html.twig',
             provider: BoardGameItemProvider::class,
         ),
         new Delete(),

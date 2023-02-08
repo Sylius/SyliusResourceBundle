@@ -1,0 +1,7 @@
+App\BoardGameBlog\Domain\ValueObject\BoardGameName:
+    ticket_to_ride_name:
+        __construct: ['Ticket to Ride']
+
+App\BoardGameBlog\Domain\Model\BoardGame:
+    ticket_to_ride:
+        __construct: ['@ticket_to_ride_name']

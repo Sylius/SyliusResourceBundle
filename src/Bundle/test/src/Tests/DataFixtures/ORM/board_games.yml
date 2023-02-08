@@ -1,0 +1,11 @@
+App\BoardGameBlog\Domain\ValueObject\BoardGameName:
+    stone_age_name:
+        __construct: ['Stone Age']
+    ticket_to_ride_name:
+        __construct: ['Ticket to Ride']
+
+App\BoardGameBlog\Domain\Model\BoardGame:
+    stone_age:
+        __construct: ['@stone_age_name']
+    ticket_to_ride:
+        __construct: ['@ticket_to_ride_name']
