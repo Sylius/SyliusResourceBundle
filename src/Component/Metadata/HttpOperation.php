@@ -99,7 +99,7 @@ class HttpOperation extends Operation
         return $this->routePrefix;
     }
 
-    public function withRoutePrefix(string $routePrefix): self
+    public function withRoutePrefix(?string $routePrefix): self
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
