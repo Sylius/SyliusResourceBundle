@@ -114,14 +114,14 @@ final class ResourceSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_a_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, 'book');
+        $this->beConstructedWith('app.book', null, null, null, 'book');
 
         $this->getName()->shouldReturn('book');
     }
 
     function it_can_be_constructed_with_an_application_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, 'app');
+        $this->beConstructedWith('app.book', null, null, null, null, 'app');
 
         $this->getApplicationName()->shouldReturn('app');
     }
@@ -133,11 +133,18 @@ final class ResourceSpec extends ObjectBehavior
         $this->getFormType()->shouldReturn('App\Form\DummyType');
     }
 
+    function it_can_be_constructed_with_a_templates_dir(): void
+    {
+        $this->beConstructedWith('app.book', null, null, 'book');
+
+        $this->getTemplatesDir()->shouldReturn('book');
+    }
+
     function it_can_be_constructed_with_operations(): void
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, $operations);
+        $this->beConstructedWith('app.book', null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }
