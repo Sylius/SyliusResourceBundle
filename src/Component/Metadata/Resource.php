@@ -23,6 +23,7 @@ final class Resource
         private ?string $section = null,
         private ?string $formType = null,
         private ?string $templatesDir = null,
+        private ?string $routePrefix = null,
         private ?string $name = null,
         private ?string $pluralName = null,
         private ?string $applicationName = null,
@@ -118,6 +119,19 @@ final class Resource
     {
         $self = clone $this;
         $self->applicationName = $applicationName;
+
+        return $self;
+    }
+
+    public function getRoutePrefix(): ?string
+    {
+        return $this->routePrefix;
+    }
+
+    public function withRoutePrefix(string $routePrefix): self
+    {
+        $self = clone $this;
+        $self->routePrefix = $routePrefix;
 
         return $self;
     }
