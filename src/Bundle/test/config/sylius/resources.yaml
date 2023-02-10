@@ -7,6 +7,7 @@ sylius_resource:
 
     resources:
         app.board_game:
+            driver: false
             classes:
                 model: App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource
 

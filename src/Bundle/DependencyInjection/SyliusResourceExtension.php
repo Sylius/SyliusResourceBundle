@@ -93,6 +93,11 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->prependExtensionConfig('fos_rest', $config);
     }
 
+    public function append(ContainerBuilder $container): void
+    {
+        dd(__METHOD__);
+    }
+
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
         $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {
@@ -104,6 +109,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         foreach ($resources as $alias => $resource) {
+            if (false === $resource['driver']) {
+                break;
+            }
+
             if (!in_array($resource['driver'], $drivers, true)) {
                 throw new InvalidArgumentException(sprintf(
                     'Resource "%s" uses driver "%s", but this driver has not been enabled.',
@@ -138,7 +147,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $resources[$alias] = $resourceConfig;
             $container->setParameter('sylius.resources', $resources);
 
-            DriverProvider::get($metadata)->load($container, $metadata);
+            if ($metadata->getDriver()) {
+                DriverProvider::get($metadata)->load($container, $metadata);
+            }
 
             if ($metadata->hasParameter('translation')) {
                 $alias .= '_translation';
@@ -149,7 +160,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
                 $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);
 
-                DriverProvider::get($metadata)->load($container, $metadata);
+                if ($metadata->getDriver()) {
+                    DriverProvider::get($metadata)->load($container, $metadata);
+                }
             }
         }
     }
