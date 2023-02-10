@@ -3,3 +3,4 @@ app:
         board_games: Board games
         edit_board_game: Edit board game
         new_board_game: New board game
+        new_subscription: New subscription

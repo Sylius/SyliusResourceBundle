@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     section: 'admin',
     formType: BoardGameType::class,
     templatesDir: 'crud',
+    routePrefix: '/admin',
 )]
 #[Create(
     processor: CreateBoardGameProcessor::class,

@@ -1,0 +1,3 @@
+App\Subscription\Entity\Subscription:
+    subscription_marty:
+        email: 'marty.mcfly@bttf.com'
