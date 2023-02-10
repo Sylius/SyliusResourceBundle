@@ -67,8 +67,8 @@
         <service id="Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface" alias="sylius.grid.view_factory.resource" />
 
         <service id="Sylius\Component\Resource\Grid\State\RequestGridProvider">
-            <argument type="service" id="sylius.grid.view_factory.resource" />
-            <argument type="service" id="sylius.grid.service_grid_provider" />
+            <argument type="service" id="sylius.grid.view_factory.resource" on-invalid="null" />
+            <argument type="service" id="sylius.grid.service_grid_provider" on-invalid="null" />
             <tag name="sylius.state_provider" />
         </service>
     </services>
