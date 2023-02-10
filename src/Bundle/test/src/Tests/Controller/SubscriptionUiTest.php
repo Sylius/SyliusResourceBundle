@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\ApiTestCase;
-use App\BoardGameBlog\Domain\Model\BoardGame;
-use App\BoardGameBlog\Domain\Repository\BoardGameRepositoryInterface;
 use App\Subscription\Entity\Subscription;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
