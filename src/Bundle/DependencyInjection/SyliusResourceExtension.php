@@ -93,11 +93,6 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->prependExtensionConfig('fos_rest', $config);
     }
 
-    public function append(ContainerBuilder $container): void
-    {
-        dd(__METHOD__);
-    }
-
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
         $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {

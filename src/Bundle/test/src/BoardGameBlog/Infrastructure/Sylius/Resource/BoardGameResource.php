@@ -35,27 +35,25 @@ use Symfony\Component\Validator\Constraints as Assert;
     section: 'admin',
     formType: BoardGameType::class,
     templatesDir: 'crud',
-    operations: [
-        new Create(
-            processor: CreateBoardGameProcessor::class,
-        ),
-        new Update(
-            provider: BoardGameItemProvider::class,
-            processor: UpdateBoardGameProcessor::class,
-        ),
-        new Index(
-            provider: BoardGameCollectionProvider::class,
-            grid: 'app_board_game',
-        ),
-        new Show(
-            template: 'board_game/show.html.twig',
-            provider: BoardGameItemProvider::class,
-        ),
-        new Delete(
-            provider: BoardGameItemProvider::class,
-            processor: DeleteBoardGameProcessor::class,
-        ),
-    ],
+)]
+#[Create(
+    processor: CreateBoardGameProcessor::class,
+)]
+#[Update(
+    provider: BoardGameItemProvider::class,
+    processor: UpdateBoardGameProcessor::class,
+)]
+#[Index(
+    provider: BoardGameCollectionProvider::class,
+    grid: 'app_board_game',
+)]
+#[Show(
+    template: 'board_game/show.html.twig',
+    provider: BoardGameItemProvider::class,
+)]
+#[Delete(
+    provider: BoardGameItemProvider::class,
+    processor: DeleteBoardGameProcessor::class,
 )]
 final class BoardGameResource implements ResourceInterface
 {
