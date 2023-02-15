@@ -39,6 +39,12 @@
             <tag name="kernel.event_listener" event="kernel.view" priority="32" />
         </service>
 
+        <service id="sylius.listener.serialize" class="Sylius\Component\Resource\Symfony\EventListener\SerializerListener">
+            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
+            <argument type="service" id="serializer" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.view" priority="16" />
+        </service>
+
         <service id="sylius.listener.respond" class="Sylius\Component\Resource\Symfony\EventListener\RespondListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />

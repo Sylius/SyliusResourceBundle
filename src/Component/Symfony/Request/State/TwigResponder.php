@@ -39,12 +39,15 @@ final class TwigResponder implements ResponderInterface
     {
         $request = $context->get(RequestOption::class)?->request();
 
-        if (null === $this->twig) {
-            throw new \LogicException('You can not use the "Twig" if it is not available. Try running "composer require twig".');
-        }
-
         if (null === $request) {
             return null;
+        }
+
+        // TODO use $request->getRequestFormat();
+        $format = $request->attributes->get('_format');
+
+        if ('html' === $format && null === $this->twig) {
+            throw new \LogicException('You can not use the "html" format if Twig is not available. Try running "composer require twig".');
         }
 
         $isValid = $request->attributes->getBoolean('is_valid', true);
@@ -62,10 +65,14 @@ final class TwigResponder implements ResponderInterface
             return $this->redirectHandler->redirectToResource($data, $operation, $request);
         }
 
-        $content = $this->twig->render(
-            $operation->getTemplate() ?? '',
-            $this->contextFactory->create($data, $operation, $context),
-        );
+        $content = $data;
+
+        if ('html' === $format) {
+            $content = $this->twig->render(
+                $operation->getTemplate() ?? '',
+                $this->contextFactory->create($data, $operation, $context),
+            );
+        }
 
         return new Response($content, $isValid ? Response::HTTP_OK : Response::HTTP_UNPROCESSABLE_ENTITY);
     }

@@ -26,7 +26,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
     public function create(MetadataInterface $metadata, Resource $resource, HttpOperation $operation): Route
     {
-        $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
+        $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation) . '.{_format}';
 
         if (null !== $routePrefix = $operation->getRoutePrefix()) {
             $routePath = $routePrefix . '/' . $routePath;
@@ -36,6 +36,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             path: $routePath,
             defaults: [
                 '_controller' => PlaceHolderAction::class,
+                '_format' => 'html',
                 '_sylius' => $this->getSyliusOptions($resource, $operation),
             ],
             methods: $operation->getMethods() ?? [],
