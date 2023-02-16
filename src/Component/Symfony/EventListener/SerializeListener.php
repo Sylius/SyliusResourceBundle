@@ -16,7 +16,6 @@ namespace Sylius\Component\Resource\Symfony\EventListener;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Serializer\SerializerInterface;
-use Webmozart\Assert\Assert;
 
 final class SerializeListener
 {

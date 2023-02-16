@@ -17,9 +17,7 @@ use App\Subscription\Entity\Subscription;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Serializer\SerializerInterface;
-use Webmozart\Assert\Assert;
 
 final class DeserializeListener
 {

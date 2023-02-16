@@ -35,6 +35,7 @@
 
         <service id="sylius.listener.validate" class="Sylius\Component\Resource\Symfony\EventListener\ValidateListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
+            <argument type="service" id="validator" />
             <tag name="kernel.event_listener" event="kernel.view" priority="64" />
         </service>
 
@@ -56,6 +57,11 @@
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state.responder" />
             <tag name="kernel.event_listener" event="kernel.view" priority="8" />
+        </service>
+
+        <service id="sylius.listener.exception.validation" class="Sylius\Component\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
+            <argument type="service" id="serializer" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
         </service>
     </services>
 </container>

@@ -1,0 +1,15 @@
+{
+    "type": "https://symfony.com/errors/validation",
+    "title": "Validation Failed",
+    "detail": "email: This value should not be blank.",
+    "violations": [
+        {
+            "propertyPath": "email",
+            "title": "This value should not be blank.",
+            "parameters": {
+                "{{ value }}": "null"
+            },
+            "type": "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
+        }
+    ]
+}

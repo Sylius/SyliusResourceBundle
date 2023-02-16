@@ -51,6 +51,31 @@ final class SubscriptionApiTest extends JsonApiTestCase
     }
 
     /** @test */
+    public function it_allows_creating_a_subscription(): void
+    {
+        $data =
+            <<<EOT
+        {
+            "email": "marty.mcfly@bttf.com"
+        }
+EOT;
+
+        $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $response = $this->client->getResponse();
+        $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
+    }
+
+    /** @test */
+    public function it_does_not_allow_to_create_a_subscription_if_there_is_a_validation_error(): void
+    {
+        $this->loadFixturesFromFile('subscriptions.yml');
+
+        $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+
+        $this->assertResponse($this->client->getResponse(), 'subscriptions/create_validation', Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /** @test */
     public function it_allows_updating_a_subscription(): void
     {
         $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
@@ -65,6 +90,16 @@ EOT;
         $this->client->request('PUT', '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+    }
+
+    /** @test */
+    public function it_does_not_allow_to_update_a_subscription_if_there_is_a_validation_error(): void
+    {
+        $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
+
+        $this->client->request('PUT', '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+
+        $this->assertResponse($this->client->getResponse(), 'subscriptions/update_validation', Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
