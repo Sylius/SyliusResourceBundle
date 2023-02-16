@@ -35,6 +35,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $redirectToRoute = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET', 'PUT'],
@@ -52,6 +53,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            redirectToRoute: $redirectToRoute,
         );
     }
 }

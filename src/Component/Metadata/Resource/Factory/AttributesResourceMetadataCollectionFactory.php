@@ -60,6 +60,8 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             if (is_a($attribute->getName(), ResourceMetadata::class, true)) {
                 /** @var ResourceMetadata $resource */
                 $resource = $attribute->newInstance();
+                $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+                $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
                 $resources[++$index] = $resource;
                 $operations = [];
 
@@ -123,18 +125,24 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     {
         $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
 
+        if (null === $resource->getName()) {
+            $resourceName = $resourceConfiguration->getName();
+
+            $resource = $resource->withName($resourceName);
+            $operation = $operation->withResource($resource);
+        }
+
+        if (null === $resource->getPluralName()) {
+            $resourcePluralName = $resourceConfiguration->getPluralName();
+
+            $resource = $resource->withPluralName($resourcePluralName);
+            $operation = $operation->withResource($resource);
+        }
+
         if (null === $operation->getTemplate()) {
             $templateDir = $resource->getTemplatesDir() ?? '';
             $template = sprintf('%s/%s.html.twig', $templateDir, $operation->getShortName() ?? '');
             $operation = $operation->withTemplate($template);
-        }
-
-        if (null === $resource->getApplicationName()) {
-            $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
-        }
-
-        if (null === $resource->getName()) {
-            $resource = $resource->withName($resourceConfiguration->getName());
         }
 
         $operation = $operation->withResource($resource);

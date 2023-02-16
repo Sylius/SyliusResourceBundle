@@ -24,6 +24,7 @@ final class Resource
         private ?string $formType = null,
         private ?string $templatesDir = null,
         private ?string $name = null,
+        private ?string $pluralName = null,
         private ?string $applicationName = null,
         ?array $operations = null,
     ) {
@@ -69,6 +70,19 @@ final class Resource
         return $self;
     }
 
+    public function getTemplatesDir(): ?string
+    {
+        return $this->templatesDir;
+    }
+
+    public function withTemplatesDir(string $templatesDir): self
+    {
+        $self = clone $this;
+        $self->templatesDir = $templatesDir;
+
+        return $self;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
@@ -82,6 +96,19 @@ final class Resource
         return $self;
     }
 
+    public function getPluralName(): ?string
+    {
+        return $this->pluralName;
+    }
+
+    public function withPluralName(string $pluralName): self
+    {
+        $self = clone $this;
+        $self->pluralName = $pluralName;
+
+        return $self;
+    }
+
     public function getApplicationName(): ?string
     {
         return $this->applicationName;
@@ -91,19 +118,6 @@ final class Resource
     {
         $self = clone $this;
         $self->applicationName = $applicationName;
-
-        return $self;
-    }
-
-    public function getTemplatesDir(): ?string
-    {
-        return $this->templatesDir;
-    }
-
-    public function withTemplatesDir(string $templatesDir): self
-    {
-        $self = clone $this;
-        $self->templatesDir = $templatesDir;
 
         return $self;
     }
@@ -133,5 +147,19 @@ final class Resource
         $self->operations = $operations;
 
         return $self;
+    }
+
+    public function getRouteName(string $shortName): string
+    {
+        $section = $this->getSection();
+        $sectionPrefix = $section ? $section . '_' : '';
+
+        return sprintf(
+            '%s_%s%s_%s',
+            $this->getApplicationName() ?? '',
+            $sectionPrefix,
+            $this->getName() ?? '',
+            $shortName,
+        );
     }
 }
