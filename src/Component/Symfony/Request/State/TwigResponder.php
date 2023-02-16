@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Webmozart\Assert\Assert;
 
 final class TwigResponder implements ResponderInterface
 {
@@ -46,10 +47,6 @@ final class TwigResponder implements ResponderInterface
         // TODO use $request->getRequestFormat();
         $format = $request->attributes->get('_format');
 
-        if ('html' === $format && null === $this->twig) {
-            throw new \LogicException('You can not use the "html" format if Twig is not available. Try running "composer require twig".');
-        }
-
         $isValid = $request->attributes->getBoolean('is_valid', true);
 
         if ($operation instanceof DeleteOperationInterface && $operation instanceof HttpOperation) {
@@ -68,11 +65,17 @@ final class TwigResponder implements ResponderInterface
         $content = $data;
 
         if ('html' === $format) {
+            if (null === $this->twig) {
+                throw new \LogicException('You can not use the "html" format if Twig is not available. Try running "composer require twig".');
+            }
+
             $content = $this->twig->render(
                 $operation->getTemplate() ?? '',
                 $this->contextFactory->create($data, $operation, $context),
             );
         }
+
+        Assert::string($content);
 
         return new Response($content, $isValid ? Response::HTTP_OK : Response::HTTP_UNPROCESSABLE_ENTITY);
     }

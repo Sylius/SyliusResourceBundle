@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Symfony\EventListener;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Serializer\SerializerInterface;
+use Webmozart\Assert\Assert;
 
 final class SerializerListener
 {
@@ -34,6 +35,7 @@ final class SerializerListener
         $operation = $this->operationInitiator->initializeOperation($request);
 
         // TODO use $request->getRequestFormat();
+        /** @var string $format */
         $format = $request->attributes->get('_format');
 
         if (
