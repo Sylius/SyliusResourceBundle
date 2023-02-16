@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
+use App\Subscription\Entity\Subscription;
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Serializer\SerializerInterface;
 use Webmozart\Assert\Assert;
 
-final class SerializerListener
+final class DeserializeListener
 {
     public function __construct(
         private HttpOperationInitiator $operationInitiator,
@@ -27,9 +30,9 @@ final class SerializerListener
     }
 
     /**
-     * Serializes the data to the requested format.
+     * Deserializes the data sent in the requested format.
      */
-    public function onKernelView(ViewEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $operation = $this->operationInitiator->initializeOperation($request);
@@ -40,7 +43,9 @@ final class SerializerListener
 
         if (
             null === $operation ||
-            'html' === $format
+            'html' === $format ||
+            $request->isMethodSafe() ||
+            $operation instanceof DeleteOperationInterface
         ) {
             return;
         }
@@ -49,8 +54,8 @@ final class SerializerListener
             throw new \LogicException(sprintf('You can not use the "%s" format if the Serializer is not available. Try running "composer require symfony/serializer".', $format));
         }
 
-        $controllerResult = $event->getControllerResult();
+        $data = $this->serializer->deserialize(data: $request->getContent(), type: Subscription::class, format: $format);
 
-        $event->setControllerResult($this->serializer->serialize($controllerResult, $format));
+        $request->attributes->set('data', $data);
     }
 }

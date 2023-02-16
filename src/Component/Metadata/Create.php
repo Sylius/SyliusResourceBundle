@@ -36,6 +36,7 @@ final class Create extends HttpOperation implements CreateOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $format = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -55,6 +56,7 @@ final class Create extends HttpOperation implements CreateOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            format: $format,
             redirectToRoute: $redirectToRoute,
         );
     }

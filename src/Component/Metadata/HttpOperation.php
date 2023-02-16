@@ -36,6 +36,7 @@ class HttpOperation extends Operation
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $format = null,
         protected ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -52,6 +53,7 @@ class HttpOperation extends Operation
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            format: $format,
         );
     }
 

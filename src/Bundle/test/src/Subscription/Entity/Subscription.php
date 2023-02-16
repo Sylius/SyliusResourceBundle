@@ -35,6 +35,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Update]
 #[Delete]
 #[Show(template: 'subscription/show.html.twig')]
+
+#[Resource(
+    alias: 'app.subscription',
+    section: 'ajax',
+    routePrefix: '/ajax',
+)]
+#[Index(format: 'json')]
+#[Create(methods: ['POST'], path: 'subscriptions', format: 'json')]
+#[Update(methods: ['PUT'], path: 'subscriptions/{id}', format: 'json')]
+#[Delete(methods: ['DELETE'], path: 'subscriptions/{id}', format: 'json')]
+#[Show(template: 'subscription/show.html.twig', format: 'json')]
 #[ORM\Entity]
 class Subscription implements ResourceInterface
 {

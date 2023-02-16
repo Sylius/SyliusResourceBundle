@@ -46,8 +46,7 @@ abstract class Operation
         protected ?bool $write = null,
         protected ?string $formType = null,
         protected ?array $formOptions = null,
-        protected ?string $resourceName = null,
-        protected ?string $resourcePluralName = null,
+        protected ?string $format = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -233,6 +232,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->formOptions = $formOptions;
+
+        return $self;
+    }
+
+    public function getFormat(): ?string
+    {
+        return $this->format;
+    }
+
+    public function withFormat(string $format): self
+    {
+        $self = clone $this;
+        $self->format = $format;
 
         return $self;
     }

@@ -49,14 +49,16 @@ final class TwigResponder implements ResponderInterface
 
         $isValid = $request->attributes->getBoolean('is_valid', true);
 
-        if ($operation instanceof DeleteOperationInterface && $operation instanceof HttpOperation) {
+        if (
+            'html' === $format &&
+            $operation instanceof DeleteOperationInterface
+        ) {
             return $this->redirectHandler->redirectToResource($data, $operation, $request);
-            //return $this->redirectHandler->redirectToIndex($data, $operation, $request);
         }
 
         if (
             $isValid &&
-            $operation instanceof HttpOperation &&
+            'html' === $format &&
             ($operation instanceof UpdateOperationInterface || $operation instanceof CreateOperationInterface)
         ) {
             return $this->redirectHandler->redirectToResource($data, $operation, $request);
@@ -77,6 +79,20 @@ final class TwigResponder implements ResponderInterface
 
         Assert::string($content);
 
-        return new Response($content, $isValid ? Response::HTTP_OK : Response::HTTP_UNPROCESSABLE_ENTITY);
+        if ('html' === $format) {
+            return new Response($content, $isValid ? Response::HTTP_OK : Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $status = Response::HTTP_OK;
+
+        if ($operation instanceof CreateOperationInterface) {
+            $status = Response::HTTP_CREATED;
+        }
+
+        if ($operation instanceof DeleteOperationInterface || $operation instanceof UpdateOperationInterface) {
+            $status = Response::HTTP_NO_CONTENT;
+        }
+
+        return new Response($content, $isValid ? $status : Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
