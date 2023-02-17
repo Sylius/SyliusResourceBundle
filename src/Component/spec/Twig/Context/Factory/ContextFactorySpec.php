@@ -20,7 +20,7 @@ use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactory;
 
-class ContextFactorySpec extends ObjectBehavior
+final class ContextFactorySpec extends ObjectBehavior
 {
     function it_is_initializable(): void
     {
