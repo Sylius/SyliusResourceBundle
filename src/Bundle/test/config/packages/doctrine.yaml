@@ -14,3 +14,8 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            BoardGameBlog:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/BoardGameBlog/Domain'
+                prefix: 'App\BoardGameBlog\Domain'
