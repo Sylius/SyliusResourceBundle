@@ -2,6 +2,7 @@
 
 use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
+use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use SlevomatCodingStandard\Sniffs\Commenting\InlineDocCommentDeclarationSniff;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
@@ -25,6 +26,7 @@ file that was distributed with this source code.',
     $ecsConfig->skip([
         InlineDocCommentDeclarationSniff::class . '.MissingVariable',
         VisibilityRequiredFixer::class => ['*Spec.php'],
+        MethodArgumentSpaceFixer::class => ['*/BoardGameBlog/*'],
         'src/Bundle/Controller/ControllerTrait.php',
         'src/Bundle/EventListener/ODMMappedSuperClassSubscriber.php', // hot-fix to fix the build
         'src/Component/vendor/*',

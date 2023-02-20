@@ -58,8 +58,9 @@ class DoctrineResourceMetadataCollectionFactory implements ResourceMetadataColle
     private function addDefaults(ResourceMetadata $resource, Operation $operation): Operation
     {
         $metadata = $this->resourceRegistry->get($resource->getAlias());
+        $driver = $metadata->getDriver();
 
-        if (str_starts_with($metadata->getDriver(), 'doctrine/')) {
+        if ($driver && str_starts_with($driver, 'doctrine/')) {
             $operation = $operation->withProcessor($this->getProcessor($operation));
         }
 

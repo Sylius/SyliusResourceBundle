@@ -104,6 +104,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         foreach ($resources as $alias => $resource) {
+            if (false === $resource['driver']) {
+                break;
+            }
+
             if (!in_array($resource['driver'], $drivers, true)) {
                 throw new InvalidArgumentException(sprintf(
                     'Resource "%s" uses driver "%s", but this driver has not been enabled.',
@@ -138,7 +142,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $resources[$alias] = $resourceConfig;
             $container->setParameter('sylius.resources', $resources);
 
-            DriverProvider::get($metadata)->load($container, $metadata);
+            if ($metadata->getDriver()) {
+                DriverProvider::get($metadata)->load($container, $metadata);
+            }
 
             if ($metadata->hasParameter('translation')) {
                 $alias .= '_translation';
