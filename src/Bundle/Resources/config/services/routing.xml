@@ -53,5 +53,9 @@
 
         <service id="sylius.routing.factory.operation_route" class="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
+
+        <service id="sylius.routing.redirect_handler" class="Sylius\Component\Resource\Symfony\Routing\RedirectHandler">
+            <argument type="service" id="router" />
+        </service>
     </services>
 </container>

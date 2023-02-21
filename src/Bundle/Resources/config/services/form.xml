@@ -11,5 +11,10 @@
             <tag name="form.type" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Form\Type\ResourceAutocompleteChoiceType" alias="sylius.form.type.resource_autocomplete_choice" />
+
+        <service id="sylius.form.factory" class="Sylius\Component\Resource\Symfony\Form\Factory\FormFactory" public="false">
+            <argument type="service" id="form.factory" />
+        </service>
+        <service id="Symfony\Component\Form\FormFactoryInterface" alias="sylius.form.factory" />
     </services>
 </container>
