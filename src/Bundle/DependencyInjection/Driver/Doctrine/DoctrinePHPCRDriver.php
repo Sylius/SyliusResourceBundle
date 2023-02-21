@@ -166,6 +166,7 @@ final class DoctrinePHPCRDriver extends AbstractDoctrineDriver
             new Reference($metadata->getServiceId('manager')),
             $this->getClassMetadataDefinition($metadata),
         ]);
+        $definition->addTag('sylius.repository');
 
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
     }
