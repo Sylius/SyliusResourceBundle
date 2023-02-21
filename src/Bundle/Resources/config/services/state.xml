@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Paweł Jędrzejewski
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
+            <argument type="tagged_locator" tag="sylius.state_provider" />
+        </service>
+        <service id="Sylius\Component\Resource\State\ProviderInterface" alias="sylius.state.provider" />
+
+        <service id="sylius.state.processor" class="Sylius\Component\Resource\State\Processor">
+            <argument type="tagged_locator" tag="sylius.state_processor" />
+        </service>
+        <service id="Sylius\Component\Resource\State\ProcessorInterface" alias="sylius.state.processor" />
+
+        <service id="sylius.state.responder" class="Sylius\Component\Resource\State\Responder">
+            <argument type="tagged_locator" tag="sylius.state_responder" />
+        </service>
+        <service id="Sylius\Component\Resource\State\ResponderInterface" alias="sylius.state.responder" />
+
+        <service id="Sylius\Component\Resource\Symfony\Request\State\Provider">
+            <argument type="tagged_locator" tag="sylius.repository" />
+            <argument type="service" id="sylius.repository_argument_resolver.request" />
+            <tag name="sylius.state_provider" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor">
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.state_processor" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor">
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.state_processor" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
+            <argument type="service" id="sylius.routing.redirect_handler" />
+            <argument type="service" id="sylius.twig.context.factory" />
+            <argument type="service" id="twig" on-invalid="null" />
+            <tag name="sylius.state_responder" />
+        </service>
+    </services>
+</container>
