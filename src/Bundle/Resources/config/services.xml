@@ -17,6 +17,7 @@
         <import resource="services/context.xml" />
         <import resource="services/controller.xml" />
         <import resource="services/form.xml" />
+        <import resource="services/helper.xml" />
         <import resource="services/listener.xml" />
         <import resource="services/metadata.xml" />
         <import resource="services/routing.xml" />
