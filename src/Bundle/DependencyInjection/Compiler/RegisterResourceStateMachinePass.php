@@ -29,7 +29,7 @@ final class RegisterResourceStateMachinePass implements CompilerPassInterface
 
         foreach ($resources as $alias => $configuration) {
             [$applicationName, $resourceName] = explode('.', $alias, 2);
-            $stateMachineId = sprintf('%s.state_machine.%s', $applicationName, $resourceName);
+            $stateMachineId = sprintf('%s.controller_state_machine.%s', $applicationName, $resourceName);
 
             $stateMachineComponent = $configuration['state_machine_component'] ?? null;
 

@@ -45,9 +45,9 @@ final class RegisterResourceStateMachinePassTest extends AbstractCompilerPassTes
 
         $this->compile();
 
-        $this->assertContainerBuilderHasAlias('app.state_machine.book', 'sylius.resource_controller.state_machine.symfony');
-        $this->assertContainerBuilderHasAlias('app.state_machine.author', 'sylius.resource_controller.state_machine.winzou');
-        $this->assertContainerBuilderHasAlias('app.state_machine.pull_request', 'sylius.resource_controller.state_machine');
+        $this->assertContainerBuilderHasAlias('app.controller_state_machine.book', 'sylius.resource_controller.state_machine.symfony');
+        $this->assertContainerBuilderHasAlias('app.controller_state_machine.author', 'sylius.resource_controller.state_machine.winzou');
+        $this->assertContainerBuilderHasAlias('app.controller_state_machine.pull_request', 'sylius.resource_controller.state_machine');
     }
 
     /** @test */
