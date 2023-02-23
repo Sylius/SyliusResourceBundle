@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
+
 /**
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Update extends HttpOperation implements UpdateOperationInterface
+final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface
 {
     public function __construct(
         ?array $methods = null,
@@ -34,6 +36,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
+        ?bool $validate = null,
         ?string $formType = null,
         ?array $formOptions = null,
         ?string $stateMachineComponent = null,
@@ -42,20 +45,21 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
-            methods: $methods ?? ['GET', 'PUT'],
+            methods: $methods ?? ['PUT', 'PATCH'],
             path: $path,
             routePrefix: $routePrefix,
             template: $template,
-            shortName: $shortName ?? 'update',
+            shortName: $shortName ?? $stateMachineTransition ?? 'apply_state_machine_transition',
             name: $name,
             provider: $provider,
-            processor: $processor,
+            processor: $processor ?? ApplyStateMachineTransitionProcessor::class,
             responder: $responder,
             repository: $repository,
             repositoryMethod: $repositoryMethod,
             grid: $grid,
             read: $read,
             write: $write,
+            validate: $validate ?? false,
             formType: $formType,
             formOptions: $formOptions,
             stateMachineComponent: $stateMachineComponent,

@@ -60,3 +60,22 @@ framework:
                 reject:
                     from: reviewed
                     to: rejected
+        subscription:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'currentState'
+            supports:
+                - App\Subscription\Entity\Subscription
+            initial_marking: new
+            places:
+                - new
+                - accepted
+                - rejected
+            transitions:
+                accept:
+                    from: new
+                    to: accepted
+                reject:
+                    from: new
+                    to: rejected

@@ -24,6 +24,7 @@ final class MetadataSpec extends ObjectBehavior
             'app.product',
             [
                 'driver' => 'doctrine/orm',
+                'state_machine_component' => 'symfony',
                 'templates' => 'AppBundle:Resource',
                 'classes' => [
                     'model' => 'AppBundle\Model\Resource',
@@ -100,6 +101,11 @@ final class MetadataSpec extends ObjectBehavior
     function it_has_driver(): void
     {
         $this->getDriver()->shouldReturn('doctrine/orm');
+    }
+
+    function it_has_state_machine_component(): void
+    {
+        $this->getStateMachineComponent()->shouldReturn('symfony');
     }
 
     function it_has_templates_namespace(): void

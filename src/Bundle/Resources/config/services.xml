@@ -22,6 +22,7 @@
         <import resource="services/metadata.xml" />
         <import resource="services/routing.xml" />
         <import resource="services/state.xml" />
+        <import resource="services/state_machine.xml" />
         <import resource="services/storage.xml" />
         <import resource="services/twig.xml" />
     </imports>

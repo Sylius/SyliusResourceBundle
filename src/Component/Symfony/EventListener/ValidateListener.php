@@ -41,7 +41,8 @@ final class ValidateListener
         if (
             $controllerResult instanceof Response ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
-            null === $form
+            null === $form ||
+            !($operation->canValidate() ?? true)
         ) {
             return;
         }

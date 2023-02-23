@@ -34,6 +34,7 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
             new AttributesResourceMetadataCollectionFactory(
                 $resourceRegistry->getWrappedObject(),
                 new OperationRouteNameFactory(),
+                'symfony',
             ),
         );
     }
@@ -52,6 +53,7 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
         $metadata->getServiceId('repository')->willReturn('app.repository.dummy');
         $metadata->getClass('form')->willReturn('App\Form');
         $metadata->getClass('model')->willReturn('App\Dummy');
+        $metadata->getStateMachineComponent()->willReturn('symfony');
         $resourceRegistry->get('app.dummy')->willReturn($metadata);
 
         $metadata->getApplicationName()->willReturn('app');
