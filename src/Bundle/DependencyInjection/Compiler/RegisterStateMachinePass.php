@@ -32,6 +32,10 @@ final class RegisterStateMachinePass implements CompilerPassInterface
         /** @var array $settings */
         $settings = $container->getParameter('sylius.resource.settings');
         $stateMachine = $settings['state_machine_component'];
+        $container->setParameter('sylius.state_machine_component.default', null);
+
+        $this->registerWinzouStateMachine($container);
+        $this->registerSymfonyWorkflowStateMachine($container);
 
         $this->registerWinzouStateMachine($container);
         $this->registerSymfonyWorkflowStateMachine($container);
@@ -80,9 +84,34 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             throw new \LogicException('You can not use "Winzou" for your state machine if it is not available. Try running "composer require winzou/state-machine-bundle".');
         }
 
+        $container->setParameter('sylius.state_machine_component.default', 'winzou');
         $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine', StateMachine::class);
         $stateMachineDefinition->setPublic(false);
         $stateMachineDefinition->addArgument(new Reference('sm.factory'));
+
+        $container->setAlias('sylius.state_machine.operation.default', 'sylius.state_machine.operation.winzou');
+    }
+
+    private function registerWinzouStateMachine(ContainerBuilder $container): void
+    {
+        if (!$this->isWinzouStateMachineEnabled($container)) {
+            return;
+        }
+
+        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine.winzou', StateMachine::class);
+        $stateMachineDefinition->setPublic(false);
+        $stateMachineDefinition->addArgument(new Reference('sm.factory'));
+    }
+
+    private function registerSymfonyWorkflowStateMachine(ContainerBuilder $container): void
+    {
+        if (!$this->isSymfonyWorkflowEnabled($container)) {
+            return;
+        }
+
+        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine.symfony', Workflow::class);
+        $stateMachineDefinition->setPublic(false);
+        $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
     }
 
     private function registerWinzouStateMachine(ContainerBuilder $container): void
@@ -117,9 +146,12 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             throw new \LogicException('You can not use "Symfony" for your state machine if it is not available. Try running "composer require symfony/workflow".');
         }
 
+        $container->setParameter('sylius.state_machine_component.default', 'symfony');
         $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine', Workflow::class);
         $stateMachineDefinition->setPublic(false);
         $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
+
+        $container->setAlias('sylius.state_machine.operation.default', 'sylius.state_machine.operation.symfony');
     }
 
     private function isSymfonyWorkflowEnabled(ContainerBuilder $container): bool

@@ -44,6 +44,12 @@
             <tag name="sylius.state_processor" />
         </service>
 
+        <service id="Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor">
+            <argument type="service" id="sylius.state_machine.operation" />
+            <argument type="service" id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" />
+            <tag name="sylius.state_processor" />
+        </service>
+
         <service id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
             <argument type="service" id="sylius.routing.redirect_handler" />
             <argument type="service" id="sylius.twig.context.factory" />

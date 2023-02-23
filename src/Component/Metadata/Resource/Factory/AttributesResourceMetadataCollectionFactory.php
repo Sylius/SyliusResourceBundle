@@ -31,6 +31,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private OperationRouteNameFactory $operationRouteNameFactory,
+        private ?string $defaultStateMachineComponent,
     ) {
     }
 
@@ -162,6 +163,12 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withFormOptions([
                 'data_class' => $resourceConfiguration->getClass('model'),
             ]);
+        }
+
+        if (null === $operation->getStateMachineComponent()) {
+            $stateMachineComponent = $resourceConfiguration->getStateMachineComponent() ?? $this->defaultStateMachineComponent;
+
+            $operation = $operation->withStateMachineComponent($stateMachineComponent);
         }
 
         if ($operation instanceof HttpOperation) {
