@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+/**
+ * @method string|null getStateMachineComponent()
+ */
 interface MetadataInterface
 {
     public function getAlias(): string;

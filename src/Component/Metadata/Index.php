@@ -36,6 +36,9 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $stateMachineComponent = null,
+        ?string $stateMachineTransition = null,
+        ?string $stateMachineGraph = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -55,6 +58,9 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            stateMachineComponent: $stateMachineComponent,
+            stateMachineTransition: $stateMachineTransition,
+            stateMachineGraph: $stateMachineGraph,
             redirectToRoute: $redirectToRoute,
         );
     }

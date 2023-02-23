@@ -32,3 +32,18 @@ winzou_state_machine:
             reopen:
                 from: [ closed ]
                 to: review
+    subscription:
+        class: App\Subscription\Entity\Subscription
+        property_path: state
+        graph: subscription
+        states:
+            - new
+            - accepted
+            - rejected
+        transitions:
+            accept:
+                from: [ new ]
+                to: accepted
+            reject:
+                from: [ new ]
+                to: rejected

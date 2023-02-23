@@ -66,6 +66,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('driver')->defaultValue(SyliusResourceBundle::DRIVER_DOCTRINE_ORM)->end()
                             ->variableNode('options')->end()
                             ->scalarNode('templates')->cannotBeEmpty()->end()
+                            ->scalarNode('state_machine_component')->defaultNull()->end()
                             ->arrayNode('classes')
                                 ->isRequired()
                                 ->addDefaultsIfNotSet()
