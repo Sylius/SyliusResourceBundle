@@ -13,7 +13,7 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}, Persistence: ${{ matrix.persistence }}"
+        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}, Persistence: ${{ matrix.persistence }}, Collections: ${{ matrix.collections }}"
         strategy:
             fail-fast: false
             matrix:
@@ -22,17 +22,24 @@ jobs:
                 symfony: ["^5.4", "~6.0.0", "~6.1.0", "~6.2.0"]
                 twig: ["^2.12", "^3.0"]
                 persistence: ["^2.0", "^3.0"]
+                collections: ["^1.8", "^2.0"]
                 include:
                     - php: "8.0"
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
                 exclude:
-                    -
-                        php: "8.0"
-                        symfony: "~6.1.0"
-                    -
-                        php: "8.0"
-                        symfony: "~6.2.0"
+                    - php: "8.0"
+                      symfony: "~6.1.0"
+                    - php: "8.0"
+                      symfony: "~6.2.0"
+                    - php: "8.0"
+                      collections: "^2.0"
+                    - php: "8.1"
+                      collections: "^2.0"
+                      persistence: "^2.0"
+                    - php: "8.2"
+                      collections: "^2.0"
+                      persistence: "^2.0"
 
         steps:
             -
@@ -71,6 +78,11 @@ jobs:
                 name: Restrict doctrine/persistence version
                 if: matrix.persistence != ''
                 run: composer require "doctrine/persistence:${{ matrix.persistence }}" --no-update --no-scripts
+
+            -
+                name: Restrict doctrine/collections version
+                if: matrix.collections != ''
+                run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
 
             -
                 name: Install dependencies

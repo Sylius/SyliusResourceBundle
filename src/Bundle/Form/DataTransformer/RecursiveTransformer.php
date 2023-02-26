@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -28,7 +29,7 @@ final class RecursiveTransformer implements DataTransformerInterface
     }
 
     /** @param Collection|null $value */
-    public function transform($value): Collection
+    public function transform($value): ReadableCollection
     {
         if (null === $value) {
             return new ArrayCollection();
@@ -49,7 +50,7 @@ final class RecursiveTransformer implements DataTransformerInterface
     }
 
     /** @param Collection|null $value */
-    public function reverseTransform($value): Collection
+    public function reverseTransform($value): ReadableCollection
     {
         if (null === $value) {
             return new ArrayCollection();
