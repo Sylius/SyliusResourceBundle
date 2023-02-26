@@ -70,3 +70,7 @@ class BookClass extends AbstractResource
 class AuthorClass extends AbstractResource
 {
 }
+
+class PullRequestClass extends AbstractResource
+{
+}

@@ -22,6 +22,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilde
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnControllersPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
@@ -50,6 +51,7 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterResourcesPass());
         $container->addCompilerPass(new RegisterStateMachinePass());
+        $container->addCompilerPass(new RegisterResourceStateMachinePass());
         $container->addCompilerPass(new TwigPass());
         $container->addCompilerPass(new WinzouStateMachinePass());
 
