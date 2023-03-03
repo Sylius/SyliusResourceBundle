@@ -17,6 +17,7 @@ use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
+use Sylius\Component\Resource\Context\Context;
 
 final class GridViewFactory implements GridViewFactoryInterface
 {
@@ -25,7 +26,7 @@ final class GridViewFactory implements GridViewFactoryInterface
     ) {
     }
 
-    public function create(Grid $grid, Parameters $parameters, array $driverConfiguration): GridView
+    public function create(Grid $grid, Context $context, Parameters $parameters, array $driverConfiguration): GridView
     {
         return new GridView($this->dataProvider->getData($grid, $parameters), $grid, $parameters);
     }

@@ -48,14 +48,18 @@ final class RequestGridProviderSpec extends ObjectBehavior
         Grid $gridDefinition,
         GridView $gridView,
     ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
         $operation = new Index(grid: 'app_book');
+
+        $request->query = new InputBag();
 
         $gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
 
-        $gridViewFactory->create($gridDefinition, new Parameters(), [])->willReturn($gridView);
+        $gridViewFactory->create($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
 
-        $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())))
+        $this->provide($operation, $context)
             ->shouldReturn($gridView)
         ;
     }
@@ -68,6 +72,8 @@ final class RequestGridProviderSpec extends ObjectBehavior
         GridView $gridView,
         Pagerfanta $pagerfanta,
     ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag(['page' => 42]);
@@ -75,12 +81,12 @@ final class RequestGridProviderSpec extends ObjectBehavior
         $gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
 
-        $gridViewFactory->create($gridDefinition, new Parameters(), [])->willReturn($gridView);
+        $gridViewFactory->create($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
 
-        $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())))
+        $this->provide($operation, $context)
             ->shouldReturn($gridView)
         ;
     }
