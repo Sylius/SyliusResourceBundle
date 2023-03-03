@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Paweł Jędrzejewski
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sylius.context.initiator.request_context" class="Sylius\Component\Resource\Context\Initiator\RequestContextInitiator" />
+        <service id="Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface" alias="sylius.context.initiator.request_context" />
+
+        <service id="sylius.context.initiator.legacy_request_context"
+                 class="Sylius\Bundle\ResourceBundle\Context\Initiator\LegacyRequestContextInitiator"
+                 decorates="sylius.context.initiator.request_context"
+        >
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
+            <argument type="service" id=".inner" />
+        </service>
+    </services>
+</container>
