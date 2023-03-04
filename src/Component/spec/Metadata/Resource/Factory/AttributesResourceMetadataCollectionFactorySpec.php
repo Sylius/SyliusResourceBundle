@@ -37,6 +37,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithGrid;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithPluralName;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePrefix;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithTemplatesDir;
@@ -591,5 +592,48 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->getResponder()->shouldReturn(TwigResponder::class);
+    }
+
+    function it_creates_resource_metadata_with_route_prefix(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithRoutePrefix::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getRoutePrefix()->shouldReturn('/admin');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getRoutePrefix()->shouldReturn('/admin');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getRoutePrefix()->shouldReturn('/admin');
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getRoutePrefix()->shouldReturn('/admin');
     }
 }
