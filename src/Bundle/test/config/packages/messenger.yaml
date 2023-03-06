@@ -1,0 +1,11 @@
+framework:
+    messenger:
+        default_bus: command.bus
+        buses:
+            command.bus: ~
+            query.bus: ~
+        transports:
+            sync: 'sync://'
+        routing:
+            'App\Shared\Application\Query\QueryInterface': 'sync'
+            'App\Shared\Application\Command\CommandInterface': 'sync'

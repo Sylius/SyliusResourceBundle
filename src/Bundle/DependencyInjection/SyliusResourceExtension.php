@@ -155,7 +155,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
                 $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);
 
-                DriverProvider::get($metadata)->load($container, $metadata);
+                if ($metadata->getDriver()) {
+                    DriverProvider::get($metadata)->load($container, $metadata);
+                }
             }
         }
     }

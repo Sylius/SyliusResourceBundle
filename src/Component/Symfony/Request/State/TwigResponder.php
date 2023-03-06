@@ -67,6 +67,6 @@ final class TwigResponder implements ResponderInterface
             $this->contextFactory->create($data, $operation, $context),
         );
 
-        return new Response($content);
+        return new Response($content, $isValid ? Response::HTTP_OK : Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
