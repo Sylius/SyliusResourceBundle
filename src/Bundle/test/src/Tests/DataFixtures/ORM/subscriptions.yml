@@ -3,3 +3,6 @@ App\Subscription\Entity\Subscription:
         email: 'marty.mcfly@bttf.com'
     subscription_doc:
         email: 'doc.brown@bttf.com'
+    subscription_archived:
+        email: 'archived@example.com'
+        archivedAt: '<dateTimeBetween("-200 days", "now")>'

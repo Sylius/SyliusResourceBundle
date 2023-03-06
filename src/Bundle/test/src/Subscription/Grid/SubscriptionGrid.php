@@ -36,6 +36,7 @@ final class SubscriptionGrid extends AbstractGrid implements ResourceAwareGridIn
     public function buildGrid(GridBuilderInterface $gridBuilder): void
     {
         $gridBuilder
+            ->setRepositoryMethod('createListQueryBuilder', ['showArchived' => true])
             ->orderBy('email', 'asc')
             ->addField(
                 StringField::create('email')
