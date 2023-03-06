@@ -25,13 +25,17 @@ use Sylius\Component\Resource\State\ProviderInterface;
 final class RequestGridProvider implements ProviderInterface
 {
     public function __construct(
-        private GridViewFactoryInterface $gridViewFactory,
-        private GridProviderInterface $gridProvider,
+        private ?GridViewFactoryInterface $gridViewFactory = null,
+        private ?GridProviderInterface $gridProvider = null,
     ) {
     }
 
     public function provide(Operation $operation, Context $context): object|iterable|null
     {
+        if (null === $this->gridViewFactory || null === $this->gridProvider) {
+            throw new \LogicException('You can not use a grid if Sylius Grid Bundle is not available. Try running "composer require sylius/grid-bundle".');
+        }
+
         $grid = $operation->getGrid();
 
         if (null === $grid) {

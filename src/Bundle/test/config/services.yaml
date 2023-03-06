@@ -86,3 +86,6 @@ services:
 
     App\BoardGameBlog\:
         resource: '../src/BoardGameBlog'
+
+    App\Subscription\:
+        resource: '../src/Subscription'
