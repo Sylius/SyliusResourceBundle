@@ -48,7 +48,6 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
                 'resource' => 'app.dummy',
-                'resource' => 'app.dummy',
             ],
         ]);
     }
