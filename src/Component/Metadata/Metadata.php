@@ -92,7 +92,7 @@ final class Metadata implements MetadataInterface
         return self::getInflector()->pluralize($this->name);
     }
 
-    public function getDriver(): string
+    public function getDriver(): string|false
     {
         return $this->driver;
     }

@@ -38,8 +38,16 @@ final class DefaultResourceType extends AbstractType
 
         $metadata = $this->metadataRegistry->getByClass($options['data_class']);
 
+        $driver = $metadata->getDriver();
+
+        Assert::notFalse($driver, sprintf(
+            'Form "%s" cannot be used with no driver configured on the resource "%s". Please define a form.',
+            __CLASS__,
+            $metadata->getAlias(),
+        ));
+
         /** @var DefaultFormBuilderInterface $formBuilder */
-        $formBuilder = $this->formBuilderRegistry->get($metadata->getDriver());
+        $formBuilder = $this->formBuilderRegistry->get($driver);
 
         $formBuilder->build($metadata, $builder, $options);
     }

@@ -80,3 +80,9 @@ services:
                 connection: default
 
     App\Repository\ComicBookRepository: null
+
+    App\Shared\:
+        resource: '../src/Shared'
+
+    App\BoardGameBlog\:
+        resource: '../src/BoardGameBlog'

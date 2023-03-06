@@ -25,7 +25,7 @@ interface MetadataInterface
 
     public function getPluralName(): string;
 
-    public function getDriver(): string;
+    public function getDriver(): string|false;
 
     /**
      * @return ?string

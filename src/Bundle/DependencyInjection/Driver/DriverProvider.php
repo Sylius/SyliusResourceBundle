@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHP
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Exception\UnknownDriverException;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Webmozart\Assert\Assert;
 
 final class DriverProvider
 {
@@ -35,6 +36,8 @@ final class DriverProvider
         if (isset(self::$drivers[$type])) {
             return self::$drivers[$type];
         }
+
+        Assert::notFalse($type, sprintf('No driver was configured on the resource "%s".', $metadata->getAlias()));
 
         switch ($type) {
             case SyliusResourceBundle::DRIVER_DOCTRINE_ORM:
