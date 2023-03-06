@@ -1,0 +1,7 @@
+<h1>{{ (operation.resource.applicationName ~ '.ui.new_' ~ operation.resource.name)|trans }}</h1>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_widget(form) }}
+<br />
+<button type="submit">Create</button>
+{{ form_end(form) }}
