@@ -37,6 +37,8 @@ final class DriverProvider
             return self::$drivers[$type];
         }
 
+        Assert::notFalse($type, sprintf('No driver was configured on the resource "%s".', $metadata->getAlias()));
+
         switch ($type) {
             case SyliusResourceBundle::DRIVER_DOCTRINE_ORM:
                 return self::$drivers[$type] = new DoctrineORMDriver();
@@ -45,8 +47,6 @@ final class DriverProvider
             case SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM:
                 return self::$drivers[$type] = new DoctrinePHPCRDriver();
         }
-
-        Assert::notFalse($type, sprintf('No driver was configured on the resource "%s".', $metadata->getAlias()));
 
         throw new UnknownDriverException($type);
     }
