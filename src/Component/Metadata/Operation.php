@@ -45,6 +45,8 @@ abstract class Operation
         protected ?bool $read = null,
         protected ?bool $write = null,
         protected ?bool $validate = null,
+        protected ?bool $deserialize = null,
+        protected ?bool $serialize = null,
         protected ?string $formType = null,
         protected ?array $formOptions = null,
         protected ?string $resourceName = null,
@@ -223,6 +225,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->validate = $validate;
+
+        return $self;
+    }
+
+    public function canDeserialize(): ?bool
+    {
+        return $this->deserialize;
+    }
+
+    public function withDeserialize(bool $deserialize): self
+    {
+        $self = clone $this;
+        $self->deserialize = $deserialize;
+
+        return $self;
+    }
+
+    public function canSerialize(): ?bool
+    {
+        return $this->serialize;
+    }
+
+    public function withSerialize(bool $serialize): self
+    {
+        $self = clone $this;
+        $self->serialize = $serialize;
 
         return $self;
     }

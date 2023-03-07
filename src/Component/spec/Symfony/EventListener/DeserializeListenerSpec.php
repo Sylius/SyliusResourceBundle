@@ -58,6 +58,9 @@ final class DeserializeListenerSpec extends ObjectBehavior
         $request->getRequestFormat()->willReturn('json');
         $request->getContent()->willReturn(['food' => 'fighters']);
 
+        $operation->canDeserialize()->willReturn(null)->shouldBeCalled();
+        $operation->getDenormalizationContext()->willReturn([])->shouldBeCalled();
+
         $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', [])->willReturn($data)->shouldBeCalled();
 
         $this->onKernelRequest($event);
@@ -82,9 +85,36 @@ final class DeserializeListenerSpec extends ObjectBehavior
         $request->getContent()->willReturn(['food' => 'fighters']);
 
         $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->canDeserialize()->willReturn(null)->shouldBeCalled();
         $operation->getDenormalizationContext()->willReturn(['groups' => ['dummy:write']]);
 
         $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', ['groups' => ['dummy:write']])->willReturn($data)->shouldBeCalled();
+
+        $this->onKernelRequest($event);
+    }
+
+    function it_does_nothing_if_operation_cannot_be_deserialized(
+        RequestEvent $event,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        HttpOperation $operation,
+        SerializerInterface $serializer,
+        \stdClass $data,
+    ): void {
+        $event->getRequest()->willReturn($request);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = new ParameterBag();
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('json');
+        $request->getContent()->willReturn(['food' => 'fighters']);
+
+        $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->canDeserialize()->willReturn(false)->shouldBeCalled();
+
+        $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', [])->willReturn($data)->shouldNotBeCalled();
 
         $this->onKernelRequest($event);
     }
