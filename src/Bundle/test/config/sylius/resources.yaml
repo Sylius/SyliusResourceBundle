@@ -1,4 +1,9 @@
 sylius_resource:
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/BoardGameBlog/Infrastructure/Sylius/Resource'
+            - '%kernel.project_dir%/src/Subscription/Entity'
+
     translation:
         locale_provider: test.translation_locale_provider
 
@@ -42,3 +47,7 @@ sylius_resource:
             classes:
                 model: App\Entity\PullRequest
                 form: App\Form\Type\PullRequestType
+
+        app.subscription:
+            classes:
+                model: App\Subscription\Entity\Subscription

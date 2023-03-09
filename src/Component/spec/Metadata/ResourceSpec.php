@@ -140,18 +140,18 @@ final class ResourceSpec extends ObjectBehavior
         $this->getTemplatesDir()->shouldReturn('book');
     }
 
-    function it_can_be_constructed_with_a_plural_name(): void
-    {
-        $this->beConstructedWith('app.book', null, null, null, null, null, 'books');
-
-        $this->getPluralName()->shouldReturn('books');
-    }
-
     function it_can_be_constructed_with_a_route_prefix(): void
     {
         $this->beConstructedWith('app.book', null, null, null, '/admin');
 
         $this->getRoutePrefix()->shouldReturn('/admin');
+    }
+
+    function it_can_be_constructed_with_a_plural_name(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, 'books');
+
+        $this->getPluralName()->shouldReturn('books');
     }
 
     function it_can_be_constructed_with_operations(): void

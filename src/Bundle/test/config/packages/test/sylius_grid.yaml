@@ -1,0 +1,6 @@
+sylius_grid:
+    templates:
+        action:
+            delete: 'grid/action/delete.html.twig'
+            show: 'grid/action/show.html.twig'
+            update: 'grid/action/update.html.twig'
