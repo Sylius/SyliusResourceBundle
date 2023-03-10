@@ -1,0 +1,13 @@
+{% set path = options.link.url|default(path(options.link.route|default(grid.requestConfiguration.getRouteName('bulk_delete')), options.link.parameters|default({}))) %}
+
+<form action="{{ path }}" method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit">
+        <i class="icon trash"></i> Bulk delete
+    </button>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('bulk_delete') }}" />
+
+    {% for resource in grid.data %}
+        <input type="hidden" name="ids[]" value="{{ resource.id }}" />
+    {% endfor %}
+</form>

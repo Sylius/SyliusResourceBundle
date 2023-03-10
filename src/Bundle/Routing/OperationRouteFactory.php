@@ -79,6 +79,10 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return sprintf('%s/{id}', $rootPath);
         }
 
+        if ('bulk_delete' === $shortName) {
+            return sprintf('%s/bulk_delete', $rootPath);
+        }
+
         if ('show' === $shortName) {
             return sprintf('%s/{id}', $rootPath);
         }

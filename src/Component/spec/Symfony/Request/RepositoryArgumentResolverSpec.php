@@ -34,6 +34,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $attributes->all('_route_params')->willReturn(['id' => 'my_id']);
 
@@ -45,12 +46,31 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
         ]);
     }
 
-    function it_merges_arguments_from_route_params_and_query_params(
+    function it_uses_query_params_when_route_params_are_not_matching(
         Request $request,
         ParameterBag $attributes,
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag(['id' => 'my_id']);
+        $request->request = new ParameterBag();
+
+        $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
+
+        $callable = [RepositoryWithCallables::class, 'find'];
+        $reflector = CallableReflection::from($callable);
+
+        $this->getArguments($request, $reflector)->shouldReturn([
+            'id' => 'my_id',
+        ]);
+    }
+
+    function it_uses_request_params_when_route_params_are_not_matching(
+        Request $request,
+        ParameterBag $attributes,
+    ): void {
+        $request->attributes = $attributes;
+        $request->query = new InputBag();
+        $request->request = new ParameterBag(['id' => 'my_id']);
 
         $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
 
@@ -68,6 +88,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $attributes->all('_route_params')->willReturn(['enabled' => 'true', 'author' => 'author@example.com']);
 
@@ -80,5 +101,21 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
                 'author' => 'author@example.com',
             ],
         ]);
+    }
+
+    function it_return_array_values_when_method_is_magic(
+        Request $request,
+        ParameterBag $attributes,
+    ): void {
+        $request->attributes = $attributes;
+        $request->query = new InputBag();
+        $request->request = new ParameterBag(['ids' => ['first_id', 'second_id']]);
+
+        $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
+
+        $callable = [new RepositoryWithCallables(), '__call'];
+        $reflector = CallableReflection::from($callable);
+
+        $this->getArguments($request, $reflector)->shouldReturn([['first_id', 'second_id']]);
     }
 }
