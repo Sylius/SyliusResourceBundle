@@ -16,6 +16,7 @@ namespace App\Subscription\Entity;
 use App\Subscription\Form\Type\SubscriptionType;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
@@ -23,7 +24,6 @@ use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Resource(
@@ -36,6 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Index(grid: 'app_subscription')]
 #[Create]
 #[Update]
+#[BulkDelete]
 #[ApplyStateMachineTransition(stateMachineTransition: 'accept')]
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
 #[Delete]
@@ -48,10 +49,9 @@ class Subscription implements ResourceInterface
 
     public function __construct(
         #[ORM\Id]
-        #[ORM\Column(type: 'uuid', unique: true)]
-        #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-        #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-        public ?Uuid $id = null,
+        #[ORM\Column(type: 'integer', unique: true)]
+        #[ORM\GeneratedValue(strategy: 'AUTO')]
+        public ?int $id = null,
 
         #[Assert\NotBlank]
         #[Assert\Email]
@@ -60,7 +60,7 @@ class Subscription implements ResourceInterface
     ) {
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?int
     {
         return $this->id;
     }

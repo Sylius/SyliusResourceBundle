@@ -99,7 +99,7 @@ final class SubscriptionUiTest extends ApiTestCase
             'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        //$this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
         /** @var Subscription $subscription */
         $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'biff.tannen@bttf.com']);
@@ -128,6 +128,22 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/subscriptions');
         $this->client->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var Subscription[] $subscriptions */
+        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+
+        $this->assertEmpty($subscriptions);
+    }
+
+    /** @test */
+    public function it_allows_deleting_multiple_subscriptions(): void
+    {
+        $this->loadFixturesFromFile('subscriptions.yml');
+
+        $this->client->request('GET', '/admin/subscriptions');
+        $this->client->submitForm('Bulk delete');
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 

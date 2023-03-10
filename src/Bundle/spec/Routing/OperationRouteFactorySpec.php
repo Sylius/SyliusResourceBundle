@@ -16,6 +16,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
+use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\HttpOperation;
@@ -123,6 +124,26 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_bulk_delete_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new BulkDelete(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/bulk_delete');
         $route->getMethods()->shouldReturn(['DELETE']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,

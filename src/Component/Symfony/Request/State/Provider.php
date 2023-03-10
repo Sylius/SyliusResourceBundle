@@ -17,6 +17,7 @@ use Pagerfanta\Pagerfanta;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Reflection\CallableReflection;
@@ -43,8 +44,15 @@ final class Provider implements ProviderInterface
             return null;
         }
 
+        $repositoryInstance = null;
+
         if (\is_string($repository)) {
             $defaultMethod = $operation instanceof CollectionOperationInterface ? 'createPaginator' : 'findOneBy';
+
+            if ($operation instanceof BulkOperationInterface) {
+                $defaultMethod = 'findById';
+            }
+
             $method = $operation->getRepositoryMethod() ?? $defaultMethod;
 
             if (!$this->locator->has($repository)) {
@@ -58,9 +66,20 @@ final class Provider implements ProviderInterface
             $repository = [$repositoryInstance, $method];
         }
 
-        $reflector = CallableReflection::from($repository);
-        $arguments = $this->argumentResolver->getArguments($request, $reflector);
+        try {
+            $reflector = CallableReflection::from($repository);
+        } catch (\ReflectionException $exception) {
+            if (null === $repositoryInstance) {
+                throw $exception;
+            }
 
+            /** @var callable $callable */
+            $callable = [$repositoryInstance, '__call'];
+
+            $reflector = CallableReflection::from($callable);
+        }
+
+        $arguments = $this->argumentResolver->getArguments($request, $reflector);
         $data = $repository(...$arguments);
 
         if ($data instanceof Pagerfanta) {

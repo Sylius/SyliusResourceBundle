@@ -32,4 +32,9 @@ final class RepositoryWithCallables
     {
         return [];
     }
+
+    public function __call(string $method, mixed $arguments): array
+    {
+        return [];
+    }
 }
