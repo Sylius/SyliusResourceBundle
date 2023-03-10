@@ -20,16 +20,39 @@ final class RepositoryArgumentResolver
 {
     public function getArguments(Request $request, \ReflectionFunctionAbstract $reflector): array
     {
-        $arguments = array_merge($request->attributes->all('_route_params'), $request->query->all());
-        $matchedArguments = FunctionArgumentsFilter::filter($reflector, $arguments);
+        $allArguments = [
+            $request->attributes->all('_route_params'),
+            $request->query->all(),
+            $request->request->all(),
+        ];
 
-        if (0 === count($matchedArguments) && $this->hasOnlyOneRequiredArrayParameter($reflector)) {
-            $arguments = $this->filterPrivateArguments($arguments);
+        foreach ($allArguments as $arguments) {
+            $matchedArguments = FunctionArgumentsFilter::filter($reflector, $arguments);
 
-            return [$arguments];
+            if (0 === count($matchedArguments) && $this->hasOnlyOneRequiredArrayParameter($reflector)) {
+                $arguments = $this->filterPrivateArguments($arguments);
+
+                return [$arguments];
+            }
+
+            if ('__call' === $reflector->getName()) {
+                $arguments = $this->filterPrivateArguments($arguments);
+
+                if ([] === $arguments) {
+                    continue;
+                }
+
+                return array_values($arguments);
+            }
+
+            if ([] === $matchedArguments) {
+                continue;
+            }
+
+            return $matchedArguments;
         }
 
-        return $matchedArguments;
+        return [];
     }
 
     /**

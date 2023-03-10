@@ -19,6 +19,7 @@ use Sylius\Bundle\GridBundle\Builder\Action\CreateAction;
 use Sylius\Bundle\GridBundle\Builder\Action\DeleteAction;
 use Sylius\Bundle\GridBundle\Builder\Action\ShowAction;
 use Sylius\Bundle\GridBundle\Builder\Action\UpdateAction;
+use Sylius\Bundle\GridBundle\Builder\ActionGroup\BulkActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\ItemActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\MainActionGroup;
 use Sylius\Bundle\GridBundle\Builder\Field\StringField;
@@ -65,6 +66,11 @@ final class SubscriptionGrid extends AbstractGrid implements ResourceAwareGridIn
                             'transition' => 'accept',
                             'graph' => 'subscription',
                         ]),
+                ),
+            )
+            ->addActionGroup(
+                BulkActionGroup::create(
+                    DeleteAction::create(),
                 ),
             )
         ;

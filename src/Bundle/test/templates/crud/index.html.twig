@@ -3,6 +3,12 @@
 {% set grid = resources %}
 {% set definition = grid.definition %}
 
+{% if definition.actionGroups.bulk is defined and definition.getEnabledActions('bulk')|length > 0 %}
+    {% for action in definition.getEnabledActions('bulk') %}
+        {{ sylius_grid_render_bulk_action(grid, action, null) }}
+    {% endfor %}
+{% endif %}
+
 <table>
     <thead>
         <tr>
