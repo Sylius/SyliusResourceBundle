@@ -42,6 +42,7 @@
     },
     "require-dev": {
         "behat/transliterator": "^1.3",
+        "doctrine/orm": "^2.5",
         "phpspec/phpspec": "^7.2",
         "phpunit/phpunit": "^9.5",
         "sylius/grid": "^1.7 || ^1.12",
