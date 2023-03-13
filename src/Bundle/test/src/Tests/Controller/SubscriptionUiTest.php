@@ -99,7 +99,7 @@ final class SubscriptionUiTest extends ApiTestCase
             'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
-        //$this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
         /** @var Subscription $subscription */
         $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'biff.tannen@bttf.com']);
