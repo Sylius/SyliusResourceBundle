@@ -36,9 +36,6 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
-        ?string $stateMachineComponent = null,
-        ?string $stateMachineTransition = null,
-        ?string $stateMachineGraph = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
