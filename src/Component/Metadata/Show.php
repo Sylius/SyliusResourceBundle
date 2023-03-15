@@ -55,9 +55,6 @@ final class Show extends HttpOperation implements ShowOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
-            stateMachineComponent: $stateMachineComponent,
-            stateMachineTransition: $stateMachineTransition,
-            stateMachineGraph: $stateMachineGraph,
             redirectToRoute: $redirectToRoute,
         );
     }
