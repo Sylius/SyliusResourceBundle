@@ -18,9 +18,14 @@ jobs:
             fail-fast: false
             matrix:
                 php: ["8.0", "8.1", "8.2"]
+                pagerfanta: [""]
                 symfony: ["^5.4", "~6.0.0", "~6.1.0", "~6.2.0"]
                 twig: ["^2.12", "^3.0"]
                 persistence: ["^2.0", "^3.0"]
+                include:
+                    - php: "8.0"
+                      pagerfanta: "^3.7"
+                      symfony: "^5.4"
                 exclude:
                     -
                         php: "8.0"
@@ -48,6 +53,14 @@ jobs:
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
                     (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
+
+            -
+                name: Restrict Pagerfanta version
+                if: matrix.pagerfanta != ''
+                run: |
+                    composer require "babdev/pagerfanta-bundle:${{ matrix.pagerfanta }}" --no-update --no-scripts
+                    composer require "pagerfanta/pagerfanta:${{ matrix.pagerfanta }}" --dev --no-update --no-scripts
+                    (cd src/Component && composer require "pagerfanta/core:${{ matrix.pagerfanta }}" --no-update --no-scripts)
 
             -
                 name: Restrict twig/twig version
