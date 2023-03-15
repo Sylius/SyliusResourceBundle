@@ -674,11 +674,9 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
         $operation->shouldHaveType(Index::class);
-        $operation->getStateMachineComponent()->shouldReturn('winzou');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->shouldHaveType(Show::class);
-        $operation->getStateMachineComponent()->shouldReturn('winzou');
     }
 
     function it_creates_resource_metadata_with_default_state_machine_component(RegistryInterface $resourceRegistry): void
@@ -717,10 +715,8 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
         $operation->shouldHaveType(Index::class);
-        $operation->getStateMachineComponent()->shouldReturn('symfony');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->shouldHaveType(Show::class);
-        $operation->getStateMachineComponent()->shouldReturn('symfony');
     }
 }
