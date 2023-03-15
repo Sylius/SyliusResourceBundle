@@ -17,6 +17,8 @@ use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\StateMachine\OperationStateMachine;
 use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 
@@ -85,5 +87,15 @@ final class OperationStateMachineSpec extends ObjectBehavior
         $context = new Context();
 
         $this->apply($data, $operation, $context);
+    }
+
+    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
+        \stdClass $data,
+    ): void {
+        $operation = new Index();
+
+        $this->shouldThrow(
+            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
+        )->during('can', [$data, $operation, new Context()]);
     }
 }

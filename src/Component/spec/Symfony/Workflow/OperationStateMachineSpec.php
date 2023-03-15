@@ -16,6 +16,8 @@ namespace spec\Sylius\Component\Resource\Symfony\Workflow;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Symfony\Workflow\OperationStateMachine;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
@@ -90,6 +92,16 @@ final class OperationStateMachineSpec extends ObjectBehavior
 
         $this->shouldThrow(
             new \LogicException('You can not use the "state-machine" if Symfony workflow is not available. Try running "composer require symfony/workflow".'),
+        )->during('can', [$data, $operation, new Context()]);
+    }
+
+    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
+        \stdClass $data,
+    ): void {
+        $operation = new Index();
+
+        $this->shouldThrow(
+            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
         )->during('can', [$data, $operation, new Context()]);
     }
 }
