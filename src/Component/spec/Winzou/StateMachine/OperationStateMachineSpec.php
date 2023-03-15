@@ -18,6 +18,8 @@ use SM\Factory\Factory;
 use SM\StateMachine\StateMachineInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Winzou\StateMachine\OperationStateMachine;
 
 final class OperationStateMachineSpec extends ObjectBehavior
@@ -87,6 +89,16 @@ final class OperationStateMachineSpec extends ObjectBehavior
 
         $this->shouldThrow(
             new \LogicException('You can not use the "state-machine" if Winzou State Machine is not available. Try running "composer require winzou/state-machine-bundle".'),
+        )->during('can', [$data, $operation, new Context()]);
+    }
+
+    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
+        \stdClass $data,
+    ): void {
+        $operation = new Index();
+
+        $this->shouldThrow(
+            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
         )->during('can', [$data, $operation, new Context()]);
     }
 }

@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
@@ -165,9 +166,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             ]);
         }
 
-        if (null === $operation->getStateMachineComponent()) {
+        if ($operation instanceof StateMachineAwareOperationInterface && null === $operation->getStateMachineComponent()) {
             $stateMachineComponent = $resourceConfiguration->getStateMachineComponent() ?? $this->defaultStateMachineComponent;
 
+            /** @var Operation $operation */
             $operation = $operation->withStateMachineComponent($stateMachineComponent);
         }
 

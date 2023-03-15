@@ -15,6 +15,7 @@ namespace Sylius\Component\Resource\Symfony\Workflow;
 
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Symfony\Component\Workflow\Registry;
 use Webmozart\Assert\Assert;
@@ -27,6 +28,7 @@ final class OperationStateMachine implements OperationStateMachineInterface
 
     public function can(object $data, Operation $operation, Context $context): bool
     {
+        Assert::isInstanceOf($operation, StateMachineAwareOperationInterface::class);
         $transition = $operation->getStateMachineTransition() ?? null;
 
         Assert::notNull($transition, sprintf('No State machine transition was found on operation "%s".', $operation->getName() ?? ''));
@@ -38,6 +40,7 @@ final class OperationStateMachine implements OperationStateMachineInterface
 
     public function apply(object $data, Operation $operation, Context $context): void
     {
+        Assert::isInstanceOf($operation, StateMachineAwareOperationInterface::class);
         $transition = $operation->getStateMachineTransition() ?? null;
 
         Assert::notNull($transition, sprintf('No State machine transition was found on operation "%s".', $operation->getName() ?? ''));

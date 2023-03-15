@@ -49,9 +49,6 @@ abstract class Operation
         protected ?array $formOptions = null,
         protected ?string $resourceName = null,
         protected ?string $resourcePluralName = null,
-        protected ?string $stateMachineComponent = null,
-        protected ?string $stateMachineTransition = null,
-        protected ?string $stateMachineGraph = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -250,45 +247,6 @@ abstract class Operation
     {
         $self = clone $this;
         $self->formOptions = $formOptions;
-
-        return $self;
-    }
-
-    public function getStateMachineComponent(): ?string
-    {
-        return $this->stateMachineComponent;
-    }
-
-    public function withStateMachineComponent(?string $stateMachineComponent): self
-    {
-        $self = clone $this;
-        $self->stateMachineComponent = $stateMachineComponent;
-
-        return $self;
-    }
-
-    public function getStateMachineTransition(): ?string
-    {
-        return $this->stateMachineTransition;
-    }
-
-    public function withStateMachineTransition(string $stateMachineTransition): self
-    {
-        $self = clone $this;
-        $self->stateMachineTransition = $stateMachineTransition;
-
-        return $self;
-    }
-
-    public function getStateMachineGraph(): ?string
-    {
-        return $this->stateMachineGraph;
-    }
-
-    public function withStateMachineGraph(string $stateMachineGraph): self
-    {
-        $self = clone $this;
-        $self->stateMachineGraph = $stateMachineGraph;
 
         return $self;
     }

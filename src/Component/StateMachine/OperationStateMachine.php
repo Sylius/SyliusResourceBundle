@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\StateMachine;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Webmozart\Assert\Assert;
 
 final class OperationStateMachine implements OperationStateMachineInterface
@@ -40,6 +41,7 @@ final class OperationStateMachine implements OperationStateMachineInterface
 
     private function getStateMachine(Operation $operation): ?OperationStateMachineInterface
     {
+        Assert::isInstanceOf($operation, StateMachineAwareOperationInterface::class);
         $stateMachine = $operation->getStateMachineComponent();
 
         if (null === $stateMachine) {
