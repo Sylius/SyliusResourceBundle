@@ -64,7 +64,7 @@ framework:
             type: 'state_machine'
             marking_store:
                 type: 'method'
-                property: 'currentState'
+                property: 'state'
             supports:
                 - App\Subscription\Entity\Subscription
             initial_marking: new
