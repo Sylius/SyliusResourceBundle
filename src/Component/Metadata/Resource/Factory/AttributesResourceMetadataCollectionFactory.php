@@ -166,7 +166,11 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             ]);
         }
 
-        if ($operation instanceof StateMachineAwareOperationInterface && null === $operation->getStateMachineComponent()) {
+        if (
+            $operation instanceof StateMachineAwareOperationInterface &&
+            null === $operation->getStateMachineComponent() &&
+            method_exists($resourceConfiguration, 'getStateMachineComponent')
+        ) {
             $stateMachineComponent = $resourceConfiguration->getStateMachineComponent() ?? $this->defaultStateMachineComponent;
 
             /** @var Operation $operation */
