@@ -49,6 +49,6 @@ final class SerializeListener
 
         $controllerResult = $event->getControllerResult();
 
-        $event->setControllerResult($this->serializer->serialize($controllerResult, $format));
+        $event->setControllerResult($this->serializer->serialize($controllerResult, $format, $operation->getNormalizationContext() ?? []));
     }
 }

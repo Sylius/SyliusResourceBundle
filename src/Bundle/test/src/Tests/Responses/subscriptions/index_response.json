@@ -1,12 +1,10 @@
 {
     "items": [
         {
-            "id": @integer@,
             "state": "new",
             "email": "marty.mcfly@bttf.com"
         },
         {
-            "id": @integer@,
             "state": "new",
             "email": "doc.brown@bttf.com"
         }

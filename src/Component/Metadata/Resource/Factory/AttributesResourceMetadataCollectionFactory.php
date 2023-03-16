@@ -151,6 +151,14 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withTemplate($template);
         }
 
+        if (null === $operation->getNormalizationContext()) {
+            $operation = $operation->withNormalizationContext($resource->getNormalizationContext());
+        }
+
+        if (null === $operation->getDenormalizationContext()) {
+            $operation = $operation->withDenormalizationContext($resource->getDenormalizationContext());
+        }
+
         $operation = $operation->withResource($resource);
 
         if (null === $operation->getRepository()) {
