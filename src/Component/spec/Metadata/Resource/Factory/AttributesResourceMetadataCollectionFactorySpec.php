@@ -32,9 +32,11 @@ use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithDenormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithGrid;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithNormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithPluralName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePrefix;
@@ -719,5 +721,91 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->shouldHaveType(Show::class);
+    }
+
+    function it_creates_resource_metadata_with_normalization_context(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithNormalizationContext::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getNormalizationContext()->shouldReturn(['groups' => ['dummy:read']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getNormalizationContext()->shouldReturn(['groups' => ['dummy:read']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getNormalizationContext()->shouldReturn(['groups' => ['dummy:read']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getNormalizationContext()->shouldReturn(['groups' => ['dummy:read']]);
+    }
+
+    function it_creates_resource_metadata_with_denormalization_context(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithDenormalizationContext::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(4);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+        $operations->has('app_dummy_index')->shouldReturn(true);
+        $operations->has('app_dummy_show')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $operation->shouldHaveType(Index::class);
+        $operation->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $operation->shouldHaveType(Show::class);
+        $operation->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
     }
 }

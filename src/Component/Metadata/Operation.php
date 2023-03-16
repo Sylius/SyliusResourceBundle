@@ -49,6 +49,8 @@ abstract class Operation
         protected ?array $formOptions = null,
         protected ?string $resourceName = null,
         protected ?string $resourcePluralName = null,
+        protected ?array $normalizationContext = null,
+        protected ?array $denormalizationContext = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -247,6 +249,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->formOptions = $formOptions;
+
+        return $self;
+    }
+
+    public function getNormalizationContext(): ?array
+    {
+        return $this->normalizationContext;
+    }
+
+    public function withNormalizationContext(?array $normalizationContext): self
+    {
+        $self = clone $this;
+        $self->normalizationContext = $normalizationContext;
+
+        return $self;
+    }
+
+    public function getDenormalizationContext(): ?array
+    {
+        return $this->denormalizationContext;
+    }
+
+    public function withDenormalizationContext(?array $denormalizationContext): self
+    {
+        $self = clone $this;
+        $self->denormalizationContext = $denormalizationContext;
 
         return $self;
     }
