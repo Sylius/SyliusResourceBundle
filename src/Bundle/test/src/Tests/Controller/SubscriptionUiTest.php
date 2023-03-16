@@ -151,7 +151,7 @@ final class SubscriptionUiTest extends ApiTestCase
         $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'marty.mcfly@bttf.com']);
 
         $this->assertNotNull($subscription);
-        $this->assertSame('accepted', $subscription->state);
+        $this->assertSame('accepted', $subscription->getState());
     }
 
     protected function buildMatcher(): Matcher

@@ -65,12 +65,12 @@ class Subscription implements ResourceInterface
         return $this->id;
     }
 
-    public function getCurrentState(): string
+    public function getState(): string
     {
         return $this->state;
     }
 
-    public function setCurrentState(string $currentState): void
+    public function setState(string $currentState): void
     {
         $this->state = $currentState;
     }
