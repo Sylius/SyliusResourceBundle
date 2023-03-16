@@ -37,6 +37,8 @@ class HttpOperation extends Operation
         ?bool $validate = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?array $normalizationContext = null,
+        ?array $denormalizationContext = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
     ) {
@@ -55,6 +57,8 @@ class HttpOperation extends Operation
             validate: $validate,
             formType: $formType,
             formOptions: $formOptions,
+            normalizationContext: $normalizationContext,
+            denormalizationContext: $denormalizationContext,
         );
     }
 

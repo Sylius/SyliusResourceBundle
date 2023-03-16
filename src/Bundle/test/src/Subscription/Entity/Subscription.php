@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Resource(
@@ -47,6 +48,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     alias: 'app.subscription',
     section: 'ajax',
     routePrefix: '/ajax',
+    normalizationContext: ['groups' => 'subscription:read'],
+    denormalizationContext: ['groups' => 'subscription:write'],
 )]
 #[Api\GetCollection]
 #[Api\Post]
@@ -58,6 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Subscription implements ResourceInterface
 {
     #[ORM\Column(type: 'string')]
+    #[Groups(['subscription:read'])]
     public string $state = 'new';
 
     public function __construct(
@@ -69,6 +73,7 @@ class Subscription implements ResourceInterface
         #[Assert\NotBlank]
         #[Assert\Email]
         #[ORM\Column(name: 'name', nullable: false)]
+        #[Groups(['subscription:read', 'subscription:write'])]
         public ?string $email = null,
     ) {
     }

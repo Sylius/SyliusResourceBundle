@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <response>
     <items>
-        <id>@string@</id>
         <state>new</state>
         <email>marty.mcfly@bttf.com</email>
     </items>
     <items>
-        <id>@string@</id>
         <state>new</state>
         <email>doc.brown@bttf.com</email>
     </items>

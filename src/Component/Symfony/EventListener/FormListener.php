@@ -37,6 +37,7 @@ final class FormListener
         $context = $this->contextInitiator->initializeContext($request);
         $operation = $this->operationInitiator->initializeOperation($request);
 
+        /** @var string $format */
         $format = $request->getRequestFormat();
 
         if (

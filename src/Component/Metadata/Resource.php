@@ -28,6 +28,8 @@ final class Resource
         private ?string $pluralName = null,
         private ?string $applicationName = null,
         private ?string $identifier = null,
+        protected ?array $normalizationContext = null,
+        protected ?array $denormalizationContext = null,
         private ?string $class = null,
         ?array $operations = null,
     ) {
@@ -203,5 +205,31 @@ final class Resource
             $this->getName() ?? '',
             $shortName,
         );
+    }
+
+    public function getNormalizationContext(): ?array
+    {
+        return $this->normalizationContext;
+    }
+
+    public function withNormalizationContext(?array $normalizationContext): self
+    {
+        $self = clone $this;
+        $self->normalizationContext = $normalizationContext;
+
+        return $self;
+    }
+
+    public function getDenormalizationContext(): ?array
+    {
+        return $this->denormalizationContext;
+    }
+
+    public function withDenormalizationContext(?array $denormalizationContext): self
+    {
+        $self = clone $this;
+        $self->denormalizationContext = $denormalizationContext;
+
+        return $self;
     }
 }

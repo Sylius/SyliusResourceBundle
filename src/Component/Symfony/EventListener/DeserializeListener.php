@@ -56,7 +56,7 @@ final class DeserializeListener
 
         $data = $request->attributes->get('data');
 
-        $denormalizationContext = [];
+        $denormalizationContext = $operation->getDenormalizationContext() ?? [];
 
         if (null !== $data) {
             $denormalizationContext[AbstractNormalizer::OBJECT_TO_POPULATE] = $data;
