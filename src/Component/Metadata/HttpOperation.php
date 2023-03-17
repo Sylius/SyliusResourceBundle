@@ -34,6 +34,7 @@ class HttpOperation extends Operation
         ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
+        ?bool $validate = null,
         ?string $formType = null,
         ?array $formOptions = null,
         protected ?string $redirectToRoute = null,
@@ -50,6 +51,7 @@ class HttpOperation extends Operation
             grid: $grid,
             read: $read,
             write: $write,
+            validate: $validate,
             formType: $formType,
             formOptions: $formOptions,
         );

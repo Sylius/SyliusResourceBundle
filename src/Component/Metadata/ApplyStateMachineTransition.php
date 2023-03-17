@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
+
 /**
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Create extends HttpOperation implements CreateOperationInterface, StateMachineAwareOperationInterface
+final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface, StateMachineAwareOperationInterface
 {
     public function __construct(
         ?array $methods = null,
@@ -34,6 +36,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
+        ?bool $validate = null,
         ?string $formType = null,
         ?array $formOptions = null,
         ?string $redirectToRoute = null,
@@ -42,20 +45,21 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         private ?string $stateMachineGraph = null,
     ) {
         parent::__construct(
-            methods: $methods ?? ['GET', 'POST'],
+            methods: $methods ?? ['PUT', 'PATCH'],
             path: $path,
             routePrefix: $routePrefix,
             template: $template,
-            shortName: $shortName ?? 'create',
+            shortName: $shortName ?? $stateMachineTransition ?? 'apply_state_machine_transition',
             name: $name,
             provider: $provider,
-            processor: $processor,
+            processor: $processor ?? ApplyStateMachineTransitionProcessor::class,
             responder: $responder,
             repository: $repository,
             repositoryMethod: $repositoryMethod,
             grid: $grid,
             read: $read,
             write: $write,
+            validate: $validate ?? false,
             formType: $formType,
             formOptions: $formOptions,
             redirectToRoute: $redirectToRoute,

@@ -64,7 +64,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/subscriptions/new');
         $this->client->submitForm('Create', [
-            'sylius_resource[email]' => 'biff.tannen@bttf.com',
+            'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
@@ -83,7 +83,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/subscriptions/new');
         $this->client->submitForm('Create', [
-            'sylius_resource[email]' => null,
+            'subscription[email]' => null,
         ]);
 
         $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -96,7 +96,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/subscriptions/' . $subscriptions['subscription_marty']->getId() . '/edit');
         $this->client->submitForm('Save changes', [
-            'sylius_resource[email]' => 'biff.tannen@bttf.com',
+            'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
@@ -115,7 +115,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/subscriptions/' . $subscriptions['subscription_marty']->getId() . '/edit');
         $this->client->submitForm('Save changes', [
-            'sylius_resource[email]' => null,
+            'subscription[email]' => null,
         ]);
 
         $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -135,6 +135,23 @@ final class SubscriptionUiTest extends ApiTestCase
         $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
 
         $this->assertEmpty($subscriptions);
+    }
+
+    /** @test */
+    public function it_allows_accepting_a_subscription(): void
+    {
+        $this->loadFixturesFromFile('single_subscription.yml');
+
+        $this->client->request('GET', '/admin/subscriptions');
+        $this->client->submitForm('Accept');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var Subscription $subscription */
+        $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'marty.mcfly@bttf.com']);
+
+        $this->assertNotNull($subscription);
+        $this->assertSame('accepted', $subscription->getState());
     }
 
     protected function buildMatcher(): Matcher

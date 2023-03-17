@@ -17,7 +17,7 @@ namespace Sylius\Component\Resource\Metadata;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Update extends HttpOperation implements UpdateOperationInterface
+final class Update extends HttpOperation implements UpdateOperationInterface, StateMachineAwareOperationInterface
 {
     public function __construct(
         ?array $methods = null,
@@ -37,6 +37,9 @@ final class Update extends HttpOperation implements UpdateOperationInterface
         ?string $formType = null,
         ?array $formOptions = null,
         ?string $redirectToRoute = null,
+        private ?string $stateMachineComponent = null,
+        private ?string $stateMachineTransition = null,
+        private ?string $stateMachineGraph = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET', 'PUT'],
@@ -57,5 +60,44 @@ final class Update extends HttpOperation implements UpdateOperationInterface
             formOptions: $formOptions,
             redirectToRoute: $redirectToRoute,
         );
+    }
+
+    public function getStateMachineComponent(): ?string
+    {
+        return $this->stateMachineComponent;
+    }
+
+    public function withStateMachineComponent(?string $stateMachineComponent): self
+    {
+        $self = clone $this;
+        $self->stateMachineComponent = $stateMachineComponent;
+
+        return $self;
+    }
+
+    public function getStateMachineTransition(): ?string
+    {
+        return $this->stateMachineTransition;
+    }
+
+    public function withStateMachineTransition(string $stateMachineTransition): self
+    {
+        $self = clone $this;
+        $self->stateMachineTransition = $stateMachineTransition;
+
+        return $self;
+    }
+
+    public function getStateMachineGraph(): ?string
+    {
+        return $this->stateMachineGraph;
+    }
+
+    public function withStateMachineGraph(string $stateMachineGraph): self
+    {
+        $self = clone $this;
+        $self->stateMachineGraph = $stateMachineGraph;
+
+        return $self;
     }
 }

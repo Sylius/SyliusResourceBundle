@@ -44,6 +44,7 @@ abstract class Operation
         protected ?string $grid = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
+        protected ?bool $validate = null,
         protected ?string $formType = null,
         protected ?array $formOptions = null,
         protected ?string $resourceName = null,
@@ -207,6 +208,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->write = $write;
+
+        return $self;
+    }
+
+    public function canValidate(): ?bool
+    {
+        return $this->validate;
+    }
+
+    public function withValidate(bool $validate): self
+    {
+        $self = clone $this;
+        $self->validate = $validate;
 
         return $self;
     }

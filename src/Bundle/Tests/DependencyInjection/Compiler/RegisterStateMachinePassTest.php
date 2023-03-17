@@ -26,13 +26,16 @@ use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 {
     /** @test */
-    public function it_does_nothing_when_no_state_machine_are_available_and_no_state_machine_is_configured(): void
+    public function it_does_nothing_when_no_state_machine_are_available(): void
     {
         $this->setParameter('sylius.resource.settings', ['state_machine_component' => null]);
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', null);
         $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine');
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.symfony');
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.winzou');
     }
 
     /** @test */
@@ -43,7 +46,10 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', 'symfony');
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', Workflow::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.symfony', Workflow::class);
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.winzou');
     }
 
     /** @test */
@@ -54,7 +60,10 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', 'winzou');
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.winzou', StateMachine::class);
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.symfony');
     }
 
     /** @test */
@@ -65,7 +74,10 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', 'symfony');
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', Workflow::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.symfony', Workflow::class);
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.winzou');
     }
 
     /** @test */
@@ -76,7 +88,10 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', 'winzou');
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.winzou', StateMachine::class);
+        $this->assertContainerBuilderNotHasService('sylius.resource_controller.state_machine.symfony');
     }
 
     /** @test */
@@ -88,7 +103,10 @@ final class RegisterStateMachinePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
+        $this->assertContainerBuilderHasParameter('sylius.state_machine_component.default', 'winzou');
         $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine', StateMachine::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.winzou', StateMachine::class);
+        $this->assertContainerBuilderHasService('sylius.resource_controller.state_machine.symfony', Workflow::class);
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
