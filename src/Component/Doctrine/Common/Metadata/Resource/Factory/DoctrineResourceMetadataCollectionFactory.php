@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 
-class DoctrineResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
+final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
     public function __construct(
         private RegistryInterface $resourceRegistry,
