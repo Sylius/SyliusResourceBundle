@@ -41,18 +41,20 @@ final class HttpOperationInitiatorSpec extends ObjectBehavior
 
     function it_initializes_http_operations_from_request(
         Request $request,
-        ParameterBag $parameterBag,
+        ParameterBag $attributes,
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         HttpOperation $operation,
     ): void {
-        $request->attributes = $parameterBag;
+        $request->attributes = $attributes;
 
-        $parameterBag->get('_route')->willReturn('app_dummy_index');
-        $parameterBag->all('_sylius')->willReturn([
+        $attributes->get('_route')->willReturn('app_dummy_index');
+        $attributes->all('_sylius')->willReturn([
             'resource' => 'app.dummy',
         ]);
+
+        $attributes->set('_sylius', ['resource' => 'app.dummy', 'resource_class' => 'App\DummyResource'])->shouldBeCalled();
 
         $resourceRegistry->get('app.dummy')->willReturn($metadata);
 

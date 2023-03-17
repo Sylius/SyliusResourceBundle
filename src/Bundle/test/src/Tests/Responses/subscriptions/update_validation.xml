@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<response>
+    <type>https://symfony.com/errors/validation</type>
+    <title>Validation Failed</title>
+    <detail>email: This value should not be blank.</detail>
+    <violations>
+        <propertyPath>email</propertyPath>
+        <title>This value should not be blank.</title>
+        <parameters>
+            <item key="{{ value }}">""</item>
+        </parameters>
+        <type>urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3</type>
+    </violations>
+</response>

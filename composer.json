@@ -50,7 +50,8 @@
         "symfony/yaml": "^5.4 || ^6.0",
         "webmozart/assert": "^1.8",
         "willdurand/hateoas-bundle": "^2.0",
-        "winzou/state-machine-bundle": "^0.6"
+        "winzou/state-machine-bundle": "^0.6",
+        "willdurand/negotiation": "^3.1"
     },
     "replace": {
         "sylius/resource": "self.version"
@@ -76,7 +77,8 @@
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "^4.22",
         "rector/rector": "^0.13.5",
-        "symfony/messenger": "^5.4 || ^6.0"
+        "symfony/messenger": "^5.4 || ^6.0",
+        "symfony/serializer": "^5.4 || ^6.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",

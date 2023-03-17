@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
 use Sylius\Component\Resource\Context\Option\RequestOption;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestContextInitiatorSpec extends ObjectBehavior
@@ -28,6 +29,8 @@ final class RequestContextInitiatorSpec extends ObjectBehavior
 
     function it_initializes_context(Request $request): void
     {
+        $request->attributes = new ParameterBag(['_sylius' => ['resource_class' => 'App\Resource']]);
+
         $context = $this->initializeContext($request);
         $context->shouldHaveType(Context::class);
 

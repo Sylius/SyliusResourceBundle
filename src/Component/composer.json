@@ -39,6 +39,8 @@
         "symfony/property-access": "^5.4 || ^6.0",
         "symfony/routing": "^5.4 || ^6.0",
         "symfony/translation": "^5.4 || ^6.0",
+        "symfony/validator": "^5.4 || ^6.0",
+        "willdurand/negotiation": "^3.1",
         "winzou/state-machine": "^0.4"
     },
     "require-dev": {
@@ -47,6 +49,7 @@
         "phpspec/phpspec": "^7.3",
         "phpunit/phpunit": "^9.5",
         "sylius/grid": "^1.7 || ^1.12",
+        "symfony/serializer": "^5.4 || ^6.0",
         "symfony/workflow": "^5.4 || ^6.0",
         "twig/twig": "^2.12 || ^3.0"
     },
