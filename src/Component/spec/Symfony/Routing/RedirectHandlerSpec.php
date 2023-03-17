@@ -86,7 +86,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
         Request $request,
         RouterInterface $router,
     ): void {
-        $data = new BoardGame('uid');
+        $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index', redirectArguments: ['id' => 'resource.id()']);
         $resource = new Resource(alias: 'app.board_game');
         $operation = $operation->withResource($resource);
@@ -149,7 +149,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     }
 }
 
-final class BoardGame
+final class BoardGameResource
 {
     public function __construct(private string $id)
     {
