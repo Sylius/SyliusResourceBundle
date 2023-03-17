@@ -93,6 +93,31 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_show_routes_with_custom_identifier(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $resource = new Resource('app.dummy', identifier: 'code');
+
+        /** @var HttpOperation $operation */
+        $operation = (new Show())->withResource($resource);
+
+        $route = $this->create(
+            $metadata,
+            $resource,
+            $operation,
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{code}');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
     function it_generates_update_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -113,6 +138,31 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_update_routes_with_custom_identifier(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $resource = new Resource('app.dummy', identifier: 'code');
+
+        /** @var HttpOperation $operation */
+        $operation = (new Update())->withResource($resource);
+
+        $route = $this->create(
+            $metadata,
+            $resource,
+            $operation,
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{code}/edit');
+        $route->getMethods()->shouldReturn(['GET', 'PUT']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
     function it_generates_delete_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -124,6 +174,31 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_delete_routes_with_custom_identifier(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $resource = new Resource('app.dummy', identifier: 'code');
+
+        /** @var HttpOperation $operation */
+        $operation = (new Delete())->withResource($resource);
+
+        $route = $this->create(
+            $metadata,
+            $resource,
+            $operation,
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{code}');
         $route->getMethods()->shouldReturn(['DELETE']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,
