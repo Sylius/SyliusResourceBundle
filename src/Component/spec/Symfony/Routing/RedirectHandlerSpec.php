@@ -82,6 +82,20 @@ final class RedirectHandlerSpec extends ObjectBehavior
         $this->redirectToResource($data, $operation, $request);
     }
 
+    function it_redirects_to_resource_with_id_via_the_getter(
+        Request $request,
+        RouterInterface $router,
+    ): void {
+        $data = new BoardGame('uid');
+        $operation = new Create(redirectToRoute: 'app_board_game_index', redirectArguments: ['id' => 'resource.id()']);
+        $resource = new Resource(alias: 'app.board_game');
+        $operation = $operation->withResource($resource);
+
+        $router->generate('app_board_game_index', ['id' => 'uid'])->willReturn('/board-games')->shouldBeCalled();
+
+        $this->redirectToResource($data, $operation, $request);
+    }
+
     function it_redirects_to_resource_without_arguments_after_delete_operation_by_default(
         \stdClass $data,
         Request $request,
