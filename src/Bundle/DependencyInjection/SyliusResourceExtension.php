@@ -140,9 +140,6 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
     private function getResourceAlias(Resource $resource): string
     {
-        // TODO create an alias dynamically by default when alias is not defined
-        // But Alias is not optional for now
-
         return $resource->getAlias();
     }
 
