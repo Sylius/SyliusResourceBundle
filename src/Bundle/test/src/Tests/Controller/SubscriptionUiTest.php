@@ -138,6 +138,22 @@ final class SubscriptionUiTest extends ApiTestCase
     }
 
     /** @test */
+    public function it_allows_deleting_multiple_subscriptions(): void
+    {
+        $this->loadFixturesFromFile('subscriptions.yml');
+
+        $this->client->request('GET', '/admin/subscriptions');
+        $this->client->submitForm('Bulk delete');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var Subscription[] $subscriptions */
+        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+
+        $this->assertEmpty($subscriptions);
+    }
+
+    /** @test */
     public function it_allows_accepting_a_subscription(): void
     {
         $this->loadFixturesFromFile('single_subscription.yml');

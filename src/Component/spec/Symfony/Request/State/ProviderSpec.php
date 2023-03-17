@@ -47,6 +47,7 @@ final class ProviderSpec extends ObjectBehavior
         $operation->getRepository()->willReturn([RepositoryWithCallables::class, 'find']);
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id']]);
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
         $response->shouldHaveType(\stdClass::class);
@@ -65,6 +66,7 @@ final class ProviderSpec extends ObjectBehavior
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $locator->has('App\Repository')->willReturn(true);
         $locator->get('App\Repository')->willReturn($repository);
@@ -85,6 +87,7 @@ final class ProviderSpec extends ObjectBehavior
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $locator->has('App\Repository')->willReturn(true);
         $locator->get('App\Repository')->willReturn($repository);
@@ -106,6 +109,7 @@ final class ProviderSpec extends ObjectBehavior
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
         $request->query = new InputBag(['page' => 42]);
+        $request->request = new ParameterBag();
 
         $locator->has('App\Repository')->willReturn(true);
         $locator->get('App\Repository')->willReturn($repository);
@@ -130,6 +134,7 @@ final class ProviderSpec extends ObjectBehavior
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
         $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
 
         $locator->has('App\Repository')->willReturn(true);
         $locator->get('App\Repository')->willReturn($repository);

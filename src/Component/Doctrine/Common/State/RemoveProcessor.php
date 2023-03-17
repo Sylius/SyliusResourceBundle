@@ -30,12 +30,16 @@ final class RemoveProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
-        if (!\is_object($data) || !$manager = $this->getManager($data)) {
-            return null;
-        }
+        $data = \is_array($data) ? $data : [$data];
 
-        $manager->remove($data);
-        $manager->flush();
+        foreach ($data as $row) {
+            if (!\is_object($row) || !$manager = $this->getManager($row)) {
+                return null;
+            }
+
+            $manager->remove($row);
+            $manager->flush();
+        }
 
         return null;
     }
