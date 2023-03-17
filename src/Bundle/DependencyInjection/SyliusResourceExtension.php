@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection;
 
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Factory\Factory;
 use Sylius\Component\Resource\Metadata\Metadata;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
@@ -56,6 +62,8 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->setParameter('sylius.resource.settings', $config['settings']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 
+        $this->autoRegisterResources($config, $container);
+
         $this->loadPersistence($config['drivers'], $config['resources'], $loader);
         $this->loadResources($config['resources'], $container);
 
@@ -91,6 +99,48 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     {
         $config = ['body_listener' => ['enabled' => true]];
         $container->prependExtensionConfig('fos_rest', $config);
+    }
+
+    private function autoRegisterResources(array &$config, ContainerBuilder $container): void
+    {
+        /** @var array $resources */
+        $resources = $config['resources'];
+
+        /** @var array $mapping */
+        $mapping = $container->getParameter('sylius.resource.mapping');
+        $paths = $mapping['paths'] ?? [];
+
+        /** @var class-string $className */
+        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+            $resourceAttributes = ClassReflection::getClassAttributes($className, ResourceMetadata::class);
+
+            foreach ($resourceAttributes as $resourceAttribute) {
+                /** @var ResourceMetadata $resource */
+                $resource = $resourceAttribute->newInstance();
+                $resourceAlias = $this->getResourceAlias($resource);
+
+                if ($resources[$resourceAlias] ?? false) {
+                    continue;
+                }
+
+                $resources[$resourceAlias] = [
+                    'classes' => [
+                        'model' => $className,
+                        'controller' => ResourceController::class,
+                        'factory' => Factory::class,
+                        'form' => DefaultResourceType::class,
+                    ],
+                    'driver' => 'doctrine/orm',
+                ];
+            }
+        }
+
+        $config['resources'] = $resources;
+    }
+
+    private function getResourceAlias(Resource $resource): string
+    {
+        return $resource->getAlias();
     }
 
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
