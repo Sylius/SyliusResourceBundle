@@ -16,6 +16,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
+use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
@@ -53,6 +54,46 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_create_routes_with_custom_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Create(shortName: 'register'),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/register');
+        $route->getMethods()->shouldReturn(['GET', 'POST']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_post_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\Post(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies');
+        $route->getMethods()->shouldReturn(['POST']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
     function it_generates_index_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -73,6 +114,46 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_index_routes_with_custom_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Index(shortName: 'list'),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/list');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_get_collection_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\GetCollection(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
     function it_generates_show_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -81,6 +162,46 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             $metadata,
             new Resource('app.dummy'),
             new Show(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_show_routes_with_custom_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Show(shortName: 'details'),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}/details');
+        $route->getMethods()->shouldReturn(['GET']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_get_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\Get(),
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}');
@@ -163,6 +284,66 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         ]);
     }
 
+    function it_generates_update_routes_with_custom_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Update(shortName: 'edition'),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}/edition');
+        $route->getMethods()->shouldReturn(['GET', 'PUT']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_put_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\Put(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['PUT']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_patch_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\Patch(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['PATCH']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
     function it_generates_delete_routes(): void
     {
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
@@ -171,6 +352,46 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             $metadata,
             new Resource('app.dummy'),
             new Delete(),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}');
+        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_delete_routes_with_custom_short_name(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Delete(shortName: 'remove'),
+        );
+
+        $route->getPath()->shouldReturn('/dummies/{id}/remove');
+        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_api_delete_routes(): void
+    {
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            new Api\Delete(),
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}');

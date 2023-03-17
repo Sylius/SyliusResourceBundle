@@ -28,9 +28,23 @@ final class Resource
         private ?string $pluralName = null,
         private ?string $applicationName = null,
         private ?string $identifier = null,
+        private ?string $class = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
+    }
+
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+
+    public function withClass(string $class): self
+    {
+        $self = clone $this;
+        $self->class = $class;
+
+        return $self;
     }
 
     public function getAlias(): string

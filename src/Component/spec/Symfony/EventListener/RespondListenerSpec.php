@@ -14,17 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
-use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\EventListener\RespondListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -37,21 +30,11 @@ use Webmozart\Assert\Assert;
 final class RespondListenerSpec extends ObjectBehavior
 {
     function let(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        MetadataInterface $metadata,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ResponderInterface $responder,
     ): void {
-        $operationInitiator = new HttpOperationInitiator(
-            $resourceRegistry->getWrappedObject(),
-            $resourceMetadataCollectionFactory->getWrappedObject(),
-        );
-
-        $this->beConstructedWith($operationInitiator, new RequestContextInitiator(), $responder);
-
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
-        $metadata->getAlias()->willReturn('app.dummy');
-        $metadata->getClass('model')->willReturn('App\Dummy');
+        $this->beConstructedWith($operationInitiator, $contextInitiator, $responder);
     }
 
     function it_is_initializable(): void
@@ -62,9 +45,10 @@ final class RespondListenerSpec extends ObjectBehavior
     function it_sets_a_response_on_event(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ResponderInterface $responder,
         Response $response,
     ): void {
@@ -75,21 +59,15 @@ final class RespondListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
         $request->getMethod()->willReturn('POST');
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
-
-        $responder->respond(['foo' => 'fighters'], $operation, Argument::type(Context::class))
+        $responder->respond(['foo' => 'fighters'], $operation, $context)
             ->willReturn($response)
             ->shouldBeCalled()
         ;
@@ -102,9 +80,10 @@ final class RespondListenerSpec extends ObjectBehavior
     function it_does_nothing_when_controller_result_is_a_response(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ResponderInterface $responder,
         Response $response,
     ): void {
@@ -115,21 +94,15 @@ final class RespondListenerSpec extends ObjectBehavior
             $response->getWrappedObject(),
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
         $request->getMethod()->willReturn('POST');
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
-
-        $responder->respond($response, $operation, Argument::type(Context::class))
+        $responder->respond($response, $operation, $context)
             ->willReturn($response)
             ->shouldNotBeCalled()
         ;

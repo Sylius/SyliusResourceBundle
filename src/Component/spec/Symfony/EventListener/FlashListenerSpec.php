@@ -17,13 +17,8 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
-use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Symfony\EventListener\FlashListener;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -36,22 +31,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class FlashListenerSpec extends ObjectBehavior
 {
     function let(
+        HttpOperationInitiatorInterface $operationInitiator,
         RequestContextInitiatorInterface $requestContextInitiator,
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        MetadataInterface $metadata,
         FlashHelperInterface $flashHelper,
     ): void {
-        $operationInitiator = new HttpOperationInitiator(
-            $resourceRegistry->getWrappedObject(),
-            $resourceMetadataCollectionFactory->getWrappedObject(),
-        );
-
         $this->beConstructedWith($operationInitiator, $requestContextInitiator, $flashHelper);
-
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
-        $metadata->getAlias()->willReturn('app.dummy');
-        $metadata->getClass('model')->willReturn('App\Dummy');
     }
 
     function it_is_initializable(): void
@@ -63,7 +47,7 @@ final class FlashListenerSpec extends ObjectBehavior
         KernelInterface $kernel,
         Request $request,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        HttpOperationInitiatorInterface $operationInitiator,
         RequestContextInitiatorInterface $requestContextInitiator,
         FlashHelperInterface $flashHelper,
         HttpOperation $operation,
@@ -79,17 +63,9 @@ final class FlashListenerSpec extends ObjectBehavior
 
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
         $attributes->getBoolean('is_valid', true)->willReturn(true);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $context = new Context();
 
@@ -104,7 +80,7 @@ final class FlashListenerSpec extends ObjectBehavior
         KernelInterface $kernel,
         Request $request,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        HttpOperationInitiatorInterface $operationInitiator,
         RequestContextInitiatorInterface $requestContextInitiator,
         FlashHelperInterface $flashHelper,
         Response $response,
@@ -117,21 +93,13 @@ final class FlashListenerSpec extends ObjectBehavior
             $response->getWrappedObject(),
         );
 
-        $request->isMethodSafe()->willReturn(false);
+        $request->isMethodSafe()->willReturn(false)->shouldNotBeCalled();
 
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-        $attributes->getBoolean('is_valid', true)->willReturn(true);
+        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldNotBeCalled();
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $context = new Context();
 
@@ -146,7 +114,7 @@ final class FlashListenerSpec extends ObjectBehavior
         KernelInterface $kernel,
         Request $request,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        HttpOperationInitiatorInterface $operationInitiator,
         RequestContextInitiatorInterface $requestContextInitiator,
         FlashHelperInterface $flashHelper,
         HttpOperation $operation,
@@ -158,21 +126,13 @@ final class FlashListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
-        $request->isMethodSafe()->willReturn(true);
+        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
 
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
         $attributes->getBoolean('is_valid', true)->willReturn(true);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $context = new Context();
 
@@ -187,6 +147,7 @@ final class FlashListenerSpec extends ObjectBehavior
         KernelInterface $kernel,
         Request $request,
         ParameterBag $attributes,
+        HttpOperationInitiatorInterface $operationInitiator,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         RequestContextInitiatorInterface $requestContextInitiator,
         FlashHelperInterface $flashHelper,
@@ -203,17 +164,9 @@ final class FlashListenerSpec extends ObjectBehavior
 
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-        $attributes->getBoolean('is_valid', true)->willReturn(false);
+        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $context = new Context();
 

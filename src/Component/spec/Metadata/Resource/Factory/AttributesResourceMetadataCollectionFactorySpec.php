@@ -27,7 +27,7 @@ use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
-use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
+use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
@@ -66,6 +66,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $resource = $metadataCollection->getIterator()->current();
         $resource->shouldHaveType(Resource::class);
         $resource->getAlias()->shouldReturn('app.dummy');
+        $resource->getClass()->shouldReturn(DummyResource::class);
     }
 
     function it_creates_resource_metadata_with_operations(RegistryInterface $resourceRegistry): void
@@ -555,7 +556,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getProvider()->shouldReturn(Provider::class);
     }
 
-    function it_creates_resource_metadata_with_default_twig_provider_on_http_operations(RegistryInterface $resourceRegistry): void
+    function it_creates_resource_metadata_with_default_responder_on_http_operations(RegistryInterface $resourceRegistry): void
     {
         $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
             'driver' => 'dummy_driver',
@@ -582,16 +583,16 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operations->has('app_dummy_show')->shouldReturn(true);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
-        $operation->getResponder()->shouldReturn(TwigResponder::class);
+        $operation->getResponder()->shouldReturn(Responder::class);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
-        $operation->getResponder()->shouldReturn(TwigResponder::class);
+        $operation->getResponder()->shouldReturn(Responder::class);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
-        $operation->getResponder()->shouldReturn(TwigResponder::class);
+        $operation->getResponder()->shouldReturn(Responder::class);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
-        $operation->getResponder()->shouldReturn(TwigResponder::class);
+        $operation->getResponder()->shouldReturn(Responder::class);
     }
 
     function it_creates_resource_metadata_with_route_prefix(RegistryInterface $resourceRegistry): void

@@ -12,3 +12,5 @@ framework:
         storage_factory_id: session.storage.factory.mock_file
     http_method_override: true
     test: ~
+    serializer:
+        enabled: true
