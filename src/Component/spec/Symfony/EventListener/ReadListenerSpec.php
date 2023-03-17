@@ -16,16 +16,11 @@ namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
-use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Symfony\EventListener\ReadListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -36,21 +31,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class ReadListenerSpec extends ObjectBehavior
 {
     function let(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        MetadataInterface $metadata,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ProviderInterface $provider,
     ): void {
-        $operationInitiator = new HttpOperationInitiator(
-            $resourceRegistry->getWrappedObject(),
-            $resourceMetadataCollectionFactory->getWrappedObject(),
-        );
-
-        $this->beConstructedWith($operationInitiator, new RequestContextInitiator(), $provider);
-
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
-        $metadata->getAlias()->willReturn('app.dummy');
-        $metadata->getClass('model')->willReturn('App\Dummy');
+        $this->beConstructedWith($operationInitiator, $contextInitiator, $provider);
     }
 
     function it_is_initializable(): void
@@ -61,25 +46,21 @@ final class ReadListenerSpec extends ObjectBehavior
     function it_retrieves_data_and_store_them_to_request(
         RequestEvent $event,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         HttpOperation $operation,
         ProviderInterface $provider,
     ): void {
         $event->getRequest()->willReturn($request);
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
-
-        $attributes->get('_route')->willReturn('app_dummy_show');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $provider->provide($operation, Argument::type(Context::class))->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
@@ -91,25 +72,22 @@ final class ReadListenerSpec extends ObjectBehavior
     function it_does_nothing_when_operation_is_a_create_operation(
         RequestEvent $event,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProviderInterface $provider,
     ): void {
         $event->getRequest()->willReturn($request);
 
-        $request->attributes = $attributes;
-
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
         $operation = new Create();
-        $operations = new Operations();
-        $operations->add('app_dummy_create', new Create());
 
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
+        $context = new Context();
 
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = $attributes;
 
         $provider->provide($operation, Argument::type(Context::class))->shouldNotBeCalled();
 
@@ -121,27 +99,26 @@ final class ReadListenerSpec extends ObjectBehavior
     function it_does_nothing_when_operation_cannot_be_read(
         RequestEvent $event,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProviderInterface $provider,
         HttpOperation $operation,
     ): void {
         $event->getRequest()->willReturn($request);
+
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $request->attributes = $attributes;
 
         $attributes->get('_route')->willReturn('app_dummy_show');
         $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
-
         $operation->canRead()->willReturn(false);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $provider->provide($operation, Argument::type(Context::class))->shouldNotBeCalled();
 
@@ -153,6 +130,8 @@ final class ReadListenerSpec extends ObjectBehavior
     function it_throws_an_exception_when_no_data_was_found(
         RequestEvent $event,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProviderInterface $provider,
@@ -160,20 +139,15 @@ final class ReadListenerSpec extends ObjectBehavior
     ): void {
         $event->getRequest()->willReturn($request);
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_show');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation->getWrappedObject());
-
         $operation->canRead()->willReturn(true);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $provider->provide($operation, Argument::type(Context::class))->willReturn(null);
 

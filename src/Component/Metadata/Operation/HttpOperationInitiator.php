@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class HttpOperationInitiator
+final class HttpOperationInitiator implements HttpOperationInitiatorInterface
 {
     public function __construct(
         private RegistryInterface $resourceRegistry,
@@ -30,9 +30,10 @@ final class HttpOperationInitiator
     {
         /** @var string|null $operationName */
         $operationName = $request->attributes->get('_route');
+        $syliusOptions = $attributes = $request->attributes->all('_sylius');
 
         if (
-            [] === ($attributes = $request->attributes->all('_sylius')) ||
+            [] === $syliusOptions ||
             null === ($resource = $attributes['resource'] ?? null) ||
             null === $operationName
         ) {
@@ -44,6 +45,9 @@ final class HttpOperationInitiator
         } else {
             $metadata = $this->resourceRegistry->getByClass($resource);
         }
+
+        $syliusOptions['resource_class'] = $metadata->getClass('model');
+        $request->attributes->set('_sylius', $syliusOptions);
 
         /** @var HttpOperation $operation */
         $operation = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'))
