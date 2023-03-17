@@ -59,6 +59,8 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             throw new \InvalidArgumentException(sprintf('Operation "%s" should have a short name. Please define one.', $operation::class));
         }
 
+        $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
+
         if ('index' === $shortName) {
             return sprintf('%s', $rootPath);
         }
@@ -72,11 +74,11 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         if ($operation instanceof UpdateOperationInterface) {
             $path = $shortName === 'update' ? 'edit' : $shortName;
 
-            return sprintf('%s/{id}/%s', $rootPath, $path);
+            return sprintf('%s/{%s}/%s', $rootPath, $identifier, $path);
         }
 
         if ('delete' === $shortName) {
-            return sprintf('%s/{id}', $rootPath);
+            return sprintf('%s/{%s}', $rootPath, $identifier);
         }
 
         if ('bulk_delete' === $shortName) {
@@ -84,7 +86,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         }
 
         if ('show' === $shortName) {
-            return sprintf('%s/{id}', $rootPath);
+            return sprintf('%s/{%s}', $rootPath, $identifier);
         }
 
         throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this operation "%s". Please define a path.', $operation::class));

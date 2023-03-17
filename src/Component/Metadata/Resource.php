@@ -27,6 +27,7 @@ final class Resource
         private ?string $name = null,
         private ?string $pluralName = null,
         private ?string $applicationName = null,
+        private ?string $identifier = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
@@ -132,6 +133,19 @@ final class Resource
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function withIdentifier(string $identifier): self
+    {
+        $self = clone $this;
+        $self->identifier = $identifier;
 
         return $self;
     }
