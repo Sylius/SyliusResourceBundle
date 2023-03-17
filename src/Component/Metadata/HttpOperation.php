@@ -38,6 +38,7 @@ class HttpOperation extends Operation
         ?string $formType = null,
         ?array $formOptions = null,
         protected ?string $redirectToRoute = null,
+        protected ?array $redirectArguments = null,
     ) {
         parent::__construct(
             template: $template,
@@ -118,6 +119,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->redirectToRoute = $redirectToRoute;
+
+        return $self;
+    }
+
+    public function getRedirectArguments(): ?array
+    {
+        return $this->redirectArguments;
+    }
+
+    public function withRedirectArguments(array $redirectArguments): self
+    {
+        $self = clone $this;
+        $self->redirectArguments = $redirectArguments;
 
         return $self;
     }
