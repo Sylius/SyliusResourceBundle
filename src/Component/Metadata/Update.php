@@ -37,6 +37,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         ?string $formType = null,
         ?array $formOptions = null,
         ?string $redirectToRoute = null,
+        ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -59,6 +60,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
             formType: $formType,
             formOptions: $formOptions,
             redirectToRoute: $redirectToRoute,
+            redirectArguments: $redirectArguments,
         );
     }
 
