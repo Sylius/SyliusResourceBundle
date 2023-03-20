@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy;
+namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Resource;
 
-#[Resource]
-final class DummyResource
+#[Resource(alias: 'app.dummy')]
+final class DummyResourceWithAlias
 {
 }
