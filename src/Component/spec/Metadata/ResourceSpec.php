@@ -21,19 +21,14 @@ use Sylius\Component\Resource\Metadata\Update;
 
 final class ResourceSpec extends ObjectBehavior
 {
-    function let(): void
-    {
-        $this->beConstructedWith('app.book');
-    }
-
     function it_is_initializable(): void
     {
         $this->shouldHaveType(Resource::class);
     }
 
-    function it_can_get_alias(): void
+    function it_has_no_alias_by_default(): void
     {
-        $this->getAlias()->shouldReturn('app.book');
+        $this->getAlias()->shouldReturn(null);
     }
 
     function it_could_have_an_alias(): void
@@ -107,56 +102,56 @@ final class ResourceSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_a_section(): void
     {
-        $this->beConstructedWith('app.book', 'admin');
+        $this->beConstructedWith(null, 'admin');
 
         $this->getSection()->shouldReturn('admin');
     }
 
     function it_can_be_constructed_with_a_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, 'book');
+        $this->beConstructedWith(null, null, null, null, null, 'book');
 
         $this->getName()->shouldReturn('book');
     }
 
     function it_can_be_constructed_with_an_application_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, 'app');
+        $this->beConstructedWith(null, null, null, null, null, null, null, 'app');
 
         $this->getApplicationName()->shouldReturn('app');
     }
 
     function it_can_be_constructed_with_a_form_type(): void
     {
-        $this->beConstructedWith('app.book', null, 'App\Form\DummyType');
+        $this->beConstructedWith(null, null, 'App\Form\DummyType');
 
         $this->getFormType()->shouldReturn('App\Form\DummyType');
     }
 
     function it_can_be_constructed_with_a_templates_dir(): void
     {
-        $this->beConstructedWith('app.book', null, null, 'book');
+        $this->beConstructedWith(null, null, null, 'book');
 
         $this->getTemplatesDir()->shouldReturn('book');
     }
 
     function it_can_be_constructed_with_a_route_prefix(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, '/admin');
+        $this->beConstructedWith(null, null, null, null, '/admin');
 
         $this->getRoutePrefix()->shouldReturn('/admin');
     }
 
     function it_can_be_constructed_with_a_plural_name(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, null, 'books');
+        $this->beConstructedWith(null, null, null, null, null, null, 'books');
 
         $this->getPluralName()->shouldReturn('books');
     }
 
     function it_can_be_constructed_with_an_identifier(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, 'code');
+        $this->beConstructedWith(null, null, null, null, null, null, null, null, 'code');
 
         $this->getIdentifier()->shouldReturn('code');
     }
@@ -193,7 +188,7 @@ final class ResourceSpec extends ObjectBehavior
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, null, $operations);
+        $this->beConstructedWith(null, null, null, null, null, null, null, null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }
