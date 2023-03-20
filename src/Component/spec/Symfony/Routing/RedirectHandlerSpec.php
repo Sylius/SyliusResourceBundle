@@ -53,6 +53,21 @@ final class RedirectHandlerSpec extends ObjectBehavior
         $this->redirectToResource($data, $operation, $request);
     }
 
+    function it_redirects_to_resource_with_custom_identifier_argument_by_default(
+        \stdClass $data,
+        Request $request,
+        RouterInterface $router,
+    ): void {
+        $data->code = 'xyz';
+        $operation = new Create(redirectToRoute: 'app_dummy_index');
+        $resource = new Resource(alias: 'app.ok', identifier: 'code');
+        $operation = $operation->withResource($resource);
+
+        $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
+
+        $this->redirectToResource($data, $operation, $request);
+    }
+
     function it_redirects_to_resource_with_id_via_property_access(
         Request $request,
         RouterInterface $router,

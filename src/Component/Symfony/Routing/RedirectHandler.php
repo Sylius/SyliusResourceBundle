@@ -46,7 +46,9 @@ final class RedirectHandler
         $redirectArguments = $operation->getRedirectArguments() ?? [];
 
         if ([] === $redirectArguments && !$operation instanceof DeleteOperationInterface) {
-            $redirectArguments['id'] = 'resource.id';
+            $identifier = $resource->getIdentifier() ?? 'id';
+
+            $redirectArguments[$identifier] = 'resource.' . $identifier;
         }
 
         $parameters = $this->parseResourceValues($resource, $redirectArguments, $data);
