@@ -19,7 +19,7 @@ final class Resource
     private ?Operations $operations;
 
     public function __construct(
-        private string $alias,
+        private ?string $alias = null,
         private ?string $section = null,
         private ?string $formType = null,
         private ?string $templatesDir = null,
@@ -50,7 +50,7 @@ final class Resource
         return $self;
     }
 
-    public function getAlias(): string
+    public function getAlias(): ?string
     {
         return $this->alias;
     }
@@ -175,7 +175,7 @@ final class Resource
     public function getOperation(string $name): Operation
     {
         if (null === $operations = $this->operations) {
-            throw new \RuntimeException(sprintf('No Operations were found on resource %s"', $this->alias));
+            throw new \RuntimeException(sprintf('No Operations were found on resource %s"', $this->alias ?? ''));
         }
 
         return $operations->get($name);

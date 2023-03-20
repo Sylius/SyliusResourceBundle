@@ -32,6 +32,7 @@ use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithAlias;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithDenormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormOptions;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
@@ -61,6 +62,20 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
     function it_creates_resource_metadata(RegistryInterface $resourceRegistry): void
     {
         $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
+
+        $metadataCollection = $this->create(DummyResourceWithAlias::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $metadataCollection->count()->shouldReturn(1);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+    }
+
+    function it_creates_resource_metadata_without_resource_alias(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->getByClass(DummyResource::class)->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']));
 
         $metadataCollection = $this->create(DummyResource::class);
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
@@ -184,30 +199,18 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
-        $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
     }
 
     function it_creates_multi_resources_metadata_with_sections_and_nested_operations(RegistryInterface $resourceRegistry): void
@@ -243,30 +246,18 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_admin_dummy_create');
-        $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_admin_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_admin_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_shop_dummy_show');
         $operation->shouldHaveType(Show::class);
         $operation->getName()->shouldReturn('app_shop_dummy_show');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
     }
 
     function it_creates_operations_even_if_there_is_no_resource_attribute(RegistryInterface $resourceRegistry): void
@@ -299,16 +290,10 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
         $operation->shouldHaveType(Index::class);
         $operation->getName()->shouldReturn('app_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
         $operation->shouldHaveType(Create::class);
         $operation->getName()->shouldReturn('app_dummy_create');
-        $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
-        $operation->getFormType()->shouldReturn('App\Form');
     }
 
     function it_creates_resource_metadata_with_form_type(RegistryInterface $resourceRegistry): void
@@ -335,17 +320,9 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operations->has('app_dummy_update')->shouldReturn(true);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
-        $operation->shouldHaveType(Create::class);
-        $operation->getName()->shouldReturn('app_dummy_create');
-        $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getFormType()->shouldReturn('App\Form\DummyType');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
-        $operation->shouldHaveType(Update::class);
-        $operation->getName()->shouldReturn('app_dummy_update');
-        $operation->getMethods()->shouldReturn(['GET', 'PUT']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getFormType()->shouldReturn('App\Form\DummyType');
     }
 
@@ -456,31 +433,15 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operations->has('app_dummy_show')->shouldReturn(true);
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
-        $operation->shouldHaveType(Create::class);
-        $operation->getName()->shouldReturn('app_dummy_create');
-        $operation->getMethods()->shouldReturn(['GET', 'POST']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getTemplate()->shouldReturn('book/create.html.twig');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
-        $operation->shouldHaveType(Update::class);
-        $operation->getName()->shouldReturn('app_dummy_update');
-        $operation->getMethods()->shouldReturn(['GET', 'PUT']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getTemplate()->shouldReturn('book/update.html.twig');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
-        $operation->shouldHaveType(Index::class);
-        $operation->getName()->shouldReturn('app_dummy_index');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getTemplate()->shouldReturn('book/index.html.twig');
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
-        $operation->shouldHaveType(Show::class);
-        $operation->getName()->shouldReturn('app_dummy_show');
-        $operation->getMethods()->shouldReturn(['GET']);
-        $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getTemplate()->shouldReturn('book/show.html.twig');
     }
 

@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use function Symfony\Component\String\u;
 
 final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
 {
@@ -117,7 +118,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             foreach ($resourceAttributes as $resourceAttribute) {
                 /** @var ResourceMetadata $resource */
                 $resource = $resourceAttribute->newInstance();
-                $resourceAlias = $this->getResourceAlias($resource);
+                $resourceAlias = $this->getResourceAlias($resource, $className);
 
                 if ($resources[$resourceAlias] ?? false) {
                     continue;
@@ -138,9 +139,24 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $config['resources'] = $resources;
     }
 
-    private function getResourceAlias(Resource $resource): string
+    /** @param class-string $className */
+    private function getResourceAlias(Resource $resource, string $className): string
     {
-        return $resource->getAlias();
+        $alias = $resource->getAlias();
+
+        if (null !== $alias) {
+            return $alias;
+        }
+
+        $reflectionClass = new \ReflectionClass($className);
+
+        $shortName = $reflectionClass->getShortName();
+        $suffix = 'Resource';
+        if (str_ends_with($shortName, $suffix)) {
+            $shortName = substr($shortName, 0, strlen($shortName) - strlen($suffix));
+        }
+
+        return 'app.' . u($shortName)->snake()->toString();
     }
 
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void

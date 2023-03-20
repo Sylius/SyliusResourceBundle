@@ -64,7 +64,14 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             if (is_a($attribute->getName(), ResourceMetadata::class, true)) {
                 /** @var ResourceMetadata $resource */
                 $resource = $attribute->newInstance();
-                $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+                $resourceAlias = $resource->getAlias();
+
+                if (null !== $resourceAlias) {
+                    $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
+                } else {
+                    $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
+                }
+
                 $resource = $this->getResourceWithDefaults($resourceClass, $resource, $resourceConfiguration);
                 $resources[++$index] = $resource;
                 $operations = [];
@@ -116,6 +123,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     {
         $resource = $resource->withClass($resourceClass);
 
+        if (null === $resource->getAlias()) {
+            $resource = $resource->withAlias($resourceConfiguration->getAlias());
+        }
+
         if (null === $resource->getApplicationName()) {
             $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
         }
@@ -129,7 +140,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
     private function getOperationWithDefaults(ResourceMetadata $resource, Operation $operation): array
     {
-        $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+        $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
 
         if (null === $resource->getName()) {
             $resourceName = $resourceConfiguration->getName();
