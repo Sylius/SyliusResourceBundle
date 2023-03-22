@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Subscription\Entity;
 
 use App\Subscription\Form\Type\SubscriptionType;
+use App\Subscription\Repository\SubscriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Component\Resource\Metadata\BulkDelete;
@@ -41,11 +42,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
 #[Delete]
 #[Show(template: 'subscription/show.html.twig')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
 class Subscription implements ResourceInterface
 {
     #[ORM\Column(type: 'string')]
     public string $state = 'new';
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    public ?\DateTimeInterface $archivedAt = null;
 
     public function __construct(
         #[ORM\Id]

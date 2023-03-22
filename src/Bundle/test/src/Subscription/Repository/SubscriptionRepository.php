@@ -11,27 +11,33 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Subscription\Repository;
 
-use App\Entity\Book;
+use App\Subscription\Entity\Subscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-final class BookRepository extends ServiceEntityRepository implements BookRepositoryInterface
+final class SubscriptionRepository extends ServiceEntityRepository implements RepositoryInterface
 {
     use ResourceRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Book::class);
+        parent::__construct($registry, Subscription::class);
     }
 
-    public function createListQueryBuilder(): QueryBuilder
+    public function createListQueryBuilder(bool $showArchived = false): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('o');
-        $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('o.archivedAt'));
+
+        if (!$showArchived) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->isNull('o.archivedAt'),
+            );
+        }
 
         return $queryBuilder;
     }

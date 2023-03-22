@@ -55,6 +55,11 @@ final class SubscriptionUiTest extends ApiTestCase
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_doc']->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_doc']->getId()), $content);
         $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_doc']->getId()), $content);
+
+        $this->assertStringContainsString('<td>archived@example.com</td>', $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_archived']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_archived']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_archived']->getId()), $content);
     }
 
     /** @test */
