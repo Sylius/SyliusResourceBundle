@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace App\Subscription\EventSubscriber;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\GenericEvent as SymfonyGenericEvent;
 
 class SmokeSubscriptionEventsSubscriber implements EventSubscriberInterface
 {
@@ -34,7 +36,7 @@ class SmokeSubscriptionEventsSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function smokeShowEvent(OperationEvent $event): void
+    public function smokeShowEvent(SymfonyGenericEvent $event): void
     {
     }
 
@@ -42,7 +44,7 @@ class SmokeSubscriptionEventsSubscriber implements EventSubscriberInterface
     {
     }
 
-    public function smokePreEvent(OperationEvent $event): void
+    public function smokePreEvent(GenericEvent $event): void
     {
     }
 
