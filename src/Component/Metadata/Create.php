@@ -46,6 +46,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         ?string $formType = null,
         ?array $formOptions = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
@@ -73,6 +74,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
             formType: $formType,
             formOptions: $formOptions,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

@@ -39,6 +39,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?string $formType = null,
         ?array $formOptions = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
     ) {
@@ -62,6 +63,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             formType: $formType,
             formOptions: $formOptions,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );
