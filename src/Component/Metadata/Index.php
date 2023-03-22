@@ -39,6 +39,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?bool $serialize = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $eventShortName = null,
         ?array $validationContext = null,
         ?string $redirectToRoute = null,
     ) {
@@ -63,6 +64,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             formType: $formType,
             formOptions: $formOptions,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
         );
     }

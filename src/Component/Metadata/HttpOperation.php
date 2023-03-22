@@ -42,6 +42,7 @@ class HttpOperation extends Operation
         ?array $normalizationContext = null,
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
     ) {
@@ -65,6 +66,7 @@ class HttpOperation extends Operation
             normalizationContext: $normalizationContext,
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
         );
     }
 

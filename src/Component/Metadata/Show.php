@@ -40,6 +40,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?string $formType = null,
         ?array $formOptions = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -63,6 +64,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
             formType: $formType,
             formOptions: $formOptions,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
         );
     }
