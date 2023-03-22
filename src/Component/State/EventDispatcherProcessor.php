@@ -35,10 +35,10 @@ final class EventDispatcherProcessor implements ProcessorInterface
     {
         $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context);
 
-        $this->decorated->process($data, $operation, $context);
+        $result = $this->decorated->process($data, $operation, $context);
 
         $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context);
 
-        return null;
+        return $result;
     }
 }
