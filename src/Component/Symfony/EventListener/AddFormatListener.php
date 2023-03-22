@@ -63,7 +63,7 @@ final class AddFormatListener
                 return;
             }
 
-            throw $this->getNotAcceptableHttpException($mimeType, $mimeTypes);
+            throw $this->getNotAcceptableHttpException($mimeType ?? '', $mimeTypes);
         }
     }
 
