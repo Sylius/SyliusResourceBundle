@@ -15,9 +15,7 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -25,10 +23,8 @@ use Webmozart\Assert\Assert;
  */
 final class Processor implements ProcessorInterface
 {
-    public function __construct(
-        private ContainerInterface $locator,
-        private OperationEventDispatcherInterface $operationEventDispatcher,
-    ) {
+    public function __construct(private ContainerInterface $locator)
+    {
     }
 
     /**
@@ -42,53 +38,18 @@ final class Processor implements ProcessorInterface
             return null;
         }
 
-        return $this->processWithProcessor($processor, $data, $operation, $context);
-    }
-
-    private function processWithProcessor(callable|string $processor, mixed $data, Operation $operation, Context $context): mixed
-    {
-        /** @var ProcessorInterface|null $processorInstance */
-        $processorInstance = null;
-
-        if (\is_string($processor)) {
-            $processorInstance = $this->locator->get($processor);
-            Assert::isInstanceOf($processorInstance, ProcessorInterface::class);
+        if (\is_callable($processor)) {
+            return $processor($data, $operation, $context);
         }
 
-        if ($operation instanceof BulkOperationInterface && \is_iterable($data)) {
-            $this->operationEventDispatcher->dispatchBulkEvent($data, $operation, $context);
-
-            foreach ($data as $item) {
-                $this->operationEventDispatcher->dispatchPreEvent($item, $operation, $context);
-
-                if (null === $processorInstance) {
-                    if (\is_callable($processor)) {
-                        $processor($item, $operation, $context);
-                    }
-                } else {
-                    $processorInstance->process($item, $operation, $context);
-                }
-
-                $this->operationEventDispatcher->dispatchPostEvent($item, $operation, $context);
-            }
-
-            return null;
+        if (!$this->locator->has($processor)) {
+            throw new \RuntimeException(sprintf('Processor "%s" not found on operation "%s"', $processor, $operation->getName() ?? ''));
         }
 
-        $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context);
+        /** @var ProcessorInterface $processorInstance */
+        $processorInstance = $this->locator->get($processor);
+        Assert::isInstanceOf($processorInstance, ProcessorInterface::class);
 
-        $result = null;
-
-        if (null === $processorInstance) {
-            if (\is_callable($processor)) {
-                $result = $processor($data, $operation, $context);
-            }
-        } else {
-            $result = $processorInstance->process($data, $operation, $context);
-        }
-
-        $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context);
-
-        return $result;
+        return $processorInstance->process($data, $operation, $context);
     }
 }
