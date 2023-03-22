@@ -159,6 +159,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withDenormalizationContext($resource->getDenormalizationContext());
         }
 
+        if (null === $operation->getValidationContext()) {
+            $operation = $operation->withValidationContext($resource->getValidationContext());
+        }
+
         $operation = $operation->withResource($resource);
 
         if (null === $operation->getRepository()) {
@@ -170,11 +174,8 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withFormType($formType);
         }
 
-        if (null === $operation->getFormOptions()) {
-            $operation = $operation->withFormOptions([
-                'data_class' => $resourceConfiguration->getClass('model'),
-            ]);
-        }
+        $formOptions = $this->buildFormOptions($operation, $resourceConfiguration);
+        $operation = $operation->withFormOptions($formOptions);
 
         if (
             $operation instanceof StateMachineAwareOperationInterface &&
@@ -215,5 +216,21 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         $operationName = $operation->getName();
 
         return [$operationName, $operation];
+    }
+
+    private function buildFormOptions(Operation $operation, MetadataInterface $resourceConfiguration): array
+    {
+        $formOptions = array_merge(
+            ['data_class' => $resourceConfiguration->getClass('model')],
+            $operation->getFormOptions() ?? [],
+        );
+
+        $validationGroups = $operation->getValidationContext()['groups'] ?? null;
+
+        if (null !== $validationGroups) {
+            $formOptions = array_merge(['validation_groups' => $validationGroups], $formOptions);
+        }
+
+        return $formOptions;
     }
 }

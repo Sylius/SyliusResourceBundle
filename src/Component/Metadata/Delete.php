@@ -38,6 +38,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?bool $serialize = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?array $validationContext = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
     ) {
@@ -60,6 +61,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             serialize: $serialize,
             formType: $formType,
             formOptions: $formOptions,
+            validationContext: $validationContext,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

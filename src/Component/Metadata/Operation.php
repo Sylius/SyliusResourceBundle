@@ -53,6 +53,7 @@ abstract class Operation
         protected ?string $resourcePluralName = null,
         protected ?array $normalizationContext = null,
         protected ?array $denormalizationContext = null,
+        protected ?array $validationContext = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -303,6 +304,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->denormalizationContext = $denormalizationContext;
+
+        return $self;
+    }
+
+    public function getValidationContext(): ?array
+    {
+        return $this->validationContext;
+    }
+
+    public function withValidationContext(?array $validationContext): self
+    {
+        $self = clone $this;
+        $self->validationContext = $validationContext;
 
         return $self;
     }
