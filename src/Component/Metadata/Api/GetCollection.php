@@ -44,6 +44,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
         ?array $normalizationContext = null,
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -69,6 +70,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
             normalizationContext: $normalizationContext,
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
         );
     }

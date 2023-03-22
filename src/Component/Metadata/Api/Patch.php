@@ -44,6 +44,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface
         ?array $normalizationContext = null,
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -69,6 +70,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface
             normalizationContext: $normalizationContext,
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
         );
     }
