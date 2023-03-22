@@ -18,6 +18,7 @@ use Negotiation\Negotiator;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 final class AddFormatListener
 {
@@ -32,26 +33,49 @@ final class AddFormatListener
         $request = $event->getRequest();
         $operation = $this->operationInitiator->initializeOperation($request);
 
-        if (null === $operation) {
+        if (
+            null === $operation
+        ) {
             return;
         }
 
-        /** @var string|null $format */
-        $format = $request->attributes->has('_format') ? $request->attributes->get('_format') : null;
-        $mimeTypes = null !== $format ? Request::getMimeTypes($format) : ['application/json', 'application/xml'];
+        $mimeTypes = ['text/html', 'application/json', 'application/xml'];
+
+        // First, try to guess the format from the Accept header
         $accept = $request->headers->get('Accept');
+        if (null !== $accept) {
+            /** @var BaseAccept|null $mediaType */
+            $mediaType = $this->negotiator->getBest($accept, $mimeTypes);
 
-        if (null === $accept) {
-            return;
+            if (null !== $mediaType) {
+                $request->setRequestFormat($request->getFormat($mediaType->getType()));
+
+                return;
+            }
         }
 
-        /** @var BaseAccept|null $mediaType */
-        $mediaType = $this->negotiator->getBest($accept, $mimeTypes);
+        // Then use the Symfony request format if available and applicable
+        $requestFormat = $request->getRequestFormat(null);
+        if (null !== $requestFormat) {
+            $mimeType = $request->getMimeType($requestFormat);
 
-        if (null === $mediaType) {
-            return;
+            if (\in_array($mimeType, $mimeTypes, true)) {
+                return;
+            }
+
+            throw $this->getNotAcceptableHttpException($mimeType, $mimeTypes);
         }
+    }
 
-        $request->setRequestFormat($request->getFormat($mediaType->getType()));
+    /**
+     * Retrieves an instance of NotAcceptableHttpException.
+     */
+    private function getNotAcceptableHttpException(string $accept, array $mimeTypes): NotAcceptableHttpException
+    {
+        return new NotAcceptableHttpException(sprintf(
+            'Requested format "%s" is not supported. Supported MIME types are "%s".',
+            $accept,
+            implode('", "', $mimeTypes),
+        ));
     }
 }
