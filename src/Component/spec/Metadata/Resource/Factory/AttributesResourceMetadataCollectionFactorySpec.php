@@ -33,6 +33,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithDenormalizationContext;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormOptions;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithGrid;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
@@ -43,6 +44,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePrefix;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithTemplatesDir;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithValidationContext;
 
 final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {
@@ -345,6 +347,86 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $operation->getMethods()->shouldReturn(['GET', 'PUT']);
         $operation->getRepository()->shouldReturn('app.repository.dummy');
         $operation->getFormType()->shouldReturn('App\Form\DummyType');
+    }
+
+    function it_creates_resource_metadata_with_form_options(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithFormOptions::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getFormOptions()->shouldReturn([
+            'data_class' => 'App\Dummy',
+            'html5' => false,
+        ]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getFormOptions()->shouldReturn([
+            'data_class' => 'App\Dummy',
+            'html5' => true,
+        ]);
+    }
+
+    function it_creates_resource_metadata_with_validation_context(RegistryInterface $resourceRegistry): void
+    {
+        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]));
+
+        $metadataCollection = $this->create(DummyResourceWithValidationContext::class);
+        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $resource->shouldHaveType(Resource::class);
+        $resource->getAlias()->shouldReturn('app.dummy');
+
+        $operations = $resource->getOperations();
+        $operations->shouldHaveType(Operations::class);
+
+        $operations->count()->shouldReturn(2);
+        $operations->has('app_dummy_create')->shouldReturn(true);
+        $operations->has('app_dummy_update')->shouldReturn(true);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $operation->shouldHaveType(Create::class);
+        $operation->getValidationContext()->shouldReturn(['groups' => ['sylius']]);
+        $operation->getFormOptions()->shouldReturn([
+            'validation_groups' => ['sylius'],
+            'data_class' => 'App\Dummy',
+        ]);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $operation->shouldHaveType(Update::class);
+        $operation->getValidationContext()->shouldReturn(['groups' => ['sylius']]);
+        $operation->getFormOptions()->shouldReturn([
+            'validation_groups' => ['sylius'],
+            'data_class' => 'App\Dummy',
+        ]);
     }
 
     function it_creates_resource_metadata_with_templates_dir(RegistryInterface $resourceRegistry): void
