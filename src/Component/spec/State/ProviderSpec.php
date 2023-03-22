@@ -17,15 +17,20 @@ use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\State\Provider;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProviderWithCallable;
 
 final class ProviderSpec extends ObjectBehavior
 {
-    function let(ContainerInterface $locator): void
-    {
-        $this->beConstructedWith($locator);
+    function let(
+        ContainerInterface $locator,
+        OperationEventDispatcherInterface $operationEventDispatcher,
+    ): void {
+        $this->beConstructedWith($locator, $operationEventDispatcher);
     }
 
     function it_is_initializable(): void
@@ -54,6 +59,60 @@ final class ProviderSpec extends ObjectBehavior
         $context = new Context();
 
         $this->provide($operation, $context)->shouldHaveType(\stdClass::class);
+    }
+
+    function it_dispatches_events_for_index_operation(
+        ContainerInterface $locator,
+        ProviderInterface $provider,
+        OperationEventDispatcherInterface $operationEventDispatcher,
+    ): void {
+        $operation = new Index(provider: '\App\Provider');
+        $context = new Context();
+
+        $locator->has('\App\Provider')->willReturn(true);
+        $locator->get('\App\Provider')->willReturn($provider);
+
+        $provider->provide($operation, $context)->shouldBeCalled();
+
+        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
+
+        $this->provide($operation, $context);
+    }
+
+    function it_dispatches_events_for_show_operation(
+        ContainerInterface $locator,
+        ProviderInterface $provider,
+        OperationEventDispatcherInterface $operationEventDispatcher,
+    ): void {
+        $operation = new Show(provider: '\App\Provider');
+        $context = new Context();
+
+        $locator->has('\App\Provider')->willReturn(true);
+        $locator->get('\App\Provider')->willReturn($provider);
+
+        $provider->provide($operation, $context)->shouldBeCalled();
+
+        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
+
+        $this->provide($operation, $context);
+    }
+
+    function it_does_not_dispatch_events_for_create_operation(
+        ContainerInterface $locator,
+        ProviderInterface $provider,
+        OperationEventDispatcherInterface $operationEventDispatcher,
+    ): void {
+        $operation = new Create(provider: '\App\Provider');
+        $context = new Context();
+
+        $locator->has('\App\Provider')->willReturn(true);
+        $locator->get('\App\Provider')->willReturn($provider);
+
+        $provider->provide($operation, $context)->shouldBeCalled();
+
+        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldNotBeCalled();
+
+        $this->provide($operation, $context);
     }
 
     function it_returns_null_if_operation_has_no_provider(): void

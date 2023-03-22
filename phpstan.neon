@@ -17,6 +17,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
         - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
         - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
+        - %currentWorkingDirectory%/src/Bundle/Event/ResourceControllerEvent.php
         - %currentWorkingDirectory%/src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
         - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
@@ -73,6 +74,7 @@ parameters:
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository\:\:findAll\(\) should return array\<object\> but returns array\./'
+        - '/Method Sylius\\Component\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:stop\(\) has no return type specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return type specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return type specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return type specified./'

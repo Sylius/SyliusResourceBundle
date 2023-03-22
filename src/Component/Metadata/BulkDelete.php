@@ -35,6 +35,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
         ?bool $write = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
     ) {
@@ -54,6 +55,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
             write: $write,
             formType: $formType,
             formOptions: $formOptions,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

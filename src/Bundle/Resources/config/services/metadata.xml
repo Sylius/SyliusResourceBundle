@@ -36,6 +36,13 @@
             <argument type="service" id=".inner" />
         </service>
 
+        <service id="sylius.resource_metadata_collection.factory.event_short_name"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
         <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
