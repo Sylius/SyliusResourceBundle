@@ -39,6 +39,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         ?bool $serialize = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?array $validationContext = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
@@ -65,6 +66,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
             serialize: $serialize,
             formType: $formType,
             formOptions: $formOptions,
+            validationContext: $validationContext,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

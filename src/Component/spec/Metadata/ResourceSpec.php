@@ -175,9 +175,16 @@ final class ResourceSpec extends ObjectBehavior
         $this->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
     }
 
+    function it_can_be_constructed_with_a_validation_context(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, ['groups' => ['sylius']]);
+
+        $this->getValidationContext()->shouldReturn(['groups' => ['sylius']]);
+    }
+
     function it_can_be_constructed_with_a_class(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, 'App\Resource');
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, 'App\Resource');
 
         $this->getClass()->shouldReturn('App\Resource');
     }
@@ -186,7 +193,7 @@ final class ResourceSpec extends ObjectBehavior
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, $operations);
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }

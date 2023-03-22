@@ -53,7 +53,8 @@ final class ValidateListener
         }
 
         if ('html' !== $format) {
-            $violations = $this->validator->validate($controllerResult);
+            $validationGroups = $operation->getValidationContext()['groups'] ?? null;
+            $violations = $this->validator->validate(value: $controllerResult, groups: $validationGroups);
             if (0 !== \count($violations)) {
                 throw new ValidationException($violations);
             }
