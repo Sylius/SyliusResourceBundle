@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing;
 
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Component\Resource\Metadata\Resource;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -21,8 +23,10 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class RedirectHandler
 {
-    public function __construct(private RouterInterface $router)
-    {
+    public function __construct(
+        private RouterInterface $router,
+        private ArgumentParser $routingArgumentParser,
+    ) {
     }
 
     public function redirectToResource(mixed $data, HttpOperation $operation, Request $request): RedirectResponse
@@ -33,34 +37,46 @@ final class RedirectHandler
             throw new \RuntimeException(sprintf('Operation "%s" has no redirection route, but it should.', $operation->getName() ?? ''));
         }
 
-        $parameters = $this->parseResourceValues([], $data);
+        $resource = $operation->getResource();
 
-        return $this->redirectToRoute($data, $operation, $route, $parameters);
+        if (null === $resource) {
+            throw new \RuntimeException(sprintf('Operation "%s" has no resource, but it should.', $operation->getName() ?? ''));
+        }
+
+        $redirectArguments = $operation->getRedirectArguments() ?? [];
+
+        if ([] === $redirectArguments && !$operation instanceof DeleteOperationInterface) {
+            $identifier = $resource->getIdentifier() ?? 'id';
+
+            $redirectArguments[$identifier] = 'resource.' . $identifier;
+        }
+
+        $parameters = $this->parseResourceValues($resource, $redirectArguments, $data);
+
+        return $this->redirectToRoute($data, $route, $parameters);
     }
 
-    public function redirectToRoute(mixed $data, HttpOperation $operation, string $route, array $parameters = []): RedirectResponse
+    public function redirectToRoute(mixed $data, string $route, array $parameters = []): RedirectResponse
     {
         return new RedirectResponse($this->router->generate($route, $parameters));
     }
 
-    private function parseResourceValues(array $parameters, mixed $data): array
+    private function parseResourceValues(Resource $resource, array $parameters, mixed $data): array
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        if (empty($parameters)) {
-            if (\is_object($data) && $accessor->isReadable($data, 'id')) {
-                return ['id' => $accessor->getValue($data, 'id')];
-            }
-        }
-
         foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                $parameters[$key] = $this->parseResourceValues($value, $data);
+            if (str_contains($value, 'resource.')) {
+                $propertyPath = substr($value, 9);
+
+                if (\is_object($data) && $accessor->isReadable($data, $propertyPath)) {
+                    $parameters[$key] = $accessor->getValue($data, $propertyPath);
+
+                    continue;
+                }
             }
 
-            if (is_string($value) && str_starts_with($value, 'resource.')) {
-                $parameters[$key] = $accessor->getValue($data, substr($value, 9));
-            }
+            $parameters[$key] = $this->routingArgumentParser->parseExpression($value, $resource, $data);
         }
 
         return $parameters;
