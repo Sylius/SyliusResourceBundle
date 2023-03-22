@@ -36,15 +36,16 @@ final class EventDispatcherProcessorSpec extends ObjectBehavior
         ProcessorInterface $decorated,
         OperationEventDispatcherInterface $operationEventDispatcher,
         \stdClass $data,
+        \stdClass $result,
     ): void {
         $operation = new Create(processor: '\App\Processor');
         $context = new Context();
 
-        $decorated->process($data, $operation, $context)->shouldBeCalled();
+        $decorated->process($data, $operation, $context)->willReturn($result)->shouldBeCalled();
 
         $operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->shouldBeCalled();
         $operationEventDispatcher->dispatchPostEvent($data, $operation, $context)->shouldBeCalled();
 
-        $this->process($data, $operation, $context);
+        $this->process($data, $operation, $context)->shouldReturn($result);
     }
 }
