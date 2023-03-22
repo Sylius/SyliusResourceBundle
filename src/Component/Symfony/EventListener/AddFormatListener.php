@@ -36,8 +36,9 @@ final class AddFormatListener
             return;
         }
 
-        /** @var string|null $routeFormat */
-        $routeFormat = $request->attributes->has('_format') ? Request::getMimeTypes($request->attributes->get('_format')) : ['application/json', 'application/xml'];
+        /** @var string|null $format */
+        $format = $request->attributes->has('_format') ? $request->attributes->get('_format') : null;
+        $mimeTypes = null !== $format ? Request::getMimeTypes($format) : ['application/json', 'application/xml'];
         $accept = $request->headers->get('Accept');
 
         if (null === $accept) {
