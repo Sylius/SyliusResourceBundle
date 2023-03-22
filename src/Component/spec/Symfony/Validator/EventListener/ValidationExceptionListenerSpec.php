@@ -92,4 +92,25 @@ final class ValidationExceptionListenerSpec extends ObjectBehavior
 
         Assert::null($event->getResponse());
     }
+
+    function it_throws_an_exception_when_serializer_is_not_available(
+        KernelInterface $kernel,
+        Request $request,
+    ): void {
+        $this->beConstructedWith(null);
+
+        $violationList = new ConstraintViolationList();
+        $exception = new ValidationException($violationList);
+
+        $event = new ExceptionEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            $exception,
+        );
+
+        $this->shouldThrow(new \LogicException('The Symfony Serializer is not available. Try running "composer require symfony/serializer".'))
+            ->during('onKernelException', [$event])
+        ;
+    }
 }

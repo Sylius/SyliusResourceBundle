@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class ValidationExceptionListener
 {
-    public function __construct(private SerializerInterface $serializer)
+    public function __construct(private ?SerializerInterface $serializer = null)
     {
     }
 
@@ -36,6 +36,10 @@ final class ValidationExceptionListener
 
         if (!$exception instanceof ConstraintViolationListAwareExceptionInterface) {
             return;
+        }
+
+        if (null === $this->serializer) {
+            throw new \LogicException('The Symfony Serializer is not available. Try running "composer require symfony/serializer".');
         }
 
         $request = $event->getRequest();
