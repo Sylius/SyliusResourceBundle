@@ -21,6 +21,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\Factory;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
@@ -78,6 +79,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $container->registerForAutoconfiguration(ResponderInterface::class)
             ->addTag('sylius.state_responder')
+        ;
+
+        $container->registerForAutoconfiguration(FactoryInterface::class)
+            ->addTag('sylius.resource_factory')
         ;
 
         $container->addObjectResource(Metadata::class);
