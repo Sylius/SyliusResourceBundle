@@ -51,7 +51,6 @@ final class TwigResponder implements ResponderInterface
 
         if ($operation instanceof DeleteOperationInterface && $operation instanceof HttpOperation) {
             return $this->redirectHandler->redirectToResource($data, $operation, $request);
-            //return $this->redirectHandler->redirectToIndex($data, $operation, $request);
         }
 
         if (

@@ -16,15 +16,9 @@ namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
-use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Symfony\EventListener\WriteListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -36,21 +30,11 @@ use Webmozart\Assert\Assert;
 final class WriteListenerSpec extends ObjectBehavior
 {
     function let(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        MetadataInterface $metadata,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ProcessorInterface $processor,
     ): void {
-        $operationInitiator = new HttpOperationInitiator(
-            $resourceRegistry->getWrappedObject(),
-            $resourceMetadataCollectionFactory->getWrappedObject(),
-        );
-
-        $this->beConstructedWith($operationInitiator, new RequestContextInitiator(), $processor);
-
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
-        $metadata->getAlias()->willReturn('app.dummy');
-        $metadata->getClass('model')->willReturn('App\Dummy');
+        $this->beConstructedWith($operationInitiator, $contextInitiator, $processor);
     }
 
     function it_is_initializable(): void
@@ -61,9 +45,10 @@ final class WriteListenerSpec extends ObjectBehavior
     function it_writes_data(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProcessorInterface $processor,
     ): void {
         $event = new ViewEvent(
@@ -73,23 +58,19 @@ final class WriteListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
         $request->getMethod()->willReturn('POST');
         $request->isMethodSafe()->willReturn(false);
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
-
-        $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->shouldBeCalled();
+        $processor->process(['foo' => 'fighters'], $operation, $context)->shouldBeCalled();
 
         $this->onKernelView($event);
     }
@@ -97,9 +78,10 @@ final class WriteListenerSpec extends ObjectBehavior
     function it_replaces_controller_result_on_event(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProcessorInterface $processor,
     ): void {
         $event = new ViewEvent(
@@ -109,21 +91,17 @@ final class WriteListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
         $request->getMethod()->willReturn('POST');
         $request->isMethodSafe()->willReturn(false);
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->willReturn('persisted_result')->shouldBeCalled();
 
@@ -135,9 +113,10 @@ final class WriteListenerSpec extends ObjectBehavior
     function it_removes_controller_result_on_event_with_delete_method(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProcessorInterface $processor,
     ): void {
         $event = new ViewEvent(
@@ -147,23 +126,19 @@ final class WriteListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
         $request->getMethod()->willReturn('DELETE')->shouldBeCalled();
         $request->isMethodSafe()->willReturn(false);
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
-
-        $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->willReturn('persisted_result')->shouldBeCalled();
+        $processor->process(['foo' => 'fighters'], $operation, $context)->willReturn('persisted_result')->shouldBeCalled();
 
         $this->onKernelView($event);
 
@@ -173,9 +148,10 @@ final class WriteListenerSpec extends ObjectBehavior
     function it_does_nothing_when_operation_cannot_be_write(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProcessorInterface $processor,
     ): void {
         $event = new ViewEvent(
@@ -185,21 +161,19 @@ final class WriteListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
-        $request->attributes = $attributes;
-        $request->getMethod()->willReturn('POST');
+        $context = new Context();
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+        $contextInitiator->initializeContext($request)->willReturn($context);
 
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $operation->canWrite()->willReturn(false)->shouldBeCalled();
 
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
+        $request->attributes = $attributes;
 
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
+        $request->isMethodSafe()->willReturn(false);
+
+        $attributes->getBoolean('is_valid', true)->willReturn(true);
 
         $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->shouldNotBeCalled();
 
@@ -209,9 +183,10 @@ final class WriteListenerSpec extends ObjectBehavior
     function it_does_nothing_when_operation_method_is_safe(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
         ParameterBag $attributes,
         HttpOperation $operation,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         ProcessorInterface $processor,
     ): void {
         $event = new ViewEvent(
@@ -221,21 +196,17 @@ final class WriteListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-        $request->isMethodSafe()->willReturn(true);
+        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation->getWrappedObject());
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->shouldNotBeCalled();
 

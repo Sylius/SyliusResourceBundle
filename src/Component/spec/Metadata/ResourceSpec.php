@@ -161,11 +161,18 @@ final class ResourceSpec extends ObjectBehavior
         $this->getIdentifier()->shouldReturn('code');
     }
 
+    function it_can_be_constructed_with_a_class(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, 'App\Resource');
+
+        $this->getClass()->shouldReturn('App\Resource');
+    }
+
     function it_can_be_constructed_with_operations(): void
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, $operations);
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }

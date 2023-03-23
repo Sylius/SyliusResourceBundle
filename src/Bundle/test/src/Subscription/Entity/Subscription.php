@@ -15,6 +15,7 @@ namespace App\Subscription\Entity;
 
 use App\Subscription\Form\Type\SubscriptionType;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
@@ -41,6 +42,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
 #[Delete]
 #[Show(template: 'subscription/show.html.twig')]
+
+#[Resource(
+    alias: 'app.subscription',
+    section: 'ajax',
+    routePrefix: '/ajax',
+)]
+#[Api\GetCollection]
+#[Api\Post]
+#[Api\Put]
+#[Api\Delete]
+#[Api\Get]
+
 #[ORM\Entity]
 class Subscription implements ResourceInterface
 {

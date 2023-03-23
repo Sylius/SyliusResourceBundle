@@ -17,10 +17,8 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
@@ -31,25 +29,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Webmozart\Assert\Assert;
 
 final class ValidateListenerSpec extends ObjectBehavior
 {
     function let(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
-        MetadataInterface $metadata,
+        HttpOperationInitiatorInterface $operationInitiator,
+        ValidatorInterface $validator,
     ): void {
-        $operationInitiator = new HttpOperationInitiator(
-            $resourceRegistry->getWrappedObject(),
-            $resourceMetadataCollectionFactory->getWrappedObject(),
-        );
-
-        $this->beConstructedWith($operationInitiator);
-
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
-        $metadata->getAlias()->willReturn('app.dummy');
-        $metadata->getClass('model')->willReturn('App\Dummy');
+        $this->beConstructedWith($operationInitiator, $validator);
     }
 
     function it_is_initializable(): void
@@ -60,35 +52,28 @@ final class ValidateListenerSpec extends ObjectBehavior
     function it_validates_form_data(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
         FormInterface $form,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         \stdClass $data,
     ): void {
         $event = new ViewEvent(
             $kernel->getWrappedObject(),
             $request->getWrappedObject(),
             HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
+            $data->getWrappedObject(),
         );
 
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html');
 
         $request->attributes = $attributes;
 
         $attributes->get('form')->willReturn($form);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operation = new Create();
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $form->isSubmitted()->willReturn(true)->shouldBeCalled();
         $form->isValid()->willReturn(true)->shouldBeCalled();
@@ -104,9 +89,9 @@ final class ValidateListenerSpec extends ObjectBehavior
     function it_does_nothing_if_controller_result_is_a_response(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
         FormInterface $form,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         \stdClass $data,
     ): void {
         $event = new ViewEvent(
@@ -116,23 +101,16 @@ final class ValidateListenerSpec extends ObjectBehavior
             new Response(),
         );
 
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html');
 
         $request->attributes = $attributes;
 
         $attributes->get('form')->willReturn($form);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operation = new Create();
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
         $form->isValid()->willReturn(true)->shouldNotBeCalled();
@@ -159,6 +137,7 @@ final class ValidateListenerSpec extends ObjectBehavior
         );
 
         $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html');
 
         $request->attributes = $attributes;
 
@@ -188,9 +167,9 @@ final class ValidateListenerSpec extends ObjectBehavior
     function it_sets_is_valid_to_false_if_method_is_safe(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
         FormInterface $form,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         \stdClass $data,
     ): void {
         $event = new ViewEvent(
@@ -200,23 +179,16 @@ final class ValidateListenerSpec extends ObjectBehavior
             ['foo' => 'fighters'],
         );
 
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
         $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
+        $request->getRequestFormat()->willReturn('html');
 
         $request->attributes = $attributes;
 
         $attributes->get('form')->willReturn($form);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operation = new Create();
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
         $form->isValid()->willReturn(true)->shouldNotBeCalled();
@@ -230,37 +202,99 @@ final class ValidateListenerSpec extends ObjectBehavior
     function it_does_nothing_if_there_is_no_form(
         HttpKernelInterface $kernel,
         Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
         ParameterBag $attributes,
-        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         \stdClass $data,
     ): void {
         $event = new ViewEvent(
             $kernel->getWrappedObject(),
             $request->getWrappedObject(),
             HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
+            $data->getWrappedObject(),
         );
 
         $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html');
+
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $request->attributes = $attributes;
 
         $attributes->get('form')->willReturn(null);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
-
-        $operation = new Create();
-
-        $operations = new Operations();
-        $operations->add('app_dummy_create', $operation);
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
-
-        $resourceMetadataCollectionFactory->create('App\Dummy')->willReturn($resourceMetadataCollection);
 
         $attributes->set('is_valid', Argument::any())->shouldNotBeCalled();
 
         $this->onKernelView($event);
+    }
+
+    function it_validates_resource_on_non_html_format(
+        HttpKernelInterface $kernel,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        ParameterBag $attributes,
+        \stdClass $data,
+        ValidatorInterface $validator,
+        ConstraintViolationListInterface $constraintViolationList,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            $data->getWrappedObject(),
+        );
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('json');
+
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = $attributes;
+
+        $attributes->get('form')->willReturn(null);
+
+        $validator->validate($data)->willReturn($constraintViolationList)->shouldBeCalled();
+
+        $constraintViolationList->count()->willReturn(0)->shouldBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_throws_an_exception_when_validating_resource_on_non_html_format(
+        HttpKernelInterface $kernel,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        ParameterBag $attributes,
+        ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        \stdClass $data,
+        ValidatorInterface $validator,
+        ConstraintViolationInterface $constraintViolation,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            $data->getWrappedObject(),
+        );
+
+        $operation = new Create();
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('json');
+
+        $request->attributes = $attributes;
+
+        $attributes->get('form')->willReturn(null);
+
+        $constraintViolationList = new ConstraintViolationList([$constraintViolation->getWrappedObject()]);
+
+        $validator->validate($data)->willReturn($constraintViolationList)->shouldBeCalled();
+
+        $this->shouldThrow()->during('onKernelView', [$event]);
     }
 }

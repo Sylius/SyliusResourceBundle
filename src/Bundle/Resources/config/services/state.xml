@@ -50,10 +50,20 @@
             <tag name="sylius.state_processor" />
         </service>
 
+        <service id="Sylius\Component\Resource\Symfony\Request\State\Responder">
+            <argument type="service" id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder" />
+            <argument type="service" id="Sylius\Component\Resource\Symfony\Request\State\ApiResponder" />
+            <tag name="sylius.state_responder" />
+        </service>
+
         <service id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
             <argument type="service" id="sylius.routing.redirect_handler" />
             <argument type="service" id="sylius.twig.context.factory" />
             <argument type="service" id="twig" on-invalid="null" />
+            <tag name="sylius.state_responder" />
+        </service>
+
+        <service id="Sylius\Component\Resource\Symfony\Request\State\ApiResponder">
             <tag name="sylius.state_responder" />
         </service>
 

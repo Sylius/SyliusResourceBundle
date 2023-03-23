@@ -24,7 +24,7 @@ use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
-use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
+use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
@@ -65,7 +65,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 /** @var ResourceMetadata $resource */
                 $resource = $attribute->newInstance();
                 $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
-                $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
+                $resource = $this->getResourceWithDefaults($resourceClass, $resource, $resourceConfiguration);
                 $resources[++$index] = $resource;
                 $operations = [];
 
@@ -87,7 +87,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                     $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
 
                     $resource = new ResourceMetadata($resourceConfiguration->getAlias());
-                    $resource = $this->getResourceWithDefaults($resource, $resourceConfiguration);
+                    $resource = $this->getResourceWithDefaults($resourceClass, $resource, $resourceConfiguration);
 
                     $resources[++$index] = $resource;
                 } catch(\InvalidArgumentException) {
@@ -112,8 +112,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
-    private function getResourceWithDefaults(ResourceMetadata $resource, MetadataInterface $resourceConfiguration): ResourceMetadata
+    private function getResourceWithDefaults(string $resourceClass, ResourceMetadata $resource, MetadataInterface $resourceConfiguration): ResourceMetadata
     {
+        $resource = $resource->withClass($resourceClass);
+
         if (null === $resource->getApplicationName()) {
             $resource = $resource->withApplicationName($resourceConfiguration->getApplicationName());
         }
@@ -196,7 +198,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             }
 
             if (null === $operation->getResponder()) {
-                $operation = $operation->withResponder(TwigResponder::class);
+                $operation = $operation->withResponder(Responder::class);
             }
 
             $operation = $operation->withName($routeName);

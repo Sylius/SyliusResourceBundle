@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Symfony\EventListener;
 
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
+use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class ReadListener
 {
     public function __construct(
-        private HttpOperationInitiator $operationInitiator,
+        private HttpOperationInitiatorInterface $operationInitiator,
         private RequestContextInitiatorInterface $contextInitiator,
         private ProviderInterface $provider,
     ) {
