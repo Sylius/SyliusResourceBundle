@@ -18,6 +18,11 @@
         </service>
         <service id="Sylius\Component\Resource\State\ProviderInterface" alias="sylius.state.provider" />
 
+        <service id="sylius.state.factory" class="Sylius\Component\Resource\State\Factory">
+            <argument type="tagged_locator" tag="sylius.resource_factory" />
+        </service>
+        <service id="Sylius\Component\Resource\State\FactoryInterface" alias="sylius.state.factory" />
+
         <service id="sylius.state.processor" class="Sylius\Component\Resource\State\Processor">
             <argument type="tagged_locator" tag="sylius.state_processor" />
         </service>
