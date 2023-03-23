@@ -52,12 +52,39 @@ final class DeserializeListenerSpec extends ObjectBehavior
         $request->attributes = new ParameterBag();
 
         $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->getDenormalizationContext()->willReturn(null)->shouldBeCalled();
 
         $request->isMethodSafe()->willReturn(false);
         $request->getRequestFormat()->willReturn('json');
         $request->getContent()->willReturn(['food' => 'fighters']);
 
         $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', [])->willReturn($data)->shouldBeCalled();
+
+        $this->onKernelRequest($event);
+    }
+
+    function it_deserializes_data_with_denormalization_context(
+        RequestEvent $event,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        HttpOperation $operation,
+        SerializerInterface $serializer,
+        \stdClass $data,
+    ): void {
+        $event->getRequest()->willReturn($request);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = new ParameterBag();
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('json');
+        $request->getContent()->willReturn(['food' => 'fighters']);
+
+        $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->getDenormalizationContext()->willReturn(['groups' => ['dummy:write']]);
+
+        $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', ['groups' => ['dummy:write']])->willReturn($data)->shouldBeCalled();
 
         $this->onKernelRequest($event);
     }

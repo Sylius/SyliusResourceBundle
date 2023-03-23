@@ -161,9 +161,23 @@ final class ResourceSpec extends ObjectBehavior
         $this->getIdentifier()->shouldReturn('code');
     }
 
+    function it_can_be_constructed_with_a_normalization_context(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, ['groups' => ['dummy:read']]);
+
+        $this->getNormalizationContext()->shouldReturn(['groups' => ['dummy:read']]);
+    }
+
+    function it_can_be_constructed_with_a_denormalization_context(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, ['groups' => ['dummy:write']]);
+
+        $this->getDenormalizationContext()->shouldReturn(['groups' => ['dummy:write']]);
+    }
+
     function it_can_be_constructed_with_a_class(): void
     {
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, 'App\Resource');
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, 'App\Resource');
 
         $this->getClass()->shouldReturn('App\Resource');
     }
@@ -172,7 +186,7 @@ final class ResourceSpec extends ObjectBehavior
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, $operations);
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }
