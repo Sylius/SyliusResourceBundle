@@ -42,6 +42,7 @@
         "symfony/form": "^5.4 || ^6.0",
         "symfony/framework-bundle": "^5.4 || ^6.0",
         "symfony/http-foundation": "^5.4 || ^6.0",
+        "symfony/security-core": "^5.4 || ^6.0",
         "symfony/security-csrf": "^5.4 || ^6.0",
         "symfony/routing": "^5.4 || ^6.0",
         "symfony/translation": "^5.4 || ^6.0",
@@ -51,8 +52,7 @@
         "webmozart/assert": "^1.8",
         "willdurand/hateoas-bundle": "^2.0",
         "winzou/state-machine-bundle": "^0.6",
-        "willdurand/negotiation": "^3.1",
-        "symfony/security-core": "^5.4 || ^6.0"
+        "willdurand/negotiation": "^3.1"
     },
     "replace": {
         "sylius/resource": "self.version"
