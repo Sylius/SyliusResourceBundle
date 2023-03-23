@@ -41,6 +41,7 @@ class HttpOperation extends Operation
         ?array $formOptions = null,
         ?array $normalizationContext = null,
         ?array $denormalizationContext = null,
+        ?array $validationContext = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
     ) {
@@ -63,6 +64,7 @@ class HttpOperation extends Operation
             formOptions: $formOptions,
             normalizationContext: $normalizationContext,
             denormalizationContext: $denormalizationContext,
+            validationContext: $validationContext,
         );
     }
 

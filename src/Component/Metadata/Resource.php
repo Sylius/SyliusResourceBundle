@@ -30,6 +30,7 @@ final class Resource
         private ?string $identifier = null,
         protected ?array $normalizationContext = null,
         protected ?array $denormalizationContext = null,
+        protected ?array $validationContext = null,
         private ?string $class = null,
         ?array $operations = null,
     ) {
@@ -229,6 +230,19 @@ final class Resource
     {
         $self = clone $this;
         $self->denormalizationContext = $denormalizationContext;
+
+        return $self;
+    }
+
+    public function getValidationContext(): ?array
+    {
+        return $this->validationContext;
+    }
+
+    public function withValidationContext(?array $validationContext): self
+    {
+        $self = clone $this;
+        $self->validationContext = $validationContext;
 
         return $self;
     }

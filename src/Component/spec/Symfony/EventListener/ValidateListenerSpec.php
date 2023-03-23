@@ -256,7 +256,41 @@ final class ValidateListenerSpec extends ObjectBehavior
 
         $attributes->get('form')->willReturn(null);
 
-        $validator->validate($data)->willReturn($constraintViolationList)->shouldBeCalled();
+        $validator->validate($data, null, null)->willReturn($constraintViolationList)->shouldBeCalled();
+
+        $constraintViolationList->count()->willReturn(0)->shouldBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_validates_resource_with_validation_context_on_non_html_format(
+        HttpKernelInterface $kernel,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        ParameterBag $attributes,
+        \stdClass $data,
+        ValidatorInterface $validator,
+        ConstraintViolationListInterface $constraintViolationList,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            $data->getWrappedObject(),
+        );
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('json');
+
+        $operation = new Create(validationContext: ['groups' => ['sylius']]);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = $attributes;
+
+        $attributes->get('form')->willReturn(null);
+
+        $validator->validate($data, null, ['sylius'])->willReturn($constraintViolationList)->shouldBeCalled();
 
         $constraintViolationList->count()->willReturn(0)->shouldBeCalled();
 
@@ -293,7 +327,7 @@ final class ValidateListenerSpec extends ObjectBehavior
 
         $constraintViolationList = new ConstraintViolationList([$constraintViolation->getWrappedObject()]);
 
-        $validator->validate($data)->willReturn($constraintViolationList)->shouldBeCalled();
+        $validator->validate($data, null, null)->willReturn($constraintViolationList)->shouldBeCalled();
 
         $this->shouldThrow()->during('onKernelView', [$event]);
     }

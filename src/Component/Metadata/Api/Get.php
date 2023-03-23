@@ -43,6 +43,7 @@ final class Get extends HttpOperation implements ShowOperationInterface
         ?array $formOptions = null,
         ?array $normalizationContext = null,
         ?array $denormalizationContext = null,
+        ?array $validationContext = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -67,6 +68,7 @@ final class Get extends HttpOperation implements ShowOperationInterface
             formOptions: $formOptions,
             normalizationContext: $normalizationContext,
             denormalizationContext: $denormalizationContext,
+            validationContext: $validationContext,
             redirectToRoute: $redirectToRoute,
         );
     }

@@ -39,6 +39,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?bool $serialize = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?array $validationContext = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -61,6 +62,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             serialize: $serialize,
             formType: $formType,
             formOptions: $formOptions,
+            validationContext: $validationContext,
             redirectToRoute: $redirectToRoute,
         );
     }
