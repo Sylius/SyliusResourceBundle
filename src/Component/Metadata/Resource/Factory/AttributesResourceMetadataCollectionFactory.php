@@ -142,6 +142,8 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     {
         $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
 
+        $operation = $operation->withResource($resource);
+
         if (null === $resource->getName()) {
             $resourceName = $resourceConfiguration->getName();
 
