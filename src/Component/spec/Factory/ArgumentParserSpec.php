@@ -26,13 +26,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class ArgumentParserSpec extends ObjectBehavior
 {
     function let(
-        TokenStorageInterface $tokenStorage,
         RequestStack $requestStack,
+        TokenStorageInterface $tokenStorage,
     ): void {
         $this->beConstructedWith(
             new ExpressionLanguage(),
-            $tokenStorage,
             $requestStack,
+            $tokenStorage,
         );
     }
 
