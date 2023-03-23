@@ -297,4 +297,41 @@ final class ValidateListenerSpec extends ObjectBehavior
 
         $this->shouldThrow()->during('onKernelView', [$event]);
     }
+
+    function it_does_nothing_if_operation_cannot_be_validated(
+        HttpKernelInterface $kernel,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        FormInterface $form,
+        ParameterBag $attributes,
+        \stdClass $data,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            $data->getWrappedObject(),
+        );
+
+        $operation = new Create(validate: false);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html');
+
+        $request->attributes = $attributes;
+
+        $attributes->get('form')->willReturn($form);
+
+        $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
+        $form->isValid()->willReturn(true)->shouldNotBeCalled();
+        $form->getData()->willReturn($data)->shouldNotBeCalled();
+
+        $attributes->set('is_valid', true)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+
+        Assert::eq($event->getControllerResult(), $data->getWrappedObject());
+    }
 }

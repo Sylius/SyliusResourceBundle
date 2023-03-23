@@ -45,7 +45,8 @@ final class DeserializeListener
             null === $resourceClass ||
             'html' === $format ||
             $request->isMethodSafe() ||
-            $operation instanceof DeleteOperationInterface
+            $operation instanceof DeleteOperationInterface ||
+            !($operation->canDeserialize() ?? true)
         ) {
             return;
         }

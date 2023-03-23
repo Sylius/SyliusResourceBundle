@@ -38,7 +38,8 @@ final class SerializeListener
 
         if (
             null === $operation ||
-            'html' === $format
+            'html' === $format ||
+            !($operation->canSerialize() ?? true)
         ) {
             return;
         }
