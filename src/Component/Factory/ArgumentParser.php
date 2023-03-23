@@ -23,13 +23,17 @@ final class ArgumentParser
 {
     public function __construct(
         private ExpressionLanguage $expressionLanguage,
-        private TokenStorageInterface $tokenStorage,
         private RequestStack $requestStack,
+        private ?TokenStorageInterface $tokenStorage = null,
     ) {
     }
 
     public function parseExpression(string $expression): mixed
     {
+        if (null === $this->tokenStorage) {
+            throw new \LogicException('The "symfony/security-bundle" must be installed and configured to use the "security" attribute. Try running "composer require symfony/security-bundle"');
+        }
+
         if (null === $token = $this->tokenStorage->getToken()) {
             $token = new NullToken();
         }

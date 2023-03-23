@@ -32,13 +32,13 @@ final class FactorySpec extends ObjectBehavior
 {
     function let(
         ContainerInterface $locator,
-        TokenStorageInterface $tokenStorage,
         RequestStack $requestStack,
+        TokenStorageInterface $tokenStorage,
     ): void {
         $this->beConstructedWith($locator, new ArgumentParser(
             new ExpressionLanguage(),
-            $tokenStorage->getWrappedObject(),
             $requestStack->getWrappedObject(),
+            $tokenStorage->getWrappedObject(),
         ));
     }
 
