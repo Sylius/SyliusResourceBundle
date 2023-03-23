@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy;
 
 use Sylius\Component\Resource\Metadata\Resource;
 
-#[Resource]
-final class DummyResource
+#[Resource(alias: 'app.book')]
+final class BookWithAliasResource
 {
 }

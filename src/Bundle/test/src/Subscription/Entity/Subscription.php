@@ -29,7 +29,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Resource(
-    alias: 'app.subscription',
     section: 'admin',
     formType: SubscriptionType::class,
     templatesDir: 'crud',

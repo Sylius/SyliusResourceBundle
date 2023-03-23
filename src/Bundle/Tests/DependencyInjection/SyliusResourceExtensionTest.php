@@ -21,6 +21,7 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\DummyResource;
 use Sylius\Component\Resource\Factory\Factory;
 
@@ -177,6 +178,15 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resources', [
+            'app.book' => [
+                'classes' => [
+                    'model' => BookWithAliasResource::class,
+                    'controller' => ResourceController::class,
+                    'factory' => Factory::class,
+                    'form' => DefaultResourceType::class,
+                ],
+                'driver' => 'doctrine/orm',
+            ],
             'app.dummy' => [
                 'classes' => [
                     'model' => DummyResource::class,
