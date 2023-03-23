@@ -21,6 +21,9 @@ use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\Factory;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,8 +33,13 @@ final class FactorySpec extends ObjectBehavior
     function let(
         ContainerInterface $locator,
         TokenStorageInterface $tokenStorage,
+        RequestStack $requestStack,
     ): void {
-        $this->beConstructedWith($locator, new ArgumentParser(new ExpressionLanguage(), $tokenStorage->getWrappedObject()));
+        $this->beConstructedWith($locator, new ArgumentParser(
+            new ExpressionLanguage(),
+            $tokenStorage->getWrappedObject(),
+            $requestStack->getWrappedObject(),
+        ));
     }
 
     function it_is_initializable(): void
@@ -83,7 +91,7 @@ final class FactorySpec extends ObjectBehavior
         $this->create($operation, new Context())->shouldReturn($data);
     }
 
-    function it_calls_factory_with_arguments_from_operation_as_string(
+    function it_calls_factory_with_user_arguments_from_operation_as_string(
         ContainerInterface $locator,
         TokenStorageInterface $tokenStorage,
         TokenInterface $token,
@@ -102,6 +110,39 @@ final class FactorySpec extends ObjectBehavior
             factory: $factory::class,
             factoryMethod: 'createForUser',
             factoryArguments: ['userId' => 'user.getUserIdentifier()'],
+        );
+
+        $locator->has($factory::class)->willReturn(true);
+        $locator->get($factory::class)->willReturn($factory);
+
+        $result = $this->create($operation, new Context());
+        $result->shouldHaveType(\stdClass::class);
+        $result->userId->shouldReturn('51353e91-5295-4876-a994-cae4b3ff3a7c');
+    }
+
+    function it_calls_factory_with_request_arguments_from_operation_as_string(
+        ContainerInterface $locator,
+        TokenStorageInterface $tokenStorage,
+        TokenInterface $token,
+        RequestStack $requestStack,
+        Request $request,
+        UserInterface $user,
+    ): void {
+        $factory = new ResourceFactory();
+
+        $requestStack->getCurrentRequest()->willReturn($request);
+
+        $request->attributes = new ParameterBag(['id' => '51353e91-5295-4876-a994-cae4b3ff3a7c']);
+
+        $tokenStorage->getToken()->willReturn($token);
+
+        $token->getUser()->willReturn(null);
+
+        $operation = new Create(
+            name: 'app_dummy_create',
+            factory: $factory::class,
+            factoryMethod: 'createForUser',
+            factoryArguments: ['userId' => "request.attributes.get('id')"],
         );
 
         $locator->has($factory::class)->willReturn(true);

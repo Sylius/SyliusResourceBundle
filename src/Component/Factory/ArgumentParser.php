@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Factory;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -23,6 +24,7 @@ final class ArgumentParser
     public function __construct(
         private ExpressionLanguage $expressionLanguage,
         private TokenStorageInterface $tokenStorage,
+        private RequestStack $requestStack,
     ) {
     }
 
@@ -38,6 +40,7 @@ final class ArgumentParser
     private function getVariables(TokenInterface $token): array
     {
         return [
+            'request' => $this->requestStack->getCurrentRequest(),
             'token' => $token,
             'user' => $token->getUser(),
         ];
