@@ -96,4 +96,20 @@ final class ArgumentParserSpec extends ObjectBehavior
 
         $this->parseExpression('user === null')->shouldReturn(true);
     }
+
+    function it_throws_an_exception_when_token_storage_is_not_available(
+        RequestStack $requestStack,
+        TokenStorageInterface $tokenStorage,
+        TokenInterface $token,
+    ): void {
+        $this->beConstructedWith(
+            new ExpressionLanguage(),
+            $requestStack,
+            null,
+        );
+
+        $this->shouldThrow(new \LogicException('The "symfony/security-bundle" must be installed and configured to use the "token" & "user" attribute. Try running "composer require symfony/security-bundle"'))
+            ->during('parseExpression', [''])
+        ;
+    }
 }
