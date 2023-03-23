@@ -89,3 +89,6 @@ services:
 
     App\Subscription\:
         resource: '../src/Subscription'
+
+    App\Subscription\Factory\SubscriptionFactory:
+        decorates: 'app.factory.subscription'

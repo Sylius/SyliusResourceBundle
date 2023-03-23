@@ -17,8 +17,11 @@ namespace Sylius\Component\Resource\Metadata;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Create extends HttpOperation implements CreateOperationInterface, StateMachineAwareOperationInterface
+final class Create extends HttpOperation implements CreateOperationInterface, StateMachineAwareOperationInterface, FactoryAwareOperationInterface
 {
+    /** @var string|callable|false|null */
+    private $factory;
+
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
@@ -31,6 +34,9 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         string|callable|null $responder = null,
         string|callable|null $repository = null,
         ?string $repositoryMethod = null,
+        string|callable|false|null $factory = null,
+        private ?string $factoryMethod = null,
+        private ?array $factoryArguments = [],
         ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
@@ -70,6 +76,8 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );
+
+        $this->factory = $factory;
     }
 
     public function getStateMachineComponent(): ?string
@@ -107,6 +115,45 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
     {
         $self = clone $this;
         $self->stateMachineGraph = $stateMachineGraph;
+
+        return $self;
+    }
+
+    public function getFactory(): callable|string|false|null
+    {
+        return $this->factory;
+    }
+
+    public function withFactory(string|callable|false|null $factory): self
+    {
+        $self = clone $this;
+        $self->factory = $factory;
+
+        return $self;
+    }
+
+    public function getFactoryMethod(): ?string
+    {
+        return $this->factoryMethod;
+    }
+
+    public function withFactoryMethod(string $factoryMethod): self
+    {
+        $self = clone $this;
+        $self->factoryMethod = $factoryMethod;
+
+        return $self;
+    }
+
+    public function getFactoryArguments(): ?array
+    {
+        return $this->factoryArguments;
+    }
+
+    public function withFactoryArguments(array $factoryArguments): self
+    {
+        $self = clone $this;
+        $self->factoryArguments = $factoryArguments;
 
         return $self;
     }
