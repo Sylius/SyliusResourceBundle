@@ -4,7 +4,7 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 
 <!-- TOC -->
 * [Index operation](#index-operation)
-* [Use a grid to your index operation](#use-a-grid-to-your-index-operation)
+* [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
 * [Create operation](#create-operation)
 * [Update operation](#update-operation)
 * [Delete operation](#delete-operation)
@@ -91,7 +91,9 @@ It will configure this route for your `index` operation.
 |-----------------------|-----------------|---------|
 | app_book_index        | GET             | /books  |
 
-### Use a grid to your index operation
+### Use a grid for your index operation
+
+To use a grid for you operation, you need to install the [Sylius grid package](https://github.com/Sylius/SyliusGridBundle/)
 
 ```php
 namespace App\Entity;
