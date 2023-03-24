@@ -51,8 +51,8 @@
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
 
-        <service id="sylius.routing.factory.operation_route" class="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory" public="false" />
-        <service id="Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
+        <service id="sylius.routing.factory.operation_route" class="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory" public="false" />
+        <service id="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
 
         <service id="sylius.routing.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
 
