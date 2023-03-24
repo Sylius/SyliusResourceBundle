@@ -5,12 +5,6 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 <!-- TOC -->
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
-* [Configure your operations](#configure-your-operations)
-  * [Index operation](#index-operation)
-  * [Use a grid to your index operation](#use-a-grid-to-your-index-operation)
-  * [Create operation](#create-operation)
-  * [Update operation](#update-operation)
-  * [Delete operation](#delete-operation)
 <!-- TOC -->
 
 ## Implements the Resource interface
