@@ -3,31 +3,21 @@
 After that an action has been performed, the operation can be redirected to another operation.
 
 <!-- TOC -->
-* [Default redirection](#default-redirection)
-  * [Create operations](#create-operations) 
-  * [Update operations](#update-operations)
-  * [Delete operations](#delete-operations)
+* [Default redirections](#default-redirections)
 * [Custom redirection](#custom-redirection)
 * [Pass arguments to your redirection](#pass-arguments-to-your-redirection)
 <!-- TOC -->
 
 
-## Default redirection
+## Default redirections
 
 Redirections are configured on your operations with the default behaviours.
 
-### Create operations 
-
-Create operations are redirected to `show` operation if this operation is defined.
-Otherwise, they are redirected to `index` operation.
-
-### Update operations
-
-This is the same behaviour as [create operations](#create-operations).
-
-### Delete operations
-
-Delete operations are redirected to `index` by default.
+| Operation | Redirection                         |
+|-----------|-------------------------------------|
+| create    | `show` if exists, otherwise `index` |
+| update    | `show` if exists, otherwise `index` |  
+| delete    | `index`                             |
 
 ## Custom redirection
 
