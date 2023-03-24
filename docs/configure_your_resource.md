@@ -1,28 +1,21 @@
 # Configure your resource
 
-To create your resource, read the previous chapter [Create a new resource](create_new_resource.md)
+Read the previous chapter to [create a new resource](create_new_resource.md).
 
 <!-- TOC -->
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
 * [Configure your operations](#configure-your-operations)
+  * [Index operation](#index-operation)
+  * [Use a grid to your index operation](#use-a-grid-to-your-index-operation)
+  * [Create operation](#create-operation)
+  * [Update operation](#update-operation)
+  * [Delete operation](#delete-operation)
 <!-- TOC -->
 
 ## Implements the Resource interface
 
 To declare your resource as a Sylius one, you need to implement the ```Sylius\Component\Resource\Model\ResourceInterface``` which requires you to implement a `getId()` method.
-
-```php
-declare(strict_types=1);
-
-namespace Sylius\Component\Resource\Model;
-
-interface ResourceInterface
-{
-    public function getId();
-}
-
-```
 
 ```php
 // src/Entity/Book.php
@@ -74,26 +67,3 @@ $ bin/console sylius:debug:resource 'App\Entity\book'
 ```
 
 By default, it will have the `app.book` alias in Sylius resource which is a concatenation of the application name and the resource name `{application}.{name}`.
-
-## Configure your operations
-
-```php
-namespace App\Entity;
-
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Model\ResourceInterface;
-
-#[Resource]
-#[Index]
-class Book implements ResourceInterface
-{
-}
-
-```
-
-It will configure this route for your `index` operation.
-
-| Name                  | Method          | Path     |
-|-----------------------|-----------------|----------|
-| app_book_index        | GET             | /books/  |
