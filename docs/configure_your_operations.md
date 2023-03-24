@@ -11,64 +11,7 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 * [State machine operation](#state-machine-operation)
 <!-- TOC -->
 
-## Implements the Resource interface
-
-To declare your resource as a Sylius one, you need to implement the ```Sylius\Component\Resource\Model\ResourceInterface``` which requires you to implement a `getId()` method.
-
-```php
-// src/Entity/Book.php
-
-namespace App\Entity;
-
-class Book implements ResourceInterface
-{
-    public function getId(): int
-    {
-        return $this->id;
-    }
-}
-
-```
-
-## Use the Resource attribute
-
-We add the PHP attribute ```#[Resource]``` to the Doctrine entity.
-It will configure your entity as a Sylius resource.
-
-```php
-namespace App\Entity;
-
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Model\ResourceInterface;
-
-#[Resource]
-class Book implements ResourceInterface
-{
-}
-
-```
-
-```shell
-$ bin/console sylius:debug:resource 'App\Entity\book'
-```
-
-```
-+--------------------+------------------------------------------------------------+
-| name               | book                                                       |
-| application        | app                                                        |
-| driver             | doctrine/orm                                               |
-| classes.model      | App\Entity\Book                                            |
-| classes.controller | Sylius\Bundle\ResourceBundle\Controller\ResourceController |
-| classes.factory    | Sylius\Component\Resource\Factory\Factory                  |
-| classes.form       | Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType |
-+--------------------+------------------------------------------------------------+
-```
-
-By default, it will have the `app.book` alias in Sylius resource which is a concatenation of the application name and the resource name `{application}.{name}`.
-
-## Configure your operations
-
-### Index operation
+## Index operation
 
 ```php
 namespace App\Entity;
@@ -114,7 +57,7 @@ class Book implements ResourceInterface
 
 ```
 
-### Create operation
+## Create operation
 
 ```php
 namespace App\Entity;
@@ -137,7 +80,7 @@ It will configure this route for your `create` operation.
 |-----------------|-----------|------------|
 | app_book_create | GET, POST | /books/new |
 
-### Update operation
+## Update operation
 
 ```php
 namespace App\Entity;
@@ -160,7 +103,7 @@ It will configure this route for your `update` operation.
 |-----------------|-----------------|------------------|
 | app_book_update | GET, PUT, PATCH | /books/{id}/edit |
 
-### Delete operation
+## Delete operation
 
 ```php
 namespace App\Entity;
@@ -183,7 +126,7 @@ It will configure this route for your `delete` operation.
 |-----------------|--------|-------------|
 | app_book_delete | DELETE | /books/{id} |
 
-### Bulk delete operation
+## Bulk delete operation
 
 ```php
 namespace App\Entity;
@@ -206,7 +149,7 @@ It will configure this route for your `bulk_delete` operation.
 |----------------------|--------|--------------------|
 | app_book_bulk_delete | DELETE | /books/bulk_delete |    
 
-### Show operation
+## Show operation
 
 ```php
 namespace App\Entity;
@@ -229,7 +172,7 @@ It will configure this route for your `show` operation.
 |-----------------|--------|-------------|
 | app_book_show   | GET    | /books/{id} |    
 
-### State machine operation
+## State machine operation
 
 ```php
 namespace App\Entity;
