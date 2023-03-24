@@ -63,7 +63,11 @@ EOT
             return 0;
         }
 
-        $metadata = $this->registry->get($resource);
+        if (str_contains($resource, '.')) {
+            $metadata = $this->registry->get($resource);
+        } else {
+            $metadata = $this->registry->getByClass($resource);
+        }
 
         $this->debugResource($metadata, $output);
 

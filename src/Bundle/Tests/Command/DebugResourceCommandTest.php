@@ -85,6 +85,32 @@ EOT
             , $display);
     }
 
+    /**
+     * @test
+     */
+    public function it_displays_the_metadata_for_given_resource_as_fully_qualified_class_name(): void
+    {
+        $this->registry->getByClass('App\Resource')->willReturn($this->createMetadata('one'));
+        $this->tester->execute([
+            'resource' => 'App\Resource',
+        ]);
+
+        $display = $this->tester->getDisplay();
+
+        $this->assertEquals(<<<'EOT'
++------------------------------+-----------------+
+| name                         | one             |
+| application                  | sylius          |
+| driver                       | doctrine/foobar |
+| classes.foo                  | bar             |
+| classes.bar                  | foo             |
+| whatever.something.elephants | camels          |
++------------------------------+-----------------+
+
+EOT
+            , $display);
+    }
+
     private function createMetadata(string $suffix): MetadataInterface
     {
         $metadata = Metadata::fromAliasAndConfiguration(sprintf('sylius.%s', $suffix), [
