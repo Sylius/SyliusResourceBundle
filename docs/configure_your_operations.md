@@ -10,7 +10,7 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 * [Delete operation](#delete-operation)
 * [State machine operation](#state-machine-operation)
 * [Configure the templates' dir](#configure-the-templates-dir)
-* [Configure the routes' prefix](#configure-the-routes-prefix)
+* [Configure the section](#configure-the-section)
 <!-- TOC -->
 
 ## Index operation
@@ -229,7 +229,7 @@ class Book implements ResourceInterface
 
 ## Configure the routes' prefix
 
-It defines the routes' prefix for your operations.
+It adds a prefix to the path for each operation.
 
 ```php
 namespace App\Entity;
@@ -264,3 +264,45 @@ class Book implements ResourceInterface
 | app_book_delete        | DELETE          | /admin/books/{id}        |
 | app_book_bulk_delete   | DELETE          | /admin/books/bulk_delete |               
 | app_book_show          | GET             | /admin/books/{id}        |
+
+## Configure the section
+
+It changes the route name for each operation.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Delete;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(section: 'admin', routePrefix: 'admin')]
+#[Index]
+#[Create]
+#[Update]
+#[Delete]
+#[BulkDelete]
+
+#[Resource(section: 'shop')]
+#[Index]
+#[Show]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+| Name                       | Method          | Path                     |
+|----------------------------|-----------------|--------------------------|
+| app_admin_book_index       | GET             | /admin/books/            |
+| app_admin_book_create      | GET, POST       | /admin/books/new         |                     
+| app_admin_book_update      | GET, PUT, PATCH | /admin/books/{id}/edit   |        
+| app_admin_book_delete      | DELETE          | /admin/books/{id}        |
+| app_admin_book_bulk_delete | DELETE          | /admin/books/bulk_delete |    
+| app_shop_book_index        | GET             | /books/                  |
+| app_shop_book_show         | GET             | /books/{id}              |
