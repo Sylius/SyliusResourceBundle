@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Routing;
+namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;

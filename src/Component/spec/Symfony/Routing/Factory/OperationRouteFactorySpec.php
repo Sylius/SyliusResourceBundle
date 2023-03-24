@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Routing;
+namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\BulkDelete;
@@ -26,6 +25,7 @@ use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 
 final class OperationRouteFactorySpec extends ObjectBehavior
 {
