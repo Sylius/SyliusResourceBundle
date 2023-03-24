@@ -10,6 +10,7 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 * [Delete operation](#delete-operation)
 * [State machine operation](#state-machine-operation)
 * [Configure the templates' dir](#configure-the-templates-dir)
+* [Configure the routes' prefix](#configure-the-routes-prefix)
 <!-- TOC -->
 
 ## Index operation
@@ -225,3 +226,41 @@ class Book implements ResourceInterface
 | create    | templates/books/create.html.twig |   
 | update    | templates/books/update.html.twig |   
 | show      | templates/books/show.html.twig   |
+
+## Configure the routes' prefix
+
+It defines the routes' prefix for your operations.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Delete;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(routePrefix: 'admin')]
+#[Index]
+#[Create]
+#[Update]
+#[Delete]
+#[BulkDelete]
+#[Show]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+| Name                   | Method          | Path                     |
+|------------------------|-----------------|--------------------------|
+| app_book_index         | GET             | /admin/books/            |
+| app_book_create        | GET, POST       | /admin/books/new         |                     
+| app_book_update        | GET, PUT, PATCH | /admin/books/{id}/edit   |        
+| app_book_delete        | DELETE          | /admin/books/{id}        |
+| app_book_bulk_delete   | DELETE          | /admin/books/bulk_delete |               
+| app_book_show          | GET             | /admin/books/{id}        |
