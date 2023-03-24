@@ -173,8 +173,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 #[Resource]
 #[Create(
     path: 'authors/{authorId}/books',
-    factoryMethod: 'createForAuthor', 
-    factoryArguments: ['authorId' => "request.attributes.get('authorId')"],
+    factoryMethod: 'createForAuthor',
 )]
 class Book implements ResourceInterface
 {
