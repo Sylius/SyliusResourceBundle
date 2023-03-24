@@ -51,19 +51,18 @@
         </service>
 
         <service id="Sylius\Component\Resource\Symfony\Request\State\Responder">
-            <argument type="service" id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder" />
-            <argument type="service" id="Sylius\Component\Resource\Symfony\Request\State\ApiResponder" />
+            <argument type="tagged_locator" tag="sylius.state_responder" />
             <tag name="sylius.state_responder" />
         </service>
 
-        <service id="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
+        <service id="sylius.state_responder.html" class="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
             <argument type="service" id="sylius.routing.redirect_handler" />
             <argument type="service" id="sylius.twig.context.factory" />
             <argument type="service" id="twig" on-invalid="null" />
             <tag name="sylius.state_responder" />
         </service>
 
-        <service id="Sylius\Component\Resource\Symfony\Request\State\ApiResponder">
+        <service id="sylius.state_responder.api" class="Sylius\Component\Resource\Symfony\Request\State\ApiResponder">
             <tag name="sylius.state_responder" />
         </service>
 
