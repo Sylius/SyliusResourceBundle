@@ -5,7 +5,6 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 <!-- TOC -->
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
-* [Configure the templates' dir](#configure-the-templates-dir)
 <!-- TOC -->
 
 ## Implements the Resource interface
@@ -62,31 +61,3 @@ $ bin/console sylius:debug:resource 'App\Entity\book'
 ```
 
 By default, it will have the `app.book` alias in Sylius resource which is a concatenation of the application name and the resource name `{application}.{name}`.
-
-## Configure the templates' dir
-
-```php
-namespace App\Entity;
-
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Model\ResourceInterface;
-
-#[Resource(templatesDir: 'book')]
-class Book implements ResourceInterface
-{
-}
-
-```
-
-It defines the templates directory for your operations.
-
-In the following example, we have `index`, `create`, `update` and `show` operations configured to our resources.
-
-| Operation | Template Path                    |
-|-----------|----------------------------------|
-| index     | templates/books/index.html.twig  |  
-| create    | templates/books/create.html.twig |   
-| update    | templates/books/update.html.twig |   
-| show      | templates/books/show.html.twig   |
-
-Learn how to [configure your operations in the next chapter](configure_your_operations.md).

@@ -9,6 +9,7 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 * [Update operation](#update-operation)
 * [Delete operation](#delete-operation)
 * [State machine operation](#state-machine-operation)
+* [Configure the templates' dir](#configure-the-templates-dir)
 <!-- TOC -->
 
 ## Index operation
@@ -194,3 +195,33 @@ It will configure this route for your `apply_state_machine_transition` operation
 | Name              | Method | Path                |
 |-------------------|--------|---------------------|
 | app_book_publish  | GET    | /books/{id}/publish |    
+
+## Configure the templates' dir
+
+It defines the templates directory for your operations.
+
+As an example, we defines `index`, `create`, `update` and `show` operations to our book resource.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Create;use Sylius\Component\Resource\Metadata\Index;use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Show;use Sylius\Component\Resource\Metadata\Update;use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(templatesDir: 'book')]
+#[Index]
+#[Create]
+#[Update]
+#[Show]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+| Operation | Template Path                    |
+|-----------|----------------------------------|
+| index     | templates/books/index.html.twig  |  
+| create    | templates/books/create.html.twig |   
+| update    | templates/books/update.html.twig |   
+| show      | templates/books/show.html.twig   |
