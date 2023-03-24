@@ -123,7 +123,6 @@ final class Configuration implements ConfigurationInterface
                         ->booleanNode('filterable')->defaultFalse()->end()
                         ->variableNode('criteria')->defaultNull()->end()
                         ->scalarNode('state_machine_component')->defaultNull()->end()
-
                     ->end()
                 ->end()
             ->end()
