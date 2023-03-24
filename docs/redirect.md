@@ -13,11 +13,12 @@ After that an action has been performed, the operation can be redirected to anot
 
 Redirections are configured on your operations with the default behaviours.
 
-| Operation | Redirection                         |
-|-----------|-------------------------------------|
-| create    | `show` if exists, otherwise `index` |
-| update    | `show` if exists, otherwise `index` |  
-| delete    | `index`                             |
+| Operation   | Redirection                         |
+|-------------|-------------------------------------|
+| create      | `show` if exists, otherwise `index` |
+| update      | `show` if exists, otherwise `index` |  
+| delete      | `index`                             |
+| bulk_delete | `index`                             |
 
 ## Custom redirection
 
