@@ -13,6 +13,10 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="sylius.cache.metadata.resource_collection" parent="cache.system" public="false">
+            <tag name="cache.pool" />
+        </service>
+
         <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
@@ -20,9 +24,19 @@
         </service>
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
 
+        <service id="sylius.resource_metadata_collection.factory.cached"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decoration-priority="-10"
+        >
+            <argument type="service" id="sylius.cache.metadata.resource_collection" />
+            <argument type="service" id=".inner" />
+        </service>
+
         <service id="sylius.resource_metadata_collection.factory.doctrine"
             class="Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory"
             decorates="sylius.resource_metadata_collection.factory.attributes"
+            decoration-priority="200"
         >
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id=".inner" />
@@ -31,6 +45,7 @@
         <service id="sylius.resource_metadata_collection.factory.redirect"
                  class="Sylius\Component\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decoration-priority="200"
         >
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
             <argument type="service" id=".inner" />
