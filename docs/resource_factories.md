@@ -1,10 +1,20 @@
 # Resource factories
 
+Resource factories are used on Create operations to instantiate your resource.
+
+<!-- TOC -->
+* [Default factory for you resource](#default-factory-for-your-resource)
+* [Define your custom factory](#define-your-custom-factory)
+* [Use a factory without declaring it](#use-a-factory-without-declaring-it)
+* [Use a callable for your custom factory](#use-a-callable-for-your-custom-factory)
+<!-- TOC -->
+
+
 ## Default factory for your resource
 
 By default, a resource factory is defined to your resource `Sylius\Component\Resource\Factory\Factory`.
 
-It has 'createNew' method with no arguments.
+It has a 'createNew' method with no arguments.
 
 ## Define your custom factory
 
@@ -15,13 +25,17 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;use Sylius\Component\Resource\Factory\FactoryInterface;
+use App\Entity\Book;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 
 final class BookFactory implements FactoryInterface
 {
     public function createNew(): Book
     {
-        return new Book();
+        $book = new Book();
+        $book->setCreatedAt(new \DateTimeImmutable());
+        
+        return $book;
     }
 }
 ```
@@ -29,6 +43,7 @@ final class BookFactory implements FactoryInterface
 Configure your factory
 
 ```yaml
+# config/services.yaml
 services:
     App\Factory\BookFactory:
         decorates: '@.inner'
@@ -43,7 +58,9 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;use Sylius\Component\Resource\Factory\FactoryInterface;use Sylius\Component\Resource\Repository\RepositoryInterface;
+use App\Entity\Book;
+use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class BookFactory implements FactoryInterface
 {
@@ -69,7 +86,7 @@ final class BookFactory implements FactoryInterface
 }
 ```
 
-Use it on your operation
+Use it on your create operation
 
 ```php
 // src/Entity/Book.php
@@ -78,14 +95,91 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use Sylius\Component\Resource\Metadata\Create;use Sylius\Component\Resource\Metadata\Resource;use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 #[Resource]
 #[Create(
+    path: 'authors/{authorId}/books',
     factoryMethod: 'createForAuthor', 
     factoryArguments: ['authorId' => "request.attributes.get('authorId')"],
+)]
+class Book implements ResourceInterface
+{
+}
+```
+
+## Use a factory without declaring it 
+
+You can use a factory without declaring it on `services.yaml`.
+
+```php
+// src/Entity/Book.php
+
+declare(strict_types=1);
+
+namespace App\Entity\Book;
+
+use App\Factory\BookFactory;use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource]
+#[Create(
+    path: 'authors/{authorId}/books',
+    factory: BookFactory::class,
+    factoryMethod: 'createForAuthor', 
+    factoryArguments: ['authorId' => "request.attributes.get('authorId')"],
+)]
+class Book implements ResourceInterface
+{
+}
+```
+
+
+## Use a callable for your custom factory
+
+```php
+// src/Factory/BookRepository.php
+
+declare(strict_types=1);
+
+namespace App\Factory;
+
+use App\Entity\Book;
+
+final class BookFactory
+{    
+    public static function create(): Book
+    {
+        return new Book();
+    }
+}
+```
+
+```php
+// src/Entity/Book.php
+
+declare(strict_types=1);
+
+namespace App\Entity\Book;
+
+use App\Entity\Book;
+use App\Factory\BookFactory;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource]
+#[Create(
+    factory: [BookFactory::class, 'create'], 
 )]
 class Book implements \Sylius\Component\Resource\Model\ResourceInterface
 {
 }
 ```
+
+[⬆️ Back to top](#resource-factories)
+
+[//]: # ([⬅️ Previous: Create new ressource]&#40;../create_new_ressource.md&#41; | [➡️ Next:]&#40;../create_new_resource/README.md&#41;)
