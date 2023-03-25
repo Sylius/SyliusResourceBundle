@@ -19,14 +19,13 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\Processor;
 use Sylius\Component\Resource\State\ProcessorInterface;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 
 final class ProcessorSpec extends ObjectBehavior
 {
-    function let(ContainerInterface $locator, OperationEventDispatcherInterface $operationEventDispatcher): void
+    function let(ContainerInterface $locator): void
     {
-        $this->beConstructedWith($locator, $operationEventDispatcher);
+        $this->beConstructedWith($locator);
     }
 
     function it_is_initializable(): void
