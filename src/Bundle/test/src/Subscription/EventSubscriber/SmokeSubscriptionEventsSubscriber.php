@@ -19,7 +19,7 @@ use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent as SymfonyGenericEvent;
 
-class SmokeSubscriptionEventsSubscriber implements EventSubscriberInterface
+final class SmokeSubscriptionEventsSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {
