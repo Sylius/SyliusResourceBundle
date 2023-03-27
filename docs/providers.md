@@ -77,6 +77,8 @@ declare(strict_types=1);
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
+use App\BoardGameBlog\Infrastructure\Sylius\State\Provider\BoardGameItemProvider;
+
 #[Resource]
 #[Show(provider: BoardGameItemProvider::class)]
 final class BoardGameResource implements ResourceInterface
