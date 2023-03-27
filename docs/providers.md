@@ -71,6 +71,10 @@ final class Customer implements ResourceInterface
 
 ## Custom providers
 
+Custom providers are useful to customize your logic to retrieve data and for an advanced usage such as an hexagonal architecture.
+
+As an example, let's configure a `BoardGameItemProvider` on a `BoardGameResource` which is not a Doctrine entity.
+
 ```php
 // src/BoardGameBlog/Infrastructure/Sylius/State/Provider/BoardGameItemProvider.php
 
