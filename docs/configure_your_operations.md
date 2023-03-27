@@ -6,17 +6,22 @@ Now, with your fresh new resource, you have to define the operations that you ne
 There are some basic CRUD operations and more. 
 
 <!-- TOC -->
-* [Index operation](#index-operation)
-* [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
-* [Create operation](#create-operation)
-* [Update operation](#update-operation)
-* [Delete operation](#delete-operation)
-* [State machine operation](#state-machine-operation)
-* [Configure the templates' dir](#configure-the-templates-dir)
-* [Configure the section](#configure-the-section)
+* [Basic operations](#basic-operations)
+  * [Index operation](#index-operation)
+  * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
+  * [Create operation](#create-operation)
+  * [Update operation](#update-operation)
+  * [Delete operation](#delete-operation)
+  * [State machine operation](#state-machine-operation)
+* [Advanced configuration](#advanced-configuration)
+  * [Configure the templates' dir](#configure-the-templates-dir)
+  * [Configure the section](#configure-the-section)
+  * [Configure the routes' prefix](#configure-the-routes-prefix)
 <!-- TOC -->
 
-## Index operation
+## Basic operations
+
+### Index operation
 
 `Index` operation allows to browse all items of your resource.
 
@@ -64,7 +69,7 @@ class Book implements ResourceInterface
 
 ```
 
-## Create operation
+### Create operation
 
 `Create` operation allows to add a new item of your resource.
 
@@ -89,7 +94,7 @@ It will configure this route for your `create` operation.
 |-----------------|-----------|------------|
 | app_book_create | GET, POST | /books/new |
 
-## Update operation
+### Update operation
 
 `Update` operation allows to edit an existing item of your resource.
 
@@ -114,7 +119,7 @@ It will configure this route for your `update` operation.
 |-----------------|-----------------|------------------|
 | app_book_update | GET, PUT, PATCH | /books/{id}/edit |
 
-## Delete operation
+### Delete operation
 
 `Delete` operation allows to remove an existing item of your resource.
 
@@ -139,7 +144,7 @@ It will configure this route for your `delete` operation.
 |-----------------|--------|-------------|
 | app_book_delete | DELETE | /books/{id} |
 
-## Bulk delete operation
+### Bulk delete operation
 
 `Bulk delete` operation allows to remove several items of your resource at the same time.
 
@@ -164,7 +169,7 @@ It will configure this route for your `bulk_delete` operation.
 |----------------------|--------|--------------------|
 | app_book_bulk_delete | DELETE | /books/bulk_delete |    
 
-## Show operation
+### Show operation
 
 `Show` operation allows to view details of an item.
 
@@ -189,7 +194,7 @@ It will configure this route for your `show` operation.
 |-----------------|--------|-------------|
 | app_book_show   | GET    | /books/{id} |    
 
-## State machine operation
+### State machine operation
 
 
 `State machine` operation allows to apply a transition to an item of your resource.
@@ -217,7 +222,9 @@ It will configure this route for your `apply_state_machine_transition` operation
 |-------------------|--------|---------------------|
 | app_book_publish  | GET    | /books/{id}/publish |    
 
-## Configure the templates' dir
+## Advanced configuration
+
+### Configure the templates' dir
 
 It defines the templates directory for your operations.
 
@@ -247,7 +254,7 @@ class Book implements ResourceInterface
 | update    | templates/books/update.html.twig |   
 | show      | templates/books/show.html.twig   |
 
-## Configure the routes' prefix
+### Configure the routes' prefix
 
 It adds a prefix to the path for each operation.
 
@@ -285,7 +292,7 @@ class Book implements ResourceInterface
 | app_book_bulk_delete   | DELETE          | /admin/books/bulk_delete |               
 | app_book_show          | GET             | /admin/books/{id}        |
 
-## Configure the section
+### Configure the section
 
 It changes the route name for each operation.
 
