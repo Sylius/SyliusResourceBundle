@@ -5,6 +5,8 @@ Processors process data: send an email, persist to storage, add to queue etc.
 <!-- TOC -->
 * [Default processors](#default-processors)
 * [Custom processors](#custom-processors)
+  * [Sending an email after persisting data](#example-1--sending-an-email-after-persisting-data)
+  * [Use a custom delete processor](#example-2--use-a-custom-delete-processor)
 <!-- TOC -->
 
 ## Default processors
@@ -23,6 +25,8 @@ As it uses the Doctrine repository configured on your resource, it will automati
 ## Custom processors
 
 Custom processors are useful to customize your logic to send an email, persist data to storage, add to queue and for an advanced usage such as an hexagonal architecture.
+
+### Example #1: Sending an email after persisting data
 
 As an example, send an email after customer registration
 
@@ -81,6 +85,7 @@ use App\Sylius\State\Processor\CreateCustomerProcessor;
 final class BoardGameResource implements ResourceInterface
 ```
 
+### Example #2: Use a custom delete processor
 
 As another example, let's configure a `DeleteBoardGameProcessor` on a `BoardGameResource` which is not a Doctrine entity.
 
