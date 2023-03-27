@@ -174,6 +174,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 #[Create(
     path: 'authors/{authorId}/books',
     factoryMethod: 'createForAuthor',
+    factoryArguments: ['authorId' => "request.attributes.get('authorId')"],
 )]
 class Book implements ResourceInterface
 {
@@ -198,6 +199,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 #[Resource]
 #[Create(
     path: 'authors/{authorId}/books',
+    # Here we declared the factory to use with its fully classified class name
     factory: BookFactory::class,
     factoryMethod: 'createForAuthor', 
     factoryArguments: ['authorId' => "request.attributes.get('authorId')"],
@@ -250,6 +252,4 @@ class Book implements \Sylius\Component\Resource\Model\ResourceInterface
 }
 ```
 
-[⬆️ Back to top](#resource-factories)
-
-[//]: # ([⬅️ Previous: Create new ressource]&#40;../create_new_ressource.md&#41; | [➡️ Next:]&#40;../create_new_resource/README.md&#41;)
+**[Go back to the documentation's index](index.md)**
