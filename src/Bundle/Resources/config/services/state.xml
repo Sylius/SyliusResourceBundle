@@ -62,7 +62,10 @@
             <tag name="sylius.state_responder" />
         </service>
 
+        <service id="sylius.headers_initiator.api" class="Sylius\Component\Resource\Symfony\Response\ApiHeadersInitiator" />
+
         <service id="sylius.state_responder.api" class="Sylius\Component\Resource\Symfony\Request\State\ApiResponder">
+            <argument type="service" id="sylius.headers_initiator.api" />
             <tag name="sylius.state_responder" />
         </service>
 
