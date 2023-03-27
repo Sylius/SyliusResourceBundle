@@ -28,7 +28,7 @@ As it uses the Doctrine repository configured on your resource, some default rep
 You can customize the method to use.
 
 ```php
-// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+// src/Entity/Customer.php
 
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ You can pass arguments to your repository method.
 It uses the [Symfony expression language](https://symfony.com/doc/current/components/expression_language.html) component.
 
 ```php
-// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+// src/Entity/Customer.php
 
 declare(strict_types=1);
 
