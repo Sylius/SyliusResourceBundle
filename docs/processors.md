@@ -5,8 +5,8 @@ Processors process data: send an email, persist to storage, add to queue etc.
 <!-- TOC -->
 * [Default processors](#default-processors)
 * [Custom processors](#custom-processors)
-  * [Sending an email after persisting data](#example-1--sending-an-email-after-persisting-data)
-  * [Use a custom delete processor](#example-2--use-a-custom-delete-processor)
+  * [Sending an email after persisting data](#example-1-sending-an-email-after-persisting-data)
+  * [Use a custom delete processor](#example-2-use-a-custom-delete-processor)
 <!-- TOC -->
 
 ## Default processors
@@ -74,7 +74,7 @@ services:
 Use this processor on your operation.
 
 ```php
-// src/Entity/Cusotmer.php
+// src/Entity/Customer.php
 
 namespace App\Entity\Customer;
 
