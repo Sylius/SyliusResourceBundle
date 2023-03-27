@@ -1,6 +1,6 @@
 # Create a new resource
 
-As an example, we create a Book entity with 4 fields:
+As an example, let's create a Book entity:
 
 <!-- TOC -->
 * [Create the entity](#create-the-entity)
@@ -99,7 +99,7 @@ Next: When you're ready, create a migration with php bin/console make:migration
 
 ## Configure the BookRepository
 
-The command also generated a Doctrine repository class: App\Repository\BookRepository.
+The command also generated a Doctrine repository class: `App\Repository\BookRepository`.
 The generated code looks like the following (only a small portion of the file is replicated here):
 
 ```php
@@ -123,10 +123,10 @@ class BookRepository
 }
 ```
 
-The generated code is not compatible with Sylius Resource Bundle, so we need to make some changes to it.
+The generated code is not compatible with Sylius Resource yet, so we need to make few changes.
 
-* First, we need to implement the `Sylius\Component\Resource\Repository\RepositoryInterface` interface
-* Then, we need to use the `Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait` trait
+* First, your repository should implement the `Sylius\Component\Resource\Repository\RepositoryInterface` interface
+* Then, add the `Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait` trait
 
 Your repository should look like this:
 
@@ -160,5 +160,4 @@ class BookRepository extends ServiceEntityRepository implements RepositoryInterf
 }
 ```
 
-[⬆️ Back to top](#create-a-new-resource)
-
+**[Go back to the documentation's index](index.md)**
