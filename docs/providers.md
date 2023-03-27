@@ -38,6 +38,31 @@ final class Customer implements ResourceInterface
 }
 ```
 
+You can pass arguments to your repository method.
+
+3 variables are available:
+
+* `request`: to retrieve data from the request via `Symfony\Component\HttpFoundation\Request`
+* `token`: to retrieve data from the authentication token via `Symfony\Component\Security\Core\Authentication\Token\TokenInterface`
+* `user`: to retrieve data from the logged-in user via `Symfony\Component\Security\Core\User\UserInterface`
+
+It uses the [Symfony expression language](https://symfony.com/doc/current/components/expression_language.html) component.
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+#[Resource]
+#[Show(repositoryMethod: 'findOneByEmail', repositoryArguments: ['email' => "request.attributes.get('email')"])]
+final class Customer implements ResourceInterface
+{
+    // [...]
+}
+```
+
 ## Custom providers
 
 ```php
