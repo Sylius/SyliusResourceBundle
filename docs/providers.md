@@ -4,6 +4,8 @@ Providers retrieve data from your persistence layer.
 
 <!-- TOC -->
 * [Default providers](#default-providers)
+  * [Custom repository method](#custom-repository-method)
+  * [Custom repository arguments](#custom-repository-arguments)
 * [Custom providers](#custom-providers)
 <!-- TOC -->
 
@@ -21,6 +23,8 @@ As it uses the Doctrine repository configured on your resource, some default rep
 | delete      | findOneBy         |
 | bulk delete | findById          |
 
+### Custom repository method
+
 You can customize the method to use.
 
 ```php
@@ -37,6 +41,8 @@ final class Customer implements ResourceInterface
     // [...]
 }
 ```
+
+### Custom repository arguments
 
 You can pass arguments to your repository method.
 
