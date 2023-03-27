@@ -11,7 +11,7 @@ After that an action has been performed, the operation can be redirected to anot
 
 ## Default redirections
 
-Redirections are configured on your operations with the default behaviours.
+Redirections are configured on your operations with these default behaviours.
 
 | Operation   | Redirection                         |
 |-------------|-------------------------------------|
@@ -22,7 +22,7 @@ Redirections are configured on your operations with the default behaviours.
 
 ## Custom redirection
 
-As an example, let's configure the create & update operations that has been redirected to update after performed action.
+As an example, let's configure a custom redirection fo create & update operations.
 
 ```php
 
@@ -42,6 +42,8 @@ class Book implements ResourceInterface
 {
 }
 ```
+
+After adding or editing a book, it will be redirected to the edition page of a book.
 
 ## Pass arguments to your redirection
 
