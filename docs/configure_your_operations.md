@@ -2,6 +2,9 @@
 
 Read the previous chapter to [configure your resource](configure_your_resource.md).
 
+Now, with your fresh new resource, you have to define the operations that you need to implement.
+There are some basic CRUD operations and more. 
+
 <!-- TOC -->
 * [Index operation](#index-operation)
 * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
@@ -14,6 +17,8 @@ Read the previous chapter to [configure your resource](configure_your_resource.m
 <!-- TOC -->
 
 ## Index operation
+
+`Index` operation allows to browse all items of your resource.
 
 ```php
 namespace App\Entity;
@@ -61,6 +66,8 @@ class Book implements ResourceInterface
 
 ## Create operation
 
+`Create` operation allows to add a new item of your resource.
+
 ```php
 namespace App\Entity;
 
@@ -83,6 +90,8 @@ It will configure this route for your `create` operation.
 | app_book_create | GET, POST | /books/new |
 
 ## Update operation
+
+`Update` operation allows to edit an existing item of your resource.
 
 ```php
 namespace App\Entity;
@@ -107,6 +116,8 @@ It will configure this route for your `update` operation.
 
 ## Delete operation
 
+`Delete` operation allows to remove an existing item of your resource.
+
 ```php
 namespace App\Entity;
 
@@ -129,6 +140,8 @@ It will configure this route for your `delete` operation.
 | app_book_delete | DELETE | /books/{id} |
 
 ## Bulk delete operation
+
+`Bulk delete` operation allows to remove several items of your resource at the same time.
 
 ```php
 namespace App\Entity;
@@ -153,6 +166,8 @@ It will configure this route for your `bulk_delete` operation.
 
 ## Show operation
 
+`Show` operation allows to view details of an item.
+
 ```php
 namespace App\Entity;
 
@@ -175,6 +190,11 @@ It will configure this route for your `show` operation.
 | app_book_show   | GET    | /books/{id} |    
 
 ## State machine operation
+
+
+`State machine` operation allows to apply a transition to an item of your resource.
+
+As an example, we add a `publish` operation to our book resource.
 
 ```php
 namespace App\Entity;
