@@ -11,7 +11,7 @@ Providers retrieve data from your persistence layer.
 
 When your resource is a Doctrine entity, there's a default provider `Sylius\Component\Resource\Symfony\Request\State\Provider` which is already configured to your operations.
 
-As they use the Doctrine repository configured on your resource, some default repository methods are used.
+As it uses the Doctrine repository configured on your resource, some default repository methods are used.
 
 | Operation   | Repository method |
 |-------------|-------------------|
