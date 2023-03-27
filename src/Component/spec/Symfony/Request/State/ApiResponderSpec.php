@@ -21,12 +21,18 @@ use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\ApiResponder;
+use Sylius\Component\Resource\Symfony\Response\ApiHeadersInitiator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ApiResponderSpec extends ObjectBehavior
 {
+    function let(): void
+    {
+        $this->beConstructedWith(new ApiHeadersInitiator());
+    }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(ApiResponder::class);

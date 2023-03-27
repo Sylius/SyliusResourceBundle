@@ -20,11 +20,16 @@ use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
+use Sylius\Component\Resource\Symfony\Response\HeadersInitiatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
 final class ApiResponder implements ResponderInterface
 {
+    public function __construct(private HeadersInitiatorInterface $headersInitializer)
+    {
+    }
+
     public function respond(mixed $data, Operation $operation, Context $context): ?Response
     {
         $request = $context->get(RequestOption::class)?->request();
@@ -43,12 +48,7 @@ final class ApiResponder implements ResponderInterface
         /** @var string $mimeType */
         $mimeType = $request->getMimeType($format);
 
-        $headers = [
-            'Content-Type' => sprintf('%s; charset=utf-8', $mimeType),
-            'Vary' => 'Accept',
-            'X-Content-Type-Options' => 'nosniff',
-            'X-Frame-Options' => 'deny',
-        ];
+        $headers = $this->headersInitializer->initializeHeaders($mimeType);
 
         $status = Response::HTTP_OK;
 
