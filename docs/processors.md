@@ -22,9 +22,67 @@ As it uses the Doctrine repository configured on your resource, it will automati
 
 ## Custom processors
 
-Custom processors are useful to customize your logic to persist data to storage and for an advanced usage such as an hexagonal architecture.
+Custom processors are useful to customize your logic to send an email, persist data to storage, add to queue and for an advanced usage such as an hexagonal architecture.
 
-As an example, let's configure a `DeleteBoardGameProcessor` on a `BoardGameResource` which is not a Doctrine entity.
+As an example, send an email after customer registration
+
+```php
+// src/Sylius/State/Processor/CreateCustomerProcessor.php
+
+namespace App\Sylius\State\Processor;
+
+use Sylius\Component\Customer\Model\CustomerInterface;
+use Sylius\Component\Resource\State\ProcessorInterface;
+
+final class CreateCustomerProcessor implements ProcessorInterface
+{
+    public function __construct(
+        private CommandBusInterface $commandBus,
+        private ProcessorInterface $decorated,
+    ) {
+    }
+
+    public function process(mixed $data, Operation $operation, Context $context): mixed
+    {
+        Assert::isInstanceOf($data, Customer::class);
+        
+        $this->decorated->process($data, $operation, $context);
+
+        // Here your logic to send a registration email.
+        $this->commandBus->dispatch(new SendRegistrationEmailCommand(new CustomerId($data->id)));
+
+        return null;
+    }
+}
+```
+
+Configure this processor
+
+```yaml
+# config/services.yaml
+services:
+    App\Sylius\State\Processor\CreateCustomerProcessor:
+        decorates: Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor
+        arguments:
+            $decorated: '@.inner'
+```
+
+Use this processor on your operation.
+
+```php
+// src/Entity/Cusotmer.php
+
+namespace App\Entity\Customer;
+
+use App\Sylius\State\Processor\CreateCustomerProcessor;
+
+#[Resource]
+#[Create(processor: CreateCustomerProcessor::class)]
+final class BoardGameResource implements ResourceInterface
+```
+
+
+As another example, let's configure a `DeleteBoardGameProcessor` on a `BoardGameResource` which is not a Doctrine entity.
 
 ```php
 // src/BoardGameBlog/Infrastructure/Sylius/State/Processor/DeleteBoardGameProcessor.php
