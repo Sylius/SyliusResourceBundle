@@ -17,7 +17,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
-class ShowSubscriptionContextFactory implements ContextFactoryInterface
+final class ShowSubscriptionContextFactory implements ContextFactoryInterface
 {
     public function __construct(private ContextFactoryInterface $decorated)
     {
