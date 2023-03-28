@@ -29,6 +29,7 @@ use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
+use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -83,6 +84,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $container->registerForAutoconfiguration(FactoryInterface::class)
             ->addTag('sylius.resource_factory')
+        ;
+
+        $container->registerForAutoconfiguration(ContextFactoryInterface::class)
+            ->addTag('sylius.twig_context_factory')
         ;
 
         $container->addObjectResource(Metadata::class);
