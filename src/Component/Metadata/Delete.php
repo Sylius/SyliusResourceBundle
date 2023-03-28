@@ -40,6 +40,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         ?array $formOptions = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
     ) {
@@ -64,6 +65,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             formOptions: $formOptions,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

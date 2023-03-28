@@ -41,6 +41,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         ?array $formOptions = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
@@ -69,6 +70,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
             formOptions: $formOptions,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );

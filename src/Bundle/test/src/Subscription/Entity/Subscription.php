@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Subscription\Entity;
 
 use App\Subscription\Form\Type\SubscriptionType;
+use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
@@ -41,7 +42,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApplyStateMachineTransition(stateMachineTransition: 'accept')]
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
 #[Delete]
-#[Show(template: 'subscription/show.html.twig')]
+#[Show(
+    template: 'subscription/show.html.twig',
+    twigContextFactory: ShowSubscriptionContextFactory::class,
+)]
 
 #[Resource(
     alias: 'app.subscription',

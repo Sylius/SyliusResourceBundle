@@ -41,6 +41,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?array $formOptions = null,
         ?string $eventShortName = null,
         ?array $validationContext = null,
+        string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -65,6 +66,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             formOptions: $formOptions,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
         );
     }
