@@ -204,6 +204,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 $operation = $operation->withRoutePrefix($resource->getRoutePrefix() ?? null);
             }
 
+            if (null === $operation->getTwigContextFactory()) {
+                $operation = $operation->withTwigContextFactory('sylius.twig.context.factory.default');
+            }
+
             if (null === $routeName = $operation->getRouteName()) {
                 $routeName = $this->operationRouteNameFactory->createRouteName($operation);
                 $operation = $operation->withRouteName($routeName);
@@ -219,10 +223,6 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
             if (null === $operation->getResponder()) {
                 $operation = $operation->withResponder(Responder::class);
-            }
-
-            if (null === $operation->getTwigContextFactory()) {
-                $operation = $operation->withTwigContextFactory('sylius.twig.context.factory.default');
             }
 
             $operation = $operation->withName($routeName);
