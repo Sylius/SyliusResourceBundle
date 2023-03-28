@@ -15,19 +15,18 @@ namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
-use Sylius\Component\Resource\Metadata\BulkOperationInterface;
-use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
-use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\ShowOperationInterface;
-use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Symfony\Component\Routing\Route;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
+    public function __construct(
+        private OperationRoutePathFactoryInterface $routePathFactory,
+    ) {
+    }
+
     public function create(MetadataInterface $metadata, Resource $resource, HttpOperation $operation): Route
     {
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
@@ -59,64 +58,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             return $path;
         }
 
-        if (null === $shortName = $operation->getShortName()) {
-            throw new \InvalidArgumentException(sprintf('Operation "%s" should have a short name. Please define one.', $operation::class));
-        }
-
-        $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
-
-        if ($operation instanceof CollectionOperationInterface) {
-            $path = match ($shortName) {
-                'index', 'get_collection' => '',
-                default => '/' . $shortName,
-            };
-
-            return sprintf('%s%s', $rootPath, $path);
-        }
-
-        if ($operation instanceof CreateOperationInterface) {
-            $path = match ($shortName) {
-                'create' => '/new',
-                'post' => '',
-                default => '/' . $shortName,
-            };
-
-            return sprintf('%s%s', $rootPath, $path);
-        }
-
-        if ($operation instanceof UpdateOperationInterface) {
-            $path = match ($shortName) {
-                'update' => '/edit',
-                'put', 'patch' => '',
-                default => '/' . $shortName,
-            };
-
-            return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
-        }
-
-        if ($operation instanceof BulkOperationInterface) {
-            return sprintf('%s/%s', $rootPath, $shortName);
-        }
-
-        if ($operation instanceof DeleteOperationInterface) {
-            $path = match ($shortName) {
-                'delete' => '',
-                default => '/' . $shortName,
-            };
-
-            return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
-        }
-
-        if ($operation instanceof ShowOperationInterface) {
-            $path = match ($shortName) {
-                'show', 'get' => '',
-                default => '/' . $shortName,
-            };
-
-            return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
-        }
-
-        throw new \InvalidArgumentException(sprintf('Impossible to get a default route path for this operation "%s". Please define a path.', $operation::class));
+        return $this->routePathFactory->createRoutePath($operation, $rootPath);
     }
 
     private function getSyliusOptions(Resource $resource, HttpOperation $operation): array

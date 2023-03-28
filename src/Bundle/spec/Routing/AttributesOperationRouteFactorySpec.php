@@ -14,23 +14,31 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 
 final class AttributesOperationRouteFactorySpec extends ObjectBehavior
 {
-    function let(RegistryInterface $resourceRegistry): void
-    {
+    function let(
+        RegistryInterface $resourceRegistry,
+        OperationRoutePathFactoryInterface $routePathFactory,
+    ): void {
         $this->beConstructedWith(
             $resourceRegistry,
-            new OperationRouteFactory(),
+            new OperationRouteFactory($routePathFactory->getWrappedObject()),
             new AttributesResourceMetadataCollectionFactory(
                 $resourceRegistry->getWrappedObject(),
                 new OperationRouteNameFactory(),
@@ -47,6 +55,7 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
     function it_creates_routes_with_operations(
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
+        OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
         $routeCollection = new RouteCollection();
 
@@ -59,6 +68,11 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
         $metadata->getApplicationName()->willReturn('app');
         $metadata->getName()->willReturn('dummy');
         $metadata->getPluralName()->willReturn('dummies');
+
+        $routePathFactory->createRoutePath(Argument::type(Index::class), 'dummies')->willReturn('/dummies')->shouldBeCalled();
+        $routePathFactory->createRoutePath(Argument::type(Create::class), 'dummies')->willReturn('/dummies/new')->shouldBeCalled();
+        $routePathFactory->createRoutePath(Argument::type(Update::class), 'dummies')->willReturn('/dummies/{id}/edit')->shouldBeCalled();
+        $routePathFactory->createRoutePath(Argument::type(Show::class), 'dummies')->willReturn('/dummies/{id}')->shouldBeCalled();
 
         $this->createRouteForClass($routeCollection, DummyResourceWithOperations::class);
 
