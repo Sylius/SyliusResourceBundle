@@ -27,11 +27,12 @@ final class ContextFactory implements ContextFactoryInterface
 
     public function create(mixed $data, Operation $operation, Context $context): array
     {
-        if (!$operation instanceof HttpOperation) {
+        if (
+            !$operation instanceof HttpOperation ||
+            null === $twigContextFactory = $operation->getTwigContextFactory()
+        ) {
             return [];
         }
-
-        $twigContextFactory = $operation->getTwigContextFactory();
 
         if (\is_callable($twigContextFactory)) {
             return $twigContextFactory($data, $operation, $context);
