@@ -36,13 +36,14 @@ As an example, send an email after customer registration
 namespace App\Sylius\State\Processor;
 
 use Sylius\Component\Customer\Model\CustomerInterface;
+use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 
 final class CreateCustomerProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $commandBus,
-        private ProcessorInterface $decorated,
+        private PersistProcessor $decorated,
     ) {
     }
 
@@ -58,17 +59,6 @@ final class CreateCustomerProcessor implements ProcessorInterface
         return null;
     }
 }
-```
-
-Configure this processor
-
-```yaml
-# config/services.yaml
-services:
-    App\Sylius\State\Processor\CreateCustomerProcessor:
-        decorates: Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor
-        arguments:
-            $decorated: '@.inner'
 ```
 
 Use this processor on your operation.
