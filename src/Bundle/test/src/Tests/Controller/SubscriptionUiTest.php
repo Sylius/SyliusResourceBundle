@@ -33,6 +33,7 @@ final class SubscriptionUiTest extends ApiTestCase
         $content = $response->getContent();
         $this->assertStringContainsString(sprintf('ID: %s', $subscriptions['subscription_marty']->getId()), $content);
         $this->assertStringContainsString('Email: marty.mcfly@bttf.com', $content);
+        $this->assertStringContainsString('Foo: bar', $content);
     }
 
     /** @test */

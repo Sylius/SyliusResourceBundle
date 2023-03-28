@@ -13,8 +13,14 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sylius.twig.context.factory" class="Sylius\Component\Resource\Twig\Context\Factory\ContextFactory" />
-        <service id="Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface" alias="sylius.twig.context.factory" />
+        <service id="sylius.twig.context.factory" class="Sylius\Component\Resource\Twig\Context\Factory\ContextFactory">
+            <argument type="tagged_locator" tag="sylius.twig_context_factory" />
+        </service>
+
+        <service id="sylius.twig.context.factory.default" class="Sylius\Component\Resource\Twig\Context\Factory\DefaultContextFactory">
+            <tag name="sylius.twig_context_factory" />
+        </service>
+        <service id="Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface" alias="sylius.twig.context.factory.default" />
 
         <service id="sylius.twig.context.factory.request"
                  class="Sylius\Component\Resource\Twig\Context\Factory\RequestContextFactory"

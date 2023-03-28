@@ -223,6 +223,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 $operation = $operation->withResponder(Responder::class);
             }
 
+            if (null === $operation->getTwigContextFactory()) {
+                $operation = $operation->withTwigContextFactory('sylius.twig.context.factory.default');
+            }
+
             $operation = $operation->withName($routeName);
         }
 

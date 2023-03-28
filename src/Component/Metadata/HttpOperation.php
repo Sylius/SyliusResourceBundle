@@ -18,6 +18,9 @@ namespace Sylius\Component\Resource\Metadata;
  */
 class HttpOperation extends Operation
 {
+    /** @var string|callable|null */
+    protected $twigContextFactory;
+
     public function __construct(
         protected ?array $methods = null,
         protected ?string $path = null,
@@ -44,6 +47,7 @@ class HttpOperation extends Operation
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        string|callable|null $twigContextFactory = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
     ) {
@@ -70,6 +74,8 @@ class HttpOperation extends Operation
             validationContext: $validationContext,
             eventShortName: $eventShortName,
         );
+
+        $this->twigContextFactory = $twigContextFactory;
     }
 
     public function getMethods(): ?array
@@ -120,6 +126,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    public function getTwigContextFactory(): callable|string|null
+    {
+        return $this->twigContextFactory;
+    }
+
+    public function withTwigContextFactory(callable|string|null $twigContextFactory): self
+    {
+        $self = clone $this;
+        $self->twigContextFactory = $twigContextFactory;
 
         return $self;
     }

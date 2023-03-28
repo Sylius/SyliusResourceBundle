@@ -42,6 +42,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?array $formOptions = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -67,6 +68,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
             formOptions: $formOptions,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
         );
     }
