@@ -46,6 +46,15 @@ It will configure this route for your `index` operation.
 |-----------------------|-----------------|---------|
 | app_book_index        | GET             | /books  |
 
+On your Twig template, these variables are available
+
+| Name      | Type                                     |
+|-----------|------------------------------------------|
+| resources | Pagerfanta\Pagerfanta                    |
+| books     | Pagerfanta\Pagerfanta                    |
+| operation | Sylius\Component\Resource\Metadata\Index |
+| app       | Symfony\Bridge\Twig\AppVariable          |
+
 ### Use a grid for your index operation
 
 To use a grid for you operation, you need to install the [Sylius grid package](https://github.com/Sylius/SyliusGridBundle/)
@@ -273,8 +282,12 @@ As an example, we defines `index`, `create`, `update` and `show` operations to o
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;use Sylius\Component\Resource\Metadata\Index;use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\Show;use Sylius\Component\Resource\Metadata\Update;use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 #[Resource(templatesDir: 'book')]
 #[Index]
