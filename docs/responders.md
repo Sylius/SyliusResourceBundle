@@ -29,7 +29,7 @@ The variables that are passed to the Twig templates depends on the operation (Se
 
 ### Customize Twig template variables
 
-Sme variables are already available on your operations, but you can add more variables easily.
+Some variables are already available on your operations, but you can add more variables easily.
 
 As an example, we add a `foo` variable to the Twig template with `bar` as value.
 
