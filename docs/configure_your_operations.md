@@ -69,6 +69,17 @@ class Book implements ResourceInterface
 
 ```
 
+On your Twig template, these variables are available
+
+| Name      | Type                                                    |
+|-----------|---------------------------------------------------------|
+| resources | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
+| books     | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
+| operation | Sylius\Component\Resource\Metadata\Index                |
+| app       | Symfony\Bridge\Twig\AppVariable                         |
+
+The iterator for your books will be available as `books.data` or `resources.data`.
+
 ### Create operation
 
 `Create` operation allows to add a new item of your resource.
@@ -94,6 +105,17 @@ It will configure this route for your `create` operation.
 |-----------------|-----------|------------|
 | app_book_create | GET, POST | /books/new |
 
+On your Twig template, these variables are available
+
+| Name      | Type                                      |
+|-----------|-------------------------------------------|
+| resource  | App\Entity\Book                           |
+| book      | App\Entity\Book                           |
+| operation | Sylius\Component\Resource\Metadata\Create |
+| app       | Symfony\Bridge\Twig\AppVariable           |
+
+The iterator for your books will be available as `books.data` or `resources.data`.
+
 ### Update operation
 
 `Update` operation allows to edit an existing item of your resource.
@@ -118,6 +140,15 @@ It will configure this route for your `update` operation.
 | Name            | Method          | Path             |
 |-----------------|-----------------|------------------|
 | app_book_update | GET, PUT, PATCH | /books/{id}/edit |
+
+On your Twig template, these variables are available
+
+| Name      | Type                                      |
+|-----------|-------------------------------------------|
+| resource  | App\Entity\Book                           |
+| book      | App\Entity\Book                           |
+| operation | Sylius\Component\Resource\Metadata\Update |
+| app       | Symfony\Bridge\Twig\AppVariable           |
 
 ### Delete operation
 
@@ -193,6 +224,15 @@ It will configure this route for your `show` operation.
 | Name            | Method | Path        |
 |-----------------|--------|-------------|
 | app_book_show   | GET    | /books/{id} |    
+
+On your Twig template, these variables are available
+
+| Name      | Type                                    |
+|-----------|-----------------------------------------|
+| resource  | App\Entity\Book                         |
+| book      | App\Entity\Book                         |
+| operation | Sylius\Component\Resource\Metadata\Show |
+| app       | Symfony\Bridge\Twig\AppVariable         |
 
 ### State machine operation
 
