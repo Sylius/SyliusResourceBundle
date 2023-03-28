@@ -6,6 +6,7 @@ Responders respond data: transform data to a Symfony response, return a success 
 * [Default responders](#default-responders)
 * [Twig Responder](#twig-responder)
   * [Customize Twig template variables](#customize-twig-template-variables)
+* [API Responder](#api-responder)
 <!-- TOC -->
 
 ## Default responders
@@ -24,6 +25,7 @@ The responder will automatically choose the responder depending on the request f
 ## Twig Responder
 
 The Twig responder is used to render data into a Symfony response.
+It's used for HTML responses.
 
 The variables that are passed to the Twig templates depends on the operation (See [Configure your operations](configure_your_operations.md) chapter).
 
@@ -77,5 +79,10 @@ class Subscription implements ResourceInterface
 {
 }
 ```
+
+## API Responder
+
+The API responder is used to render serialized data into a Symfony response.
+It's used for JSON/XML responses.
 
 **[Go back to the documentation's index](index.md)**
