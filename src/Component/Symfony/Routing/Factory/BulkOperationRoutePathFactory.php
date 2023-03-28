@@ -24,7 +24,7 @@ class BulkOperationRoutePathFactory implements OperationRoutePathFactoryInterfac
 
     public function createRoutePath(HttpOperation $operation, string $rootPath): string
     {
-        $shortName = $operation->getShortName();
+        $shortName = $operation->getShortName() ?? '';
 
         if ($operation instanceof BulkOperationInterface) {
             return sprintf('%s/%s', $rootPath, $shortName);
