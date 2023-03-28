@@ -4,7 +4,8 @@ Responders respond data: transform data to a Symfony response, return a success 
 
 <!-- TOC -->
 * [Default responders](#default-responders)
-* [Customize twig template variables](#customize-twig-template-variables)
+* [Twig Responder](#twig-responder)
+  * [Customize Twig template variables](#customize-twig-template-variables)
 <!-- TOC -->
 
 ## Default responders
@@ -19,7 +20,18 @@ The responder will automatically choose the responder depending on the request f
 | json           | Sylius\Component\Resource\Symfony\Request\State\ApiResponder  |
 | xml            | Sylius\Component\Resource\Doctrine\Common\State\ApiResponder  |
 
-## Customize Twig template variables
+
+## Twig Responder
+
+The Twig responder is used to render data into a Symfony response.
+
+The variables that are passed to the Twig templates depends on the operation (See [Configure your operations](configure_your_operations.md) chapter).
+
+### Customize Twig template variables
+
+Sme variables are already available on your operations, but you can add more variables easily.
+
+As an example, we add a `foo` variable to the Twig template with `bar` as value.
 
 ```php
 // src/Twig/Context/Factory/ShowSubscriptionContextFactory.php
