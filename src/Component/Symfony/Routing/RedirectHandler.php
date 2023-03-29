@@ -15,7 +15,6 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
