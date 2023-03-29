@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use Sylius\Component\Resource\Metadata\Operation;
 
-final class OperationRouteNameFactory
+final class OperationRouteNameFactory implements OperationRouteNameFactoryInterface
 {
     public function createRouteName(Operation $operation, ?string $shortName = null): string
     {

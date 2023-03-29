@@ -18,13 +18,13 @@ use Sylius\Component\Resource\Metadata\Operation;
 
 interface OperationEventDispatcherInterface
 {
-    public function dispatch(mixed $data, Operation $operation, Context $context): void;
+    public function dispatch(mixed $data, Operation $operation, Context $context): OperationEvent;
 
-    public function dispatchBulkEvent(mixed $data, Operation $operation, Context $context): void;
+    public function dispatchBulkEvent(mixed $data, Operation $operation, Context $context): OperationEvent;
 
-    public function dispatchPreEvent(mixed $data, Operation $operation, Context $context): void;
+    public function dispatchPreEvent(mixed $data, Operation $operation, Context $context): OperationEvent;
 
-    public function dispatchPostEvent(mixed $data, Operation $operation, Context $context): void;
+    public function dispatchPostEvent(mixed $data, Operation $operation, Context $context): OperationEvent;
 
-    public function dispatchInitializeEvent(mixed $data, Operation $operation, Context $context): void;
+    public function dispatchInitializeEvent(mixed $data, Operation $operation, Context $context): OperationEvent;
 }

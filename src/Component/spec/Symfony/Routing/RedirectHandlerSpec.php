@@ -19,6 +19,7 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Symfony\Routing\ArgumentParser;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,11 +27,13 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class RedirectHandlerSpec extends ObjectBehavior
 {
-    function let(RouterInterface $router): void
+    function let(RouterInterface $router, OperationRouteNameFactoryInterface $operationRouteNameFactory): void
     {
-        $this->beConstructedWith($router, new ArgumentParser(
-            new ExpressionLanguage(),
-        ));
+        $this->beConstructedWith(
+            $router,
+            new ArgumentParser(new ExpressionLanguage()),
+            $operationRouteNameFactory,
+        );
     }
 
     function it_is_initializable(): void
@@ -72,7 +75,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
         Request $request,
         RouterInterface $router,
     ): void {
-        $data = new BoardGame('uid');
+        $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index');
         $resource = new Resource(alias: 'app.board_game');
         $operation = $operation->withResource($resource);

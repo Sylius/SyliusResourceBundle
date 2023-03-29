@@ -18,6 +18,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\State\EventDispatcherBulkAwareProcessor;
 use Sylius\Component\Resource\State\ProcessorInterface;
+use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 
@@ -40,9 +41,11 @@ final class EventDispatcherBulkAwareProcessorSpec extends ObjectBehavior
         $operation = new BulkDelete(processor: [ProcessorWithCallable::class, 'process']);
         $context = new Context();
 
+        $operationEvent = new OperationEvent();
+
         $data = [];
 
-        $operationEventDispatcher->dispatchBulkEvent($data, $operation, $context)->shouldBeCalled();
+        $operationEventDispatcher->dispatchBulkEvent($data, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
 
         $decorated->process($data, $operation, $context)->shouldBeCalled();
 

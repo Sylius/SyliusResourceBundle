@@ -20,6 +20,7 @@ use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\State\EventDispatcherProvider;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 
 final class EventDispatcherProviderSpec extends ObjectBehavior
@@ -43,9 +44,11 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
         $operation = new Index(provider: '\App\Provider');
         $context = new Context();
 
+        $operationEvent = new OperationEvent();
+
         $decorated->provide($operation, $context)->shouldBeCalled();
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
+        $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
 
         $this->provide($operation, $context);
     }
@@ -57,9 +60,11 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
         $operation = new Show(provider: '\App\Provider');
         $context = new Context();
 
+        $operationEvent = new OperationEvent();
+
         $decorated->provide($operation, $context)->shouldBeCalled();
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
+        $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
 
         $this->provide($operation, $context);
     }
