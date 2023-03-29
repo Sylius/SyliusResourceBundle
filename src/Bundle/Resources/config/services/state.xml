@@ -45,6 +45,7 @@
         >
             <argument type="service" id=".inner" />
             <argument type="service" id="sylius.dispatcher.operation" />
+            <argument type="service" id="sylius.event_handler.operation" />
         </service>
 
         <service id="sylius.state.processor.bulk_aware"
