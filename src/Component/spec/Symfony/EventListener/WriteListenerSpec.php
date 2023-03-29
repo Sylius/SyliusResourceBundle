@@ -23,6 +23,7 @@ use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Symfony\EventListener\WriteListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Webmozart\Assert\Assert;
@@ -108,6 +109,44 @@ final class WriteListenerSpec extends ObjectBehavior
         $this->onKernelView($event);
 
         Assert::eq($event->getControllerResult(), 'persisted_result');
+    }
+
+    function it_does_not_replace_controller_result_if_it_is_a_response_already(
+        HttpKernelInterface $kernel,
+        Request $request,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
+        ParameterBag $attributes,
+        HttpOperation $operation,
+        ProcessorInterface $processor,
+        Response $response,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            ['foo' => 'fighters'],
+        );
+
+        $context = new Context();
+
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $request->attributes = $attributes;
+        $request->getMethod()->willReturn('POST');
+        $request->isMethodSafe()->willReturn(false);
+
+        $attributes->getBoolean('is_valid', true)->willReturn(true);
+
+        $processor->process(['foo' => 'fighters'], $operation, Argument::type(Context::class))->willReturn($response)->shouldBeCalled();
+
+        $this->onKernelView($event);
+
+        $response->__toString()->willReturn('response_result');
+
+        Assert::eq($event->getResponse(), 'response_result');
     }
 
     function it_removes_controller_result_on_event_with_delete_method(
