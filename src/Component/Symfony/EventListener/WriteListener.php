@@ -55,14 +55,13 @@ final class WriteListener
                     return;
                 }
 
-                $controllerResult = $persistResult;
-
                 if ($persistResult instanceof Response) {
-                    $event->setResponse($controllerResult);
+                    $event->setResponse($persistResult);
 
                     return;
                 }
 
+                $controllerResult = $persistResult;
                 $event->setControllerResult($controllerResult);
 
                 break;
