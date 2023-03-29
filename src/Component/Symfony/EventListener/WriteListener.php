@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Symfony\EventListener;
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\ProcessorInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class WriteListener
@@ -50,10 +51,19 @@ final class WriteListener
             case 'POST':
                 $persistResult = $this->processor->process($controllerResult, $operation, $context);
 
-                if ($persistResult) {
-                    $controllerResult = $persistResult;
-                    $event->setControllerResult($controllerResult);
+                if (!$persistResult) {
+                    return;
                 }
+
+                $controllerResult = $persistResult;
+
+                if ($persistResult instanceof Response) {
+                    $event->setResponse($controllerResult);
+
+                    return;
+                }
+
+                $event->setControllerResult($controllerResult);
 
                 break;
             case 'DELETE':
