@@ -17,5 +17,10 @@
             <argument type="service" id="event_dispatcher" />
         </service>
         <service id="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface" alias="sylius.dispatcher.operation" />
+
+        <service id="sylius.event_handler.operation" class="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandler">
+            <argument type="service" id="sylius.routing.redirect_handler" />
+        </service>
+        <service id="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface" alias="sylius.event_handler.operation" />
     </services>
 </container>
