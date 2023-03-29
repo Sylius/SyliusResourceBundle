@@ -24,39 +24,39 @@ final class OperationEventDispatcher implements OperationEventDispatcherInterfac
     ) {
     }
 
-    public function dispatch(mixed $data, Operation $operation, Context $context): void
+    public function dispatch(mixed $data, Operation $operation, Context $context): OperationEvent
     {
-        $this->dispatchEvent($data, $operation, $context);
+        return $this->dispatchEvent($data, $operation, $context);
     }
 
-    public function dispatchBulkEvent(mixed $data, Operation $operation, Context $context): void
+    public function dispatchBulkEvent(mixed $data, Operation $operation, Context $context): OperationEvent
     {
-        $this->dispatchEvent($data, $operation, $context, 'bulk');
+        return $this->dispatchEvent($data, $operation, $context, 'bulk');
     }
 
-    public function dispatchPreEvent(mixed $data, Operation $operation, Context $context): void
+    public function dispatchPreEvent(mixed $data, Operation $operation, Context $context): OperationEvent
     {
-        $this->dispatchEvent($data, $operation, $context, 'pre');
+        return $this->dispatchEvent($data, $operation, $context, 'pre');
     }
 
-    public function dispatchPostEvent(mixed $data, Operation $operation, Context $context): void
+    public function dispatchPostEvent(mixed $data, Operation $operation, Context $context): OperationEvent
     {
-        $this->dispatchEvent($data, $operation, $context, 'post');
+        return $this->dispatchEvent($data, $operation, $context, 'post');
     }
 
-    public function dispatchInitializeEvent(mixed $data, Operation $operation, Context $context): void
+    public function dispatchInitializeEvent(mixed $data, Operation $operation, Context $context): OperationEvent
     {
-        $this->dispatchEvent($data, $operation, $context, 'initialize');
+        return $this->dispatchEvent($data, $operation, $context, 'initialize');
     }
 
-    private function dispatchEvent(mixed $data, Operation $operation, Context $context, ?string $eventType = null): void
+    private function dispatchEvent(mixed $data, Operation $operation, Context $context, ?string $eventType = null): OperationEvent
     {
         $operationEvent = new OperationEvent($data, ['operation' => $operation, 'context' => $context]);
 
         $resource = $operation->getResource();
 
         if (null === $resource) {
-            return;
+            return $operationEvent;
         }
 
         $eventName = sprintf(
@@ -68,5 +68,7 @@ final class OperationEventDispatcher implements OperationEventDispatcherInterfac
         );
 
         $this->eventDispatcher->dispatch($operationEvent, $eventName);
+
+        return $operationEvent;
     }
 }

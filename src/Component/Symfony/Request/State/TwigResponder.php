@@ -21,7 +21,7 @@ use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
-use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
+use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -29,7 +29,7 @@ use Twig\Environment;
 final class TwigResponder implements ResponderInterface
 {
     public function __construct(
-        private RedirectHandler $redirectHandler,
+        private RedirectHandlerInterface $redirectHandler,
         private ContextFactoryInterface $contextFactory,
         private ?Environment $twig,
     ) {
