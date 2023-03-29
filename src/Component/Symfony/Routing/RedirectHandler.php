@@ -59,7 +59,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return new RedirectResponse($this->router->generate($route, $parameters));
     }
 
-    private function getRouteArguments(mixed $data, Operation $operation, Request $request): array
+    private function getRouteArguments(mixed $data, HttpOperation $operation, Request $request): array
     {
         $resource = $operation->getResource();
 
