@@ -50,12 +50,11 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         ;
     }
 
-    function it_returns_response_from_event_when_it_has_one_and_event_is_stopped(
+    function it_returns_response_from_event_when_it_has_one_and_request_format_is_html(
         Request $request,
         Response $response,
     ): void {
         $event = new OperationEvent();
-        $event->stop(message: 'What the hell is going on?', errorCode: 666);
         $event->setResponse($response->getWrappedObject());
 
         $context = new Context(new RequestOption($request->getWrappedObject()));
@@ -63,6 +62,20 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $request->getRequestFormat()->willReturn('html');
 
         $this->handleEvent($event, $context)->shouldReturn($response);
+    }
+
+    function it_does_not_returns_response_from_event_when_request_format_is_not_html(
+        Request $request,
+        Response $response,
+    ): void {
+        $event = new OperationEvent();
+        $event->setResponse($response->getWrappedObject());
+
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getRequestFormat()->willReturn('json');
+
+        $this->handleEvent($event, $context)->shouldReturn(null);
     }
 
     function it_can_redirect_to_resource_when_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
