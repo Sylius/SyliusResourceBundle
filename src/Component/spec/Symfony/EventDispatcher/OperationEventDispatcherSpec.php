@@ -51,7 +51,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
 
         $eventDispatcher->dispatch($operationEvent, 'app.book.read')->shouldBeCalled();
 
-        $this->dispatch($data, $show, $context);
+        $this->dispatch($data, $show, $context)->shouldHaveType(OperationEvent::class);
     }
 
     function it_dispatches_events_for_bulk_operations(
@@ -70,7 +70,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
 
         $eventDispatcher->dispatch($operationEvent, 'app.book.bulk_delete')->shouldBeCalled();
 
-        $this->dispatchBulkEvent($data, $bulkDelete, $context);
+        $this->dispatchBulkEvent($data, $bulkDelete, $context)->shouldHaveType(OperationEvent::class);
     }
 
     function it_dispatches_pre_events(
@@ -89,7 +89,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
 
         $eventDispatcher->dispatch($operationEvent, 'app.book.pre_create')->shouldBeCalled();
 
-        $this->dispatchPreEvent($data, $create, $context);
+        $this->dispatchPreEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
     }
 
     function it_dispatches_post_events(
@@ -108,7 +108,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
 
         $eventDispatcher->dispatch($operationEvent, 'app.book.post_create')->shouldBeCalled();
 
-        $this->dispatchPostEvent($data, $create, $context);
+        $this->dispatchPostEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
     }
 
     function it_dispatches_initialize_events(
@@ -127,6 +127,6 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
 
         $eventDispatcher->dispatch($operationEvent, 'app.book.initialize_create')->shouldBeCalled();
 
-        $this->dispatchInitializeEvent($data, $create, $context);
+        $this->dispatchInitializeEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
     }
 }

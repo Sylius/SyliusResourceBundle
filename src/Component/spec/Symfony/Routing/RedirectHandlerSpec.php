@@ -19,15 +19,23 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
 final class RedirectHandlerSpec extends ObjectBehavior
 {
-    function let(RouterInterface $router, ArgumentParserInterface $argumentParser): void
-    {
-        $this->beConstructedWith($router, $argumentParser);
+    function let(
+        RouterInterface $router,
+        ArgumentParserInterface $argumentParser,
+        OperationRouteNameFactoryInterface $operationRouteNameFactory,
+    ): void {
+        $this->beConstructedWith(
+            $router,
+            $argumentParser,
+            $operationRouteNameFactory,
+        );
     }
 
     function it_is_initializable(): void
