@@ -20,25 +20,22 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
-use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
+use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 final class TwigResponderSpec extends ObjectBehavior
 {
     function let(
         Environment $twig,
-        RouterInterface $router,
+        RedirectHandlerInterface $redirectHandler,
         ContextFactoryInterface $contextFactory,
-        ArgumentParserInterface $argumentParser,
     ): void {
-        $this->beConstructedWith(new RedirectHandler($router->getWrappedObject(), $argumentParser->getWrappedObject()), $contextFactory, $twig);
+        $this->beConstructedWith($redirectHandler, $contextFactory, $twig);
     }
 
     function it_is_initializable(): void
@@ -102,23 +99,18 @@ final class TwigResponderSpec extends ObjectBehavior
         \ArrayObject $data,
         Request $request,
         ParameterBag $attributes,
-        RouterInterface $router,
-        ArgumentParserInterface $argumentParser,
+        RedirectHandlerInterface $redirectHandler,
+        RedirectResponse $response,
     ): void {
         $data->id = 'xyz';
         $request->attributes = $attributes;
 
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
 
-        $resource = new Resource(alias: 'app.book', pluralName: 'books');
-        $operation = (new Create(redirectToRoute: 'app_dummy_index'))->withResource($resource);
+        $operation = new Create();
 
-        $argumentParser->parseExpression('resource.id', ['resource' => $data])->willReturn('xyz');
+        $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response);
 
-        $router->generate('app_dummy_index', ['id' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
-
-        $response = $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldHaveType(RedirectResponse::class);
-        $response->getTargetUrl()->shouldReturn('/dummies');
+        $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())))->shouldReturn($response);
     }
 }
