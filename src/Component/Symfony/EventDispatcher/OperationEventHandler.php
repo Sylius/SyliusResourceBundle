@@ -33,12 +33,19 @@ final class OperationEventHandler implements OperationEventHandlerInterface
     ): ?Response {
         $request = $context->get(RequestOption::class)?->request();
 
-        if ('html' !== $request?->getRequestFormat()) {
-            throw new HttpException($event->getErrorCode(), $event->getMessage());
+        if (
+            'html' === $request?->getRequestFormat() &&
+            null !== $operationEventResponse = $event->getResponse()
+        ) {
+            return $operationEventResponse;
         }
 
-        if (null !== $operationEventResponse = $event->getResponse()) {
-            return $operationEventResponse;
+        if (!$event->isStopped()) {
+            return null;
+        }
+
+        if ('html' !== $request?->getRequestFormat()) {
+            throw new HttpException($event->getErrorCode(), $event->getMessage());
         }
 
         $operation = $event->getOperation();
