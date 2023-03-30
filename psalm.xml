@@ -179,6 +179,12 @@
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
+        
+        <TypeDoesNotContainType>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Event/ResourceControllerEvent.php" />
+            </errorLevel>
+        </TypeDoesNotContainType>
 
         <UndefinedClass>
             <errorLevel type="suppress">

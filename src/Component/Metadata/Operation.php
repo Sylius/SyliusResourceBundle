@@ -54,6 +54,7 @@ abstract class Operation
         protected ?array $normalizationContext = null,
         protected ?array $denormalizationContext = null,
         protected ?array $validationContext = null,
+        protected ?string $eventShortName = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -317,6 +318,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->validationContext = $validationContext;
+
+        return $self;
+    }
+
+    public function getEventShortName(): ?string
+    {
+        return $this->eventShortName;
+    }
+
+    public function withEventShortName(string $eventShortName): self
+    {
+        $self = clone $this;
+        $self->eventShortName = $eventShortName;
 
         return $self;
     }

@@ -18,10 +18,63 @@
         </service>
         <service id="Sylius\Component\Resource\State\ProviderInterface" alias="sylius.state.provider" />
 
+        <service id="sylius.state.provider.event_dispatcher"
+                 class="Sylius\Component\Resource\State\EventDispatcherProvider"
+                 decorates="sylius.state.provider"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.dispatcher.operation" />
+        </service>
+
         <service id="sylius.state.processor" class="Sylius\Component\Resource\State\Processor">
             <argument type="tagged_locator" tag="sylius.state_processor" />
         </service>
         <service id="Sylius\Component\Resource\State\ProcessorInterface" alias="sylius.state.processor" />
+
+        <service id="sylius.state.processor.event_dispatcher"
+                 class="Sylius\Component\Resource\State\EventDispatcherProcessor"
+                 decorates="sylius.state.processor"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.dispatcher.operation" />
+            <argument type="service" id="sylius.event_handler.operation" />
+        </service>
+
+        <service id="sylius.state.processor.bulk_aware"
+                 class="Sylius\Component\Resource\State\BulkAwareProcessor"
+                 decorates="sylius.state.processor"
+                 decoration-priority="-64"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.state.processor.event_dispatcher_bulk_aware"
+                 class="Sylius\Component\Resource\State\EventDispatcherBulkAwareProcessor"
+                 decorates="sylius.state.processor.bulk_aware"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.dispatcher.operation" />
+        </service>
+
+        <service id="sylius.state.processor.write"
+                 class="Sylius\Component\Resource\State\WriteProcessor"
+                 decorates="sylius.state.processor.event_dispatcher_bulk_aware"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.state.processor.respond"
+                 class="Sylius\Component\Resource\State\RespondProcessor"
+                 decorates="sylius.state.processor.event_dispatcher_bulk_aware"
+                 decoration-priority="-64"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.state.responder" />
+        </service>
 
         <service id="sylius.state.responder" class="Sylius\Component\Resource\State\Responder">
             <argument type="tagged_locator" tag="sylius.state_responder" />

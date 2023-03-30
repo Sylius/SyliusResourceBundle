@@ -40,6 +40,7 @@
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" alias="sylius.routing.loader.routes_attributes" public="false" />
 
         <service id="sylius.routing.factory.operation_route_name_factory" class="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory" public="false" />
+        <service id="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface" alias="sylius.routing.factory.operation_route_name_factory" />
 
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
@@ -63,6 +64,8 @@
         <service id="sylius.routing.redirect_handler" class="Sylius\Component\Resource\Symfony\Routing\RedirectHandler">
             <argument type="service" id="router" />
             <argument type="service" id="sylius.routing.argument_parser" />
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
         </service>
+        <service id="Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface" alias="sylius.routing.redirect_handler" />
     </services>
 </container>

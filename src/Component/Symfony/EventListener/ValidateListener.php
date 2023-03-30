@@ -19,6 +19,7 @@ use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Symfony\Validator\Exception\ValidationException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -30,10 +31,10 @@ final class ValidateListener
     ) {
     }
 
-    public function onKernelView(ViewEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
-        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
+        $controllerResult = $request->attributes->get('data');
 
         /** @var FormInterface|null $form */
         $form = $request->attributes->get('form');
@@ -72,7 +73,7 @@ final class ValidateListener
             $form->isValid()
         ) {
             $request->attributes->set('is_valid', true);
-            $event->setControllerResult($form->getData());
+            $request->attributes->set('data', $form->getData());
 
             return;
         }

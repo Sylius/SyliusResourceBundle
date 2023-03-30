@@ -83,5 +83,11 @@
 
         <service id="sylius.resource_controller.resource_delete_handler" class="Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandler" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface" alias="sylius.resource_controller.resource_delete_handler" public="false" />
+
+        <service id="Sylius\Component\Resource\Action\ResourceAction">
+            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
+            <argument type="service" id="sylius.context.initiator.request_context" />
+            <argument type="service" id="sylius.state.processor" />
+        </service>
     </services>
 </container>

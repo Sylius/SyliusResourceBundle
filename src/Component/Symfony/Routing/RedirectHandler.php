@@ -16,16 +16,18 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 
-final class RedirectHandler
+final class RedirectHandler implements RedirectHandlerInterface
 {
     public function __construct(
         private RouterInterface $router,
         private ArgumentParser $routingArgumentParser,
+        private OperationRouteNameFactoryInterface $operationRouteNameFactory,
     ) {
     }
 
@@ -37,6 +39,27 @@ final class RedirectHandler
             throw new \RuntimeException(sprintf('Operation "%s" has no redirection route, but it should.', $operation->getName() ?? ''));
         }
 
+        $parameters = $this->getRouteArguments($data, $operation, $request);
+
+        return $this->redirectToRoute($data, $route, $parameters);
+    }
+
+    public function redirectToOperation(mixed $data, HttpOperation $operation, Request $request, string $newOperation): RedirectResponse
+    {
+        $route = $this->operationRouteNameFactory->createRouteName($operation, $newOperation);
+
+        $parameters = $this->getRouteArguments($data, $operation, $request);
+
+        return $this->redirectToRoute($data, $route, $parameters);
+    }
+
+    public function redirectToRoute(mixed $data, string $route, array $parameters = []): RedirectResponse
+    {
+        return new RedirectResponse($this->router->generate($route, $parameters));
+    }
+
+    private function getRouteArguments(mixed $data, HttpOperation $operation, Request $request): array
+    {
         $resource = $operation->getResource();
 
         if (null === $resource) {
@@ -51,14 +74,7 @@ final class RedirectHandler
             $redirectArguments[$identifier] = 'resource.' . $identifier;
         }
 
-        $parameters = $this->parseResourceValues($resource, $redirectArguments, $data);
-
-        return $this->redirectToRoute($data, $route, $parameters);
-    }
-
-    public function redirectToRoute(mixed $data, string $route, array $parameters = []): RedirectResponse
-    {
-        return new RedirectResponse($this->router->generate($route, $parameters));
+        return $this->parseResourceValues($resource, $redirectArguments, $data);
     }
 
     private function parseResourceValues(Resource $resource, array $parameters, mixed $data): array
