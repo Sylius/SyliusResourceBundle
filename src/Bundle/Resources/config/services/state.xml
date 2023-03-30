@@ -59,6 +59,23 @@
             <argument type="service" id="sylius.dispatcher.operation" />
         </service>
 
+        <service id="sylius.state.processor.write"
+                 class="Sylius\Component\Resource\State\WriteProcessor"
+                 decorates="sylius.state.processor.event_dispatcher_bulk_aware"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.state.processor.respond"
+                 class="Sylius\Component\Resource\State\RespondProcessor"
+                 decorates="sylius.state.processor.event_dispatcher_bulk_aware"
+                 decoration-priority="-64"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.state.responder" />
+        </service>
+
         <service id="sylius.state.responder" class="Sylius\Component\Resource\State\Responder">
             <argument type="tagged_locator" tag="sylius.state_responder" />
         </service>

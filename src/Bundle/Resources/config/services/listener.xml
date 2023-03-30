@@ -38,21 +38,21 @@
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.form.factory" />
-            <tag name="kernel.event_listener" event="kernel.view" priority="128" />
+            <tag name="kernel.event_listener" event="kernel.request" priority="1" />
         </service>
 
         <service id="sylius.listener.validate" class="Sylius\Component\Resource\Symfony\EventListener\ValidateListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="validator" />
-            <tag name="kernel.event_listener" event="kernel.view" priority="64" />
+            <tag name="kernel.event_listener" event="kernel.request" priority="0" />
         </service>
 
-        <service id="sylius.listener.write" class="Sylius\Component\Resource\Symfony\EventListener\WriteListener">
-            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
-            <argument type="service" id="sylius.context.initiator.request_context" />
-            <argument type="service" id="sylius.state.processor" />
-            <tag name="kernel.event_listener" event="kernel.view" priority="32" />
-        </service>
+<!--        <service id="sylius.listener.write" class="Sylius\Component\Resource\Symfony\EventListener\WriteListener">-->
+<!--            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />-->
+<!--            <argument type="service" id="sylius.context.initiator.request_context" />-->
+<!--            <argument type="service" id="sylius.state.processor" />-->
+<!--            <tag name="kernel.event_listener" event="kernel.view" priority="32" />-->
+<!--        </service>-->
 
         <service id="sylius.listener.serialize" class="Sylius\Component\Resource\Symfony\EventListener\SerializeListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
@@ -67,12 +67,12 @@
             <tag name="kernel.event_listener" event="kernel.view" priority="16" />
         </service>
 
-        <service id="sylius.listener.respond" class="Sylius\Component\Resource\Symfony\EventListener\RespondListener">
-            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
-            <argument type="service" id="sylius.context.initiator.request_context" />
-            <argument type="service" id="sylius.state.responder" />
-            <tag name="kernel.event_listener" event="kernel.view" priority="8" />
-        </service>
+<!--        <service id="sylius.listener.respond" class="Sylius\Component\Resource\Symfony\EventListener\RespondListener">-->
+<!--            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />-->
+<!--            <argument type="service" id="sylius.context.initiator.request_context" />-->
+<!--            <argument type="service" id="sylius.state.responder" />-->
+<!--            <tag name="kernel.event_listener" event="kernel.view" priority="8" />-->
+<!--        </service>-->
 
         <service id="sylius.listener.exception.validation" class="Sylius\Component\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
 

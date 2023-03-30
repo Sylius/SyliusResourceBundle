@@ -19,6 +19,7 @@ use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 final class FormListener
@@ -30,10 +31,10 @@ final class FormListener
     ) {
     }
 
-    public function onKernelView(ViewEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
-        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
+        $controllerResult = $request->attributes->get('data');
         $context = $this->contextInitiator->initializeContext($request);
         $operation = $this->operationInitiator->initializeOperation($request);
 
@@ -41,7 +42,6 @@ final class FormListener
         $format = $request->getRequestFormat();
 
         if (
-            $controllerResult instanceof Response ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
             'html' !== $format ||
             null == $operation->getFormType()
