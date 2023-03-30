@@ -39,23 +39,21 @@ final class EventDispatcherProcessor implements ProcessorInterface
     {
         $operationEvent = $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context);
 
-        if ($operationEvent->isStopped()) {
-            $eventResponse = $this->eventHandler->handleEvent(
-                $operationEvent,
-                $context,
-                $operation instanceof CreateOperationInterface ? ResourceActions::INDEX : null,
-            );
+        $eventResponse = $this->eventHandler->handlePreProcessEvent(
+            $operationEvent,
+            $context,
+            $operation instanceof CreateOperationInterface ? ResourceActions::INDEX : null,
+        );
 
-            if (null !== $eventResponse) {
-                return $eventResponse;
-            }
+        if (null !== $eventResponse) {
+            return $eventResponse;
         }
 
         $result = $this->decorated->process($data, $operation, $context);
 
         $operationEvent = $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context);
 
-        $eventResponse = $this->eventHandler->handleEvent(
+        $eventResponse = $this->eventHandler->handlePostProcessEvent(
             $operationEvent,
             $context,
         );

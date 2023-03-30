@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 interface OperationEventHandlerInterface
 {
-    public function handleEvent(
-        OperationEvent $event,
-        Context $context,
-        ?string $newOperation = null,
-    ): ?Response;
+    public function handlePreProcessEvent(OperationEvent $event, Context $context, ?string $newOperation = null): ?Response;
+
+    public function handlePostProcessEvent(OperationEvent $event, Context $context): ?Response;
 }
