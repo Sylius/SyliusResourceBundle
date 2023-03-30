@@ -26,11 +26,15 @@ final class OperationEventHandler implements OperationEventHandlerInterface
     {
     }
 
-    public function handleEvent(
+    public function handlePreProcessEvent(
         OperationEvent $event,
         Context $context,
         ?string $newOperation = null,
     ): ?Response {
+        if (!$event->isStopped()) {
+            return null;
+        }
+
         $request = $context->get(RequestOption::class)?->request();
 
         if (
@@ -38,10 +42,6 @@ final class OperationEventHandler implements OperationEventHandlerInterface
             null !== $operationEventResponse = $event->getResponse()
         ) {
             return $operationEventResponse;
-        }
-
-        if (!$event->isStopped()) {
-            return null;
         }
 
         if ('html' !== $request?->getRequestFormat()) {
@@ -59,5 +59,18 @@ final class OperationEventHandler implements OperationEventHandlerInterface
         }
 
         return null;
+    }
+
+    public function handlePostProcessEvent(
+        OperationEvent $event,
+        Context $context,
+    ): ?Response {
+        $request = $context->get(RequestOption::class)?->request();
+
+        if ('html' !== $request?->getRequestFormat()) {
+            return null;
+        }
+
+        return $event->getResponse();
     }
 }

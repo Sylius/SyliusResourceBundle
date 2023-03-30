@@ -38,7 +38,7 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $this->shouldHaveType(OperationEventHandler::class);
     }
 
-    function it_throws_an_http_exception_when_event_is_stopped_and_request_format_is_not_html(): void
+    function it_throws_an_http_exception_when_pre_process_event_is_stopped_and_request_format_is_not_html(): void
     {
         $event = new OperationEvent();
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
@@ -46,39 +46,43 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $context = new Context();
 
         $this->shouldThrow(new HttpException(666, 'What the hell is going on?'))
-            ->during('handleEvent', [$event, $context])
+            ->during('handlePreProcessEvent', [$event, $context])
         ;
     }
 
-    function it_returns_response_from_event_when_it_has_one_and_request_format_is_html(
+    function it_returns_response_from_pre_process_event_when_it_has_one_and_request_format_is_html(
         Request $request,
         Response $response,
     ): void {
         $event = new OperationEvent();
+        $event->stop(message: 'What the hell is going on?', errorCode: 666);
         $event->setResponse($response->getWrappedObject());
 
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getRequestFormat()->willReturn('html');
 
-        $this->handleEvent($event, $context)->shouldReturn($response);
+        $this->handlePreProcessEvent($event, $context)->shouldReturn($response);
     }
 
-    function it_does_not_returns_response_from_event_when_request_format_is_not_html(
+    function it_does_not_returns_response_from_pre_process_event_when_request_format_is_not_html(
         Request $request,
         Response $response,
     ): void {
         $event = new OperationEvent();
+        $event->stop(message: 'What the hell is going on?', errorCode: 666);
         $event->setResponse($response->getWrappedObject());
 
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getRequestFormat()->willReturn('json');
 
-        $this->handleEvent($event, $context)->shouldReturn(null);
+        $this->shouldThrow(new HttpException(666, 'What the hell is going on?'))
+            ->during('handlePreProcessEvent', [$event, $context])
+        ;
     }
 
-    function it_can_redirect_to_resource_when_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
+    function it_can_redirect_to_resource_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
         Request $request,
         \stdClass $data,
         RedirectHandlerInterface $redirectHandler,
@@ -97,10 +101,10 @@ final class OperationEventHandlerSpec extends ObjectBehavior
 
         $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response)->shouldBeCalled();
 
-        $this->handleEvent($event, $context)->shouldHaveType(RedirectResponse::class);
+        $this->handlePreProcessEvent($event, $context)->shouldHaveType(RedirectResponse::class);
     }
 
-    function it_can_redirect_to_operation_when_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
+    function it_can_redirect_to_operation_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
         Request $request,
         \stdClass $data,
         RedirectHandlerInterface $redirectHandler,
@@ -119,10 +123,10 @@ final class OperationEventHandlerSpec extends ObjectBehavior
 
         $redirectHandler->redirectToOperation($data, $operation, $request, 'index')->willReturn($response)->shouldBeCalled();
 
-        $this->handleEvent($event, $context, 'index')->shouldHaveType(RedirectResponse::class);
+        $this->handlePreProcessEvent($event, $context, 'index')->shouldHaveType(RedirectResponse::class);
     }
 
-    function it_returns_null_when_event_is_stopped_and_has_no_response_and_operation_is_not_an_http_operation(
+    function it_returns_null_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_not_an_http_operation(
         Request $request,
         \stdClass $data,
         Operation $operation,
@@ -135,6 +139,47 @@ final class OperationEventHandlerSpec extends ObjectBehavior
 
         $request->getRequestFormat()->willReturn('html');
 
-        $this->handleEvent($event, $context)->shouldReturn(null);
+        $this->handlePreProcessEvent($event, $context)->shouldReturn(null);
+    }
+
+    function it_returns_post_process_event_response_when_request_format_is_html(
+        Request $request,
+        \stdClass $data,
+        Response $response,
+    ): void {
+        $event = new OperationEvent($data);
+        $event->setResponse($response->getWrappedObject());
+
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getRequestFormat()->willReturn('html');
+
+        $this->handlePostProcessEvent($event, $context)->shouldReturn($response);
+    }
+
+    function it_returns_null_for_post_process_event_when_request_format_is_html_but_event_has_no_response(
+        Request $request,
+        \stdClass $data,
+    ): void {
+        $event = new OperationEvent($data);
+
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getRequestFormat()->willReturn('html');
+
+        $this->handlePostProcessEvent($event, $context)->shouldReturn(null);
+    }
+
+    function it_returns_null_for_post_process_event_when_request_format_is_not_html(
+        Request $request,
+        \stdClass $data,
+    ): void {
+        $event = new OperationEvent($data);
+
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getRequestFormat()->willReturn('json');
+
+        $this->handlePostProcessEvent($event, $context)->shouldReturn(null);
     }
 }
