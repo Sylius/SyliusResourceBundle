@@ -56,13 +56,13 @@ final class EventDispatcherProcessorSpec extends ObjectBehavior
         $operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->willReturn($preEvent)->shouldBeCalled();
         $operationEventDispatcher->dispatchPostEvent($data, $operation, $context)->willReturn($postEvent)->shouldBeCalled();
 
-        $eventHandler->handleEvent($preEvent, $context, 'index')->willReturn(null)->shouldNotBeCalled();
-        $eventHandler->handleEvent($postEvent, $context)->willReturn(null)->shouldBeCalled();
+        $eventHandler->handlePreProcessEvent($preEvent, $context, 'index')->willReturn(null)->shouldBeCalled();
+        $eventHandler->handlePostProcessEvent($postEvent, $context)->willReturn(null)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn($result);
     }
 
-    function it_does_not_call_processor_if_pre_event_returns_a_response_and_has_been_stopped(
+    function it_does_not_call_processor_if_pre_event_returns_a_response(
         ProcessorInterface $decorated,
         OperationEventDispatcherInterface $operationEventDispatcher,
         OperationEventHandlerInterface $eventHandler,
@@ -76,11 +76,10 @@ final class EventDispatcherProcessorSpec extends ObjectBehavior
         $decorated->process($data, $operation, $context)->willReturn($result)->shouldNotBeCalled();
 
         $preEvent = new OperationEvent();
-        $preEvent->stop(message: 'What the hell is going on?', errorCode: 666);
 
         $operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->willReturn($preEvent)->shouldBeCalled();
 
-        $eventHandler->handleEvent($preEvent, $context, 'index')->willReturn($response)->shouldBeCalled();
+        $eventHandler->handlePreProcessEvent($preEvent, $context, 'index')->willReturn($response)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn($response);
     }
@@ -104,7 +103,8 @@ final class EventDispatcherProcessorSpec extends ObjectBehavior
         $operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->willReturn($preEvent)->shouldBeCalled();
         $operationEventDispatcher->dispatchPostEvent($data, $operation, $context)->willReturn($postEvent)->shouldBeCalled();
 
-        $eventHandler->handleEvent($postEvent, $context)->willReturn($response)->shouldBeCalled();
+        $eventHandler->handlePreProcessEvent($preEvent, $context, 'index')->willReturn(null)->shouldBeCalled();
+        $eventHandler->handlePostProcessEvent($postEvent, $context)->willReturn($response)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn($response);
     }
