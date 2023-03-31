@@ -15,10 +15,10 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory;
-use Sylius\Bundle\ResourceBundle\Routing\OperationRouteFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
+use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Symfony\Component\Routing\RouteCollection;
