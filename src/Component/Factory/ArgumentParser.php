@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-final class ArgumentParser
+final class ArgumentParser implements ArgumentParserInterface
 {
     public function __construct(
         private ExpressionLanguage $expressionLanguage,

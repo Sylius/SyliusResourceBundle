@@ -20,6 +20,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="security.token_storage" on-invalid="null" />
         </service>
+        <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
 
         <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
