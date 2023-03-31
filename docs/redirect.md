@@ -22,7 +22,7 @@ Redirections are configured on your operations with these default behaviours.
 
 ## Custom redirection
 
-As an example, let's configure a custom redirection fo create & update operations.
+For example, let's configure a custom redirection to create & update operations.
 
 ```php
 
