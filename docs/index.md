@@ -17,6 +17,11 @@ So far we support:
 ## Resource system for Symfony applications.
 
 * [Installation](installation.md)
+
+# New documentation
+* [Resource Factories](resource_factories.md)
+
+# Deprecated documentation
 * [Configuring Your Resources](configuration.md)
 * [Services](services.md)
 * [Routing](routing.md)
