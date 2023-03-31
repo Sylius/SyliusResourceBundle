@@ -100,7 +100,6 @@ Next: When you're ready, create a migration with php bin/console make:migration
 ## Configure the BookRepository
 
 The command also generated a Doctrine repository class: `App\Repository\BookRepository`.
-The generated code looks like the following (only a small portion of the file is replicated here):
 
 ```php
 <?php
@@ -108,18 +107,20 @@ The generated code looks like the following (only a small portion of the file is
 namespace App\Repository;
 
 use App\Entity\Book;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Book>
- *
- * @method Book|null find($id, $lockMode = null, $lockVersion = null)
- * @method Book|null findOneBy(array $criteria, array $orderBy = null)
- * @method Book[]    findAll()
- * @method Book[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * [...]
  */
-class BookRepository 
+class BookRepository extends ServiceEntityRepository
 {
-    // ...
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Book::class);
+    }
+    
+    // [...]
 }
 ```
 
