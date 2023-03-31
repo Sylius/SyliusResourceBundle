@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Factory\ArgumentParser;
+use Sylius\Component\Resource\Factory\ArgumentParserInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface as ResourceFactoryInterface;
 use Sylius\Component\Resource\Metadata\FactoryAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
@@ -25,7 +25,7 @@ final class Factory implements FactoryInterface
 {
     public function __construct(
         private ContainerInterface $locator,
-        private ArgumentParser $argumentParser,
+        private ArgumentParserInterface $argumentParser,
     ) {
     }
 
