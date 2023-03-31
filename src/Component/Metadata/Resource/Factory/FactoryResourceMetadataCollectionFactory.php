@@ -35,7 +35,7 @@ final class FactoryResourceMetadataCollectionFactory implements ResourceMetadata
 
         /** @var ResourceMetadata $resource */
         foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
-            $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias());
+            $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
             $operations = $resource->getOperations() ?? new Operations();
 
             /** @var Operation|(Operation&FactoryAwareOperationInterface) $operation */
