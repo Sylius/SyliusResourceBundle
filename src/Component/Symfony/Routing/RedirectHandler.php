@@ -25,7 +25,7 @@ final class RedirectHandler
 {
     public function __construct(
         private RouterInterface $router,
-        private ArgumentParser $routingArgumentParser,
+        private ArgumentParserInterface $routingArgumentParser,
     ) {
     }
 
