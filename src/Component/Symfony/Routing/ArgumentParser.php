@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 use Sylius\Component\Resource\Metadata\Resource;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class ArgumentParser
+final class ArgumentParser implements ArgumentParserInterface
 {
     public function __construct(private ExpressionLanguage $expressionLanguage)
     {

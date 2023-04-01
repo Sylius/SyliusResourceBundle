@@ -20,19 +20,27 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Repository\ArgumentParser;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class ProviderSpec extends ObjectBehavior
 {
-    function let(ContainerInterface $locator): void
+    function let(ContainerInterface $locator, RequestStack $requestStack, TokenStorageInterface $tokenStorage): void
     {
-        $this->beConstructedWith($locator, new RepositoryArgumentResolver());
+        $this->beConstructedWith($locator, new RepositoryArgumentResolver(), new ArgumentParser(
+            new ExpressionLanguage(),
+            $requestStack->getWrappedObject(),
+            $tokenStorage->getWrappedObject(),
+        ));
     }
 
     function it_is_initializable(): void
@@ -45,6 +53,8 @@ final class ProviderSpec extends ObjectBehavior
         Request $request,
     ): void {
         $operation->getRepository()->willReturn([RepositoryWithCallables::class, 'find']);
+        $operation->getRepositoryArguments()->willReturn(null);
+
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id']]);
         $request->query = new InputBag([]);
         $request->request = new ParameterBag();
@@ -63,6 +73,7 @@ final class ProviderSpec extends ObjectBehavior
     ): void {
         $operation->getRepository()->willReturn('App\Repository');
         $operation->getRepositoryMethod()->willReturn(null);
+        $operation->getRepositoryArguments()->willReturn(null);
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
         $request->query = new InputBag([]);
@@ -131,8 +142,36 @@ final class ProviderSpec extends ObjectBehavior
     ): void {
         $operation->getRepository()->willReturn('App\Repository');
         $operation->getRepositoryMethod()->willReturn('find');
+        $operation->getRepositoryArguments()->willReturn(null);
 
         $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
+        $request->query = new InputBag([]);
+        $request->request = new ParameterBag();
+
+        $locator->has('App\Repository')->willReturn(true);
+        $locator->get('App\Repository')->willReturn($repository);
+
+        $repository->find('my_id')->willReturn($stdClass);
+
+        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
+        $response->shouldReturn($stdClass);
+    }
+
+    function it_calls_repository_as_string_with_specific_repository_method_an_arguments(
+        RequestStack $requestStack,
+        Operation $operation,
+        Request $request,
+        ContainerInterface $locator,
+        RepositoryInterface $repository,
+        \stdClass $stdClass,
+    ): void {
+        $requestStack->getCurrentRequest()->willReturn($request);
+
+        $operation->getRepository()->willReturn('App\Repository');
+        $operation->getRepositoryMethod()->willReturn('find');
+        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+
+        $request->attributes = new ParameterBag(['id' => 'my_id']);
         $request->query = new InputBag([]);
         $request->request = new ParameterBag();
 

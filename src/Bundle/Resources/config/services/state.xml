@@ -22,6 +22,15 @@
         </service>
         <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
 
+        <service id="sylius.repository.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
+
+        <service id="sylius.repository.argument_parser" class="Sylius\Component\Resource\Repository\ArgumentParser">
+            <argument type="service" id="sylius.repository.expression_language" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="security.token_storage" on-invalid="null" />
+        </service>
+        <service id="Sylius\Component\Resource\Repository\ArgumentParserInterface" alias="sylius.repository.argument_parser" />
+
         <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>
@@ -81,6 +90,7 @@
         <service id="Sylius\Component\Resource\Symfony\Request\State\Provider">
             <argument type="tagged_locator" tag="sylius.repository" />
             <argument type="service" id="sylius.repository_argument_resolver.request" />
+            <argument type="service" id="sylius.repository.argument_parser" />
             <tag name="sylius.state_provider" />
         </service>
 
