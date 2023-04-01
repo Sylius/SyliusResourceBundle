@@ -42,6 +42,7 @@
         "symfony/form": "^5.4 || ^6.0",
         "symfony/framework-bundle": "^5.4 || ^6.0",
         "symfony/http-foundation": "^5.4 || ^6.0",
+        "symfony/security-core": "^5.4 || ^6.0",
         "symfony/security-csrf": "^5.4 || ^6.0",
         "symfony/routing": "^5.4 || ^6.0",
         "symfony/translation": "^5.4 || ^6.0",
@@ -78,7 +79,8 @@
         "vimeo/psalm": "^4.22",
         "rector/rector": "^0.13.5",
         "symfony/messenger": "^5.4 || ^6.0",
-        "symfony/serializer": "^5.4 || ^6.0"
+        "symfony/serializer": "^5.4 || ^6.0",
+        "symfony/security-bundle": "^5.4 || ^6.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",

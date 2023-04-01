@@ -28,6 +28,13 @@
             <tag name="kernel.event_listener" event="kernel.request" priority="4" />
         </service>
 
+        <service id="sylius.listener.factory" class="Sylius\Component\Resource\Symfony\EventListener\FactoryListener">
+            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
+            <argument type="service" id="sylius.context.initiator.request_context" />
+            <argument type="service" id="sylius.state.factory" />
+            <tag name="kernel.event_listener" event="kernel.request" priority="3" />
+        </service>
+
         <service id="sylius.listener.deserialize" class="Sylius\Component\Resource\Symfony\EventListener\DeserializeListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="serializer" on-invalid="null" />

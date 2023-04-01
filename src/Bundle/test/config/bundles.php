@@ -21,11 +21,13 @@ use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Sylius\Bundle\GridBundle\SyliusGridBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 return [
     FrameworkBundle::class => ['all' => true],
+    SecurityBundle::class => ['all' => true],
     DoctrineBundle::class => ['all' => true],
     SyliusResourceBundle::class => ['all' => true],
     BabDevPagerfantaBundle::class => ['all' => true],

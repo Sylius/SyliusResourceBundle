@@ -63,6 +63,12 @@ final class SubscriptionUiTest extends ApiTestCase
         $this->loadFixturesFromFile('subscriptions.yml');
 
         $this->client->request('GET', '/admin/subscriptions/new');
+        $response = $this->client->getResponse();
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('value="new@example.com"', $content);
+
         $this->client->submitForm('Create', [
             'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
