@@ -41,6 +41,7 @@ abstract class Operation
         string|callable|null $responder = null,
         string|callable|null $repository = null,
         protected ?string $repositoryMethod = null,
+        protected ?array $repositoryArguments = null,
         protected ?string $grid = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
@@ -175,6 +176,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->repositoryMethod = $repositoryMethod;
+
+        return $self;
+    }
+
+    public function getRepositoryArguments(): ?array
+    {
+        return $this->repositoryArguments;
+    }
+
+    public function withRepositoryArguments(array $repositoryArguments): self
+    {
+        $self = clone $this;
+        $self->repositoryArguments = $repositoryArguments;
 
         return $self;
     }
