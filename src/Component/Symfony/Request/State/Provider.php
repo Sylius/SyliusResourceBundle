@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Reflection\CallableReflection;
+use Sylius\Component\Resource\Repository\ArgumentParserInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 
@@ -29,6 +30,7 @@ final class Provider implements ProviderInterface
     public function __construct(
         private ContainerInterface $locator,
         private RepositoryArgumentResolver $argumentResolver,
+        private ArgumentParserInterface $argumentParser,
     ) {
     }
 
@@ -45,6 +47,7 @@ final class Provider implements ProviderInterface
         }
 
         $repositoryInstance = null;
+        $arguments = $this->parseArgumentValues($operation->getRepositoryArguments() ?? []);
 
         if (\is_string($repository)) {
             $defaultMethod = $operation instanceof CollectionOperationInterface ? 'createPaginator' : 'findOneBy';
@@ -79,7 +82,10 @@ final class Provider implements ProviderInterface
             $reflector = CallableReflection::from($callable);
         }
 
-        $arguments = $this->argumentResolver->getArguments($request, $reflector);
+        if ([] === $arguments) {
+            $arguments = $this->argumentResolver->getArguments($request, $reflector);
+        }
+
         $data = $repository(...$arguments);
 
         if ($data instanceof Pagerfanta) {
@@ -88,5 +94,14 @@ final class Provider implements ProviderInterface
         }
 
         return $data;
+    }
+
+    private function parseArgumentValues(array $arguments): array
+    {
+        foreach ($arguments as $key => $value) {
+            $arguments[$key] = $this->argumentParser->parseExpression($value);
+        }
+
+        return $arguments;
     }
 }
