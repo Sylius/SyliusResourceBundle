@@ -28,7 +28,7 @@ final class VariablesCollection implements VariablesCollectionInterface
         $variables = [];
 
         foreach ($this->iterator as $variable) {
-            array_merge($variables, $variable->getVariables());
+            $variables = array_merge($variables, $variable->getVariables());
         }
 
         return $variables;
