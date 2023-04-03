@@ -11,24 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Factory;
+namespace Sylius\Component\Resource\Symfony\ExpressionLanguage;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-final class ArgumentParser implements ArgumentParserInterface
+final class TokenVariables implements VariablesInterface
 {
-    public function __construct(
-        private ExpressionLanguage $expressionLanguage,
-        private RequestStack $requestStack,
-        private ?TokenStorageInterface $tokenStorage = null,
-    ) {
+    public function __construct(private ?TokenStorageInterface $tokenStorage = null)
+    {
     }
 
-    public function parseExpression(string $expression): mixed
+    public function getVariables(): array
     {
         if (null === $this->tokenStorage) {
             throw new \LogicException('The "symfony/security-bundle" must be installed and configured to use the "token" & "user" attribute. Try running "composer require symfony/security-bundle"');
@@ -38,13 +32,7 @@ final class ArgumentParser implements ArgumentParserInterface
             $token = new NullToken();
         }
 
-        return $this->expressionLanguage->evaluate($expression, $this->getVariables($token));
-    }
-
-    private function getVariables(TokenInterface $token): array
-    {
         return [
-            'request' => $this->requestStack->getCurrentRequest(),
             'token' => $token,
             'user' => $token->getUser(),
         ];
