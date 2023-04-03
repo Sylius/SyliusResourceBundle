@@ -15,10 +15,10 @@ namespace Sylius\Component\Resource\State;
 
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Factory\ArgumentParserInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface as ResourceFactoryInterface;
 use Sylius\Component\Resource\Metadata\FactoryAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Webmozart\Assert\Assert;
 
 final class Factory implements FactoryInterface

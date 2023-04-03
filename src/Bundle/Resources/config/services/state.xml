@@ -13,24 +13,6 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sylius.resource_factory.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
-
-        <service id="sylius.resource_factory.argument_parser" class="Sylius\Component\Resource\Factory\ArgumentParser">
-            <argument type="service" id="sylius.resource_factory.expression_language" />
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="security.token_storage" on-invalid="null" />
-        </service>
-        <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
-
-        <service id="sylius.repository.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
-
-        <service id="sylius.repository.argument_parser" class="Sylius\Component\Resource\Repository\ArgumentParser">
-            <argument type="service" id="sylius.repository.expression_language" />
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="security.token_storage" on-invalid="null" />
-        </service>
-        <service id="Sylius\Component\Resource\Repository\ArgumentParserInterface" alias="sylius.repository.argument_parser" />
-
         <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>
@@ -47,7 +29,7 @@
 
         <service id="sylius.state.factory" class="Sylius\Component\Resource\State\Factory">
             <argument type="tagged_locator" tag="sylius.resource_factory" />
-            <argument type="service" id="sylius.resource_factory.argument_parser" />
+            <argument type="service" id="sylius.expression_language.argument_parser.factory" />
         </service>
         <service id="Sylius\Component\Resource\State\FactoryInterface" alias="sylius.state.factory" />
 
@@ -90,7 +72,7 @@
         <service id="Sylius\Component\Resource\Symfony\Request\State\Provider">
             <argument type="tagged_locator" tag="sylius.repository" />
             <argument type="service" id="sylius.repository_argument_resolver.request" />
-            <argument type="service" id="sylius.repository.argument_parser" />
+            <argument type="service" id="sylius.expression_language.argument_parser.repository" />
             <tag name="sylius.state_provider" />
         </service>
 
