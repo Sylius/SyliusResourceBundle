@@ -122,3 +122,7 @@ As an example, on an `index` operation these Twig variables will be available:
 | library   | App\Entity\Book                          |
 | operation | Sylius\Component\Resource\Metadata\Index |
 | app       | Symfony\Bridge\Twig\AppVariable          |
+
+**[Go back to the documentation's index](index.md)**
+
+**[> Next chapter: Configure your operations](configure_your_operations.md)**

@@ -253,3 +253,5 @@ class Book implements \Sylius\Component\Resource\Model\ResourceInterface
 ```
 
 **[Go back to the documentation's index](index.md)**
+
+**[> Next chapter: Providers](providers.md)**
