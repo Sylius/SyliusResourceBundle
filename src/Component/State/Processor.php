@@ -46,6 +46,7 @@ final class Processor implements ProcessorInterface
             throw new \RuntimeException(sprintf('Processor "%s" not found on operation "%s"', $processor, $operation->getName() ?? ''));
         }
 
+        /** @var ProcessorInterface $processorInstance */
         $processorInstance = $this->locator->get($processor);
         Assert::isInstanceOf($processorInstance, ProcessorInterface::class);
 

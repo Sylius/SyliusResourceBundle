@@ -23,8 +23,9 @@ use Webmozart\Assert\Assert;
  */
 final class Provider implements ProviderInterface
 {
-    public function __construct(private ContainerInterface $locator)
-    {
+    public function __construct(
+        private ContainerInterface $locator,
+    ) {
     }
 
     public function provide(Operation $operation, Context $context): object|iterable|null

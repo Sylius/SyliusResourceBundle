@@ -16,6 +16,7 @@
         <import resource="services/console.xml" />
         <import resource="services/context.xml" />
         <import resource="services/controller.xml" />
+        <import resource="services/dispatcher.xml" />
         <import resource="services/form.xml" />
         <import resource="services/helper.xml" />
         <import resource="services/listener.xml" />

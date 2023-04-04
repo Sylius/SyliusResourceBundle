@@ -3,3 +3,4 @@
 /test/app/logs
 /test/config/db.sql
 /test/var
+/test/vendor/
