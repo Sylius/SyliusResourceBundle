@@ -19,7 +19,6 @@ use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow as SymfonyWorkflow;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
