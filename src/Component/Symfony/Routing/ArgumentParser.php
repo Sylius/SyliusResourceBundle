@@ -15,7 +15,6 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ArgumentParser implements ArgumentParserInterface
