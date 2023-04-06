@@ -6,7 +6,8 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
 * [Advanced configuration](#advanced-configuration)
-* [Configure the resource name](#configure-the-resource-name)
+  * [Configure the resource name](#configure-the-resource-name)
+  * [Configure the resource plural name](#configure-the-resource-plural-name)
 <!-- TOC -->
 
 ## Implements the Resource interface
@@ -93,3 +94,31 @@ As an example, on a `show` operation following Twig variables will be available:
 | cart      | App\Entity\Order                        |
 | operation | Sylius\Component\Resource\Metadata\Show |
 | app       | Symfony\Bridge\Twig\AppVariable         |
+
+### Configure the resource plural name
+
+It defines the resource plural name.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(pluralName: 'library')]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+On your Twig templates, the `books` variable will be replaced by the `library` one.
+
+As an example, on a `index` operation these Twig variables wille be available:
+
+| Name      | Type                                     |
+|-----------|------------------------------------------|
+| resource  | App\Entity\Book                          |
+| library   | App\Entity\Book                          |
+| operation | Sylius\Component\Resource\Metadata\Index |
+| app       | Symfony\Bridge\Twig\AppVariable          |
