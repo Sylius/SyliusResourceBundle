@@ -17,6 +17,7 @@ There are some basic CRUD operations and more.
   * [Configure the templates' dir](#configure-the-templates-dir)
   * [Configure the section](#configure-the-section)
   * [Configure the routes' prefix](#configure-the-routes-prefix)
+  * [Configure the resource identifier](#configure-the-resource-identifier)
 <!-- TOC -->
 
 ## Basic operations
