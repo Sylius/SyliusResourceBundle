@@ -138,6 +138,7 @@
 
         <PossiblyNullReference>
             <errorLevel type="suppress">
+                <file name="src/Component/Tests/Symfony/ExpressionLanguage/ArgumentParserTest.php" />
                 <file name="src/Bundle/DependencyInjection/Configuration.php" />
                 <file name="src/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
                 <file name="src/Bundle/Routing/Configuration.php" />
@@ -159,6 +160,7 @@
             <errorLevel type="suppress">
                 <file name="src/Component/Tests/Reflection/ClassInfoTraitTest.php" />
                 <file name="src/Component/Tests/Reflection/ClassReflectionTest.php" />
+                <file name="src/Component/Tests/Symfony/ExpressionLanguage/ArgumentParserTest.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
