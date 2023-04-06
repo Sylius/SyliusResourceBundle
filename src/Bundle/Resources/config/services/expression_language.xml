@@ -15,15 +15,18 @@
     <services>
         <service id="sylius.resource_factory.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
         <service id="sylius.repository.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
+        <service id="sylius.routing.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
 
         <service id="sylius.expression_language.variables.token" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\TokenVariables">
             <argument type="service" id="security.token_storage" />
             <tag name="sylius.resource_factory_variables" />
+            <tag name="sylius.repository_variables" />
         </service>
 
         <service id="sylius.expression_language.variables.request" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\RequestVariables">
             <argument type="service" id="request_stack" />
             <tag name="sylius.resource_factory_variables" />
+            <tag name="sylius.repository_variables" />
         </service>
 
         <service id="sylius.expression_language.variables_collection.factory" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">

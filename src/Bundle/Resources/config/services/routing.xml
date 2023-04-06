@@ -109,8 +109,6 @@
         </service>
         <service id="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
 
-        <service id="sylius.routing.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
-
         <service id="sylius.routing.argument_parser" class="Sylius\Component\Resource\Symfony\Routing\ArgumentParser">
             <argument type="service" id="sylius.routing.expression_language" />
         </service>
