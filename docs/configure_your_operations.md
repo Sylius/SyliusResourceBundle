@@ -14,6 +14,8 @@ There are some basic CRUD operations and more.
   * [Delete operation](#delete-operation)
   * [State machine operation](#state-machine-operation)
 * [Advanced configuration](#advanced-configuration)
+  * [Configure the path](#configure-the-path)
+  * [Configure the short name](#configure-the-short-name)
   * [Configure the templates' dir](#configure-the-templates-dir)
   * [Configure the section](#configure-the-section)
   * [Configure the routes' prefix](#configure-the-routes-prefix)
@@ -272,6 +274,54 @@ It will configure this route for your `apply_state_machine_transition` operation
 | app_book_publish  | GET    | /books/{id}/publish |    
 
 ## Advanced configuration
+
+### Configure the path
+
+It customizes the path for your operations.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource]
+#[Create(path: 'register')]
+class Customer implements ResourceInterface
+{
+}
+
+```
+
+| Name            | Method    | Path                 |
+|-----------------|-----------|----------------------|
+| app_book_create | GET, POST | /books/{id}/register |    
+
+### Configure the short name
+
+It customizes the path for your operations.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource]
+#[Create(shortName: 'register')]
+class Customer implements ResourceInterface
+{
+}
+
+```
+
+| Name              | Method    | Path                 |
+|-------------------|-----------|----------------------|
+| app_book_register | GET, POST | /books/{id}/register |    
+
+It influences the path by default too, but you can still customize the path if needed.
 
 ### Configure the templates' dir
 
