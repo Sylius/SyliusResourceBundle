@@ -6,6 +6,7 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
 * [Advanced configuration](#advanced-configuration)
+* [Configure the resource name](#configure-the-resource-name)
 <!-- TOC -->
 
 ## Implements the Resource interface
