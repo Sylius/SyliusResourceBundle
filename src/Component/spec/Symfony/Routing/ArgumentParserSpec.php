@@ -15,14 +15,15 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
 use Sylius\Component\Resource\Symfony\Routing\ArgumentParser;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ArgumentParserSpec extends ObjectBehavior
 {
-    function let(): void
+    function let(VariablesCollectionInterface $variablesCollection): void
     {
-        $this->beConstructedWith(new ExpressionLanguage());
+        $this->beConstructedWith(new ExpressionLanguage(), $variablesCollection);
     }
 
     function it_is_initializable(): void
@@ -32,28 +33,49 @@ final class ArgumentParserSpec extends ObjectBehavior
 
     function it_parses_resource_argument_with_public_property(
         \stdClass $data,
+        VariablesCollectionInterface $variablesCollection,
     ): void {
         $data->code = 'xyz';
         $resource = new Resource(alias: 'app.book');
 
+        $variablesCollection->getVariables()->willReturn([]);
+
         $this->parseExpression('resource.code', $resource, $data)->shouldReturn('xyz');
     }
 
-    function it_parses_resource_argument_via_a_getter(): void
-    {
+    function it_parses_resource_argument_via_a_getter(
+        VariablesCollectionInterface $variablesCollection,
+    ): void {
         $data = new BoardGame('uid');
         $resource = new Resource(alias: 'app.board_game');
+
+        $variablesCollection->getVariables()->willReturn([]);
 
         $this->parseExpression('resource.id()', $resource, $data)->shouldReturn('uid');
     }
 
     function it_parses_resource_argument_with_resource_name(
         \stdClass $data,
+        VariablesCollectionInterface $variablesCollection,
     ): void {
         $data->code = 'xyz';
         $resource = new Resource(alias: 'app.book', name: 'book');
 
+        $variablesCollection->getVariables()->willReturn([]);
+
         $this->parseExpression('book.code', $resource, $data)->shouldReturn('xyz');
+    }
+
+    function it_merges_variables_collection_with_resource_name(
+        \stdClass $data,
+        VariablesCollectionInterface $variablesCollection,
+    ): void {
+        $data->code = 'xyz';
+        $resource = new Resource(alias: 'app.book', name: 'book');
+
+        $variablesCollection->getVariables()->willReturn(['expected_code' => 'xyz']);
+
+        $this->parseExpression('book.code === expected_code', $resource, $data)->shouldReturn(true);
     }
 }
 

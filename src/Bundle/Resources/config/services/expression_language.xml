@@ -37,6 +37,10 @@
             <argument type="tagged_iterator" tag="sylius.repository_variables" />
         </service>
 
+        <service id="sylius.expression_language.variables_collection.routing" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">
+            <argument type="tagged_iterator" tag="sylius.routing_variables" />
+        </service>
+
         <service id="sylius.expression_language.argument_parser.factory" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.resource_factory.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.factory"  />
