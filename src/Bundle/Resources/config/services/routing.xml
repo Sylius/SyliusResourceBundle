@@ -111,6 +111,7 @@
 
         <service id="sylius.routing.argument_parser" class="Sylius\Component\Resource\Symfony\Routing\ArgumentParser">
             <argument type="service" id="sylius.routing.expression_language" />
+            <argument type="service" id="sylius.expression_language.variables_collection.routing" />
         </service>
         <service id="Sylius\Component\Resource\Symfony\Routing\ArgumentParserInterface" alias="sylius.routing.argument_parser" />
 

@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Symfony\Routing;
 
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ArgumentParser implements ArgumentParserInterface
 {
-    public function __construct(private ExpressionLanguage $expressionLanguage)
-    {
+    public function __construct(
+        private ExpressionLanguage $expressionLanguage,
+        private VariablesCollectionInterface $variablesCollection,
+    ) {
     }
 
     public function parseExpression(string $expression, Resource $resource, mixed $data): mixed
@@ -29,9 +33,9 @@ final class ArgumentParser implements ArgumentParserInterface
 
     private function getVariables(Resource $resource, mixed $data): array
     {
-        $variables = [
+        $variables = array_merge($this->variablesCollection->getVariables(), [
             'resource' => $data,
-        ];
+        ]);
 
         $name = $resource->getName();
 
