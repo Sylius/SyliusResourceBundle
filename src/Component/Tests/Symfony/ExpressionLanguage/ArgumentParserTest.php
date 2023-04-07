@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Symfony\ExpressionLanguage;
 
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class ArgumentParserTest extends KernelTestCase
@@ -23,10 +24,12 @@ final class ArgumentParserTest extends KernelTestCase
 
         $container = static::getContainer();
 
-        $resourceFactoryArgumentParser = $container->get('sylius.expression_language.argument_parser.factory');
+        /** @var ArgumentParserInterface $argumentParser */
+        $argumentParser = $container->get('sylius.expression_language.argument_parser.factory');
 
-        $this->assertTrue($resourceFactoryArgumentParser->parseExpression('token.getUser() === null'));
-        $this->assertTrue($resourceFactoryArgumentParser->parseExpression('user === null'));
+        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
+        $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
+        $this->assertTrue($argumentParser->parseExpression('user === null'));
     }
 
     public function testRepositoryArgumentParser(): void
@@ -35,9 +38,23 @@ final class ArgumentParserTest extends KernelTestCase
 
         $container = static::getContainer();
 
-        $resourceFactoryArgumentParser = $container->get('sylius.expression_language.argument_parser.repository');
+        /** @var ArgumentParserInterface $argumentParser */
+        $argumentParser = $container->get('sylius.expression_language.argument_parser.repository');
 
-        $this->assertTrue($resourceFactoryArgumentParser->parseExpression('token.getUser() === null'));
-        $this->assertTrue($resourceFactoryArgumentParser->parseExpression('user === null'));
+        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
+        $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
+        $this->assertTrue($argumentParser->parseExpression('user === null'));
+    }
+
+    public function testRoutingArgumentParser(): void
+    {
+        self::bootKernel();
+
+        $container = static::getContainer();
+
+        /** @var ArgumentParserInterface $argumentParser */
+        $argumentParser = $container->get('sylius.expression_language.argument_parser.routing');
+
+        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
     }
 }
