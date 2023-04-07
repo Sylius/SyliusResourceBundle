@@ -23,8 +23,14 @@ final class ArgumentParser implements ArgumentParserInterface
     ) {
     }
 
-    public function parseExpression(string $expression): mixed
+    public function parseExpression(string $expression, array $variables = []): mixed
     {
-        return $this->expressionLanguage->evaluate($expression, $this->variablesCollection->getVariables());
+        return $this->expressionLanguage->evaluate(
+            $expression,
+            array_merge(
+                $this->variablesCollection->getVariables(),
+                $variables,
+            ),
+        );
     }
 }
