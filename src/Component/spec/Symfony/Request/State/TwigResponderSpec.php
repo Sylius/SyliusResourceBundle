@@ -20,11 +20,10 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
-use Sylius\Component\Resource\Symfony\Routing\ArgumentParser;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,9 +32,13 @@ use Twig\Environment;
 
 final class TwigResponderSpec extends ObjectBehavior
 {
-    function let(Environment $twig, RouterInterface $router, ContextFactoryInterface $contextFactory): void
-    {
-        $this->beConstructedWith(new RedirectHandler($router->getWrappedObject(), new ArgumentParser(new ExpressionLanguage())), $contextFactory, $twig);
+    function let(
+        Environment $twig,
+        RouterInterface $router,
+        ContextFactoryInterface $contextFactory,
+        ArgumentParserInterface $argumentParser,
+    ): void {
+        $this->beConstructedWith(new RedirectHandler($router->getWrappedObject(), $argumentParser->getWrappedObject()), $contextFactory, $twig);
     }
 
     function it_is_initializable(): void
@@ -100,6 +103,7 @@ final class TwigResponderSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributes,
         RouterInterface $router,
+        ArgumentParserInterface $argumentParser,
     ): void {
         $data->id = 'xyz';
         $request->attributes = $attributes;
@@ -108,6 +112,8 @@ final class TwigResponderSpec extends ObjectBehavior
 
         $resource = new Resource(alias: 'app.book', pluralName: 'books');
         $operation = (new Create(redirectToRoute: 'app_dummy_index'))->withResource($resource);
+
+        $argumentParser->parseExpression('resource.id', ['resource' => $data])->willReturn('xyz');
 
         $router->generate('app_dummy_index', ['id' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
 

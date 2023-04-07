@@ -109,15 +109,9 @@
         </service>
         <service id="Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface" alias="sylius.routing.factory.operation_route" />
 
-        <service id="sylius.routing.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
-
-        <service id="sylius.routing.argument_parser" class="Sylius\Component\Resource\Symfony\Routing\ArgumentParser">
-            <argument type="service" id="sylius.routing.expression_language" />
-        </service>
-
         <service id="sylius.routing.redirect_handler" class="Sylius\Component\Resource\Symfony\Routing\RedirectHandler">
             <argument type="service" id="router" />
-            <argument type="service" id="sylius.routing.argument_parser" />
+            <argument type="service" id="sylius.expression_language.argument_parser.routing" />
         </service>
     </services>
 </container>
