@@ -50,5 +50,10 @@
             <argument type="service" id="sylius.repository.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.repository"  />
         </service>
+
+        <service id="sylius.expression_language.argument_parser.routing" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser">
+            <argument type="service" id="sylius.routing.expression_language" />
+            <argument type="service" id="sylius.expression_language.variables_collection.routing"  />
+        </service>
     </services>
 </container>

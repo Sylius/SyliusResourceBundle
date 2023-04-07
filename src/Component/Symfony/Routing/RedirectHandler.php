@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -25,7 +26,7 @@ final class RedirectHandler
 {
     public function __construct(
         private RouterInterface $router,
-        private ArgumentParserInterface $routingArgumentParser,
+        private ArgumentParserInterface $argumentParser,
     ) {
     }
 
@@ -76,7 +77,14 @@ final class RedirectHandler
                 }
             }
 
-            $parameters[$key] = $this->routingArgumentParser->parseExpression($value, $resource, $data);
+            $variables = ['resource' => $data];
+            $resourceName = $resource->getName();
+
+            if (null !== $resourceName) {
+                $variables[$resourceName] = $data;
+            }
+
+            $parameters[$key] = $this->argumentParser->parseExpression($value, $variables);
         }
 
         return $parameters;

@@ -36,4 +36,11 @@ final class ArgumentParserSpec extends ObjectBehavior
 
         $this->parseExpression('foo')->shouldReturn('fighters');
     }
+
+    function it_merges_variables(VariablesCollectionInterface $variablesCollection): void
+    {
+        $variablesCollection->getVariables()->willReturn(['foo' => 'fighters']);
+
+        $this->parseExpression('foo', ['foo' => 'bar'])->shouldReturn('bar');
+    }
 }
