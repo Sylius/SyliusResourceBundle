@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 
-class ShowOperationRoutePathFactory implements OperationRoutePathFactoryInterface
+final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)
     {
