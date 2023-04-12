@@ -105,7 +105,7 @@ Configuration
 Operations
 ----------
 
- [INFO] This resource has no defined operations.                                                                        \n
+ [INFO] This resource has no defined operations.                                \n
 
 TXT
             , $display);
