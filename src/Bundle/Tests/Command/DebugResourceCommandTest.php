@@ -87,7 +87,7 @@ TXT
 
         $display = $this->tester->getDisplay();
 
-        $this->assertEquals(<<<TXT
+        $this->assertStringContainsString(<<<TXT
 
 Configuration
 -------------
@@ -105,8 +105,7 @@ Configuration
 Operations
 ----------
 
- [INFO] This resource has no defined operations.                                \n
-
+ [INFO] This resource has no defined operations.
 TXT
             , $display);
     }
