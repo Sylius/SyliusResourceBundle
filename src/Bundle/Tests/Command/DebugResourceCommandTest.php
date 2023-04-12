@@ -17,9 +17,15 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Symfony\Component\Console\Tester\CommandTester;
 
 final class DebugResourceCommandTest extends TestCase
@@ -28,13 +34,16 @@ final class DebugResourceCommandTest extends TestCase
 
     private ObjectProphecy $registry;
 
+    private ObjectProphecy $resourceCollectionMetadataFactory;
+
     private CommandTester $tester;
 
     public function setUp(): void
     {
         $this->registry = $this->prophesize(RegistryInterface::class);
+        $this->resourceCollectionMetadataFactory = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
 
-        $command = new DebugResourceCommand($this->registry->reveal());
+        $command = new DebugResourceCommand($this->registry->reveal(), $this->resourceCollectionMetadataFactory->reveal());
         $this->tester = new CommandTester($command);
     }
 
@@ -44,44 +53,113 @@ final class DebugResourceCommandTest extends TestCase
     public function it_lists_all_resources_if_no_argument_is_given(): void
     {
         $this->registry->getAll()->willReturn([$this->createMetadata('one'), $this->createMetadata('two')]);
+
         $this->tester->execute([]);
         $display = $this->tester->getDisplay();
 
-        $this->assertEquals(<<<'EOT'
-+------------+
-| Alias      |
-+------------+
-| sylius.one |
-| sylius.two |
-+------------+
+        $this->assertEquals(<<<TXT
+ ------------ 
+  Alias       
+ ------------ 
+  sylius.one  
+  sylius.two  
+ ------------ 
 
-EOT
+
+TXT
             , $display);
     }
 
     /**
      * @test
      */
-    public function it_displays_the_metadata_for_given_resource_alias(): void
+    public function it_displays_the_metadata_for_given_resource_alias_without_operations(): void
     {
         $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+
+        $resourceMetadataCollection = new ResourceMetadataCollection();
+
+        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+
         $this->tester->execute([
             'resource' => 'metadata.one',
         ]);
 
         $display = $this->tester->getDisplay();
 
-        $this->assertEquals(<<<'EOT'
-+------------------------------+-----------------+
-| name                         | one             |
-| application                  | sylius          |
-| driver                       | doctrine/foobar |
-| classes.foo                  | bar             |
-| classes.bar                  | foo             |
-| whatever.something.elephants | camels          |
-+------------------------------+-----------------+
+        $this->assertEquals(<<<TXT
 
-EOT
+Configuration
+-------------
+
+ ------------------------------ ----------------- 
+  name                           one              
+  application                    sylius           
+  driver                         doctrine/foobar  
+  classes.model                  App\One          
+  classes.foo                    bar              
+  classes.bar                    foo              
+  whatever.something.elephants   camels           
+ ------------------------------ ----------------- 
+
+Operations
+----------
+
+ [INFO] This resource has no defined operations.                                                                        \n
+
+TXT
+            , $display);
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_the_metadata_for_given_resource_alias_with_operations(): void
+    {
+        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+
+        $resourceMetadata = (new Resource())->withOperations(new Operations([
+            new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
+            new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
+        ]));
+
+        $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
+
+        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+
+        $this->tester->execute([
+            'resource' => 'metadata.one',
+        ]);
+
+        $display = $this->tester->getDisplay();
+
+        $this->assertEquals(<<<TXT
+
+Configuration
+-------------
+
+ ------------------------------ ----------------- 
+  name                           one              
+  application                    sylius           
+  driver                         doctrine/foobar  
+  classes.model                  App\One          
+  classes.foo                    bar              
+  classes.bar                    foo              
+  whatever.something.elephants   camels           
+ ------------------------------ ----------------- 
+
+Operations
+----------
+
+ ---------------- ------------------------ ------------------------ 
+  Name             Provider                 Processor               
+ ---------------- ------------------------ ------------------------ 
+  app_one_index    App\GetOneItemProvider                           
+  app_one_create                            App\CreateOneProcessor  
+ ---------------- ------------------------ ------------------------ 
+
+
+TXT
             , $display);
     }
 
@@ -116,6 +194,7 @@ EOT
         $metadata = Metadata::fromAliasAndConfiguration(sprintf('sylius.%s', $suffix), [
             'driver' => 'doctrine/foobar',
             'classes' => [
+                'model' => 'App\\' . ucfirst($suffix),
                 'foo' => 'bar',
                 'bar' => 'foo',
             ],

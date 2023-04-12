@@ -14,22 +14,24 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Command;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class DebugResourceCommand extends Command
 {
-    private RegistryInterface $registry;
-
-    public function __construct(RegistryInterface $registry)
-    {
+    public function __construct(
+        private RegistryInterface $registry,
+        private ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+    ) {
         parent::__construct();
-
-        $this->registry = $registry;
     }
 
     public function configure(): void
@@ -40,7 +42,7 @@ final class DebugResourceCommand extends Command
             <<<'EOT'
 List or show resource metadata.
 
-To list run the command without an agrument:
+To list run the command without an argument:
 
     $ php %command.full_name%
 
@@ -57,8 +59,10 @@ EOT
         /** @var string|null $resource */
         $resource = $input->getArgument('resource');
 
+        $ui = new SymfonyStyle($input, $output);
+
         if (null === $resource) {
-            $this->listResources($output);
+            $this->listResources($ui);
 
             return 0;
         }
@@ -69,31 +73,31 @@ EOT
             $metadata = $this->registry->getByClass($resource);
         }
 
-        $this->debugResource($metadata, $output);
+        $this->debugResource($metadata, $ui);
 
         return 0;
     }
 
-    private function listResources(OutputInterface $output): void
+    private function listResources(SymfonyStyle $ui): void
     {
         /** @var iterable<MetadataInterface> $resources */
         $resources = $this->registry->getAll();
         $resources = is_array($resources) ? $resources : iterator_to_array($resources);
         ksort($resources);
 
-        $table = new Table($output);
-        $table->setHeaders(['Alias']);
+        $rows = [];
 
         foreach ($resources as $resource) {
-            $table->addRow([$resource->getAlias()]);
+            $rows[] = [$resource->getAlias()];
         }
 
-        $table->render();
+        $ui->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, OutputInterface $output): void
+    private function debugResource(MetadataInterface $metadata, SymfonyStyle $ui): void
     {
-        $table = new Table($output);
+        $ui->section('Configuration');
+
         $information = [
             'name' => $metadata->getName(),
             'application' => $metadata->getApplicationName(),
@@ -106,17 +110,53 @@ EOT
             $information[$key] = $value;
         }
 
+        $rows = [];
         foreach ($information as $key => $value) {
-            $table->addRow([$key, $value]);
+            $rows[] = [$key, $value];
         }
 
-        $table->render();
+        $ui->table([], $rows);
+
+        $this->debugResourceCollectionOperation($metadata, $ui);
     }
 
-    /**
-     * @param string $prefix
-     */
-    private function flattenParameters(array $parameters, array $flattened = [], $prefix = ''): array
+    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $ui): void
+    {
+        $ui->section('Operations');
+
+        $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
+
+        $rows = [];
+
+        /** @var ResourceMetadata $resourceMetadata */
+        foreach ($resourceMetadataCollection as $resourceMetadata) {
+            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows);
+        }
+
+        if ($rows === []) {
+            $ui->info('This resource has no defined operations.');
+
+            return;
+        }
+
+        $ui->table(['Name', 'Provider', 'Processor'], $rows);
+    }
+
+    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows): array
+    {
+        /** @var Operation $operation */
+        foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
+            $rows[] = [
+                $operation->getName(),
+                $operation->getProvider(),
+                $operation->getProcessor(),
+            ];
+        }
+
+        return $rows;
+    }
+
+    private function flattenParameters(array $parameters, array $flattened = [], string $prefix = ''): array
     {
         foreach ($parameters as $key => $value) {
             if (is_array($value)) {
