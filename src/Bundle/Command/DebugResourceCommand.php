@@ -59,22 +59,22 @@ EOT
         /** @var string|null $resource */
         $resource = $input->getArgument('resource');
 
-        $ui = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
         if (null === $resource) {
-            $this->listResources($ui);
+            $this->listResources($io);
 
             return 0;
         }
 
         $metadata = $this->registry->get($resource);
 
-        $this->debugResource($metadata, $ui);
+        $this->debugResource($metadata, $io);
 
         return 0;
     }
 
-    private function listResources(SymfonyStyle $ui): void
+    private function listResources(SymfonyStyle $io): void
     {
         /** @var iterable<MetadataInterface> $resources */
         $resources = $this->registry->getAll();
@@ -87,12 +87,12 @@ EOT
             $rows[] = [$resource->getAlias()];
         }
 
-        $ui->table(['Alias'], $rows);
+        $io->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, SymfonyStyle $ui): void
+    private function debugResource(MetadataInterface $metadata, SymfonyStyle $io): void
     {
-        $ui->section('Configuration');
+        $io->section('Configuration');
 
         $information = [
             'name' => $metadata->getName(),
@@ -111,14 +111,14 @@ EOT
             $rows[] = [$key, $value];
         }
 
-        $ui->table([], $rows);
+        $io->table([], $rows);
 
-        $this->debugResourceCollectionOperation($metadata, $ui);
+        $this->debugResourceCollectionOperation($metadata, $io);
     }
 
-    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $ui): void
+    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io): void
     {
-        $ui->section('Operations');
+        $io->section('Operations');
 
         $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
 
@@ -130,12 +130,12 @@ EOT
         }
 
         if ($rows === []) {
-            $ui->info('This resource has no defined operations.');
+            $io->info('This resource has no defined operations.');
 
             return;
         }
 
-        $ui->table(['Name', 'Provider', 'Processor'], $rows);
+        $io->table(['Name', 'Provider', 'Processor'], $rows);
     }
 
     private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows): array
