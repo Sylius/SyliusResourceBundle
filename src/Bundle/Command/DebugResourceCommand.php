@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 final class DebugResourceCommand extends Command
 {
@@ -175,12 +176,17 @@ EOT
 
     private function operationToArray(Operation $operation): array
     {
+        $accessor = PropertyAccess::createPropertyAccessor();
         $reflection = new \ReflectionClass($operation);
 
         $values = [];
 
-        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $property) {
-            $values[$property->getName()] = $property->getValue($operation);
+        foreach ($reflection->getProperties() as $property) {
+            $propertyName = $property->getName();
+
+            if ($accessor->isReadable($operation, $propertyName)) {
+                $values[$property->getName()] = $accessor->getValue($operation, $propertyName);
+            }
         }
 
         return $values;
