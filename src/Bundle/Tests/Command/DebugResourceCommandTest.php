@@ -57,17 +57,20 @@ final class DebugResourceCommandTest extends TestCase
         $this->tester->execute([]);
         $display = $this->tester->getDisplay();
 
-        $this->assertEquals(<<<TXT
- ------------ 
-  Alias       
- ------------ 
-  sylius.one  
-  sylius.two  
- ------------ 
-
-
-TXT
-            , $display);
+        $this->assertEquals(
+            <<<TXT
+             ------------ 
+              Alias       
+             ------------ 
+              sylius.one  
+              sylius.two  
+             ------------ 
+            
+            
+            TXT
+            ,
+            $display,
+        );
     }
 
     /**
@@ -87,27 +90,7 @@ TXT
 
         $display = $this->tester->getDisplay();
 
-        $this->assertStringContainsString(<<<TXT
-
-Configuration
--------------
-
- ------------------------------ ----------------- 
-  name                           one              
-  application                    sylius           
-  driver                         doctrine/foobar  
-  classes.model                  App\One          
-  classes.foo                    bar              
-  classes.bar                    foo              
-  whatever.something.elephants   camels           
- ------------------------------ ----------------- 
-
-Operations
-----------
-
- [INFO] This resource has no defined operations.
-TXT
-            , $display);
+        $this->assertStringContainsString('[INFO] This resource has no defined operations.', $display);
     }
 
     /**
@@ -132,34 +115,102 @@ TXT
 
         $display = $this->tester->getDisplay();
 
-        $this->assertEquals(<<<TXT
+        $this->assertEquals(
+            <<<TXT
 
-Configuration
--------------
-
- ------------------------------ ----------------- 
-  name                           one              
-  application                    sylius           
-  driver                         doctrine/foobar  
-  classes.model                  App\One          
-  classes.foo                    bar              
-  classes.bar                    foo              
-  whatever.something.elephants   camels           
- ------------------------------ ----------------- 
-
-Operations
-----------
-
- ---------------- ------------------------ ------------------------ 
-  Name             Provider                 Processor               
- ---------------- ------------------------ ------------------------ 
-  app_one_index    App\GetOneItemProvider                           
-  app_one_create                            App\CreateOneProcessor  
- ---------------- ------------------------ ------------------------ 
-
-
-TXT
-            , $display);
+            Configuration
+            -------------
+            
+             ------------------------------ ----------------- 
+              name                           one              
+              application                    sylius           
+              driver                         doctrine/foobar  
+              classes.model                  App\One          
+              classes.foo                    bar              
+              classes.bar                    foo              
+              whatever.something.elephants   camels           
+             ------------------------------ ----------------- 
+            
+            Operations
+            ----------
+            
+             ---------------- -------------------------------------------- 
+              Name             Options                                     
+             ---------------- -------------------------------------------- 
+              app_one_index    [                                           
+                                 "methods" => [                            
+                                   "GET"                                   
+                                 ],                                        
+                                 "path" => null,                           
+                                 "routeName" => null,                      
+                                 "routePrefix" => null,                    
+                                 "redirectToRoute" => null,                
+                                 "redirectArguments" => null,              
+                                 "provider" => "App\GetOneItemProvider",   
+                                 "processor" => null,                      
+                                 "responder" => null,                      
+                                 "repository" => null,                     
+                                 "template" => null,                       
+                                 "shortName" => "index",                   
+                                 "name" => "app_one_index",                
+                                 "repositoryMethod" => null,               
+                                 "grid" => null,                           
+                                 "read" => null,                           
+                                 "write" => null,                          
+                                 "validate" => null,                       
+                                 "deserialize" => null,                    
+                                 "serialize" => null,                      
+                                 "formType" => null,                       
+                                 "formOptions" => null,                    
+                                 "normalizationContext" => null,           
+                                 "denormalizationContext" => null,         
+                                 "validationContext" => null,              
+                                 "eventShortName" => null                  
+                               ]                                           
+              app_one_create   [                                           
+                                 "factory" => null,                        
+                                 "factoryMethod" => null,                  
+                                 "factoryArguments" => [],                 
+                                 "stateMachineComponent" => null,          
+                                 "stateMachineTransition" => null,         
+                                 "stateMachineGraph" => null,              
+                                 "methods" => [                            
+                                   "GET",                                  
+                                   "POST"                                  
+                                 ],                                        
+                                 "path" => null,                           
+                                 "routeName" => null,                      
+                                 "routePrefix" => null,                    
+                                 "redirectToRoute" => null,                
+                                 "redirectArguments" => null,              
+                                 "provider" => null,                       
+                                 "processor" => "App\CreateOneProcessor",  
+                                 "responder" => null,                      
+                                 "repository" => null,                     
+                                 "template" => null,                       
+                                 "shortName" => "create",                  
+                                 "name" => "app_one_create",               
+                                 "repositoryMethod" => null,               
+                                 "grid" => null,                           
+                                 "read" => null,                           
+                                 "write" => null,                          
+                                 "validate" => null,                       
+                                 "deserialize" => null,                    
+                                 "serialize" => null,                      
+                                 "formType" => null,                       
+                                 "formOptions" => null,                    
+                                 "normalizationContext" => null,           
+                                 "denormalizationContext" => null,         
+                                 "validationContext" => null,              
+                                 "eventShortName" => null                  
+                               ]                                           
+             ---------------- -------------------------------------------- 
+            
+            
+            TXT
+            ,
+            $display,
+        );
     }
 
     /**
@@ -190,7 +241,7 @@ EOT
 
     private function createMetadata(string $suffix): MetadataInterface
     {
-        $metadata = Metadata::fromAliasAndConfiguration(sprintf('sylius.%s', $suffix), [
+        return Metadata::fromAliasAndConfiguration(sprintf('sylius.%s', $suffix), [
             'driver' => 'doctrine/foobar',
             'classes' => [
                 'model' => 'App\\' . ucfirst($suffix),
@@ -203,7 +254,5 @@ EOT
                 ],
             ],
         ]);
-
-        return $metadata;
     }
 }

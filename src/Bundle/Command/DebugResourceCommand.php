@@ -20,6 +20,7 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +62,8 @@ EOT
 
         $io = new SymfonyStyle($input, $output);
 
+        $dumper = new Dumper($output);
+
         if (null === $resource) {
             $this->listResources($io);
 
@@ -73,7 +76,7 @@ EOT
             $metadata = $this->registry->getByClass($resource);
         }
 
-        $this->debugResource($metadata, $io);
+        $this->debugResource($metadata, $io, $dumper);
 
         return 0;
     }
@@ -94,7 +97,7 @@ EOT
         $io->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, SymfonyStyle $io): void
+    private function debugResource(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('Configuration');
 
@@ -117,10 +120,10 @@ EOT
 
         $io->table([], $rows);
 
-        $this->debugResourceCollectionOperation($metadata, $io);
+        $this->debugResourceCollectionOperation($metadata, $io, $dumper);
     }
 
-    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io): void
+    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('Operations');
 
@@ -130,7 +133,7 @@ EOT
 
         /** @var ResourceMetadata $resourceMetadata */
         foreach ($resourceMetadataCollection as $resourceMetadata) {
-            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows);
+            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows, $dumper);
         }
 
         if ($rows === []) {
@@ -139,17 +142,16 @@ EOT
             return;
         }
 
-        $io->table(['Name', 'Provider', 'Processor'], $rows);
+        $io->table(['Name', 'Options'], $rows);
     }
 
-    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows): array
+    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, Dumper $dumper): array
     {
         /** @var Operation $operation */
         foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
             $rows[] = [
                 $operation->getName(),
-                $operation->getProvider(),
-                $operation->getProcessor(),
+                $dumper($this->operationToArray($operation)),
             ];
         }
 
@@ -169,5 +171,18 @@ EOT
         }
 
         return $flattened;
+    }
+
+    private function operationToArray(Operation $operation): array
+    {
+        $reflection = new \ReflectionClass($operation);
+
+        $values = [];
+
+        foreach ($reflection->getProperties() as $property) {
+            $values[$property->getName()] = $property->getValue($operation);
+        }
+
+        return $values;
     }
 }

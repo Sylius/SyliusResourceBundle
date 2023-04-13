@@ -50,8 +50,6 @@ abstract class Operation
         protected ?bool $serialize = null,
         protected ?string $formType = null,
         protected ?array $formOptions = null,
-        protected ?string $resourceName = null,
-        protected ?string $resourcePluralName = null,
         protected ?array $normalizationContext = null,
         protected ?array $denormalizationContext = null,
         protected ?array $validationContext = null,
