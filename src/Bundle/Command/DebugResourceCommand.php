@@ -175,7 +175,7 @@ EOT
 
         $values = [];
 
-        foreach ($reflection->getProperties() as $property) {
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $property) {
             $values[$property->getName()] = $property->getValue($operation);
         }
 
