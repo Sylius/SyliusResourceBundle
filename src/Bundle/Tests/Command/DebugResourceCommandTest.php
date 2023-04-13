@@ -168,6 +168,12 @@ final class DebugResourceCommandTest extends TestCase
                                  "eventShortName" => null                  
                                ]                                           
               app_one_create   [                                           
+                                 "factory" => null,                        
+                                 "factoryMethod" => null,                  
+                                 "factoryArguments" => [],                 
+                                 "stateMachineComponent" => null,          
+                                 "stateMachineTransition" => null,         
+                                 "stateMachineGraph" => null,              
                                  "methods" => [                            
                                    "GET",                                  
                                    "POST"                                  
