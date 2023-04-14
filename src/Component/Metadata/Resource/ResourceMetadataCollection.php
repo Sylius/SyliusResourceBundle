@@ -32,8 +32,8 @@ final class ResourceMetadataCollection extends \ArrayObject
 
         throw new \RuntimeException(sprintf(
             'Operation "%s" for "%s" resource was not found.',
-            $resourceAlias,
             $name,
+            $resourceAlias,
         ));
     }
 }
