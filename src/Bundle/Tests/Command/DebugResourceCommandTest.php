@@ -117,19 +117,29 @@ final class DebugResourceCommandTest extends TestCase
 
         $this->assertEquals(
             <<<TXT
-
+            
             Configuration
             -------------
             
-             ------------------------------ ----------------- 
-              name                           one              
-              application                    sylius           
-              driver                         doctrine/foobar  
-              classes.model                  App\One          
-              classes.foo                    bar              
-              classes.bar                    foo              
-              whatever.something.elephants   camels           
-             ------------------------------ ----------------- 
+             ----------------------- ----------------------------- 
+              Option                  Value                        
+             ----------------------- ----------------------------- 
+              name                    "one"                        
+              applicationName         "sylius"                     
+              driver                  "doctrine/foobar"            
+              stateMachineComponent   null                         
+              templatesNamespace      null                         
+              classes                 [                            
+                                        "model" => "App\One",      
+                                        "foo" => "bar",            
+                                        "bar" => "foo"             
+                                      ]                            
+              whatever                [                            
+                                        "something" => [           
+                                          "elephants" => "camels"  
+                                        ]                          
+                                      ]                            
+             ----------------------- ----------------------------- 
             
             New Resource Metadata
             ---------------------
@@ -137,21 +147,21 @@ final class DebugResourceCommandTest extends TestCase
              ------------------------ ------- 
               Option                   Value  
              ------------------------ ------- 
-              alias                           
-              section                         
-              formType                        
-              templatesDir                    
-              routePrefix                     
-              name                            
-              pluralName                      
-              applicationName                 
-              identifier                      
-              normalizationContext            
-              denormalizationContext          
-              validationContext               
-              class                           
+              alias                    null   
+              section                  null   
+              formType                 null   
+              templatesDir             null   
+              routePrefix              null   
+              name                     null   
+              pluralName               null   
+              applicationName          null   
+              identifier               null   
+              normalizationContext     null   
+              denormalizationContext   null   
+              validationContext        null   
+              class                    null   
              ------------------------ ------- 
-
+            
             New operations
             --------------
             

@@ -115,8 +115,6 @@ final class RegisterStateMachinePass implements CompilerPassInterface
     {
         if (!$this->isSymfonyWorkflowEnabled($container)) {
             if (class_exists(SymfonyWorkflow::class)) {
-                return;
-
                 throw new \LogicException('You can not use "Symfony" for your state machine if it is not enabled on framework bundle.');
             }
 
