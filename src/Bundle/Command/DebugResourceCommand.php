@@ -54,6 +54,7 @@ To show the metadata for a resource, pass its alias:
 EOT
         );
         $this->addArgument('resource', InputArgument::OPTIONAL, 'Resource to debug');
+        $this->addArgument('operation', InputArgument::OPTIONAL, 'Operation to debug');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): ?int
@@ -68,7 +69,7 @@ EOT
         if (null === $resource) {
             $this->listResources($io);
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         if (str_contains($resource, '.')) {
@@ -77,9 +78,21 @@ EOT
             $metadata = $this->registry->getByClass($resource);
         }
 
-        $this->debugResource($metadata, $io, $dumper);
+        $resourceMetadataCollection = $this->getResourceMetadataCollection($metadata);
 
-        return 0;
+        $operationName = $input->getArgument('operation');
+
+        if (null !== $operationName) {
+            $operation = $resourceMetadataCollection->getOperation($metadata->getAlias(), $operationName);
+
+            $this->debugOperation($operation, $io, $dumper);
+
+            return Command::SUCCESS;
+        }
+
+        $this->debugResource($metadata, $resourceMetadataCollection, $input, $io, $dumper);
+
+        return Command::SUCCESS;
     }
 
     private function listResources(SymfonyStyle $io): void
@@ -98,7 +111,7 @@ EOT
         $io->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
+    private function debugResource(MetadataInterface $metadata, ResourceMetadata\ResourceMetadataCollection $resourceMetadataCollection, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('Configuration');
 
@@ -112,16 +125,36 @@ EOT
 
         $io->table(['Option', 'Value'], $rows);
 
-        $this->debugNewResourceMetadata($metadata, $io, $dumper);
+        $resourceMetadataCollection = $this->getResourceMetadataCollection($metadata);
 
-        $this->debugResourceCollectionOperation($metadata, $io, $dumper);
+        $this->debugNewResourceMetadata($resourceMetadataCollection, $io, $dumper);
+
+        $this->debugResourceCollectionOperation($metadata, $input, $io, $dumper);
     }
 
-    private function debugNewResourceMetadata(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
+    private function getResourceMetadataCollection(MetadataInterface $resourceConfiguration): ResourceMetadata\ResourceMetadataCollection
+    {
+        return $this->resourceMetadataCollectionFactory->create($resourceConfiguration->getClass('model'));
+    }
+
+    private function debugOperation(Operation $operation, SymfonyStyle $io, Dumper $dumper): void
+    {
+        $io->section('Operation Metadata');
+
+        $values = $this->operationToArray($operation);
+
+        $rows = [];
+
+        foreach ($values as $key => $value) {
+            $rows[] = [$key, $dumper($value)];
+        }
+
+        $io->table(['Option', 'Value'], $rows);
+    }
+
+    private function debugNewResourceMetadata(ResourceMetadata\ResourceMetadataCollection $resourceMetadataCollection, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('New Resource Metadata');
-
-        $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
 
         if (0 === $resourceMetadataCollection->count()) {
             $io->info('This resource has no new metadata.');
@@ -142,7 +175,7 @@ EOT
         }
     }
 
-    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
+    private function debugResourceCollectionOperation(MetadataInterface $metadata, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('New operations');
 
@@ -152,7 +185,7 @@ EOT
 
         /** @var ResourceMetadata $resourceMetadata */
         foreach ($resourceMetadataCollection as $resourceMetadata) {
-            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows, $dumper);
+            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows, $input);
         }
 
         if ($rows === []) {
@@ -161,15 +194,21 @@ EOT
             return;
         }
 
-        $io->table(['Name'], $rows);
+        $io->table(['Name', 'Details'], $rows);
     }
 
-    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, Dumper $dumper): array
+    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, InputInterface $input): array
     {
         /** @var Operation $operation */
         foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
             $rows[] = [
                 $operation->getName(),
+                sprintf(
+                    '<comment>bin/console %s %s %s</comment>',
+                    $this->getName() ?? '',
+                    $input->getArgument('resource'),
+                    $operation->getName() ?? '',
+                ),
             ];
         }
 
@@ -193,6 +232,11 @@ EOT
         unset($values['operations']);
 
         return $values;
+    }
+
+    private function operationToArray(Operation $operation): array
+    {
+        return $this->objectToArray($operation);
     }
 
     private function objectToArray(object $object): array
