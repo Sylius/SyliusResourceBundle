@@ -75,6 +75,7 @@ EOT
         $metadata = $this->registry->get($resource);
         $resourceMetadataCollection = $this->getResourceMetadataCollection($metadata);
 
+        /** @var string|null $operationName */
         $operationName = $input->getArgument('operation');
 
         if (null !== $operationName) {
@@ -194,6 +195,9 @@ EOT
 
     private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, InputInterface $input): array
     {
+        /** @var string $resourceName */
+        $resourceName = $input->getArgument('resource');
+
         /** @var Operation $operation */
         foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
             $rows[] = [
@@ -201,7 +205,7 @@ EOT
                 sprintf(
                     '<comment>bin/console %s %s %s</comment>',
                     $this->getName() ?? '',
-                    $input->getArgument('resource'),
+                    $resourceName,
                     $operation->getName() ?? '',
                 ),
             ];
