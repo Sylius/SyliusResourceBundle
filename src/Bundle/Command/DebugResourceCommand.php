@@ -116,17 +116,44 @@ EOT
 
         $rows = [];
         foreach ($information as $key => $value) {
-            $rows[] = [$key, $value];
+            $rows[] = ['<comment>' . $key . '</comment>', $value];
         }
 
         $io->table([], $rows);
 
+        $this->debugNewResourceMetadata($metadata, $io, $dumper);
+
         $this->debugResourceCollectionOperation($metadata, $io, $dumper);
+    }
+
+    private function debugNewResourceMetadata(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
+    {
+        $io->section('New Resource Metadata');
+
+        $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
+
+        if (0 === $resourceMetadataCollection->count()) {
+            $io->info('This resource has no new metadata.');
+
+            return;
+        }
+
+        /** @var ResourceMetadata $resourceMetadata */
+        foreach ($resourceMetadataCollection as $resourceMetadata) {
+            $rows = [];
+
+            $values = $this->resourceToArray($resourceMetadata);
+            foreach ($values as $key => $value) {
+                $rows[] = ['<comment>' . $key . '</comment>', $value];
+            }
+
+            $io->table(['Option', 'Value'], $rows);
+        }
     }
 
     private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
     {
-        $io->section('Operations');
+        $io->section('New operations');
 
         $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
 
@@ -143,7 +170,7 @@ EOT
             return;
         }
 
-        $io->table(['Name', 'Options'], $rows);
+        $io->table(['Name'], $rows);
     }
 
     private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, Dumper $dumper): array
@@ -152,7 +179,6 @@ EOT
         foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
             $rows[] = [
                 $operation->getName(),
-                $dumper($this->operationToArray($operation)),
             ];
         }
 
@@ -174,20 +200,22 @@ EOT
         return $flattened;
     }
 
-    private function operationToArray(Operation $operation): array
+    private function resourceToArray(ResourceMetadata $resource): array
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $reflection = new \ReflectionClass($operation);
+        $reflection = new \ReflectionClass($resource);
 
         $values = [];
 
         foreach ($reflection->getProperties() as $property) {
             $propertyName = $property->getName();
 
-            if ($accessor->isReadable($operation, $propertyName)) {
-                $values[$property->getName()] = $accessor->getValue($operation, $propertyName);
+            if ($accessor->isReadable($resource, $propertyName)) {
+                $values[$property->getName()] = $accessor->getValue($resource, $propertyName);
             }
         }
+
+        unset($values['operations']);
 
         return $values;
     }
