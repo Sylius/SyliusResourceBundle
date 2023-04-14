@@ -131,80 +131,36 @@ final class DebugResourceCommandTest extends TestCase
               whatever.something.elephants   camels           
              ------------------------------ ----------------- 
             
-            Operations
-            ----------
+            New Resource Metadata
+            ---------------------
             
-             ---------------- -------------------------------------------- 
-              Name             Options                                     
-             ---------------- -------------------------------------------- 
-              app_one_index    [                                           
-                                 "methods" => [                            
-                                   "GET"                                   
-                                 ],                                        
-                                 "path" => null,                           
-                                 "routeName" => null,                      
-                                 "routePrefix" => null,                    
-                                 "redirectToRoute" => null,                
-                                 "redirectArguments" => null,              
-                                 "provider" => "App\GetOneItemProvider",   
-                                 "processor" => null,                      
-                                 "responder" => null,                      
-                                 "repository" => null,                     
-                                 "template" => null,                       
-                                 "shortName" => "index",                   
-                                 "name" => "app_one_index",                
-                                 "repositoryMethod" => null,               
-                                 "grid" => null,                           
-                                 "read" => null,                           
-                                 "write" => null,                          
-                                 "validate" => null,                       
-                                 "deserialize" => null,                    
-                                 "serialize" => null,                      
-                                 "formType" => null,                       
-                                 "formOptions" => null,                    
-                                 "normalizationContext" => null,           
-                                 "denormalizationContext" => null,         
-                                 "validationContext" => null,              
-                                 "eventShortName" => null                  
-                               ]                                           
-              app_one_create   [                                           
-                                 "factory" => null,                        
-                                 "factoryMethod" => null,                  
-                                 "factoryArguments" => [],                 
-                                 "stateMachineComponent" => null,          
-                                 "stateMachineTransition" => null,         
-                                 "stateMachineGraph" => null,              
-                                 "methods" => [                            
-                                   "GET",                                  
-                                   "POST"                                  
-                                 ],                                        
-                                 "path" => null,                           
-                                 "routeName" => null,                      
-                                 "routePrefix" => null,                    
-                                 "redirectToRoute" => null,                
-                                 "redirectArguments" => null,              
-                                 "provider" => null,                       
-                                 "processor" => "App\CreateOneProcessor",  
-                                 "responder" => null,                      
-                                 "repository" => null,                     
-                                 "template" => null,                       
-                                 "shortName" => "create",                  
-                                 "name" => "app_one_create",               
-                                 "repositoryMethod" => null,               
-                                 "grid" => null,                           
-                                 "read" => null,                           
-                                 "write" => null,                          
-                                 "validate" => null,                       
-                                 "deserialize" => null,                    
-                                 "serialize" => null,                      
-                                 "formType" => null,                       
-                                 "formOptions" => null,                    
-                                 "normalizationContext" => null,           
-                                 "denormalizationContext" => null,         
-                                 "validationContext" => null,              
-                                 "eventShortName" => null                  
-                               ]                                           
-             ---------------- -------------------------------------------- 
+             ------------------------ ------- 
+              Option                   Value  
+             ------------------------ ------- 
+              alias                           
+              section                         
+              formType                        
+              templatesDir                    
+              routePrefix                     
+              name                            
+              pluralName                      
+              applicationName                 
+              identifier                      
+              normalizationContext            
+              denormalizationContext          
+              validationContext               
+              class                           
+             ------------------------ ------- 
+
+            New operations
+            --------------
+            
+             ---------------- 
+              Name            
+             ---------------- 
+              app_one_index   
+              app_one_create  
+             ---------------- 
             
             
             TXT
