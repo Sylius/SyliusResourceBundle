@@ -102,24 +102,15 @@ EOT
     {
         $io->section('Configuration');
 
-        $information = [
-            'name' => $metadata->getName(),
-            'application' => $metadata->getApplicationName(),
-            'driver' => $metadata->getDriver(),
-        ];
-
-        $parameters = $this->flattenParameters($metadata->getParameters());
-
-        foreach ($parameters as $key => $value) {
-            $information[$key] = $value;
-        }
+        $values = $this->configurationToArray($metadata);
 
         $rows = [];
-        foreach ($information as $key => $value) {
-            $rows[] = ['<comment>' . $key . '</comment>', $value];
+
+        foreach ($values as $key => $value) {
+            $rows[] = [$key, $dumper($value)];
         }
 
-        $io->table([], $rows);
+        $io->table(['Option', 'Value'], $rows);
 
         $this->debugNewResourceMetadata($metadata, $io, $dumper);
 
@@ -144,7 +135,7 @@ EOT
 
             $values = $this->resourceToArray($resourceMetadata);
             foreach ($values as $key => $value) {
-                $rows[] = ['<comment>' . $key . '</comment>', $value];
+                $rows[] = [$key, $dumper($value)];
             }
 
             $io->table(['Option', 'Value'], $rows);
@@ -185,37 +176,39 @@ EOT
         return $rows;
     }
 
-    private function flattenParameters(array $parameters, array $flattened = [], string $prefix = ''): array
+    private function configurationToArray(MetadataInterface $metadata): array
     {
-        foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                $flattened = $this->flattenParameters($value, $flattened, $prefix . $key . '.');
+        $values = $this->objectToArray($metadata);
 
-                continue;
-            }
+        $values = array_merge($values, $values['parameters']);
+        unset($values['parameters']);
 
-            $flattened[$prefix . $key] = $value;
-        }
-
-        return $flattened;
+        return $values;
     }
 
     private function resourceToArray(ResourceMetadata $resource): array
     {
+        $values = $this->objectToArray($resource);
+
+        unset($values['operations']);
+
+        return $values;
+    }
+
+    private function objectToArray(object $object): array
+    {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $reflection = new \ReflectionClass($resource);
+        $reflection = new \ReflectionClass($object);
 
         $values = [];
 
         foreach ($reflection->getProperties() as $property) {
             $propertyName = $property->getName();
 
-            if ($accessor->isReadable($resource, $propertyName)) {
-                $values[$property->getName()] = $accessor->getValue($resource, $propertyName);
+            if ($accessor->isReadable($object, $propertyName)) {
+                $values[$property->getName()] = $accessor->getValue($object, $propertyName);
             }
         }
-
-        unset($values['operations']);
 
         return $values;
     }
