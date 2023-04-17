@@ -54,8 +54,10 @@ final class MakeResource extends AbstractMaker
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
+        /** @var string $class */
         $class = $input->getArgument('class');
 
+        /** @var string $namespace */
         $namespace = $input->getOption('namespace');
         $namespace = \trim($namespace, '\\');
 

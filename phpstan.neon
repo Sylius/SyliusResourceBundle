@@ -25,6 +25,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/test/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
+        - %currentWorkingDirectory%/src/Component/Symfony/Bundle/Resources/config/skeleton/*
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 
