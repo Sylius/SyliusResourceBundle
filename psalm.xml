@@ -14,6 +14,7 @@
             <directory name="src/Bundle/Tests" />
             <directory name="src/Component/spec" />
             <directory name="src/Component/vendor" />
+            <directory name="src/Component/Symfony/Bundle/Resources/config/skeleton" />
             <file name="src/Bundle/Controller/ControllerTrait.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
@@ -160,6 +161,7 @@
                 <file name="src/Component/Tests/Reflection/ClassInfoTraitTest.php" />
                 <file name="src/Component/Tests/Reflection/ClassReflectionTest.php" />
                 <file name="src/Component/Tests/Symfony/ExpressionLanguage/ArgumentParserTest.php" />
+                <file name="src/Component/Tests/Symfony/Maker/MakeResourceTest.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
