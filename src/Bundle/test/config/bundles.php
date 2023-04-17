@@ -21,6 +21,7 @@ use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Sylius\Bundle\GridBundle\SyliusGridBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
@@ -39,4 +40,5 @@ return [
     NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
     SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
+    MakerBundle::class => ['all' => true],
 ];
