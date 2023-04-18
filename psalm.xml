@@ -161,6 +161,7 @@
                 <file name="src/Component/Tests/Reflection/ClassInfoTraitTest.php" />
                 <file name="src/Component/Tests/Reflection/ClassReflectionTest.php" />
                 <file name="src/Component/Tests/Symfony/ExpressionLanguage/ArgumentParserTest.php" />
+                <file name="src/Component/Tests/Symfony/Maker/MakeEntityTest.php" />
                 <file name="src/Component/Tests/Symfony/Maker/MakeResourceTest.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />

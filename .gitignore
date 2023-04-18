@@ -8,3 +8,5 @@
 /.phpunit.result.cache
 
 src/Bundle/test/src/Tests/Tmp/
+src/Bundle/test/src/Entity/Tmp/
+src/Bundle/test/src/Repository/Tmp/
