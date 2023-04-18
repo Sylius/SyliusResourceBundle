@@ -13,12 +13,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\ComicBookRepository;
+use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * @Serializer\ExclusionPolicy("all")
  */
+#[ORM\Entity(repositoryClass: ComicBookRepository::class)]
+#[ORM\MappedSuperclass]
+#[ORM\Table(name: 'app_comic_book')]
 class ComicBook implements ResourceInterface
 {
     /**
@@ -28,13 +33,17 @@ class ComicBook implements ResourceInterface
      *
      * @Serializer\XmlAttribute
      */
-    private int $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     /**
      * @Serializer\Expose
      *
      * @Serializer\Until("1.1")
      */
+    #[ORM\Embedded]
     private ?Author $author = null;
 
     /**
@@ -42,25 +51,20 @@ class ComicBook implements ResourceInterface
      *
      * @Serializer\Type("string")
      */
+    #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
@@ -72,7 +76,7 @@ class ComicBook implements ResourceInterface
      */
     public function getAuthorFirstName(): ?string
     {
-        return $this->author ? $this->author->getFirstName() : null;
+        return $this->author?->getFirstName();
     }
 
     /**
@@ -82,7 +86,7 @@ class ComicBook implements ResourceInterface
      */
     public function getAuthorLastName(): ?string
     {
-        return $this->author ? $this->author->getLastName() : null;
+        return $this->author?->getLastName();
     }
 
     public function getAuthor(): ?Author

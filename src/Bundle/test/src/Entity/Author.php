@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @Serializer\ExclusionPolicy("all")
  */
+#[ORM\Embeddable]
 final class Author
 {
     /**
@@ -25,6 +27,7 @@ final class Author
      *
      * @Serializer\Type("string")
      */
+    #[ORM\Column(name: 'first_name', length: 255)]
     private ?string $firstName = null;
 
     /**
@@ -32,6 +35,7 @@ final class Author
      *
      * @Serializer\Type("string")
      */
+    #[ORM\Column(name: 'last_name', length: 255)]
     private ?string $lastName = null;
 
     public function getFirstName(): ?string
