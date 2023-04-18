@@ -55,9 +55,12 @@ final class MakeEntityTest extends KernelTestCase
             
             use App\Repository\Tmp\BookRepository;
             use Doctrine\ORM\Mapping as ORM;
+            use Sylius\Component\Resource\Metadata\Resource;
+            use Sylius\Component\Resource\Model\ResourceInterface;
             
             #[ORM\Entity(repositoryClass: BookRepository::class)]
-            class Book
+            #[Resource]
+            class Book implements ResourceInterface
             {
                 #[ORM\Id]
                 #[ORM\GeneratedValue]
@@ -99,6 +102,9 @@ final class MakeEntityTest extends KernelTestCase
             use App\Entity\Tmp\Book;
             use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
             use Doctrine\Persistence\ManagerRegistry;
+            use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
+            use Sylius\Component\Resource\Model\ResourceInterface;
+            use Sylius\Component\Resource\Repository\RepositoryInterface;
             
             /**
              * @extends ServiceEntityRepository<Book>
@@ -108,8 +114,10 @@ final class MakeEntityTest extends KernelTestCase
              * @method Book[]    findAll()
              * @method Book[]    findBy(array \$criteria, array \$orderBy = null, \$limit = null, \$offset = null)
              */
-            class BookRepository extends ServiceEntityRepository
+            class BookRepository extends ServiceEntityRepository implements RepositoryInterface
             {
+                use ResourceRepositoryTrait;
+            
                 public function __construct(ManagerRegistry \$registry)
                 {
                     parent::__construct(\$registry, Book::class);
@@ -124,12 +132,12 @@ final class MakeEntityTest extends KernelTestCase
                     }
                 }
             
-                public function remove(Book \$entity, bool \$flush = false): void
+                // TODO: You could remove this, cause this is already on the ResourceRepositoryTrait
+                public function remove(ResourceInterface \$resource): void
                 {
-                    \$this->getEntityManager()->remove(\$entity);
-            
-                    if (\$flush) {
-                        \$this->getEntityManager()->flush();
+                    if (null !== \$this->find(\$resource->getId())) {
+                        \$this->_em->remove(\$resource);
+                        \$this->_em->flush();
                     }
                 }
             

@@ -53,8 +53,15 @@
             </errorLevel>
         </DuplicateClass>
 
+        <InternalClass>
+            <errorLevel type="suppress">
+                <file name="src/Component/Symfony/Maker/MakeEntity.php" />
+            </errorLevel>
+        </InternalClass>
+
         <InternalMethod>
             <errorLevel type="suppress">
+                <file name="src/Component/Symfony/Maker/MakeEntity.php" />
                 <file name="src/Bundle/Controller/ParametersParser.php" />
                 <file name="src/Bundle/Controller/RequestConfiguration.php" />
                 <file name="src/Bundle/Controller/ResourceController.php" />
