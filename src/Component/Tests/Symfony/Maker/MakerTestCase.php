@@ -18,21 +18,18 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class MakerTestCase extends KernelTestCase
 {
-    /**
-     * @before
-     */
-    public static function cleanupTmpDir(): void
+    public static function removeFile(string $path): void
     {
-        (new Filesystem())->remove(self::tempDir());
+        (new Filesystem())->remove($path);
     }
 
-    protected static function tempDir(): string
+    protected static function projectDir(): string
     {
-        return dirname(__DIR__, 4) . '/Bundle/test/src/Tests/Tmp';
+        return dirname(__DIR__, 4) . '/Bundle/test/src';
     }
 
-    protected static function tempFile(string $path): string
+    protected static function file(string $path): string
     {
-        return \sprintf('%s/%s', self::tempDir(), $path);
+        return \sprintf('%s/%s', self::projectDir(), $path);
     }
 }

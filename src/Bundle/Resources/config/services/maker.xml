@@ -13,14 +13,10 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sylius.maker.entity" class="Sylius\Component\Resource\Symfony\Maker\MakeEntity" decorates="maker.maker.make_entity">
-            <argument type="service" id=".inner" />
+        <service id="sylius.maker.resource" class="Sylius\Component\Resource\Symfony\Maker\MakeResource">
+            <argument type="service" id="maker.maker.make_entity" />
             <argument type="service" id="maker.generator" />
             <argument type="service" id="maker.file_manager" />
-            <tag name="maker.command" />
-        </service>
-
-        <service id="sylius.maker.resource" class="Sylius\Component\Resource\Symfony\Maker\MakeResource">
             <tag name="maker.command" />
         </service>
     </services>

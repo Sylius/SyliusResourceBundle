@@ -24,3 +24,8 @@ doctrine:
                 type: attribute
                 dir: '%kernel.project_dir%/src/Subscription/Entity'
                 prefix: 'App\Subscription\Entity'
+            Tests:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Tests/Tmp/Entity'
+                prefix: 'App\Tests\Tmp\Entity'

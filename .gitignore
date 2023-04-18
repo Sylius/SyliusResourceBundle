@@ -7,6 +7,5 @@
 
 /.phpunit.result.cache
 
-src/Bundle/test/src/Tests/Tmp/
-src/Bundle/test/src/Entity/Tmp/
-src/Bundle/test/src/Repository/Tmp/
+src/Bundle/test/src/Tests/Tmp/Sylius/
+src/Bundle/test/src/Repository/Tests/Tmp/
