@@ -173,6 +173,7 @@ final class MakeEntityTest extends KernelTestCase
 
     /**
      * @before
+     *
      * @after
      */
     public static function cleanupTmpDirs(): void
