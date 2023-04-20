@@ -36,7 +36,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function it_has_default_mapping_paths()
+    public function it_has_no_default_mapping_paths()
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -44,9 +44,7 @@ class ConfigurationTest extends TestCase
             ],
             [
                 'mapping' => [
-                    'paths' => [
-                        '%kernel.project_dir%/src/Entity',
-                    ],
+                    'paths' => [],
                 ],
             ],
             'mapping',
