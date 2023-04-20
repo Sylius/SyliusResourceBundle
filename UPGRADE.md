@@ -1,3 +1,19 @@
+## UPGRADE FOR `1.11.x`
+
+### FROM `1.10.x` to `1.11.x`
+
+We remove the default mapping paths which are used to read PHP 8 attributes to build routes.
+
+To configure this default value, please edit your `config/packages/sylius_resource.yaml` file to add your mapping paths manually:
+
+```yaml
+# config/packages/sylius_resource.yaml
+sylius_resource:
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+```
+
 ## UPGRADE FOR `1.10.x`
 
 ### FROM `1.9.x` to `1.10.x`
