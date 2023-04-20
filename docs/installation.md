@@ -31,6 +31,18 @@ return [
 ];
 ```
 
+Configure your mapping paths for your resources
+
+```yaml
+# config/packages/sylius_resource.yaml
+sylius_resource:
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+```
+
+Configure the routing
+
 ```yaml
 # config/routes.yaml
 
