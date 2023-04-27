@@ -78,6 +78,26 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
+    public function its_default_templates_dir_can_be_customized()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['settings' => [
+                    'default_templates_dir' => 'path/to/templates',
+                ]],
+            ],
+            [
+                'settings' => [
+                    'default_templates_dir' => 'path/to/templates',
+                ],
+            ],
+            'settings.default_templates_dir',
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_has_default_authorization_checker()
     {
         $this->assertProcessedConfigurationEquals(

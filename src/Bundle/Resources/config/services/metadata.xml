@@ -66,6 +66,14 @@
             <argument type="service" id=".inner" />
         </service>
 
+        <service id="sylius.resource_metadata_collection.factory.templates_dir"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+        >
+            <argument type="service" id=".inner" />
+            <argument>%sylius.resource.settings%</argument>
+        </service>
+
         <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />

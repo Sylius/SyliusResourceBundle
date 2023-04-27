@@ -117,6 +117,7 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue([10, 20, 30])
                         ->end()
                         ->integerNode('default_page_size')->defaultValue(10)->end()
+                        ->scalarNode('default_templates_dir')->defaultNull()->end()
                         ->booleanNode('sortable')->defaultFalse()->end()
                         ->variableNode('sorting')->defaultNull()->end()
                         ->booleanNode('filterable')->defaultFalse()->end()
