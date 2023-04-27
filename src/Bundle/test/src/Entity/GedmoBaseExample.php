@@ -13,12 +13,22 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
+#[ORM\Entity]
+#[ORM\MappedSuperclass]
+#[ORM\Table(name: 'gedmo')]
 class GedmoBaseExample implements ResourceInterface
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column]
+    #[Gedmo\SortablePosition]
     private ?int $position = null;
 
     public function getId(): ?int

@@ -13,8 +13,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\MappedSuperclass]
+
 class GedmoExtendedExample extends GedmoBaseExample
 {
+    #[ORM\Column(length: 255)]
     private ?string $extra = null;
 
     public function getExtra(): ?string

@@ -13,28 +13,34 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\AbstractTranslation;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
+#[ORM\Entity]
+#[ORM\MappedSuperclass]
+#[ORM\Table(name: 'app_book_translation')]
 class BookTranslation extends AbstractTranslation implements ResourceInterface
 {
-    /** @var mixed */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    protected ?int $id = null;
 
-    /** @var string */
-    protected $title;
+    #[ORM\Column(length: 255)]
+    protected ?string $title = null;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }

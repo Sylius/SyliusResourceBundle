@@ -13,12 +13,20 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
+#[ORM\Entity]
+#[ORM\MappedSuperclass]
+#[ORM\Table(name: 'app_blog_post')]
 class BlogPost implements ResourceInterface
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column]
     private array $currentPlace = ['draft' => 1];
 
     public function getId(): ?int
