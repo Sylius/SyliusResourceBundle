@@ -14,162 +14,259 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Component\Resource\Context\Context;
+use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Component\Resource\Metadata\BulkUpdate;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Component\Resource\Symfony\EventListener\SerializeListener;
+use Sylius\Component\Resource\Metadata\Operations;
+use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Symfony\EventListener\FormListener;
+use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Webmozart\Assert\Assert;
 
-final class SerializeListenerSpec extends ObjectBehavior
+final class FormListenerSpec extends ObjectBehavior
 {
     function let(
         HttpOperationInitiatorInterface $operationInitiator,
-        SerializerInterface $serializer,
+        RequestContextInitiatorInterface $contextInitiator,
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+        FormFactoryInterface $formFactory,
     ): void {
-        $this->beConstructedWith($operationInitiator, $serializer);
+        $this->beConstructedWith($operationInitiator, $contextInitiator, $formFactory);
     }
 
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(SerializeListener::class);
+        $this->shouldHaveType(FormListener::class);
     }
 
-    function it_serializes_data_to_the_requested_format(
+    function it_handles_forms(
         HttpKernelInterface $kernel,
         Request $request,
-        \stdClass $data,
+        ParameterBag $attributes,
         HttpOperationInitiatorInterface $operationInitiator,
-        HttpOperation $operation,
-        SerializerInterface $serializer,
+        RequestContextInitiatorInterface $contextInitiator,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
     ): void {
         $event = new ViewEvent(
             $kernel->getWrappedObject(),
             $request->getWrappedObject(),
             HttpKernelInterface::MAIN_REQUEST,
-            $data->getWrappedObject(),
+            ['foo' => 'fighters'],
         );
 
-        $operationInitiator->initializeOperation($request)->willReturn($operation);
-
-        $request->getRequestFormat()->willReturn('json');
-
-        $serializer->serialize($data, 'json', [])->willReturn('serialized_data')->shouldBeCalled();
-
-        $this->onKernelView($event);
-
-        Assert::eq($event->getControllerResult(), 'serialized_data');
-    }
-
-    function it_serializes_data_to_the_requested_format_with_normalization_context(
-        HttpKernelInterface $kernel,
-        Request $request,
-        \stdClass $data,
-        HttpOperationInitiatorInterface $operationInitiator,
-        HttpOperation $operation,
-        SerializerInterface $serializer,
-    ): void {
-        $event = new ViewEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $data->getWrappedObject(),
-        );
-
-        $operationInitiator->initializeOperation($request)->willReturn($operation);
-
-        $request->getRequestFormat()->willReturn('json');
-
-        $operation->getNormalizationContext()->willReturn(['groups' => ['dummy:read']]);
-
-        $serializer->serialize($data, 'json', ['groups' => ['dummy:read']])->willReturn('serialized_data')->shouldBeCalled();
-
-        $this->onKernelView($event);
-
-        Assert::eq($event->getControllerResult(), 'serialized_data');
-    }
-
-    function it_does_nothing_when_operation_is_null(
-        HttpKernelInterface $kernel,
-        Request $request,
-        \stdClass $data,
-        HttpOperationInitiatorInterface $operationInitiator,
-        SerializerInterface $serializer,
-    ): void {
-        $event = new ViewEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $data->getWrappedObject(),
-        );
-
-        $operationInitiator->initializeOperation($request)->willReturn(null);
-
-        $request->getRequestFormat()->willReturn('json');
-
-        $serializer->serialize($data, 'json')->willReturn('serialized_data')->shouldNotBeCalled();
-
-        $this->onKernelView($event);
-
-        Assert::eq($event->getControllerResult(), $data->getWrappedObject());
-    }
-
-    function it_does_nothing_when_format_is_html(
-        HttpKernelInterface $kernel,
-        Request $request,
-        \stdClass $data,
-        HttpOperationInitiatorInterface $operationInitiator,
-        HttpOperation $operation,
-        SerializerInterface $serializer,
-    ): void {
-        $event = new ViewEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $data->getWrappedObject(),
-        );
-
-        $operationInitiator->initializeOperation($request)->willReturn($operation);
-
+        $request->attributes = $attributes;
         $request->getRequestFormat()->willReturn('html');
 
-        $serializer->serialize($data, 'json', [])->willReturn('serialized_data')->shouldNotBeCalled();
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new Create(formType: 'App\Type\DummyType');
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
+
+        $context = new Context();
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $formFactory->create($operation, $context, ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldBeCalled()
+        ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldBeCalled();
+
+        $attributes->set('form', $form)->shouldBeCalled();
 
         $this->onKernelView($event);
-
-        Assert::eq($event->getControllerResult(), $data->getWrappedObject());
     }
 
-    function it_throws_an_exception_when_serializer_is_not_available(
+    function it_does_nothing_when_controller_result_is_a_response(
         HttpKernelInterface $kernel,
         Request $request,
-        \stdClass $data,
+        ParameterBag $attributes,
         HttpOperationInitiatorInterface $operationInitiator,
-        HttpOperation $operation,
-        SerializerInterface $serializer,
+        RequestContextInitiatorInterface $contextInitiator,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
+        Response $response,
     ): void {
-        $this->beConstructedWith($operationInitiator, null);
-
         $event = new ViewEvent(
             $kernel->getWrappedObject(),
             $request->getWrappedObject(),
             HttpKernelInterface::MAIN_REQUEST,
-            $data->getWrappedObject(),
+            $response->getWrappedObject(),
         );
+
+        $request->attributes = $attributes;
+        $request->getRequestFormat()->willReturn('html');
+
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new Create(formType: 'App\Type\DummyType');
 
         $operationInitiator->initializeOperation($request)->willReturn($operation);
 
-        $request->getRequestFormat()->willReturn('json', []);
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
 
-        $serializer->serialize($data, 'json')->willReturn('serialized_data')->shouldNotBeCalled();
+        $context = new Context();
+        $contextInitiator->initializeContext($request)->willReturn($context);
 
-        $this->shouldThrow(new \LogicException('You can not use the "json" format if the Serializer is not available. Try running "composer require symfony/serializer".'))
-            ->during(
-                'onKernelView',
-                [$event],
-            )
+        $formFactory->create($operation, $context, ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldNotBeCalled()
         ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+
+        $attributes->set('form', $form)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_does_nothing_when_operation_has_no_form_type(
+        HttpKernelInterface $kernel,
+        Request $request,
+        ParameterBag $attributes,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            ['foo' => 'fighters'],
+        );
+
+        $request->attributes = $attributes;
+        $request->getRequestFormat()->willReturn('html');
+
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new Create(formType: null);
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
+
+        $context = new Context();
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $formFactory->create($operation, $context, ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldNotBeCalled()
+        ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+
+        $attributes->set('form', $form)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_does_nothing_when_operation_is_not_a_create_or_update(
+        HttpKernelInterface $kernel,
+        Request $request,
+        ParameterBag $attributes,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            ['foo' => 'fighters'],
+        );
+
+        $request->attributes = $attributes;
+        $request->getRequestFormat()->willReturn('html');
+
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new Show(formType: 'App\Type\DummyType');
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
+
+        $context = new Context();
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $formFactory->create($operation, $context, ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldNotBeCalled()
+        ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+
+        $attributes->set('form', $form)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
+
+    function it_does_nothing_when_operation_is_a_bulk_update(
+        HttpKernelInterface $kernel,
+        Request $request,
+        ParameterBag $attributes,
+        HttpOperationInitiatorInterface $operationInitiator,
+        RequestContextInitiatorInterface $contextInitiator,
+        FormFactoryInterface $formFactory,
+        FormInterface $form,
+    ): void {
+        $event = new ViewEvent(
+            $kernel->getWrappedObject(),
+            $request->getWrappedObject(),
+            HttpKernelInterface::MAIN_REQUEST,
+            ['foo' => 'fighters'],
+        );
+
+        $request->attributes = $attributes;
+        $request->getRequestFormat()->willReturn('html');
+
+        $attributes->get('_route')->willReturn('app_dummy_show');
+        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+
+        $operation = new BulkUpdate(formType: 'App\Type\DummyType');
+
+        $operationInitiator->initializeOperation($request)->willReturn($operation);
+
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
+
+        $context = new Context();
+        $contextInitiator->initializeContext($request)->willReturn($context);
+
+        $formFactory->create($operation, $context, ['foo' => 'fighters'])
+            ->willReturn($form)
+            ->shouldNotBeCalled()
+        ;
+
+        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+
+        $attributes->set('form', $form)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
     }
 }

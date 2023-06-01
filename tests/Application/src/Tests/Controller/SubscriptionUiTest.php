@@ -177,6 +177,23 @@ final class SubscriptionUiTest extends ApiTestCase
         $this->assertSame('accepted', $subscription->getState());
     }
 
+    /** @test */
+    public function it_allows_accepting_multiple_subscription(): void
+    {
+        $this->loadFixturesFromFile('subscriptions.yml');
+
+        $this->client->request('GET', '/admin/subscriptions');
+        $this->client->submitForm('Bulk accept');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var Subscription $subscription */
+        $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'marty.mcfly@bttf.com']);
+
+        $this->assertNotNull($subscription);
+        $this->assertSame('accepted', $subscription->getState());
+    }
+
     protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->createMatcher(new VoidBacktrace());

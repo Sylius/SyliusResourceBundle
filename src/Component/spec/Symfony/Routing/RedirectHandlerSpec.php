@@ -15,6 +15,7 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Resource;
@@ -126,6 +127,21 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->id = 'xyz';
         $operation = new Delete(redirectToRoute: 'app_dummy_index');
+        $resource = new Resource(alias: 'app.book');
+        $operation = $operation->withResource($resource);
+
+        $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
+
+        $this->redirectToResource($data, $operation, $request);
+    }
+
+    function it_redirects_to_resource_without_arguments_after_bulk_operation_by_default(
+        \stdClass $data,
+        Request $request,
+        RouterInterface $router,
+    ): void {
+        $data->id = 'xyz';
+        $operation = new BulkUpdate(redirectToRoute: 'app_dummy_index');
         $resource = new Resource(alias: 'app.book');
         $operation = $operation->withResource($resource);
 

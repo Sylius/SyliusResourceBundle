@@ -6,4 +6,5 @@ sylius_grid:
             show: 'grid/action/show.html.twig'
             update: 'grid/action/update.html.twig'
         bulk_action:
+            apply_transition: 'grid/bulk_action/apply_transition.html.twig'
             delete: 'grid/bulk_action/delete.html.twig'

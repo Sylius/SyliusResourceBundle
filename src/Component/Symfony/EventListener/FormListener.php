@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
 use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
@@ -42,6 +43,7 @@ final class FormListener
 
         if (
             $controllerResult instanceof Response ||
+            $operation instanceof BulkOperationInterface ||
             !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
             'html' !== $format ||
             null == $operation->getFormType()

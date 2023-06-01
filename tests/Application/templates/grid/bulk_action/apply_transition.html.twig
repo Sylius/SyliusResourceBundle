@@ -1,0 +1,15 @@
+{% set labeled = true %}
+{% set message = action.label %}
+{% set path = options.link.url|default(path(options.link.route|default(grid.requestConfiguration.getRouteName('bulk_update')), options.link.parameters|default({}))) %}
+
+<form action="{{ path }}" method="post">
+    <input type="hidden" name="_method" value="PATCH">
+    <button class="button" type="submit">
+        <i class="icon check"></i> {{ ((message is empty and labeled) ? 'sylius.ui.bulk_update' : message)|trans }}
+    </button>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('bulk_update') }}" />
+
+    {% for resource in grid.data %}
+        <input type="hidden" name="ids[]" value="{{ resource.id }}" />
+    {% endfor %}
+</form>
