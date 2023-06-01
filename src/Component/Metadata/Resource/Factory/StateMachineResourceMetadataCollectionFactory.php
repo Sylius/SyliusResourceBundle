@@ -58,8 +58,11 @@ final class StateMachineResourceMetadataCollectionFactory implements ResourceMet
 
     private function addDefaults(MetadataInterface $resourceConfiguration, Operation $operation): Operation
     {
+        if (!$operation instanceof StateMachineAwareOperationInterface) {
+            return $operation;
+        }
+
         if (
-            $operation instanceof StateMachineAwareOperationInterface &&
             null === $operation->getStateMachineComponent() &&
             method_exists($resourceConfiguration, 'getStateMachineComponent')
         ) {
@@ -67,13 +70,14 @@ final class StateMachineResourceMetadataCollectionFactory implements ResourceMet
 
             /** @var Operation $operation */
             $operation = $operation->withStateMachineComponent($stateMachineComponent);
+        }
 
-            if (
-                null !== $operation->getStateMachineTransition() &&
-                null === $operation->getProcessor()
-            ) {
-                $operation = $operation->withProcessor(ApplyStateMachineTransitionProcessor::class);
-            }
+        if (
+            method_exists($operation, 'getStateMachineTransition') &&
+            null !== $operation->getStateMachineTransition() &&
+            null === $operation->getProcessor()
+        ) {
+            $operation = $operation->withProcessor(ApplyStateMachineTransitionProcessor::class);
         }
 
         return $operation;
