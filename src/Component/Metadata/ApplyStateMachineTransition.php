@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
-use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
-
 /**
  * @experimental
  */
@@ -52,7 +50,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
             shortName: $shortName ?? $stateMachineTransition ?? 'apply_state_machine_transition',
             name: $name,
             provider: $provider,
-            processor: $processor ?? ApplyStateMachineTransitionProcessor::class,
+            processor: $processor,
             responder: $responder,
             repository: $repository,
             repositoryMethod: $repositoryMethod,
