@@ -20,18 +20,18 @@
         <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
-            <argument>%sylius.state_machine_component.default%</argument>
         </service>
         <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
         <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
 
-        <service id="sylius.resource_metadata_collection.factory.cached"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
-                 decorates="sylius.resource_metadata_collection.factory"
-                 decoration-priority="-10"
+        <service id="sylius.resource_metadata_collection.factory.state_machine"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decoration-priority="300"
         >
-            <argument type="service" id="sylius.cache.metadata.resource_collection" />
+            <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id=".inner" />
+            <argument>%sylius.state_machine_component.default%</argument>
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.doctrine"
@@ -73,6 +73,15 @@
         >
             <argument type="service" id=".inner" />
             <argument>%sylius.resource.settings%</argument>
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.cached"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decoration-priority="-10"
+        >
+            <argument type="service" id="sylius.cache.metadata.resource_collection" />
+            <argument type="service" id=".inner" />
         </service>
 
         <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator">
