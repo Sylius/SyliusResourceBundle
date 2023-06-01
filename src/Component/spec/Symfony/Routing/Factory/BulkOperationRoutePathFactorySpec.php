@@ -15,6 +15,7 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 
@@ -35,5 +36,12 @@ final class BulkOperationRoutePathFactorySpec extends ObjectBehavior
         $operation = new BulkDelete();
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/bulk_delete');
+    }
+
+    function it_generates_route_path_for_bulk_update_operations(): void
+    {
+        $operation = new BulkUpdate();
+
+        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/bulk_update');
     }
 }

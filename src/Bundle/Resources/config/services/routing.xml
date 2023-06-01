@@ -63,16 +63,16 @@
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius.routing.factory.operation_route_path_factory.update"
-                 class="Sylius\Component\Resource\Symfony\Routing\Factory\UpdateOperationRoutePathFactory"
+        <service id="sylius.routing.factory.operation_route_path_factory.bulk_operation"
+                 class="Sylius\Component\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-40"
         >
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius.routing.factory.operation_route_path_factory.bulk_operation"
-                 class="Sylius\Component\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory"
+        <service id="sylius.routing.factory.operation_route_path_factory.update"
+                 class="Sylius\Component\Resource\Symfony\Routing\Factory\UpdateOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-30"
         >

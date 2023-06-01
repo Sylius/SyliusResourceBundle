@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing;
 
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Resource;
@@ -69,7 +70,11 @@ final class RedirectHandler implements RedirectHandlerInterface
 
         $redirectArguments = $operation->getRedirectArguments() ?? [];
 
-        if ([] === $redirectArguments && !$operation instanceof DeleteOperationInterface) {
+        if (
+            [] === $redirectArguments &&
+            !$operation instanceof DeleteOperationInterface &&
+            !$operation instanceof BulkOperationInterface
+        ) {
             $identifier = $resource->getIdentifier() ?? 'id';
 
             $redirectArguments[$identifier] = 'resource.' . $identifier;

@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\HttpOperation;
@@ -182,6 +183,31 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route->getPath()->shouldReturn('/dummies/bulk_delete');
         $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+            ],
+        ]);
+    }
+
+    function it_generates_bulk_update_routes(
+        OperationRoutePathFactoryInterface $routePathFactory,
+    ): void {
+        $operation = new BulkUpdate();
+
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/bulk_update')->shouldBeCalled();
+
+        $route = $this->create(
+            $metadata,
+            new Resource('app.dummy'),
+            $operation,
+        );
+
+        $route->getPath()->shouldReturn('/dummies/bulk_update');
+        $route->getMethods()->shouldReturn(['PUT', 'PATCH']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
@@ -65,7 +66,18 @@ final class RedirectResourceMetadataCollectionFactory implements ResourceMetadat
             return $operation;
         }
 
-        if ($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) {
+        if ($operation instanceof BulkOperationInterface) {
+            $newOperation = $this->setRedirectIfRouteExists($resource, $operation, 'index');
+
+            if (null !== $newOperation) {
+                return $newOperation;
+            }
+        }
+
+        if (
+            $operation instanceof CreateOperationInterface ||
+            $operation instanceof UpdateOperationInterface
+        ) {
             $newOperation = $this->setRedirectIfRouteExists($resource, $operation, 'show');
 
             if (null !== $newOperation) {
