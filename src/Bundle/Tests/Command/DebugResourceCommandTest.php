@@ -217,6 +217,7 @@ final class DebugResourceCommandTest extends TestCase
               stateMachineComponent    null                      
               stateMachineTransition   null                      
               stateMachineGraph        null                      
+              twigContextFactory       null                      
               methods                  [                         
                                          "GET",                  
                                          "POST"                  
@@ -234,6 +235,7 @@ final class DebugResourceCommandTest extends TestCase
               shortName                "create"                  
               name                     "app_one_create"          
               repositoryMethod         null                      
+              repositoryArguments      null                      
               grid                     null                      
               read                     null                      
               write                    null                      
