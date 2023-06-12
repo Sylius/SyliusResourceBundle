@@ -206,6 +206,10 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
                 $operation = $operation->withRoutePrefix($resource->getRoutePrefix() ?? null);
             }
 
+            if (null === $operation->getTwigContextFactory()) {
+                $operation = $operation->withTwigContextFactory('sylius.twig.context.factory.default');
+            }
+
             if (null === $routeName = $operation->getRouteName()) {
                 $routeName = $this->operationRouteNameFactory->createRouteName($operation);
                 $operation = $operation->withRouteName($routeName);

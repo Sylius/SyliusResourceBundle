@@ -48,6 +48,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         ?array $formOptions = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
@@ -77,6 +78,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
             formOptions: $formOptions,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
         );
