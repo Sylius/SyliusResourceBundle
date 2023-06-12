@@ -14,22 +14,26 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Command;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 final class DebugResourceCommand extends Command
 {
-    private RegistryInterface $registry;
-
-    public function __construct(RegistryInterface $registry)
-    {
+    public function __construct(
+        private RegistryInterface $registry,
+        private ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+    ) {
         parent::__construct();
-
-        $this->registry = $registry;
     }
 
     public function configure(): void
@@ -40,7 +44,7 @@ final class DebugResourceCommand extends Command
             <<<'EOT'
 List or show resource metadata.
 
-To list run the command without an agrument:
+To list run the command without an argument:
 
     $ php %command.full_name%
 
@@ -57,73 +61,151 @@ EOT
         /** @var string|null $resource */
         $resource = $input->getArgument('resource');
 
+        $io = new SymfonyStyle($input, $output);
+
+        $dumper = new Dumper($output);
+
         if (null === $resource) {
-            $this->listResources($output);
+            $this->listResources($io);
 
             return 0;
         }
 
         $metadata = $this->registry->get($resource);
 
-        $this->debugResource($metadata, $output);
+        $this->debugResource($metadata, $io, $dumper);
 
         return 0;
     }
 
-    private function listResources(OutputInterface $output): void
+    private function listResources(SymfonyStyle $io): void
     {
         /** @var iterable<MetadataInterface> $resources */
         $resources = $this->registry->getAll();
         $resources = is_array($resources) ? $resources : iterator_to_array($resources);
         ksort($resources);
 
-        $table = new Table($output);
-        $table->setHeaders(['Alias']);
+        $rows = [];
 
         foreach ($resources as $resource) {
-            $table->addRow([$resource->getAlias()]);
+            $rows[] = [$resource->getAlias()];
         }
 
-        $table->render();
+        $io->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, OutputInterface $output): void
+    private function debugResource(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
     {
-        $table = new Table($output);
-        $information = [
-            'name' => $metadata->getName(),
-            'application' => $metadata->getApplicationName(),
-            'driver' => $metadata->getDriver(),
-        ];
+        $io->section('Configuration');
 
-        $parameters = $this->flattenParameters($metadata->getParameters());
+        $values = $this->configurationToArray($metadata);
 
-        foreach ($parameters as $key => $value) {
-            $information[$key] = $value;
+        $rows = [];
+
+        foreach ($values as $key => $value) {
+            $rows[] = [$key, $dumper($value)];
         }
 
-        foreach ($information as $key => $value) {
-            $table->addRow([$key, $value]);
-        }
+        $io->table(['Option', 'Value'], $rows);
 
-        $table->render();
+        $this->debugNewResourceMetadata($metadata, $io, $dumper);
+
+        $this->debugResourceCollectionOperation($metadata, $io, $dumper);
     }
 
-    /**
-     * @param string $prefix
-     */
-    private function flattenParameters(array $parameters, array $flattened = [], $prefix = ''): array
+    private function debugNewResourceMetadata(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
     {
-        foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                $flattened = $this->flattenParameters($value, $flattened, $prefix . $key . '.');
+        $io->section('New Resource Metadata');
 
-                continue;
+        $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
+
+        if (0 === $resourceMetadataCollection->count()) {
+            $io->info('This resource has no new metadata.');
+
+            return;
+        }
+
+        /** @var ResourceMetadata $resourceMetadata */
+        foreach ($resourceMetadataCollection as $resourceMetadata) {
+            $rows = [];
+
+            $values = $this->resourceToArray($resourceMetadata);
+            foreach ($values as $key => $value) {
+                $rows[] = [$key, $dumper($value)];
             }
 
-            $flattened[$prefix . $key] = $value;
+            $io->table(['Option', 'Value'], $rows);
+        }
+    }
+
+    private function debugResourceCollectionOperation(MetadataInterface $metadata, SymfonyStyle $io, Dumper $dumper): void
+    {
+        $io->section('New operations');
+
+        $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
+
+        $rows = [];
+
+        /** @var ResourceMetadata $resourceMetadata */
+        foreach ($resourceMetadataCollection as $resourceMetadata) {
+            $rows = $this->addResourceOperationsRows($resourceMetadata, $rows, $dumper);
         }
 
-        return $flattened;
+        if ($rows === []) {
+            $io->info('This resource has no defined operations.');
+
+            return;
+        }
+
+        $io->table(['Name'], $rows);
+    }
+
+    private function addResourceOperationsRows(ResourceMetadata $resourceMetadata, array $rows, Dumper $dumper): array
+    {
+        /** @var Operation $operation */
+        foreach ($resourceMetadata->getOperations() ?? new Operations() as $operation) {
+            $rows[] = [
+                $operation->getName(),
+            ];
+        }
+
+        return $rows;
+    }
+
+    private function configurationToArray(MetadataInterface $metadata): array
+    {
+        $values = $this->objectToArray($metadata);
+
+        $values = array_merge($values, $values['parameters']);
+        unset($values['parameters']);
+
+        return $values;
+    }
+
+    private function resourceToArray(ResourceMetadata $resource): array
+    {
+        $values = $this->objectToArray($resource);
+
+        unset($values['operations']);
+
+        return $values;
+    }
+
+    private function objectToArray(object $object): array
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $reflection = new \ReflectionClass($object);
+
+        $values = [];
+
+        foreach ($reflection->getProperties() as $property) {
+            $propertyName = $property->getName();
+
+            if ($accessor->isReadable($object, $propertyName)) {
+                $values[$property->getName()] = $accessor->getValue($object, $propertyName);
+            }
+        }
+
+        return $values;
     }
 }
