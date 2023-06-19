@@ -17,7 +17,7 @@ WORKDIR /app
 
 RUN composer update --with-all-dependencies --no-interaction --no-progress
 
-WORKDIR /app/src/Bundle/test
+WORKDIR /app/tests/Application
 
 RUN php bin/console doctrine:database:create && php bin/console doctrine:schema:update --force
 

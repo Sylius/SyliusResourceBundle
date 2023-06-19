@@ -107,17 +107,17 @@
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
-            "App\\": "src/Bundle/test/src/"
+            "App\\": "tests/Application/src/"
         }
     },
     "scripts": {
         "analyse": [
             "@composer validate --strict",
-            "vendor/bin/ecs check src",
+            "vendor/bin/ecs check",
             "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon -l max src"
         ],
         "fix": [
-            "vendor/bin/ecs check src --fix"
+            "vendor/bin/ecs check --fix"
         ],
         "test": [
             "vendor/bin/phpspec run --ansi --no-interaction",

@@ -28,7 +28,7 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
         AttributesOperationRouteFactoryInterface $attributesOperationRouteFactory,
     ): void {
         $this->beConstructedWith(
-            ['paths' => [__DIR__ . '/../../test/src/Entity/Route']],
+            ['paths' => [dirname(__DIR__, 4) . '/tests/Application/src/Entity/Route']],
             $routeAttributesFactory,
             $attributesOperationRouteFactory,
         );
