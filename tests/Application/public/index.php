@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
-require __DIR__ . '/../../../../vendor/autoload.php';
+require dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 if (!class_exists(Application::class)) {
     throw new RuntimeException('You need to add "symfony/framework-bundle" as a Composer dependency.');
