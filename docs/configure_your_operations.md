@@ -17,6 +17,7 @@ There are some basic CRUD operations and more.
   * [Configure the templates' dir](#configure-the-templates-dir)
   * [Configure the section](#configure-the-section)
   * [Configure the routes' prefix](#configure-the-routes-prefix)
+  * [Configure the resource identifier](#configure-the-resource-identifier)
 <!-- TOC -->
 
 ## Basic operations
@@ -386,3 +387,39 @@ class Book implements ResourceInterface
 | app_admin_book_bulk_delete | DELETE          | /admin/books/bulk_delete |    
 | app_shop_book_index        | GET             | /books/                  |
 | app_shop_book_show         | GET             | /books/{id}              |
+
+### Configure the resource identifier
+
+It changes the resource identifier for each operation.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\Create;
+use Sylius\Component\Resource\Metadata\Delete;
+use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(identifier: 'code')]
+#[Index]
+#[Create]
+#[Update]
+#[Delete]
+#[BulkDelete]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+| Name                 | Method          | Path                     |
+|----------------------|-----------------|--------------------------|
+| app_book_index       | GET             | /admin/books/            |
+| app_ook_create       | GET, POST       | /admin/books/new         |                     
+| app_book_update      | GET, PUT, PATCH | /admin/books/{code}/edit |        
+| app_book_delete      | DELETE          | /admin/books/{code}      |
+| app_book_bulk_delete | DELETE          | /admin/books/bulk_delete |
