@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Paweł Jędrzejewski
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sylius.maker.generator.resource" class="Sylius\Component\Resource\Symfony\Maker\Generator\ResourceClassGenerator">
+            <argument type="service" id="maker.generator" />
+        </service>
+
+        <service id="sylius.maker.generator.repository" class="Sylius\Component\Resource\Symfony\Maker\Generator\RepositoryClassGenerator">
+            <argument type="service" id="maker.generator" />
+        </service>
+
+        <service id="sylius.maker.resource" class="Sylius\Component\Resource\Symfony\Maker\MakeResource">
+            <argument type="service" id="maker.generator" />
+            <argument type="service" id="sylius.maker.generator.resource" />
+            <argument type="service" id="sylius.maker.generator.repository" />
+            <argument type="service" id="maker.file_manager" />
+            <tag name="maker.command" />
+        </service>
+
+        <service id="sylius.maker.state_provider" class="Sylius\Component\Resource\Symfony\Maker\MakeStateProvider">
+            <tag name="maker.command" />
+        </service>
+
+        <service id="sylius.maker.state_processor" class="Sylius\Component\Resource\Symfony\Maker\MakeStateProcessor">
+            <tag name="maker.command" />
+        </service>
+    </services>
+</container>

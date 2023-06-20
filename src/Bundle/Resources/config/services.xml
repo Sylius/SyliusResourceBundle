@@ -21,6 +21,7 @@
         <import resource="services/form.xml" />
         <import resource="services/helper.xml" />
         <import resource="services/listener.xml" />
+        <import resource="services/maker.xml" />
         <import resource="services/metadata.xml" />
         <import resource="services/routing.xml" />
         <import resource="services/state.xml" />

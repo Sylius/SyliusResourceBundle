@@ -24,6 +24,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/spec/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
+        - %currentWorkingDirectory%/src/Component/Symfony/Maker/Resources/skeleton/*
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 
@@ -80,6 +81,7 @@ parameters:
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::set(Created|Updated)At\(\) has no return type specified./'
         - '/Parameter #1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessor::getValue\(\) expects array\|object, mixed given\./'
         - '/Parameter #1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface::getValue\(\) expects array\|object, mixed given\./'
+        - '/Parameter #1 \$help of method Symfony\\Component\\Console\\Command\\Command\:\:setHelp\(\) expects string, string\|false given\./'
         - '/Parameter #4 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\./'
         - '/Parameter #1 \$submittedData of method Symfony\\Component\\Form\\FormInterface::submit\(\) expects array\|string\|null, mixed given\./'
         - '/Parameter #2 \$callback of function preg_replace_callback expects callable\(array<int\|string, string>\): string, Closure\(array\): mixed given\./'
