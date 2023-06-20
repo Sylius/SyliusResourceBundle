@@ -30,7 +30,7 @@ final class CrudRoutesAttributesLoaderSpec extends ObjectBehavior
     function let(RegistryInterface $resourceRegistry, RouteFactoryInterface $routeFactory): void
     {
         $this->beConstructedWith(
-            ['paths' => [__DIR__ . '/../../test/src']],
+            ['paths' => [dirname(__DIR__, 4) . '/tests/Application/src']],
             new ResourceLoader($resourceRegistry->getWrappedObject(), $routeFactory->getWrappedObject()),
         );
     }

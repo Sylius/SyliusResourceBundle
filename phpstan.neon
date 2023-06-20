@@ -22,7 +22,6 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
-        - %currentWorkingDirectory%/src/Bundle/test/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*
