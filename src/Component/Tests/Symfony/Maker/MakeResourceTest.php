@@ -172,7 +172,6 @@ final class MakeResourceTest extends MakerTestCase
             use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
             use Doctrine\Persistence\ManagerRegistry;
             use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
-            use Sylius\Component\Resource\Model\ResourceInterface;
             use Sylius\Component\Resource\Repository\RepositoryInterface;
             
             /**
@@ -231,7 +230,7 @@ final class MakeResourceTest extends MakerTestCase
                     return \$this->name;
                 }
             
-                public function setName(?string \$name): self
+                public function setName(?string \$name): static
                 {
                     \$this->name = \$name;
             
