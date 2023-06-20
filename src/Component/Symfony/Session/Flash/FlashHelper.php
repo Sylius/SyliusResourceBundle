@@ -18,6 +18,7 @@ use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Humanizer\StringHumanizer;
 use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
+use Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -32,10 +33,61 @@ final class FlashHelper implements FlashHelperInterface
 
     public function addSuccessFlash(Operation $operation, Context $context): void
     {
-        $this->addFlash($operation, $context, 'success');
+        $this->addFlashFromOperation($operation, $context, 'success');
     }
 
-    private function addFlash(Operation $operation, Context $context, string $type): void
+    public function addFlashFromEvent(GenericEvent $event, Context $context): void
+    {
+        $message = $this->buildEventMessage($event);
+
+        $this->addFlash($message, $event->getMessageType(), $context);
+    }
+
+    private function addFlashFromOperation(Operation $operation, Context $context, string $type): void
+    {
+        $message = $this->buildOperationMessage($operation, $type);
+
+        $this->addFlash($message, $type, $context);
+    }
+
+    private function buildEventMessage(GenericEvent $event): string
+    {
+        $message = $event->getMessage();
+        $parameters = $event->getMessageParameters();
+
+        if (!$this->translator instanceof TranslatorBagInterface) {
+            return $this->translator->trans($message, $parameters, 'flashes');
+        }
+
+        if ($this->translator->getCatalogue()->has($message, 'flashes')) {
+            return $this->translator->trans($message, $parameters, 'flashes');
+        }
+
+        return $message;
+    }
+
+    private function buildOperationMessage(Operation $operation, string $type): string
+    {
+        $resource = $operation->getResource();
+        Assert::notNull($resource);
+
+        $key = sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $operation->getShortName() ?? '');
+        $fallbackKey = sprintf('sylius.resource.%s', $operation->getShortName() ?? '');
+
+        $parameters = $this->getTranslationParameters($operation);
+
+        if (!$this->translator instanceof TranslatorBagInterface) {
+            return $this->translator->trans($fallbackKey, $parameters, 'flashes');
+        }
+
+        if ($this->translator->getCatalogue()->has($key, 'flashes')) {
+            return $this->translator->trans($key, $parameters, 'flashes');
+        }
+
+        return $this->translator->trans($fallbackKey, $parameters, 'flashes');
+    }
+
+    private function addFlash(string $message, string $type, Context $context): void
     {
         $request = $context->get(RequestOption::class)?->request();
 
@@ -43,33 +95,10 @@ final class FlashHelper implements FlashHelperInterface
             return;
         }
 
-        $message = $this->buildMessage($operation, $type);
-
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
 
         $flashBag->add($type, $message);
-    }
-
-    private function buildMessage(Operation $operation, string $type): string
-    {
-        $resource = $operation->getResource();
-        Assert::notNull($resource);
-
-        $specifyKey = sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $operation->getShortName() ?? '');
-        $defaultKey = sprintf('sylius.resource.%s', $operation->getShortName() ?? '');
-
-        $parameters = $this->getTranslationParameters($operation);
-
-        if (!$this->translator instanceof TranslatorBagInterface) {
-            return $this->translator->trans($defaultKey, $parameters, 'flashes');
-        }
-
-        if ($this->translator->getCatalogue()->has($specifyKey, 'flashes')) {
-            return $this->translator->trans($specifyKey, $parameters, 'flashes');
-        }
-
-        return $this->translator->trans($defaultKey, $parameters, 'flashes');
     }
 
     private function getTranslationParameters(Operation $operation): array
