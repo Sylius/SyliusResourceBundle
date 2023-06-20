@@ -114,7 +114,7 @@ class Book implements ResourceInterface
 
 On your Twig templates, the `books` variable will be replaced by the `library` one.
 
-As an example, on a `index` operation these Twig variables wille be available:
+As an example, on an `index` operation these Twig variables will be available:
 
 | Name      | Type                                     |
 |-----------|------------------------------------------|
