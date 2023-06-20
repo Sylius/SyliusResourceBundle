@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Session\Flash;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -64,7 +66,7 @@ final class FlashHelperSpec extends ObjectBehavior
         $this->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_default_message(
+    function it_adds_success_flashes_with_fallback_message(
         Request $request,
         SessionInterface $session,
         FlashBagInterface $flashBag,
@@ -157,5 +159,87 @@ final class FlashHelperSpec extends ObjectBehavior
         $flashBag->add('success', 'Admin users was removed successfully.')->shouldBeCalled();
 
         $this->addSuccessFlash($operation, $context);
+    }
+
+    function it_translates_flashes_from_event_when_translator_is_not_a_bag(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator,
+        GenericEvent $event,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $event->getMessage()->willReturn('app.admin_user.banned');
+        $event->getMessageType()->willReturn('success');
+        $event->getMessageParameters()->willReturn(['%admin_user%' => 'Darth Vader']);
+
+        $translator->trans('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.')->shouldBeCalled();
+
+        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
+
+        $this->addFlashFromEvent($event, $context);
+    }
+
+    function it_translates_flashes_from_event_when_translator_is_a_bag(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+        GenericEvent $event,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $event->getMessage()->willReturn('app.admin_user.banned');
+        $event->getMessageType()->willReturn('success');
+        $event->getMessageParameters()->willReturn(['%admin_user%' => 'Darth Vader']);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('app.admin_user.banned', 'flashes')->willReturn(true)->shouldBeCalled();
+
+        $translator->trans('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.')->shouldBeCalled();
+
+        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
+
+        $this->addFlashFromEvent($event, $context);
+    }
+
+    function it_does_not_translate_event_message_when_translator_is_a_bag_and_does_not_contains_the_key(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+        GenericEvent $event,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $event->getMessage()->willReturn('Darth Vader was banned successfully.');
+        $event->getMessageType()->willReturn('success');
+        $event->getMessageParameters()->willReturn([]);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('Darth Vader was banned successfully.', 'flashes')->willReturn(false)->shouldBeCalled();
+
+        $translator->trans(Argument::cetera())->shouldNotBeCalled();
+
+        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
+
+        $this->addFlashFromEvent($event, $context);
     }
 }
