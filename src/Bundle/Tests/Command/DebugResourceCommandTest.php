@@ -101,8 +101,8 @@ final class DebugResourceCommandTest extends TestCase
         $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
 
         $resourceMetadata = (new Resource())->withOperations(new Operations([
-            new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
-            new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
+            'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
+            'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
         ]));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
@@ -165,12 +165,90 @@ final class DebugResourceCommandTest extends TestCase
             New operations
             --------------
             
-             ---------------- 
-              Name            
-             ---------------- 
-              app_one_index   
-              app_one_create  
-             ---------------- 
+             ---------------- --------------------------------------------------------------- 
+              Name             Details                                                        
+             ---------------- --------------------------------------------------------------- 
+              app_one_index    bin/console sylius:debug:resource metadata.one app_one_index   
+              app_one_create   bin/console sylius:debug:resource metadata.one app_one_create  
+             ---------------- --------------------------------------------------------------- 
+            
+            
+            TXT
+            ,
+            $display,
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_the_metadata_for_given_resource_operation(): void
+    {
+        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+
+        $resourceMetadata = (new Resource(alias: 'sylius.one'))->withOperations(new Operations([
+            'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
+            'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
+        ]));
+
+        $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
+
+        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+
+        $this->tester->execute([
+            'resource' => 'metadata.one',
+            'operation' => 'app_one_create',
+        ]);
+
+        $display = $this->tester->getDisplay();
+
+        $this->assertEquals(
+            <<<TXT
+            
+            Operation Metadata
+            ------------------
+            
+             ------------------------ -------------------------- 
+              Option                   Value                     
+             ------------------------ -------------------------- 
+              factory                  null                      
+              factoryMethod            null                      
+              factoryArguments         []                        
+              stateMachineComponent    null                      
+              stateMachineTransition   null                      
+              stateMachineGraph        null                      
+              twigContextFactory       null                      
+              methods                  [                         
+                                         "GET",                  
+                                         "POST"                  
+                                       ]                         
+              path                     null                      
+              routeName                null                      
+              routePrefix              null                      
+              redirectToRoute          null                      
+              redirectArguments        null                      
+              provider                 null                      
+              processor                "App\CreateOneProcessor"  
+              responder                null                      
+              repository               null                      
+              template                 null                      
+              shortName                "create"                  
+              name                     "app_one_create"          
+              repositoryMethod         null                      
+              repositoryArguments      null                      
+              grid                     null                      
+              read                     null                      
+              write                    null                      
+              validate                 null                      
+              deserialize              null                      
+              serialize                null                      
+              formType                 null                      
+              formOptions              null                      
+              normalizationContext     null                      
+              denormalizationContext   null                      
+              validationContext        null                      
+              eventShortName           null                      
+             ------------------------ -------------------------- 
             
             
             TXT
