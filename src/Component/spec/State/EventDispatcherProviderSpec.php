@@ -49,6 +49,9 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
         $decorated->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
+        $decorated->provide($operation, $context)->shouldBeCalled();
+
+        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
 
         $this->provide($operation, $context);
     }
@@ -65,6 +68,9 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
         $decorated->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
+        $decorated->provide($operation, $context)->shouldBeCalled();
+
+        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
 
         $this->provide($operation, $context);
     }

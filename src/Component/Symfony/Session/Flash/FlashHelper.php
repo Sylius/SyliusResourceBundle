@@ -16,6 +16,7 @@ namespace Sylius\Component\Resource\Symfony\Session\Flash;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Humanizer\StringHumanizer;
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
@@ -55,11 +56,6 @@ final class FlashHelper implements FlashHelperInterface
         $resource = $operation->getResource();
         Assert::notNull($resource);
 
-        $keys = [
-            sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $operation->getShortName() ?? ''),
-            sprintf('sylius.resource.%s', $operation->getShortName() ?? ''),
-        ];
-
         $specifyKey = sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $operation->getShortName() ?? '');
         $defaultKey = sprintf('sylius.resource.%s', $operation->getShortName() ?? '');
 
@@ -84,11 +80,13 @@ final class FlashHelper implements FlashHelperInterface
             return [];
         }
 
-        // TODO plural name with Bulk operation
-//        if ($operation instanceof BulkOperationInterface) {
-//            return ['%resources%' => ucfirst($resource->getPluralName() ?? '')];
-//        }
+        $resourceName = $operation instanceof BulkOperationInterface ? $resource->getPluralName() : $resource->getName();
+        $humanizedName = ucfirst(StringHumanizer::humanize($resourceName ?? ''));
 
-        return ['%resource%' => ucfirst(StringHumanizer::humanize($resource->getName() ?? ''))];
+        if ($operation instanceof BulkOperationInterface) {
+            return ['%resources%' => $humanizedName];
+        }
+
+        return ['%resource%' => $humanizedName];
     }
 }
