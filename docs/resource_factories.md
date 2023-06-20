@@ -48,7 +48,7 @@ Configure your factory
 # config/services.yaml
 services:
     App\Factory\BookFactory:
-        decorates: '@.inner'
+        decorates: 'app.factory.book'
 ```
 
 ## Use your custom method
