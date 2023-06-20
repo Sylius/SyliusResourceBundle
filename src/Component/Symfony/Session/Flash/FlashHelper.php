@@ -101,27 +101,6 @@ final class FlashHelper implements FlashHelperInterface
         $flashBag->add($type, $message);
     }
 
-    private function buildMessage(Operation $operation, string $type): string
-    {
-        $resource = $operation->getResource();
-        Assert::notNull($resource);
-
-        $specifyKey = sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $operation->getShortName() ?? '');
-        $defaultKey = sprintf('sylius.resource.%s', $operation->getShortName() ?? '');
-
-        $parameters = $this->getTranslationParameters($operation);
-
-        if (!$this->translator instanceof TranslatorBagInterface) {
-            return $this->translator->trans($defaultKey, $parameters, 'flashes');
-        }
-
-        if ($this->translator->getCatalogue()->has($specifyKey, 'flashes')) {
-            return $this->translator->trans($specifyKey, $parameters, 'flashes');
-        }
-
-        return $this->translator->trans($defaultKey, $parameters, 'flashes');
-    }
-
     private function getTranslationParameters(Operation $operation): array
     {
         $resource = $operation->getResource();
