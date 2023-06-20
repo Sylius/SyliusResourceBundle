@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandler;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
+use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,9 +29,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class OperationEventHandlerSpec extends ObjectBehavior
 {
-    function let(RedirectHandlerInterface $redirectHandler): void
-    {
-        $this->beConstructedWith($redirectHandler);
+    function let(
+        RedirectHandlerInterface $redirectHandler,
+        FlashHelperInterface $flashHelper,
+    ): void {
+        $this->beConstructedWith($redirectHandler, $flashHelper);
     }
 
     function it_is_initializable(): void
@@ -53,6 +56,7 @@ final class OperationEventHandlerSpec extends ObjectBehavior
     function it_returns_response_from_pre_process_event_when_it_has_one_and_request_format_is_html(
         Request $request,
         Response $response,
+        FlashHelperInterface $flashHelper,
     ): void {
         $event = new OperationEvent();
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
@@ -61,6 +65,8 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getRequestFormat()->willReturn('html');
+
+        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
 
         $this->handlePreProcessEvent($event, $context)->shouldReturn($response);
     }
@@ -87,6 +93,7 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         \stdClass $data,
         RedirectHandlerInterface $redirectHandler,
         RedirectResponse $response,
+        FlashHelperInterface $flashHelper,
     ): void {
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
@@ -98,6 +105,8 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $event->setArgument('operation', $operation);
 
         $request->getRequestFormat()->willReturn('html');
+
+        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
 
         $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response)->shouldBeCalled();
 
@@ -109,6 +118,7 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         \stdClass $data,
         RedirectHandlerInterface $redirectHandler,
         RedirectResponse $response,
+        FlashHelperInterface $flashHelper,
     ): void {
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
@@ -121,6 +131,8 @@ final class OperationEventHandlerSpec extends ObjectBehavior
 
         $request->getRequestFormat()->willReturn('html');
 
+        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
+
         $redirectHandler->redirectToOperation($data, $operation, $request, 'index')->willReturn($response)->shouldBeCalled();
 
         $this->handlePreProcessEvent($event, $context, 'index')->shouldHaveType(RedirectResponse::class);
@@ -130,6 +142,7 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         Request $request,
         \stdClass $data,
         Operation $operation,
+        FlashHelperInterface $flashHelper,
     ): void {
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
@@ -138,6 +151,8 @@ final class OperationEventHandlerSpec extends ObjectBehavior
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getRequestFormat()->willReturn('html');
+
+        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
 
         $this->handlePreProcessEvent($event, $context)->shouldReturn(null);
     }
