@@ -25,7 +25,7 @@ abstract class MakerTestCase extends KernelTestCase
 
     protected static function projectDir(): string
     {
-        return dirname(__DIR__, 4) . '/Bundle/test';
+        return dirname(__DIR__, 5) . '/tests/Application';
     }
 
     protected static function file(string $path): string

@@ -8,3 +8,4 @@
 ###< symfony/framework-bundle ###
 
 config/db.sql
+tmp/Sylius
