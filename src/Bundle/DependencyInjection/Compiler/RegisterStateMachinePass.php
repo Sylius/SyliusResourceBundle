@@ -99,7 +99,7 @@ final class RegisterStateMachinePass implements CompilerPassInterface
 
     private function isSymfonyWorkflowEnabled(ContainerBuilder $container): bool
     {
-        return $container->hasDefinition('workflow.registry');
+        return $container->hasDefinition('workflow.registry') || $container->hasAlias('workflow.registry');
     }
 
     private function isWinzouStateMachineEnabled(ContainerBuilder $container): bool
