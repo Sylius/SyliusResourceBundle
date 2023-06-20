@@ -16,6 +16,7 @@ namespace spec\Sylius\Component\Resource\Symfony\Session\Flash;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
+use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelper;
@@ -45,7 +46,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', applicationName: 'app', name: 'dummy'));
+        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -70,7 +71,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', applicationName: 'app', name: 'dummy'));
+        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -94,7 +95,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         TranslatorInterface $translator,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', applicationName: 'app', name: 'dummy'));
+        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -115,7 +116,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', applicationName: 'app', name: 'admin_user'));
+        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'admin_user', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -126,9 +127,34 @@ final class FlashHelperSpec extends ObjectBehavior
 
         $messageCatalogue->has('app.admin_user.create', 'flashes')->willReturn(true)->shouldBeCalled();
 
-        $translator->trans('app.admin_user.create', ['%resource%' => 'Admin user'], 'flashes')->willReturn('Dummy was created successfully.')->shouldBeCalled();
+        $translator->trans('app.admin_user.create', ['%resource%' => 'Admin user'], 'flashes')->willReturn('Admin user was created successfully.')->shouldBeCalled();
 
-        $flashBag->add('success', 'Dummy was created successfully.')->shouldBeCalled();
+        $flashBag->add('success', 'Admin user was created successfully.')->shouldBeCalled();
+
+        $this->addSuccessFlash($operation, $context);
+    }
+
+    function it_adds_success_flashes_with_humanized_message_and_plural_name_on_bulk_operation(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+    ): void {
+        $operation = (new BulkDelete())->withResource(new Resource(alias: 'app.dummy', name: 'admin_user', pluralName: 'admin_users', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('app.admin_user.bulk_delete', 'flashes')->willReturn(true)->shouldBeCalled();
+
+        $translator->trans('app.admin_user.bulk_delete', ['%resources%' => 'Admin users'], 'flashes')->willReturn('Admin users was removed successfully.')->shouldBeCalled();
+
+        $flashBag->add('success', 'Admin users was removed successfully.')->shouldBeCalled();
 
         $this->addSuccessFlash($operation, $context);
     }
