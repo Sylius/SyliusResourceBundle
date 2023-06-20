@@ -114,28 +114,6 @@ final class RegisterStateMachinePass implements CompilerPassInterface
         $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
     }
 
-    private function registerWinzouStateMachine(ContainerBuilder $container): void
-    {
-        if (!$this->isWinzouStateMachineEnabled($container)) {
-            return;
-        }
-
-        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine.winzou', StateMachine::class);
-        $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('sm.factory'));
-    }
-
-    private function registerSymfonyWorkflowStateMachine(ContainerBuilder $container): void
-    {
-        if (!$this->isSymfonyWorkflowEnabled($container)) {
-            return;
-        }
-
-        $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine.symfony', Workflow::class);
-        $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
-    }
-
     private function setSymfonyWorkflowAsStateMachine(ContainerBuilder $container): void
     {
         if (!$this->isSymfonyWorkflowEnabled($container)) {
