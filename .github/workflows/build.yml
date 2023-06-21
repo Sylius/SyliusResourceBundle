@@ -79,31 +79,53 @@ jobs:
                     (cd src/Component && composer validate --strict)
 
             -
-                name: Run component tests
-                run: (cd src/Component && vendor/bin/phpspec run)
+                name: Run Phpspec tests
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
+                run: |
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    (cd src/Component && vendor/bin/phpspec run --no-interaction)
 
             -
-                name: Run bundle tests
-                run: composer test
+                name: Run PHPUnit tests
+                run: vendor/bin/phpunit --colors=always
 
             -
                 name: Run lint container
                 run: (cd tests/Application && bin/console lint:container)
 
             -
-                name: Run state machine tests with winzou/state-machine package
+                name: Run state machine Phpspec tests with winzou/state-machine package
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
                     (cd tests/Application && bin/console cache:clear --env=test)
-                    composer test
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+
+
+            -
+                name: Run state machine PHPUnit tests with winzou/state-machine package
+                run: |
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpunit --colors=always
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
-                name: Run state machine tests with symfony/workflow package
+                name: Run state machine Phpspec tests with symfony/workflow package
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
                     (cd tests/Application && bin/console cache:clear --env=test)
-                    composer test
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
+
+            -
+                name: Run state machine PHPUnit tests with symfony/workflow package
+                run: |
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpunit --colors=always
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
