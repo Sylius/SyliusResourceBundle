@@ -182,6 +182,92 @@ final class DebugResourceCommandTest extends TestCase
     /**
      * @test
      */
+    public function it_displays_the_metadata_for_given_resource_as_fully_qualified_class_name(): void
+    {
+        $this->registry->getByClass('App\Resource')->willReturn($this->createMetadata('one'));
+
+        $resourceMetadata = (new Resource(alias: 'sylius.one'))->withOperations(new Operations([
+            'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
+            'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
+        ]));
+
+        $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
+
+        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+
+        $this->tester->execute([
+            'resource' => 'App\Resource',
+        ]);
+
+        $display = $this->tester->getDisplay();
+
+        $this->assertEquals(
+            <<<TXT
+            
+            Configuration
+            -------------
+            
+             ----------------------- ----------------------------- 
+              Option                  Value                        
+             ----------------------- ----------------------------- 
+              name                    "one"                        
+              applicationName         "sylius"                     
+              driver                  "doctrine/foobar"            
+              stateMachineComponent   null                         
+              templatesNamespace      null                         
+              classes                 [                            
+                                        "model" => "App\One",      
+                                        "foo" => "bar",            
+                                        "bar" => "foo"             
+                                      ]                            
+              whatever                [                            
+                                        "something" => [           
+                                          "elephants" => "camels"  
+                                        ]                          
+                                      ]                            
+             ----------------------- ----------------------------- 
+            
+            New Resource Metadata
+            ---------------------
+            
+             ------------------------ -------------- 
+              Option                   Value         
+             ------------------------ -------------- 
+              alias                    "sylius.one"  
+              section                  null          
+              formType                 null          
+              templatesDir             null          
+              routePrefix              null          
+              name                     null          
+              pluralName               null          
+              applicationName          null          
+              identifier               null          
+              normalizationContext     null          
+              denormalizationContext   null          
+              validationContext        null          
+              class                    null          
+             ------------------------ -------------- 
+            
+            New operations
+            --------------
+            
+             ---------------- --------------------------------------------------------------- 
+              Name             Details                                                        
+             ---------------- --------------------------------------------------------------- 
+              app_one_index    bin/console sylius:debug:resource App\Resource app_one_index   
+              app_one_create   bin/console sylius:debug:resource App\Resource app_one_create  
+             ---------------- --------------------------------------------------------------- 
+            
+            
+            TXT
+            ,
+            $display,
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_the_metadata_for_given_resource_operation(): void
     {
         $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
@@ -255,32 +341,6 @@ final class DebugResourceCommandTest extends TestCase
             ,
             $display,
         );
-    }
-
-    /**
-     * @test
-     */
-    public function it_displays_the_metadata_for_given_resource_as_fully_qualified_class_name(): void
-    {
-        $this->registry->getByClass('App\Resource')->willReturn($this->createMetadata('one'));
-        $this->tester->execute([
-            'resource' => 'App\Resource',
-        ]);
-
-        $display = $this->tester->getDisplay();
-
-        $this->assertEquals(<<<'EOT'
-+------------------------------+-----------------+
-| name                         | one             |
-| application                  | sylius          |
-| driver                       | doctrine/foobar |
-| classes.foo                  | bar             |
-| classes.bar                  | foo             |
-| whatever.something.elephants | camels          |
-+------------------------------+-----------------+
-
-EOT
-            , $display);
     }
 
     private function createMetadata(string $suffix): MetadataInterface
