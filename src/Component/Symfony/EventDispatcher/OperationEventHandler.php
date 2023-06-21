@@ -17,13 +17,16 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
+use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class OperationEventHandler implements OperationEventHandlerInterface
 {
-    public function __construct(private RedirectHandlerInterface $redirectHandler)
-    {
+    public function __construct(
+        private RedirectHandlerInterface $redirectHandler,
+        private FlashHelperInterface $flashHelper,
+    ) {
     }
 
     public function handlePreProcessEvent(
@@ -37,15 +40,14 @@ final class OperationEventHandler implements OperationEventHandlerInterface
 
         $request = $context->get(RequestOption::class)?->request();
 
-        if (
-            'html' === $request?->getRequestFormat() &&
-            null !== $operationEventResponse = $event->getResponse()
-        ) {
-            return $operationEventResponse;
-        }
-
         if ('html' !== $request?->getRequestFormat()) {
             throw new HttpException($event->getErrorCode(), $event->getMessage());
+        }
+
+        $this->flashHelper->addFlashFromEvent($event, $context);
+
+        if (null !== $operationEventResponse = $event->getResponse()) {
+            return $operationEventResponse;
         }
 
         $operation = $event->getOperation();
