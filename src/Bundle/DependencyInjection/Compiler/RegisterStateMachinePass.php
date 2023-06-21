@@ -106,9 +106,26 @@ final class RegisterStateMachinePass implements CompilerPassInterface
             return;
         }
 
+        $this->defineSyliusWorkflowRegistry($container);
+
         $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine.symfony', Workflow::class);
         $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
+        $stateMachineDefinition->addArgument(new Reference('sylius.workflow.registry'));
+    }
+
+    private function defineSyliusWorkflowRegistry(ContainerBuilder $container): void
+    {
+        if ($container->hasDefinition('.workflow.registry')) {
+            $container->setAlias('sylius.workflow.registry', '.workflow.registry');
+
+            return;
+        }
+
+        if ($container->hasDefinition('workflow.registry')) {
+            $container->setAlias('sylius.workflow.registry', 'workflow.registry');
+
+            return;
+        }
     }
 
     private function setSymfonyWorkflowAsStateMachine(ContainerBuilder $container): void
@@ -124,14 +141,14 @@ final class RegisterStateMachinePass implements CompilerPassInterface
         $container->setParameter('sylius.state_machine_component.default', 'symfony');
         $stateMachineDefinition = $container->register('sylius.resource_controller.state_machine', Workflow::class);
         $stateMachineDefinition->setPublic(false);
-        $stateMachineDefinition->addArgument(new Reference('workflow.registry'));
+        $stateMachineDefinition->addArgument(new Reference('sylius.workflow.registry'));
 
         $container->setAlias('sylius.state_machine.operation.default', 'sylius.state_machine.operation.symfony');
     }
 
     private function isSymfonyWorkflowEnabled(ContainerBuilder $container): bool
     {
-        return $container->hasDefinition('workflow.registry');
+        return $container->hasDefinition('workflow.registry') || $container->hasDefinition('.workflow.registry');
     }
 
     private function isWinzouStateMachineEnabled(ContainerBuilder $container): bool
