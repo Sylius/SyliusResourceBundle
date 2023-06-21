@@ -5,6 +5,8 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 <!-- TOC -->
 * [Implements the Resource interface](#implements-the-resource-interface)
 * [Use the Resource attribute](#use-the-resource-attribute)
+* [Advanced configuration](#advanced-configuration)
+* [Configure the resource name](#configure-the-resource-name)
 <!-- TOC -->
 
 ## Implements the Resource interface
@@ -61,3 +63,33 @@ $ bin/console sylius:debug:resource 'App\Entity\book'
 ```
 
 By default, it will have the `app.book` alias in Sylius resource which is a concatenation of the application name and the resource name `{application}.{name}`.
+
+## Advanced configuration
+
+### Configure the resource name
+
+It defines the resource name.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(name: 'cart')]
+class Order implements ResourceInterface
+{
+}
+
+```
+
+On your Twig templates, the `order` variable will be replaced by the `cart` one.
+
+As an example, on a `show` operation following Twig variables will be available:
+
+| Name      | Type                                    |
+|-----------|-----------------------------------------|
+| resource  | App\Entity\Order                        |
+| cart      | App\Entity\Order                        |
+| operation | Sylius\Component\Resource\Metadata\Show |
+| app       | Symfony\Bridge\Twig\AppVariable         |
