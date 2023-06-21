@@ -473,3 +473,7 @@ class Book implements ResourceInterface
 | app_book_update      | GET, PUT, PATCH | /admin/books/{code}/edit |        
 | app_book_delete      | DELETE          | /admin/books/{code}      |
 | app_book_bulk_delete | DELETE          | /admin/books/bulk_delete |
+
+**[Go back to the documentation's index](index.md)**
+
+**[> Next chapter: Redirect](redirect.md)**
