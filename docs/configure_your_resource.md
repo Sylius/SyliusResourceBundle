@@ -85,7 +85,7 @@ class Order implements ResourceInterface
 
 On your Twig templates, the `order` variable will be replaced by the `cart` one.
 
-As an example, on a `show` operation these Twig variables wille be available:
+As an example, on a `show` operation following Twig variables will be available:
 
 | Name      | Type                                    |
 |-----------|-----------------------------------------|
