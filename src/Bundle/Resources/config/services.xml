@@ -14,10 +14,19 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <imports>
         <import resource="services/console.xml" />
+        <import resource="services/context.xml" />
         <import resource="services/controller.xml" />
+        <import resource="services/dispatcher.xml" />
+        <import resource="services/expression_language.xml" />
         <import resource="services/form.xml" />
+        <import resource="services/helper.xml" />
+        <import resource="services/listener.xml" />
+        <import resource="services/metadata.xml" />
         <import resource="services/routing.xml" />
+        <import resource="services/state.xml" />
+        <import resource="services/state_machine.xml" />
         <import resource="services/storage.xml" />
+        <import resource="services/twig.xml" />
     </imports>
 
     <parameters>

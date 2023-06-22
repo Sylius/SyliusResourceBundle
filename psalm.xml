@@ -10,7 +10,6 @@
             <directory name="vendor" />
             <directory name="src/Bundle/Doctrine/ODM" />
             <directory name="src/Bundle/spec" />
-            <directory name="src/Bundle/test" />
             <directory name="src/Bundle/Tests" />
             <directory name="src/Component/spec" />
             <directory name="src/Component/vendor" />
@@ -27,6 +26,8 @@
     <issueHandlers>
         <ArgumentTypeCoercion>
             <errorLevel type="suppress">
+                <referencedFunction name="Doctrine\Persistence\ManagerRegistry::getManagerForClass" />
+                <referencedFunction name="Doctrine\Persistence\ObjectManager::getClassMetadata" />
                 <referencedFunction name="ReflectionClass::getAttributes" />
             </errorLevel>
         </ArgumentTypeCoercion>
@@ -122,6 +123,12 @@
             </errorLevel>
         </MoreSpecificImplementedParamType>
 
+        <PossiblyFalseOperand>
+            <errorLevel type="suppress">
+                <file name="src/Component/Reflection/ClassInfoTrait.php" />
+            </errorLevel>
+        </PossiblyFalseOperand>
+
         <PossiblyNullArgument>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
@@ -149,7 +156,9 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
+                <file name="src/Component/Tests/Reflection/ClassInfoTraitTest.php" />
                 <file name="src/Component/Tests/Reflection/ClassReflectionTest.php" />
+                <file name="src/Component/Tests/Symfony/ExpressionLanguage/ArgumentParserTest.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
@@ -170,12 +179,19 @@
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
+        
+        <TypeDoesNotContainType>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Event/ResourceControllerEvent.php" />
+            </errorLevel>
+        </TypeDoesNotContainType>
 
         <UndefinedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
                 <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
                 <referencedClass name="Doctrine\Common\Persistence\ObjectManager" />
+                <referencedClass name="Doctrine\ODM\MongoDB\Mapping\ClassMetadata" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheAdapter" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>

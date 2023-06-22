@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Paweł Jędrzejewski
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sylius.cache.metadata.resource_collection" parent="cache.system" public="false">
+            <tag name="cache.pool" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument>%sylius.state_machine_component.default%</argument>
+        </service>
+        <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
+        <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
+
+        <service id="sylius.resource_metadata_collection.factory.cached"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="-10"
+        >
+            <argument type="service" id="sylius.cache.metadata.resource_collection" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.doctrine"
+            class="Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory"
+            decorates="sylius.resource_metadata_collection.factory"
+            decoration-priority="200"
+        >
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.redirect"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="200"
+        >
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.resource_factory"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\FactoryResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+        >
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.event_short_name"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.templates_dir"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory.attributes"
+        >
+            <argument type="service" id=".inner" />
+            <argument>%sylius.resource.settings%</argument>
+        </service>
+
+        <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
+        </service>
+
+        <service id="sylius.repository_argument_resolver.request" class="Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver" />
+    </services>
+</container>

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata;
 
+/**
+ * @method string|null getStateMachineComponent()
+ */
 interface MetadataInterface
 {
     public function getAlias(): string;
@@ -25,7 +28,7 @@ interface MetadataInterface
 
     public function getPluralName(): string;
 
-    public function getDriver(): string;
+    public function getDriver(): string|false;
 
     /**
      * @return ?string
@@ -40,16 +43,18 @@ interface MetadataInterface
     public function getParameter(string $name);
 
     /**
+     * @return class-string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getClass(string $name): string;
+
+    /**
      * Return all the metadata parameters.
      */
     public function getParameters(): array;
 
     public function hasParameter(string $name): bool;
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function getClass(string $name): string;
 
     public function hasClass(string $name): bool;
 

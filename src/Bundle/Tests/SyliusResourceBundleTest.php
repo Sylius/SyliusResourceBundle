@@ -31,7 +31,7 @@ final class SyliusResourceBundleTest extends WebTestCase
         $services = $container->getServiceIds();
 
         $services = array_filter($services, function (string $serviceId): bool {
-            return 0 === strpos($serviceId, 'sylius.');
+            return str_starts_with($serviceId, 'sylius.');
         });
 
         foreach ($services as $id) {

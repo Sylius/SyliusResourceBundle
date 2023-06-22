@@ -51,5 +51,19 @@
             <argument type="service" id="property_accessor" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface" alias="sylius.grid_options_parser" public="false" />
+
+        <service id="sylius.grid.view_factory.legacy"
+                 class="Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory"
+                 decorates="sylius.grid.view_factory.resource"
+                 public="false"
+        >
+            <argument type="service" id="sylius.grid.resource_view_factory" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.grid.view_factory.resource" class="Sylius\Component\Resource\Grid\View\Factory\GridViewFactory">
+            <argument type="service" id="sylius.grid.data_provider" />
+        </service>
+        <service id="Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface" alias="sylius.grid.view_factory.resource" />
     </services>
 </container>

@@ -1,0 +1,9 @@
+sylius_grid:
+    templates:
+        action:
+            apply_transition: 'grid/action/apply_transition.html.twig'
+            delete: 'grid/action/delete.html.twig'
+            show: 'grid/action/show.html.twig'
+            update: 'grid/action/update.html.twig'
+        bulk_action:
+            delete: 'grid/bulk_action/delete.html.twig'

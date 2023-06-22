@@ -19,14 +19,11 @@ use Symfony\Component\Routing\RouteCollection;
 
 final class RoutesAttributesLoader implements RouteLoaderInterface
 {
-    private array $mapping;
-
-    private RouteAttributesFactoryInterface $routesAttributesFactory;
-
-    public function __construct(array $mapping, RouteAttributesFactoryInterface $routesAttributesFactory)
-    {
-        $this->mapping = $mapping;
-        $this->routesAttributesFactory = $routesAttributesFactory;
+    public function __construct(
+        private array $mapping,
+        private RouteAttributesFactoryInterface $routesAttributesFactory,
+        private AttributesOperationRouteFactoryInterface $attributesOperationRouteFactory,
+    ) {
     }
 
     public function __invoke(): RouteCollection
@@ -37,6 +34,7 @@ final class RoutesAttributesLoader implements RouteLoaderInterface
         /** @var string $className */
         foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
             $this->routesAttributesFactory->createRouteForClass($routeCollection, $className);
+            $this->attributesOperationRouteFactory->createRouteForClass($routeCollection, $className);
         }
 
         return $routeCollection;

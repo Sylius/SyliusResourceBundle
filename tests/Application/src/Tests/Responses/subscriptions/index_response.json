@@ -1,0 +1,20 @@
+{
+    "items": [
+        {
+            "state": "new",
+            "email": "marty.mcfly@bttf.com"
+        },
+        {
+            "state": "new",
+            "email": "doc.brown@bttf.com"
+        }
+    ],
+    "pagination": {
+        "current_page": 1,
+        "has_previous_page": false,
+        "has_next_page": false,
+        "per_page": 10,
+        "total_items": 2,
+        "total_pages": 1
+    }
+}

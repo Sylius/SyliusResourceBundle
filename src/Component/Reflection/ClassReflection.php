@@ -60,7 +60,7 @@ final class ClassReflection
      *
      * @return \ReflectionAttribute[]
      */
-    public static function getClassAttributes(string $className, string $attributeName): array
+    public static function getClassAttributes(string $className, ?string $attributeName = null): array
     {
         $reflectionClass = new \ReflectionClass($className);
 

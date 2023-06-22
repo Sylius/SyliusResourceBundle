@@ -25,6 +25,8 @@ final class Metadata implements MetadataInterface
     /** @var string */
     private $driver;
 
+    private ?string $stateMachineComponent = null;
+
     /** @var string */
     private $templatesNamespace;
 
@@ -40,6 +42,7 @@ final class Metadata implements MetadataInterface
 
         $this->driver = $parameters['driver'];
         $this->templatesNamespace = array_key_exists('templates', $parameters) ? $parameters['templates'] : null;
+        $this->stateMachineComponent = $parameters['state_machine_component'] ?? null;
 
         $this->parameters = $parameters;
     }
@@ -92,9 +95,14 @@ final class Metadata implements MetadataInterface
         return self::getInflector()->pluralize($this->name);
     }
 
-    public function getDriver(): string
+    public function getDriver(): string|false
     {
         return $this->driver;
+    }
+
+    public function getStateMachineComponent(): ?string
+    {
+        return $this->stateMachineComponent;
     }
 
     public function getTemplatesNamespace(): ?string

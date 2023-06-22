@@ -36,7 +36,7 @@ class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function it_has_default_mapping_paths()
+    public function it_has_no_default_mapping_paths()
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -44,9 +44,7 @@ class ConfigurationTest extends TestCase
             ],
             [
                 'mapping' => [
-                    'paths' => [
-                        '%kernel.project_dir%/src/Entity',
-                    ],
+                    'paths' => [],
                 ],
             ],
             'mapping',
@@ -72,6 +70,26 @@ class ConfigurationTest extends TestCase
                 ],
             ],
             'mapping',
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function its_default_templates_dir_can_be_customized()
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['settings' => [
+                    'default_templates_dir' => 'path/to/templates',
+                ]],
+            ],
+            [
+                'settings' => [
+                    'default_templates_dir' => 'path/to/templates',
+                ],
+            ],
+            'settings.default_templates_dir',
         );
     }
 

@@ -42,6 +42,7 @@
         "symfony/form": "^5.4 || ^6.0",
         "symfony/framework-bundle": "^5.4 || ^6.0",
         "symfony/http-foundation": "^5.4 || ^6.0",
+        "symfony/security-core": "^5.4 || ^6.0",
         "symfony/security-csrf": "^5.4 || ^6.0",
         "symfony/routing": "^5.4 || ^6.0",
         "symfony/translation": "^5.4 || ^6.0",
@@ -50,7 +51,8 @@
         "symfony/yaml": "^5.4 || ^6.0",
         "webmozart/assert": "^1.8",
         "willdurand/hateoas-bundle": "^2.0",
-        "winzou/state-machine-bundle": "^0.6"
+        "winzou/state-machine-bundle": "^0.6",
+        "willdurand/negotiation": "^3.1"
     },
     "replace": {
         "sylius/resource": "self.version"
@@ -71,10 +73,14 @@
         "sylius/grid-bundle": "^1.7 || v1.12.0-ALPHA.1",
         "symfony/dependency-injection": "^5.4 || ^6.0",
         "symfony/dotenv": "^5.4 || ^6.0",
+        "symfony/uid": "^5.4 || ^6.0",
         "symfony/workflow": "^5.4 || ^6.0",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "^4.22",
-        "rector/rector": "^0.13.5"
+        "rector/rector": "^0.13.5",
+        "symfony/messenger": "^5.4 || ^6.0",
+        "symfony/serializer": "^5.4 || ^6.0",
+        "symfony/security-bundle": "^5.4 || ^6.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",
@@ -101,17 +107,17 @@
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
-            "App\\": "src/Bundle/test/src/"
+            "App\\": "tests/Application/src/"
         }
     },
     "scripts": {
         "analyse": [
             "@composer validate --strict",
-            "vendor/bin/ecs check src",
+            "vendor/bin/ecs check",
             "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon -l max src"
         ],
         "fix": [
-            "vendor/bin/ecs check src --fix"
+            "vendor/bin/ecs check --fix"
         ],
         "test": [
             "vendor/bin/phpspec run --ansi --no-interaction",

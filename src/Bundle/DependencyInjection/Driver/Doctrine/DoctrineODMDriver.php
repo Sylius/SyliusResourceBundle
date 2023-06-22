@@ -69,6 +69,7 @@ final class DoctrineODMDriver extends AbstractDoctrineDriver
             $unitOfWorkDefinition,
             $this->getClassMetadataDefinition($metadata),
         ]);
+        $definition->addTag('sylius.repository');
 
         $container->setDefinition($metadata->getServiceId('repository'), $definition);
     }

@@ -1,0 +1,16 @@
+framework:
+    assets: false
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks: ["%locale%"]
+    secret: "%secret%"
+    form: ~
+    csrf_protection: true
+    default_locale: "%locale%"
+    session:
+        handler_id: ~
+        storage_factory_id: session.storage.factory.mock_file
+    http_method_override: true
+    test: ~
+    serializer:
+        enabled: true

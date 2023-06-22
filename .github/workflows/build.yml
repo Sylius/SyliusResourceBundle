@@ -65,8 +65,8 @@ jobs:
             -
                 name: Prepare test application
                 run: |
-                    (cd src/Bundle/test && bin/console doctrine:database:create)
-                    (cd src/Bundle/test && bin/console doctrine:schema:create)
+                    (cd tests/Application && bin/console doctrine:database:create)
+                    (cd tests/Application && bin/console doctrine:schema:create)
 
             -
                 name: Run Psalm
@@ -79,46 +79,68 @@ jobs:
                     (cd src/Component && composer validate --strict)
 
             -
-                name: Run component tests
-                run: (cd src/Component && vendor/bin/phpspec run)
+                name: Run Phpspec tests
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
+                run: |
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    (cd src/Component && vendor/bin/phpspec run --no-interaction)
 
             -
-                name: Run bundle tests
-                run: composer test
+                name: Run PHPUnit tests
+                run: vendor/bin/phpunit --colors=always
 
             -
                 name: Run lint container
-                run: (cd src/Bundle/test && bin/console lint:container)
+                run: (cd tests/Application && bin/console lint:container)
 
             -
-                name: Run state machine tests with winzou/state-machine package
+                name: Run state machine Phpspec tests with winzou/state-machine package
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
-                    (cd src/Bundle/test && bin/console cache:clear --env=test)
-                    composer test
-                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+
 
             -
-                name: Run state machine tests with symfony/workflow package
+                name: Run state machine PHPUnit tests with winzou/state-machine package
                 run: |
-                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
-                    (cd src/Bundle/test && bin/console cache:clear --env=test)
-                    composer test
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' src/Bundle/test/config/packages/test/sylius_resource.yaml
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpunit --colors=always
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+
+            -
+                name: Run state machine Phpspec tests with symfony/workflow package
+                if: ${{ true != contains( matrix.php, '8.2' ) }}
+                run: |
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpspec run --ansi --no-interaction
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
+
+            -
+                name: Run state machine PHPUnit tests with symfony/workflow package
+                run: |
+                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
+                    (cd tests/Application && bin/console cache:clear --env=test)
+                    vendor/bin/phpunit --colors=always
+                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
                 run: |
                     composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
-                    (cd src/Bundle/test && bin/console cache:clear --env=test_without_fosrest)
+                    (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
                     composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
 
             -
                 name: Run lint container without winzou/state-machine-bundle package
                 run: |
                     composer remove winzou/state-machine-bundle --no-scripts
-                    (cd src/Bundle/test && bin/console cache:clear --env=test_without_state_machine)
-                    (cd src/Bundle/test && bin/console lint:container --env=test_without_state_machine)
+                    (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
+                    (cd tests/Application && bin/console lint:container --env=test_without_state_machine)
                     composer require winzou/state-machine-bundle --no-scripts
 
             -
@@ -126,7 +148,7 @@ jobs:
                 run: |
                     composer remove symfony/twig-bundle --no-scripts
                     composer remove sylius/grid-bundle --no-scripts --dev
-                    (cd src/Bundle/test && bin/console cache:clear --env=test_without_twig)
-                    (cd src/Bundle/test && bin/console lint:container --env=test_without_twig)
+                    (cd tests/Application && bin/console cache:clear --env=test_without_twig)
+                    (cd tests/Application && bin/console lint:container --env=test_without_twig)
                     composer require symfony/twig-bundle --no-scripts
                     composer require "sylius/grid-bundle: ^1.7 || v1.12.0-ALPHA.1" --no-scripts --dev

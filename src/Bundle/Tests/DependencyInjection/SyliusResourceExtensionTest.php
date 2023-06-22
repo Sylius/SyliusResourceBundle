@@ -20,13 +20,17 @@ use App\Factory\BookFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
+use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\DummyResource;
+use Sylius\Component\Resource\Factory\Factory;
 
 class SyliusResourceExtensionTest extends AbstractExtensionTestCase
 {
     /**
      * @test
      */
-    public function it_registers_services_and_parameters_for_resources()
+    public function it_registers_services_and_parameters_for_resources(): void
     {
         // TODO: Move Resource-Grid integration to a dedicated compiler pass
         $this->setParameter('kernel.bundles', []);
@@ -59,12 +63,14 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_aliases_authorization_checker_with_the_one_given_in_configuration()
+    public function it_aliases_authorization_checker_with_the_one_given_in_configuration(): void
     {
         // TODO: Move Resource-Grid integration to a dedicated compiler pass
         $this->setParameter('kernel.bundles', []);
 
-        $this->load(['authorization_checker' => 'custom_service']);
+        $this->load([
+            'authorization_checker' => 'custom_service',
+        ]);
 
         $this->assertContainerBuilderHasAlias('sylius.resource_controller.authorization_checker', 'custom_service');
     }
@@ -72,7 +78,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_registers_default_translation_parameters()
+    public function it_registers_default_translation_parameters(): void
     {
         // TODO: Move ResourceGrid integration to a dedicated compiler pass
         $this->setParameter('kernel.bundles', []);
@@ -125,14 +131,50 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->load([
             'mapping' => [
                 'paths' => [
-                    'path/to/resources',
+                    __DIR__ . '/Dummy',
                 ],
             ],
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.mapping', [
             'paths' => [
-                'path/to/resources',
+                __DIR__ . '/Dummy',
+            ],
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_auto_registers_resources(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load([
+            'mapping' => [
+                'paths' => [
+                    __DIR__ . '/Dummy',
+                ],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resources', [
+            'app.book' => [
+                'classes' => [
+                    'model' => BookWithAliasResource::class,
+                    'controller' => ResourceController::class,
+                    'factory' => Factory::class,
+                    'form' => DefaultResourceType::class,
+                ],
+                'driver' => 'doctrine/orm',
+            ],
+            'app.dummy' => [
+                'classes' => [
+                    'model' => DummyResource::class,
+                    'controller' => ResourceController::class,
+                    'factory' => Factory::class,
+                    'form' => DefaultResourceType::class,
+                ],
+                'driver' => 'doctrine/orm',
             ],
         ]);
     }

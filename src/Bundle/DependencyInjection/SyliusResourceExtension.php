@@ -13,12 +13,23 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection;
 
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Factory\Factory;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Reflection\ClassReflection;
+use Sylius\Component\Resource\State\ProcessorInterface;
+use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Component\Resource\State\ResponderInterface;
+use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,12 +37,14 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use function Symfony\Component\String\u;
 
 final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load('services.xml');
@@ -52,8 +65,30 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->setParameter('sylius.resource.settings', $config['settings']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 
+        $this->autoRegisterResources($config, $container);
+
         $this->loadPersistence($config['drivers'], $config['resources'], $loader);
         $this->loadResources($config['resources'], $container);
+
+        $container->registerForAutoconfiguration(ProviderInterface::class)
+            ->addTag('sylius.state_provider')
+        ;
+
+        $container->registerForAutoconfiguration(ProcessorInterface::class)
+            ->addTag('sylius.state_processor')
+        ;
+
+        $container->registerForAutoconfiguration(ResponderInterface::class)
+            ->addTag('sylius.state_responder')
+        ;
+
+        $container->registerForAutoconfiguration(FactoryInterface::class)
+            ->addTag('sylius.resource_factory')
+        ;
+
+        $container->registerForAutoconfiguration(ContextFactoryInterface::class)
+            ->addTag('sylius.twig_context_factory')
+        ;
 
         $container->addObjectResource(Metadata::class);
         $container->addObjectResource(DriverProvider::class);
@@ -77,6 +112,63 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->prependExtensionConfig('fos_rest', $config);
     }
 
+    private function autoRegisterResources(array &$config, ContainerBuilder $container): void
+    {
+        /** @var array $resources */
+        $resources = $config['resources'];
+
+        /** @var array $mapping */
+        $mapping = $container->getParameter('sylius.resource.mapping');
+        $paths = $mapping['paths'] ?? [];
+
+        /** @var class-string $className */
+        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+            $resourceAttributes = ClassReflection::getClassAttributes($className, ResourceMetadata::class);
+
+            foreach ($resourceAttributes as $resourceAttribute) {
+                /** @var ResourceMetadata $resource */
+                $resource = $resourceAttribute->newInstance();
+                $resourceAlias = $this->getResourceAlias($resource, $className);
+
+                if ($resources[$resourceAlias] ?? false) {
+                    continue;
+                }
+
+                $resources[$resourceAlias] = [
+                    'classes' => [
+                        'model' => $className,
+                        'controller' => ResourceController::class,
+                        'factory' => Factory::class,
+                        'form' => DefaultResourceType::class,
+                    ],
+                    'driver' => 'doctrine/orm',
+                ];
+            }
+        }
+
+        $config['resources'] = $resources;
+    }
+
+    /** @param class-string $className */
+    private function getResourceAlias(Resource $resource, string $className): string
+    {
+        $alias = $resource->getAlias();
+
+        if (null !== $alias) {
+            return $alias;
+        }
+
+        $reflectionClass = new \ReflectionClass($className);
+
+        $shortName = $reflectionClass->getShortName();
+        $suffix = 'Resource';
+        if (str_ends_with($shortName, $suffix)) {
+            $shortName = substr($shortName, 0, strlen($shortName) - strlen($suffix));
+        }
+
+        return 'app.' . u($shortName)->snake()->toString();
+    }
+
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
         $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {
@@ -88,6 +180,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }
 
         foreach ($resources as $alias => $resource) {
+            if (false === $resource['driver']) {
+                break;
+            }
+
             if (!in_array($resource['driver'], $drivers, true)) {
                 throw new InvalidArgumentException(sprintf(
                     'Resource "%s" uses driver "%s", but this driver has not been enabled.',
@@ -122,7 +218,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $resources[$alias] = $resourceConfig;
             $container->setParameter('sylius.resources', $resources);
 
-            DriverProvider::get($metadata)->load($container, $metadata);
+            if ($metadata->getDriver()) {
+                DriverProvider::get($metadata)->load($container, $metadata);
+            }
 
             if ($metadata->hasParameter('translation')) {
                 $alias .= '_translation';
@@ -133,7 +231,9 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
                 $metadata = Metadata::fromAliasAndConfiguration($alias, $resourceConfig);
 
-                DriverProvider::get($metadata)->load($container, $metadata);
+                if ($metadata->getDriver()) {
+                    DriverProvider::get($metadata)->load($container, $metadata);
+                }
             }
         }
     }

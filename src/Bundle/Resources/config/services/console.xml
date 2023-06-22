@@ -17,6 +17,7 @@
 
         <service id="sylius.console.command.resource_debug"  class="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand">
             <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
             <tag name="console.command" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand" alias="sylius.console.command.resource_debug" />

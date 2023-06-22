@@ -39,6 +39,8 @@ final class SyliusResourceBundle extends Bundle
 
     public const DRIVER_DOCTRINE_PHPCR_ODM = 'doctrine/phpcr-odm';
 
+    public const NO_DRIVER = false;
+
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
