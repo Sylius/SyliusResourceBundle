@@ -59,6 +59,10 @@ trait ResourceRepositoryTrait
 
     protected function getPaginator(QueryBuilder $queryBuilder): Pagerfanta
     {
+        if (!class_exists(QueryAdapter::class)) {
+            throw new \LogicException('You can not use the "paginator" if Pargefanta Doctrine ORM Adapter is not available. Try running "composer require pagerfanta/doctrine-orm-adapter".');
+        }
+
         // Use output walkers option in the query adapter should be false as it affects performance greatly (see sylius/sylius#3775)
         return new Pagerfanta(new QueryAdapter($queryBuilder, false, false));
     }
