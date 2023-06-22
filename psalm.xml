@@ -58,6 +58,7 @@
                 <file name="src/Bundle/Controller/ResourceController.php" />
                 <file name="src/Bundle/Controller/Workflow.php" />
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/Component/Symfony/Workflow/OperationStateMachine.php" />
             </errorLevel>
         </InternalMethod>
 
@@ -180,7 +181,7 @@
                 <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch" />
             </errorLevel>
         </TooManyArguments>
-        
+
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
