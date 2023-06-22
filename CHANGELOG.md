@@ -1,5 +1,41 @@
 ## CHANGELOG
 
+### v1.11.0-ALPHA.1 (2023-06-22)
+
+#### Details
+
+- [#493](https://github.com/Sylius/SyliusResourceBundle/issues/493) Add support for Doctrine persistence version 3.0 (@[@loic425](https://github.com/loic425))
+- [#498](https://github.com/Sylius/SyliusResourceBundle/issues/498) Add services' aliases to improve autowiring experience ([@loic425](https://github.com/loic425))
+- [#502](https://github.com/Sylius/SyliusResourceBundle/issues/502) Fix the build ([@loic425](https://github.com/loic425))
+- [#503](https://github.com/Sylius/SyliusResourceBundle/issues/503) Init gitattributes file to preserve the planet ([@loic425](https://github.com/loic425))
+- [#507](https://github.com/Sylius/SyliusResourceBundle/issues/507) Fix Symfony 6 Exception ([@mpysiak](https://github.com/mpysiak), [@lchrusciel](https://github.com/lchrusciel))
+- [#510](https://github.com/Sylius/SyliusResourceBundle/issues/510) Fix declaring repository on resource when it is a service entity repository ([@loic425](https://github.com/loic425))
+- [#530](https://github.com/Sylius/SyliusResourceBundle/issues/530) [DOCS] Change configuration to correct one ()
+- [#545](https://github.com/Sylius/SyliusResourceBundle/issues/545) Update phpspec/phpspec to 7.3 ([@dannyvw](https://github.com/dannyvw))
+- [#549](https://github.com/Sylius/SyliusResourceBundle/issues/549) Hotfix for Attributes routing system ([@loic425](https://github.com/loic425))
+- [#550](https://github.com/Sylius/SyliusResourceBundle/issues/550) Fix build on 1.10 ([@loic425](https://github.com/loic425))
+- [#551](https://github.com/Sylius/SyliusResourceBundle/issues/551) Flip back service ids and FQCN ([@loic425](https://github.com/loic425))
+- [#589](https://github.com/Sylius/SyliusResourceBundle/issues/589) Fix the build on 1.10 branch ([@loic425](https://github.com/loic425))
+- [#607](https://github.com/Sylius/SyliusResourceBundle/issues/607) Allow jms/serializer-bundle ^5.0 ([@dannyvw](https://github.com/dannyvw))
+- [#613](https://github.com/Sylius/SyliusResourceBundle/issues/613) Configure specific state machine component for a resource ([@loic425](https://github.com/loic425))
+- [#659](https://github.com/Sylius/SyliusResourceBundle/issues/659) Debug resource with FQCN ([@loic425](https://github.com/loic425))
+- [#682](https://github.com/Sylius/SyliusResourceBundle/issues/682) [New docs] docs' pagination ([@loic425](https://github.com/loic425))
+- [#687](https://github.com/Sylius/SyliusResourceBundle/issues/687) [New docs] Configure the resource name ([@loic425](https://github.com/loic425))
+- [#689](https://github.com/Sylius/SyliusResourceBundle/issues/689) [New docs] Configure the resource plural name ([@loic425](https://github.com/loic425))
+- [#694](https://github.com/Sylius/SyliusResourceBundle/issues/694) Quick fix for state machine workflow usage with Symfony 6.2 ([@loic425](https://github.com/loic425))
+- [#696](https://github.com/Sylius/SyliusResourceBundle/issues/696) [CI] Add support for PHP 8.2 ([@loic425](https://github.com/loic425))
+- [#700](https://github.com/Sylius/SyliusResourceBundle/issues/700) Fix missing pagerfanta ORM adapter error ([@loic425](https://github.com/loic425))
+- [#701](https://github.com/Sylius/SyliusResourceBundle/issues/701) [HotFix] Flip id with alias on resource loader ([@loic425](https://github.com/loic425))
+- [#706](https://github.com/Sylius/SyliusResourceBundle/issues/706) [Test app] Use Doctrine attributes ([@loic425](https://github.com/loic425))
+- [#717](https://github.com/Sylius/SyliusResourceBundle/issues/717) Fix after upmerge ([@loic425](https://github.com/loic425))
+- [#718](https://github.com/Sylius/SyliusResourceBundle/issues/718) Poc rebased ([@loic425](https://github.com/loic425))
+- [#719](https://github.com/Sylius/SyliusResourceBundle/issues/719) Update licence ([@Rafikooo](https://github.com/Rafikooo))
+- [#723](https://github.com/Sylius/SyliusResourceBundle/issues/723) Fix default templates dir ([@loic425](https://github.com/loic425))
+- [#724](https://github.com/Sylius/SyliusResourceBundle/issues/724) Add flash from event on processor ([@lchrusciel](https://github.com/lchrusciel))
+- [#726](https://github.com/Sylius/SyliusResourceBundle/issues/726) Update license ([@Zales0123](https://github.com/Zales0123))
+- [#727](https://github.com/Sylius/SyliusResourceBundle/issues/727) Bulk update ([@loic425](https://github.com/loic425))
+- [#728](https://github.com/Sylius/SyliusResourceBundle/issues/728) Psalm fix after upmerge ([@Zales0123](https://github.com/Zales0123))
+
 ### v1.10.2 (2023-01-04)
 
 #### Details
