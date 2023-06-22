@@ -7,6 +7,10 @@
         {
             "state": "new",
             "email": "doc.brown@bttf.com"
+        },
+        {
+            "state": "accepted",
+            "email": "biff.tannen@bttf.com"
         }
     ],
     "pagination": {
@@ -14,7 +18,7 @@
         "has_previous_page": false,
         "has_next_page": false,
         "per_page": 10,
-        "total_items": 2,
+        "total_items": 3,
         "total_pages": 1
     }
 }
