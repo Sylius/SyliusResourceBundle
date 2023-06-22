@@ -17,7 +17,7 @@ namespace Sylius\Component\Resource\Metadata;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class ApplyStateMachineTransition extends HttpOperation implements UpdateOperationInterface, StateMachineAwareOperationInterface
+final class BulkUpdate extends HttpOperation implements UpdateOperationInterface, StateMachineAwareOperationInterface, BulkOperationInterface
 {
     public function __construct(
         ?array $methods = null,
@@ -31,13 +31,19 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         string|callable|null $responder = null,
         string|callable|null $repository = null,
         ?string $repositoryMethod = null,
+        ?array $repositoryArguments = null,
         ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
         ?bool $validate = null,
+        ?bool $deserialize = null,
+        ?bool $serialize = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?array $validationContext = null,
+        ?string $eventShortName = null,
         ?string $redirectToRoute = null,
+        ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -47,20 +53,26 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
             path: $path,
             routePrefix: $routePrefix,
             template: $template,
-            shortName: $shortName ?? $stateMachineTransition ?? 'apply_state_machine_transition',
+            shortName: $shortName ?? 'bulk_update',
             name: $name,
             provider: $provider,
             processor: $processor,
             responder: $responder,
             repository: $repository,
             repositoryMethod: $repositoryMethod,
+            repositoryArguments: $repositoryArguments,
             grid: $grid,
             read: $read,
             write: $write,
-            validate: $validate ?? false,
+            validate: $validate,
+            deserialize: $deserialize,
+            serialize: $serialize,
             formType: $formType,
             formOptions: $formOptions,
+            validationContext: $validationContext,
+            eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
+            redirectArguments: $redirectArguments,
         );
     }
 

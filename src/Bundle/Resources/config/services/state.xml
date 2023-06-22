@@ -13,6 +13,24 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="sylius.resource_factory.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
+
+        <service id="sylius.resource_factory.argument_parser" class="Sylius\Component\Resource\Factory\ArgumentParser">
+            <argument type="service" id="sylius.resource_factory.expression_language" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="security.token_storage" on-invalid="null" />
+        </service>
+        <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
+
+        <service id="sylius.state.provider.event_dispatcher"
+                 class="Sylius\Component\Resource\State\EventDispatcherProvider"
+                 decorates="sylius.state.provider"
+                 decoration-priority="-32"
+        >
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.dispatcher.operation" />
+        </service>
+
         <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>

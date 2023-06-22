@@ -1,0 +1,13 @@
+{% set path = options.link.url|default(path(options.link.route|default(grid.requestConfiguration.getRouteName('bulk_accept')), options.link.parameters|default({}))) %}
+
+<form action="{{ path }}" method="post">
+    <input type="hidden" name="_method" value="PATCH">
+    <button type="submit">
+        <i class="icon trash"></i> Bulk accept
+    </button>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('bulk_accept') }}" />
+
+    {% for resource in grid.data %}
+        <input type="hidden" name="ids[]" value="{{ resource.id }}" />
+    {% endfor %}
+</form>

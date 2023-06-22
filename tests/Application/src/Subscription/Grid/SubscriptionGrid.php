@@ -71,6 +71,16 @@ final class SubscriptionGrid extends AbstractGrid implements ResourceAwareGridIn
             ->addActionGroup(
                 BulkActionGroup::create(
                     DeleteAction::create(),
+                    Action::create('accept', 'apply_transition')
+                        ->setLabel('Bulk accept')
+                        ->setOptions([
+                            'link' => [
+                                'route' => 'app_admin_subscription_bulk_accept',
+                            ],
+                            'class' => 'green',
+                            'transition' => 'accept',
+                            'graph' => 'subscription',
+                        ]),
                 ),
             )
         ;

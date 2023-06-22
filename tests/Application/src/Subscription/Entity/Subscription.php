@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
@@ -41,6 +42,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[BulkDelete]
 #[ApplyStateMachineTransition(stateMachineTransition: 'accept')]
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
+#[BulkUpdate(
+    shortName: 'bulk_accept',
+    stateMachineTransition: 'accept',
+)]
 #[Delete]
 #[Show(
     template: 'subscription/show.html.twig',
