@@ -56,6 +56,11 @@ final class SubscriptionUiTest extends ApiTestCase
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_doc']->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_doc']->getId()), $content);
         $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_doc']->getId()), $content);
+
+        $this->assertStringContainsString('<td>biff.tannen@bttf.com</td>', $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_biff']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_biff']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_biff']->getId()), $content);
     }
 
     /** @test */
@@ -187,11 +192,17 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        /** @var Subscription $subscription */
-        $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'marty.mcfly@bttf.com']);
+        /** @var Subscription $firstSubscription */
+        $firstSubscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'marty.mcfly@bttf.com']);
 
-        $this->assertNotNull($subscription);
-        $this->assertSame('accepted', $subscription->getState());
+        /** @var Subscription $secondSubscription */
+        $secondSubscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'doc.brown@bttf.com']);
+
+        $this->assertNotNull($firstSubscription);
+        $this->assertSame('accepted', $firstSubscription->getState());
+
+        $this->assertNotNull($secondSubscription);
+        $this->assertSame('accepted', $secondSubscription->getState());
     }
 
     protected function buildMatcher(): Matcher
