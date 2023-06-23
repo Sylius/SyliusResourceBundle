@@ -256,7 +256,8 @@ As an example, we add a `publish` operation to our book resource.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
