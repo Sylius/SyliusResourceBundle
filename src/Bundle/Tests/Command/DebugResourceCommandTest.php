@@ -322,7 +322,6 @@ final class DebugResourceCommandTest extends TestCase
               name                     "app_one_create"          
               repositoryMethod         null                      
               repositoryArguments      null                      
-              grid                     null                      
               read                     null                      
               write                    null                      
               validate                 null                      

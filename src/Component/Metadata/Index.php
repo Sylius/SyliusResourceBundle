@@ -17,7 +17,7 @@ namespace Sylius\Component\Resource\Metadata;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Index extends HttpOperation implements CollectionOperationInterface
+final class Index extends HttpOperation implements CollectionOperationInterface, GridAwareOperationInterface
 {
     public function __construct(
         ?array $methods = null,
@@ -32,7 +32,6 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         string|callable|null $repository = null,
         ?string $repositoryMethod = null,
         ?array $repositoryArguments = null,
-        ?string $grid = null,
         ?bool $read = null,
         ?bool $write = null,
         ?bool $validate = null,
@@ -44,6 +43,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface
         ?array $validationContext = null,
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
+        private ?string $grid = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -58,7 +58,6 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             repository: $repository,
             repositoryMethod: $repositoryMethod,
             repositoryArguments: $repositoryArguments,
-            grid: $grid,
             read: $read,
             write: $write,
             validate: $validate,
@@ -71,5 +70,18 @@ final class Index extends HttpOperation implements CollectionOperationInterface
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
         );
+    }
+
+    public function getGrid(): ?string
+    {
+        return $this->grid;
+    }
+
+    public function withGrid(string $grid): self
+    {
+        $self = clone $this;
+        $self->grid = $grid;
+
+        return $self;
     }
 }

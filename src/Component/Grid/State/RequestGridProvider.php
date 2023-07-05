@@ -19,6 +19,7 @@ use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
+use Sylius\Component\Resource\Metadata\GridAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProviderInterface;
 
@@ -34,6 +35,10 @@ final class RequestGridProvider implements ProviderInterface
     {
         if (null === $this->gridViewFactory || null === $this->gridProvider) {
             throw new \LogicException('You can not use a grid if Sylius Grid Bundle is not available. Try running "composer require sylius/grid-bundle".');
+        }
+
+        if (!$operation instanceof GridAwareOperationInterface) {
+            throw new \LogicException(sprintf('You can not use a grid if your operation does not implement "%s".', GridAwareOperationInterface::class));
         }
 
         $grid = $operation->getGrid();
