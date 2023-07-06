@@ -8,11 +8,6 @@ sylius_resource:
         locale_provider: test.translation_locale_provider
 
     resources:
-        app.board_game:
-            driver: false
-            classes:
-                model: App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource
-
         app.blog_post:
             classes:
                 model: App\Entity\BlogPost

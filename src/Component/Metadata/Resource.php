@@ -32,6 +32,7 @@ final class Resource
         protected ?array $denormalizationContext = null,
         protected ?array $validationContext = null,
         private ?string $class = null,
+        private string|false|null $driver = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
@@ -243,6 +244,19 @@ final class Resource
     {
         $self = clone $this;
         $self->validationContext = $validationContext;
+
+        return $self;
+    }
+
+    public function getDriver(): false|string|null
+    {
+        return $this->driver;
+    }
+
+    public function withDriver(false|string $driver): self
+    {
+        $self = clone $this;
+        $self->driver = $driver;
 
         return $self;
     }
