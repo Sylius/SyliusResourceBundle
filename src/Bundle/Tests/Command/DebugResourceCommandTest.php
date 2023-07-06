@@ -160,6 +160,7 @@ final class DebugResourceCommandTest extends TestCase
               denormalizationContext   null   
               validationContext        null   
               class                    null   
+              driver                   null   
              ------------------------ ------- 
             
             New operations
@@ -246,6 +247,7 @@ final class DebugResourceCommandTest extends TestCase
               denormalizationContext   null          
               validationContext        null          
               class                    null          
+              driver                   null          
              ------------------------ -------------- 
             
             New operations
