@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Reflection;
+namespace Sylius\Component\Resource\Tests\Reflection;
 
 use App\Entity\CrudRoutes\BookWithCriteria;
 use App\Entity\Route\ShowBook;
@@ -29,7 +29,7 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_returns_resource_classes_from_paths(): void
     {
-        $resources = ClassReflection::getResourcesByPaths([__DIR__ . '/../Dummy']);
+        $resources = ClassReflection::getResourcesByPaths([dirname(__DIR__, 3) . '/src/Component/Tests/Dummy']);
 
         $this->assertContains(DummyClassOne::class, $resources);
         $this->assertContains(DummyClassTwo::class, $resources);
@@ -38,7 +38,7 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_returns_resource_classes_from_a_directory(): void
     {
-        $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
+        $resources = ClassReflection::getResourcesByPaths([dirname(__DIR__, 3) . '/src/Component/Tests/Dummy']);
 
         $this->assertContains(DummyClassOne::class, $resources);
         $this->assertContains(DummyClassTwo::class, $resources);
@@ -47,7 +47,7 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_excludes_traits(): void
     {
-        $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
+        $resources = ClassReflection::getResourcesByPaths([dirname(__DIR__, 3) . '/src/Component/Tests/Dummy']);
 
         $this->assertNotContains(TraitPass::class, $resources);
     }

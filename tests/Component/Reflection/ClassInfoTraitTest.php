@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Reflection;
+namespace Sylius\Component\Resource\Tests\Reflection;
 
 use App\Entity\Book;
 use PHPUnit\Framework\TestCase;
