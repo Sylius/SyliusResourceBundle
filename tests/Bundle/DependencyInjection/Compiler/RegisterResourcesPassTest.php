@@ -71,6 +71,6 @@ class AuthorClass extends AbstractResource
 {
 }
 
-class PullRequestClass extends \Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler\AbstractResource
+class PullRequestClass extends AbstractResource
 {
 }
