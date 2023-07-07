@@ -19,6 +19,7 @@ use App\Entity\ComicBook;
 use App\Factory\BookFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
@@ -177,6 +178,76 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
                 'driver' => 'doctrine/orm',
             ],
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_registering_custom_driver(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load([
+            'drivers' => [
+                'custom' => [
+                    'class' => DoctrineORMDriver::class,
+                ],
+            ],
+        ]);
+
+        // services/integrations/doctrine.xml not loaded
+        $this->assertContainerBuilderNotHasService('sylius_resource.doctrine.mapping_driver_chain');
+        // services/integrations/doctrine/orm.xml not loaded
+        $this->assertContainerBuilderNotHasService('sylius.event_subscriber.orm_mapped_super_class');
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_registering_custom_driver_with_simple_array_values(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load([
+            'drivers' => [
+                'custom' => DoctrineORMDriver::class,
+            ],
+        ]);
+
+        // services/integrations/doctrine.xml not loaded
+        $this->assertContainerBuilderNotHasService('sylius_resource.doctrine.mapping_driver_chain');
+        // services/integrations/doctrine/orm.xml not loaded
+        $this->assertContainerBuilderNotHasService('sylius.event_subscriber.orm_mapped_super_class');
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_registering_drivers_with_the_legacy_string_array(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load([
+            'drivers' => [
+                'doctrine/orm',
+            ],
+        ]);
+
+        // services/integrations/doctrine.xml is loaded
+        $this->assertContainerBuilderHasService('sylius_resource.doctrine.mapping_driver_chain');
+        // services/integrations/doctrine/orm.xml is loaded
+        $this->assertContainerBuilderHasService('sylius.event_subscriber.orm_mapped_super_class');
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_registering_drivers_with_defaults_values(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+        $this->load();
+
+        // services/integrations/doctrine.xml is loaded
+        $this->assertContainerBuilderHasService('sylius_resource.doctrine.mapping_driver_chain');
+        // services/integrations/doctrine/orm.xml is loaded
+        $this->assertContainerBuilderHasService('sylius.event_subscriber.orm_mapped_super_class');
     }
 
     protected function getContainerExtensions(): array

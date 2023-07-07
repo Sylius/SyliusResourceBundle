@@ -14,12 +14,17 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection;
 
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODMDriver;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHPCRDriver;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverInterface;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 final class Configuration implements ConfigurationInterface
 {
@@ -146,8 +151,76 @@ final class Configuration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('drivers')
-                    ->defaultValue([SyliusResourceBundle::DRIVER_DOCTRINE_ORM])
-                    ->enumPrototype()->values(SyliusResourceBundle::getAvailableDrivers())->end()
+                    ->info('The list of enabled drivers with there related class.')
+                    ->normalizeKeys(false) // do not replace dashes with underscores
+                    ->useAttributeAsKey('type')
+                    ->defaultValue([
+                        SyliusResourceBundle::DRIVER_DOCTRINE_ORM => ['class' => DoctrineORMDriver::class],
+                    ])
+                    ->beforeNormalization()
+                        ->ifArray()
+                        ->then(static function (array $v) {
+                            foreach ($v as $driver => $value) {
+                                if (isset($value['class'])) {
+                                    continue;
+                                }
+                                // retro-compatibility
+                                if (in_array($value, SyliusResourceBundle::getAvailableDrivers(), true)) {
+                                    $v[$value] = ['class' => match ($value) {
+                                        SyliusResourceBundle::DRIVER_DOCTRINE_ORM => DoctrineORMDriver::class,
+                                        SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM => DoctrineODMDriver::class,
+                                        SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM => DoctrinePHPCRDriver::class,
+                                    }];
+
+                                    unset($v[$driver]);
+
+                                    continue;
+                                }
+
+                                $v[$driver] = ['class' => $value];
+                            }
+
+                            return $v;
+                        })
+                    ->end()
+                    ->validate()
+                        ->ifArray()
+                        ->then(static function (array $v) {
+                            foreach ($v as $driver => $value) {
+                                /** @var string|null $class */
+                                $class = $value['class'] ?? null;
+                                if (null === $class) {
+                                    throw new InvalidConfigurationException(sprintf(
+                                        'The Sylius Resource driver "%s" must have a class!',
+                                        $driver,
+                                    ));
+                                }
+
+                                if (false === class_exists($class)) {
+                                    throw new InvalidConfigurationException(sprintf(
+                                        'The Sylius Resource driver "%s" class must be an existing class, "%s" given.',
+                                        $driver,
+                                        $class,
+                                    ));
+                                }
+
+                                if (false === is_a($class, DriverInterface::class, true)) {
+                                    throw new InvalidConfigurationException(sprintf(
+                                        'The Sylius Resource driver "%s" class must be an instance of "%s".',
+                                        $driver,
+                                        DriverInterface::class,
+                                    ));
+                                }
+                            }
+
+                            return $v;
+                        })
+                    ->end()
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('class')->cannotBeEmpty()->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;
