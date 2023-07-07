@@ -108,6 +108,7 @@
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
             "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/Bundle/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
+            "Sylius\\Component\\Resource\\Tests\\": "tests/Component/",
             "App\\": "tests/Application/src/"
         }
     },
