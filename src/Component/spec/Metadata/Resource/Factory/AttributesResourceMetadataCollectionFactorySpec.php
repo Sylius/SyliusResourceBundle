@@ -15,7 +15,6 @@ namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Metadata;
@@ -26,7 +25,6 @@ use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetada
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
-use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
@@ -36,7 +34,6 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithAlias;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithDenormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormOptions;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithFormType;
-use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithGrid;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithNormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
@@ -481,84 +478,6 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $operation->getResource()->getPluralName()->shouldReturn('books');
-    }
-
-    function it_creates_resource_metadata_with_default_provider_on_http_operations(RegistryInterface $resourceRegistry): void
-    {
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
-            'driver' => 'dummy_driver',
-            'classes' => [
-                'model' => 'App\Dummy',
-                'form' => 'App\Form',
-            ],
-        ]));
-
-        $metadataCollection = $this->create(DummyResourceWithOperations::class);
-        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
-
-        $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
-        $resource->getAlias()->shouldReturn('app.dummy');
-
-        $operations = $resource->getOperations();
-        $operations->shouldHaveType(Operations::class);
-
-        $operations->count()->shouldReturn(4);
-        $operations->has('app_dummy_create')->shouldReturn(true);
-        $operations->has('app_dummy_update')->shouldReturn(true);
-        $operations->has('app_dummy_index')->shouldReturn(true);
-        $operations->has('app_dummy_show')->shouldReturn(true);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
-        $operation->getProvider()->shouldReturn(Provider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
-        $operation->getProvider()->shouldReturn(Provider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
-        $operation->getProvider()->shouldReturn(Provider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
-        $operation->getProvider()->shouldReturn(Provider::class);
-    }
-
-    function it_creates_resource_metadata_with_default_grid_provider_on_http_operations(RegistryInterface $resourceRegistry): void
-    {
-        $resourceRegistry->get('app.dummy')->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
-            'driver' => 'dummy_driver',
-            'classes' => [
-                'model' => 'App\Dummy',
-                'form' => 'App\Form',
-            ],
-        ]));
-
-        $metadataCollection = $this->create(DummyResourceWithGrid::class);
-        $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
-
-        $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
-        $resource->getAlias()->shouldReturn('app.dummy');
-
-        $operations = $resource->getOperations();
-        $operations->shouldHaveType(Operations::class);
-
-        $operations->count()->shouldReturn(4);
-        $operations->has('app_dummy_create')->shouldReturn(true);
-        $operations->has('app_dummy_update')->shouldReturn(true);
-        $operations->has('app_dummy_index')->shouldReturn(true);
-        $operations->has('app_dummy_show')->shouldReturn(true);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
-        $operation->getProvider()->shouldReturn(Provider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
-        $operation->getProvider()->shouldReturn(Provider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
-        $operation->getProvider()->shouldReturn(RequestGridProvider::class);
-
-        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
-        $operation->getProvider()->shouldReturn(Provider::class);
     }
 
     function it_creates_resource_metadata_with_default_responder_on_http_operations(RegistryInterface $resourceRegistry): void

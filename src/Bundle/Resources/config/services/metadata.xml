@@ -52,6 +52,13 @@
             <argument type="service" id=".inner" />
         </service>
 
+        <service id="sylius.resource_metadata_collection.factory.provider"
+                 class="Sylius\Component\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+        >
+            <argument type="service" id=".inner" />
+        </service>
+
         <service id="sylius.resource_metadata_collection.factory.resource_factory"
                  class="Sylius\Component\Resource\Metadata\Resource\Factory\FactoryResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"

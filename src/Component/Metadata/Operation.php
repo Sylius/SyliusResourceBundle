@@ -42,7 +42,6 @@ abstract class Operation
         string|callable|null $repository = null,
         protected ?string $repositoryMethod = null,
         protected ?array $repositoryArguments = null,
-        protected ?string $grid = null,
         protected ?bool $read = null,
         protected ?bool $write = null,
         protected ?bool $validate = null,
@@ -187,19 +186,6 @@ abstract class Operation
     {
         $self = clone $this;
         $self->repositoryArguments = $repositoryArguments;
-
-        return $self;
-    }
-
-    public function getGrid(): ?string
-    {
-        return $this->grid;
-    }
-
-    public function withGrid(string $grid): self
-    {
-        $self = clone $this;
-        $self->grid = $grid;
 
         return $self;
     }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
@@ -22,7 +21,6 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Reflection\ClassReflection;
-use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
@@ -194,14 +192,6 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             if (null === $routeName = $operation->getRouteName()) {
                 $routeName = $this->operationRouteNameFactory->createRouteName($operation);
                 $operation = $operation->withRouteName($routeName);
-            }
-
-            if (null === $operation->getProvider() && null !== $operation->getGrid()) {
-                $operation = $operation->withProvider(RequestGridProvider::class);
-            }
-
-            if (null === $operation->getProvider()) {
-                $operation = $operation->withProvider(Provider::class);
             }
 
             if (null === $operation->getResponder()) {

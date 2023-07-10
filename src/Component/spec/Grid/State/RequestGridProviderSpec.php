@@ -23,6 +23,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
+use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,6 +98,19 @@ final class RequestGridProviderSpec extends ObjectBehavior
         $operation = new Index(name: 'app_book');
 
         $this->shouldThrow(new \RuntimeException('Operation has no grid, so you cannot use this provider for operation "app_book"'))
+            ->during('provide', [
+                $operation,
+                new Context(new RequestOption($request->getWrappedObject())),
+            ])
+        ;
+    }
+
+    function it_throws_an_exception_when_operation_does_not_implement_the_grid_aware_interface(
+        Request $request,
+    ): void {
+        $operation = new Create(name: 'app_book');
+
+        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Component\Resource\Metadata\GridAwareOperationInterface".'))
             ->during('provide', [
                 $operation,
                 new Context(new RequestOption($request->getWrappedObject())),
