@@ -36,9 +36,10 @@ final class DriverProvider
 
         /** @var class-string|null $class */
         $class = self::$drivers[$type]['class'] ?? null;
+
         if (null !== $class) {
+            /** @var DriverInterface $driver */
             $driver = new $class();
-            Assert::isInstanceOf($driver, DriverInterface::class);
 
             return $driver;
         }
