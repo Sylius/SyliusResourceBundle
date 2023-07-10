@@ -164,7 +164,8 @@ final class Configuration implements ConfigurationInterface
                                 if (isset($value['class'])) {
                                     continue;
                                 }
-                                // retro-compatibility
+
+                                // bc-layer
                                 if (in_array($value, SyliusResourceBundle::getAvailableDrivers(), true)) {
                                     $values[$value] = ['class' => match ($value) {
                                         SyliusResourceBundle::DRIVER_DOCTRINE_ORM => DoctrineORMDriver::class,
