@@ -159,28 +159,28 @@ final class Configuration implements ConfigurationInterface
                     ])
                     ->beforeNormalization()
                         ->ifArray()
-                        ->then(static function (array $v) {
-                            foreach ($v as $driver => $value) {
+                        ->then(static function (array $values) {
+                            foreach ($values as $driver => $value) {
                                 if (isset($value['class'])) {
                                     continue;
                                 }
                                 // retro-compatibility
                                 if (in_array($value, SyliusResourceBundle::getAvailableDrivers(), true)) {
-                                    $v[$value] = ['class' => match ($value) {
+                                    $values[$value] = ['class' => match ($value) {
                                         SyliusResourceBundle::DRIVER_DOCTRINE_ORM => DoctrineORMDriver::class,
                                         SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM => DoctrineODMDriver::class,
                                         SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM => DoctrinePHPCRDriver::class,
                                     }];
 
-                                    unset($v[$driver]);
+                                    unset($values[$driver]);
 
                                     continue;
                                 }
 
-                                $v[$driver] = ['class' => $value];
+                                $values[$driver] = ['class' => $value];
                             }
 
-                            return $v;
+                            return $values;
                         })
                     ->end()
                     ->validate()
