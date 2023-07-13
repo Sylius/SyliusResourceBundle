@@ -24,6 +24,9 @@ use Webmozart\Assert\Assert;
 
 final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener implements EventSubscriber
 {
+    /**
+     * @deprecated since version 1.10, It will be removed in 2.0.
+     */
     public function getSubscribedEvents(): array
     {
         return [

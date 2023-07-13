@@ -21,6 +21,9 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 final class ORMRepositoryClassSubscriber extends AbstractDoctrineListener implements EventSubscriber
 {
+    /**
+     * @deprecated since version 1.10, It will be removed in 2.0.
+     */
     public function getSubscribedEvents(): array
     {
         return [
