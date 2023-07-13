@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Webmozart\Assert\Assert;
 
-final class ORMMappedSuperClassSubscriber extends AbstractDoctrineSubscriber
+final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener implements EventSubscriber
 {
     public function getSubscribedEvents(): array
     {

@@ -14,6 +14,13 @@ sylius_resource:
             - '%kernel.project_dir%/src/Entity'
 ```
 
+These following services are now Doctrine listeners instead of Doctrine subscribers (@see https://github.com/symfony/symfony/issues/49586)
+
+* Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener
+* Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber
+* Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber
+
+
 ## UPGRADE FOR `1.10.x`
 
 ### FROM `1.9.x` to `1.10.x`

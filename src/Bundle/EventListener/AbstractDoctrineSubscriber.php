@@ -14,38 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\Mapping\ReflectionService;
-use Doctrine\Persistence\Mapping\RuntimeReflectionService;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
-abstract class AbstractDoctrineSubscriber implements EventSubscriber
+trigger_deprecation('sylius/resource-bundle', '1.10', 'The "%s" class is deprecated, use %s instead. It will be removed in 2.0.', AbstractDoctrineSubscriber::class, AbstractDoctrineListener::class);
+
+abstract class AbstractDoctrineSubscriber extends AbstractDoctrineListener implements EventSubscriber
 {
-    protected RegistryInterface $resourceRegistry;
-
-    private ?RuntimeReflectionService $reflectionService = null;
-
-    public function __construct(RegistryInterface $resourceRegistry)
-    {
-        $this->resourceRegistry = $resourceRegistry;
-    }
-
-    protected function isResource(ClassMetadata $metadata): bool
-    {
-        return $metadata->getReflectionClass()->implementsInterface(ResourceInterface::class);
-    }
-
-    /**
-     * @psalm-suppress InvalidReturnType
-     */
-    protected function getReflectionService(): ReflectionService
-    {
-        if ($this->reflectionService === null) {
-            $this->reflectionService = new RuntimeReflectionService();
-        }
-
-        /** @psalm-suppress InvalidReturnStatement */
-        return $this->reflectionService;
-    }
 }
