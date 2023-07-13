@@ -22,13 +22,13 @@
 
         <service id="sylius.event_subscriber.orm_mapped_super_class" class="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber">
             <argument type="service" id="sylius.resource_registry" />
-            <tag name="doctrine.event_subscriber" priority="8192" />
+            <tag name="doctrine.event_listener" event="loadClassMetadata" priority="8192" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber" alias="sylius.event_subscriber.orm_mapped_super_class" />
 
         <service id="sylius.event_subscriber.orm_repository_class" class="Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber">
             <argument type="service" id="sylius.resource_registry" />
-            <tag name="doctrine.event_subscriber" priority="8192" />
+            <tag name="doctrine.event_listener" event="loadClassMetadata" priority="8192" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber" alias="sylius.event_subscriber.orm_repository_class" />
 

@@ -13,13 +13,17 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\EventListener;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-final class ORMRepositoryClassSubscriber extends AbstractDoctrineSubscriber
+final class ORMRepositoryClassSubscriber extends AbstractDoctrineListener implements EventSubscriber
 {
+    /**
+     * @deprecated since version 1.10, It will be removed in 2.0.
+     */
     public function getSubscribedEvents(): array
     {
         return [
