@@ -141,7 +141,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                         'factory' => Factory::class,
                         'form' => DefaultResourceType::class,
                     ],
-                    'driver' => 'doctrine/orm',
+                    'driver' => $resource->getDriver() ?? SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
                 ];
             }
         }
