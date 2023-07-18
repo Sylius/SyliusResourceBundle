@@ -169,14 +169,36 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         return 'app.' . u($shortName)->snake()->toString();
     }
 
+    /**
+     * @param array<string, array<string, string>> $drivers
+     */
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
     {
-        $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {
-            return $result || in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_ORM, SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true);
+        DriverProvider::build($drivers);
+
+        $integrateDoctrine = array_reduce(array_keys($drivers), static function (bool $result, string $type): bool {
+            return $result || in_array($type, [SyliusResourceBundle::DRIVER_DOCTRINE_ORM, SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true);
         }, false);
 
         if ($integrateDoctrine) {
             $loader->load('services/integrations/doctrine.xml');
+        }
+
+        foreach ($drivers as $type => $driver) {
+            if (in_array($type, [SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true)) {
+                trigger_deprecation(
+                    'sylius/resource-bundle',
+                    '1.3',
+                    'The "%s" driver is deprecated. Doctrine MongoDB and PHPCR will no longer be supported in 2.0.',
+                    $type,
+                );
+            }
+
+            if (false === in_array($type, SyliusResourceBundle::getAvailableDrivers(), true)) {
+                continue;
+            }
+
+            $loader->load(sprintf('services/integrations/%s.xml', $type));
         }
 
         foreach ($resources as $alias => $resource) {
@@ -184,26 +206,13 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 break;
             }
 
-            if (!in_array($resource['driver'], $drivers, true)) {
+            if (!array_key_exists($resource['driver'], $drivers)) {
                 throw new InvalidArgumentException(sprintf(
                     'Resource "%s" uses driver "%s", but this driver has not been enabled.',
                     $alias,
                     $resource['driver'],
                 ));
             }
-        }
-
-        foreach ($drivers as $driver) {
-            if (in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true)) {
-                trigger_deprecation(
-                    'sylius/resource-bundle',
-                    '1.3',
-                    'The "%s" driver is deprecated. Doctrine MongoDB and PHPCR will no longer be supported in 2.0.',
-                    $driver,
-                );
-            }
-
-            $loader->load(sprintf('services/integrations/%s.xml', $driver));
         }
     }
 
