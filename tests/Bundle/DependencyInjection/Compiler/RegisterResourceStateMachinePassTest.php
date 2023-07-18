@@ -11,15 +11,12 @@
 
 declare(strict_types=1);
 
-namespace DependencyInjection\Compiler;
+namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
 use Sylius\Bundle\ResourceBundle\Controller\Workflow;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
-use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler\AuthorClass;
-use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler\BookClass;
-use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler\PullRequestClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
