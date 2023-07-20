@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Routing;
+namespace Sylius\Bundle\ResourceBundle\Tests\Routing;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Kernel;

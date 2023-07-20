@@ -10,7 +10,6 @@
             <directory name="vendor" />
             <directory name="src/Bundle/Doctrine/ODM" />
             <directory name="src/Bundle/spec" />
-            <directory name="src/Bundle/Tests" />
             <directory name="src/Component/spec" />
             <directory name="src/Component/vendor" />
             <file name="src/Bundle/Controller/ControllerTrait.php" />

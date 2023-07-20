@@ -14,7 +14,6 @@
 /psalm.xml export-ignore
 /rector.php
 /src/Bundle/spec export-ignore
-/src/Bundle/Tests export-ignore
 /src/Component/spec export-ignore
 /src/Component/Tests export-ignore
 /src/Component/phpspec.yml.dist export-ignore
