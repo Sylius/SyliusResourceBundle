@@ -50,17 +50,17 @@ final class SubscriptionUiTest extends ApiTestCase
         $this->assertStringContainsString('<td>marty.mcfly@bttf.com</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_marty']->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_marty']->getId()), $content);
-        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_marty']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s/delete" method="post">', $subscriptions['subscription_marty']->getId()), $content);
 
         $this->assertStringContainsString('<td>doc.brown@bttf.com</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_doc']->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_doc']->getId()), $content);
-        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_doc']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s/delete" method="post">', $subscriptions['subscription_doc']->getId()), $content);
 
         $this->assertStringContainsString('<td>biff.tannen@bttf.com</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $subscriptions['subscription_biff']->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $subscriptions['subscription_biff']->getId()), $content);
-        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s" method="post">', $subscriptions['subscription_biff']->getId()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s/delete" method="post">', $subscriptions['subscription_biff']->getId()), $content);
     }
 
     /** @test */

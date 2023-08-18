@@ -50,12 +50,12 @@ final class BoardGameUiTest extends ApiTestCase
         $this->assertStringContainsString('<td>Stone Age</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/board-games/%s">Show</a>', $boardGames['stone_age']->id()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/board-games/%s/edit">Edit</a>', $boardGames['stone_age']->id()), $content);
-        $this->assertStringContainsString(sprintf('<form action="/admin/board-games/%s" method="post">', $boardGames['stone_age']->id()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/board-games/%s/delete" method="post">', $boardGames['stone_age']->id()), $content);
 
         $this->assertStringContainsString('<td>Ticket to Ride</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/board-games/%s">Show</a>', $boardGames['ticket_to_ride']->id()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/board-games/%s/edit">Edit</a>', $boardGames['ticket_to_ride']->id()), $content);
-        $this->assertStringContainsString(sprintf('<form action="/admin/board-games/%s" method="post">', $boardGames['ticket_to_ride']->id()), $content);
+        $this->assertStringContainsString(sprintf('<form action="/admin/board-games/%s/delete" method="post">', $boardGames['ticket_to_ride']->id()), $content);
     }
 
     /** @test */
