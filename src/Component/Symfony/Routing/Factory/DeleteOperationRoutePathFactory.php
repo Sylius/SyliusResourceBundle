@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
+use Sylius\Component\Resource\Metadata\Api\ApiOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 
@@ -28,10 +29,7 @@ final class DeleteOperationRoutePathFactory implements OperationRoutePathFactory
         $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
 
         if ($operation instanceof DeleteOperationInterface) {
-            $path = match ($shortName) {
-                'delete' => '',
-                default => '/' . $shortName,
-            };
+            $path = $operation instanceof ApiOperationInterface && 'delete' === $shortName ? '' : '/' . $shortName;
 
             return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
         }

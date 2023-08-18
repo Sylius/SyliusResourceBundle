@@ -20,7 +20,7 @@ use Sylius\Component\Resource\Metadata\HttpOperation;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class GetCollection extends HttpOperation implements CollectionOperationInterface
+final class GetCollection extends HttpOperation implements CollectionOperationInterface, ApiOperationInterface
 {
     public function __construct(
         ?string $path = null,

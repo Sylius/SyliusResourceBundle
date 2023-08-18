@@ -36,14 +36,14 @@ final class DeleteOperationRoutePathFactorySpec extends ObjectBehavior
     {
         $operation = new Delete();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
+        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/delete');
     }
 
     function it_generates_route_path_for_delete_operations_with_custom_identifier(): void
     {
         $operation = (new Delete())->withResource(new Resource(identifier: 'code'));
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{code}');
+        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{code}/delete');
     }
 
     function it_generates_route_path_for_update_operations_with_custom_short_name(): void
@@ -58,5 +58,12 @@ final class DeleteOperationRoutePathFactorySpec extends ObjectBehavior
         $operation = new Api\Delete();
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
+    }
+
+    function it_generates_route_path_for_api_delete_operations_with_custom_short_name(): void
+    {
+        $operation = new Api\Delete(shortName: 'remove');
+
+        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/remove');
     }
 }
