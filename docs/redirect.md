@@ -49,10 +49,11 @@ After adding or editing a book, it will be redirected to the edition page of a b
 
 You can pass arguments to your redirection method.
 
-2 variables are available:
+3 variables are available:
 
 * `resource`: to retrieve data from the instantiated resource
 * `{name_of_your_resource}`: If your resource is a book instance, it will be also available as `book` variable
+* `request`: to retrieve data from the request via Symfony\Component\HttpFoundation\Request
 
 It uses the [Symfony expression language](https://symfony.com/doc/current/components/expression_language.html) component.
 

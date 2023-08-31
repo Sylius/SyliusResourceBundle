@@ -27,6 +27,7 @@
             <argument type="service" id="request_stack" />
             <tag name="sylius.resource_factory_variables" />
             <tag name="sylius.repository_variables" />
+            <tag name="sylius.routing_variables" />
         </service>
 
         <service id="sylius.expression_language.variables_collection.factory" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">
