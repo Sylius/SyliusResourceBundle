@@ -161,6 +161,7 @@ final class DebugResourceCommandTest extends TestCase
               validationContext        null   
               class                    null   
               driver                   null   
+              vars                     null   
              ------------------------ ------- 
             
             New operations
@@ -248,6 +249,7 @@ final class DebugResourceCommandTest extends TestCase
               validationContext        null          
               class                    null          
               driver                   null          
+              vars                     null          
              ------------------------ -------------- 
             
             New operations
@@ -315,6 +317,7 @@ final class DebugResourceCommandTest extends TestCase
               routePrefix              null                      
               redirectToRoute          null                      
               redirectArguments        null                      
+              vars                     null                      
               provider                 null                      
               processor                "App\CreateOneProcessor"  
               responder                null                      
