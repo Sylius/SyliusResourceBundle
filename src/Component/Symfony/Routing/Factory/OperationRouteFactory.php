@@ -69,6 +69,11 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             $options['section'] = $section;
         }
 
+        // For Legacy Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration
+        if (null !== $vars = $operation->getVars()) {
+            $options['vars'] = $vars;
+        }
+
         return $options;
     }
 }

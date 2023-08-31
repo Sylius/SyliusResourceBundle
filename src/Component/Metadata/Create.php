@@ -50,6 +50,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
+        ?array $vars = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -79,6 +80,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
+            vars: $vars,
         );
 
         $this->factory = $factory;

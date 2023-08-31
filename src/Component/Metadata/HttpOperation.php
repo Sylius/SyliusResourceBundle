@@ -49,6 +49,7 @@ class HttpOperation extends Operation
         string|callable|null $twigContextFactory = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
+        protected ?array $vars = null,
     ) {
         parent::__construct(
             template: $template,
@@ -163,6 +164,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->redirectArguments = $redirectArguments;
+
+        return $self;
+    }
+
+    public function getVars(): ?array
+    {
+        return $this->vars;
+    }
+
+    public function withVars(array $vars): self
+    {
+        $self = clone $this;
+        $self->vars = $vars;
 
         return $self;
     }

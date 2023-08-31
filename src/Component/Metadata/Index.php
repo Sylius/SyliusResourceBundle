@@ -43,6 +43,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface,
         ?array $validationContext = null,
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
+        ?array $vars = null,
         private ?string $grid = null,
     ) {
         parent::__construct(
@@ -69,6 +70,7 @@ final class Index extends HttpOperation implements CollectionOperationInterface,
             eventShortName: $eventShortName,
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
+            vars: $vars,
         );
     }
 

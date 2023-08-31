@@ -8,6 +8,7 @@ Read the previous chapter to [create a new resource](create_new_resource.md).
 * [Advanced configuration](#advanced-configuration)
   * [Configure the resource name](#configure-the-resource-name)
   * [Configure the resource plural name](#configure-the-resource-plural-name)
+  * [Configure the resource vars](#configure-the-resource-vars)
 <!-- TOC -->
 
 ## Implements the Resource interface
@@ -122,6 +123,31 @@ As an example, on an `index` operation these Twig variables will be available:
 | library   | App\Entity\Book                          |
 | operation | Sylius\Component\Resource\Metadata\Index |
 | app       | Symfony\Bridge\Twig\AppVariable          |
+
+### Configure the resource vars
+
+It defines the simple vars that you can use on your templates.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+You can use these vars on your Twig templates.
+These vars will be available on any operations for this resource.
+
+```html
+<h1>{{ operation.vars.header }}</h1>
+<h2>{{ operation.vars.subheader }}</h2>
+```
 
 **[Go back to the documentation's index](index.md)**
 

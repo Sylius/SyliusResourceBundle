@@ -43,6 +43,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
         ?string $eventShortName = null,
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
+        ?array $vars = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['GET'],
@@ -68,6 +69,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
             eventShortName: $eventShortName,
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
+            vars: $vars,
         );
     }
 }

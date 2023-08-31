@@ -20,6 +20,7 @@ There are some basic CRUD operations and more.
   * [Configure the section](#configure-the-section)
   * [Configure the routes' prefix](#configure-the-routes-prefix)
   * [Configure the resource identifier](#configure-the-resource-identifier)
+  * [Configure the vars](#configure-the-vars)
 <!-- TOC -->
 
 ## Basic operations
@@ -473,6 +474,32 @@ class Book implements ResourceInterface
 | app_book_update      | GET, PUT, PATCH | /admin/books/{code}/edit |        
 | app_book_delete      | DELETE          | /admin/books/{code}      |
 | app_book_bulk_delete | DELETE          | /admin/books/bulk_delete |
+
+### Configure the vars
+
+It defines the simple vars that you can use on your templates.
+
+```php
+namespace App\Entity;
+
+use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+#[Resource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
+#[Create(vars: ['subheader' => 'Adding a book'])]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+You can use these vars on your Twig templates.
+These vars will be available on any operations for this resource.
+
+```html
+<h1>{{ operation.vars.header }}<!-- Library --></h1>
+<h2>{{ operation.vars.subheader }}<!-- Adding a book --></h2>
+```
 
 **[Go back to the documentation's index](index.md)**
 

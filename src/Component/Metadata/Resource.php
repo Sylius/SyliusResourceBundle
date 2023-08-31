@@ -33,6 +33,7 @@ final class Resource
         protected ?array $validationContext = null,
         private ?string $class = null,
         private string|false|null $driver = null,
+        private ?array $vars = null,
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
@@ -257,6 +258,19 @@ final class Resource
     {
         $self = clone $this;
         $self->driver = $driver;
+
+        return $self;
+    }
+
+    public function getVars(): ?array
+    {
+        return $this->vars;
+    }
+
+    public function withVars(array $vars): self
+    {
+        $self = clone $this;
+        $self->vars = $vars;
 
         return $self;
     }
