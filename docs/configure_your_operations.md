@@ -482,6 +482,7 @@ It defines the simple vars that you can use on your templates.
 ```php
 namespace App\Entity;
 
+use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
