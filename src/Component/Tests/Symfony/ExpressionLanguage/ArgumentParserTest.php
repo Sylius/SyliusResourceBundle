@@ -30,6 +30,7 @@ final class ArgumentParserTest extends KernelTestCase
         $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
         $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
         $this->assertTrue($argumentParser->parseExpression('user === null'));
+        $this->assertTrue($argumentParser->parseExpression('request === null'));
     }
 
     public function testRepositoryArgumentParser(): void
@@ -44,6 +45,7 @@ final class ArgumentParserTest extends KernelTestCase
         $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
         $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
         $this->assertTrue($argumentParser->parseExpression('user === null'));
+        $this->assertTrue($argumentParser->parseExpression('request === null'));
     }
 
     public function testRoutingArgumentParser(): void
@@ -54,6 +56,7 @@ final class ArgumentParserTest extends KernelTestCase
 
         /** @var ArgumentParserInterface $argumentParser */
         $argumentParser = $container->get('sylius.expression_language.argument_parser.routing');
+        $this->assertTrue($argumentParser->parseExpression('request === null'));
 
         $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
     }
