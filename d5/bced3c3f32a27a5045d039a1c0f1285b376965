@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+
+by diimpp at 2023-09-01T10:54:04Z
+
+Is this PR part of bigger initiative? For example, will be vars made translatable?
+
+---------------------------------------------------------------------------
+
+by Prometee at 2023-09-01T11:51:05Z
+
+> Is this PR part of bigger initiative? For example, will be vars made translatable?
+
+The template is responsible of the translation, there is no need to manage translations in this bundle.
+
+---------------------------------------------------------------------------
+
+by Zales0123 at 2023-09-09T12:18:22Z
+
+Thank you, Loïc! :1st_place_medal:
