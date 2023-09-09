@@ -77,7 +77,7 @@
         "symfony/workflow": "^5.4 || ^6.0",
         "twig/twig": "^2.12 || ^3.0",
         "vimeo/psalm": "^4.22",
-        "rector/rector": "^0.13.5",
+        "rector/rector": "^0.18.2",
         "symfony/messenger": "^5.4 || ^6.0",
         "symfony/serializer": "^5.4 || ^6.0",
         "symfony/security-bundle": "^5.4 || ^6.0"
