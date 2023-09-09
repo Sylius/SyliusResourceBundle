@@ -20,7 +20,7 @@ use Sylius\Component\Resource\Metadata\HttpOperation;
  * @experimental
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-final class Delete extends HttpOperation implements DeleteOperationInterface
+final class Delete extends HttpOperation implements DeleteOperationInterface, ApiOperationInterface
 {
     public function __construct(
         ?string $path = null,

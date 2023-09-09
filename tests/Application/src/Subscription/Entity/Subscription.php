@@ -39,6 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Index(grid: 'app_subscription')]
 #[Create]
 #[Update]
+#[Delete]
 #[BulkDelete]
 #[ApplyStateMachineTransition(stateMachineTransition: 'accept')]
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
@@ -46,7 +47,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'bulk_accept',
     stateMachineTransition: 'accept',
 )]
-#[Delete]
 #[Show(
     template: 'subscription/show.html.twig',
     twigContextFactory: ShowSubscriptionContextFactory::class,
