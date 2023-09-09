@@ -191,11 +191,18 @@ final class ResourceSpec extends ObjectBehavior
         $this->getDriver()->shouldReturn('doctrine/orm');
     }
 
+    function it_can_be_constructed_with_vars(): void
+    {
+        $this->beConstructedWith('app.book', null, null, null, null, null, null, null, null, null, null, null, null, null, ['subheader' => 'Managing your library']);
+
+        $this->getVars()->shouldReturn(['subheader' => 'Managing your library']);
+    }
+
     function it_can_be_constructed_with_operations(): void
     {
         $operations = [new Create(), new Update()];
 
-        $this->beConstructedWith(null, null, null, null, null, null, null, null, null, null, null, null, null, null, $operations);
+        $this->beConstructedWith(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, $operations);
 
         $this->getOperations()->shouldHaveCount(2);
     }

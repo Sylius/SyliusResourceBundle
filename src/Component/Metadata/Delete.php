@@ -44,6 +44,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
+        ?array $vars = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['DELETE'],
@@ -70,6 +71,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
+            vars: $vars,
         );
     }
 }

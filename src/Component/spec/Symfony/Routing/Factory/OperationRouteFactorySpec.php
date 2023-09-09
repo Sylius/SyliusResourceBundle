@@ -266,4 +266,28 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             ],
         ]);
     }
+
+    function it_generates_routes_with_vars(
+        OperationRoutePathFactoryInterface $routePathFactory,
+    ): void {
+        $operation = new Index(vars: ['subheader' => 'Managing your library']);
+
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies')->shouldBeCalled();
+
+        $route = $this->create(
+            $metadata,
+            new Resource(alias: 'app.dummy'),
+            $operation,
+        );
+
+        $route->getDefaults()->shouldReturn([
+            '_controller' => PlaceHolderAction::class,
+            '_sylius' => [
+                'resource' => 'app.dummy',
+                'vars' => ['subheader' => 'Managing your library'],
+            ],
+        ]);
+    }
 }

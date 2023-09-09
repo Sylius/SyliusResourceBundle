@@ -44,6 +44,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         string|callable|null $twigContextFactory = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
+        ?array $vars = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -73,6 +74,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
             twigContextFactory: $twigContextFactory,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
+            vars: $vars,
         );
     }
 

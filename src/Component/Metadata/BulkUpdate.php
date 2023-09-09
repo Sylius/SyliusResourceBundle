@@ -43,6 +43,7 @@ final class BulkUpdate extends HttpOperation implements UpdateOperationInterface
         ?string $eventShortName = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
+        ?array $vars = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -71,6 +72,7 @@ final class BulkUpdate extends HttpOperation implements UpdateOperationInterface
             eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
+            vars: $vars,
         );
     }
 

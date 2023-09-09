@@ -39,6 +39,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
         ?string $eventShortName = null,
         ?string $redirectToRoute = null,
         ?array $redirectArguments = null,
+        ?array $vars = null,
     ) {
         parent::__construct(
             methods: $methods ?? ['DELETE'],
@@ -60,6 +61,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
             eventShortName: $eventShortName,
             redirectToRoute: $redirectToRoute,
             redirectArguments: $redirectArguments,
+            vars: $vars,
         );
     }
 }
