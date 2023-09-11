@@ -15,9 +15,6 @@ namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\BulkOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
