@@ -278,7 +278,18 @@ final class DebugResourceCommandTest extends TestCase
 
         $resourceMetadata = (new Resource(alias: 'sylius.one'))->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
-            'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
+            'app_one_create' => new Create(
+                template: 'register.html.twig',
+                name: 'app_one_create',
+                provider: 'App\ItemProvider',
+                processor: 'App\CreateOneProcessor',
+                responder: 'App\ItemResponder',
+                factory: 'App\CreateOneFactory',
+                factoryMethod: 'createWithCreator',
+                factoryArguments: ['creator' => 'user'],
+                eventShortName: 'register',
+                vars: ['foo' => 'bar'],
+            ),
         ]));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
@@ -301,9 +312,11 @@ final class DebugResourceCommandTest extends TestCase
              ------------------------ -------------------------- 
               Option                   Value                     
              ------------------------ -------------------------- 
-              factory                  null                      
-              factoryMethod            null                      
-              factoryArguments         []                        
+              factory                  "App\CreateOneFactory"    
+              factoryMethod            "createWithCreator"       
+              factoryArguments         [                         
+                                         "creator" => "user"     
+                                       ]                         
               stateMachineComponent    null                      
               stateMachineTransition   null                      
               stateMachineGraph        null                      
@@ -317,12 +330,14 @@ final class DebugResourceCommandTest extends TestCase
               routePrefix              null                      
               redirectToRoute          null                      
               redirectArguments        null                      
-              vars                     null                      
-              provider                 null                      
+              vars                     [                         
+                                         "foo" => "bar"          
+                                       ]                         
+              provider                 "App\ItemProvider"        
               processor                "App\CreateOneProcessor"  
-              responder                null                      
+              responder                "App\ItemResponder"       
               repository               null                      
-              template                 null                      
+              template                 "register.html.twig"      
               shortName                "create"                  
               name                     "app_one_create"          
               repositoryMethod         null                      
@@ -337,7 +352,7 @@ final class DebugResourceCommandTest extends TestCase
               normalizationContext     null                      
               denormalizationContext   null                      
               validationContext        null                      
-              eventShortName           null                      
+              eventShortName           "register"                
              ------------------------ -------------------------- 
             
             
