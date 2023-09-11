@@ -132,7 +132,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}/edit');
-        $route->getMethods()->shouldReturn(['GET', 'PUT']);
+        $route->getMethods()->shouldReturn(['GET', 'PUT', 'POST']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -157,7 +157,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         );
 
         $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getMethods()->shouldReturn(['DELETE', 'POST']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [
@@ -182,7 +182,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
         );
 
         $route->getPath()->shouldReturn('/dummies/bulk_delete');
-        $route->getMethods()->shouldReturn(['DELETE']);
+        $route->getMethods()->shouldReturn(['DELETE', 'POST']);
         $route->getDefaults()->shouldReturn([
             '_controller' => PlaceHolderAction::class,
             '_sylius' => [

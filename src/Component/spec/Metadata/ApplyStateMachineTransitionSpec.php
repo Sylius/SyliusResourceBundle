@@ -14,16 +14,20 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Metadata;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Component\Resource\Metadata\BulkDelete;
+use Sylius\Component\Resource\Metadata\BulkOperationInterface;
+use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\Update;
+use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 
-final class UpdateSpec extends ObjectBehavior
+final class ApplyStateMachineTransitionSpec extends ObjectBehavior
 {
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(Update::class);
+        $this->shouldHaveType(ApplyStateMachineTransition::class);
     }
 
     function it_is_an_operation(): void
@@ -34,6 +38,11 @@ final class UpdateSpec extends ObjectBehavior
     function it_implements_update_operation_interface(): void
     {
         $this->shouldImplement(UpdateOperationInterface::class);
+    }
+
+    function it_implements_state_machine_aware_operation_interface(): void
+    {
+        $this->shouldImplement(StateMachineAwareOperationInterface::class);
     }
 
     function it_has_no_resource_by_default(): void
@@ -51,13 +60,13 @@ final class UpdateSpec extends ObjectBehavior
         ;
     }
 
-    function it_has_update_name_by_default(): void
+    function it_has_bulk_delete_short_name_by_default(): void
     {
-        $this->getShortName()->shouldReturn('update');
+        $this->getShortName()->shouldReturn('apply_state_machine_transition');
     }
 
-    function it_has_get_and_put_methods_by_default(): void
+    function it_has_delete_methods_by_default(): void
     {
-        $this->getMethods()->shouldReturn(['GET', 'PUT', 'POST']);
+        $this->getMethods()->shouldReturn(['PUT', 'PATCH', 'POST']);
     }
 }
