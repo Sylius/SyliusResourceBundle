@@ -50,7 +50,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         private ?string $stateMachineGraph = null,
     ) {
         parent::__construct(
-            methods: $methods ?? ['GET', 'PUT'],
+            methods: $methods ?? ['GET', 'PUT', 'POST'],
             path: $path,
             routePrefix: $routePrefix,
             template: $template,
