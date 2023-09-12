@@ -42,7 +42,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         private ?string $stateMachineGraph = null,
     ) {
         parent::__construct(
-            methods: $methods ?? ['PUT', 'PATCH'],
+            methods: $methods ?? ['PUT', 'PATCH', 'POST'],
             path: $path,
             routePrefix: $routePrefix,
             template: $template,

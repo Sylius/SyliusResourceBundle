@@ -58,6 +58,6 @@ final class DeleteSpec extends ObjectBehavior
 
     function it_has_delete_methods_by_default(): void
     {
-        $this->getMethods()->shouldReturn(['DELETE']);
+        $this->getMethods()->shouldReturn(['DELETE', 'POST']);
     }
 }
