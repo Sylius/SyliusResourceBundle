@@ -21,7 +21,7 @@ It has a `createNew` method with no arguments.
 ## Define your custom factory
 
 ```php
-// src/Factory/BookRepository.php
+// src/Factory/BookFactory.php
 
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ services:
 ## Use your custom method
 
 ```php
-// src/Factory/BookRepository.php
+// src/Factory/BookFactory.php
 
 declare(strict_types=1);
 
@@ -123,7 +123,7 @@ You can pass arguments to your factory method.
 It uses the [Symfony expression language](https://symfony.com/doc/current/components/expression_language.html) component.
 
 ```php
-// src/Factory/BookRepository.php
+// src/Factory/BookFactory.php
 
 declare(strict_types=1);
 
@@ -213,7 +213,7 @@ class Book implements ResourceInterface
 ## Use a callable for your custom factory
 
 ```php
-// src/Factory/BookRepository.php
+// src/Factory/BookFactory.php
 
 declare(strict_types=1);
 
