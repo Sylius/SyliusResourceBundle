@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle;
 
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\CsrfTokenManagerPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineContainerRepositoryFactoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnControllersPass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\CsrfTokenManagerPass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\PagerfantaBridgePass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterResourcesPass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
+use Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\TwigPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

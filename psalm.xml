@@ -183,6 +183,7 @@
 
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
+                <directory name="src/Bundle/DependencyInjection/Compiler" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
             </errorLevel>
         </TypeDoesNotContainType>

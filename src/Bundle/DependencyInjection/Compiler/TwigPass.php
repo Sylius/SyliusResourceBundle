@@ -13,21 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+\class_exists(\Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\TwigPass::class);
 
-/**
- * TODO Remove on sylius/resource-bundle 2.0
- */
-final class TwigPass implements CompilerPassInterface
-{
-    public function process(ContainerBuilder $container): void
+if (false) {
+    final class TwigPass extends \Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\TwigPass
     {
-        if (!$container->hasDefinition('twig')) {
-            return;
-        }
-
-        $twigDefinition = $container->getDefinition('twig');
-        $twigDefinition->setPublic(true);
     }
 }

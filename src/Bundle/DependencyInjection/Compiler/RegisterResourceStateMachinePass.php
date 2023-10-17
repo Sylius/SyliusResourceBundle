@@ -13,39 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+\class_exists(\Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass::class);
 
-final class RegisterResourceStateMachinePass implements CompilerPassInterface
-{
-    public function process(ContainerBuilder $container): void
+if (false) {
+    final class RegisterResourceStateMachinePass extends \Sylius\Component\Resource\Symfony\Bundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass
     {
-        if (!$container->hasParameter('sylius.resources')) {
-            return;
-        }
-
-        /** @var array $resources */
-        $resources = $container->getParameter('sylius.resources');
-
-        foreach ($resources as $alias => $configuration) {
-            [$applicationName, $resourceName] = explode('.', $alias, 2);
-            $stateMachineId = sprintf('%s.controller_state_machine.%s', $applicationName, $resourceName);
-
-            $stateMachineComponent = $configuration['state_machine_component'] ?? null;
-
-            if (null === $stateMachineComponent) {
-                $container->setAlias($stateMachineId, 'sylius.resource_controller.state_machine');
-
-                continue;
-            }
-
-            $specificStateMachineId = sprintf('sylius.resource_controller.state_machine.%s', $stateMachineComponent);
-
-            if (!$container->hasDefinition($specificStateMachineId)) {
-                throw new \LogicException(sprintf('State machine "%s" is not available.', $stateMachineComponent));
-            }
-
-            $container->setAlias($stateMachineId, $specificStateMachineId);
-        }
     }
 }
