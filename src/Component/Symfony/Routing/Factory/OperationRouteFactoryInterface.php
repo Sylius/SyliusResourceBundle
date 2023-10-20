@@ -15,10 +15,10 @@ namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Routing\Route;
 
 interface OperationRouteFactoryInterface
 {
-    public function create(MetadataInterface $metadata, Resource $resource, HttpOperation $operation): Route;
+    public function create(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route;
 }

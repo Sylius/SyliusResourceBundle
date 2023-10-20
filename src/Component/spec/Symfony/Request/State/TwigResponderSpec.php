@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Symfony\Request\State\TwigResponder;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
@@ -57,7 +57,7 @@ final class TwigResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', name: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Show(template: 'book/show.html.twig'))->withResource($resource);
 
         $contextFactory->create($data, $operation, $context)->willReturn(['book' => $data]);
@@ -83,7 +83,7 @@ final class TwigResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', pluralName: 'books');
+        $resource = new ResourceMetadata(alias: 'app.book', pluralName: 'books');
         $operation = (new Index(template: 'book/index.html.twig'))->withResource($resource);
 
         $contextFactory->create($data, $operation, $context)->willReturn(['books' => $data]);

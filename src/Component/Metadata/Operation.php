@@ -18,7 +18,7 @@ namespace Sylius\Component\Resource\Metadata;
  */
 abstract class Operation
 {
-    private ?Resource $resource = null;
+    private ?ResourceMetadata $resource = null;
 
     /** @var string|callable|null */
     protected $provider;
@@ -60,12 +60,12 @@ abstract class Operation
         $this->repository = $repository;
     }
 
-    public function getResource(): ?Resource
+    public function getResource(): ?ResourceMetadata
     {
         return $this->resource;
     }
 
-    public function withResource(Resource $resource): self
+    public function withResource(ResourceMetadata $resource): self
     {
         $self = clone $this;
         $self->resource = $resource;

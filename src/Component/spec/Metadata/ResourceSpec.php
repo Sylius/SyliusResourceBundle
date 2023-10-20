@@ -16,14 +16,14 @@ namespace spec\Sylius\Component\Resource\Metadata;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 
 final class ResourceSpec extends ObjectBehavior
 {
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(Resource::class);
+        $this->shouldHaveType(ResourceMetadata::class);
     }
 
     function it_has_no_alias_by_default(): void

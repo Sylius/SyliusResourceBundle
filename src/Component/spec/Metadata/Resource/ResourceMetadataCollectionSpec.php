@@ -17,15 +17,15 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
 final class ResourceMetadataCollectionSpec extends ObjectBehavior
 {
     function let(): void
     {
         $this->beConstructedWith([
-            (new Resource('app.dummy'))->withOperations(new Operations([
+            (new ResourceMetadata('app.dummy'))->withOperations(new Operations([
                 'app_dummy_index' => new Index(),
                 'app_dummy_create' => new Create(),
             ])),

@@ -15,7 +15,7 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\UpdateOperationRoutePathFactory;
@@ -41,7 +41,7 @@ final class UpdateOperationRoutePathFactorySpec extends ObjectBehavior
 
     function it_generates_route_path_for_update_operations_with_custom_identifier(): void
     {
-        $operation = (new Update())->withResource(new Resource(identifier: 'code'));
+        $operation = (new Update())->withResource(new ResourceMetadata(identifier: 'code'));
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{code}/edit');
     }
