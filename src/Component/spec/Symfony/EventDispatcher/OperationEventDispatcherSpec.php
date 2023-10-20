@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
@@ -39,7 +39,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         \stdClass $data,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $show = (new Show(eventShortName: 'read'))->withResource($resource);
 
         $context = new Context();
@@ -58,7 +58,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         \ArrayObject $data,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $bulkDelete = (new BulkDelete(eventShortName: 'delete'))->withResource($resource);
 
         $context = new Context();
@@ -77,7 +77,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         \stdClass $data,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
 
         $context = new Context();
@@ -96,7 +96,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         \stdClass $data,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
 
         $context = new Context();
@@ -115,7 +115,7 @@ final class OperationEventDispatcherSpec extends ObjectBehavior
         EventDispatcherInterface $eventDispatcher,
         \stdClass $data,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
 
         $context = new Context();

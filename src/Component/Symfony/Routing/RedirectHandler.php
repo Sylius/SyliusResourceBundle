@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Symfony\Routing;
 use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -83,7 +83,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->parseResourceValues($resource, $redirectArguments, $data);
     }
 
-    private function parseResourceValues(Resource $resource, array $parameters, mixed $data): array
+    private function parseResourceValues(ResourceMetadata $resource, array $parameters, mixed $data): array
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 

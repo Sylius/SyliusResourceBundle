@@ -23,8 +23,7 @@ use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\Factory;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
-use Sylius\Component\Resource\Metadata\Resource;
-use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\State\ProviderInterface;
@@ -150,7 +149,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     }
 
     /** @param class-string $className */
-    private function getResourceAlias(Resource $resource, string $className): string
+    private function getResourceAlias(ResourceMetadata $resource, string $className): string
     {
         $alias = $resource->getAlias();
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Metadata\Resource;
 
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
 final class ResourceMetadataCollection extends \ArrayObject
 {

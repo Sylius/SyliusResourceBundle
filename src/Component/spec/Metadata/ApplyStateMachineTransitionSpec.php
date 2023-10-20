@@ -16,7 +16,7 @@ namespace spec\Sylius\Component\Resource\Metadata;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 
@@ -49,7 +49,7 @@ final class ApplyStateMachineTransitionSpec extends ObjectBehavior
 
     function it_could_have_a_resource(): void
     {
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
 
         $this->withResource($resource)
             ->getResource()

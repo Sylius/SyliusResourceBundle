@@ -38,10 +38,10 @@ It will configure your entity as a Sylius resource.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[ResourceMetadata]
 class Book implements ResourceInterface
 {
 }
@@ -75,10 +75,10 @@ It defines the resource name.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(name: 'cart')]
+#[ResourceMetadata(name: 'cart')]
 class Order implements ResourceInterface
 {
 }
@@ -103,10 +103,10 @@ It defines the resource plural name.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(pluralName: 'library')]
+#[ResourceMetadata(pluralName: 'library')]
 class Book implements ResourceInterface
 {
 }
@@ -131,10 +131,10 @@ It defines the simple vars that you can use on your templates.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
+#[ResourceMetadata(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
 class Book implements ResourceInterface
 {
 }

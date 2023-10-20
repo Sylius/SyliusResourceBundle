@@ -19,9 +19,9 @@ use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -67,7 +67,7 @@ final class HttpOperationInitiatorSpec extends ObjectBehavior
         $operations->add('app_dummy_index', $operation->getWrappedObject());
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = (new Resource(alias: 'app.dummy'))->withOperations($operations);
+        $resourceMetadataCollection[] = (new ResourceMetadata(alias: 'app.dummy'))->withOperations($operations);
 
         $resourceMetadataCollectionFactory->create('App\DummyResource')->willReturn($resourceMetadataCollection);
 

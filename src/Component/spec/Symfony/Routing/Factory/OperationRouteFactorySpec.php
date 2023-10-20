@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Metadata;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
@@ -52,7 +52,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -77,7 +77,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             new Index(),
         );
 
@@ -102,7 +102,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -127,7 +127,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -152,7 +152,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -177,7 +177,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -202,7 +202,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -227,7 +227,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource('app.dummy'),
+            new ResourceMetadata('app.dummy'),
             $operation,
         );
 
@@ -252,7 +252,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource(alias: 'app.dummy', section: 'admin'),
+            new ResourceMetadata(alias: 'app.dummy', section: 'admin'),
             $operation,
         );
 
@@ -278,7 +278,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
 
         $route = $this->create(
             $metadata,
-            new Resource(alias: 'app.dummy'),
+            new ResourceMetadata(alias: 'app.dummy'),
             $operation,
         );
 
