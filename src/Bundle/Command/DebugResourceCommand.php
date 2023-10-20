@@ -18,6 +18,7 @@ use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Dumper;
@@ -91,7 +92,7 @@ EOT
             return Command::SUCCESS;
         }
 
-        $this->debugResource($metadata, $resourceMetadataCollection, $input, $io, $dumper);
+        $this->debugResource($metadata, $input, $io, $dumper);
 
         return Command::SUCCESS;
     }
@@ -112,7 +113,7 @@ EOT
         $io->table(['Alias'], $rows);
     }
 
-    private function debugResource(MetadataInterface $metadata, ResourceMetadata\ResourceMetadataCollection $resourceMetadataCollection, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
+    private function debugResource(MetadataInterface $metadata, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('Configuration');
 
@@ -133,7 +134,7 @@ EOT
         $this->debugResourceCollectionOperation($metadata, $input, $io, $dumper);
     }
 
-    private function getResourceMetadataCollection(MetadataInterface $resourceConfiguration): ResourceMetadata\ResourceMetadataCollection
+    private function getResourceMetadataCollection(MetadataInterface $resourceConfiguration): ResourceMetadataCollection
     {
         return $this->resourceMetadataCollectionFactory->create($resourceConfiguration->getClass('model'));
     }
@@ -153,7 +154,7 @@ EOT
         $io->table(['Option', 'Value'], $rows);
     }
 
-    private function debugNewResourceMetadata(ResourceMetadata\ResourceMetadataCollection $resourceMetadataCollection, SymfonyStyle $io, Dumper $dumper): void
+    private function debugNewResourceMetadata(ResourceMetadataCollection $resourceMetadataCollection, SymfonyStyle $io, Dumper $dumper): void
     {
         $io->section('New Resource Metadata');
 
