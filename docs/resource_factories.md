@@ -97,10 +97,10 @@ declare(strict_types=1);
 namespace App\Entity\Book;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[ResourceMetadata]
+#[AsResource]
 #[Create(
     path: 'authors/{authorId}/books',
     factoryMethod: 'createWithCreator',
@@ -167,10 +167,10 @@ declare(strict_types=1);
 namespace App\Entity\Book;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[ResourceMetadata]
+#[AsResource]
 #[Create(
     path: 'authors/{authorId}/books',
     factoryMethod: 'createForAuthor',
@@ -193,10 +193,10 @@ declare(strict_types=1);
 namespace App\Entity\Book;
 
 use App\Factory\BookFactory;use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[ResourceMetadata]
+#[AsResource]
 #[Create(
     path: 'authors/{authorId}/books',
     # Here we declared the factory to use with its fully classified class name
@@ -240,10 +240,10 @@ namespace App\Entity\Book;
 use App\Entity\Book;
 use App\Factory\BookFactory;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[ResourceMetadata]
+#[AsResource]
 #[Create(
     factory: [BookFactory::class, 'create'], 
 )]
