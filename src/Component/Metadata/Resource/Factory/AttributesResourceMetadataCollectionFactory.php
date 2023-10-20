@@ -61,7 +61,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             if (is_a($attribute->getName(), AsResource::class, true)) {
                 /** @var AsResource $resourceAttribute */
                 $resourceAttribute = $attribute->newInstance();
-                $resource = $this->convertResourceAttributeToMetadata($resourceAttribute);
+                $resource = $resourceAttribute->toMetadata();
 
                 $resourceAlias = $resource->getAlias();
 
@@ -223,27 +223,5 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         }
 
         return $formOptions;
-    }
-
-    private function convertResourceAttributeToMetadata(AsResource $resourceAttribute): ResourceMetadata
-    {
-        return new ResourceMetadata(
-            alias: $resourceAttribute->alias(),
-            section: $resourceAttribute->section(),
-            formType: $resourceAttribute->formType(),
-            templatesDir: $resourceAttribute->templatesDir(),
-            routePrefix: $resourceAttribute->routePrefix(),
-            name: $resourceAttribute->name(),
-            pluralName: $resourceAttribute->pluralName(),
-            applicationName: $resourceAttribute->applicationName(),
-            identifier: $resourceAttribute->identifier(),
-            normalizationContext: $resourceAttribute->normalizationContext(),
-            denormalizationContext: $resourceAttribute->denormalizationContext(),
-            validationContext: $resourceAttribute->validationContext(),
-            class: $resourceAttribute->class(),
-            driver: $resourceAttribute->driver(),
-            vars: $resourceAttribute->vars(),
-            operations: $resourceAttribute->operations(),
-        );
     }
 }
