@@ -19,7 +19,7 @@ use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 
-final class ResourceSpec extends ObjectBehavior
+final class ResourceMetadataSpec extends ObjectBehavior
 {
     function it_is_initializable(): void
     {
