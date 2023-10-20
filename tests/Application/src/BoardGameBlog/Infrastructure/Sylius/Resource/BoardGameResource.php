@@ -20,17 +20,17 @@ use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\UpdateBoardGame
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameCollectionProvider;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameItemProvider;
 use App\BoardGameBlog\Infrastructure\Symfony\Form\Type\BoardGameType;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Uid\AbstractUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[Resource(
+#[AsResource(
     alias: 'app.board_game',
     section: 'admin',
     formType: BoardGameType::class,

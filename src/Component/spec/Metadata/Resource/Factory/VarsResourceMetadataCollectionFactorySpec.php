@@ -16,10 +16,10 @@ namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\VarsResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 
 final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
@@ -37,7 +37,7 @@ final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_merge_resource_vars_with_operation_vars(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app', vars: ['header' => 'Library', 'subheader' => 'Managing your library']);
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app', vars: ['header' => 'Library', 'subheader' => 'Managing your library']);
 
         $create = (new Create(name: 'app_book_create', vars: ['subheader' => 'Adding a new book']))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -64,7 +64,7 @@ final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_does_nothing_when_resource_has_no_vars(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);

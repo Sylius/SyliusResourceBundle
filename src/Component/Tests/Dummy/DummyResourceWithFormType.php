@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy', formType: 'App\Form\DummyType')]
+#[ResourceMetadata(alias: 'app.dummy', formType: 'App\Form\DummyType')]
 #[Create]
 #[Update]
 final class DummyResourceWithFormType

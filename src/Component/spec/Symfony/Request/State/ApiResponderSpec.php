@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\ApiResponder;
 use Sylius\Component\Resource\Symfony\Response\ApiHeadersInitiator;
@@ -52,7 +52,7 @@ final class ApiResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', name: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Create())->withResource($resource);
 
         $response = $this->respond('serialized_data', $operation, $context);
@@ -74,7 +74,7 @@ final class ApiResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', name: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Update())->withResource($resource);
 
         $response = $this->respond('serialized_data', $operation, $context);
@@ -96,7 +96,7 @@ final class ApiResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', name: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Delete())->withResource($resource);
 
         $response = $this->respond('serialized_data', $operation, $context);
@@ -118,7 +118,7 @@ final class ApiResponderSpec extends ObjectBehavior
         $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
-        $resource = new Resource(alias: 'app.book', name: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Create())->withResource($resource);
 
         $response = $this->respond('serialized_data', $operation, $context);

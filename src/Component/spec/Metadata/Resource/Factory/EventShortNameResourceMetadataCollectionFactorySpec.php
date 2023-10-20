@@ -18,10 +18,10 @@ use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 
 final class EventShortNameResourceMetadataCollectionFactorySpec extends ObjectBehavior
@@ -40,7 +40,7 @@ final class EventShortNameResourceMetadataCollectionFactorySpec extends ObjectBe
     function it_configures_default_event_short_name_on_operations(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);

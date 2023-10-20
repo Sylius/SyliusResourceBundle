@@ -15,13 +15,13 @@ namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 
-#[Resource(alias: 'app.dummy', section: 'admin')]
+#[ResourceMetadata(alias: 'app.dummy', section: 'admin')]
 #[Index]
 #[Create]
-#[Resource(alias: 'app.dummy', section: 'shop')]
+#[ResourceMetadata(alias: 'app.dummy', section: 'shop')]
 #[Index]
 #[Show]
 final class DummyResourceWithSections

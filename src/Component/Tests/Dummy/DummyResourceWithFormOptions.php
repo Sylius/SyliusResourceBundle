@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy')]
+#[ResourceMetadata(alias: 'app.dummy')]
 #[Create(formOptions: ['html5' => false])]
 #[Update(formOptions: ['html5' => true])]
 final class DummyResourceWithFormOptions

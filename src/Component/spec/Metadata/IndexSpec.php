@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
 final class IndexSpec extends ObjectBehavior
 {
@@ -43,7 +43,7 @@ final class IndexSpec extends ObjectBehavior
 
     function it_could_have_a_resource(): void
     {
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
 
         $this->withResource($resource)
             ->getResource()

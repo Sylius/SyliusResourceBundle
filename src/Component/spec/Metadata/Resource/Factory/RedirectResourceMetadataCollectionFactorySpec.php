@@ -18,10 +18,10 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
@@ -41,7 +41,7 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_redirects_create_to_show_if_route_exists(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -65,7 +65,7 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_redirects_create_to_index_if_route_exists(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $index = (new Create(name: 'app_book_index'))->withResource($resource);
@@ -89,7 +89,7 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_redirects_update_to_show_if_route_exists(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $update = (new Update(name: 'app_book_update'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -113,7 +113,7 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_redirects_update_to_index_if_route_exists(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $update = (new Update(name: 'app_book_update'))->withResource($resource);
         $index = (new Index(name: 'app_book_index'))->withResource($resource);
@@ -137,7 +137,7 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_redirects_delete_to_index_if_route_exists(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $delete = (new Delete(name: 'app_book_delete'))->withResource($resource);
         $index = (new Show(name: 'app_book_index'))->withResource($resource);

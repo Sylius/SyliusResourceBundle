@@ -17,7 +17,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Routing\Route;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
@@ -27,7 +27,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
     ) {
     }
 
-    public function create(MetadataInterface $metadata, Resource $resource, HttpOperation $operation): Route
+    public function create(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
     {
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
 
@@ -61,7 +61,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         return $this->routePathFactory->createRoutePath($operation, $rootPath);
     }
 
-    private function getSyliusOptions(Resource $resource, HttpOperation $operation): array
+    private function getSyliusOptions(ResourceMetadata $resource, HttpOperation $operation): array
     {
         $options = ['resource' => $resource->getAlias()];
 

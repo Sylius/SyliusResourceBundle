@@ -15,11 +15,11 @@ namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy', routePrefix: '/admin')]
+#[ResourceMetadata(alias: 'app.dummy', routePrefix: '/admin')]
 #[Create]
 #[Update]
 #[Index]

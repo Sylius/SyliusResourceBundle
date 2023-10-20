@@ -17,10 +17,10 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
 
 final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
@@ -39,7 +39,7 @@ final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_creates_resource_metadata_with_default_provider_on_http_operations(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $index = (new Index(name: 'app_book_index'))->withResource($resource);
 
@@ -61,7 +61,7 @@ final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
     function it_configures_request_grid_provider_if_operation_has_a_grid(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $index = (new Index(name: 'app_book_index', grid: 'app_book'))->withResource($resource);
 

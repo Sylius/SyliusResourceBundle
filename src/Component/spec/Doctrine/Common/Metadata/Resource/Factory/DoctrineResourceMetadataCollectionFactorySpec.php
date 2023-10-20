@@ -22,9 +22,9 @@ use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
 final class DoctrineResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {
@@ -45,7 +45,7 @@ final class DoctrineResourceMetadataCollectionFactorySpec extends ObjectBehavior
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
-        $resource = new Resource(alias: 'app.dummy');
+        $resource = new ResourceMetadata(alias: 'app.dummy');
         $operation = new Create(name: 'app_dummy_create');
         $resource = $resource->withOperations(new Operations([$operation]));
 
@@ -70,7 +70,7 @@ final class DoctrineResourceMetadataCollectionFactorySpec extends ObjectBehavior
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
-        $resource = new Resource(alias: 'app.dummy');
+        $resource = new ResourceMetadata(alias: 'app.dummy');
         $operation = new Create(name: 'app_dummy_create');
         $resource = $resource->withOperations(new Operations([$operation]));
 
@@ -95,7 +95,7 @@ final class DoctrineResourceMetadataCollectionFactorySpec extends ObjectBehavior
         RegistryInterface $resourceRegistry,
         MetadataInterface $metadata,
     ): void {
-        $resource = new Resource(alias: 'app.dummy');
+        $resource = new ResourceMetadata(alias: 'app.dummy');
         $operation = new Delete(name: 'app_dummy_delete');
         $resource = $resource->withOperations(new Operations([$operation]));
 

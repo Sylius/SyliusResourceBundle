@@ -18,7 +18,7 @@ use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 
 final class BulkDeleteSpec extends ObjectBehavior
 {
@@ -49,7 +49,7 @@ final class BulkDeleteSpec extends ObjectBehavior
 
     function it_could_have_a_resource(): void
     {
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
 
         $this->withResource($resource)
             ->getResource()

@@ -16,10 +16,10 @@ namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Operations;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 
 final class TemplatesDirResourceMetadataCollectionFactorySpec extends ObjectBehavior
@@ -39,7 +39,7 @@ final class TemplatesDirResourceMetadataCollectionFactorySpec extends ObjectBeha
     ): void {
         $this->beConstructedWith($decorated, ['default_templates_dir' => 'crud']);
 
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -66,7 +66,7 @@ final class TemplatesDirResourceMetadataCollectionFactorySpec extends ObjectBeha
     function it_uses_resource_templates_dir(
         ResourceMetadataCollectionFactoryInterface $decorated,
     ): void {
-        $resource = new Resource(alias: 'app.book', templatesDir: 'book');
+        $resource = new ResourceMetadata(alias: 'app.book', templatesDir: 'book');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);

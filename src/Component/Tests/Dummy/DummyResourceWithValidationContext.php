@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Tests\Dummy;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy', validationContext: ['groups' => ['sylius']])]
+#[ResourceMetadata(alias: 'app.dummy', validationContext: ['groups' => ['sylius']])]
 #[Create]
 #[Update]
 final class DummyResourceWithValidationContext

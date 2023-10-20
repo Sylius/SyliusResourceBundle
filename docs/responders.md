@@ -66,11 +66,11 @@ Use it on your operation.
 
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[ResourceMetadata]
 #[Show(
     template: 'subscription/show.html.twig',
     twigContextFactory: ShowSubscriptionContextFactory::class,

@@ -16,7 +16,7 @@ namespace spec\Sylius\Component\Resource\Twig\Context\Factory;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Twig\Context\Factory\DefaultContextFactory;
 
@@ -30,7 +30,7 @@ final class DefaultContextFactorySpec extends ObjectBehavior
     function it_creates_twig_context_for_resource(
         \stdClass $data,
     ): void {
-        $operation = (new Show())->withResource(new Resource(alias: 'app.dummy', name: 'dummy'));
+        $operation = (new Show())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy'));
 
         $this->create($data, $operation, new Context())->shouldReturn([
             'operation' => $operation,
@@ -42,7 +42,7 @@ final class DefaultContextFactorySpec extends ObjectBehavior
     function it_creates_twig_context_for_resource_collection(
         \stdClass $data,
     ): void {
-        $operation = (new Index())->withResource(new Resource(alias: 'app.dummy', pluralName: 'dummies'));
+        $operation = (new Index())->withResource(new ResourceMetadata(alias: 'app.dummy', pluralName: 'dummies'));
 
         $this->create($data, $operation, new Context())->shouldReturn([
             'operation' => $operation,
