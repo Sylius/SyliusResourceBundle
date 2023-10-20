@@ -22,6 +22,7 @@ use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\Factory;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Reflection\ClassReflection;
@@ -122,12 +123,13 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         /** @var class-string $className */
         foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
-            $resourceAttributes = ClassReflection::getClassAttributes($className, ResourceMetadata::class);
+            $resourceAttributes = ClassReflection::getClassAttributes($className, AsResource::class);
 
             foreach ($resourceAttributes as $resourceAttribute) {
-                /** @var ResourceMetadata $resource */
+                /** @var AsResource $resource */
                 $resource = $resourceAttribute->newInstance();
-                $resourceAlias = $this->getResourceAlias($resource, $className);
+                $resourceMetadata = $resource->toMetadata();
+                $resourceAlias = $this->getResourceAlias($resourceMetadata, $className);
 
                 if ($resources[$resourceAlias] ?? false) {
                     continue;
@@ -140,7 +142,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                         'factory' => Factory::class,
                         'form' => DefaultResourceType::class,
                     ],
-                    'driver' => $resource->getDriver() ?? SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
+                    'driver' => $resourceMetadata->getDriver() ?? SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
                 ];
             }
         }
