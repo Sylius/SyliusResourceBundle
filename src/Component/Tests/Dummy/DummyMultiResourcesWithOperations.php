@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 
-#[ResourceMetadata(alias: 'app.order')]
+#[AsResource(alias: 'app.order')]
 #[Index]
 #[Create]
-#[ResourceMetadata(alias: 'app.cart')]
+#[AsResource(alias: 'app.cart')]
 #[Index]
 #[Show]
 final class DummyMultiResourcesWithOperations
