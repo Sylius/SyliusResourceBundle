@@ -19,7 +19,7 @@ use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelper;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +48,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -73,7 +73,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -97,7 +97,7 @@ final class FlashHelperSpec extends ObjectBehavior
         FlashBagInterface $flashBag,
         TranslatorInterface $translator,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -118,7 +118,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new Create())->withResource(new Resource(alias: 'app.dummy', name: 'admin_user', applicationName: 'app'));
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'admin_user', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);
@@ -143,7 +143,7 @@ final class FlashHelperSpec extends ObjectBehavior
         TranslatorBagInterface $translator,
         MessageCatalogueInterface $messageCatalogue,
     ): void {
-        $operation = (new BulkDelete())->withResource(new Resource(alias: 'app.dummy', name: 'admin_user', pluralName: 'admin_users', applicationName: 'app'));
+        $operation = (new BulkDelete())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'admin_user', pluralName: 'admin_users', applicationName: 'app'));
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->getSession()->willReturn($session);

@@ -31,11 +31,11 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Create(redirectToRoute: 'app_book_update')]
 #[Update(redirectToRoute: 'app_book_update')]
 class Book implements ResourceInterface
@@ -66,7 +66,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 

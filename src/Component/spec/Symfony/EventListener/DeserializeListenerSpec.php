@@ -16,7 +16,7 @@ namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\EventListener\DeserializeListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +51,7 @@ final class DeserializeListenerSpec extends ObjectBehavior
 
         $request->attributes = new ParameterBag();
 
-        $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->getResource()->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         $operation->getDenormalizationContext()->willReturn(null)->shouldBeCalled();
 
         $request->isMethodSafe()->willReturn(false);
@@ -84,7 +84,7 @@ final class DeserializeListenerSpec extends ObjectBehavior
         $request->getRequestFormat()->willReturn('json');
         $request->getContent()->willReturn(['food' => 'fighters']);
 
-        $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->getResource()->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         $operation->canDeserialize()->willReturn(null)->shouldBeCalled();
         $operation->getDenormalizationContext()->willReturn(['groups' => ['dummy:write']]);
 
@@ -111,7 +111,7 @@ final class DeserializeListenerSpec extends ObjectBehavior
         $request->getRequestFormat()->willReturn('json');
         $request->getContent()->willReturn(['food' => 'fighters']);
 
-        $operation->getResource()->willReturn(new Resource(alias: 'app.dummy', class: 'App\Resource'));
+        $operation->getResource()->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         $operation->canDeserialize()->willReturn(false)->shouldBeCalled();
 
         $serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', [])->willReturn($data)->shouldNotBeCalled();

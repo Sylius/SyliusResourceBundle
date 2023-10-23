@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource as ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
@@ -57,9 +58,11 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         $index = -1;
 
         foreach ($attributes as $attribute) {
-            if (is_a($attribute->getName(), ResourceMetadata::class, true)) {
-                /** @var ResourceMetadata $resource */
-                $resource = $attribute->newInstance();
+            if (is_a($attribute->getName(), AsResource::class, true)) {
+                /** @var AsResource $resourceAttribute */
+                $resourceAttribute = $attribute->newInstance();
+                $resource = $resourceAttribute->toMetadata();
+
                 $resourceAlias = $resource->getAlias();
 
                 if (null !== $resourceAlias) {

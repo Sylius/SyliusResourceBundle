@@ -20,9 +20,9 @@ use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\Responder;
@@ -65,7 +65,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(1);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
     }
 
@@ -79,7 +79,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(1);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
         $resource->getClass()->shouldReturn(DummyResource::class);
     }
@@ -98,7 +98,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -134,7 +134,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(2);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.order');
 
         $operations = $resource->getOperations();
@@ -182,7 +182,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(2);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -229,7 +229,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(2);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -273,7 +273,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->count()->shouldReturn(1);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -305,7 +305,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -336,7 +336,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -375,7 +375,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -416,7 +416,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -455,7 +455,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -494,7 +494,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -533,7 +533,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -576,7 +576,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -619,7 +619,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();
@@ -662,7 +662,7 @@ final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavi
         $metadataCollection->shouldHaveType(ResourceMetadataCollection::class);
 
         $resource = $metadataCollection->getIterator()->current();
-        $resource->shouldHaveType(Resource::class);
+        $resource->shouldHaveType(ResourceMetadata::class);
         $resource->getAlias()->shouldReturn('app.dummy');
 
         $operations = $resource->getOperations();

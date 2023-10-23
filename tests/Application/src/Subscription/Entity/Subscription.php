@@ -18,19 +18,19 @@ use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\Api;
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[Resource(
+#[AsResource(
     section: 'admin',
     formType: SubscriptionType::class,
     templatesDir: 'crud',
@@ -52,7 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     twigContextFactory: ShowSubscriptionContextFactory::class,
 )]
 
-#[Resource(
+#[AsResource(
     alias: 'app.subscription',
     section: 'ajax',
     routePrefix: '/ajax',

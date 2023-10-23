@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 
-#[Resource(alias: 'app.book')]
+#[AsResource(alias: 'app.book')]
 final class BookWithAliasResource
 {
 }

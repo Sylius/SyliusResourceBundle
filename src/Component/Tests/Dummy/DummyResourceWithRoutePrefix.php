@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy', routePrefix: '/admin')]
+#[AsResource(alias: 'app.dummy', routePrefix: '/admin')]
 #[Create]
 #[Update]
 #[Index]

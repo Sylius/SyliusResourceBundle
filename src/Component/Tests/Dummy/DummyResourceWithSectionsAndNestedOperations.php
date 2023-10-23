@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Show;
 
-#[Resource(
+#[AsResource(
     alias: 'app.dummy',
     section: 'admin',
     operations: [
@@ -26,7 +26,7 @@ use Sylius\Component\Resource\Metadata\Show;
         new Create(),
     ],
 )]
-#[Resource(
+#[AsResource(
     alias: 'app.dummy',
     section: 'shop',
     operations: [

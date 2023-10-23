@@ -33,10 +33,10 @@ There are some basic CRUD operations and more.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Index]
 class Book implements ResourceInterface
 {
@@ -68,10 +68,10 @@ namespace App\Entity;
 
 use App\Grid\BookGrid;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 // You can use either the FQCN of your grid
 #[Index(grid: BookGrid::class)]
 // Or you can use the grid name
@@ -101,10 +101,10 @@ The iterator for your books will be available as `books.data` or `resources.data
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Create]
 class Book implements ResourceInterface
 {
@@ -137,10 +137,10 @@ The iterator for your books will be available as `books.data` or `resources.data
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Update;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Update]
 class Book implements ResourceInterface
 {
@@ -171,10 +171,10 @@ On your Twig template, these variables are available
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Delete]
 class Book implements ResourceInterface
 {
@@ -196,10 +196,10 @@ It will configure this route for your `delete` operation.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[BulkDelete]
 class Book implements ResourceInterface
 {
@@ -220,11 +220,11 @@ It will configure this route for your `bulk_delete` operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Show]
 class Book implements ResourceInterface
 {
@@ -258,11 +258,11 @@ As an example, we add a `publish` operation to our book resource.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[ApplyStateMachineTransition(stateMachineTransition: 'publish')]
 class Book implements ResourceInterface
 {
@@ -286,10 +286,10 @@ It customizes the path for your operations.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Create(path: 'register')]
 class Customer implements ResourceInterface
 {
@@ -309,10 +309,10 @@ It customizes the path for your operations.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Create(shortName: 'register')]
 class Customer implements ResourceInterface
 {
@@ -337,12 +337,12 @@ namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(templatesDir: 'book')]
+#[AsResource(templatesDir: 'book')]
 #[Index]
 #[Create]
 #[Update]
@@ -371,12 +371,12 @@ use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(routePrefix: 'admin')]
+#[AsResource(routePrefix: 'admin')]
 #[Index]
 #[Create]
 #[Update]
@@ -409,19 +409,19 @@ use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(section: 'admin', routePrefix: 'admin')]
+#[AsResource(section: 'admin', routePrefix: 'admin')]
 #[Index]
 #[Create]
 #[Update]
 #[Delete]
 #[BulkDelete]
 
-#[Resource(section: 'shop')]
+#[AsResource(section: 'shop')]
 #[Index]
 #[Show]
 class Book implements ResourceInterface
@@ -451,12 +451,12 @@ use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(identifier: 'code')]
+#[AsResource(identifier: 'code')]
 #[Index]
 #[Create]
 #[Update]
@@ -484,10 +484,10 @@ It defines the simple vars that you can use on your templates.
 namespace App\Entity;
 
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-#[Resource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
+#[AsResource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
 #[Create(vars: ['subheader' => 'Adding a book'])]
 class Book implements ResourceInterface
 {

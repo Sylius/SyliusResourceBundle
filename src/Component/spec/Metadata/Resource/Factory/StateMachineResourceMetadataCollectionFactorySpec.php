@@ -18,10 +18,10 @@ use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
 final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBehavior
@@ -45,7 +45,7 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
     ): void {
         $this->beConstructedWith($resourceRegistry, $decorated, 'symfony');
 
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
 
@@ -73,7 +73,7 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         ResourceMetadataCollectionFactoryInterface $decorated,
         MetadataInterface $resourceConfiguration,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
 
@@ -101,7 +101,7 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         ResourceMetadataCollectionFactoryInterface $decorated,
         MetadataInterface $resourceConfiguration,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create', stateMachineComponent: 'winzou'))->withResource($resource);
 
@@ -129,7 +129,7 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         ResourceMetadataCollectionFactoryInterface $decorated,
         MetadataInterface $resourceConfiguration,
     ): void {
-        $resource = new Resource(alias: 'app.book', name: 'book', applicationName: 'app');
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create', stateMachineTransition: 'publish'))->withResource($resource);
 

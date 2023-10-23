@@ -23,9 +23,9 @@ use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Console\Tester\CommandTester;
 
 final class DebugResourceCommandTest extends TestCase
@@ -100,7 +100,7 @@ final class DebugResourceCommandTest extends TestCase
     {
         $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
 
-        $resourceMetadata = (new Resource())->withOperations(new Operations([
+        $resourceMetadata = (new ResourceMetadata())->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
             'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
         ]));
@@ -188,7 +188,7 @@ final class DebugResourceCommandTest extends TestCase
     {
         $this->registry->getByClass('App\Resource')->willReturn($this->createMetadata('one'));
 
-        $resourceMetadata = (new Resource(alias: 'sylius.one'))->withOperations(new Operations([
+        $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'))->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
             'app_one_create' => new Create(name: 'app_one_create', processor: 'App\CreateOneProcessor'),
         ]));
@@ -276,7 +276,7 @@ final class DebugResourceCommandTest extends TestCase
     {
         $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
 
-        $resourceMetadata = (new Resource(alias: 'sylius.one'))->withOperations(new Operations([
+        $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'))->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
             'app_one_create' => new Create(
                 template: 'register.html.twig',

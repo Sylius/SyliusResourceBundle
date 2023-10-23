@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
+use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Resource;
 use Sylius\Component\Resource\Metadata\Update;
 
-#[Resource(alias: 'app.dummy', validationContext: ['groups' => ['sylius']])]
+#[AsResource(alias: 'app.dummy', validationContext: ['groups' => ['sylius']])]
 #[Create]
 #[Update]
 final class DummyResourceWithValidationContext

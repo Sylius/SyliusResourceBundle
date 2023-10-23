@@ -18,7 +18,7 @@ use Prophecy\Argument;
 use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Resource;
+use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandler;
@@ -51,7 +51,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->id = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index');
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_dummy_index', ['id' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
@@ -66,7 +66,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->code = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index');
-        $resource = new Resource(alias: 'app.ok', identifier: 'code');
+        $resource = new ResourceMetadata(alias: 'app.ok', identifier: 'code');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
@@ -80,7 +80,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index');
-        $resource = new Resource(alias: 'app.board_game');
+        $resource = new ResourceMetadata(alias: 'app.board_game');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_board_game_index', ['id' => 'uid'])->willReturn('/board-games')->shouldBeCalled();
@@ -95,7 +95,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->code = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index', redirectArguments: ['code' => 'resource.code']);
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
@@ -110,7 +110,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index', redirectArguments: ['id' => 'resource.id()']);
-        $resource = new Resource(alias: 'app.board_game');
+        $resource = new ResourceMetadata(alias: 'app.board_game');
         $operation = $operation->withResource($resource);
 
         $argumentParser->parseExpression('resource.id()', ['resource' => $data])->willReturn('uid');
@@ -127,7 +127,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->id = 'xyz';
         $operation = new Delete(redirectToRoute: 'app_dummy_index');
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
@@ -142,7 +142,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
     ): void {
         $data->id = 'xyz';
         $operation = new BulkUpdate(redirectToRoute: 'app_dummy_index');
-        $resource = new Resource(alias: 'app.book');
+        $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
         $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
