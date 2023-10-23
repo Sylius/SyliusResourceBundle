@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Entity\Route;
 
 use App\Entity\Book;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'show_book_with_section',
