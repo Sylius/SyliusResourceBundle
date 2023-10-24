@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Action;
+namespace Sylius\Resource\Action;
 
 final class PlaceHolderAction
 {

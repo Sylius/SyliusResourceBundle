@@ -100,7 +100,8 @@
     "autoload": {
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
-            "Sylius\\Component\\Resource\\": "src/Component/"
+            "Sylius\\Component\\Resource\\": "src/Component/",
+            "Sylius\\Resource\\": "src/Component/src/"
         }
     },
     "autoload-dev": {
