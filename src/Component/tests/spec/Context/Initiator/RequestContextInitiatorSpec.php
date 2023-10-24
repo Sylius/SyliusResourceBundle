@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Context\Initiator;
+namespace spec\Sylius\Resource\Context\Initiator;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiator;
-use Sylius\Component\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

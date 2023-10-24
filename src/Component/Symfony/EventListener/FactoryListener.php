@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\FactoryAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\FactoryInterface;
+use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class FactoryListener

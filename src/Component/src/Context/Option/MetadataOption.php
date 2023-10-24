@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Context\Option;
+namespace Sylius\Resource\Context\Option;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 

@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\State;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\State\EventDispatcherBulkAwareProcessor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
+use Sylius\Resource\Context\Context;
 
 final class EventDispatcherBulkAwareProcessorSpec extends ObjectBehavior
 {

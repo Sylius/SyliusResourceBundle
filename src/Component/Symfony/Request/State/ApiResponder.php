@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Request\State;
 
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\Response\HeadersInitiatorInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 

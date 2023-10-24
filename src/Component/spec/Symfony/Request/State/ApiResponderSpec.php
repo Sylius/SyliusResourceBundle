@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Request\State;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Request\State\ApiResponder;
 use Sylius\Component\Resource\Symfony\Response\ApiHeadersInitiator;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

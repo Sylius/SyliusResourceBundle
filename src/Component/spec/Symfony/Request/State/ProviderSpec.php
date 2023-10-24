@@ -16,8 +16,6 @@ namespace spec\Sylius\Component\Resource\Symfony\Request\State;
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -25,6 +23,8 @@ use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface
 use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

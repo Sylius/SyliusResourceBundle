@@ -15,11 +15,11 @@ namespace spec\Sylius\Component\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\Responder;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Tests\Dummy\ResponderWithCallable;
+use Sylius\Resource\Context\Context;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResponderSpec extends ObjectBehavior

@@ -15,10 +15,10 @@ namespace Sylius\Component\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager as DoctrineObjectManager;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Reflection\ClassInfoTrait;
 use Sylius\Component\Resource\State\ProcessorInterface;
+use Sylius\Resource\Context\Context;
 
 final class RemoveProcessor implements ProcessorInterface
 {

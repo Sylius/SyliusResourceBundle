@@ -15,11 +15,11 @@ namespace spec\Sylius\Component\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\Processor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
+use Sylius\Resource\Context\Context;
 
 final class ProcessorSpec extends ObjectBehavior
 {

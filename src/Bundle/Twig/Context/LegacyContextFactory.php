@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Twig\Context;
 
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\MetadataOption;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\MetadataOption;
 
 final class LegacyContextFactory implements ContextFactoryInterface
 {

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
+use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Workflow;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Symfony\Workflow\OperationStateMachine;
+use Sylius\Resource\Context\Context;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow;
