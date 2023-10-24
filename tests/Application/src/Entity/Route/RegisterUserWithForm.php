@@ -15,7 +15,7 @@ namespace App\Entity\Route;
 
 use App\Entity\User;
 use App\Form\Type\RegisterType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'register_user_with_form',

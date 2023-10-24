@@ -25,7 +25,7 @@ app_book_show:
 ```php
 // src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_show',
@@ -68,7 +68,7 @@ app_admin_book_show:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_admin_book_show',
@@ -111,7 +111,7 @@ app_book_show:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_show',
@@ -158,7 +158,7 @@ app_book_show:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_show',
@@ -203,7 +203,7 @@ app_book_show:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_show',
@@ -251,7 +251,7 @@ app_book_show:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_show',

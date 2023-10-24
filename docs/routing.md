@@ -22,7 +22,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -68,7 +68,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -140,7 +140,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -185,7 +185,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -235,7 +235,7 @@ app_library_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -295,7 +295,7 @@ app_admin_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -336,7 +336,7 @@ app_book:
 # src/Entity/Book
 
 use App\Form\Type\AdminBookType;
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -373,7 +373,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -431,7 +431,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     alias: 'app.book',
@@ -485,7 +485,7 @@ app_book:
 ```php
 # src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
 #[SyliusCrudRoutes(
     identifier: 'isbn',

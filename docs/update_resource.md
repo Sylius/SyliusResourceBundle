@@ -21,7 +21,7 @@ app_book_update:
 ```php
 // src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -74,7 +74,7 @@ app_book_update:
 ```php
 // src/Entity/Book
 
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -113,7 +113,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -157,7 +157,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -199,7 +199,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -240,7 +240,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -279,7 +279,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',
@@ -323,7 +323,7 @@ app_book_customer_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_customer_update',
@@ -368,7 +368,7 @@ app_book_update:
 // src/Entity/Book
 
 use App\Form\BookType;
-use Sylius\Component\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Annotation\SyliusRoute;
 
 #[SyliusRoute(
     name: 'app_book_update',

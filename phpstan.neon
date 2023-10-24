@@ -23,6 +23,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
+        - %currentWorkingDirectory%/src/Component/Annotation/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/vendor/*
