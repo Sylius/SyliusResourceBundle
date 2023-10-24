@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Context\Option;
+namespace spec\Sylius\Resource\Context\Option;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestOptionSpec extends ObjectBehavior

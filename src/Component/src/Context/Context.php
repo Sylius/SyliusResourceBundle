@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Context;
+namespace Sylius\Resource\Context;
 
 /**
  * @implements \IteratorAggregate<object>

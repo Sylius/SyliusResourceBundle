@@ -17,10 +17,10 @@ use App\BoardGameBlog\Application\Query\FindBoardGameQuery;
 use App\BoardGameBlog\Domain\ValueObject\BoardGameId;
 use App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource;
 use App\Shared\Application\Query\QueryBusInterface;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 

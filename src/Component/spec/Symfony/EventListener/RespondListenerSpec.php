@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\EventListener\RespondListener;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Context\Initiator;
+namespace Sylius\Resource\Context\Initiator;
 
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestContextInitiator implements RequestContextInitiatorInterface

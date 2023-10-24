@@ -16,12 +16,12 @@ namespace Sylius\Component\Resource\Grid\State;
 use Pagerfanta\Pagerfanta;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Option\RequestOption;
 use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Component\Resource\Metadata\GridAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
 
 final class RequestGridProvider implements ProviderInterface
 {

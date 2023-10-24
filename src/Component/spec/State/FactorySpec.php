@@ -15,11 +15,11 @@ namespace spec\Sylius\Component\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\Factory;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Context\Context;
 
 final class FactorySpec extends ObjectBehavior
 {

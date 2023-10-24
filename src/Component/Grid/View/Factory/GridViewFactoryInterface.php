@@ -16,7 +16,7 @@ namespace Sylius\Component\Resource\Grid\View\Factory;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
-use Sylius\Component\Resource\Context\Context;
+use Sylius\Resource\Context\Context;
 
 interface GridViewFactoryInterface
 {

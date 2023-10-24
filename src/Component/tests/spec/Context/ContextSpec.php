@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Context;
+namespace spec\Sylius\Resource\Context;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassTwo;
+use Sylius\Resource\Context\Context;
 
 final class ContextSpec extends ObjectBehavior
 {

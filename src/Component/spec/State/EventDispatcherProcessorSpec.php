@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\State;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\State\EventDispatcherProcessor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
+use Sylius\Resource\Context\Context;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EventDispatcherProcessorSpec extends ObjectBehavior

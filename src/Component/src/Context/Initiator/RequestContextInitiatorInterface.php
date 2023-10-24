@@ -11,18 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Context\Option;
+namespace Sylius\Resource\Context\Initiator;
 
+use Sylius\Resource\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RequestOption
+interface RequestContextInitiatorInterface
 {
-    public function __construct(private Request $request)
-    {
-    }
-
-    public function request(): Request
-    {
-        return $this->request;
-    }
+    public function initializeContext(Request $request): Context;
 }

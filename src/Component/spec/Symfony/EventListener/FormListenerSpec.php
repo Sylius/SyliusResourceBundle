@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Context;
-use Sylius\Component\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -25,6 +23,8 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Symfony\EventListener\FormListener;
 use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

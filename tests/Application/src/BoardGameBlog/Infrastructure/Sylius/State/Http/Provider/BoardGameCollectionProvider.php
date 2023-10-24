@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider;
 
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\State\ProviderInterface;
+use Sylius\Resource\Context\Context;
 
 final class BoardGameCollectionProvider implements ProviderInterface
 {

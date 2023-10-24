@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Context\Option;
+namespace spec\Sylius\Resource\Context\Option;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Context\Option\MetadataOption;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Context\Option\MetadataOption;
 
 final class MetadataOptionSpec extends ObjectBehavior
 {

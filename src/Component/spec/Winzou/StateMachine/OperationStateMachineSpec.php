@@ -16,11 +16,11 @@ namespace spec\Sylius\Component\Resource\Winzou\StateMachine;
 use PhpSpec\ObjectBehavior;
 use SM\Factory\Factory;
 use SM\StateMachine\StateMachineInterface;
-use Sylius\Component\Resource\Context\Context;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\Winzou\StateMachine\OperationStateMachine;
+use Sylius\Resource\Context\Context;
 
 final class OperationStateMachineSpec extends ObjectBehavior
 {
