@@ -63,7 +63,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Sylius\\Component\\Resource\\": ""
+            "Sylius\\Component\\Resource\\": "",
+            "Sylius\\Resource\\": "src/"
         }
     },
     "autoload-dev": {

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use Gedmo\Sluggable\Util\Urlizer;
-use Sylius\Component\Resource\Action\PlaceHolderAction;
 use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Action\PlaceHolderAction;
 use Symfony\Component\Routing\Route;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
