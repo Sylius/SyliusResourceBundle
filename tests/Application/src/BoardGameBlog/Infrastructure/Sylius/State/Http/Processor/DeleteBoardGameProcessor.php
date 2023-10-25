@@ -18,8 +18,8 @@ use App\BoardGameBlog\Domain\ValueObject\BoardGameId;
 use App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProcessorInterface;
 use Webmozart\Assert\Assert;
 
 final class DeleteBoardGameProcessor implements ProcessorInterface

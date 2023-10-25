@@ -11,11 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\State;
+namespace Sylius\Resource\State\Processor;
 
 use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProcessorInterface;
 
 /**
  * @experimental

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\StateMachine\State;
 
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProcessorInterface;
 
 final class ApplyStateMachineTransitionProcessor implements ProcessorInterface
 {

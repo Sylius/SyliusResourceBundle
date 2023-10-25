@@ -11,17 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\State;
+namespace Sylius\Resource\State;
 
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
 
-/**
- * Retrieves data from a persistence layer.
- *
- * @experimental
- */
-interface ProviderInterface
+interface ResponderInterface
 {
-    public function provide(Operation $operation, Context $context): object|iterable|null;
+    /**
+     * Handle the response.
+     */
+    public function respond(mixed $data, Operation $operation, Context $context): mixed;
 }

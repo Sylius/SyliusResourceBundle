@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\State;
+namespace Sylius\Resource\State\Processor;
 
 use Sylius\Component\Resource\Metadata\CreateOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
@@ -19,6 +19,7 @@ use Sylius\Component\Resource\ResourceActions;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProcessorInterface;
 
 /**
  * @experimental

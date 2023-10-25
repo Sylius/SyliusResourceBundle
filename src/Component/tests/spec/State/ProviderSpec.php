@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\State;
+namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\Provider;
-use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProviderWithCallable;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\Provider;
+use Sylius\Resource\State\ProviderInterface;
 
 final class ProviderSpec extends ObjectBehavior
 {
