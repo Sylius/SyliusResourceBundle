@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory;
+namespace spec\Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
