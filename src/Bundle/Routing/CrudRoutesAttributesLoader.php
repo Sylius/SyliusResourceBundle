@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
+use Sylius\Component\Resource\Annotation\SyliusCrudRoutes as LegacySyliusCrudRoutes;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
@@ -49,6 +50,7 @@ final class CrudRoutesAttributesLoader implements RouteLoaderInterface
     private function addRoutesForSyliusCrudRoutesAttributes(RouteCollection $routeCollection, string $className): void
     {
         $attributes = ClassReflection::getClassAttributes($className, SyliusCrudRoutes::class);
+        $attributes = array_merge($attributes, ClassReflection::getClassAttributes($className, LegacySyliusCrudRoutes::class));
 
         foreach ($attributes as $reflectionAttribute) {
             $resource = Yaml::dump($reflectionAttribute->getArguments());

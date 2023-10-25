@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
+use Sylius\Component\Resource\Annotation\SyliusRoute as LegacySyliusRoute;
 use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Annotation\SyliusRoute;
 use Symfony\Component\Routing\Route;
@@ -24,6 +25,7 @@ final class RouteAttributesFactory implements RouteAttributesFactoryInterface
     public function createRouteForClass(RouteCollection $routeCollection, string $className): void
     {
         $attributes = ClassReflection::getClassAttributes($className, SyliusRoute::class);
+        $attributes = array_merge($attributes, ClassReflection::getClassAttributes($className, LegacySyliusRoute::class));
 
         foreach ($attributes as $reflectionAttribute) {
             $arguments = $reflectionAttribute->getArguments();

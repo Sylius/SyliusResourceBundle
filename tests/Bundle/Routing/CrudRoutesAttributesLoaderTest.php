@@ -570,4 +570,40 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         $bookCreate = $routesCollection->get(sprintf('app_%s_book_create', $section));
         $this->assertNull($bookCreate);
     }
+
+    /**
+     * @test
+     */
+    public function it_generates_crud_routes_from_resource_with_legacy_attribute(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = self::getContainer();
+
+        $attributesLoader = $container->get('sylius.routing.loader.crud_routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $section = 'legacy_attribute';
+
+        // Test index
+        $bookIndex = $routesCollection->get(sprintf('app_%s_book_index', $section));
+        $this->assertNotNull($bookIndex);
+
+        // Test update
+        $bookUpdate = $routesCollection->get(sprintf('app_%s_book_update', $section));
+        $this->assertNotNull($bookUpdate);
+
+        // Test show
+        $bookShow = $routesCollection->get(sprintf('app_%s_book_show', $section));
+        $this->assertNotNull($bookShow);
+
+        // Test delete
+        $bookDelete = $routesCollection->get(sprintf('app_%s_book_delete', $section));
+        $this->assertNotNull($bookDelete);
+
+        // Test create
+        $bookCreate = $routesCollection->get(sprintf('app_%s_book_create', $section));
+        $this->assertNotNull($bookCreate);
+    }
 }

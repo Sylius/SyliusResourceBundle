@@ -544,4 +544,24 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
             ],
         ], $route->getDefaults());
     }
+
+    /** @test */
+    public function it_generates_routes_from_resource_with_legacy_attribute(): void
+    {
+        self::bootKernel(['environment' => 'test_with_attributes']);
+
+        $container = self::getContainer();
+
+        $attributesLoader = $container->get('sylius.routing.loader.routes_attributes');
+
+        $routesCollection = $attributesLoader->__invoke();
+
+        $route = $routesCollection->get('show_book_with_legacy_attribute');
+        $this->assertNotNull($route);
+        $this->assertEquals('/book/{id}', $route->getPath());
+        $this->assertEquals([
+            '_controller' => 'app.controller.book:showAction',
+            '_sylius' => [],
+        ], $route->getDefaults());
+    }
 }
