@@ -107,7 +107,7 @@
 
         <service id="Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor">
             <argument type="service" id="sylius.state_machine.operation" />
-            <argument type="service" id="Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor" />
+            <argument type="service" id="Sylius\Resource\Doctrine\Common\State\PersistProcessor" />
             <tag name="sylius.state_processor" />
         </service>
 
