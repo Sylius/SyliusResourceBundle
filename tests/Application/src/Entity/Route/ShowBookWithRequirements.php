@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_requirements',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     requirements: ['id' => '\d+'],
 )]
 class ShowBookWithRequirements extends Book

@@ -34,7 +34,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ], $route->getDefaults());
     }
@@ -55,7 +55,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals(['GET'], $route->getMethods());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ], $route->getDefaults());
     }
@@ -75,7 +75,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/library/{libraryId}/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'criteria' => [
                     'library' => '$libraryId',
@@ -99,7 +99,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'template' => 'book/show.html.twig',
             ],
@@ -121,7 +121,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'repository' => [
                     'method' => 'findOneNewestByAuthor',
@@ -146,7 +146,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'serialization_groups' => ['sylius'],
             ],
@@ -168,7 +168,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'serialization_version' => '1.0',
             ],
@@ -190,7 +190,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'vars' => [
                     'foo' => 'bar',
@@ -560,7 +560,7 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
         $this->assertNotNull($route);
         $this->assertEquals('/book/{id}', $route->getPath());
         $this->assertEquals([
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ], $route->getDefaults());
     }

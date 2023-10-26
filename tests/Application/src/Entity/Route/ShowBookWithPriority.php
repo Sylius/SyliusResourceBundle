@@ -23,12 +23,12 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_without_priority',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
 )]
 #[SyliusRoute(
     name: 'show_book_with_priority',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     priority: 2,
 )]
 class ShowBookWithPriority extends Book

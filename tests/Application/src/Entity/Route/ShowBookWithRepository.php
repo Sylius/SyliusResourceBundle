@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_repository',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     repository: [
         'method' => 'findOneNewestByAuthor',
         'arguments' => '[$author]',

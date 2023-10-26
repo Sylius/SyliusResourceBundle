@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_template',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     template: 'book/show.html.twig',
 )]
 class ShowBookWithTemplate extends Book

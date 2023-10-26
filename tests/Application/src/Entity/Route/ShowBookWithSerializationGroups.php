@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_serialization_groups',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     serializationGroups: ['sylius'],
 )]
 class ShowBookWithSerializationGroups extends Book

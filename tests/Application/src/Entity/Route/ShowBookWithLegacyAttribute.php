@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_legacy_attribute',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
 )]
 class ShowBookWithLegacyAttribute extends Book
 {

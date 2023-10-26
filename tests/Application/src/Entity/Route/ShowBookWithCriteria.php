@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_criteria',
     path: '/library/{libraryId}/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     criteria: ['library' => '$libraryId'],
 )]
 class ShowBookWithCriteria extends Book
