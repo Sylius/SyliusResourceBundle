@@ -18,4 +18,8 @@ namespace Sylius\Component\Resource\Factory;
  */
 interface TranslatableFactoryInterface extends FactoryInterface
 {
+    /**
+     * @return T
+     */
+    public function createNew();
 }
