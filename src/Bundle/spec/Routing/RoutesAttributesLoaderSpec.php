@@ -48,8 +48,8 @@ final class RoutesAttributesLoaderSpec extends ObjectBehavior
         RouteAttributesFactoryInterface $routeAttributesFactory,
         AttributesOperationRouteFactoryInterface $attributesOperationRouteFactory,
     ): void {
-        $routeAttributesFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(24);
-        $attributesOperationRouteFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(24);
+        $routeAttributesFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(25);
+        $attributesOperationRouteFactory->createRouteForClass(Argument::type(RouteCollection::class), Argument::type('string'))->shouldBeCalledTimes(25);
 
         $this->__invoke();
     }

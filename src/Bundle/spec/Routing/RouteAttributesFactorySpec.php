@@ -51,7 +51,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
 
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ]);
     }
@@ -66,7 +66,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getMethods(), ['GET']);
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ]);
     }
@@ -80,7 +80,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_criteria');
         Assert::eq($route->getPath(), '/library/{libraryId}/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'criteria' => [
                     'library' => '$libraryId',
@@ -98,7 +98,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_template');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'template' => 'book/show.html.twig',
             ],
@@ -114,7 +114,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_repository');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'repository' => [
                     'method' => 'findOneNewestByAuthor',
@@ -133,7 +133,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_serialization_groups');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'serialization_groups' => ['sylius'],
             ],
@@ -149,7 +149,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_serialization_version');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'serialization_version' => '1.0',
             ],
@@ -165,7 +165,7 @@ final class RouteAttributesFactorySpec extends ObjectBehavior
         $route = $routeCollection->get('show_book_with_vars');
         Assert::eq($route->getPath(), '/book/{id}');
         Assert::eq($route->getDefaults(), [
-            '_controller' => 'app.controller.book:showAction',
+            '_controller' => 'app.controller.book::showAction',
             '_sylius' => [
                 'vars' => [
                     'foo' => 'bar',

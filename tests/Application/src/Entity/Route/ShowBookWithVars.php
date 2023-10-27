@@ -23,7 +23,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
 #[SyliusRoute(
     name: 'show_book_with_vars',
     path: '/book/{id}',
-    controller: 'app.controller.book:showAction',
+    controller: 'app.controller.book::showAction',
     vars: ['foo' => 'bar'],
 )]
 class ShowBookWithVars extends Book

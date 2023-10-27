@@ -15,17 +15,16 @@ namespace App\Entity\Route;
 
 use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
-use Sylius\Resource\Annotation\SyliusRoute;
+use Sylius\Component\Resource\Annotation\SyliusRoute;
 
 /**
  * @Serializer\ExclusionPolicy("all")
  */
 #[SyliusRoute(
-    name: 'show_book_with_criteria',
-    path: '/library/{libraryId}/book/{id}',
+    name: 'show_book_with_legacy_attribute',
+    path: '/book/{id}',
     controller: 'app.controller.book::showAction',
-    criteria: ['library' => '$libraryId'],
 )]
-class ShowBookWithCriteria extends Book
+class ShowBookWithLegacyAttribute extends Book
 {
 }
