@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Doctrine\Common\State;
+namespace spec\Sylius\Resource\Doctrine\Common\State;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 
 final class PersistProcessorSpec extends ObjectBehavior
 {

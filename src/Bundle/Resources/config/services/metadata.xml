@@ -35,7 +35,7 @@
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.doctrine"
-            class="Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory"
+            class="Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory"
             decorates="sylius.resource_metadata_collection.factory"
             decoration-priority="200"
         >

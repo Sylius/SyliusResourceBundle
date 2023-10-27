@@ -11,12 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory;
+namespace spec\Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory;
-use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
-use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Delete;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -25,6 +22,9 @@ use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory;
+use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
+use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
 
 final class DoctrineResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {

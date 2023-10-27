@@ -15,12 +15,12 @@ When your resource is a Doctrine entity, there are default processors which are 
 
 As it uses the Doctrine repository configured on your resource, it will automatically flush data for you.
 
-| Operation   | Processor                                                        |
-|-------------|------------------------------------------------------------------|
-| create      | Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor |
-| update      | Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor |
-| delete      | Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor  |
-| bulk delete | Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor  |
+| Operation   | Processor                                              |
+|-------------|--------------------------------------------------------|
+| create      | Sylius\Resource\Doctrine\Common\State\PersistProcessor |
+| update      | Sylius\Resource\Doctrine\Common\State\PersistProcessor |
+| delete      | Sylius\Resource\Doctrine\Common\State\RemoveProcessor  |
+| bulk delete | Sylius\Resource\Doctrine\Common\State\RemoveProcessor  |
 
 ## Custom processors
 
@@ -36,7 +36,7 @@ As an example, send an email after customer registration
 namespace App\Sylius\State\Processor;
 
 use Sylius\Component\Customer\Model\CustomerInterface;
-use Sylius\Component\Resource\Doctrine\Common\State\PersistProcessor;
+use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Component\Resource\State\ProcessorInterface;
 
 final class CreateCustomerProcessor implements ProcessorInterface

@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Doctrine\Common\State;
+namespace spec\Sylius\Resource\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
 
 final class RemoveProcessorSpec extends ObjectBehavior
 {
