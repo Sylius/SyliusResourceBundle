@@ -64,4 +64,18 @@ final class ResponderSpec extends ObjectBehavior
 
         $this->respond([], $operation, $context)->shouldReturn(null);
     }
+
+    function it_throws_an_exception_when_configured_responder_is_not_a_responder_instance(
+        ContainerInterface $locator,
+    ): void {
+        $operation = new Create(responder: '\stdClass');
+        $context = new Context();
+
+        $locator->has('\stdClass')->willReturn(true);
+        $locator->get('\stdClass')->willReturn(new \stdClass());
+
+        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ResponderInterface. Got: stdClass'))
+            ->during('respond', [[], $operation, $context])
+        ;
+    }
 }
