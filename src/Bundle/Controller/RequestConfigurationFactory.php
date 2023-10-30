@@ -30,7 +30,6 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
 
     /**
      * @var string
-     *
      * @psalm-var class-string<RequestConfiguration>
      */
     private $configurationClass;
