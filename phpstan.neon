@@ -76,7 +76,7 @@ parameters:
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository\:\:findAll\(\) should return array\<object\> but returns array\./'
-        - '/Method Sylius\\Component\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:stop\(\) has no return type specified./'
+        - '/Method Sylius\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:stop\(\) has no return type specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return type specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return type specified./'
         - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return type specified./'
