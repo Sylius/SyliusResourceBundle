@@ -17,11 +17,11 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Show;
+use Sylius\Component\Resource\State\EventDispatcherProvider;
+use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Context\Context;
-use Sylius\Resource\State\Provider\EventDispatcherProvider;
-use Sylius\Resource\State\ProviderInterface;
 
 final class EventDispatcherProviderSpec extends ObjectBehavior
 {

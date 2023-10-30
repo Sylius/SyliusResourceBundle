@@ -13,15 +13,15 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sylius.dispatcher.operation" class="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcher">
+        <service id="sylius.dispatcher.operation" class="Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher">
             <argument type="service" id="event_dispatcher" />
         </service>
-        <service id="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface" alias="sylius.dispatcher.operation" />
+        <service id="Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface" alias="sylius.dispatcher.operation" />
 
-        <service id="sylius.event_handler.operation" class="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandler">
+        <service id="sylius.event_handler.operation" class="Sylius\Resource\Symfony\EventDispatcher\OperationEventHandler">
             <argument type="service" id="sylius.routing.redirect_handler" />
             <argument type="service" id="sylius.helper.flash" />
         </service>
-        <service id="Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface" alias="sylius.event_handler.operation" />
+        <service id="Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface" alias="sylius.event_handler.operation" />
     </services>
 </container>

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Subscription\EventSubscriber;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
-use Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
+use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent as SymfonyGenericEvent;
 

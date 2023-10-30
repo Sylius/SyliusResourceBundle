@@ -18,9 +18,9 @@ use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class OperationEventDispatcherSpec extends ObjectBehavior

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Event;
 
-\class_exists(\Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent::class);
+\class_exists(\Sylius\Resource\Symfony\EventDispatcher\GenericEvent::class);
 
 if (false) {
-    class ResourceControllerEvent extends \Sylius\Component\Resource\Symfony\EventDispatcher\GenericEvent
+    class ResourceControllerEvent extends \Sylius\Resource\Symfony\EventDispatcher\GenericEvent
     {
     }
 }

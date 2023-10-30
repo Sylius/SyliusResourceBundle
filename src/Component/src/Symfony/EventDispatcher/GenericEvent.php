@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventDispatcher;
+namespace Sylius\Resource\Symfony\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\GenericEvent as BaseGenericEvent;
 use Symfony\Component\HttpFoundation\Response;
