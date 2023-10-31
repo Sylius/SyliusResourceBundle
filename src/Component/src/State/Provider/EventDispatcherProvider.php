@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\State;
+namespace Sylius\Resource\State\Provider;
 
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\ShowOperationInterface;
 use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProviderInterface;
 
 /**
  * @experimental

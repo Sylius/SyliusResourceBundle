@@ -11,15 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\State;
+namespace Sylius\Resource\State;
 
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
 
-interface ResponderInterface
+/**
+ * Process data: send an email, persist to storage, add to queue etc.
+ *
+ * @experimental
+ */
+interface ProcessorInterface
 {
     /**
-     * Handle the response.
+     * Handle the state.
      */
-    public function respond(mixed $data, Operation $operation, Context $context): mixed;
+    public function process(mixed $data, Operation $operation, Context $context): mixed;
 }

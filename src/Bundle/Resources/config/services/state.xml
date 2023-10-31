@@ -23,7 +23,7 @@
         <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
 
         <service id="sylius.state.provider.event_dispatcher"
-                 class="Sylius\Component\Resource\State\EventDispatcherProvider"
+                 class="Sylius\Resource\State\Provider\EventDispatcherProvider"
                  decorates="sylius.state.provider"
                  decoration-priority="-32"
         >
@@ -31,13 +31,13 @@
             <argument type="service" id="sylius.dispatcher.operation" />
         </service>
 
-        <service id="sylius.state.provider" class="Sylius\Component\Resource\State\Provider">
+        <service id="sylius.state.provider" class="Sylius\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>
-        <service id="Sylius\Component\Resource\State\ProviderInterface" alias="sylius.state.provider" />
+        <service id="Sylius\Resource\State\ProviderInterface" alias="sylius.state.provider" />
 
         <service id="sylius.state.provider.event_dispatcher"
-                 class="Sylius\Component\Resource\State\EventDispatcherProvider"
+                 class="Sylius\Resource\State\Provider\EventDispatcherProvider"
                  decorates="sylius.state.provider"
                  decoration-priority="-32"
         >
@@ -45,19 +45,19 @@
             <argument type="service" id="sylius.dispatcher.operation" />
         </service>
 
-        <service id="sylius.state.factory" class="Sylius\Component\Resource\State\Factory">
+        <service id="sylius.state.factory" class="Sylius\Resource\State\Factory">
             <argument type="tagged_locator" tag="sylius.resource_factory" />
             <argument type="service" id="sylius.expression_language.argument_parser.factory" />
         </service>
-        <service id="Sylius\Component\Resource\State\FactoryInterface" alias="sylius.state.factory" />
+        <service id="Sylius\Resource\State\FactoryInterface" alias="sylius.state.factory" />
 
-        <service id="sylius.state.processor" class="Sylius\Component\Resource\State\Processor">
+        <service id="sylius.state.processor" class="Sylius\Resource\State\Processor">
             <argument type="tagged_locator" tag="sylius.state_processor" />
         </service>
-        <service id="Sylius\Component\Resource\State\ProcessorInterface" alias="sylius.state.processor" />
+        <service id="Sylius\Resource\State\ProcessorInterface" alias="sylius.state.processor" />
 
         <service id="sylius.state.processor.event_dispatcher"
-                 class="Sylius\Component\Resource\State\EventDispatcherProcessor"
+                 class="Sylius\Resource\State\Processor\EventDispatcherProcessor"
                  decorates="sylius.state.processor"
                  decoration-priority="-32"
         >
@@ -67,7 +67,7 @@
         </service>
 
         <service id="sylius.state.processor.bulk_aware"
-                 class="Sylius\Component\Resource\State\BulkAwareProcessor"
+                 class="Sylius\Resource\State\Processor\BulkAwareProcessor"
                  decorates="sylius.state.processor"
                  decoration-priority="-64"
         >
@@ -75,7 +75,7 @@
         </service>
 
         <service id="sylius.state.processor.event_dispatcher_bulk_aware"
-                 class="Sylius\Component\Resource\State\EventDispatcherBulkAwareProcessor"
+                 class="Sylius\Resource\State\Processor\EventDispatcherBulkAwareProcessor"
                  decorates="sylius.state.processor.bulk_aware"
                  decoration-priority="-32"
         >
@@ -83,10 +83,10 @@
             <argument type="service" id="sylius.dispatcher.operation" />
         </service>
 
-        <service id="sylius.state.responder" class="Sylius\Component\Resource\State\Responder">
+        <service id="sylius.state.responder" class="Sylius\Resource\State\Responder">
             <argument type="tagged_locator" tag="sylius.state_responder" />
         </service>
-        <service id="Sylius\Component\Resource\State\ResponderInterface" alias="sylius.state.responder" />
+        <service id="Sylius\Resource\State\ResponderInterface" alias="sylius.state.responder" />
 
         <service id="Sylius\Component\Resource\Symfony\Request\State\Provider">
             <argument type="tagged_locator" tag="sylius.repository" />

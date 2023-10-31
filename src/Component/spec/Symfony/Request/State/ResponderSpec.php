@@ -16,10 +16,10 @@ namespace spec\Sylius\Component\Resource\Symfony\Request\State;
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

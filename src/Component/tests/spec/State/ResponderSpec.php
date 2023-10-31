@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\State;
+namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\Responder;
-use Sylius\Component\Resource\State\ResponderInterface;
 use Sylius\Component\Resource\Tests\Dummy\ResponderWithCallable;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\Responder;
+use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResponderSpec extends ObjectBehavior
@@ -63,5 +63,19 @@ final class ResponderSpec extends ObjectBehavior
         $context = new Context();
 
         $this->respond([], $operation, $context)->shouldReturn(null);
+    }
+
+    function it_throws_an_exception_when_configured_responder_is_not_a_responder_instance(
+        ContainerInterface $locator,
+    ): void {
+        $operation = new Create(responder: '\stdClass');
+        $context = new Context();
+
+        $locator->has('\stdClass')->willReturn(true);
+        $locator->get('\stdClass')->willReturn(new \stdClass());
+
+        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ResponderInterface. Got: stdClass'))
+            ->during('respond', [[], $operation, $context])
+        ;
     }
 }

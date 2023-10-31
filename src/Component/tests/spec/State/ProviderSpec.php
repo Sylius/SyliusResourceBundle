@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\State;
+namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\Provider;
-use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProviderWithCallable;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\Provider;
+use Sylius\Resource\State\ProviderInterface;
 
 final class ProviderSpec extends ObjectBehavior
 {
@@ -73,7 +73,7 @@ final class ProviderSpec extends ObjectBehavior
         $locator->has('\stdClass')->willReturn(true);
         $locator->get('\stdClass')->willReturn(new \stdClass());
 
-        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Component\Resource\State\ProviderInterface. Got: stdClass'))
+        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ProviderInterface. Got: stdClass'))
             ->during('provide', [$operation, $context])
         ;
     }

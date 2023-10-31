@@ -19,9 +19,9 @@ use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Component\Resource\Metadata\GridAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\State\ProviderInterface;
 
 final class RequestGridProvider implements ProviderInterface
 {

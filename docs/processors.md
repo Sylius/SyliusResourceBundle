@@ -37,7 +37,7 @@ namespace App\Sylius\State\Processor;
 
 use Sylius\Component\Customer\Model\CustomerInterface;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
-use Sylius\Component\Resource\State\ProcessorInterface;
+use Sylius\Resource\State\ProcessorInterface;
 
 final class CreateCustomerProcessor implements ProcessorInterface
 {

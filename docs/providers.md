@@ -82,6 +82,8 @@ declare(strict_types=1);
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\State\Provider;
 
+use Sylius\Resource\State\ProviderInterface;
+
 final class BoardGameItemProvider implements ProviderInterface
 {
     public function __construct(

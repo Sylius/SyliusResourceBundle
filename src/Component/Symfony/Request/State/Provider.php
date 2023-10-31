@@ -19,11 +19,11 @@ use Sylius\Component\Resource\Metadata\BulkOperationInterface;
 use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Reflection\CallableReflection;
-use Sylius\Component\Resource\State\ProviderInterface;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\State\ProviderInterface;
 
 final class Provider implements ProviderInterface
 {

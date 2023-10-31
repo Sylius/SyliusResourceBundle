@@ -15,10 +15,10 @@ namespace spec\Sylius\Component\Resource\StateMachine\State;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\State\ProcessorInterface;
 use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\State\ProcessorInterface;
 
 final class ApplyStateMachineTransitionProcessorSpec extends ObjectBehavior
 {
