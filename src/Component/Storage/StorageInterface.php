@@ -13,23 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Storage;
 
-interface StorageInterface
-{
-    public function has(string $name): bool;
+interface_exists(\Sylius\Resource\Storage\StorageInterface::class);
 
-    /**
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get(string $name, $default = null);
-
-    /**
-     * @param mixed $value
-     */
-    public function set(string $name, $value): void;
-
-    public function remove(string $name): void;
-
-    public function all(): array;
+if (false) {
+    interface StorageInterface extends \Sylius\Resource\Storage\StorageInterface
+    {
+    }
 }

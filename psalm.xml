@@ -185,6 +185,7 @@
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
                 <directory name="src/Component/Annotation" />
+                <directory name="src/Component/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
             </errorLevel>
         </TypeDoesNotContainType>
@@ -205,5 +206,11 @@
                 <referencedClass name="UnitEnum"/>
             </errorLevel>
         </UndefinedDocblockClass>
+
+        <UnrecognizedStatement>
+            <errorLevel type="suppress">
+                <directory name="src/Component/Storage" />
+            </errorLevel>
+        </UnrecognizedStatement>
     </issueHandlers>
 </psalm>

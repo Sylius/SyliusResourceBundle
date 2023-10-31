@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Storage;
 
-use Sylius\Component\Resource\Storage\StorageInterface;
+use Sylius\Resource\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
