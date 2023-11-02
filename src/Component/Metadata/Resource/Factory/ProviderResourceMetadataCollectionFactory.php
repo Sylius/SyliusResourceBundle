@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\GridAwareOperationInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
+use Sylius\Resource\Grid\State\RequestGridProvider;
 
 final class ProviderResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {

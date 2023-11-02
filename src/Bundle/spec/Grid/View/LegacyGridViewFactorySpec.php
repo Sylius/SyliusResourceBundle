@@ -22,10 +22,10 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
-use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
 
 final class LegacyGridViewFactorySpec extends ObjectBehavior
 {
