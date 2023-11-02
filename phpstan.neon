@@ -25,6 +25,7 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/Tests/*
         - %currentWorkingDirectory%/src/Component/legacy/spec/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Annotation/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Exception/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Factory/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Generator/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Metadata/*
