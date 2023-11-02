@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Factory;
 
-use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Sylius\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Exception;
 
-final class VariantWithNoOptionsValuesException extends \Exception
-{
-    public function __construct()
+class_exists(\Sylius\Resource\Exception\VariantWithNoOptionsValuesException::class);
+
+if (false) {
+    final class VariantWithNoOptionsValuesException extends \Sylius\Resource\Exception\VariantWithNoOptionsValuesException
     {
-        parent::__construct('sylius.product_variant.cannot_generate_variants');
     }
 }
