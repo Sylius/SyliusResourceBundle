@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Grid\State;
+namespace spec\Sylius\Resource\Grid\State;
 
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
