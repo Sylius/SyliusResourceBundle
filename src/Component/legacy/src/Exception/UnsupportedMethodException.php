@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Exception;
 
-class UnsupportedMethodException extends \Exception
-{
-    public function __construct(string $methodName)
+class_exists(\Sylius\Resource\Exception\UnsupportedMethodException::class);
+
+if (false) {
+    class UnsupportedMethodException extends \Sylius\Resource\Exception\UnsupportedMethodException
     {
-        parent::__construct(sprintf(
-            'The method "%s" is not supported.',
-            $methodName,
-        ));
     }
 }

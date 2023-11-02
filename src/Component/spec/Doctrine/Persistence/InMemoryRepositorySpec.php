@@ -16,7 +16,7 @@ namespace spec\Sylius\Resource\Doctrine\Persistence;
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use spec\Sylius\Component\Resource\Fixtures\SampleBookResourceInterface;
-use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Sylius\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;

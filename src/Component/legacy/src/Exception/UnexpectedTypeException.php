@@ -13,17 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Exception;
 
-class UnexpectedTypeException extends \InvalidArgumentException
-{
-    /**
-     * @param mixed $value
-     */
-    public function __construct($value, string $expectedType)
+class_exists(\Sylius\Resource\Exception\UnexpectedTypeException::class);
+
+if (false) {
+    class UnexpectedTypeException extends \Sylius\Resource\Exception\UnexpectedTypeException
     {
-        parent::__construct(sprintf(
-            'Expected argument of type "%s", "%s" given.',
-            $expectedType,
-            is_object($value) ? get_class($value) : gettype($value),
-        ));
     }
 }
