@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Humanizer;
+namespace Sylius\Resource\Humanizer;
 
 final class StringHumanizer
 {
