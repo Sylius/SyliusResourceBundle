@@ -227,6 +227,7 @@
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
                 <directory name="src/Component/legacy/src/Annotation" />
+                <directory name="src/Component/legacy/src/Exception" />
                 <directory name="src/Component/legacy/src/Factory" />
                 <directory name="src/Component/legacy/src/Generator" />
                 <directory name="src/Component/legacy/src/Metadata" />
