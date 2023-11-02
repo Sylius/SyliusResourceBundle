@@ -20,7 +20,6 @@ final class Factory implements FactoryInterface
 {
     /**
      * @var string
-     *
      * @psalm-var class-string
      */
     private $className;

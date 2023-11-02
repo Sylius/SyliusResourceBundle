@@ -19,7 +19,6 @@ interface TranslatableInterface
 {
     /**
      * @return Collection|TranslationInterface[]
-     *
      * @psalm-return Collection<array-key, TranslationInterface>
      */
     public function getTranslations(): Collection;

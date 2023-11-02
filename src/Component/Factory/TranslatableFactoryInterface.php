@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
+/**
+ * @template T of object
+ */
 interface TranslatableFactoryInterface extends FactoryInterface
 {
+    /**
+     * @return T
+     */
+    public function createNew();
 }
