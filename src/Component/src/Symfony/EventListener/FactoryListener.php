@@ -11,43 +11,41 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventListener;
+namespace Sylius\Resource\Symfony\EventListener;
 
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
-use Sylius\Resource\Metadata\CreateOperationInterface;
+use Sylius\Resource\Metadata\FactoryAwareOperationInterface;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Resource\State\ProviderInterface;
+use Sylius\Resource\State\FactoryInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class ReadListener
+final class FactoryListener
 {
     public function __construct(
         private HttpOperationInitiatorInterface $operationInitiator,
-        private RequestContextInitiatorInterface $contextInitiator,
-        private ProviderInterface $provider,
+        private RequestContextInitiatorInterface $requestContextInitiator,
+        private FactoryInterface $factory,
     ) {
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $context = $this->contextInitiator->initializeContext($request);
+
+        /** @var (Operation&FactoryAwareOperationInterface)|null $operation */
         $operation = $this->operationInitiator->initializeOperation($request);
 
+        $context = $this->requestContextInitiator->initializeContext($request);
+
         if (
-            null === $operation ||
-            $operation instanceof CreateOperationInterface ||
-            !($operation->canRead() ?? true)
+            !$operation instanceof FactoryAwareOperationInterface ||
+            !($operation->getFactory() ?? true)
         ) {
             return;
         }
 
-        $data = $this->provider->provide($operation, $context);
-
-        if (null === $data) {
-            throw new NotFoundHttpException('Resource has not been found.');
-        }
+        $data = $this->factory->create($operation, $context);
 
         $request->attributes->set('data', $data);
     }

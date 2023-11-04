@@ -11,49 +11,42 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventListener;
+namespace Sylius\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Symfony\Form\Factory\FormFactoryInterface;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
-use Sylius\Resource\Metadata\BulkOperationInterface;
-use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Resource\Metadata\UpdateOperationInterface;
+use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Webmozart\Assert\Assert;
 
-final class FormListener
+final class RespondListener
 {
     public function __construct(
         private HttpOperationInitiatorInterface $operationInitiator,
         private RequestContextInitiatorInterface $contextInitiator,
-        private FormFactoryInterface $formFactory,
+        private ResponderInterface $responder,
     ) {
     }
 
     public function onKernelView(ViewEvent $event): void
     {
-        $controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
         $context = $this->contextInitiator->initializeContext($request);
         $operation = $this->operationInitiator->initializeOperation($request);
 
-        /** @var string $format */
-        $format = $request->getRequestFormat();
+        $controllerResult = $event->getControllerResult();
 
         if (
-            $controllerResult instanceof Response ||
-            $operation instanceof BulkOperationInterface ||
-            !($operation instanceof CreateOperationInterface || $operation instanceof UpdateOperationInterface) ||
-            'html' !== $format ||
-            null == $operation->getFormType()
+            null === $operation ||
+            $controllerResult instanceof Response
         ) {
             return;
         }
 
-        $form = $this->formFactory->create($operation, $context, $controllerResult);
-        $form->handleRequest($request);
+        $response = $this->responder->respond($controllerResult, $operation, $context);
+        Assert::isInstanceOf($response, Response::class);
 
-        $request->attributes->set('form', $form);
+        $event->setResponse($response);
     }
 }

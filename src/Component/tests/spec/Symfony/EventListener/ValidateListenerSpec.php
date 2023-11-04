@@ -11,11 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\EventListener;
+namespace spec\Sylius\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Symfony\EventListener\ValidateListener;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
@@ -23,6 +22,7 @@ use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\EventListener\ValidateListener;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

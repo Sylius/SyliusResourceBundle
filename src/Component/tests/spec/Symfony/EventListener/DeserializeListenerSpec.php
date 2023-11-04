@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\EventListener;
+namespace spec\Sylius\Resource\Symfony\EventListener;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\EventListener\DeserializeListener;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\EventListener\DeserializeListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
