@@ -54,7 +54,9 @@ final class TwigResponderSpec extends ObjectBehavior
 
         $request->attributes = $attributes;
 
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
+        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
+
+        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
@@ -66,7 +68,8 @@ final class TwigResponderSpec extends ObjectBehavior
             'book' => $data->getWrappedObject(),
         ])->willReturn('result')->shouldBeCalled();
 
-        $this->respond($data, $operation, $context);
+        $response = $this->respond($data, $operation, $context);
+        $response->getStatusCode()->shouldReturn(200);
     }
 
     function it_returns_a_response_for_resource_index(
@@ -79,6 +82,8 @@ final class TwigResponderSpec extends ObjectBehavior
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
         $request->attributes = $attributes;
+
+        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
 
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
         $attributes->get('form')->willReturn(null);
@@ -112,5 +117,31 @@ final class TwigResponderSpec extends ObjectBehavior
         $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response);
 
         $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())))->shouldReturn($response);
+    }
+
+    function it_response_is_unprocessable_when_validation_has_failed(
+        \ArrayObject $data,
+        Request $request,
+        ParameterBag $attributes,
+        ContextFactoryInterface $contextFactory,
+        Environment $twig,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $data->id = 'xyz';
+        $request->attributes = $attributes;
+
+        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
+
+        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
+
+        $operation = new Create();
+
+        $contextFactory->create($data, $operation, $context)->willReturn(['books' => $data]);
+
+        $twig->render('', ['books' => $data])->willReturn('twig_content');
+
+        $response = $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())));
+        $response->getStatusCode()->shouldReturn(422);
     }
 }
