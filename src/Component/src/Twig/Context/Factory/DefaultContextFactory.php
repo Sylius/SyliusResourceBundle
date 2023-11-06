@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Twig\Context\Factory;
 
-use Sylius\Component\Resource\Metadata\CollectionOperationInterface;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\CollectionOperationInterface;
+use Sylius\Resource\Metadata\Operation;
 
 final class DefaultContextFactory implements ContextFactoryInterface
 {

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Session\Flash;
 
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 
 interface FlashHelperInterface

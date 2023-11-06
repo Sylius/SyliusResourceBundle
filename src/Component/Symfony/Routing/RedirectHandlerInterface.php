@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing;
 
-use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\HttpOperation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

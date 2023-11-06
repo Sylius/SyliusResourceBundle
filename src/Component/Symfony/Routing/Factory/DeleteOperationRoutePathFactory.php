@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
-use Sylius\Component\Resource\Metadata\Api\ApiOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Api\ApiOperationInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\HttpOperation;
 
 final class DeleteOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {

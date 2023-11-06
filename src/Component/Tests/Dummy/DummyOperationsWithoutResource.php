@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Index;
 
 #[Index]
 #[Create]

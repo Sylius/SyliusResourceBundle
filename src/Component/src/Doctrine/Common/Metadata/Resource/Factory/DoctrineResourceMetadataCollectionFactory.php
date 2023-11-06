@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Operations;
+use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {

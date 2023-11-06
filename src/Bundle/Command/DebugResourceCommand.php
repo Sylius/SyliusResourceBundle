@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Command;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
-use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Operations;
+use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\Console\Input\InputArgument;

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;

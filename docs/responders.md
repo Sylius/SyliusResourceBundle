@@ -40,8 +40,8 @@ As an example, we add a `foo` variable to the Twig template with `bar` as value.
 
 namespace App\Twig\Context\Factory;
 
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
 final class ShowSubscriptionContextFactory implements ContextFactoryInterface
@@ -66,9 +66,9 @@ Use it on your operation.
 
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
 
 #[AsResource]
 #[Show(

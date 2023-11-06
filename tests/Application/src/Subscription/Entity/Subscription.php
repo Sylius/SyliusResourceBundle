@@ -17,16 +17,16 @@ use App\Subscription\Form\Type\SubscriptionType;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\BulkUpdate;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\BulkUpdate;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -59,11 +59,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => 'subscription:read'],
     denormalizationContext: ['groups' => 'subscription:write'],
 )]
-#[Api\GetCollection]
-#[Api\Post]
-#[Api\Put]
-#[Api\Delete]
-#[Api\Get]
+#[\Sylius\Resource\Metadata\Api\GetCollection]
+#[\Sylius\Resource\Metadata\Api\Post]
+#[\Sylius\Resource\Metadata\Api\Put]
+#[\Sylius\Resource\Metadata\Api\Delete]
+#[\Sylius\Resource\Metadata\Api\Get]
 
 #[ORM\Entity]
 class Subscription implements ResourceInterface

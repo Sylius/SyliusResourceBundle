@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\State\Provider;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\State\Provider\EventDispatcherProvider;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;

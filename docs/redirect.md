@@ -30,10 +30,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Update;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;use Sylius\Resource\Metadata\AsResource;use Sylius\Resource\Metadata\Create;use Sylius\Resource\Metadata\Update;
 
 #[AsResource]
 #[Create(redirectToRoute: 'app_book_update')]
@@ -65,9 +62,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 #[Resource]

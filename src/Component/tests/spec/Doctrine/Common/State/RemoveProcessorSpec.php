@@ -16,9 +16,9 @@ namespace spec\Sylius\Resource\Doctrine\Common\State;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
+use Sylius\Resource\Metadata\Operation;
 
 final class RemoveProcessorSpec extends ObjectBehavior
 {

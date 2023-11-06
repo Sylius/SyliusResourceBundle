@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\UpdateOperationRoutePathFactory;
+use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Update;
 
 final class UpdateOperationRoutePathFactorySpec extends ObjectBehavior
 {
@@ -55,14 +54,14 @@ final class UpdateOperationRoutePathFactorySpec extends ObjectBehavior
 
     function it_generates_route_path_for_api_put_operations(): void
     {
-        $operation = new Api\Put();
+        $operation = new \Sylius\Resource\Metadata\Api\Put();
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
     }
 
     function it_generates_route_path_for_api_patch_operations(): void
     {
-        $operation = new Api\Patch();
+        $operation = new \Sylius\Resource\Metadata\Api\Patch();
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
     }

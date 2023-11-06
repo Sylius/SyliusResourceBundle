@@ -15,19 +15,19 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\BulkUpdate;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Metadata;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Resource\Action\PlaceHolderAction;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\BulkUpdate;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
 final class OperationRouteFactorySpec extends ObjectBehavior
 {

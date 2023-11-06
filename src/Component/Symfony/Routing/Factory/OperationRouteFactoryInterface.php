@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
-use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Routing\Route;
 
 interface OperationRouteFactoryInterface

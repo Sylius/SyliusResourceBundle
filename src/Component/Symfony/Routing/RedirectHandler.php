@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing;
 
-use Sylius\Component\Resource\Metadata\BulkOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
+use Sylius\Resource\Metadata\BulkOperationInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
