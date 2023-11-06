@@ -65,7 +65,7 @@ final class BoardGameUiTest extends ApiTestCase
 
         $this->client->request('GET', '/admin/board-games/new');
 
-        $this->assertResponseCode(Response::HTTP_OK);
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_OK);
     }
 
     /** @test */
