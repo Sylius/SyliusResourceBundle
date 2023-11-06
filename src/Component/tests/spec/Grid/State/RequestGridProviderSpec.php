@@ -110,7 +110,7 @@ final class RequestGridProviderSpec extends ObjectBehavior
     ): void {
         $operation = new Create(name: 'app_book');
 
-        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Component\Resource\Metadata\GridAwareOperationInterface".'))
+        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Resource\Metadata\GridAwareOperationInterface".'))
             ->during('provide', [
                 $operation,
                 new Context(new RequestOption($request->getWrappedObject())),
