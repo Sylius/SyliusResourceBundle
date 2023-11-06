@@ -59,6 +59,16 @@ final class BoardGameUiTest extends ApiTestCase
     }
 
     /** @test */
+    public function it_allows_accessing_board_game_creation_page(): void
+    {
+        $this->loadFixturesFromFile('board_games.yml');
+
+        $this->client->request('GET', '/admin/board-games/new');
+
+        $this->assertResponseCode(Response::HTTP_OK);
+    }
+
+    /** @test */
     public function it_allows_creating_a_board_game(): void
     {
         $this->loadFixturesFromFile('board_games.yml');
