@@ -40,9 +40,7 @@ As an example, we add a `foo` variable to the Twig template with `bar` as value.
 
 namespace App\Twig\Context\Factory;
 
-use phpDocumentor\Reflection\Types\Context;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
+use phpDocumentor\Reflection\Types\Context;use Sylius\Component\Resource\Metadata\Operation;use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
 final class ShowSubscriptionContextFactory implements ContextFactoryInterface
 {

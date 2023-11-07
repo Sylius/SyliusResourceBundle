@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Twig\Context\Factory;
+namespace Sylius\Resource\Twig\Context\Factory;
 
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
