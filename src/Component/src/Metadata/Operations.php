@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace  Sylius\Resource\Metadata;
+namespace Sylius\Resource\Metadata;
 
 use RuntimeException;
 
