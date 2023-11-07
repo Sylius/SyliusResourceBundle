@@ -15,12 +15,12 @@ namespace spec\Sylius\Resource\State\Processor;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\State\Processor\EventDispatcherProcessor;
 use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EventDispatcherProcessorSpec extends ObjectBehavior

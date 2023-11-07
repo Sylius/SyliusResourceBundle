@@ -16,10 +16,10 @@ namespace spec\Sylius\Resource\State\Processor;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\Api\Delete;
 use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\State\Processor\BulkAwareProcessor;
 use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 
 final class BulkAwareProcessorSpec extends ObjectBehavior
 {

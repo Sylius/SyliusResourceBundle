@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\EventDispatcher;
+namespace spec\Sylius\Resource\Symfony\EventDispatcher;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEvent;
-use Sylius\Component\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class OperationEventDispatcherSpec extends ObjectBehavior

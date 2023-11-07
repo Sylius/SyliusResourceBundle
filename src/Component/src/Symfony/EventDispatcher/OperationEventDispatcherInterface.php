@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventDispatcher;
+namespace Sylius\Resource\Symfony\EventDispatcher;
 
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
