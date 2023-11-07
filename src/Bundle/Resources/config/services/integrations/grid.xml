@@ -61,9 +61,9 @@
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius.grid.view_factory.resource" class="Sylius\Component\Resource\Grid\View\Factory\GridViewFactory">
+        <service id="sylius.grid.view_factory.resource" class="Sylius\Resource\Grid\View\Factory\GridViewFactory">
             <argument type="service" id="sylius.grid.data_provider" />
         </service>
-        <service id="Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface" alias="sylius.grid.view_factory.resource" />
+        <service id="Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface" alias="sylius.grid.view_factory.resource" />
     </services>
 </container>

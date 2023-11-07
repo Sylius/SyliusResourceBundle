@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Grid\State\RequestGridProvider;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Metadata\Operations;
 use Sylius\Component\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory;
@@ -22,6 +21,7 @@ use Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollecti
 use Sylius\Component\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\Request\State\Provider;
+use Sylius\Resource\Grid\State\RequestGridProvider;
 
 final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Grid\State;
+namespace spec\Sylius\Resource\Grid\State;
 
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
@@ -19,12 +19,12 @@ use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Grid\View\GridView;
-use Sylius\Component\Resource\Grid\State\RequestGridProvider;
-use Sylius\Component\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Grid\State\RequestGridProvider;
+use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
