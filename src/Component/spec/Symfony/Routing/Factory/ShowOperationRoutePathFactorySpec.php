@@ -16,6 +16,7 @@ namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Component\Resource\Symfony\Routing\Factory\ShowOperationRoutePathFactory;
+use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 
@@ -54,7 +55,7 @@ final class ShowOperationRoutePathFactorySpec extends ObjectBehavior
 
     function it_generates_route_path_for_api_get_operations(): void
     {
-        $operation = new \Sylius\Resource\Metadata\Api\Get();
+        $operation = new Api\Get();
 
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
     }
