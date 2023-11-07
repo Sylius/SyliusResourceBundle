@@ -96,7 +96,9 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use Sylius\Component\Resource\Model\ResourceInterface;use Sylius\Resource\Metadata\AsResource;use Sylius\Resource\Metadata\Create;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(
@@ -164,7 +166,9 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use Sylius\Component\Resource\Model\ResourceInterface;use Sylius\Resource\Metadata\AsResource;use Sylius\Resource\Metadata\Create;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(
@@ -188,7 +192,10 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use App\Factory\BookFactory;use Sylius\Component\Resource\Model\ResourceInterface;use Sylius\Resource\Metadata\AsResource;use Sylius\Resource\Metadata\Create;
+use App\Factory\BookFactory;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(
@@ -231,7 +238,9 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use App\Factory\BookFactory;use Sylius\Resource\Metadata\AsResource;use Sylius\Resource\Metadata\Create;
+use App\Factory\BookFactory;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(
