@@ -27,7 +27,8 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;use Sylius\Resource\Factory\FactoryInterface;
+use App\Entity\Book;
+use Sylius\Resource\Factory\FactoryInterface;
 
 final class BookFactory implements FactoryInterface
 {
@@ -59,7 +60,9 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;use Sylius\Resource\Factory\FactoryInterface;use Symfony\Component\Security\Core\Security;
+use App\Entity\Book;
+use Sylius\Resource\Factory\FactoryInterface;
+use Symfony\Component\Security\Core\Security;
 
 final class BookFactory implements FactoryInterface
 {
@@ -125,7 +128,9 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;use Sylius\Component\Resource\Repository\RepositoryInterface;use Sylius\Resource\Factory\FactoryInterface;
+use App\Entity\Book;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Factory\FactoryInterface;
 
 final class BookFactory implements FactoryInterface
 {
