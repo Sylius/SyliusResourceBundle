@@ -20,10 +20,11 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrinePHP
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
-use Sylius\Component\Resource\Factory\Factory;
-use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Factory\Factory;
+use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\State\ProcessorInterface;
@@ -83,6 +84,10 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         ;
 
         $container->registerForAutoconfiguration(FactoryInterface::class)
+            ->addTag('sylius.resource_factory')
+        ;
+
+        $container->registerForAutoconfiguration(LegacyFactoryInterface::class)
             ->addTag('sylius.resource_factory')
         ;
 

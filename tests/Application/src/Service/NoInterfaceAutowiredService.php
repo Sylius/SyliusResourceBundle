@@ -16,7 +16,7 @@ namespace App\Service;
 use App\Factory\BookFactory;
 use App\Repository\BookRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Sylius\Component\Resource\Factory\Factory;
+use Sylius\Resource\Factory\Factory;
 
 final class NoInterfaceAutowiredService
 {

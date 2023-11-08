@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
+use Sylius\Resource\Factory\FactoryInterface;
+
 /**
  * @template T of object
  */

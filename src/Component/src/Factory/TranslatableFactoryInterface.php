@@ -11,10 +11,15 @@
 
 declare(strict_types=1);
 
-namespace App\Factory;
+namespace Sylius\Resource\Factory;
 
-use Sylius\Resource\Factory\TranslatableFactoryInterface;
-
-interface BookFactoryInterface extends TranslatableFactoryInterface
+/**
+ * @template T of object
+ */
+interface TranslatableFactoryInterface extends FactoryInterface
 {
+    /**
+     * @return T
+     */
+    public function createNew();
 }

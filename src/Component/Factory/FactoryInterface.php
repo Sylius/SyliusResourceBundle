@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
-/**
- * @template T of object
- */
-interface FactoryInterface
-{
+interface_exists(\Sylius\Resource\Factory\FactoryInterface::class);
+
+if (false) {
     /**
-     * @return T
+     * @inheritDoc
      */
-    public function createNew();
+    interface FactoryInterface extends \Sylius\Resource\Factory\FactoryInterface
+    {
+    }
 }

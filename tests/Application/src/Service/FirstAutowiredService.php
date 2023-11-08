@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\Persistence\ObjectManager;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Factory\FactoryInterface;
 
 final class FirstAutowiredService
 {

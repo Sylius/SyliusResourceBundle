@@ -11,14 +11,13 @@
 
 declare(strict_types=1);
 
-namespace App\Factory;
+namespace Sylius\Resource\Factory;
 
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
-use Sylius\Resource\Factory\FactoryInterface;
 
-final class BookFactory implements BookFactoryInterface
+final class TranslatableFactory implements TranslatableFactoryInterface
 {
     private FactoryInterface $factory;
 
@@ -30,17 +29,22 @@ final class BookFactory implements BookFactoryInterface
         $this->localeProvider = $localeProvider;
     }
 
+    /**
+     * @throws UnexpectedTypeException
+     */
     public function createNew()
     {
-        $book = $this->factory->createNew();
+        $resource = $this->factory->createNew();
 
-        if (!$book instanceof TranslatableInterface) {
-            throw new UnexpectedTypeException($book, TranslatableInterface::class);
+        if (!$resource instanceof TranslatableInterface) {
+            throw new UnexpectedTypeException($resource, TranslatableInterface::class);
         }
 
-        $book->setCurrentLocale($this->localeProvider->getDefaultLocaleCode());
-        $book->setFallbackLocale($this->localeProvider->getDefaultLocaleCode());
+        $resource->setCurrentLocale($this->localeProvider->getDefaultLocaleCode());
+        $resource->setFallbackLocale($this->localeProvider->getDefaultLocaleCode());
 
-        return $book;
+        return $resource;
     }
 }
+
+class_alias(TranslatableFactory::class, \Sylius\Component\Resource\Factory\TranslatableFactory::class);

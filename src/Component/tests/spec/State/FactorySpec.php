@@ -15,8 +15,8 @@ namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Factory;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
