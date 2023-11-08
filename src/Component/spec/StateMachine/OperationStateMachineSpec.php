@@ -15,12 +15,12 @@ namespace spec\Sylius\Component\Resource\StateMachine;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Component\Resource\StateMachine\OperationStateMachine;
 use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
 
 final class OperationStateMachineSpec extends ObjectBehavior
 {

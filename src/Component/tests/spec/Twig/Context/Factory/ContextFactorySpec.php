@@ -15,9 +15,9 @@ namespace spec\Sylius\Resource\Twig\Context\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Twig\Context\Factory\ContextFactory;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 

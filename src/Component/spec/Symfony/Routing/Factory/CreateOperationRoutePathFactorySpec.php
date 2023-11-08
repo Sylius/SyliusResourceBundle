@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Symfony\Routing\Factory\CreateOperationRoutePathFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Metadata\Api;
+use Sylius\Resource\Metadata\Create;
 
 final class CreateOperationRoutePathFactorySpec extends ObjectBehavior
 {

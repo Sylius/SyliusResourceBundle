@@ -32,9 +32,9 @@ There are some basic CRUD operations and more.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Index;
 
 #[AsResource]
 #[Index]
@@ -67,9 +67,9 @@ To use a grid for you operation, you need to install the [Sylius grid package](h
 namespace App\Entity;
 
 use App\Grid\BookGrid;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Index;
 
 #[AsResource]
 // You can use either the FQCN of your grid
@@ -100,9 +100,9 @@ The iterator for your books will be available as `books.data` or `resources.data
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create]
@@ -136,9 +136,9 @@ The iterator for your books will be available as `books.data` or `resources.data
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Update;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Update;
 
 #[AsResource]
 #[Update]
@@ -170,9 +170,9 @@ On your Twig template, these variables are available
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Delete;
 
 #[AsResource]
 #[Delete]
@@ -195,9 +195,9 @@ It will configure this route for your `delete` operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
 
 #[AsResource]
 #[BulkDelete]
@@ -220,9 +220,9 @@ It will configure this route for your `bulk_delete` operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
 
 #[AsResource]
 #[Show]
@@ -257,10 +257,9 @@ As an example, we add a `publish` operation to our book resource.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\ApplyStateMachineTransition;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\ApplyStateMachineTransition;
+use Sylius\Resource\Metadata\AsResource;
 
 #[AsResource]
 #[ApplyStateMachineTransition(stateMachineTransition: 'publish')]
@@ -285,9 +284,9 @@ It customizes the path for your operations.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(path: 'register')]
@@ -308,9 +307,9 @@ It customizes the path for your operations.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource]
 #[Create(shortName: 'register')]
@@ -335,12 +334,12 @@ As an example, we defines `index`, `create`, `update` and `show` operations to o
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
 #[AsResource(templatesDir: 'book')]
 #[Index]
@@ -367,14 +366,14 @@ It adds a prefix to the path for each operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
 #[AsResource(routePrefix: 'admin')]
 #[Index]
@@ -405,14 +404,14 @@ It changes the route name for each operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
 #[AsResource(section: 'admin', routePrefix: 'admin')]
 #[Index]
@@ -447,14 +446,13 @@ It changes the resource identifier for each operation.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\AsResource;
-use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Update;
 
 #[AsResource(identifier: 'code')]
 #[Index]
@@ -483,9 +481,9 @@ It defines the simple vars that you can use on your templates.
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\AsResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
 
 #[AsResource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
 #[Create(vars: ['subheader' => 'Adding a book'])]

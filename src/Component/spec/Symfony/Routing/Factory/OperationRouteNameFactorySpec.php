@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class OperationRouteNameFactorySpec extends ObjectBehavior
 {

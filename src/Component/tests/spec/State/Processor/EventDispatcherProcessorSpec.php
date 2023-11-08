@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\State\Processor;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Processor\EventDispatcherProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;

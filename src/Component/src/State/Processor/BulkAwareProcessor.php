@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\State\Processor;
 
-use Sylius\Component\Resource\Metadata\BulkOperationInterface;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\BulkOperationInterface;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 
 /**

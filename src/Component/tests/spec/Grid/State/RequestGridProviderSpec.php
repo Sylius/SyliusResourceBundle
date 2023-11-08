@@ -19,12 +19,12 @@ use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Grid\View\GridView;
-use Sylius\Component\Resource\Metadata\Create;
-use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Index;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -110,7 +110,7 @@ final class RequestGridProviderSpec extends ObjectBehavior
     ): void {
         $operation = new Create(name: 'app_book');
 
-        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Component\Resource\Metadata\GridAwareOperationInterface".'))
+        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Resource\Metadata\GridAwareOperationInterface".'))
             ->during('provide', [
                 $operation,
                 new Context(new RequestOption($request->getWrappedObject())),

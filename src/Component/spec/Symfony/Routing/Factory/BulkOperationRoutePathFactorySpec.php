@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\BulkDelete;
-use Sylius\Component\Resource\Metadata\BulkUpdate;
 use Sylius\Component\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\BulkUpdate;
 
 final class BulkOperationRoutePathFactorySpec extends ObjectBehavior
 {

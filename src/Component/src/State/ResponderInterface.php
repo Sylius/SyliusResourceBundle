@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\State;
 
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Operation;
 
 interface ResponderInterface
 {

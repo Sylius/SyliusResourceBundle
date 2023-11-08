@@ -17,15 +17,15 @@
             <tag name="cache.pool" />
         </service>
 
-        <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Component\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
+        <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
         </service>
-        <service id="Sylius\Component\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
+        <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
         <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
 
         <service id="sylius.resource_metadata_collection.factory.state_machine"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory.attributes"
                  decoration-priority="300"
         >
@@ -44,7 +44,7 @@
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.redirect"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
                  decoration-priority="200"
         >
@@ -53,21 +53,21 @@
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.vars"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\VarsResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\VarsResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
         >
             <argument type="service" id=".inner" />
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.provider"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
         >
             <argument type="service" id=".inner" />
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.resource_factory"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\FactoryResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\FactoryResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
         >
             <argument type="service" id="sylius.resource_registry" />
@@ -75,14 +75,14 @@
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.event_short_name"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
         >
             <argument type="service" id=".inner" />
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.templates_dir"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory.attributes"
         >
             <argument type="service" id=".inner" />
@@ -90,7 +90,7 @@
         </service>
 
         <service id="sylius.resource_metadata_collection.factory.cached"
-                 class="Sylius\Component\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
+                 class="Sylius\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory.attributes"
                  decoration-priority="-10"
         >
@@ -98,7 +98,7 @@
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiator">
+        <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Resource\Metadata\Operation\HttpOperationInitiator">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory" />
         </service>

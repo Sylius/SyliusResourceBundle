@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Resource\Twig\Context\Factory;
 
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Operation;
 use Webmozart\Assert\Assert;
 
 final class ContextFactory implements ContextFactoryInterface

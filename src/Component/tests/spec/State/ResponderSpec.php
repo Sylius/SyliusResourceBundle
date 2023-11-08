@@ -15,9 +15,9 @@ namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Tests\Dummy\ResponderWithCallable;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Responder;
 use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\Index;
 use Sylius\Component\Resource\Symfony\Routing\Factory\CollectionOperationRoutePathFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Metadata\Api;
+use Sylius\Resource\Metadata\Index;
 
 final class CollectionOperationRoutePathFactorySpec extends ObjectBehavior
 {
@@ -45,7 +45,7 @@ final class CollectionOperationRoutePathFactorySpec extends ObjectBehavior
         $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/list');
     }
 
-    function it_generates_route_path_for_api_post_operations(): void
+    function it_generates_route_path_for_api_get_collection_operations(): void
     {
         $operation = new Api\GetCollection();
 

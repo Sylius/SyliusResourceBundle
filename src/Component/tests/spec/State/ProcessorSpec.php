@@ -15,9 +15,9 @@ namespace spec\Sylius\Resource\State;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\Create;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Processor;
 use Sylius\Resource\State\ProcessorInterface;
 

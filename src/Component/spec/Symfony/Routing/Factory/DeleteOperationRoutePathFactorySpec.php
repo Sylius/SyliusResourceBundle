@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Api;
-use Sylius\Component\Resource\Metadata\Delete;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
 use Sylius\Component\Resource\Symfony\Routing\Factory\DeleteOperationRoutePathFactory;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Metadata\Api;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class DeleteOperationRoutePathFactorySpec extends ObjectBehavior
 {

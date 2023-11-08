@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\EventDispatcher;
 
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Operation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class OperationEventDispatcher implements OperationEventDispatcherInterface

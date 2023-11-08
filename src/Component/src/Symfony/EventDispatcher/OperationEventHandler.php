@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\EventDispatcher;
 
-use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\HttpOperation;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Symfony\Request\State;
 
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ResponderInterface;
 
 final class Responder implements ResponderInterface

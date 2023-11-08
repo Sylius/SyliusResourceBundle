@@ -15,7 +15,7 @@ namespace Sylius\Component\Resource\Symfony\EventListener;
 
 use Negotiation\BaseAccept;
 use Negotiation\Negotiator;
-use Sylius\Component\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
+use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 

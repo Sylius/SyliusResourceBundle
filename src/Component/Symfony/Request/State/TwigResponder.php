@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Request\State;
 
-use Sylius\Component\Resource\Metadata\CreateOperationInterface;
-use Sylius\Component\Resource\Metadata\DeleteOperationInterface;
-use Sylius\Component\Resource\Metadata\HttpOperation;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\CreateOperationInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Resource\State\ResponderInterface;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;

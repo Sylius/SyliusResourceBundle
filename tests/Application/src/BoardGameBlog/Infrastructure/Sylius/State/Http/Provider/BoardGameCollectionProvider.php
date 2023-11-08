@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider;
 
-use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Grid\State\RequestGridProvider;
+use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProviderInterface;
 
 final class BoardGameCollectionProvider implements ProviderInterface

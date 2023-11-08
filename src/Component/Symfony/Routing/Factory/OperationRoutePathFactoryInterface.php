@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Symfony\Routing\Factory;
 
-use Sylius\Component\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\HttpOperation;
 
 /**
  * @experimental

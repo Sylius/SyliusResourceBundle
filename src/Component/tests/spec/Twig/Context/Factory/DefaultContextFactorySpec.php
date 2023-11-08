@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Twig\Context\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Index;
-use Sylius\Component\Resource\Metadata\ResourceMetadata;
-use Sylius\Component\Resource\Metadata\Show;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Twig\Context\Factory\DefaultContextFactory;
 
 final class DefaultContextFactorySpec extends ObjectBehavior

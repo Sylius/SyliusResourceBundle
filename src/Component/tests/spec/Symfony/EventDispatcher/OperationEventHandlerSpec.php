@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Symfony\EventDispatcher;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Metadata\Update;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;

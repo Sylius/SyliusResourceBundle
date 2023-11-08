@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\State\Processor;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Api\Delete;
-use Sylius\Component\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Metadata\Api\Delete;
+use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\State\Processor\BulkAwareProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
