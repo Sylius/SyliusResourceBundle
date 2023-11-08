@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\Validator\EventListener;
+namespace spec\Sylius\Resource\Symfony\Validator\EventListener;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
