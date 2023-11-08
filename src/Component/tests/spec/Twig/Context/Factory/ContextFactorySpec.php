@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Twig\Context\Factory;
+namespace spec\Sylius\Resource\Twig\Context\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\Show;
-use Sylius\Component\Resource\Twig\Context\Factory\ContextFactory;
-use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Twig\Context\Factory\ContextFactory;
+use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
 final class ContextFactorySpec extends ObjectBehavior
 {

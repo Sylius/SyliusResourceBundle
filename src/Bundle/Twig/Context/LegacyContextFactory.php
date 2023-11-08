@@ -15,9 +15,9 @@ namespace Sylius\Bundle\ResourceBundle\Twig\Context;
 
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Component\Resource\Metadata\Operation;
-use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
 final class LegacyContextFactory implements ContextFactoryInterface
 {

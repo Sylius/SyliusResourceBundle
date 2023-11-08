@@ -19,10 +19,10 @@ use Sylius\Component\Resource\Metadata\HttpOperation;
 use Sylius\Component\Resource\Metadata\Operation;
 use Sylius\Component\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
-use Sylius\Component\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\State\ResponderInterface;
+use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
