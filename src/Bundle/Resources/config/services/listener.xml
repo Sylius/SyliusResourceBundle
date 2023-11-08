@@ -81,7 +81,7 @@
             <tag name="kernel.event_listener" event="kernel.view" priority="8" />
         </service>
 
-        <service id="sylius.listener.exception.validation" class="Sylius\Component\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
+        <service id="sylius.listener.exception.validation" class="Sylius\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
 
             <argument type="service" id="serializer" on-invalid="null" />
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
