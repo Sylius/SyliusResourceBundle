@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Humanizer;
+namespace spec\Sylius\Resource\Humanizer;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Humanizer\StringHumanizer;
+use Sylius\Resource\Humanizer\StringHumanizer;
 
 final class StringHumanizerSpec extends ObjectBehavior
 {
