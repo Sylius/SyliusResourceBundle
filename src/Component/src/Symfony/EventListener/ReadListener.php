@@ -11,42 +11,44 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventListener;
+namespace Sylius\Resource\Symfony\EventListener;
 
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Resource\State\ResponderInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Webmozart\Assert\Assert;
+use Sylius\Resource\State\ProviderInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class RespondListener
+final class ReadListener
 {
     public function __construct(
         private HttpOperationInitiatorInterface $operationInitiator,
         private RequestContextInitiatorInterface $contextInitiator,
-        private ResponderInterface $responder,
+        private ProviderInterface $provider,
     ) {
     }
 
-    public function onKernelView(ViewEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $context = $this->contextInitiator->initializeContext($request);
         $operation = $this->operationInitiator->initializeOperation($request);
 
-        $controllerResult = $event->getControllerResult();
-
         if (
             null === $operation ||
-            $controllerResult instanceof Response
+            $operation instanceof CreateOperationInterface ||
+            !($operation->canRead() ?? true)
         ) {
             return;
         }
 
-        $response = $this->responder->respond($controllerResult, $operation, $context);
-        Assert::isInstanceOf($response, Response::class);
+        $data = $this->provider->provide($operation, $context);
 
-        $event->setResponse($response);
+        if (null === $data) {
+            throw new NotFoundHttpException('Resource has not been found.');
+        }
+
+        $request->attributes->set('data', $data);
     }
 }

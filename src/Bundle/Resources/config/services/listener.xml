@@ -15,73 +15,73 @@
     <services>
         <service id="sylius.negotiator" class="Negotiation\Negotiator" />
 
-        <service id="sylius.listener.add_format" class="Sylius\Component\Resource\Symfony\EventListener\AddFormatListener">
+        <service id="sylius.listener.add_format" class="Sylius\Resource\Symfony\EventListener\AddFormatListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.negotiator" />
             <tag name="kernel.event_listener" event="kernel.request" priority="28" />
         </service>
 
-        <service id="sylius.listener.read" class="Sylius\Component\Resource\Symfony\EventListener\ReadListener">
+        <service id="sylius.listener.read" class="Sylius\Resource\Symfony\EventListener\ReadListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state.provider" />
             <tag name="kernel.event_listener" event="kernel.request" priority="4" />
         </service>
 
-        <service id="sylius.listener.factory" class="Sylius\Component\Resource\Symfony\EventListener\FactoryListener">
+        <service id="sylius.listener.factory" class="Sylius\Resource\Symfony\EventListener\FactoryListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state.factory" />
             <tag name="kernel.event_listener" event="kernel.request" priority="3" />
         </service>
 
-        <service id="sylius.listener.deserialize" class="Sylius\Component\Resource\Symfony\EventListener\DeserializeListener">
+        <service id="sylius.listener.deserialize" class="Sylius\Resource\Symfony\EventListener\DeserializeListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="serializer" on-invalid="null" />
             <tag name="kernel.event_listener" event="kernel.request" priority="2" />
         </service>
 
-        <service id="sylius.listener.form" class="Sylius\Component\Resource\Symfony\EventListener\FormListener">
+        <service id="sylius.listener.form" class="Sylius\Resource\Symfony\EventListener\FormListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.form.factory" />
             <tag name="kernel.event_listener" event="kernel.view" priority="128" />
         </service>
 
-        <service id="sylius.listener.validate" class="Sylius\Component\Resource\Symfony\EventListener\ValidateListener">
+        <service id="sylius.listener.validate" class="Sylius\Resource\Symfony\EventListener\ValidateListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="validator" />
             <tag name="kernel.event_listener" event="kernel.view" priority="64" />
         </service>
 
-        <service id="sylius.listener.write" class="Sylius\Component\Resource\Symfony\EventListener\WriteListener">
+        <service id="sylius.listener.write" class="Sylius\Resource\Symfony\EventListener\WriteListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state.processor" />
             <tag name="kernel.event_listener" event="kernel.view" priority="32" />
         </service>
 
-        <service id="sylius.listener.serialize" class="Sylius\Component\Resource\Symfony\EventListener\SerializeListener">
+        <service id="sylius.listener.serialize" class="Sylius\Resource\Symfony\EventListener\SerializeListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="serializer" on-invalid="null" />
             <tag name="kernel.event_listener" event="kernel.view" priority="16" />
         </service>
 
-        <service id="sylius.listener.flash" class="Sylius\Component\Resource\Symfony\EventListener\FlashListener">
+        <service id="sylius.listener.flash" class="Sylius\Resource\Symfony\EventListener\FlashListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.helper.flash" />
             <tag name="kernel.event_listener" event="kernel.view" priority="16" />
         </service>
 
-        <service id="sylius.listener.respond" class="Sylius\Component\Resource\Symfony\EventListener\RespondListener">
+        <service id="sylius.listener.respond" class="Sylius\Resource\Symfony\EventListener\RespondListener">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state.responder" />
             <tag name="kernel.event_listener" event="kernel.view" priority="8" />
         </service>
 
-        <service id="sylius.listener.exception.validation" class="Sylius\Component\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
+        <service id="sylius.listener.exception.validation" class="Sylius\Resource\Symfony\Validator\EventListener\ValidationExceptionListener">
 
             <argument type="service" id="serializer" on-invalid="null" />
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />

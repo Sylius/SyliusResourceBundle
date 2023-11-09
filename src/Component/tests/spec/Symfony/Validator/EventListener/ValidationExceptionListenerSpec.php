@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\Validator\EventListener;
+namespace spec\Sylius\Resource\Symfony\Validator\EventListener;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Symfony\Validator\EventListener\ValidationExceptionListener;
 use Sylius\Component\Resource\Symfony\Validator\Exception\ValidationException;
+use Sylius\Resource\Symfony\Validator\EventListener\ValidationExceptionListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;

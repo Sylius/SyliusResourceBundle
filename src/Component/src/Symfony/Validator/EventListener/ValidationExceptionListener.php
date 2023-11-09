@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Validator\EventListener;
+namespace Sylius\Resource\Symfony\Validator\EventListener;
 
 use Sylius\Component\Resource\Symfony\Validator\Exception\ConstraintViolationListAwareExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;

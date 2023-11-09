@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\EventListener;
+namespace Sylius\Resource\Symfony\EventListener;
 
 use Sylius\Component\Resource\Symfony\Validator\Exception\ValidationException;
 use Sylius\Resource\Metadata\CreateOperationInterface;
