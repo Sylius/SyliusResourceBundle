@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\ExpressionLanguage;
+namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
+use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ArgumentParserSpec extends ObjectBehavior

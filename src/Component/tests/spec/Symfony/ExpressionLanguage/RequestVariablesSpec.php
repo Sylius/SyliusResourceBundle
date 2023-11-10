@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\ExpressionLanguage;
+namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\RequestVariables;
+use Sylius\Resource\Symfony\ExpressionLanguage\RequestVariables;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

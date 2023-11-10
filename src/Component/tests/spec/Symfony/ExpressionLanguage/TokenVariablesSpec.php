@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\ExpressionLanguage;
+namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\TokenVariables;
+use Sylius\Resource\Symfony\ExpressionLanguage\TokenVariables;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
