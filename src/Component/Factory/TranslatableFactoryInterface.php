@@ -13,21 +13,17 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Factory;
 
-use Sylius\Resource\Factory\FactoryInterface;
-
 interface_exists(\Sylius\Resource\Factory\TranslatableFactoryInterface::class);
 
 if (false) {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     interface TranslatableFactoryInterface extends \Sylius\Resource\Factory\TranslatableFactoryInterface
     {
         /**
-         * {@inheritDoc}
+         * @inheritDoc
          */
         public function createNew();
     }
 }
-
-

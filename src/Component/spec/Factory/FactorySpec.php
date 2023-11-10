@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
 use Sylius\Resource\Factory\Factory as NewFactory;
 use Sylius\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
 
 final class FactorySpec extends ObjectBehavior
 {

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Component\Resource\Factory\TranslatableFactoryInterface as LegacyTranslatableFactoryInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Factory\TranslatableFactory as NewTranslatableFactory;
 use Sylius\Resource\Factory\TranslatableFactoryInterface;
-use Sylius\Component\Resource\Factory\TranslatableFactoryInterface as LegacyTranslatableFactoryInterface;
 
 final class TranslatableFactorySpec extends ObjectBehavior
 {
