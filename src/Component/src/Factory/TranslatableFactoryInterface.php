@@ -23,3 +23,5 @@ interface TranslatableFactoryInterface extends FactoryInterface
      */
     public function createNew();
 }
+
+class_alias(TranslatableFactoryInterface::class, \Sylius\Component\Resource\Factory\TranslatableFactoryInterface::class);

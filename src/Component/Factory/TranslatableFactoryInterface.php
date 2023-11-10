@@ -15,13 +15,19 @@ namespace Sylius\Component\Resource\Factory;
 
 use Sylius\Resource\Factory\FactoryInterface;
 
-/**
- * @template T of object
- */
-interface TranslatableFactoryInterface extends FactoryInterface
-{
+interface_exists(\Sylius\Resource\Factory\TranslatableFactoryInterface::class);
+
+if (false) {
     /**
-     * @return T
+     * {@inheritDoc}
      */
-    public function createNew();
+    interface TranslatableFactoryInterface extends \Sylius\Resource\Factory\TranslatableFactoryInterface
+    {
+        /**
+         * {@inheritDoc}
+         */
+        public function createNew();
+    }
 }
+
+

@@ -18,9 +18,7 @@ namespace Sylius\Resource\Factory;
  */
 final class Factory implements FactoryInterface
 {
-    /**
-     * @var class-string
-     */
+    /** @var class-string */
     private $className;
 
     /**
