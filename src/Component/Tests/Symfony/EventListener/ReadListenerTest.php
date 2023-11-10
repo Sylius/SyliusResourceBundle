@@ -33,17 +33,13 @@ final class ReadListenerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var HttpOperationInitiatorInterface|ObjectProphecy */
-    private $operationInitiator;
+    private HttpOperationInitiatorInterface|ObjectProphecy $operationInitiator;
 
-    /** @var RequestContextInitiatorInterface|ObjectProphecy */
-    private $contextInitiator;
+    private RequestContextInitiatorInterface|ObjectProphecy $contextInitiator;
 
-    /** @var ProviderInterface|ObjectProphecy */
-    private $provider;
+    private ProviderInterface|ObjectProphecy $provider;
 
-    /** @var ReadListener */
-    private $readListener;
+    private ReadListener $readListener;
 
     protected function setUp(): void
     {
