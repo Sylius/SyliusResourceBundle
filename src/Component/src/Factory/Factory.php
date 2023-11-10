@@ -19,13 +19,12 @@ namespace Sylius\Resource\Factory;
 final class Factory implements FactoryInterface
 {
     /**
-     * @var string
-     * @psalm-var class-string
+     * @var class-string
      */
     private $className;
 
     /**
-     * @psalm-param class-string $className
+     * @param class-string $className
      */
     public function __construct(string $className)
     {
