@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\src\State\Provider;
+namespace Sylius\Resource\State\Provider;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
