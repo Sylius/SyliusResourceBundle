@@ -28,7 +28,7 @@ final class Provider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, Context $context): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|array|null
     {
         $provider = $operation->getProvider();
 

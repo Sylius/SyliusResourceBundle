@@ -23,5 +23,5 @@ use Sylius\Resource\Metadata\Operation;
  */
 interface ProviderInterface
 {
-    public function provide(Operation $operation, Context $context): object|iterable|null;
+    public function provide(Operation $operation, Context $context): object|array|null;
 }

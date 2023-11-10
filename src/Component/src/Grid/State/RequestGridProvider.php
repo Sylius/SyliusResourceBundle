@@ -31,7 +31,7 @@ final class RequestGridProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, Context $context): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|array|null
     {
         if (null === $this->gridViewFactory || null === $this->gridProvider) {
             throw new \LogicException('You can not use a grid if Sylius Grid Bundle is not available. Try running "composer require sylius/grid-bundle".');

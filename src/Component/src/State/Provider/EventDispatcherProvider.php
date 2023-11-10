@@ -31,7 +31,7 @@ final class EventDispatcherProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, Context $context): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|array|null
     {
         if (
             $operation instanceof CollectionOperationInterface ||
