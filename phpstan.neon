@@ -27,6 +27,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/Storage/*
+        - %currentWorkingDirectory%/src/Component/Tests/*
         - %currentWorkingDirectory%/src/Component/tests/spec/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 
