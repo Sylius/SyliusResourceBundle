@@ -24,7 +24,7 @@ final class BoardGameCollectionProvider implements ProviderInterface
     {
     }
 
-    public function provide(Operation $operation, Context $context): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|array|null
     {
         return $this->requestGridProvider->provide($operation, $context);
     }
