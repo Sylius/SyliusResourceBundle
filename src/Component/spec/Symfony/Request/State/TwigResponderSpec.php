@@ -107,7 +107,7 @@ final class TwigResponderSpec extends ObjectBehavior
         RedirectHandlerInterface $redirectHandler,
         RedirectResponse $response,
     ): void {
-        $data->id = 'xyz';
+        $data->offsetSet('id', 'xyz');
         $request->attributes = $attributes;
 
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
@@ -128,7 +128,7 @@ final class TwigResponderSpec extends ObjectBehavior
     ): void {
         $context = new Context(new RequestOption($request->getWrappedObject()));
 
-        $data->id = 'xyz';
+        $data->offsetSet('id', 'xyz');
         $request->attributes = $attributes;
 
         $request->isMethodSafe()->willReturn(false)->shouldBeCalled();

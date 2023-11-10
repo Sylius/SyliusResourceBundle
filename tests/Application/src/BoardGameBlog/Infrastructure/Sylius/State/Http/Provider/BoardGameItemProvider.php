@@ -31,7 +31,7 @@ final class BoardGameItemProvider implements ProviderInterface
     ) {
     }
 
-    public function provide(Operation $operation, Context $context): object|iterable|null
+    public function provide(Operation $operation, Context $context): object|array|null
     {
         $request = $context->get(RequestOption::class)?->request();
         Assert::notNull($request);

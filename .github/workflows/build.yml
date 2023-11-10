@@ -108,7 +108,6 @@ jobs:
 
             -
                 name: Run Phpspec tests
-                if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
                     vendor/bin/phpspec run --ansi --no-interaction
                     (cd src/Component && vendor/bin/phpspec run --no-interaction)
