@@ -29,14 +29,11 @@ final class DeserializeListenerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var HttpOperationInitiatorInterface|ObjectProphecy */
-    private $operationInitiator;
+    private HttpOperationInitiatorInterface|ObjectProphecy $operationInitiator;
 
-    /** @var SerializerInterface|ObjectProphecy */
-    private $serializer;
+    private SerializerInterface|ObjectProphecy $serializer;
 
-    /** @var DeserializeListener */
-    private $deserializableListener;
+    private DeserializeListener $deserializableListener;
 
     protected function setUp(): void
     {
