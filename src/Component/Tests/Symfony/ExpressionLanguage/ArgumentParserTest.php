@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Symfony\ExpressionLanguage;
 
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class ArgumentParserTest extends KernelTestCase

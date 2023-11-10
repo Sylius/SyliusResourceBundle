@@ -16,7 +16,6 @@ namespace Sylius\Component\Resource\Symfony\Request\State;
 use Pagerfanta\Pagerfanta;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Reflection\CallableReflection;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
@@ -24,6 +23,7 @@ use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProviderInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 
 final class Provider implements ProviderInterface
 {

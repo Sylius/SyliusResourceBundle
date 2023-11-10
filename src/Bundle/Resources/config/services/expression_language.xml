@@ -17,42 +17,42 @@
         <service id="sylius.repository.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
         <service id="sylius.routing.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
 
-        <service id="sylius.expression_language.variables.token" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\TokenVariables">
+        <service id="sylius.expression_language.variables.token" class="Sylius\Resource\Symfony\ExpressionLanguage\TokenVariables">
             <argument type="service" id="security.token_storage" on-invalid="null" />
             <tag name="sylius.resource_factory_variables" />
             <tag name="sylius.repository_variables" />
         </service>
 
-        <service id="sylius.expression_language.variables.request" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\RequestVariables">
+        <service id="sylius.expression_language.variables.request" class="Sylius\Resource\Symfony\ExpressionLanguage\RequestVariables">
             <argument type="service" id="request_stack" />
             <tag name="sylius.resource_factory_variables" />
             <tag name="sylius.repository_variables" />
             <tag name="sylius.routing_variables" />
         </service>
 
-        <service id="sylius.expression_language.variables_collection.factory" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">
+        <service id="sylius.expression_language.variables_collection.factory" class="Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection">
             <argument type="tagged_iterator" tag="sylius.resource_factory_variables" />
         </service>
 
-        <service id="sylius.expression_language.variables_collection.repository" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">
+        <service id="sylius.expression_language.variables_collection.repository" class="Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection">
             <argument type="tagged_iterator" tag="sylius.repository_variables" />
         </service>
 
-        <service id="sylius.expression_language.variables_collection.routing" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection">
+        <service id="sylius.expression_language.variables_collection.routing" class="Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection">
             <argument type="tagged_iterator" tag="sylius.routing_variables" />
         </service>
 
-        <service id="sylius.expression_language.argument_parser.factory" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser">
+        <service id="sylius.expression_language.argument_parser.factory" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.resource_factory.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.factory"  />
         </service>
 
-        <service id="sylius.expression_language.argument_parser.repository" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser">
+        <service id="sylius.expression_language.argument_parser.repository" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.repository.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.repository"  />
         </service>
 
-        <service id="sylius.expression_language.argument_parser.routing" class="Sylius\Component\Resource\Symfony\ExpressionLanguage\ArgumentParser">
+        <service id="sylius.expression_language.argument_parser.routing" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.routing.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.routing"  />
         </service>

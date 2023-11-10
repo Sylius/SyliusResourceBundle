@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Symfony\ExpressionLanguage;
 
-interface VariablesInterface
+interface ArgumentParserInterface
 {
-    public function getVariables(): array;
+    public function parseExpression(string $expression, array $variables = []): mixed;
 }

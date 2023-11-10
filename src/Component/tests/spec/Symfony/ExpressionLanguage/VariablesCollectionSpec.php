@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\ExpressionLanguage;
+namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesCollection;
-use Sylius\Component\Resource\Symfony\ExpressionLanguage\VariablesInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
+use Sylius\Resource\Symfony\ExpressionLanguage\VariablesInterface;
 
 final class VariablesCollectionSpec extends ObjectBehavior
 {
