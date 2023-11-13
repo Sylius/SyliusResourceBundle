@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
+use Sylius\Resource\Factory\TranslatableFactoryInterface;
 
 interface BookFactoryInterface extends TranslatableFactoryInterface
 {

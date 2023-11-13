@@ -24,7 +24,7 @@ use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\DummyResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\NoDriverResource;
-use Sylius\Component\Resource\Factory\Factory;
+use Sylius\Resource\Factory\Factory;
 
 class SyliusResourceExtensionTest extends AbstractExtensionTestCase
 {
