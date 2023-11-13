@@ -16,7 +16,6 @@ namespace Sylius\Resource\Metadata\Resource\Factory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Reflection\ClassReflection;
-use Sylius\Component\Resource\Symfony\Request\State\Responder;
 use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\HttpOperation;
@@ -24,6 +23,7 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\Request\State\Responder;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {

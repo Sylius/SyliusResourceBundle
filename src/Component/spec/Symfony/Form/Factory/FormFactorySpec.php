@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Symfony\Form\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\Form\Factory\FormFactory;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Symfony\Form\Factory\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface as SymfonyFormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

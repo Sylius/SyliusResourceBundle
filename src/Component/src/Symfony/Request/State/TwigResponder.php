@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Symfony\Request\State;
 
 use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Context\Context;

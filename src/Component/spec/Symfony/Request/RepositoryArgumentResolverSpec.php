@@ -15,8 +15,8 @@ namespace spec\Sylius\Component\Resource\Symfony\Request;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Reflection\CallableReflection;
-use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

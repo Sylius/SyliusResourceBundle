@@ -15,22 +15,6 @@
     <services>
         <service id="sylius.resource_factory.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
 
-        <service id="sylius.resource_factory.argument_parser" class="Sylius\Component\Resource\Factory\ArgumentParser">
-            <argument type="service" id="sylius.resource_factory.expression_language" />
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="security.token_storage" on-invalid="null" />
-        </service>
-        <service id="Sylius\Component\Resource\Factory\ArgumentParserInterface" alias="sylius.resource_factory.argument_parser" />
-
-        <service id="sylius.state.provider.event_dispatcher"
-                 class="Sylius\Resource\State\Provider\EventDispatcherProvider"
-                 decorates="sylius.state.provider"
-                 decoration-priority="-32"
-        >
-            <argument type="service" id=".inner" />
-            <argument type="service" id="sylius.dispatcher.operation" />
-        </service>
-
         <service id="sylius.state.provider" class="Sylius\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>
@@ -88,7 +72,7 @@
         </service>
         <service id="Sylius\Resource\State\ResponderInterface" alias="sylius.state.responder" />
 
-        <service id="Sylius\Component\Resource\Symfony\Request\State\Provider">
+        <service id="Sylius\Resource\Symfony\Request\State\Provider">
             <argument type="tagged_locator" tag="sylius.repository" />
             <argument type="service" id="sylius.repository_argument_resolver.request" />
             <argument type="service" id="sylius.expression_language.argument_parser.repository" />
@@ -111,21 +95,21 @@
             <tag name="sylius.state_processor" />
         </service>
 
-        <service id="Sylius\Component\Resource\Symfony\Request\State\Responder">
+        <service id="Sylius\Resource\Symfony\Request\State\Responder">
             <argument type="tagged_locator" tag="sylius.state_responder" />
             <tag name="sylius.state_responder" />
         </service>
 
-        <service id="sylius.state_responder.html" class="Sylius\Component\Resource\Symfony\Request\State\TwigResponder">
+        <service id="sylius.state_responder.html" class="Sylius\Resource\Symfony\Request\State\TwigResponder">
             <argument type="service" id="sylius.routing.redirect_handler" />
             <argument type="service" id="sylius.twig.context.factory" />
             <argument type="service" id="twig" on-invalid="null" />
             <tag name="sylius.state_responder" />
         </service>
 
-        <service id="sylius.headers_initiator.api" class="Sylius\Component\Resource\Symfony\Response\ApiHeadersInitiator" />
+        <service id="sylius.headers_initiator.api" class="Sylius\Resource\Symfony\Response\ApiHeadersInitiator" />
 
-        <service id="sylius.state_responder.api" class="Sylius\Component\Resource\Symfony\Request\State\ApiResponder">
+        <service id="sylius.state_responder.api" class="Sylius\Resource\Symfony\Request\State\ApiResponder">
             <argument type="service" id="sylius.headers_initiator.api" />
             <tag name="sylius.state_responder" />
         </service>
