@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\Form\Factory;
+namespace spec\Sylius\Resource\Symfony\Form\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Context\Context;

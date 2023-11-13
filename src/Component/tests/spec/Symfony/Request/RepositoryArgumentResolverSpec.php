@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\Request;
+namespace spec\Sylius\Resource\Symfony\Request;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Reflection\CallableReflection;

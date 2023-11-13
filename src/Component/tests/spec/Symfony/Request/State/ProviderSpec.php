@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Symfony\Request\State;
+namespace spec\Sylius\Resource\Symfony\Request\State;
 
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
