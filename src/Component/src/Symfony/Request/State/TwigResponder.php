@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Request\State;
 
-use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\CreateOperationInterface;
@@ -22,6 +21,7 @@ use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Resource\State\ResponderInterface;
+use Sylius\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;

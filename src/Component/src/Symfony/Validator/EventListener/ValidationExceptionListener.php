@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Validator\EventListener;
 
-use Sylius\Component\Resource\Symfony\Validator\Exception\ConstraintViolationListAwareExceptionInterface;
+use Sylius\Resource\Symfony\Validator\Exception\ConstraintViolationListAwareExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Serializer\SerializerInterface;

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
@@ -23,6 +22,7 @@ use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\UpdateOperationInterface;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class RedirectResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
