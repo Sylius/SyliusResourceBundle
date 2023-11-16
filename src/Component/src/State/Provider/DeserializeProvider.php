@@ -34,8 +34,12 @@ final class DeserializeProvider implements ProviderInterface
     {
         $data = $this->decorated->provide($operation, $context);
 
-        // We need request content
-        if (!$operation instanceof HttpOperation || !($request = $context->get(RequestOption::class)?->request() ?? null)) {
+        if (!$operation instanceof HttpOperation) {
+            return $data;
+        }
+
+        $request = $context->get(RequestOption::class)?->request() ?? null;
+        if (!$request) {
             return $data;
         }
 
