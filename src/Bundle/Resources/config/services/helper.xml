@@ -13,9 +13,9 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sylius.helper.flash" class="Sylius\Component\Resource\Symfony\Session\Flash\FlashHelper">
+        <service id="sylius.helper.flash" class="Sylius\Resource\Symfony\Session\Flash\FlashHelper">
             <argument type="service" id="translator" />
         </service>
-        <service id="Sylius\Component\Resource\Symfony\Session\Flash\FlashHelperInterface" alias="sylius.helper.flash" />
+        <service id="Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface" alias="sylius.helper.flash" />
     </services>
 </container>

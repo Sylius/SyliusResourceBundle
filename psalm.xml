@@ -58,7 +58,7 @@
                 <file name="src/Bundle/Controller/ResourceController.php" />
                 <file name="src/Bundle/Controller/Workflow.php" />
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
-                <file name="src/Component/Symfony/Workflow/OperationStateMachine.php" />
+                <file name="src/Component/src/Symfony/Workflow/OperationStateMachine.php" />
             </errorLevel>
         </InternalMethod>
 

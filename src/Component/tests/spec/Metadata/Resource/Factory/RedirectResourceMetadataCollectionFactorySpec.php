@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\Index;
@@ -25,6 +24,7 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 
 final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {

@@ -15,11 +15,11 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;

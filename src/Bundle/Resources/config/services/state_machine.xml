@@ -20,7 +20,7 @@
 
         <service id="sylius.state_machine.operation.default" alias="sylius.state_machine.operation.winzou" />
 
-        <service id="sylius.state_machine.operation.symfony" class="Sylius\Component\Resource\Symfony\Workflow\OperationStateMachine">
+        <service id="sylius.state_machine.operation.symfony" class="Sylius\Resource\Symfony\Workflow\OperationStateMachine">
             <argument type="service" id="workflow.registry" on-invalid="null" />
             <tag name="sylius.state_machine" key="symfony" />
         </service>

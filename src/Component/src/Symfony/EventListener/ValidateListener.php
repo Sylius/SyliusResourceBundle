@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\EventListener;
 
-use Sylius\Component\Resource\Symfony\Validator\Exception\ValidationException;
 use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Resource\Metadata\UpdateOperationInterface;
+use Sylius\Resource\Symfony\Validator\Exception\ValidationException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;

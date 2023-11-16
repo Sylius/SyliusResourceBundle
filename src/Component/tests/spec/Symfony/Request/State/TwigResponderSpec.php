@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Symfony\Request\State;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -22,6 +21,7 @@ use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Symfony\Request\State\TwigResponder;
+use Sylius\Resource\Symfony\Routing\RedirectHandlerInterface;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;

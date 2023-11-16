@@ -18,15 +18,15 @@ use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\RegistryInterface;
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteFactory;
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
-use Sylius\Component\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 
