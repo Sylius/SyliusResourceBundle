@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Tests\Symfony\EventListener;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\HttpOperation;
@@ -123,7 +124,7 @@ final class DeserializeListenerTest extends TestCase
         $operation->getResource()->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         $operation->canDeserialize()->willReturn(false)->shouldBeCalled();
 
-        $this->serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', [])->willReturn($data)->shouldNotBeCalled();
+        $this->serializer->deserialize(Argument::cetera())->willReturn($data)->shouldNotBeCalled();
 
         $this->deserializableListener->onKernelRequest($event->reveal());
     }
