@@ -21,8 +21,8 @@ It only provides format agnostic controllers as a foundation to build on, with s
 
 ### Supported branches
 
-- `1.9` (`v1.9.*` versions) - bug fixes and improvements of existing features
-- `1.10` (next version - `v1.10.0`) - new features and bigger changes
+- `1.10` (`v1.10.*` versions) - bug fixes and improvements of existing features
+- `1.11` (next version - `v1.11.0`) - new features and bigger changes
 
 Beware! There is no `main` or `master` branch on the repository. You should always open a Pull Request to the branch
 named as the minor version on which your changes should be applied.
