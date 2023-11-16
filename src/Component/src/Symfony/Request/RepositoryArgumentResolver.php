@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Request;
+namespace Sylius\Resource\Symfony\Request;
 
 use Sylius\Component\Resource\Reflection\Filter\FunctionArgumentsFilter;
 use Symfony\Component\HttpFoundation\Request;

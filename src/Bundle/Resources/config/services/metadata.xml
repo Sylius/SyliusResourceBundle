@@ -103,6 +103,6 @@
             <argument type="service" id="sylius.resource_metadata_collection.factory" />
         </service>
 
-        <service id="sylius.repository_argument_resolver.request" class="Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver" />
+        <service id="sylius.repository_argument_resolver.request" class="Sylius\Resource\Symfony\Request\RepositoryArgumentResolver" />
     </services>
 </container>

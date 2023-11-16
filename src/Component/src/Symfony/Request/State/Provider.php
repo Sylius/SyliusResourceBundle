@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Symfony\Request\State;
 
 use Pagerfanta\Pagerfanta;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Reflection\CallableReflection;
-use Sylius\Component\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\BulkOperationInterface;
@@ -24,6 +23,7 @@ use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
 
 final class Provider implements ProviderInterface
 {

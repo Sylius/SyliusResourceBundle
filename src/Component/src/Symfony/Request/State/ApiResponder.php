@@ -11,9 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Symfony\Request\State;
 
-use Sylius\Component\Resource\Symfony\Response\HeadersInitiatorInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\CreateOperationInterface;
@@ -21,6 +20,7 @@ use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Resource\State\ResponderInterface;
+use Sylius\Resource\Symfony\Response\HeadersInitiatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 

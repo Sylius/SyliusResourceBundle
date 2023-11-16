@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Symfony\Response;
+namespace Sylius\Resource\Symfony\Response;
 
 interface HeadersInitiatorInterface
 {
