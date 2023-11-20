@@ -3,7 +3,7 @@
 /*
  * This file is part of the Sylius package.
  *
- * (c) Sylius Sp. z o.o.
+ * (c) Paweł Jędrzejewski
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierCacheableTransformer implements DataTransformerInterface
 {
-    /** @var RepositoryInterface<ResourceInterface> $repository */
+    /** @var RepositoryInterface<ResourceInterface> */
     private RepositoryInterface $repository;
 
     private string $identifier;

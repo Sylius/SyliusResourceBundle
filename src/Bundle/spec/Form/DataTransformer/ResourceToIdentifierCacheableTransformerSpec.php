@@ -3,7 +3,7 @@
 /*
  * This file is part of the Sylius package.
  *
- * (c) Sylius Sp. z o.o.
+ * (c) Paweł Jędrzejewski
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -50,11 +50,12 @@ final class ResourceToIdentifierCacheableTransformerSpec extends ObjectBehavior
 
     function it_reverse_transform_identifier_to_resource_using_cache(
         RepositoryInterface $repository,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): void {
         $repository->findOneBy(['id' => 5])
             ->willReturn($resource)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledOnce()
+        ;
 
         $this->reverseTransform(5)->shouldReturn($resource);
         $this->reverseTransform(5)->shouldReturn($resource);
