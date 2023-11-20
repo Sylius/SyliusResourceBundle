@@ -31,14 +31,11 @@ final class DeserializeProviderTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ProviderInterface|ObjectProphecy */
-    private $decorated;
+    private ProviderInterface|ObjectProphecy $decorated;
 
-    /** @var SerializerInterface|ObjectProphecy */
-    private $serializer;
+    private SerializerInterface|ObjectProphecy $serializer;
 
-    /** @var DeserializeProvider */
-    private $deserializableProvider;
+    private DeserializeProvider $deserializableProvider;
 
     protected function setUp(): void
     {
