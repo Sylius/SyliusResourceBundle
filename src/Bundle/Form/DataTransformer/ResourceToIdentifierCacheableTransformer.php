@@ -78,4 +78,9 @@ final class ResourceToIdentifierCacheableTransformer implements DataTransformerI
 
         return $resource;
     }
+
+    public function clear(): void
+    {
+        self::$cache = [];
+    }
 }

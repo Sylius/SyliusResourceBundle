@@ -48,10 +48,12 @@ final class ResourceToIdentifierCacheableTransformerSpec extends ObjectBehavior
         $this->reverseTransform(5)->shouldReturn($resource);
     }
 
-    function it_reverse_transform_identifier_to_resource_using_cache(
+    function it_reverse_transforms_identifier_to_resource_using_cache(
         RepositoryInterface $repository,
         ResourceInterface $resource,
     ): void {
+        $this->clear();
+
         $repository->findOneBy(['id' => 5])
             ->willReturn($resource)
             ->shouldBeCalledOnce()
