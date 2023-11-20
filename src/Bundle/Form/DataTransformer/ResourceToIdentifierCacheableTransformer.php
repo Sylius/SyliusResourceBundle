@@ -39,7 +39,7 @@ final class ResourceToIdentifierCacheableTransformer implements DataTransformerI
     /**
      * @psalm-suppress MissingParamType
      *
-     * @param object|null $value
+     * @param mixed $value
      */
     public function transform($value)
     {
@@ -53,7 +53,7 @@ final class ResourceToIdentifierCacheableTransformer implements DataTransformerI
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
-    /** @param int|string|null $value */
+    /** @param mixed $value */
     public function reverseTransform($value): ?ResourceInterface
     {
         if (null === $value) {
