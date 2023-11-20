@@ -22,7 +22,6 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierCacheableTransformer implements DataTransformerInterface
 {
-    /** @var RepositoryInterface<ResourceInterface> */
     private RepositoryInterface $repository;
 
     private string $identifier;
