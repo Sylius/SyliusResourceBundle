@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\State\Processor;
 
-use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class FlashProcessor implements ProcessorInterface
