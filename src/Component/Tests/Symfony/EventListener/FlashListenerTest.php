@@ -21,7 +21,6 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Symfony\EventListener\FlashListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
