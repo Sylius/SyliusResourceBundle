@@ -11,48 +11,43 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\EventListener;
+namespace Sylius\Component\Resource\Tests\Symfony\Form\State;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
-use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Create;
-use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
+use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Show;
-use Sylius\Resource\Symfony\EventListener\FormListener;
+use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\Form\Factory\FormFactoryInterface;
+use Sylius\Resource\Symfony\Form\State\FormProvider;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class FormListenerTest extends TestCase
+final class FormProviderTest extends TestCase
 {
     use ProphecyTrait;
 
-    private HttpOperationInitiatorInterface|ObjectProphecy $operationInitiator;
-
-    private RequestContextInitiatorInterface|ObjectProphecy $contextInitiator;
+    private ProviderInterface|ObjectProphecy $decorated;
 
     private FormFactoryInterface|ObjectProphecy $formFactory;
 
-    private FormListener $formListener;
+    private FormProvider $formProvider;
 
     protected function setUp(): void
     {
-        $this->operationInitiator = $this->prophesize(HttpOperationInitiatorInterface::class);
-        $this->contextInitiator = $this->prophesize(RequestContextInitiatorInterface::class);
+        $this->decorated = $this->prophesize(ProviderInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
 
-        $this->formListener = new FormListener(
-            $this->operationInitiator->reveal(),
-            $this->contextInitiator->reveal(),
+        $this->formProvider = new FormProvider(
+            $this->decorated->reveal(),
             $this->formFactory->reveal(),
         );
     }
@@ -60,27 +55,18 @@ final class FormListenerTest extends TestCase
     /** @test */
     public function it_handles_forms(): void
     {
-        $kernel = $this->prophesize(HttpKernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $form = $this->prophesize(FormInterface::class);
 
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
-
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html');
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
 
         $operation = new Create(formType: 'App\Type\DummyType');
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
-        $context = new Context();
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
         $this->formFactory->create($operation, $context, ['foo' => 'fighters'])
             ->willReturn($form)
@@ -91,34 +77,24 @@ final class FormListenerTest extends TestCase
 
         $attributes->set('form', $form)->shouldBeCalled();
 
-        $this->formListener->onKernelView($event);
+        $this->formProvider->provide($operation, $context);
     }
 
     /** @test */
-    public function it_does_nothing_when_controller_result_is_a_response(): void
+    public function it_does_nothing_when_data_is_a_response(): void
     {
-        $kernel = $this->prophesize(HttpKernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $form = $this->prophesize(FormInterface::class);
         $response = $this->prophesize(Response::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $response->reveal(),
-        );
 
         $request->attributes = $attributes;
         $request->getRequestFormat()->willReturn('html');
 
         $operation = new Create(formType: 'App\Type\DummyType');
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
-
-        $context = new Context();
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $context = new Context(new RequestOption($request->reveal()));
+        $this->decorated->provide($operation, $context)->willReturn($response)->shouldBeCalled();
 
         $this->formFactory->create(Argument::cetera())
             ->willReturn($form)
@@ -129,33 +105,22 @@ final class FormListenerTest extends TestCase
 
         $attributes->set('form', $form)->shouldNotBeCalled();
 
-        $this->formListener->onKernelView($event);
+        $this->formProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_has_no_form_type(): void
     {
-        $kernel = $this->prophesize(HttpKernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $form = $this->prophesize(FormInterface::class);
 
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
-
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html');
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
 
         $operation = new Create(formType: null);
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
-
-        $context = new Context();
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $this->formFactory->create(Argument::cetera())
             ->willReturn($form)
@@ -166,33 +131,22 @@ final class FormListenerTest extends TestCase
 
         $attributes->set('form', $form)->shouldNotBeCalled();
 
-        $this->formListener->onKernelView($event);
+        $this->formProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_is_not_a_create_or_update(): void
     {
-        $kernel = $this->prophesize(HttpKernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $form = $this->prophesize(FormInterface::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
 
         $request->attributes = $attributes;
         $request->getRequestFormat()->willReturn('html');
 
         $operation = new Show(formType: 'App\Type\DummyType');
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
-
-        $context = new Context();
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $this->formFactory->create(Argument::cetera())
             ->willReturn($form)
@@ -203,33 +157,25 @@ final class FormListenerTest extends TestCase
 
         $attributes->set('form', $form)->shouldNotBeCalled();
 
-        $this->formListener->onKernelView($event);
+        $this->formProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_is_a_bulk_update(): void
     {
-        $kernel = $this->prophesize(HttpKernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $form = $this->prophesize(FormInterface::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
 
         $request->attributes = $attributes;
         $request->getRequestFormat()->willReturn('html');
 
         $operation = new BulkUpdate(formType: 'App\Type\DummyType');
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $operations = new Operations();
+        $operations->add('app_dummy_show', $operation);
 
-        $context = new Context();
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $this->formFactory->create(Argument::cetera())
             ->willReturn($form)
@@ -240,6 +186,6 @@ final class FormListenerTest extends TestCase
 
         $attributes->set('form', $form)->shouldNotBeCalled();
 
-        $this->formListener->onKernelView($event);
+        $this->formProvider->provide($operation, $context);
     }
 }
