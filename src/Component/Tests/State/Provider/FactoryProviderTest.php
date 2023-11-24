@@ -25,7 +25,6 @@ use Sylius\Resource\State\FactoryInterface;
 use Sylius\Resource\State\ProviderInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class FactoryProviderTest extends TestCase
 {
