@@ -72,6 +72,7 @@ final class ValidateProvider implements ProviderInterface
             $form->isValid()
         ) {
             $request->attributes->set('is_valid', true);
+            /** @var array|object|null $data */
             $data = $form->getData();
 
             return $data;
