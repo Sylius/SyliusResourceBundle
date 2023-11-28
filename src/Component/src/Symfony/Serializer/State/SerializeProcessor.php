@@ -19,6 +19,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Serializes the data to the requested format.
+ */
 final class SerializeProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -27,9 +30,6 @@ final class SerializeProcessor implements ProcessorInterface
     ) {
     }
 
-    /**
-     * Serializes the data to the requested format.
-     */
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
         $data = $this->decorated->process($data, $operation, $context);
