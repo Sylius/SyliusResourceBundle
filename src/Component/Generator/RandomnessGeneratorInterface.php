@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Generator;
 
-interface RandomnessGeneratorInterface
-{
-    public function generateUriSafeString(int $length): string;
+interface_exists(\Sylius\Resource\Generator\RandomnessGeneratorInterface::class);
 
-    public function generateNumeric(int $length): string;
-
-    public function generateInt(int $min, int $max): int;
+if (false) {
+    interface RandomnessGeneratorInterface extends \Sylius\Resource\Generator\RandomnessGeneratorInterface
+    {
+    }
 }
