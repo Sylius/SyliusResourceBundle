@@ -17,7 +17,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\DefaultParentL
 use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\NameFilterListener;
 use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\NameResolverListener;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;

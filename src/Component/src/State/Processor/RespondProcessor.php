@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\src\State\Processor;
+namespace Sylius\Resource\State\Processor;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;

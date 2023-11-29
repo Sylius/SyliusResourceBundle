@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\Form\Builder;
 
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 trigger_deprecation('sylius/resource-bundle', '1.3', 'The "%s" class is deprecated. Doctrine MongoDB and PHPCR support will no longer be supported in 2.0.', DefaultFormBuilder::class);

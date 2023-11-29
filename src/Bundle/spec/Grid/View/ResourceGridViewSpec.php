@@ -18,7 +18,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 final class ResourceGridViewSpec extends ObjectBehavior
 {

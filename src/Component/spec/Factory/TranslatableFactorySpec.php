@@ -37,7 +37,7 @@ final class TranslatableFactorySpec extends ObjectBehavior
         $this->shouldImplement(LegacyTranslatableFactoryInterface::class);
     }
 
-    function it_should_be_an_alias_of_translatable_factory_interface(): void
+    function it_should_be_an_alias_of_translatable_factory(): void
     {
         $this->shouldBeAnInstanceOf(NewTranslatableFactory::class);
     }

@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 final class DefaultFormBuilderSpec extends ObjectBehavior

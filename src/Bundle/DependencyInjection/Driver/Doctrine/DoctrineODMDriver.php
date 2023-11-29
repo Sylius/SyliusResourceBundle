@@ -15,8 +15,8 @@ namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine;
 
 use Sylius\Bundle\ResourceBundle\Doctrine\ODM\MongoDB\TranslatableRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;

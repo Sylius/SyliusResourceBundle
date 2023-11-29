@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 
 /**
  * It needs to extend MappingDriverChain in order to be compatible with Gedmo/DoctrineExtensions.

@@ -22,7 +22,7 @@ use Doctrine\Inflector\Rules\Transformations;
 use Doctrine\Inflector\Rules\Word;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use Sylius\Component\Resource\Metadata\Metadata;
+use Sylius\Resource\Metadata\Metadata;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor Having some issues with custom PHPUnit annotations

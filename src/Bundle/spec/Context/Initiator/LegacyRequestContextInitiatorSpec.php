@@ -18,11 +18,11 @@ use Sylius\Bundle\ResourceBundle\Context\Initiator\LegacyRequestContextInitiator
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -15,8 +15,6 @@ namespace spec\Sylius\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\Metadata;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Tests\Dummy\DummyMultiResourcesWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyOperationsWithoutResource;
 use Sylius\Component\Resource\Tests\Dummy\DummyResource;
@@ -34,7 +32,9 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOper
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithValidationContext;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\Operations;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;

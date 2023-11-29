@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Context\Option;
 
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 final class MetadataOption
 {

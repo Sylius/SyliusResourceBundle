@@ -15,8 +15,8 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Routing\RouteFactoryInterface;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Routing\Route;

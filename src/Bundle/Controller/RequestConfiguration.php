@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Provider\RequestParameterProvider;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 

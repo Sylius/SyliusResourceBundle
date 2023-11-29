@@ -15,7 +15,6 @@ namespace spec\Sylius\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Resource\Action\PlaceHolderAction;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\BulkUpdate;
@@ -23,6 +22,7 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
