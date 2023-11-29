@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Generator;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Generator\RandomnessGeneratorInterface;
+use Sylius\Component\Resource\Generator\RandomnessGeneratorInterface as LegacyRandomnessGeneratorInterface;
+use Sylius\Resource\Generator\RandomnessGenerator as NewRandomnessGenerator;
+use Sylius\Resource\Generator\RandomnessGeneratorInterface;
 
 final class RandomnessGeneratorSpec extends ObjectBehavior
 {
@@ -23,41 +25,13 @@ final class RandomnessGeneratorSpec extends ObjectBehavior
         $this->shouldImplement(RandomnessGeneratorInterface::class);
     }
 
-    function it_generates_random_uri_safe_string_of_length(): void
+    function it_implements_legacy_randomness_generator_interface(): void
     {
-        $length = 9;
-
-        $this->generateUriSafeString($length)->shouldBeString();
-        $this->generateUriSafeString($length)->shouldHaveLength($length);
+        $this->shouldImplement(LegacyRandomnessGeneratorInterface::class);
     }
 
-    function it_generates_random_numeric_string_of_length(): void
+    function it_should_be_an_alias_of_randomness_generator(): void
     {
-        $length = 12;
-
-        $this->generateNumeric($length)->shouldBeString();
-        $this->generateNumeric($length)->shouldBeNumeric();
-        $this->generateNumeric($length)->shouldHaveLength($length);
-    }
-
-    function it_generates_random_int_in_range(): void
-    {
-        $min = 12;
-        $max = 2000000;
-
-        $this->generateInt($min, $max)->shouldBeInt();
-        $this->generateInt($min, $max)->shouldBeInRange($min, $max);
-    }
-
-    public function getMatchers(): array
-    {
-        return [
-            'haveLength' => function ($subject, $length) {
-                return $length === strlen($subject);
-            },
-            'beInRange' => function ($subject, $min, $max) {
-                return $subject >= $min && $subject <= $max;
-            },
-        ];
+        $this->shouldBeAnInstanceOf(NewRandomnessGenerator::class);
     }
 }
