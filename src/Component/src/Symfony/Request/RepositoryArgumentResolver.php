@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Request;
 
-use Sylius\Component\Resource\Reflection\Filter\FunctionArgumentsFilter;
+use Sylius\Resource\Reflection\Filter\FunctionArgumentsFilter;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RepositoryArgumentResolver

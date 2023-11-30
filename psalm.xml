@@ -128,7 +128,7 @@
 
         <PossiblyFalseOperand>
             <errorLevel type="suppress">
-                <file name="src/Component/Reflection/ClassInfoTrait.php" />
+                <file name="src/Component/src/Reflection/ClassInfoTrait.php" />
             </errorLevel>
         </PossiblyFalseOperand>
 
@@ -189,6 +189,7 @@
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />
                 <directory name="src/Component/Generator" />
+                <directory name="src/Component/Reflection" />
                 <directory name="src/Component/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
             </errorLevel>

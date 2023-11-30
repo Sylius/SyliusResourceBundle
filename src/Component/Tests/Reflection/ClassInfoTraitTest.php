@@ -15,7 +15,7 @@ namespace Reflection;
 
 use App\Entity\Book;
 use PHPUnit\Framework\TestCase;
-use Sylius\Component\Resource\Reflection\ClassInfoTrait;
+use Sylius\Resource\Reflection\ClassInfoTrait;
 
 final class ClassInfoTraitTest extends TestCase
 {
