@@ -25,13 +25,13 @@ final class MetadataSpec extends ObjectBehavior
             [
                 'driver' => 'doctrine/orm',
                 'state_machine_component' => 'symfony',
-                'templates' => 'AppBundle:Resource',
+                'templates' => 'product',
                 'classes' => [
-                    'model' => 'AppBundle\Model\Resource',
+                    'model' => 'App\Model\Resource',
                     'form' => [
-                        'default' => 'AppBundle\Form\Type\ResourceType',
-                        'choice' => 'AppBundle\Form\Type\ResourceChoiceType',
-                        'autocomplete' => 'AppBundle\Type\ResourceAutocompleteType',
+                        'default' => 'App\Form\Type\ResourceType',
+                        'choice' => 'App\Form\Type\ResourceChoiceType',
+                        'autocomplete' => 'App\Type\ResourceAutocompleteType',
                     ],
                 ],
             ],
@@ -54,13 +54,13 @@ final class MetadataSpec extends ObjectBehavior
             'app.product.with.dots',
             [
                 'driver' => 'doctrine/orm',
-                'templates' => 'AppBundle:Resource',
+                'templates' => 'product',
                 'classes' => [
-                    'model' => 'AppBundle\Model\Resource',
+                    'model' => 'App\Model\Resource',
                     'form' => [
-                        'default' => 'AppBundle\Form\Type\ResourceType',
-                        'choice' => 'AppBundle\Form\Type\ResourceChoiceType',
-                        'autocomplete' => 'AppBundle\Type\ResourceAutocompleteType',
+                        'default' => 'App\Form\Type\ResourceType',
+                        'choice' => 'App\Form\Type\ResourceChoiceType',
+                        'autocomplete' => 'App\Type\ResourceAutocompleteType',
                     ],
                 ],
             ],
@@ -110,7 +110,7 @@ final class MetadataSpec extends ObjectBehavior
 
     function it_has_templates_namespace(): void
     {
-        $this->getTemplatesNamespace()->shouldReturn('AppBundle:Resource');
+        $this->getTemplatesNamespace()->shouldReturn('product');
     }
 
     function it_has_access_to_specific_config_parameter(): void
@@ -134,7 +134,7 @@ final class MetadataSpec extends ObjectBehavior
 
     function it_has_access_to_specific_classes(): void
     {
-        $this->getClass('model')->shouldReturn('AppBundle\Model\Resource');
+        $this->getClass('model')->shouldReturn('App\Model\Resource');
     }
 
     function it_throws_an_exception_when_class_does_not_exist(): void
