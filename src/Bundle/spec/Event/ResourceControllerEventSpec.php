@@ -15,6 +15,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Event;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResourceControllerEventSpec extends ObjectBehavior
@@ -93,5 +94,10 @@ final class ResourceControllerEventSpec extends ObjectBehavior
     function it_has_not_response_if_it_was_not_set_before(): void
     {
         $this->hasResponse()->shouldReturn(false);
+    }
+
+    function it_should_be_an_alias_of_generic_event(): void
+    {
+        $this->shouldBeAnInstanceOf(GenericEvent::class);
     }
 }

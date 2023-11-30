@@ -101,6 +101,10 @@ jobs:
                 run: vendor/bin/psalm --php-version=${{ matrix.php }}
 
             -
+                name: Run PHPArkitect
+                run: (cd src/Component && vendor/bin/phparkitect check)
+
+            -
                 name: Run analysis
                 run: |
                     composer analyse

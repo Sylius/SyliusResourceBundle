@@ -55,7 +55,8 @@
         "sylius/grid": "^1.7 || ^1.12",
         "symfony/serializer": "^5.4 || ^6.0",
         "symfony/workflow": "^5.4 || ^6.0",
-        "twig/twig": "^2.12 || ^3.0"
+        "twig/twig": "^2.12 || ^3.0",
+        "phparkitect/phparkitect": "^0.3"
     },
     "extra": {
         "branch-alias": {
