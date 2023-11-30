@@ -185,6 +185,7 @@
 
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
+                <directory name="src/Bundle/Command" />
                 <directory name="src/Component/Annotation" />
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />

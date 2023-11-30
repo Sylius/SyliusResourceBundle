@@ -15,11 +15,14 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.console.command.resource_debug"  class="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand">
+        <service id="sylius.console.command.resource_debug"  class="Sylius\Resource\Symfony\Bundle\Command\DebugResourceCommand">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory" />
             <tag name="console.command" />
         </service>
-        <service id="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand" alias="sylius.console.command.resource_debug" />
+        <service id="Sylius\Resource\Symfony\Bundle\Command\DebugResourceCommand" alias="sylius.console.command.resource_debug" />
+        <service id="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand" alias="sylius.console.command.resource_debug">
+            <deprecated package="sylius/resource-bundle" version="1.11">The "%alias_id%" service alias is deprecated since sylius/resource-bundle 1.11 and will be removed in sylius/resource-bundle 2.0. Use Sylius\Resource\Symfony\Bundle\Command\DebugResourceCommand instead.</deprecated>
+        </service>
     </services>
 </container>
