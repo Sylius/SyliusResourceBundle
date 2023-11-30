@@ -46,9 +46,7 @@
         <service id="sylius.resource_registry" class="Sylius\Resource\Metadata\Registry" public="false" />
         <service id="Sylius\Resource\Metadata\RegistryInterface" alias="sylius.resource_registry" public="false" />
         <service id="Sylius\Component\Resource\Metadata\RegistryInterface" alias="sylius.resource_registry" public="false">
-            <deprecated package="sylius/resource-bundle" version="2.0">
-                The "%alias_id%" service alias is deprecated. Use Sylius\Resource\Metadata\RegistryInterface instead.
-            </deprecated>
+            <deprecated package="sylius/resource-bundle" version="2.0" />
         </service>
 
         <service id="sylius.expression_language" class="Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage" public="false" />
