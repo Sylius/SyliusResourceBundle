@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Symfony\Request;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Reflection\CallableReflection;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Sylius\Resource\Reflection\CallableReflection;
 use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;

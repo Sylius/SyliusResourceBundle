@@ -17,12 +17,12 @@ use App\Entity\CrudRoutes\BookWithCriteria;
 use App\Entity\Route\ShowBook;
 use App\Entity\Route\ShowBookWithPriority;
 use PHPUnit\Framework\TestCase;
-use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassTwo;
 use Sylius\Component\Resource\Tests\Dummy\TraitPass;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 use Sylius\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Reflection\ClassReflection;
 
 final class ClassReflectionTest extends TestCase
 {

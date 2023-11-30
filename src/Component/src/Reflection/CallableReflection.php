@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Reflection;
+namespace Sylius\Resource\Reflection;
 
 final class CallableReflection
 {

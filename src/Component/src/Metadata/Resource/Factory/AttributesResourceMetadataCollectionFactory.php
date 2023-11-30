@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\MetadataInterface;
@@ -22,6 +21,7 @@ use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Symfony\Request\State\Responder;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
 

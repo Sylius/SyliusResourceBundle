@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Reflection\Filter;
+namespace Sylius\Resource\Reflection\Filter;
 
 final class FunctionArgumentsFilter
 {

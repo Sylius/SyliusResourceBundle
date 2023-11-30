@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Reflection\Filter;
+namespace spec\Sylius\Resource\Reflection\Filter;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Reflection\CallableReflection;
-use Sylius\Component\Resource\Reflection\Filter\FunctionArgumentsFilter;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Sylius\Resource\Reflection\CallableReflection;
+use Sylius\Resource\Reflection\Filter\FunctionArgumentsFilter;
 
 final class FunctionArgumentsFilterSpec extends ObjectBehavior
 {

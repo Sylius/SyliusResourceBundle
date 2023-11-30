@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Annotation\SyliusRoute as LegacySyliusRoute;
-use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Annotation\SyliusRoute;
+use Sylius\Resource\Reflection\ClassReflection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;

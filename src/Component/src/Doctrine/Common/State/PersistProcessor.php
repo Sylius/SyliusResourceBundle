@@ -17,9 +17,9 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager as DoctrineObjectManager;
-use Sylius\Component\Resource\Reflection\ClassInfoTrait;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Reflection\ClassInfoTrait;
 use Sylius\Resource\State\ProcessorInterface;
 
 final class PersistProcessor implements ProcessorInterface
