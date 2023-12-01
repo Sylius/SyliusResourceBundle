@@ -73,10 +73,10 @@ jobs:
             -
                 name: Install dependencies
                 run: |
-                    if [[max.prefer_lowest == 1 ]]; then composer update --prefer-lowest --no-scripts; fi 
-                    if [[max.prefer_lowest != 1 ]]; then composer update --no-scripts; fi 
-                    if [[max.prefer_lowest == 1 ]]; then (cd src/Component && composer update --prefer-lowest --no-scripts); fi 
-                    if [[max.prefer_lowest != 1 ]]; then (cd src/Component && composer update --no-scripts); fi 
+                    if [[matrix.prefer_lowest == 1 ]]; then composer update --prefer-lowest --no-scripts; fi 
+                    if [[matrix.prefer_lowest != 1 ]]; then composer update --no-scripts; fi 
+                    if [[matrix.prefer_lowest == 1 ]]; then (cd src/Component && composer update --prefer-lowest --no-scripts); fi 
+                    if [[matrix.prefer_lowest != 1 ]]; then (cd src/Component && composer update --no-scripts); fi 
 
             -
                 name: Prepare test application
