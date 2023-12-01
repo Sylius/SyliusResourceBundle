@@ -26,6 +26,9 @@ jobs:
                 prefer_lowest: [0]
                 include:
                     - prefer_lowest: 1
+                exclude:
+                    - php: "8.3"
+                      persistence: "^2.0"
 
         steps:
             -
@@ -71,12 +74,18 @@ jobs:
                 run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
 
             -
-                name: Install dependencies
+                name: Install dependencies prefer lowest
+                if: matrix.prefer_lowest == 1
                 run: |
-                    if [[ matrix.prefer_lowest == 1 ]]; then composer update --prefer-lowest --no-scripts; fi 
-                    if [[ matrix.prefer_lowest != 1 ]]; then composer update --no-scripts; fi 
-                    if [[ matrix.prefer_lowest == 1 ]]; then (cd src/Component && composer update --prefer-lowest --no-scripts); fi 
-                    if [[ matrix.prefer_lowest != 1 ]]; then (cd src/Component && composer update --no-scripts); fi 
+                    then composer update --prefer-lowest --no-scripts
+                    (cd src/Component && composer update --prefer-lowest --no-scripts)
+
+            -
+                name: Install dependencies
+                if: matrix.prefer_lowest != 1
+                run: |
+                    composer update --no-scripts
+                    (cd src/Component && composer update --no-scripts)
 
             -
                 name: Prepare test application
