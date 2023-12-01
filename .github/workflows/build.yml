@@ -28,7 +28,7 @@ jobs:
                     - prefer_lowest: 1
                 exclude:
                     - persistence: "^2.0"
-                      collections: "^1.8"
+                      collections: "^2.0"
 
         steps:
             -
