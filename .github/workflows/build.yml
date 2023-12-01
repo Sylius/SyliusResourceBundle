@@ -25,7 +25,8 @@ jobs:
                 collections: ["^1.8", "^2.0"]
                 prefer_lowest: [0]
                 include:
-                    - prefer_lowest: 1
+                    - php: 8.1
+                      prefer_lowest: 1
                 exclude:
                     - persistence: "^2.0"
                       collections: "^2.0"
