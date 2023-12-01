@@ -23,7 +23,7 @@ jobs:
                 twig: ["^2.12", "^3.0"]
                 persistence: ["^2.0", "^3.0"]
                 collections: ["^1.8", "^2.0"]
-                prefer_lowest: [""]
+                prefer_lowest: [0]
                 include:
                     - prefer_lowest: 1
 
@@ -73,10 +73,10 @@ jobs:
             -
                 name: Install dependencies
                 run: |
-                    if [[matrix.prefer_lowest == 1 ]]; then composer update --prefer-lowest --no-scripts; fi 
-                    if [[matrix.prefer_lowest != 1 ]]; then composer update --no-scripts; fi 
-                    if [[matrix.prefer_lowest == 1 ]]; then (cd src/Component && composer update --prefer-lowest --no-scripts); fi 
-                    if [[matrix.prefer_lowest != 1 ]]; then (cd src/Component && composer update --no-scripts); fi 
+                    if [[ matrix.prefer_lowest == 1 ]]; then composer update --prefer-lowest --no-scripts; fi 
+                    if [[ matrix.prefer_lowest != 1 ]]; then composer update --no-scripts; fi 
+                    if [[ matrix.prefer_lowest == 1 ]]; then (cd src/Component && composer update --prefer-lowest --no-scripts); fi 
+                    if [[ matrix.prefer_lowest != 1 ]]; then (cd src/Component && composer update --no-scripts); fi 
 
             -
                 name: Prepare test application
