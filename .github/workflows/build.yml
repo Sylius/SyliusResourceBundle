@@ -77,7 +77,7 @@ jobs:
                 name: Install dependencies prefer lowest
                 if: matrix.prefer_lowest == 1
                 run: |
-                    then composer update --prefer-lowest --no-scripts
+                    composer update --prefer-lowest --no-scripts
                     (cd src/Component && composer update --prefer-lowest --no-scripts)
 
             -
