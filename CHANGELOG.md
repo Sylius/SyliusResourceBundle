@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.10.3 (2023-12-01)
+
+#### Details
+
+- [#589](https://github.com/Sylius/SyliusResourceBundle/issues/589) Fix the build on 1.10 branch ([@loic425](https://github.com/loic425))
+- [#493](https://github.com/Sylius/SyliusResourceBundle/issues/493) Add support for Doctrine persistence version 3.0 (@[@loic425](https://github.com/loic425))
+- [#701](https://github.com/Sylius/SyliusResourceBundle/issues/701) [HotFix] Flip id with alias on resource loader ([@loic425](https://github.com/loic425))
+- [#700](https://github.com/Sylius/SyliusResourceBundle/issues/700) Fix missing pagerfanta ORM adapter error ([@loic425](https://github.com/loic425))
+- [#694](https://github.com/Sylius/SyliusResourceBundle/issues/694) Quick fix for state machine workflow usage with Symfony 6.2 ([@loic425](https://github.com/loic425))
+- [#538](https://github.com/Sylius/SyliusResourceBundle/issues/538) fix(flashbag): fixed addFlash in ControllerTrait for Symfony 6 ([@UlrichHP](https://github.com/UlrichHP))
+- [#765](https://github.com/Sylius/SyliusResourceBundle/issues/765) Missed typehint for `TranslatableFactoryInterface` ([@Rafikooo](https://github.com/Rafikooo))
+- [#809](https://github.com/Sylius/SyliusResourceBundle/issues/809) Add support for Symfony 6.4 ([@loic425](https://github.com/loic425))
+
 ### v1.10.2 (2023-01-04)
 
 #### Details
