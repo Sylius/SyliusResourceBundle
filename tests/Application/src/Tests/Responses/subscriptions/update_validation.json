@@ -6,6 +6,7 @@
         {
             "propertyPath": "email",
             "title": "This value should not be blank.",
+            "template": "This value should not be blank.",
             "parameters": {
                 "{{ value }}": "\"\""
             },

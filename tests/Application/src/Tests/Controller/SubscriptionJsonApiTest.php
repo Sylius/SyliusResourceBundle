@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use App\Kernel;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,7 +72,9 @@ EOT;
 
         $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
-        $this->assertResponse($this->client->getResponse(), 'subscriptions/create_validation', Response::HTTP_UNPROCESSABLE_ENTITY);
+        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/create_validation' : 'subscriptions/create_validation_legacy';
+
+        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
@@ -105,7 +108,9 @@ EOT;
 
         $this->client->request('PUT', '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
-        $this->assertResponse($this->client->getResponse(), 'subscriptions/update_validation', Response::HTTP_UNPROCESSABLE_ENTITY);
+        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/update_validation' : 'subscriptions/update_validation_legacy';
+
+        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
