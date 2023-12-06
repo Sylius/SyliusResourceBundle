@@ -19,8 +19,8 @@ use Doctrine\ODM\MongoDB\Events;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 
 /**
  * @require Doctrine\ODM\MongoDB\Events

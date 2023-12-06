@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Context\Option;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 final class MetadataOptionSpec extends ObjectBehavior
 {

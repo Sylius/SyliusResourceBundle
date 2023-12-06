@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\FactoryAwareOperationInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 

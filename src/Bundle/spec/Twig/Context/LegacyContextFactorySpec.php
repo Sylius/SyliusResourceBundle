@@ -17,9 +17,9 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Twig\Context\LegacyContextFactory;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 

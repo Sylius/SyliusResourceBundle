@@ -16,8 +16,8 @@ namespace Sylius\Bundle\ResourceBundle\EventListener;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\ReflectionService;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 
 abstract class AbstractDoctrineListener
 {

@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Grid\View;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 interface ResourceGridViewFactoryInterface
 {

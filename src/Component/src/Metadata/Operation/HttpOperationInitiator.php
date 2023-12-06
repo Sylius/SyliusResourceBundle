@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Operation;
 
-use Sylius\Component\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
