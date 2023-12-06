@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\ExpressionLanguage;
+namespace Sylius\Component\Resource\tests\Symfony\ExpressionLanguage;
 
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

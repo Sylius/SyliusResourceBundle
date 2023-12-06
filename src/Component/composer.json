@@ -71,7 +71,8 @@
     "autoload-dev": {
         "psr-4": {
             "Sylius\\Component\\Resource\\spec\\": "spec/",
-            "Sylius\\Component\\Resource\\Tests\\": "Tests"
+            "Sylius\\Component\\Resource\\Tests\\": "Tests",
+            "Sylius\\Resource\\Tests\\": "tests"
         }
     }
 }

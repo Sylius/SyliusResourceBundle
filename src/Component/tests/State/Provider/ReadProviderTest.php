@@ -11,64 +11,65 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\EventListener;
+namespace Sylius\Resource\Tests\State\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
-use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
+use Sylius\Resource\State\Provider\ReadProvider;
 use Sylius\Resource\State\ProviderInterface;
-use Sylius\Resource\Symfony\EventListener\ReadListener;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class ReadListenerTest extends TestCase
+final class ReadProviderTest extends TestCase
 {
     use ProphecyTrait;
 
-    private HttpOperationInitiatorInterface|ObjectProphecy $operationInitiator;
-
-    private RequestContextInitiatorInterface|ObjectProphecy $contextInitiator;
-
     private ProviderInterface|ObjectProphecy $provider;
 
-    private ReadListener $readListener;
+    private ReadProvider $readProvider;
 
     protected function setUp(): void
     {
-        $this->operationInitiator = $this->prophesize(HttpOperationInitiatorInterface::class);
-        $this->contextInitiator = $this->prophesize(RequestContextInitiatorInterface::class);
         $this->provider = $this->prophesize(ProviderInterface::class);
 
-        $this->readListener = new ReadListener(
-            $this->operationInitiator->reveal(),
-            $this->contextInitiator->reveal(),
+        $this->readProvider = new ReadProvider(
             $this->provider->reveal(),
         );
     }
 
     /** @test */
-    public function it_retrieves_data_and_store_them_to_request(): void
+    public function it_retrieves_data(): void
     {
-        $event = $this->prophesize(RequestEvent::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
-        $event->getRequest()->willReturn($request);
-
         $context = new Context();
 
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
+        $request->attributes = $attributes;
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $this->provider->provide($operation, Argument::type(Context::class))->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+
+        $attributes->set('data', Argument::any())->shouldNotBeCalled();
+
+        $this->readProvider->provide($operation->reveal(), $context);
+    }
+
+    /** @test */
+    public function it_retrieves_data_and_store_them_to_request(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $attributes = $this->prophesize(ParameterBag::class);
+        $operation = $this->prophesize(HttpOperation::class);
+
+        $context = new Context(new RequestOption($request->reveal()));
 
         $request->attributes = $attributes;
 
@@ -76,25 +77,17 @@ final class ReadListenerTest extends TestCase
 
         $attributes->set('data', ['foo' => 'fighters'])->shouldBeCalled();
 
-        $this->readListener->onKernelRequest($event->reveal());
+        $this->readProvider->provide($operation->reveal(), $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_is_a_create_operation(): void
     {
-        $event = $this->prophesize(RequestEvent::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
-
-        $event->getRequest()->willReturn($request);
-
         $operation = new Create();
 
-        $context = new Context();
-
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
-
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $request->attributes = $attributes;
 
@@ -102,24 +95,17 @@ final class ReadListenerTest extends TestCase
 
         $attributes->set('data', Argument::any())->shouldNotBeCalled();
 
-        $this->readListener->onKernelRequest($event->reveal());
+        $this->readProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_cannot_be_read(): void
     {
-        $event = $this->prophesize(RequestEvent::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
-        $event->getRequest()->willReturn($request);
-
-        $context = new Context();
-
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
-
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $request->attributes = $attributes;
 
@@ -132,24 +118,17 @@ final class ReadListenerTest extends TestCase
 
         $attributes->set('data', Argument::any())->shouldNotBeCalled();
 
-        $this->readListener->onKernelRequest($event->reveal());
+        $this->readProvider->provide($operation->reveal(), $context);
     }
 
     /** @test */
     public function it_throws_an_exception_when_no_data_was_found(): void
     {
-        $event = $this->prophesize(RequestEvent::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
-        $event->getRequest()->willReturn($request);
-
-        $context = new Context();
-
-        $this->contextInitiator->initializeContext($request)->willReturn($context);
-
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
         $request->attributes = $attributes;
 
@@ -162,6 +141,6 @@ final class ReadListenerTest extends TestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Resource has not been found.');
 
-        $this->readListener->onKernelRequest($event->reveal());
+        $this->readProvider->provide($operation->reveal(), $context);
     }
 }

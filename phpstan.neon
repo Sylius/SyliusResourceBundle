@@ -30,7 +30,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/Storage/*
         - %currentWorkingDirectory%/src/Component/Tests/*
-        - %currentWorkingDirectory%/src/Component/tests/spec/*
+        - %currentWorkingDirectory%/src/Component/tests/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 
     ignoreErrors:
