@@ -16,8 +16,8 @@ namespace Sylius\Resource\Tests\Context\Option;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 final class MetadataOptionTest extends TestCase
 {
