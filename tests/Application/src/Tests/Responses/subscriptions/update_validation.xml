@@ -6,6 +6,7 @@
     <violations>
         <propertyPath>email</propertyPath>
         <title>This value should not be blank.</title>
+        <template>This value should not be blank.</template>
         <parameters>
             <item key="{{ value }}">""</item>
         </parameters>

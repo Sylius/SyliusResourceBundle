@@ -37,6 +37,8 @@ jobs:
                     - php: "8.2"
                       collections: "^2.0"
                       persistence: "^2.0"
+                    - persistence: "^2.0"
+                      symfony: "~6.4.0"
 
         steps:
             -
