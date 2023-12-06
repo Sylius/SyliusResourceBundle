@@ -69,6 +69,18 @@ class TargetEntitiesResolverSpec extends ObjectBehavior
         $this->resolve($config)->shouldNotHaveKeyWithValue(AnimalInterface::class, Bear::class);
     }
 
+    function it_autodiscovers_interfaces_on_models_when_passed_multiple_times(): void
+    {
+        $config = [
+            'app.fly' => ['classes' => ['model' => Fly::class]],
+            'app.another_resource_with_fly_model' => ['classes' => ['model' => Fly::class]],
+        ];
+
+        $this->resolve($config)->shouldHaveCount(2);
+        $this->resolve($config)->shouldHaveKeyWithValue(FlyInterface::class, Fly::class);
+        $this->resolve($config)->shouldHaveKeyWithValue(AnimalInterface::class, Fly::class);
+    }
+
     function it_uses_the_interface_defined_in_the_config(): void
     {
         $config = [
