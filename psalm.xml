@@ -191,6 +191,7 @@
                 <directory name="src/Component/Annotation" />
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />
+                <directory name="src/Component/Generator" />
                 <directory name="src/Component/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
             </errorLevel>
@@ -217,6 +218,7 @@
             <errorLevel type="suppress">
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />
+                <directory name="src/Component/Generator" />
                 <directory name="src/Component/Storage" />
             </errorLevel>
         </UnrecognizedStatement>
