@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace State\Processor;
+namespace Sylius\Resource\Tests\State\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;

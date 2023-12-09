@@ -16,6 +16,7 @@
 /src/Bundle/spec export-ignore
 /src/Component/spec export-ignore
 /src/Component/Tests export-ignore
+/src/Component/tests export-ignore
 /src/Component/phpspec.yml.dist export-ignore
 /src/Component/phpunit.xml.dist export-ignore
 /tests export-ignore

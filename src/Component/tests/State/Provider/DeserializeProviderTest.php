@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace State\Provider;
+namespace Sylius\Resource\Tests\State\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;

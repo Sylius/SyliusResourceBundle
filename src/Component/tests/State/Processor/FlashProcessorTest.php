@@ -11,45 +11,38 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\EventListener;
+namespace Sylius\Resource\Tests\State\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
-use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
-use Sylius\Resource\Symfony\EventListener\FlashListener;
+use Sylius\Resource\State\Processor\FlashProcessor;
+use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
-final class FlashListenerTest extends TestCase
+final class FlashProcessorTest extends TestCase
 {
     use ProphecyTrait;
 
-    private HttpOperationInitiatorInterface|ObjectProphecy $operationInitiator;
-
-    private RequestContextInitiatorInterface|ObjectProphecy $requestContextInitiator;
+    private ProcessorInterface|ObjectProphecy $decorated;
 
     private FlashHelperInterface|ObjectProphecy $flashHelper;
 
-    private FlashListener $flashListener;
+    private FlashProcessor $flashProcessor;
 
     protected function setUp(): void
     {
-        $this->operationInitiator = $this->prophesize(HttpOperationInitiatorInterface::class);
-        $this->requestContextInitiator = $this->prophesize(RequestContextInitiatorInterface::class);
+        $this->decorated = $this->prophesize(ProcessorInterface::class);
         $this->flashHelper = $this->prophesize(FlashHelperInterface::class);
 
-        $this->flashListener = new FlashListener(
-            $this->operationInitiator->reveal(),
-            $this->requestContextInitiator->reveal(),
+        $this->flashProcessor = new FlashProcessor(
+            $this->decorated->reveal(),
             $this->flashHelper->reveal(),
         );
     }
@@ -57,17 +50,9 @@ final class FlashListenerTest extends TestCase
     /** @test */
     public function it_adds_flash(): void
     {
-        $kernel = $this->prophesize(KernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
 
         $request->isMethodSafe()->willReturn(false);
 
@@ -75,32 +60,22 @@ final class FlashListenerTest extends TestCase
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
-        $context = new Context();
-
-        $this->requestContextInitiator->initializeContext($request)->willReturn($context);
+        $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
         $this->flashHelper->addSuccessFlash($operation, $context)->shouldBeCalled();
 
-        $this->flashListener->onKernelView($event);
+        $this->flashProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
     }
 
     /** @test */
     public function it_does_nothing_when_controller_result_is_a_response(): void
     {
-        $kernel = $this->prophesize(KernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
         $response = $this->prophesize(Response::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $response->reveal(),
-        );
 
         $request->isMethodSafe()->willReturn(false)->shouldNotBeCalled();
 
@@ -108,31 +83,21 @@ final class FlashListenerTest extends TestCase
 
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldNotBeCalled();
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
-        $context = new Context();
-
-        $this->requestContextInitiator->initializeContext($request)->willReturn($context);
+        $this->decorated->process($response, $operation, $context)->willReturn($response)->shouldBeCalled();
 
         $this->flashHelper->addSuccessFlash($operation, $context)->shouldNotBeCalled();
 
-        $this->flashListener->onKernelView($event);
+        $this->flashProcessor->process($response->reveal(), $operation->reveal(), $context);
     }
 
     /** @test */
     public function it_does_nothing_when_method_is_safe(): void
     {
-        $kernel = $this->prophesize(KernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
 
         $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
 
@@ -140,31 +105,21 @@ final class FlashListenerTest extends TestCase
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
-        $context = new Context();
-
-        $this->requestContextInitiator->initializeContext($request)->willReturn($context);
+        $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
         $this->flashHelper->addSuccessFlash($operation, $context)->shouldNotBeCalled();
 
-        $this->flashListener->onKernelView($event);
+        $this->flashProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
     }
 
     /** @test */
     public function it_does_nothing_when_validation_has_failed(): void
     {
-        $kernel = $this->prophesize(KernelInterface::class);
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
-
-        $event = new ViewEvent(
-            $kernel->reveal(),
-            $request->reveal(),
-            HttpKernelInterface::MAIN_REQUEST,
-            ['foo' => 'fighters'],
-        );
 
         $request->isMethodSafe()->willReturn(false);
 
@@ -172,14 +127,12 @@ final class FlashListenerTest extends TestCase
 
         $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
 
-        $this->operationInitiator->initializeOperation($request)->willReturn($operation);
+        $context = new Context(new RequestOption($request->reveal()));
 
-        $context = new Context();
-
-        $this->requestContextInitiator->initializeContext($request)->willReturn($context);
+        $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
         $this->flashHelper->addSuccessFlash($operation, $context)->shouldNotBeCalled();
 
-        $this->flashListener->onKernelView($event);
+        $this->flashProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
     }
 }

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\Form\State;
+namespace Sylius\Component\Resource\tests\Symfony\Form\State;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
