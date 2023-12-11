@@ -47,7 +47,7 @@ final class EventDispatcherBulkAwareProcessorSpec extends ObjectBehavior
 
         $operationEventDispatcher->dispatchBulkEvent($data, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
 
-        $decorated->process($data, $operation, $context)->shouldBeCalled();
+        $decorated->process($data, $operation, $context)->willReturn(null)->shouldBeCalled();
 
         $this->process($data, $operation, $context);
     }

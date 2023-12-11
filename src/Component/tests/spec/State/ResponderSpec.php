@@ -44,7 +44,7 @@ final class ResponderSpec extends ObjectBehavior
         $locator->has('\App\Responder')->willReturn(true);
         $locator->get('\App\Responder')->willReturn($responder);
 
-        $responder->respond([], $operation, $context)->shouldBeCalled();
+        $responder->respond([], $operation, $context)->willReturn('response_data')->shouldBeCalled();
 
         $this->respond([], $operation, $context);
     }

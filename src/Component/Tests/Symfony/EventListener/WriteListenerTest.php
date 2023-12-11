@@ -82,7 +82,7 @@ final class WriteListenerTest extends TestCase
 
         $attributes->getBoolean('is_valid', true)->willReturn(true);
 
-        $this->processor->process(['foo' => 'fighters'], $operation, $context)->shouldBeCalled();
+        $this->processor->process(['foo' => 'fighters'], $operation, $context)->willReturn(null)->shouldBeCalled();
 
         $this->writeListener->onKernelView($event);
     }
