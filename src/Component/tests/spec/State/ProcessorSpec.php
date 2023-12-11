@@ -43,7 +43,7 @@ final class ProcessorSpec extends ObjectBehavior
         $locator->has('\App\Processor')->willReturn(true);
         $locator->get('\App\Processor')->willReturn($processor);
 
-        $processor->process([], $operation, $context)->shouldBeCalled();
+        $processor->process([], $operation, $context)->willReturn(null)->shouldBeCalled();
 
         $this->process([], $operation, $context);
     }

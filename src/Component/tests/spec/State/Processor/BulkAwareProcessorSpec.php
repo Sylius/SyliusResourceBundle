@@ -46,8 +46,8 @@ final class BulkAwareProcessorSpec extends ObjectBehavior
             $secondItem->getWrappedObject(),
         ];
 
-        $decorated->process($firstItem, $operation, $context)->shouldBeCalled();
-        $decorated->process($secondItem, $operation, $context)->shouldBeCalled();
+        $decorated->process($firstItem, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $decorated->process($secondItem, $operation, $context)->willReturn(null)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn(null);
     }
