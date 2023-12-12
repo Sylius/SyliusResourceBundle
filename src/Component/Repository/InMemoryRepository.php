@@ -11,10 +11,12 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Sylius\Component\Resource\Repository;
 
-use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+class_exists(\Sylius\Resource\Doctrine\Persistence\InMemoryRepository::class);
 
-interface BookRepositoryInterface extends RepositoryInterface
-{
+if (false) {
+    class InMemoryRepository extends \Sylius\Resource\Doctrine\Persistence\InMemoryRepository
+    {
+    }
 }

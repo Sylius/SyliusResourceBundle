@@ -19,7 +19,7 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\ResourceActions;
-use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Model\ResourceInterface;

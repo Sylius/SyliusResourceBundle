@@ -18,7 +18,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class ResourcesResolver implements ResourcesResolverInterface
 {

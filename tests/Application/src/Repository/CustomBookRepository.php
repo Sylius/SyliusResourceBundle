@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Book;
-use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class CustomBookRepository
 {

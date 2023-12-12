@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Doctrine\Peristence;
+namespace Sylius\Resource\Doctrine\Persistence;
 
 use ArrayObject;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\src\Doctrine\Peristence\Exception\ExistingResourceException;
+use Sylius\Resource\Doctrine\Persistence\Exception\ExistingResourceException;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -212,3 +212,5 @@ class InMemoryRepository implements RepositoryInterface
         return $results;
     }
 }
+
+class_alias(InMemoryRepository::class, \Sylius\Component\Resource\Repository\InMemoryRepository::class);

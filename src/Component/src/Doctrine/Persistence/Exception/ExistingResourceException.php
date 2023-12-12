@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Doctrine\Peristence\Exception;
+namespace Sylius\Resource\Doctrine\Persistence\Exception;
 
 class ExistingResourceException extends \Exception
 {
@@ -20,3 +20,5 @@ class ExistingResourceException extends \Exception
         parent::__construct('Given resource already exists in the repository.');
     }
 }
+
+class_alias(ExistingResourceException::class, \Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class);
