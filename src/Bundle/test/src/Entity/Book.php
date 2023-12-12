@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Controller\BookController;
+use App\Form\Type\BookTranslationType;
 use JMS\Serializer\Annotation as Serializer;
+use Sylius\Component\Resource\Annotation\SyliusResource;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
@@ -21,8 +24,17 @@ use Sylius\Component\Resource\Model\TranslatableTrait;
 /**
  * @Serializer\ExclusionPolicy("all")
  */
+#[SyliusResource(
+    name: self::RESOURCE_NAME,
+    model: self::class,
+    controller: BookController::class,
+    translationModel: BookTranslation::class,
+    translationForm: BookTranslationType::class,
+)]
 class Book implements ResourceInterface, TranslatableInterface
 {
+    public const RESOURCE_NAME = 'app.book';
+
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
     }
