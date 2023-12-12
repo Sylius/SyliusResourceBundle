@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
 use Sylius\Component\Resource\Annotation\SyliusCrudRoutes as LegacySyliusCrudRoutes;
-use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
+use Sylius\Resource\Reflection\ClassReflection;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;

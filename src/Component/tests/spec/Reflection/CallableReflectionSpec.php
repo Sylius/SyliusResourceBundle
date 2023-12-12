@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Reflection;
+namespace spec\Sylius\Resource\Reflection;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Reflection\CallableReflection;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
+use Sylius\Resource\Reflection\CallableReflection;
 
 class CallableReflectionSpec extends ObjectBehavior
 {
