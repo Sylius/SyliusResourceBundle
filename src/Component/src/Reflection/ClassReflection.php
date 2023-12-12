@@ -34,7 +34,10 @@ final class ClassReflection
         $finder->files()->in($path)->name('*.php')->sortByName(true);
 
         foreach ($finder as $file) {
-            $fileContent = (string) file_get_contents((string) $file->getRealPath());
+            $fileContent = file_get_contents((string) $file->getRealPath());
+            if (false === $fileContent) {
+                throw new \RuntimeException(sprintf('Unable to read "%s" file', $file->getRealPath()));
+            }
 
             preg_match('/namespace (.+);/', $fileContent, $matches);
 
