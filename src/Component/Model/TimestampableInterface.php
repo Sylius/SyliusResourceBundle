@@ -13,15 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface TimestampableInterface
-{
-    public function getCreatedAt(): ?\DateTimeInterface;
+interface_exists(\Sylius\Resource\Model\TimestampableInterface::class);
 
-    /** @psalm-suppress MissingReturnType */
-    public function setCreatedAt(?\DateTimeInterface $createdAt);
-
-    public function getUpdatedAt(): ?\DateTimeInterface;
-
-    /** @psalm-suppress MissingReturnType */
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt);
+if (false) {
+    interface TimestampableInterface extends \Sylius\Resource\Model\TimestampableInterface
+    {
+    }
 }

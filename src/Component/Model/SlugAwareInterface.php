@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface SlugAwareInterface
-{
-    public function getSlug(): ?string;
+interface_exists(\Sylius\Resource\Model\SlugAwareInterface::class);
 
-    public function setSlug(?string $slug): void;
+if (false) {
+    interface SlugAwareInterface extends \Sylius\Resource\Model\SlugAwareInterface
+    {
+    }
 }

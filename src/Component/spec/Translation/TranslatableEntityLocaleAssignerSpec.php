@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Translation;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 
 final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\src\Symfony\Serializer\State;
+namespace Sylius\Resource\Symfony\Serializer\State;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;

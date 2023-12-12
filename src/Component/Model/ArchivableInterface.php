@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface ArchivableInterface
-{
-    public function getArchivedAt(): ?\DateTimeInterface;
+interface_exists(\Sylius\Resource\Model\ArchivableInterface::class);
 
-    public function setArchivedAt(?\DateTimeInterface $archivedAt): void;
+if (false) {
+    interface ArchivableInterface extends \Sylius\Resource\Model\ArchivableInterface
+    {
+    }
 }

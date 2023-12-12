@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Metadata;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;

@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface TranslationInterface
-{
-    public function getTranslatable(): TranslatableInterface;
+interface_exists(\Sylius\Resource\Model\TranslationInterface::class);
 
-    public function setTranslatable(?TranslatableInterface $translatable): void;
-
-    public function getLocale(): ?string;
-
-    public function setLocale(?string $locale): void;
+if (false) {
+    interface TranslationInterface extends \Sylius\Resource\Model\TranslationInterface
+    {
+    }
 }

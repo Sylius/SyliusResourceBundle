@@ -15,7 +15,8 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\ResourceInterface as LegacyResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -33,6 +34,7 @@ class RegisterResourcesPassTest extends AbstractCompilerPassTestCase
             [
                 'app.book' => ['classes' => ['model' => BookClass::class]],
                 'app.author' => ['classes' => ['model' => AuthorClass::class]],
+                'app.legacy_book' => ['classes' => ['model' => LegacyBookClass::class]],
             ],
         );
 
@@ -49,6 +51,12 @@ class RegisterResourcesPassTest extends AbstractCompilerPassTestCase
             'addFromAliasAndConfiguration',
             ['app.author', ['classes' => ['model' => AuthorClass::class]]],
         );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'sylius.resource_registry',
+            'addFromAliasAndConfiguration',
+            ['app.legacy_book', ['classes' => ['model' => LegacyBookClass::class]]],
+        );
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
@@ -64,6 +72,7 @@ class AbstractResource implements ResourceInterface
         return;
     }
 }
+
 class BookClass extends AbstractResource
 {
 }
@@ -73,4 +82,12 @@ class AuthorClass extends AbstractResource
 
 class PullRequestClass extends AbstractResource
 {
+}
+
+class LegacyBookClass implements LegacyResourceInterface
+{
+    public function getId()
+    {
+        return;
+    }
 }

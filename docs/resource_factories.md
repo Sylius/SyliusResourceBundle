@@ -95,7 +95,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Create;
 
@@ -165,7 +165,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Book;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Create;
 
@@ -192,7 +192,7 @@ declare(strict_types=1);
 namespace App\Entity\Book;
 
 use App\Factory\BookFactory;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Create;
 
@@ -245,7 +245,7 @@ use Sylius\Resource\Metadata\Create;
 #[Create(
     factory: [BookFactory::class, 'create'], 
 )]
-class Book implements \Sylius\Component\Resource\Model\ResourceInterface
+class Book implements \Sylius\Resource\Model\ResourceInterface
 {
 }
 ```

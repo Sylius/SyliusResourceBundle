@@ -27,6 +27,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/Factory/*
         - %currentWorkingDirectory%/src/Component/Metadata/*
         - %currentWorkingDirectory%/src/Component/Generator/*
+        - %currentWorkingDirectory%/src/Component/Model/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/Storage/*
@@ -53,9 +54,9 @@ parameters:
         - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent::stop\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
-        - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
-        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
-        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
+        - '/Method Sylius\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
+        - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
+        - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
         - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
         - '/Method Symfony\\Component\\Routing\\RouteCollection::add\(\) invoked with 3 parameters, 2 required\./'
@@ -76,9 +77,9 @@ parameters:
         - '/Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<int\|string\, string\>\): string, Closure\(array\)\: mixed given\./'
         - '/Parameter \#1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface\:\:getValue\(\) expects array\|object, array\|object\|null given\./'
         - '/Parameter \#1 \$min \(0\) of function random_int expects lower number than parameter \#2 \$max \(int\<\-1, max\>\)\./'
-        - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface\:\:getId\(\) has no return type specified\./'
-        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
-        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
+        - '/Method Sylius\\Resource\\Model\\ResourceInterface\:\:getId\(\) has no return type specified\./'
+        - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
+        - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository\:\:findAll\(\) should return array\<object\> but returns array\./'
         - '/Method Sylius\\Resource\\State\\Provider\\DeserializeProvider\:\:provide\(\) should return array\|object\|null but returns mixed./'
         - '/Method Sylius\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:stop\(\) has no return type specified./'

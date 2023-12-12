@@ -13,31 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-trait TimestampableTrait
-{
-    /** @var \DateTimeInterface|null */
-    protected $createdAt;
+trait_exists(\Sylius\Resource\Model\TimestampableTrait::class);
 
-    /** @var \DateTimeInterface|null */
-    protected $updatedAt;
-
-    public function getCreatedAt(): ?\DateTimeInterface
+if (false) {
+    trait TimestampableTrait
     {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?\DateTimeInterface $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
+        use \Sylius\Resource\Model\TimestampableTrait;
     }
 }

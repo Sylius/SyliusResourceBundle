@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Model;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Sylius\Component\Resource\Model\AbstractTranslation;
-use Sylius\Component\Resource\Model\TranslatableInterface;
-use Sylius\Component\Resource\Model\TranslationInterface;
+use Sylius\Resource\Model\AbstractTranslation as NewAbstractTranslation;
+use Sylius\Resource\Model\TranslationInterface;
 
 final class AbstractTranslationSpec extends ObjectBehavior
 {
@@ -31,28 +30,9 @@ final class AbstractTranslationSpec extends ObjectBehavior
         $this->shouldImplement(TranslationInterface::class);
     }
 
-    function its_translatable_is_mutable(TranslatableInterface $translatable): void
+    function it_should_be_an_alias_of_abstract_translation(): void
     {
-        $this->setTranslatable($translatable);
-        $this->getTranslatable()->shouldReturn($translatable);
-    }
-
-    function its_detaches_from_its_translatable_correctly(
-        TranslatableInterface $translatable1,
-        TranslatableInterface $translatable2,
-    ): void {
-        $translatable1->addTranslation(Argument::type(AbstractTranslation::class));
-        $this->setTranslatable($translatable1);
-
-        $translatable1->removeTranslation(Argument::type(AbstractTranslation::class));
-        $translatable2->addTranslation(Argument::type(AbstractTranslation::class));
-        $this->setTranslatable($translatable2);
-    }
-
-    function its_locale_is_mutable(): void
-    {
-        $this->setLocale('en');
-        $this->getLocale()->shouldReturn('en');
+        $this->shouldHaveType(NewAbstractTranslation::class);
     }
 }
 

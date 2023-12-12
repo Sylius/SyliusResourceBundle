@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Repository;
 
 use Doctrine\Persistence\ObjectRepository;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 
 /**
  * @template T of ResourceInterface

@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
+class_exists(\Sylius\Resource\Model\ResourceLogEntry::class);
 
-abstract class ResourceLogEntry extends AbstractLogEntry implements ResourceInterface
-{
+if (false) {
+    abstract class ResourceLogEntry extends \Sylius\Resource\Model\ResourceLogEntry
+    {
+    }
 }

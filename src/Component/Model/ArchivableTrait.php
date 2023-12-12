@@ -13,21 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-/**
- * @see ArchivableInterface
- */
-trait ArchivableTrait
-{
-    /** @var \DateTimeInterface|null */
-    protected $archivedAt;
+trait_exists(\Sylius\Resource\Model\ArchivableTrait::class);
 
-    public function getArchivedAt(): ?\DateTimeInterface
+if (false) {
+    trait ArchivableTrait
     {
-        return $this->archivedAt;
-    }
-
-    public function setArchivedAt(?\DateTimeInterface $archivedAt): void
-    {
-        $this->archivedAt = $archivedAt;
+        use \Sylius\Resource\Model\ArchivableTrait;
     }
 }

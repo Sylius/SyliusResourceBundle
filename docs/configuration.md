@@ -15,7 +15,7 @@ You can see a full exemplary configuration of a typical resource
 ```php
 namespace App\Entity;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 
 class Book implements ResourceInterface
 {

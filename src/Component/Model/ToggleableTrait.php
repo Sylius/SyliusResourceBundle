@@ -13,31 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-trait ToggleableTrait
-{
-    /** @var bool */
-    protected $enabled = true;
+trait_exists(\Sylius\Resource\Model\ToggleableTrait::class);
 
-    public function isEnabled(): bool
+if (false) {
+    trait ToggleableTrait
     {
-        return $this->enabled;
-    }
-
-    /**
-     * @param bool $enabled
-     */
-    public function setEnabled(?bool $enabled): void
-    {
-        $this->enabled = (bool) $enabled;
-    }
-
-    public function enable(): void
-    {
-        $this->enabled = true;
-    }
-
-    public function disable(): void
-    {
-        $this->enabled = false;
+        use \Sylius\Resource\Model\ToggleableTrait;
     }
 }

@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface VersionedInterface
-{
-    public function getVersion(): ?int;
+interface_exists(\Sylius\Resource\Model\VersionedInterface::class);
 
-    public function setVersion(?int $version): void;
+if (false) {
+    interface VersionedInterface extends \Sylius\Resource\Model\VersionedInterface
+    {
+    }
 }

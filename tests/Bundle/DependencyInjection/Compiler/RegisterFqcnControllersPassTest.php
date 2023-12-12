@@ -16,7 +16,8 @@ namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Compiler;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnControllersPass;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\ResourceInterface as LegacyResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -66,6 +67,27 @@ final class RegisterFqcnControllersPassTest extends AbstractCompilerPassTestCase
     }
 
     /** @test */
+    public function it_works_with_legacy_resource_interface(): void
+    {
+        $this->setDefinition('sylius.resource_registry', new Definition());
+        $this->setDefinition('app.controller.book', new Definition());
+
+        $this->setParameter(
+            'sylius.resources',
+            [
+                'app.book' => [
+                    'driver' => 'doctrine/orm',
+                    'classes' => ['model' => LegacyBookTestClass::class, 'controller' => BookTestController::class],
+                ],
+            ],
+        );
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService(BookTestController::class);
+    }
+
+    /** @test */
     public function it_throws_exception_if_class_does_not_implement_resource_interface(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -102,4 +124,11 @@ class NormalClass
 
 class BookTestController extends ResourceController
 {
+}
+
+class LegacyBookTestClass implements LegacyResourceInterface
+{
+    public function getId()
+    {
+    }
 }

@@ -19,9 +19,9 @@ use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface as ControllerEventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EventDispatcherSpec extends ObjectBehavior

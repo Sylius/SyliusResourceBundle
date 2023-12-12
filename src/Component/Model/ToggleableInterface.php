@@ -13,21 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface ToggleableInterface
-{
-    /**
-     * Missing scalar typehint because it conflicts with AdvancedUserInterface.
-     *
-     * @return bool
-     */
-    public function isEnabled();
+interface_exists(\Sylius\Resource\Model\ToggleableInterface::class);
 
-    /**
-     * @param bool $enabled
-     */
-    public function setEnabled(?bool $enabled): void;
-
-    public function enable(): void;
-
-    public function disable(): void;
+if (false) {
+    interface ToggleableInterface extends \Sylius\Resource\Model\ToggleableInterface
+    {
+    }
 }
