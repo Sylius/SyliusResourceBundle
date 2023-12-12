@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Repository\Exception;
+namespace Sylius\Resource\Doctrine\Peristence\Exception;
 
 class ExistingResourceException extends \Exception
 {

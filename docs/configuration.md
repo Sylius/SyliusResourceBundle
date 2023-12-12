@@ -69,9 +69,7 @@ Then you just have to implement `SyliusRepositoryInterface` and use `ResourceRep
 ```php
 namespace App\Repository;
 
-use App\Entity\Book;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use App\Entity\Book;use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 
 class BookRepository extends ServiceEntityRepository implements RepositoryInterface
 {

@@ -17,8 +17,8 @@ use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use spec\Sylius\Component\Resource\Fixtures\SampleBookResourceInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\Repository\Exception\ExistingResourceException;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Peristence\Exception\ExistingResourceException;
+use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
 require_once __DIR__ . '/../Fixtures/SampleBookResourceInterface.php';

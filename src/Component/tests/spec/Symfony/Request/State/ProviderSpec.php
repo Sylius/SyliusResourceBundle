@@ -16,7 +16,7 @@ namespace spec\Sylius\Resource\Symfony\Request\State;
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;

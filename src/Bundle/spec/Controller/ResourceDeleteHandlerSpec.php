@@ -15,7 +15,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
 final class ResourceDeleteHandlerSpec extends ObjectBehavior

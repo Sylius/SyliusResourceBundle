@@ -17,7 +17,7 @@ use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
 final class ResourcesResolverSpec extends ObjectBehavior

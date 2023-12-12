@@ -128,9 +128,7 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Book;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\Resource\Factory\FactoryInterface;
+use App\Entity\Book;use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;use Sylius\Resource\Factory\FactoryInterface;
 
 final class BookFactory implements FactoryInterface
 {

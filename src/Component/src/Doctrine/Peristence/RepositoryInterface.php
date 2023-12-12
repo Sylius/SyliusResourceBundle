@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Repository;
+namespace Sylius\Resource\Doctrine\Peristence;
 
 use Doctrine\Persistence\ObjectRepository;
 use Sylius\Resource\Model\ResourceInterface;
@@ -36,12 +36,12 @@ interface RepositoryInterface extends ObjectRepository
     public function createPaginator(array $criteria = [], array $sorting = []): iterable;
 
     /**
-     * @param T $resource
+     * @param ResourceInterface $resource
      */
     public function add(ResourceInterface $resource): void;
 
     /**
-     * @param T $resource
+     * @param ResourceInterface $resource
      */
     public function remove(ResourceInterface $resource): void;
 }

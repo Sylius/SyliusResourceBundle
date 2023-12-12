@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Peristence\RepositoryInterface;
 
 interface BookRepositoryInterface extends RepositoryInterface
 {
