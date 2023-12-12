@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Repository\Exception;
+namespace spec\Sylius\Resource\Doctrine\Persistence\Exception;
 
 use PhpSpec\ObjectBehavior;
 
