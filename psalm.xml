@@ -88,26 +88,26 @@
 
         <InvalidReturnStatement>
             <errorLevel type="suppress">
-                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </InvalidReturnStatement>
 
         <InvalidReturnType>
             <errorLevel type="suppress">
-                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </InvalidReturnType>
 
         <LessSpecificImplementedReturnType>
             <errorLevel type="suppress">
-                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </LessSpecificImplementedReturnType>
 
         <LessSpecificReturnStatement>
             <errorLevel type="suppress">
-                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </LessSpecificReturnStatement>
 
@@ -122,7 +122,7 @@
         <MissingParamType>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Routing/ResourceLoader.php" />
-                <file name="src/Component/Repository/InMemoryRepository.php" />
+                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </MissingParamType>
 
@@ -198,6 +198,7 @@
                 <directory name="src/Component/Generator" />
                 <directory name="src/Component/Model" />
                 <directory name="src/Component/Reflection" />
+                <directory name="src/Component/Repository" />
                 <directory name="src/Component/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
             </errorLevel>
@@ -226,6 +227,7 @@
                 <directory name="src/Component/Metadata" />
                 <directory name="src/Component/Generator" />
                 <directory name="src/Component/Model" />
+                <directory name="src/Component/Repository" />
                 <directory name="src/Component/Storage" />
             </errorLevel>
         </UnrecognizedStatement>
