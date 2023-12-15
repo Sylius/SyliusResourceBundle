@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Tests\Symfony\Serializer\State;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Resource\src\Symfony\Serializer\State\SerializeProcessor;
@@ -29,7 +30,7 @@ final class SerializeProcessorTest extends TestCase
 {
     use ProphecyTrait;
 
-    private ProcessorInterface|ObjectProphecy $decorated;
+    private ProcessorInterface|ObjectProphecy $processor;
 
     private SerializerInterface|ObjectProphecy $serializer;
 
@@ -37,11 +38,11 @@ final class SerializeProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProcessorInterface::class);
+        $this->processor = $this->prophesize(ProcessorInterface::class);
         $this->serializer = $this->prophesize(SerializerInterface::class);
 
         $this->serializeProcessor = new SerializeProcessor(
-            $this->decorated->reveal(),
+            $this->processor->reveal(),
             $this->serializer->reveal(),
         );
     }
@@ -55,7 +56,7 @@ final class SerializeProcessorTest extends TestCase
 
         $context = new Context(new RequestOption($request->reveal()));
 
-        $this->decorated->process($data, $operation, $context)->willReturn($data);
+        $this->processor->process('serialized_data', $operation, $context)->willReturn('serialized_data')->shouldBeCalled();
 
         $request->getRequestFormat()->willReturn('json');
 
@@ -78,7 +79,7 @@ final class SerializeProcessorTest extends TestCase
 
         $context = new Context(new RequestOption($request->reveal()));
 
-        $this->decorated->process($data, $operation, $context)->willReturn($data);
+        $this->processor->process('serialized_data', $operation, $context)->willReturn('serialized_data');
 
         $request->getRequestFormat()->willReturn('json');
 
@@ -101,11 +102,11 @@ final class SerializeProcessorTest extends TestCase
 
         $context = new Context(new RequestOption($request->reveal()));
 
-        $this->decorated->process($data, $operation, $context)->willReturn($data);
+        $this->processor->process($data, $operation, $context)->willReturn($data);
 
         $request->getRequestFormat()->willReturn('html');
 
-        $this->serializer->serialize($data, 'json', [])->willReturn('serialized_data')->shouldNotBeCalled();
+        $this->serializer->serialize(Argument::cetera())->willReturn('serialized_data')->shouldNotBeCalled();
 
         $result = $this->serializeProcessor->process($data, $operation->reveal(), $context);
 
@@ -119,11 +120,11 @@ final class SerializeProcessorTest extends TestCase
         $operation = $this->prophesize(HttpOperation::class);
         $data = $this->prophesize(\stdClass::class);
 
-        $serializeProcessor = new SerializeProcessor($this->decorated->reveal(), null);
+        $serializeProcessor = new SerializeProcessor($this->processor->reveal(), null);
 
         $context = new Context(new RequestOption($request->reveal()));
 
-        $this->decorated->process($data, $operation, $context)->willReturn($data);
+        $this->processor->process($data, $operation, $context)->willReturn($data);
 
         $request->getRequestFormat()->willReturn('json', []);
 
@@ -144,13 +145,13 @@ final class SerializeProcessorTest extends TestCase
 
         $context = new Context(new RequestOption($request->reveal()));
 
-        $this->decorated->process($data, $operation, $context)->willReturn($data);
+        $this->processor->process($data, $operation, $context)->willReturn($data);
 
         $request->getRequestFormat()->willReturn('json');
 
         $operation->canSerialize()->willReturn(false)->shouldBeCalled();
 
-        $this->serializer->serialize($data, 'json', [])->willReturn('serialized_data')->shouldNotBeCalled();
+        $this->serializer->serialize(Argument::cetera())->willReturn('serialized_data')->shouldNotBeCalled();
 
         $result = $this->serializeProcessor->process($data, $operation->reveal(), $context);
 
