@@ -14,6 +14,10 @@
             <directory name="src/Component/Tests" />
             <directory name="src/Component/tests" />
             <directory name="src/Component/vendor" />
+            <file name="src/Component/Model/ArchivableTrait.php" />
+            <file name="src/Component/Model/TimestampableTrait.php" />
+            <file name="src/Component/Model/ToggleableTrait.php" />
+            <file name="src/Component/Model/TranslatableTrait.php" />
             <file name="src/Bundle/Controller/ControllerTrait.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
@@ -192,6 +196,7 @@
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />
                 <directory name="src/Component/Generator" />
+                <directory name="src/Component/Model" />
                 <directory name="src/Component/Reflection" />
                 <directory name="src/Component/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
@@ -220,6 +225,7 @@
                 <directory name="src/Component/Factory" />
                 <directory name="src/Component/Metadata" />
                 <directory name="src/Component/Generator" />
+                <directory name="src/Component/Model" />
                 <directory name="src/Component/Storage" />
             </errorLevel>
         </UnrecognizedStatement>

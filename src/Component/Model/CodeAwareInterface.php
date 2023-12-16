@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface CodeAwareInterface
-{
-    public function getCode(): ?string;
+interface_exists(\Sylius\Resource\Model\CodeAwareInterface::class);
 
-    public function setCode(?string $code): void;
+if (false) {
+    interface CodeAwareInterface extends \Sylius\Resource\Model\CodeAwareInterface
+    {
+    }
 }

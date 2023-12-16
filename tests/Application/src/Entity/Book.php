@@ -15,9 +15,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\TranslatableInterface;
-use Sylius\Component\Resource\Model\TranslatableTrait;
+use Sylius\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Model\TranslatableTrait;
 
 /**
  * @Serializer\ExclusionPolicy("all")
@@ -41,7 +41,7 @@ class Book implements ResourceInterface, TranslatableInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @Serializer\Expose
@@ -51,46 +51,32 @@ class Book implements ResourceInterface, TranslatableInterface
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return string
-     *
      * @Serializer\VirtualProperty()
      *
      * @Serializer\SerializedName("title")
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->getTranslation()->getTitle();
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): void
     {
         $this->getTranslation()->setTitle($title);
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthor()
+    public function getAuthor(): ?string
     {
         return $this->author;
     }
 
-    /**
-     * @param string $author
-     */
-    public function setAuthor($author)
+    public function setAuthor(?string $author): void
     {
         $this->author = $author;
     }

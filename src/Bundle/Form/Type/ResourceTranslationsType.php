@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Form\Type;
 
-use Sylius\Component\Resource\Model\TranslatableInterface;
-use Sylius\Component\Resource\Model\TranslationInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Sylius\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;

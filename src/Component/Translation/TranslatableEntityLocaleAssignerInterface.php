@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Translation;
 
-use Sylius\Component\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 
 interface TranslatableEntityLocaleAssignerInterface
 {

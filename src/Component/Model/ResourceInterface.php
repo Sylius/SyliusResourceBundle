@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Model;
 
-interface ResourceInterface
-{
-    /** @psalm-suppress MissingReturnType */
-    public function getId();
+interface_exists(\Sylius\Resource\Model\ResourceInterface::class);
+
+if (false) {
+    interface ResourceInterface extends \Sylius\Resource\Model\ResourceInterface
+    {
+    }
 }

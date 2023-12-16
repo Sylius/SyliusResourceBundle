@@ -16,7 +16,7 @@ namespace App\Entity;
 use App\Repository\ComicBookRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 
 /**
  * @Serializer\ExclusionPolicy("all")

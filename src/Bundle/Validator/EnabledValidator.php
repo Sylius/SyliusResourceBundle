@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Validator;
 
 use Sylius\Bundle\ResourceBundle\Validator\Constraints\Enabled;
-use Sylius\Component\Resource\Model\ToggleableInterface;
+use Sylius\Resource\Model\ToggleableInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Webmozart\Assert\Assert;

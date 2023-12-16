@@ -66,7 +66,7 @@ Use it on your operation.
 
 namespace App\Entity;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Show;
 

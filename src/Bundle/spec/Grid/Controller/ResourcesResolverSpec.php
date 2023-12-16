@@ -23,9 +23,9 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

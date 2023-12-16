@@ -16,7 +16,6 @@ namespace App\Subscription\Entity;
 use App\Subscription\Form\Type\SubscriptionType;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Resource\Metadata\AsResource;
@@ -27,6 +26,7 @@ use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 

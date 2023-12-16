@@ -15,8 +15,8 @@ namespace spec\Sylius\Bundle\ResourceBundle\Form\DataTransformer;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class ResourceToIdentifierTransformerSpec extends ObjectBehavior
