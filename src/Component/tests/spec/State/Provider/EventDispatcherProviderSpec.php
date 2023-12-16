@@ -26,10 +26,10 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 final class EventDispatcherProviderSpec extends ObjectBehavior
 {
     function let(
-        ProviderInterface $decorated,
+        ProviderInterface $provider,
         OperationEventDispatcherInterface $operationEventDispatcher,
     ): void {
-        $this->beConstructedWith($decorated, $operationEventDispatcher);
+        $this->beConstructedWith($provider, $operationEventDispatcher);
     }
 
     function it_is_initializable(): void
@@ -38,7 +38,7 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
     }
 
     function it_dispatches_events_for_index_operation(
-        ProviderInterface $decorated,
+        ProviderInterface $provider,
         OperationEventDispatcherInterface $operationEventDispatcher,
     ): void {
         $operation = new Index(provider: '\App\Provider');
@@ -46,10 +46,10 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
 
         $operationEvent = new OperationEvent();
 
-        $decorated->provide($operation, $context)->shouldBeCalled();
+        $provider->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
-        $decorated->provide($operation, $context)->shouldBeCalled();
+        $provider->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
 
@@ -57,7 +57,7 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
     }
 
     function it_dispatches_events_for_show_operation(
-        ProviderInterface $decorated,
+        ProviderInterface $provider,
         OperationEventDispatcherInterface $operationEventDispatcher,
     ): void {
         $operation = new Show(provider: '\App\Provider');
@@ -65,10 +65,10 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
 
         $operationEvent = new OperationEvent();
 
-        $decorated->provide($operation, $context)->shouldBeCalled();
+        $provider->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
-        $decorated->provide($operation, $context)->shouldBeCalled();
+        $provider->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
 
@@ -76,13 +76,13 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
     }
 
     function it_does_not_dispatch_events_for_create_operation(
-        ProviderInterface $decorated,
+        ProviderInterface $provider,
         OperationEventDispatcherInterface $operationEventDispatcher,
     ): void {
         $operation = new Create(provider: '\App\Provider');
         $context = new Context();
 
-        $decorated->provide($operation, $context)->shouldBeCalled();
+        $provider->provide($operation, $context)->shouldBeCalled();
 
         $operationEventDispatcher->dispatch(null, $operation, $context)->shouldNotBeCalled();
 
