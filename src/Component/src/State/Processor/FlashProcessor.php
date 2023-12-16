@@ -23,30 +23,32 @@ use Symfony\Component\HttpFoundation\Response;
 final class FlashProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $decorated,
+        private ProcessorInterface $processor,
         private FlashHelperInterface $flashHelper,
     ) {
     }
 
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
-        $data = $this->decorated->process($data, $operation, $context);
         $request = $context->get(RequestOption::class)?->request();
 
         if (null === $request) {
-            return $data;
+            return $this->processor->process($data, $operation, $context);
         }
+
+        $format = $request->getRequestFormat();
 
         if (
             $data instanceof Response ||
             $request->isMethodSafe() ||
-            !$request->attributes->getBoolean('is_valid', true)
+            $format !== 'html' ||
+            !($operation->canWrite() ?? true)
         ) {
-            return $data;
+            return $this->processor->process($data, $operation, $context);
         }
 
         $this->flashHelper->addSuccessFlash($operation, $context);
 
-        return $data;
+        return $this->processor->process($data, $operation, $context);
     }
 }
