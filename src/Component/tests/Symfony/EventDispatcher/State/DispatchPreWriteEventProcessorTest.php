@@ -51,7 +51,7 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
     }
 
     /** @test */
-    public function it_dispatches_pre_events_with_operation_as_string(): void
+    public function it_dispatches_pre_events(): void
     {
         $data = new \stdClass();
 
