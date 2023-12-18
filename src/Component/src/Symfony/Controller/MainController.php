@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Controller;
 
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\State\ProviderInterface;
@@ -35,7 +36,7 @@ final class MainController
         $operation = $this->operationInitiator->initializeOperation($request);
 
         if (null === $operation) {
-            throw new \RuntimeException('Operation should not be null.');
+            throw new RuntimeException('Operation should not be null.');
         }
 
         $context = $this->requestContextInitiator->initializeContext($request);

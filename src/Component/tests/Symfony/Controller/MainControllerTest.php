@@ -19,6 +19,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
@@ -92,7 +93,7 @@ final class MainControllerTest extends TestCase
 
         $this->operationInitiator->initializeOperation($request)->willReturn(null)->shouldBeCalled();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Operation should not be null.');
 
         $this->mainController->__invoke($request->reveal());
