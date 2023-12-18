@@ -27,7 +27,7 @@
             <argument type="service" id="sylius.state_processor.locator" />
         </service>
 
-        <service id="sylius.state_processor.serialize" class="Sylius\Component\Resource\src\Symfony\Serializer\State\SerializeProcessor" decorates="sylius.state_processor.main" decoration-priority="200">
+        <service id="sylius.state_processor.serialize" class="Sylius\Resource\Symfony\Serializer\State\SerializeProcessor" decorates="sylius.state_processor.main" decoration-priority="200">
             <argument type="service" id=".inner" />
             <argument type="service" id="serializer" on-invalid="null" />
         </service>
