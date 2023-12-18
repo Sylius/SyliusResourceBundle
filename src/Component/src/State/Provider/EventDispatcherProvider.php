@@ -26,13 +26,15 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 final class EventDispatcherProvider implements ProviderInterface
 {
     public function __construct(
-        private ProviderInterface $decorated,
+        private ProviderInterface $provider,
         private OperationEventDispatcherInterface $operationEventDispatcher,
     ) {
     }
 
     public function provide(Operation $operation, Context $context): object|array|null
     {
+        $data = $this->provider->provide($operation, $context);
+
         if (
             $operation instanceof CollectionOperationInterface ||
             $operation instanceof ShowOperationInterface
@@ -40,6 +42,6 @@ final class EventDispatcherProvider implements ProviderInterface
             $this->operationEventDispatcher->dispatch(null, $operation, $context);
         }
 
-        return $this->decorated->provide($operation, $context);
+        return $data;
     }
 }
