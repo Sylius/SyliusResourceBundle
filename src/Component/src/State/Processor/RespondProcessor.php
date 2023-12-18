@@ -23,15 +23,12 @@ use Webmozart\Assert\Assert;
 final class RespondProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $decorated,
         private ResponderInterface $responder,
     ) {
     }
 
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
-        $data = $this->decorated->process($data, $operation, $context);
-
         if ($data instanceof Response) {
             return $data;
         }
