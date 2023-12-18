@@ -22,7 +22,6 @@ use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\State\Processor\FlashProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -51,14 +50,12 @@ final class FlashProcessorTest extends TestCase
     public function it_adds_flash(): void
     {
         $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
-        $request->isMethodSafe()->willReturn(false);
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
+        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
 
-        $request->attributes = $attributes;
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true);
+        $operation->canWrite()->willReturn(null)->shouldBeCalled();
 
         $context = new Context(new RequestOption($request->reveal()));
 
@@ -73,15 +70,13 @@ final class FlashProcessorTest extends TestCase
     public function it_does_nothing_when_controller_result_is_a_response(): void
     {
         $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
         $response = $this->prophesize(Response::class);
 
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
         $request->isMethodSafe()->willReturn(false)->shouldNotBeCalled();
 
-        $request->attributes = $attributes;
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldNotBeCalled();
+        $operation->canWrite()->willReturn(null)->shouldNotBeCalled();
 
         $context = new Context(new RequestOption($request->reveal()));
 
@@ -96,14 +91,12 @@ final class FlashProcessorTest extends TestCase
     public function it_does_nothing_when_method_is_safe(): void
     {
         $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
         $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
 
-        $request->attributes = $attributes;
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true);
+        $operation->canWrite()->willReturn(null)->shouldNotBeCalled();
 
         $context = new Context(new RequestOption($request->reveal()));
 
@@ -115,17 +108,15 @@ final class FlashProcessorTest extends TestCase
     }
 
     /** @test */
-    public function it_does_nothing_when_validation_has_failed(): void
+    public function it_does_nothing_when_operation_cannot_be_written(): void
     {
         $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
         $operation = $this->prophesize(HttpOperation::class);
 
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
         $request->isMethodSafe()->willReturn(false);
 
-        $request->attributes = $attributes;
-
-        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
+        $operation->canWrite()->willReturn(false)->shouldBeCalled();
 
         $context = new Context(new RequestOption($request->reveal()));
 
