@@ -23,9 +23,9 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 
 final class BulkAwareProcessorSpec extends ObjectBehavior
 {
-    function let(ProcessorInterface $decorated, OperationEventDispatcherInterface $operationEventDispatcher): void
+    function let(ProcessorInterface $processor, OperationEventDispatcherInterface $operationEventDispatcher): void
     {
-        $this->beConstructedWith($decorated, $operationEventDispatcher);
+        $this->beConstructedWith($processor, $operationEventDispatcher);
     }
 
     function it_is_initializable(): void
@@ -34,7 +34,7 @@ final class BulkAwareProcessorSpec extends ObjectBehavior
     }
 
     function it_calls_decorated_processor_for_each_data_for_bulk_operation(
-        ProcessorInterface $decorated,
+        ProcessorInterface $processor,
         \stdClass $firstItem,
         \stdClass $secondItem,
     ): void {
@@ -46,21 +46,21 @@ final class BulkAwareProcessorSpec extends ObjectBehavior
             $secondItem->getWrappedObject(),
         ];
 
-        $decorated->process($firstItem, $operation, $context)->willReturn(null)->shouldBeCalled();
-        $decorated->process($secondItem, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $processor->process($firstItem, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $processor->process($secondItem, $operation, $context)->willReturn(null)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn(null);
     }
 
     function it_calls_decorated_processor_for_data_for_other_operation_than_bulk_one(
-        ProcessorInterface $decorated,
+        ProcessorInterface $processor,
         \stdClass $data,
         \stdClass $result,
     ): void {
         $operation = new Delete();
         $context = new Context();
 
-        $decorated->process($data, $operation, $context)->willReturn($result)->shouldBeCalled();
+        $processor->process($data, $operation, $context)->willReturn($result)->shouldBeCalled();
 
         $this->process($data, $operation, $context)->shouldReturn($result);
     }

@@ -24,7 +24,7 @@ use Sylius\Resource\State\ProcessorInterface;
 final class BulkAwareProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $decorated,
+        private ProcessorInterface $processor,
     ) {
     }
 
@@ -37,11 +37,11 @@ final class BulkAwareProcessor implements ProcessorInterface
             !$operation instanceof BulkOperationInterface ||
             !\is_iterable($data)
         ) {
-            return $this->decorated->process($data, $operation, $context);
+            return $this->processor->process($data, $operation, $context);
         }
 
         foreach ($data as $item) {
-            $this->decorated->process($item, $operation, $context);
+            $this->processor->process($item, $operation, $context);
         }
 
         return null;
