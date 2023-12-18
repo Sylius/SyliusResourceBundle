@@ -110,6 +110,7 @@ final class TwigResponderSpec extends ObjectBehavior
         $data->offsetSet('id', 'xyz');
         $request->attributes = $attributes;
 
+        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
         $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
 
         $operation = new Create();

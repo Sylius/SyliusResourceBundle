@@ -1,16 +1,19 @@
-<h1>{{ (operation.resource.applicationName ~ '.ui.' ~ operation.resource.pluralName)|trans }}</h1>
+{% extends 'layout.html.twig' %}
 
-{% set grid = resources %}
-{% set definition = grid.definition %}
+{% block body %}
+    <h1>{{ (operation.resource.applicationName ~ '.ui.' ~ operation.resource.pluralName)|trans }}</h1>
 
-{% if definition.actionGroups.bulk is defined and definition.getEnabledActions('bulk')|length > 0 %}
-    {% for action in definition.getEnabledActions('bulk') %}
-        {{ sylius_grid_render_bulk_action(grid, action, null) }}
-    {% endfor %}
-{% endif %}
+    {% set grid = resources %}
+    {% set definition = grid.definition %}
 
-<table>
-    <thead>
+    {% if definition.actionGroups.bulk is defined and definition.getEnabledActions('bulk')|length > 0 %}
+        {% for action in definition.getEnabledActions('bulk') %}
+            {{ sylius_grid_render_bulk_action(grid, action, null) }}
+        {% endfor %}
+    {% endif %}
+
+    <table>
+        <thead>
         <tr>
             {% for field in definition.fields %}
                 {% if field.enabled %}
@@ -21,21 +24,21 @@
                 {% endif %}
             {% endfor %}
         </tr>
-    </thead>
-    <tbody>
-    {% for resource in resources.data %}
-        <tr>
-            {% for field in definition.enabledFields %}
-                <td>{{ sylius_grid_render_field(grid, field, resource) }}</td>
-                <td>
-                {% for action in definition.getEnabledActions('item') %}
-                    {{ sylius_grid_render_action(grid, action, resource) }}
+        </thead>
+        <tbody>
+        {% for resource in resources.data %}
+            <tr>
+                {% for field in definition.enabledFields %}
+                    <td>{{ sylius_grid_render_field(grid, field, resource) }}</td>
+                    <td>
+                        {% for action in definition.getEnabledActions('item') %}
+                            {{ sylius_grid_render_action(grid, action, resource) }}
+                        {% endfor %}
+                    </td>
                 {% endfor %}
-                </td>
-            {% endfor %}
-        </tr>
-    {% endfor %}
-    </tbody>
+            </tr>
+        {% endfor %}
+        </tbody>
 
-</table>
-
+    </table>
+{% endblock %}

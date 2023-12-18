@@ -47,6 +47,9 @@ final class FlashProcessor implements ProcessorInterface
             return $this->processor->process($data, $operation, $context);
         }
 
+        $data = $this->processor->process($data, $operation, $context);
+
+        dump(__METHOD__);
         $this->flashHelper->addSuccessFlash($operation, $context);
 
         return $this->processor->process($data, $operation, $context);

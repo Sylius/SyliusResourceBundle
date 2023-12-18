@@ -60,6 +60,7 @@ parameters:
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
         - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
+        - '/Method Sylius\\Resource\\Symfony\\Controller\\MainController::__invoke\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed./'
         - '/Method Symfony\\Component\\Routing\\RouteCollection::add\(\) invoked with 3 parameters, 2 required\./'
         - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
         - '/Parameter \#1 \$currentPage of method Pagerfanta\\Pagerfanta<mixed>::setCurrentPage\(\) expects int<1, max>, int given\./'

@@ -1,8 +1,11 @@
-<h1>Subscription</h1>
+{% extends 'layout.html.twig' %}
 
-<h3>ID: {{ resource.id }}</h3>
-<ul>
-    <li>Email: {{ resource.email }}</li>
-    <li>Foo: {{ foo }}</li>
-</ul>
+{% block body %}
+    <h1>Subscription</h1>
 
+    <h3>ID: {{ resource.id }}</h3>
+    <ul>
+        <li>Email: {{ resource.email }}</li>
+        <li>Foo: {{ foo }}</li>
+    </ul>
+{% endblock %}

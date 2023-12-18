@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Gedmo\Sluggable\Util\Urlizer;
-use Sylius\Resource\Action\PlaceHolderAction;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
@@ -38,7 +37,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         return new Route(
             path: $routePath,
             defaults: [
-                '_controller' => PlaceHolderAction::class,
+                '_controller' => 'sylius.controller.main',
                 '_sylius' => $this->getSyliusOptions($resource, $operation),
             ],
             methods: $operation->getMethods() ?? [],
