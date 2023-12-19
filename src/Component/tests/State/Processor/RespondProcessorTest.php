@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\State\Processor;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\State\Processor\RespondProcessor;
-use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
@@ -28,8 +28,6 @@ use Webmozart\Assert\Assert;
 final class RespondProcessorTest extends TestCase
 {
     use ProphecyTrait;
-
-    private ProcessorInterface|ObjectProphecy $decorated;
 
     private RequestContextInitiatorInterface|ObjectProphecy $contextInitiator;
 
@@ -39,11 +37,9 @@ final class RespondProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProcessorInterface::class);
         $this->responder = $this->prophesize(ResponderInterface::class);
 
         $this->respondProcessor = new RespondProcessor(
-            $this->decorated->reveal(),
             $this->responder->reveal(),
         );
     }
@@ -61,8 +57,6 @@ final class RespondProcessorTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
-
         $data = $this->respondProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
         Assert::eq($data, $response->reveal());
     }
@@ -75,14 +69,12 @@ final class RespondProcessorTest extends TestCase
 
         $context = new Context();
 
-        $this->decorated->process($response, $operation, $context)->willReturn($response)->shouldBeCalled();
-
-        $this->responder->respond($response, $operation, $context)
+        $this->responder->respond(Argument::cetera())
             ->willReturn($response)
             ->shouldNotBeCalled()
         ;
 
-        $data = $this->respondProcessor->process($response, $operation->reveal(), $context);
+        $data = $this->respondProcessor->process($response->reveal(), $operation->reveal(), $context);
         Assert::eq($data, $response->reveal());
     }
 }
