@@ -6,23 +6,24 @@ Now, with your fresh new resource, you have to define the operations that you ne
 There are some basic CRUD operations and more.
 
 <!-- TOC -->
-
-* [Basic operations](#basic-operations)
+* [Configure your operations](#configure-your-operations)
+  * [Basic operations](#basic-operations)
     * [Index operation](#index-operation)
     * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
     * [Create operation](#create-operation)
     * [Update operation](#update-operation)
     * [Delete operation](#delete-operation)
+    * [Bulk delete operation](#bulk-delete-operation)
+    * [Show operation](#show-operation)
     * [State machine operation](#state-machine-operation)
-* [Advanced configuration](#advanced-configuration)
+  * [Advanced configuration](#advanced-configuration)
     * [Configure the path](#configure-the-path)
     * [Configure the short name](#configure-the-short-name)
     * [Configure the templates' dir](#configure-the-templates-dir)
-    * [Configure the section](#configure-the-section)
     * [Configure the routes' prefix](#configure-the-routes-prefix)
+    * [Configure the section](#configure-the-section)
     * [Configure the resource identifier](#configure-the-resource-identifier)
     * [Configure the vars](#configure-the-vars)
-
 <!-- TOC -->
 
 ## Basic operations
