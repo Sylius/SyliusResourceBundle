@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Tests\Symfony\Serializer\State;
+namespace Sylius\Component\Resource\tests\Symfony\Serializer\State;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
