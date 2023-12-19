@@ -15,7 +15,7 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.controller.main" class="Sylius\Resource\Symfony\Controller\MainController" public="false">
+        <service id="sylius.symfony.main_controller" class="Sylius\Resource\Symfony\Controller\MainController" public="false">
             <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
             <argument type="service" id="sylius.context.initiator.request_context" />
             <argument type="service" id="sylius.state_provider.main" />

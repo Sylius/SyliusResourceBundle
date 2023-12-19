@@ -37,7 +37,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         return new Route(
             path: $routePath,
             defaults: [
-                '_controller' => 'sylius.controller.main',
+                '_controller' => 'sylius.symfony.main_controller',
                 '_sylius' => $this->getSyliusOptions($resource, $operation),
             ],
             methods: $operation->getMethods() ?? [],
