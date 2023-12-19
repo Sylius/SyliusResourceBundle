@@ -3,14 +3,13 @@
 Read the previous chapter to [create a new resource](create_new_resource.md).
 
 <!-- TOC -->
-
-* [Implements the Resource interface](#implements-the-resource-interface)
-* [Use the Resource attribute](#use-the-resource-attribute)
-* [Advanced configuration](#advanced-configuration)
+* [Configure your resource](#configure-your-resource)
+  * [Implements the Resource interface](#implements-the-resource-interface)
+  * [Use the Resource attribute](#use-the-resource-attribute)
+  * [Advanced configuration](#advanced-configuration)
     * [Configure the resource name](#configure-the-resource-name)
     * [Configure the resource plural name](#configure-the-resource-plural-name)
     * [Configure the resource vars](#configure-the-resource-vars)
-
 <!-- TOC -->
 
 ## Implements the Resource interface
