@@ -11,19 +11,19 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State\Provider;
+namespace spec\Sylius\Resource\Symfony\EventDispatcher\State;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Show;
-use Sylius\Resource\State\Provider\EventDispatcherProvider;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
+use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostReadEventProvider;
 
-final class EventDispatcherProviderSpec extends ObjectBehavior
+final class DispatchPostReadEventProviderSpec extends ObjectBehavior
 {
     function let(
         ProviderInterface $provider,
@@ -34,7 +34,7 @@ final class EventDispatcherProviderSpec extends ObjectBehavior
 
     function it_is_initializable(): void
     {
-        $this->shouldHaveType(EventDispatcherProvider::class);
+        $this->shouldHaveType(DispatchPostReadEventProvider::class);
     }
 
     function it_dispatches_events_for_index_operation(

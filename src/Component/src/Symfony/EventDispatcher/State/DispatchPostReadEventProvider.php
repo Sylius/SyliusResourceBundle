@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\State\Provider;
+namespace Sylius\Resource\Symfony\EventDispatcher\State;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\CollectionOperationInterface;
@@ -23,7 +23,7 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 /**
  * @experimental
  */
-final class EventDispatcherProvider implements ProviderInterface
+final class DispatchPostReadEventProvider implements ProviderInterface
 {
     public function __construct(
         private ProviderInterface $provider,

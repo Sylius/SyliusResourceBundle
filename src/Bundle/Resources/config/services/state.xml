@@ -20,8 +20,8 @@
         </service>
         <service id="Sylius\Resource\State\ProviderInterface" alias="sylius.state.provider" />
 
-        <service id="sylius.state.provider.event_dispatcher"
-                 class="Sylius\Resource\State\Provider\EventDispatcherProvider"
+        <service id="sylius.state.provider.dispatch_post_read_event"
+                 class="Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostReadEventProvider"
                  decorates="sylius.state.provider"
                  decoration-priority="-32"
         >
