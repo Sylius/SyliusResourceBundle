@@ -3,24 +3,26 @@
 Read the previous chapter to [configure your resource](configure_your_resource.md).
 
 Now, with your fresh new resource, you have to define the operations that you need to implement.
-There are some basic CRUD operations and more. 
+There are some basic CRUD operations and more.
 
 <!-- TOC -->
+
 * [Basic operations](#basic-operations)
-  * [Index operation](#index-operation)
-  * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
-  * [Create operation](#create-operation)
-  * [Update operation](#update-operation)
-  * [Delete operation](#delete-operation)
-  * [State machine operation](#state-machine-operation)
+    * [Index operation](#index-operation)
+    * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
+    * [Create operation](#create-operation)
+    * [Update operation](#update-operation)
+    * [Delete operation](#delete-operation)
+    * [State machine operation](#state-machine-operation)
 * [Advanced configuration](#advanced-configuration)
-  * [Configure the path](#configure-the-path)
-  * [Configure the short name](#configure-the-short-name)
-  * [Configure the templates' dir](#configure-the-templates-dir)
-  * [Configure the section](#configure-the-section)
-  * [Configure the routes' prefix](#configure-the-routes-prefix)
-  * [Configure the resource identifier](#configure-the-resource-identifier)
-  * [Configure the vars](#configure-the-vars)
+    * [Configure the path](#configure-the-path)
+    * [Configure the short name](#configure-the-short-name)
+    * [Configure the templates' dir](#configure-the-templates-dir)
+    * [Configure the section](#configure-the-section)
+    * [Configure the routes' prefix](#configure-the-routes-prefix)
+    * [Configure the resource identifier](#configure-the-resource-identifier)
+    * [Configure the vars](#configure-the-vars)
+
 <!-- TOC -->
 
 ## Basic operations
@@ -46,22 +48,24 @@ class Book implements ResourceInterface
 
 It will configure this route for your `index` operation.
 
-| Name                  | Method          | Path    |
-|-----------------------|-----------------|---------|
-| app_book_index        | GET             | /books  |
+| Name           | Method | Path   |
+|----------------|--------|--------|
+| app_book_index | GET    | /books |
 
 On your Twig template, these variables are available
 
-| Name      | Type                                     |
-|-----------|------------------------------------------|
-| resources | Pagerfanta\Pagerfanta                    |
-| books     | Pagerfanta\Pagerfanta                    |
-| operation | Sylius\Component\Resource\Metadata\Index |
-| app       | Symfony\Bridge\Twig\AppVariable          |
+| Name              | Type                                      |
+|-------------------|-------------------------------------------|
+| resources         | Pagerfanta\Pagerfanta                     |
+| books             | Pagerfanta\Pagerfanta                     |
+| operation         | Sylius\Resource\Metadata\Index            |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
+| app               | Symfony\Bridge\Twig\AppVariable           |
 
 ### Use a grid for your index operation
 
-To use a grid for you operation, you need to install the [Sylius grid package](https://github.com/Sylius/SyliusGridBundle/)
+To use a grid for you operation, you need to install
+the [Sylius grid package](https://github.com/Sylius/SyliusGridBundle/)
 
 ```php
 namespace App\Entity;
@@ -84,12 +88,13 @@ class Book implements ResourceInterface
 
 On your Twig template, these variables are available
 
-| Name      | Type                                                    |
-|-----------|---------------------------------------------------------|
-| resources | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
-| books     | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
-| operation | Sylius\Component\Resource\Metadata\Index                |
-| app       | Symfony\Bridge\Twig\AppVariable                         |
+| Name              | Type                                                    |
+|-------------------|---------------------------------------------------------|
+| resources         | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
+| books             | Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView |
+| operation         | Sylius\Resource\Metadata\Index                          |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata               |
+| app               | Symfony\Bridge\Twig\AppVariable                         |
 
 The iterator for your books will be available as `books.data` or `resources.data`.
 
@@ -120,12 +125,13 @@ It will configure this route for your `create` operation.
 
 On your Twig template, these variables are available
 
-| Name      | Type                                      |
-|-----------|-------------------------------------------|
-| resource  | App\Entity\Book                           |
-| book      | App\Entity\Book                           |
-| operation | Sylius\Component\Resource\Metadata\Create |
-| app       | Symfony\Bridge\Twig\AppVariable           |
+| Name              | Type                                      |
+|-------------------|-------------------------------------------|
+| resource          | App\Entity\Book                           |
+| book              | App\Entity\Book                           |
+| operation         | Sylius\Resource\Metadata\Create           |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
+| app               | Symfony\Bridge\Twig\AppVariable           |
 
 The iterator for your books will be available as `books.data` or `resources.data`.
 
@@ -156,12 +162,13 @@ It will configure this route for your `update` operation.
 
 On your Twig template, these variables are available
 
-| Name      | Type                                      |
-|-----------|-------------------------------------------|
-| resource  | App\Entity\Book                           |
-| book      | App\Entity\Book                           |
-| operation | Sylius\Component\Resource\Metadata\Update |
-| app       | Symfony\Bridge\Twig\AppVariable           |
+| Name              | Type                                      |
+|-------------------|-------------------------------------------|
+| resource          | App\Entity\Book                           |
+| book              | App\Entity\Book                           |
+| operation         | Sylius\Resource\Metadata\Update           |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
+| app               | Symfony\Bridge\Twig\AppVariable           |
 
 ### Delete operation
 
@@ -234,21 +241,21 @@ class Book implements ResourceInterface
 
 It will configure this route for your `show` operation.
 
-| Name            | Method | Path        |
-|-----------------|--------|-------------|
-| app_book_show   | GET    | /books/{id} |    
+| Name          | Method | Path        |
+|---------------|--------|-------------|
+| app_book_show | GET    | /books/{id} |    
 
 On your Twig template, these variables are available
 
-| Name      | Type                                    |
-|-----------|-----------------------------------------|
-| resource  | App\Entity\Book                         |
-| book      | App\Entity\Book                         |
-| operation | Sylius\Component\Resource\Metadata\Show |
-| app       | Symfony\Bridge\Twig\AppVariable         |
+| Name              | Type                                      |
+|-------------------|-------------------------------------------|
+| resource          | App\Entity\Book                           |
+| book              | App\Entity\Book                           |
+| operation         | Sylius\Resource\Metadata\Show             |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
+| app               | Symfony\Bridge\Twig\AppVariable           |
 
 ### State machine operation
-
 
 `State machine` operation allows to apply a transition to an item of your resource.
 
@@ -271,9 +278,9 @@ class Book implements ResourceInterface
 
 It will configure this route for your `apply_state_machine_transition` operation.
 
-| Name              | Method | Path                |
-|-------------------|--------|---------------------|
-| app_book_publish  | GET    | /books/{id}/publish |    
+| Name             | Method | Path                |
+|------------------|--------|---------------------|
+| app_book_publish | GET    | /books/{id}/publish |    
 
 ## Advanced configuration
 
@@ -388,14 +395,14 @@ class Book implements ResourceInterface
 
 ```
 
-| Name                   | Method          | Path                     |
-|------------------------|-----------------|--------------------------|
-| app_book_index         | GET             | /admin/books/            |
-| app_book_create        | GET, POST       | /admin/books/new         |                     
-| app_book_update        | GET, PUT, PATCH | /admin/books/{id}/edit   |        
-| app_book_delete        | DELETE          | /admin/books/{id}        |
-| app_book_bulk_delete   | DELETE          | /admin/books/bulk_delete |               
-| app_book_show          | GET             | /admin/books/{id}        |
+| Name                 | Method          | Path                     |
+|----------------------|-----------------|--------------------------|
+| app_book_index       | GET             | /admin/books/            |
+| app_book_create      | GET, POST       | /admin/books/new         |                     
+| app_book_update      | GET, PUT, PATCH | /admin/books/{id}/edit   |        
+| app_book_delete      | DELETE          | /admin/books/{id}        |
+| app_book_bulk_delete | DELETE          | /admin/books/bulk_delete |               
+| app_book_show        | GET             | /admin/books/{id}        |
 
 ### Configure the section
 
@@ -469,7 +476,7 @@ class Book implements ResourceInterface
 | Name                 | Method          | Path                     |
 |----------------------|-----------------|--------------------------|
 | app_book_index       | GET             | /admin/books/            |
-| app_ook_create       | GET, POST       | /admin/books/new         |                     
+| app_book_create      | GET, POST       | /admin/books/new         |                     
 | app_book_update      | GET, PUT, PATCH | /admin/books/{code}/edit |        
 | app_book_delete      | DELETE          | /admin/books/{code}      |
 | app_book_bulk_delete | DELETE          | /admin/books/bulk_delete |
