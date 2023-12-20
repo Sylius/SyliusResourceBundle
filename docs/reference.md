@@ -15,8 +15,7 @@ sylius_resource:
                     validation_groups: [sylius]
             options:
                 object_manager: default
-            templates:
-                form: Book/_form.html.twig
+            templates: 'book' # directory of templates, this would be placed in `templates/book/`. Default value is empty. Keep in mind, that in Sylius we usually use UpperCamelCase notation in contrary to Symfony recommendations
             translation:
                 classes:
                     model: ~
