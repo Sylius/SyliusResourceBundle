@@ -10,11 +10,11 @@ There are some basic CRUD operations and more.
   * [Basic operations](#basic-operations)
     * [Index operation](#index-operation)
     * [Use a grid for your index operation](#use-a-grid-for-your-index-operation)
+    * [Show operation](#show-operation)
     * [Create operation](#create-operation)
     * [Update operation](#update-operation)
     * [Delete operation](#delete-operation)
     * [Bulk delete operation](#bulk-delete-operation)
-    * [Show operation](#show-operation)
     * [State machine operation](#state-machine-operation)
   * [Advanced configuration](#advanced-configuration)
     * [Configure the path](#configure-the-path)
@@ -98,6 +98,41 @@ On your Twig template, these variables are available
 | app               | Symfony\Bridge\Twig\AppVariable                         |
 
 The iterator for your books will be available as `books.data` or `resources.data`.
+
+### Show operation
+
+`Show` operation allows to view details of an item.
+
+```php
+namespace App\Entity;
+
+use Sylius\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
+
+#[AsResource]
+#[Show]
+class Book implements ResourceInterface
+{
+}
+
+```
+
+It will configure this route for your `show` operation.
+
+| Name          | Method | Path        |
+|---------------|--------|-------------|
+| app_book_show | GET    | /books/{id} |    
+
+On your Twig template, these variables are available
+
+| Name              | Type                                      |
+|-------------------|-------------------------------------------|
+| resource          | App\Entity\Book                           |
+| book              | App\Entity\Book                           |
+| operation         | Sylius\Resource\Metadata\Show             |
+| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
+| app               | Symfony\Bridge\Twig\AppVariable           |
 
 ### Create operation
 
@@ -219,42 +254,7 @@ It will configure this route for your `bulk_delete` operation.
 
 | Name                 | Method | Path               |
 |----------------------|--------|--------------------|
-| app_book_bulk_delete | DELETE | /books/bulk_delete |    
-
-### Show operation
-
-`Show` operation allows to view details of an item.
-
-```php
-namespace App\Entity;
-
-use Sylius\Resource\Model\ResourceInterface;
-use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Metadata\Show;
-
-#[AsResource]
-#[Show]
-class Book implements ResourceInterface
-{
-}
-
-```
-
-It will configure this route for your `show` operation.
-
-| Name          | Method | Path        |
-|---------------|--------|-------------|
-| app_book_show | GET    | /books/{id} |    
-
-On your Twig template, these variables are available
-
-| Name              | Type                                      |
-|-------------------|-------------------------------------------|
-| resource          | App\Entity\Book                           |
-| book              | App\Entity\Book                           |
-| operation         | Sylius\Resource\Metadata\Show             |
-| resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
-| app               | Symfony\Bridge\Twig\AppVariable           |
+| app_book_bulk_delete | DELETE | /books/bulk_delete |
 
 ### State machine operation
 

@@ -123,8 +123,8 @@ As an example, on an `index` operation these Twig variables will be available:
 
 | Name              | Type                                      |
 |-------------------|-------------------------------------------|
-| resource          | App\Entity\Book                           |
-| library           | App\Entity\Book                           |
+| resources         | Pagerfanta\Pagerfanta                     |
+| library           | APagerfanta\Pagerfanta                    |
 | operation         | Sylius\Resource\Metadata\Index            |
 | resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
 | app               | Symfony\Bridge\Twig\AppVariable           |
