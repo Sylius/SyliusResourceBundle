@@ -30,10 +30,12 @@ final class DefaultContextFactorySpec extends ObjectBehavior
     function it_creates_twig_context_for_resource(
         \stdClass $data,
     ): void {
-        $operation = (new Show())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy'));
+        $resourceMetadata = new ResourceMetadata(alias: 'app.dummy', name: 'dummy');
+        $operation = (new Show())->withResource($resourceMetadata);
 
         $this->create($data, $operation, new Context())->shouldReturn([
             'operation' => $operation,
+            'resource_metadata' => $resourceMetadata,
             'resource' => $data,
             'dummy' => $data,
         ]);
@@ -42,10 +44,12 @@ final class DefaultContextFactorySpec extends ObjectBehavior
     function it_creates_twig_context_for_resource_collection(
         \stdClass $data,
     ): void {
-        $operation = (new Index())->withResource(new ResourceMetadata(alias: 'app.dummy', pluralName: 'dummies'));
+        $resourceMetadata = new ResourceMetadata(alias: 'app.dummy', pluralName: 'dummies');
+        $operation = (new Index())->withResource($resourceMetadata);
 
         $this->create($data, $operation, new Context())->shouldReturn([
             'operation' => $operation,
+            'resource_metadata' => $resourceMetadata,
             'resources' => $data,
             'dummies' => $data,
         ]);
