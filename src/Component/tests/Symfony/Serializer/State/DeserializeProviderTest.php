@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Tests\State\Provider;
+namespace Sylius\Component\Resource\tests\Symfony\Serializer\State;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -21,8 +21,8 @@ use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\State\Provider\DeserializeProvider;
 use Sylius\Resource\State\ProviderInterface;
+use Sylius\Resource\Symfony\Serializer\State\DeserializeProvider;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
