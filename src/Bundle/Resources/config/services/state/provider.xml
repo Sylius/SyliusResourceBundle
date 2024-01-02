@@ -23,13 +23,13 @@
             <argument type="service" id="sylius.state.factory" />
         </service>
 
-        <service id="sylius.state_provider.event_dispatcher" class="Sylius\Resource\State\Provider\EventDispatcherProvider" decorates="sylius.state_provider.read" decoration-priority="400"
+        <service id="sylius.state_provider.dispatch_post_read_event" class="Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostReadEventProvider" decorates="sylius.state_provider.read" decoration-priority="400"
         >
             <argument type="service" id=".inner" />
             <argument type="service" id="sylius.dispatcher.operation" />
         </service>
 
-        <service id="sylius.state_provider.deserialize" class="Sylius\Resource\State\Provider\DeserializeProvider" decorates="sylius.state_provider.read" decoration-priority="300">
+        <service id="sylius.state_provider.deserialize" class="Sylius\Resource\Symfony\Serializer\State\DeserializeProvider" decorates="sylius.state_provider.read" decoration-priority="300">
             <argument type="service" id=".inner" />
             <argument type="service" id="serializer" on-invalid="null" />
         </service>
