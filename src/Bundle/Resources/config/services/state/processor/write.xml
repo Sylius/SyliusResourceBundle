@@ -18,7 +18,7 @@
         </service>
 
         <!-- Pre-write -->
-        <service id="sylius.state_processor.pre_event_dispatcher" class="Sylius\Resource\State\Processor\PreEventDispatcherProcessor" decorates="sylius.state_processor.locator" decoration-priority="200">
+        <service id="sylius.state_processor.dispatch_pre_write_event" class="Sylius\Component\Resource\src\Symfony\EventDispatcher\State\DispatchPreWriteEventProcessor" decorates="sylius.state_processor.locator" decoration-priority="200">
             <argument type="service" id=".inner" />
             <argument type="service" id="sylius.dispatcher.operation" />
             <argument type="service" id="sylius.event_handler.operation" />
