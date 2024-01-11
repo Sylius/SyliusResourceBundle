@@ -16,13 +16,13 @@ namespace spec\Sylius\Resource\State\Processor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Sylius\Component\Resource\src\Symfony\EventDispatcher\State\DispatchPostWriteEventProcessor;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
+use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostWriteEventProcessor;
 use Symfony\Component\HttpFoundation\Response;
 
 final class DispatchPostWriteEventProcessorTest extends TestCase

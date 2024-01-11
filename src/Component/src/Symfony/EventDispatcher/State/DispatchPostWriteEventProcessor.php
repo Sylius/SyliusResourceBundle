@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\src\Symfony\EventDispatcher\State;
+namespace Sylius\Resource\Symfony\EventDispatcher\State;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
