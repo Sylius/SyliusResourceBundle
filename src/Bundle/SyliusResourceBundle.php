@@ -27,6 +27,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachi
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
+use Sylius\Component\Resource\src\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -46,6 +47,7 @@ final class SyliusResourceBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new CsrfTokenManagerPass());
+        $container->addCompilerPass(new DisableMetadataCachePass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterFormBuilderPass());
