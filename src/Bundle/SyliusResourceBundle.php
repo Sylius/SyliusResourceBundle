@@ -27,7 +27,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachi
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
-use Sylius\Component\Resource\src\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
+use Sylius\Resource\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

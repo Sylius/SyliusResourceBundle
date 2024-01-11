@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Sylius\Component\Resource\src\State\Processor\WriteProcessor;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\State\Processor\WriteProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
