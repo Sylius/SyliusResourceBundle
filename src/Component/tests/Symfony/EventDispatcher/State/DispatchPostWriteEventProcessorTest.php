@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\EventDispatcher\State;
+namespace spec\Sylius\Resource\State\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -22,10 +22,10 @@ use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
-use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPreWriteEventProcessor;
+use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostWriteEventProcessor;
 use Symfony\Component\HttpFoundation\Response;
 
-final class DispatchPreWriteEventProcessorTest extends TestCase
+final class DispatchPostWriteEventProcessorTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -35,7 +35,7 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
 
     private ObjectProphecy|OperationEventHandlerInterface $eventHandler;
 
-    private DispatchPreWriteEventProcessor $dispatchPreWriteEventProcessor;
+    private DispatchPostWriteEventProcessor $dispatchPostWriteEventProcessor;
 
     protected function setUp(): void
     {
@@ -43,7 +43,7 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
         $this->operationEventDispatcher = $this->prophesize(OperationEventDispatcherInterface::class);
         $this->eventHandler = $this->prophesize(OperationEventHandlerInterface::class);
 
-        $this->dispatchPreWriteEventProcessor = new DispatchPreWriteEventProcessor(
+        $this->dispatchPostWriteEventProcessor = new DispatchPostWriteEventProcessor(
             $this->processor->reveal(),
             $this->operationEventDispatcher->reveal(),
             $this->eventHandler->reveal(),
@@ -51,7 +51,7 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
     }
 
     /** @test */
-    public function it_dispatches_pre_events(): void
+    public function it_dispatches_post_events_with_operation_as_string(): void
     {
         $data = new \stdClass();
 
@@ -61,17 +61,18 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
         $this->processor->process($data, $operation, $context)->willReturn($data)->shouldBeCalled();
 
         $preEvent = new OperationEvent();
+        $postEvent = new OperationEvent();
 
-        $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->willReturn($preEvent)->shouldBeCalled();
+        $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context)->willReturn($postEvent)->shouldBeCalled();
 
-        $this->eventHandler->handlePreProcessEvent($preEvent, $context, 'index')->willReturn(null)->shouldBeCalled();
+        $this->eventHandler->handlePostProcessEvent($postEvent, $context)->willReturn(null)->shouldBeCalled();
 
-        $result = $this->dispatchPreWriteEventProcessor->process($data, $operation, $context);
+        $result = $this->dispatchPostWriteEventProcessor->process($data, $operation, $context);
         $this->assertEquals($data, $result);
     }
 
     /** @test */
-    public function it_does_not_call_processor_if_pre_event_returns_a_response(): void
+    public function it_returns_post_event_response(): void
     {
         $data = new \stdClass();
         $response = new Response();
@@ -79,15 +80,15 @@ final class DispatchPreWriteEventProcessorTest extends TestCase
         $operation = new Create(processor: '\App\Processor');
         $context = new Context();
 
-        $this->processor->process($data, $operation, $context)->willReturn($data)->shouldNotBeCalled();
+        $this->processor->process($data, $operation, $context)->willReturn($data)->shouldBeCalled();
 
-        $preEvent = new OperationEvent();
+        $postEvent = new OperationEvent();
 
-        $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context)->willReturn($preEvent)->shouldBeCalled();
+        $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context)->willReturn($postEvent)->shouldBeCalled();
 
-        $this->eventHandler->handlePreProcessEvent($preEvent, $context, 'index')->willReturn($response)->shouldBeCalled();
+        $this->eventHandler->handlePostProcessEvent($postEvent, $context)->willReturn($response)->shouldBeCalled();
 
-        $result = $this->dispatchPreWriteEventProcessor->process($data, $operation, $context);
+        $result = $this->dispatchPostWriteEventProcessor->process($data, $operation, $context);
         $this->assertEquals($response, $result);
     }
 }

@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\EventDispatcher\State;
 
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Resource\Context\Context;
-use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
@@ -24,7 +22,7 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
 /**
  * @experimental
  */
-final class DispatchPreWriteEventProcessor implements ProcessorInterface
+final class DispatchPostWriteEventProcessor implements ProcessorInterface
 {
     public function __construct(
         private ProcessorInterface $processor,
@@ -38,18 +36,19 @@ final class DispatchPreWriteEventProcessor implements ProcessorInterface
      */
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
-        $operationEvent = $this->operationEventDispatcher->dispatchPreEvent($data, $operation, $context);
+        $data = $this->processor->process($data, $operation, $context);
 
-        $eventResponse = $this->eventHandler->handlePreProcessEvent(
+        $operationEvent = $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context);
+
+        $eventResponse = $this->eventHandler->handlePostProcessEvent(
             $operationEvent,
             $context,
-            $operation instanceof CreateOperationInterface ? ResourceActions::INDEX : null,
         );
 
         if (null !== $eventResponse) {
             return $eventResponse;
         }
 
-        return $this->processor->process($data, $operation, $context);
+        return $data;
     }
 }
