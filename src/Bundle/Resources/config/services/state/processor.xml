@@ -22,7 +22,7 @@
         </service>
         <service id="sylius.state_processor.main" alias="sylius.state_processor.respond" />
 
-        <service id="sylius.state_processor.write" class="Sylius\Component\Resource\src\State\Processor\WriteProcessor" decorates="sylius.state_processor.main" decoration-priority="100">
+        <service id="sylius.state_processor.write" class="Sylius\Resource\State\Processor\WriteProcessor" decorates="sylius.state_processor.main" decoration-priority="100">
             <argument type="service" id=".inner" />
             <argument type="service" id="sylius.state_processor.locator" />
         </service>
