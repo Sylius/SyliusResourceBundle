@@ -20,7 +20,7 @@
 
         <service id="sylius.state_provider.factory" class="Sylius\Resource\State\Provider\FactoryProvider" decorates="sylius.state_provider.read" decoration-priority="500">
             <argument type="service" id=".inner" />
-            <argument type="service" id="sylius.state.factory" />
+            <argument type="service" id="sylius.state_factory" />
         </service>
 
         <service id="sylius.state_provider.dispatch_post_read_event" class="Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostReadEventProvider" decorates="sylius.state_provider.read" decoration-priority="400"
