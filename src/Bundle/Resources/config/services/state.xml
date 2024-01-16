@@ -23,9 +23,9 @@
         <service id="sylius.state_provider.locator" class="Sylius\Resource\State\Provider">
             <argument type="tagged_locator" tag="sylius.state_provider" />
         </service>
-        <service id="Sylius\Resource\State\ProviderInterface" alias="sylius.state.provider" />
+        <service id="Sylius\Resource\State\ProviderInterface" alias="sylius.state_provider" />
 
-        <service id="sylius.state.factory" class="Sylius\Resource\State\Factory">
+        <service id="sylius.state_factory" class="Sylius\Resource\State\Factory">
             <argument type="tagged_locator" tag="sylius.resource_factory" />
             <argument type="service" id="sylius.expression_language.argument_parser.factory" />
         </service>
