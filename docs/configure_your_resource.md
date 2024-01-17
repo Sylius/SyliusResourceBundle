@@ -40,8 +40,8 @@ It will configure your entity as a Sylius resource.
 ```php
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 class Book implements ResourceInterface

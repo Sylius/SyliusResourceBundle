@@ -66,9 +66,9 @@ Use it on your operation.
 
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 #[Show(
