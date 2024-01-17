@@ -31,7 +31,7 @@
             <argument type="service" id="sylius.event_handler.operation" />
         </service>
 
-        <service id="sylius.state.processor.bulk_aware" class="Sylius\Resource\State\Processor\BulkAwareProcessor" decorates="sylius.state_processor.locator" decoration-priority="100">
+        <service id="sylius.state_processor.bulk_aware" class="Sylius\Resource\State\Processor\BulkAwareProcessor" decorates="sylius.state_processor.locator" decoration-priority="100">
             <argument type="service" id=".inner" />
         </service>
     </services>

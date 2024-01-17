@@ -29,7 +29,7 @@
             <argument type="tagged_locator" tag="sylius.resource_factory" />
             <argument type="service" id="sylius.expression_language.argument_parser.factory" />
         </service>
-        <service id="Sylius\Resource\State\FactoryInterface" alias="sylius.state.factory" />
+        <service id="Sylius\Resource\State\FactoryInterface" alias="sylius.state_factory" />
 
         <service id="sylius.state_responder" class="Sylius\Resource\State\Responder">
             <argument type="tagged_locator" tag="sylius.state_responder" />
