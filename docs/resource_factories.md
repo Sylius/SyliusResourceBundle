@@ -240,14 +240,6 @@ namespace App\Entity\Book;
 use App\Factory\BookFactory;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Create;
-
-#[AsResource]
-#[Create(
-    factory: [BookFactory::class, 'create'], 
-)]
-use App\Factory\BookFactory;
-use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Model\ResourceInterface
 
 #[AsResource]
