@@ -18,7 +18,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Resource\Doctrine\Persistence\Exception\ExistingResourceException;
+use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -54,7 +54,7 @@ class InMemoryRepository implements RepositoryInterface
     }
 
     /**
-     * @throws ExistingResourceException
+     * @throws ResourceExistsException
      * @throws UnexpectedTypeException
      */
     public function add(ResourceInterface $resource): void
@@ -64,7 +64,7 @@ class InMemoryRepository implements RepositoryInterface
         }
 
         if (in_array($resource, $this->findAll(), true)) {
-            throw new ExistingResourceException();
+            throw new ResourceExistsException();
         }
 
         $this->arrayObject->append($resource);

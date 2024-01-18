@@ -17,7 +17,7 @@ use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use spec\Sylius\Component\Resource\Fixtures\SampleBookResourceInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Resource\Doctrine\Persistence\Exception\ExistingResourceException;
+use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
@@ -58,7 +58,7 @@ final class InMemoryRepositorySpec extends ObjectBehavior
     function it_throws_existing_resource_exception_on_adding_a_resource_which_is_already_in_repository(SampleBookResourceInterface $bike): void
     {
         $this->add($bike);
-        $this->shouldThrow(ExistingResourceException::class)->during('add', [$bike]);
+        $this->shouldThrow(ResourceExistsException::class)->during('add', [$bike]);
     }
 
     function it_removes_a_resource(SampleBookResourceInterface $shirt): void

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Doctrine\Persistence\Exception;
 
-class ExistingResourceException extends \Exception
+class ResourceExistsException extends \RuntimeException implements ExceptionInterface
 {
     public function __construct()
     {
@@ -21,4 +21,4 @@ class ExistingResourceException extends \Exception
     }
 }
 
-class_alias(ExistingResourceException::class, \Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class);
+class_alias(ResourceExistsException::class, \Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class);

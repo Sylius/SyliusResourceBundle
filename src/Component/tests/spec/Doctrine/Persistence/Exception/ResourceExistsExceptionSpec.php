@@ -15,7 +15,7 @@ namespace spec\Sylius\Resource\Doctrine\Persistence\Exception;
 
 use PhpSpec\ObjectBehavior;
 
-final class ExistingResourceExceptionSpec extends ObjectBehavior
+final class ResourceExistsExceptionSpec extends ObjectBehavior
 {
     function it_extends_exception(): void
     {

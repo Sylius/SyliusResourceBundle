@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Repository\Exception;
 
-class_exists(\Sylius\Resource\Doctrine\Persistence\Exception\ExistingResourceException::class);
+class_exists(\Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException::class);
 
 if (false) {
-    class ExistingResourceException extends \Sylius\Resource\Doctrine\Persistence\Exception\ExistingResourceException
+    class ExistingResourceException extends \Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException
     {
     }
 }
