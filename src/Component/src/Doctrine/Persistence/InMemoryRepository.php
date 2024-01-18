@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Doctrine\Persistence;
 
-use ArrayObject;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
@@ -50,7 +49,7 @@ class InMemoryRepository implements RepositoryInterface
 
         $this->interface = $interface;
         $this->accessor = PropertyAccess::createPropertyAccessor();
-        $this->arrayObject = new ArrayObject();
+        $this->arrayObject = new \ArrayObject();
     }
 
     /**

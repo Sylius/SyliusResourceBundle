@@ -14,12 +14,23 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Doctrine\Persistence\Exception;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Doctrine\Persistence\Exception\ExceptionInterface;
 
 final class ResourceExistsExceptionSpec extends ObjectBehavior
 {
     function it_extends_exception(): void
     {
         $this->shouldHaveType(\Exception::class);
+    }
+
+    function it_extends_runtime_exception(): void
+    {
+        $this->shouldHaveType(\RuntimeException::class);
+    }
+
+    function it_implements_exception_interface(): void
+    {
+        $this->shouldImplement(ExceptionInterface::class);
     }
 
     function it_has_a_message(): void
