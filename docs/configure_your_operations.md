@@ -35,7 +35,6 @@ There are some basic CRUD operations and more.
 ```php
 namespace App\Entity;
 
-
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Model\ResourceInterface;
