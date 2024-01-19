@@ -13,35 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Repository;
 
-use Doctrine\Persistence\ObjectRepository;
-use Sylius\Resource\Model\ResourceInterface;
+interface_exists(\Sylius\Resource\Doctrine\Persistence\RepositoryInterface::class);
 
-/**
- * @template T of ResourceInterface
- *
- * @extends ObjectRepository<T>
- */
-interface RepositoryInterface extends ObjectRepository
-{
-    public const ORDER_ASCENDING = 'ASC';
-
-    public const ORDER_DESCENDING = 'DESC';
-
+if (false) {
     /**
-     * @param array<string, mixed> $criteria
-     * @param array<string, string> $sorting
-     *
-     * @return iterable<T>
+     * @inheritDoc
      */
-    public function createPaginator(array $criteria = [], array $sorting = []): iterable;
-
-    /**
-     * @param T $resource
-     */
-    public function add(ResourceInterface $resource): void;
-
-    /**
-     * @param T $resource
-     */
-    public function remove(ResourceInterface $resource): void;
+    interface RepositoryInterface extends \Sylius\Resource\Doctrine\Persistence\RepositoryInterface
+    {
+    }
 }

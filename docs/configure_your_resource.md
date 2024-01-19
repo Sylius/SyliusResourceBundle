@@ -40,8 +40,8 @@ It will configure your entity as a Sylius resource.
 ```php
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 class Book implements ResourceInterface
@@ -78,8 +78,8 @@ It defines the resource name.
 ```php
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource(name: 'cart')]
 class Order implements ResourceInterface
@@ -107,8 +107,8 @@ It defines the resource plural name.
 ```php
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource(pluralName: 'library')]
 class Book implements ResourceInterface
@@ -124,7 +124,7 @@ As an example, on an `index` operation these Twig variables will be available:
 | Name              | Type                                      |
 |-------------------|-------------------------------------------|
 | resources         | Pagerfanta\Pagerfanta                     |
-| library           | APagerfanta\Pagerfanta                    |
+| library           | Pagerfanta\Pagerfanta                     |
 | operation         | Sylius\Resource\Metadata\Index            |
 | resource_metadata | Sylius\Resource\Metadata\ResourceMetadata |
 | app               | Symfony\Bridge\Twig\AppVariable           |
@@ -136,8 +136,8 @@ It defines the simple vars that you can use on your templates.
 ```php
 namespace App\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource(vars: ['header' => 'Library', 'subheader' => 'Managing your library'])]
 class Book implements ResourceInterface

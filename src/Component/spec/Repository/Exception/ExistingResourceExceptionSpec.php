@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Repository\Exception;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 
 final class ExistingResourceExceptionSpec extends ObjectBehavior
 {
@@ -22,8 +23,8 @@ final class ExistingResourceExceptionSpec extends ObjectBehavior
         $this->shouldHaveType(\Exception::class);
     }
 
-    function it_has_a_message(): void
+    function it_should_be_an_alias_of_resource_exists_exception(): void
     {
-        $this->getMessage()->shouldReturn('Given resource already exists in the repository.');
+        $this->shouldHaveType(ResourceExistsException::class);
     }
 }

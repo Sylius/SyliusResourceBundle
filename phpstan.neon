@@ -29,6 +29,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/Generator/*
         - %currentWorkingDirectory%/src/Component/Model/*
         - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
+        - %currentWorkingDirectory%/src/Component/Repository/*
         - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/Storage/*
         - %currentWorkingDirectory%/src/Component/Tests/*
@@ -57,8 +58,8 @@ parameters:
         - '/Method Sylius\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
-        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
-        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
+        - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
+        - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
         - '/Method Symfony\\Component\\Routing\\RouteCollection::add\(\) invoked with 3 parameters, 2 required\./'
         - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
         - '/Parameter \#1 \$currentPage of method Pagerfanta\\Pagerfanta<mixed>::setCurrentPage\(\) expects int<1, max>, int given\./'

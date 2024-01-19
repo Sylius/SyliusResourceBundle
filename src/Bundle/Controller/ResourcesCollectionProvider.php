@@ -17,7 +17,7 @@ use Hateoas\Configuration\Route;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Pagerfanta\Pagerfanta;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class ResourcesCollectionProvider implements ResourcesCollectionProviderInterface
 {

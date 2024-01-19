@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Sylius\Resource\Doctrine\Persistence\Exception;
 
-use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Exception\ExceptionInterface as BaseExceptionInterface;
 
-interface BookRepositoryInterface extends RepositoryInterface
+interface ExceptionInterface extends BaseExceptionInterface
 {
 }
