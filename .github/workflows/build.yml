@@ -27,8 +27,6 @@ jobs:
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
                 exclude:
-                    - php: "8.0"
-                      collections: "^2.0"
                     - php: "8.1"
                       collections: "^2.0"
                       persistence: "^2.0"
