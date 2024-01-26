@@ -58,7 +58,7 @@ EOT
         $this->addArgument('operation', InputArgument::OPTIONAL, 'Operation to debug');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): ?int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string|null $resource */
         $resource = $input->getArgument('resource');
