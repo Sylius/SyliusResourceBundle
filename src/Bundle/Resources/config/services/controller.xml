@@ -15,6 +15,14 @@
     <services>
         <defaults public="true" />
 
+        <service id="sylius.main_controller" class="Sylius\Resource\Symfony\Controller\MainController" public="false">
+            <argument type="service" id="sylius.resource_metadata_operation.initiator.http_operation" />
+            <argument type="service" id="sylius.context.initiator.request_context" />
+            <argument type="service" id="sylius.state_provider.main" />
+            <argument type="service" id="sylius.state_processor.main" />
+            <tag name="controller.service_arguments" />
+        </service>
+
         <service id="sylius.resource_controller.parameters_parser" class="Sylius\Bundle\ResourceBundle\Controller\ParametersParser" public="false">
             <argument type="service" id="service_container" />
             <argument type="service" id="sylius.expression_language" />

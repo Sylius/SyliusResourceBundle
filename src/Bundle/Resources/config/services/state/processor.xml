@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Sylius Sp. z o.o.
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="processor/write.xml" />
+    </imports>
+
+    <services>
+        <service id="sylius.state_processor.respond" class="Sylius\Resource\State\Processor\RespondProcessor">
+            <argument type="service" id="sylius.state_responder" />
+        </service>
+        <service id="sylius.state_processor.main" alias="sylius.state_processor.respond" />
+
+        <service id="sylius.state_processor.write" class="Sylius\Resource\State\Processor\WriteProcessor" decorates="sylius.state_processor.main" decoration-priority="100">
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.state_processor.locator" />
+        </service>
+
+        <service id="sylius.state_processor.serialize" class="Sylius\Resource\Symfony\Serializer\State\SerializeProcessor" decorates="sylius.state_processor.main" decoration-priority="200">
+            <argument type="service" id=".inner" />
+            <argument type="service" id="serializer" on-invalid="null" />
+        </service>
+
+        <service id="sylius.state_processor.flash" class="Sylius\Resource\State\Processor\FlashProcessor" decorates="sylius.state_processor.main" decoration-priority="300">
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.helper.flash" />
+        </service>
+    </services>
+</container>

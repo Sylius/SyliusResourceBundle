@@ -55,6 +55,7 @@ final class TwigResponder implements ResponderInterface
 
         if (
             $isValid &&
+            !$request->isMethodSafe() &&
             $operation instanceof HttpOperation &&
             ($operation instanceof UpdateOperationInterface || $operation instanceof CreateOperationInterface)
         ) {

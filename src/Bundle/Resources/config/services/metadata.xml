@@ -102,6 +102,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory" />
         </service>
+        <service id="Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface" alias="sylius.resource_metadata_operation.initiator.http_operation" />
 
         <service id="sylius.repository_argument_resolver.request" class="Sylius\Resource\Symfony\Request\RepositoryArgumentResolver" />
     </services>
