@@ -15,6 +15,7 @@
     <imports>
         <import resource="state/processor.xml" />
         <import resource="state/provider.xml" />
+        <import resource="state/**/*.xml" />
     </imports>
 
     <services>
