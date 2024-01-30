@@ -23,19 +23,20 @@ parameters:
         - %currentWorkingDirectory%/src/legacy/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/legacy/Bundle/spec/*
         - %currentWorkingDirectory%/src/legacy/Bundle/Tests/*
+
         - %currentWorkingDirectory%/src/legacy/Component/Annotation/*
         - %currentWorkingDirectory%/src/legacy/Component/Factory/*
         - %currentWorkingDirectory%/src/legacy/Component/Metadata/*
         - %currentWorkingDirectory%/src/legacy/Component/Generator/*
-        - %currentWorkingDirectory%/src/legacy/Component/legacyTests/*
+        - %currentWorkingDirectory%/src/legacy/Component/Tests/*
         - %currentWorkingDirectory%/src/legacy/Component/Model/*
         - %currentWorkingDirectory%/src/legacy/Component/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/legacy/Component/Repository/*
         - %currentWorkingDirectory%/src/legacy/Component/spec/*
         - %currentWorkingDirectory%/src/legacy/Component/Storage/*
-        - %currentWorkingDirectory%/src/legacy/Component/tests/*
         - %currentWorkingDirectory%/src/legacy/Component/vendor/*
 
+        - %currentWorkingDirectory%/src/new-architecture/Tests/*
     ignoreErrors:
         - '/Call to method getArguments\(\) on an unknown class ReflectionAttribute./'
         - '/Call to method isChangeTrackingDeferredExplicit\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata./'
