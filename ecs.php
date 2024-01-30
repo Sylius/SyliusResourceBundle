@@ -32,10 +32,7 @@ file that was distributed with this source code.',
         InlineDocCommentDeclarationSniff::class . '.MissingVariable',
         VisibilityRequiredFixer::class => ['*Spec.php'],
         MethodArgumentSpaceFixer::class => ['*/BoardGameBlog/*', '*/Subscription/*'],
-        'src/Bundle/Controller/ControllerTrait.php',
-        'src/Bundle/EventListener/ODMMappedSuperClassSubscriber.php', // hot-fix to fix the build
         'src/Component/vendor/*',
-        'src/Component/Reflection/ClassReflection.php',
         '**/var/*',
     ]);
 };

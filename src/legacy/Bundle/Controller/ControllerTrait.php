@@ -1,13 +1,15 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ * This file is part of the Sylius package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Sylius Sp. z o.o.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
@@ -39,8 +41,6 @@ use Symfony\Component\WebLink\GenericLinkProvider;
 
 /**
  * Common features needed in controllers.
- *
- * @author Fabien Potencier <fabien@symfony.com>
  *
  * @internal
  *
@@ -237,7 +237,7 @@ trait ControllerTrait
         string $view,
         array $parameters = [],
         Response $response = null,
-        ?int $responseCode = null
+        ?int $responseCode = null,
     ): Response {
         if ($this->container->has('templating')) {
             @trigger_error('Using the "templating" service is deprecated since Symfony 4.3 and will be removed in 5.0; use Twig instead.', \E_USER_DEPRECATED);
@@ -425,7 +425,8 @@ trait ControllerTrait
     {
         if (!$this->container->has('messenger.default_bus')) {
             $message = class_exists(Envelope::class) ? 'You need to define the "messenger.default_bus" configuration option.' : 'Try running "composer require symfony/messenger".';
-            throw new \LogicException('The message bus is not enabled in your application. '.$message);
+
+            throw new \LogicException('The message bus is not enabled in your application. ' . $message);
         }
 
         return $this->container->get('messenger.default_bus')->dispatch($message, $stamps);
