@@ -2,18 +2,13 @@ suites:
     Bundle:
         namespace: Sylius\Bundle\ResourceBundle
         psr4_prefix: Sylius\Bundle\ResourceBundle
-        src_path: src/Bundle
-        spec_path: src/Bundle
+        src_path: src/legacy/Bundle
+        spec_path: src/legacy/Bundle
     Component:
         namespace: Sylius\Component\Resource
         psr4_prefix: Sylius\Component\Resource
-        src_path: src/Component
-        spec_path: src/Component
-    Package:
-        namespace: Sylius\Resource
-        psr4_prefix: Sylius\Resource
-        src_path: src/Component/src
-        spec_path: src/Component/tests
+        src_path: src/legacy/Component
+        spec_path: src/legacy/Component
 
 extensions:
     Akeneo\SkipExampleExtension: ~

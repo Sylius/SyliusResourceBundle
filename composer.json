@@ -100,17 +100,17 @@
     },
     "autoload": {
         "psr-4": {
-            "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
-            "Sylius\\Component\\Resource\\": "src/Component/",
-            "Sylius\\Resource\\": "src/Component/src/"
+            "Sylius\\Bundle\\ResourceBundle\\": "src/legacy/Bundle/",
+            "Sylius\\Component\\Resource\\": "src/legacy/Component/",
+            "Sylius\\Resource\\": "src/new-architecture/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
+            "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/legacy/Bundle/spec/",
             "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/Bundle/",
-            "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
-            "Sylius\\Component\\Resource\\Tests\\": "src/Component/legacyTests/",
+            "Sylius\\Component\\Resource\\spec\\": "src/legacy/Component/spec/",
+            "Sylius\\Component\\Resource\\Tests\\": "src/legacy/Component/legacyTests/",
             "App\\": "tests/Application/src/"
         }
     },

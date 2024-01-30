@@ -8,23 +8,23 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
-            <directory name="src/Bundle/Doctrine/ODM" />
-            <directory name="src/Bundle/spec" />
-            <directory name="src/Component/legacyTests" />
-            <directory name="src/Component/spec" />
-            <directory name="src/Component/tests" />
-            <directory name="src/Component/vendor" />
-            <file name="src/Component/Model/ArchivableTrait.php" />
-            <file name="src/Component/Model/TimestampableTrait.php" />
-            <file name="src/Component/Model/ToggleableTrait.php" />
-            <file name="src/Component/Model/TranslatableTrait.php" />
-            <file name="src/Bundle/Controller/ControllerTrait.php" />
-            <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
-            <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
-            <file name="src/Bundle/EventListener/ODM*.php" />
-            <file name="src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php" />
-            <file name="src/Bundle/Routing/RoutesAttributesLoader.php" />
-            <file name="src/Bundle/Routing/CrudRoutesAttributesLoader.php" />
+            <directory name="src/legacy/Bundle/Doctrine/ODM" />
+            <directory name="src/legacy/Bundle/spec" />
+            <directory name="src/new-architecture/Tests" />
+            <directory name="src/legacy/Component/spec" />
+            <directory name="src/legacy/Component/Tests" />
+            <directory name="src/legacy/Component/vendor" />
+            <file name="src/legacy/Component/Model/ArchivableTrait.php" />
+            <file name="src/legacy/Component/Model/TimestampableTrait.php" />
+            <file name="src/legacy/Component/Model/ToggleableTrait.php" />
+            <file name="src/legacy/Component/Model/TranslatableTrait.php" />
+            <file name="src/legacy/Bundle/Controller/ControllerTrait.php" />
+            <file name="src/legacy/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
+            <file name="src/legacy/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
+            <file name="src/legacy/Bundle/EventListener/ODM*.php" />
+            <file name="src/legacy/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php" />
+            <file name="src/legacy/Bundle/Routing/RoutesAttributesLoader.php" />
+            <file name="src/legacy/Bundle/Routing/CrudRoutesAttributesLoader.php" />
         </ignoreFiles>
     </projectFiles>
 
@@ -34,8 +34,8 @@
                 <referencedFunction name="Doctrine\Persistence\ManagerRegistry::getManagerForClass" />
                 <referencedFunction name="Doctrine\Persistence\ObjectManager::getClassMetadata" />
                 <referencedFunction name="ReflectionClass::getAttributes" />
-                <file name="src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/legacy/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </ArgumentTypeCoercion>
 
@@ -54,72 +54,72 @@
 
         <DeprecatedTrait>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Controller/ResourceController.php" />
+                <file name="src/legacy/Bundle/Controller/ResourceController.php" />
             </errorLevel>
         </DeprecatedTrait>
 
         <DuplicateClass>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Controller/Parameters.php" />
+                <file name="src/legacy/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </DuplicateClass>
 
         <InternalMethod>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Controller/ParametersParser.php" />
-                <file name="src/Bundle/Controller/RequestConfiguration.php" />
-                <file name="src/Bundle/Controller/ResourceController.php" />
-                <file name="src/Bundle/Controller/Workflow.php" />
-                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
-                <file name="src/Component/src/Symfony/Workflow/OperationStateMachine.php" />
+                <file name="src/legacy/Bundle/Controller/ParametersParser.php" />
+                <file name="src/legacy/Bundle/Controller/RequestConfiguration.php" />
+                <file name="src/legacy/Bundle/Controller/ResourceController.php" />
+                <file name="src/legacy/Bundle/Controller/Workflow.php" />
+                <file name="src/legacy/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/new-architecture/Symfony/Workflow/OperationStateMachine.php" />
             </errorLevel>
         </InternalMethod>
 
         <InvalidArgument>
             <errorLevel type="suppress">
                 <referencedFunction name="Symfony\Component\DependencyInjection\Alias::setDeprecated" />
-                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
-                <file name="src/Component/src/Reflection/ClassReflection.php" />
+                <file name="src/legacy/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/new-architecture/Reflection/ClassReflection.php" />
             </errorLevel>
         </InvalidArgument>
 
         <InvalidReturnStatement>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
-                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/legacy/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </InvalidReturnStatement>
 
         <InvalidReturnType>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </InvalidReturnType>
 
         <LessSpecificImplementedReturnType>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </LessSpecificImplementedReturnType>
 
         <LessSpecificReturnStatement>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </LessSpecificReturnStatement>
 
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
-                <file name="src/Bundle/Storage/CookieStorage.php" />
-                <file name="src/Bundle/Controller/Parameters.php" />
+                <file name="src/legacy/Bundle/Doctrine/ResourceMappingDriverChain.php" />
+                <file name="src/legacy/Bundle/Storage/CookieStorage.php" />
+                <file name="src/legacy/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </MethodSignatureMismatch>
 
         <MissingParamType>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Routing/ResourceLoader.php" />
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/legacy/Bundle/Routing/ResourceLoader.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </MissingParamType>
 
@@ -131,11 +131,11 @@
 
         <MoreSpecificImplementedParamType>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Doctrine/ResourceMappingDriverChain.php" />
-                <file name="src/Bundle/Form/DataTransformer/RecursiveTransformer.php" />
-                <file name="src/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php" />
-                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
-                <file name="src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php" />
+                <file name="src/legacy/Bundle/Doctrine/ResourceMappingDriverChain.php" />
+                <file name="src/legacy/Bundle/Form/DataTransformer/RecursiveTransformer.php" />
+                <file name="src/legacy/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php" />
+                <file name="src/legacy/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/legacy/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php" />
             </errorLevel>
         </MoreSpecificImplementedParamType>
 
@@ -147,30 +147,30 @@
 
         <PossiblyFalseOperand>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Reflection/ClassInfoTrait.php" />
+                <file name="src/new-architecture/Reflection/ClassInfoTrait.php" />
             </errorLevel>
         </PossiblyFalseOperand>
 
         <PossiblyNullArgument>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/legacy/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </PossiblyNullArgument>
 
         <PossiblyNullReference>
             <errorLevel type="suppress">
-                <file name="src/Bundle/DependencyInjection/Configuration.php" />
-                <file name="src/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
-                <file name="src/Bundle/Routing/Configuration.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/Configuration.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
+                <file name="src/legacy/Bundle/Routing/Configuration.php" />
             </errorLevel>
         </PossiblyNullReference>
-        
+
         <PossiblyUndefinedArrayOffset>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Controller/ParametersParser.php" />
-                <file name="src/Bundle/DependencyInjection/Compiler/RegisterResourceRepositoryPass.php" />
-                <file name="src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php" />
-                <file name="src/Bundle/Form/Type/FixedCollectionType.php" />
+                <file name="src/legacy/Bundle/Controller/ParametersParser.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/Compiler/RegisterResourceRepositoryPass.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php" />
+                <file name="src/legacy/Bundle/Form/Type/FixedCollectionType.php" />
             </errorLevel>
         </PossiblyUndefinedArrayOffset>
 
@@ -187,18 +187,18 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
-                <file name="src/Bundle/Validator/Constraints/Enabled.php" />
-                <file name="src/Bundle/Validator/Constraints/Disabled.php" />
+                <file name="src/legacy/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
+                <file name="src/legacy/Bundle/Validator/Constraints/Enabled.php" />
+                <file name="src/legacy/Bundle/Validator/Constraints/Disabled.php" />
             </errorLevel>
         </PropertyNotSetInConstructor>
 
         <RedundantConditionGivenDocblockType>
             <errorLevel type="suppress">
-                <file name="src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
+                <file name="src/legacy/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
             </errorLevel>
         </RedundantConditionGivenDocblockType>
-        
+
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
                 <directory name="src" />
@@ -222,16 +222,16 @@
 
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
-                <directory name="src/Component/Annotation" />
-                <directory name="src/Component/Factory" />
-                <directory name="src/Component/Generator" />
-                <directory name="src/Component/Metadata" />
-                <directory name="src/Component/Model" />
-                <directory name="src/Component/Reflection" />
-                <directory name="src/Component/Repository" />
-                <directory name="src/Component/Storage" />
-                <file name="src/Bundle/Event/ResourceControllerEvent.php" />
-                <file name="src/Component/src/Symfony/Request/State/TwigResponder.php" />
+                <directory name="src/legacy/Component/Annotation" />
+                <directory name="src/legacy/Component/Factory" />
+                <directory name="src/legacy/Component/Generator" />
+                <directory name="src/legacy/Component/Metadata" />
+                <directory name="src/legacy/Component/Model" />
+                <directory name="src/legacy/Component/Reflection" />
+                <directory name="src/legacy/Component/Repository" />
+                <directory name="src/legacy/Component/Storage" />
+                <file name="src/legacy/Bundle/Event/ResourceControllerEvent.php" />
+                <file name="src/new-architecture/Symfony/Request/State/TwigResponder.php" />
             </errorLevel>
         </TypeDoesNotContainType>
 
@@ -254,26 +254,26 @@
 
         <UndefinedInterfaceMethod>
             <errorLevel type="suppress">
-                <file name="src/Bundle/DependencyInjection/Configuration.php" />
-                <file name="src/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
-                <file name="src/Bundle/Routing/Configuration.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/Configuration.php" />
+                <file name="src/legacy/Bundle/DependencyInjection/PagerfantaConfiguration.php" />
+                <file name="src/legacy/Bundle/Routing/Configuration.php" />
             </errorLevel>
         </UndefinedInterfaceMethod>
 
         <UnrecognizedStatement>
             <errorLevel type="suppress">
-                <directory name="src/Component/Factory" />
-                <directory name="src/Component/Generator" />
-                <directory name="src/Component/Metadata" />
-                <directory name="src/Component/Model" />
-                <directory name="src/Component/Repository" />
-                <directory name="src/Component/Storage" />
+                <directory name="src/legacy/Component/Factory" />
+                <directory name="src/legacy/Component/Generator" />
+                <directory name="src/legacy/Component/Metadata" />
+                <directory name="src/legacy/Component/Model" />
+                <directory name="src/legacy/Component/Repository" />
+                <directory name="src/legacy/Component/Storage" />
             </errorLevel>
         </UnrecognizedStatement>
 
         <UnsupportedReferenceUsage>
             <errorLevel type="suppress">
-                <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/new-architecture/Doctrine/Persistence/InMemoryRepository.php" />
             </errorLevel>
         </UnsupportedReferenceUsage>
     </issueHandlers>

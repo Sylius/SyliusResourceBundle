@@ -57,7 +57,7 @@ jobs:
                     composer global config --no-plugins allow-plugins.symfony/flex true
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
-                    (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
+                    (cd src/legacy/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
 
             -
                 name: Restrict Pagerfanta version
@@ -65,7 +65,7 @@ jobs:
                 run: |
                     composer require "babdev/pagerfanta-bundle:${{ matrix.pagerfanta }}" --no-update --no-scripts
                     composer require "pagerfanta/pagerfanta:${{ matrix.pagerfanta }}" --dev --no-update --no-scripts
-                    (cd src/Component && composer require "pagerfanta/core:${{ matrix.pagerfanta }}" --no-update --no-scripts)
+                    (cd src/legacy/Component && composer require "pagerfanta/core:${{ matrix.pagerfanta }}" --no-update --no-scripts)
 
             -
                 name: Restrict twig/twig version
@@ -86,7 +86,7 @@ jobs:
                 name: Install dependencies
                 run: |
                     composer update --no-scripts
-                    (cd src/Component && composer update --no-scripts)
+                    (cd src/legacy/Component && composer update --no-scripts)
 
             -
                 name: Prepare test application
@@ -102,13 +102,13 @@ jobs:
                 name: Run analysis
                 run: |
                     composer analyse
-                    (cd src/Component && composer validate --strict)
+                    (cd src/legacy/Component && composer validate --strict)
 
             -
                 name: Run Phpspec tests
                 run: |
                     vendor/bin/phpspec run --ansi --no-interaction
-                    (cd src/Component && vendor/bin/phpspec run --no-interaction)
+                    (cd src/legacy/Component && vendor/bin/phpspec run --no-interaction)
 
             -
                 name: Run PHPUnit tests
