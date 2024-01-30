@@ -36,6 +36,7 @@ parameters:
         - %currentWorkingDirectory%/src/legacy/Component/Storage/*
         - %currentWorkingDirectory%/src/legacy/Component/vendor/*
 
+        - %currentWorkingDirectory%/src/new-architecture/spec/*
         - %currentWorkingDirectory%/src/new-architecture/Tests/*
     ignoreErrors:
         - '/Call to method getArguments\(\) on an unknown class ReflectionAttribute./'
