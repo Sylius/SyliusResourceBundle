@@ -9,6 +9,11 @@ suites:
         psr4_prefix: Sylius\Component\Resource
         src_path: src/legacy/Component
         spec_path: src/legacy/Component
+    Package:
+        namespace: Sylius\Resource
+        psr4_prefix: Sylius\Resource
+        src_path: src/new-architecture/
+        spec_path: src/new-architecture/
 
 extensions:
     Akeneo\SkipExampleExtension: ~

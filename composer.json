@@ -110,7 +110,9 @@
             "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/legacy/Bundle/spec/",
             "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/Bundle/",
             "Sylius\\Component\\Resource\\spec\\": "src/legacy/Component/spec/",
-            "Sylius\\Component\\Resource\\Tests\\": "src/legacy/Component/legacyTests/",
+            "Sylius\\Component\\Resource\\Tests\\": "src/legacy/Component/Tests/",
+            "Sylius\\Resource\\spec\\": "src/new-architecture/spec/",
+            "Sylius\\Resource\\Tests\\": "src/new-architecture/Tests/",
             "App\\": "tests/Application/src/"
         }
     },
