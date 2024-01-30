@@ -10,10 +10,11 @@
             <directory name="vendor" />
             <directory name="src/legacy/Bundle/Doctrine/ODM" />
             <directory name="src/legacy/Bundle/spec" />
-            <directory name="src/new-architecture/Tests" />
             <directory name="src/legacy/Component/spec" />
             <directory name="src/legacy/Component/Tests" />
             <directory name="src/legacy/Component/vendor" />
+            <directory name="src/new-architecture/spec" />
+            <directory name="src/new-architecture/Tests" />
             <file name="src/legacy/Component/Model/ArchivableTrait.php" />
             <file name="src/legacy/Component/Model/TimestampableTrait.php" />
             <file name="src/legacy/Component/Model/ToggleableTrait.php" />
