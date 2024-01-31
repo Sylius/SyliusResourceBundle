@@ -54,6 +54,9 @@ abstract class AbstractDriver implements DriverInterface
         if ($metadata->hasClass('repository')) {
             $container->setParameter(sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName()), $metadata->getClass('repository'));
         }
+        if ($metadata->hasClass('form')) {
+            $container->setParameter(sprintf('%s.form.%s.class', $metadata->getApplicationName(), $metadata->getName()), $metadata->getClass('form'));
+        }
     }
 
     protected function addController(ContainerBuilder $container, MetadataInterface $metadata): void
