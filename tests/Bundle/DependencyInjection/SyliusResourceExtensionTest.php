@@ -17,6 +17,7 @@ use App\Entity\Book;
 use App\Entity\BookTranslation;
 use App\Entity\ComicBook;
 use App\Factory\BookFactory;
+use App\Form\Type\BookType;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
@@ -41,6 +42,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
                 'app.book' => [
                     'classes' => [
                         'model' => Book::class,
+                        'form' => BookType::class,
                     ],
                     'translation' => [
                         'classes' => [
@@ -59,6 +61,8 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasParameter('app.model.book.class', Book::class);
         $this->assertContainerBuilderHasParameter('app.model.book_translation.class', BookTranslation::class);
+
+        $this->assertContainerBuilderHasParameter('app.form.book.class', BookType::class);
     }
 
     /**
