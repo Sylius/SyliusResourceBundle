@@ -19,13 +19,16 @@ jobs:
             matrix:
                 php: ["8.1", "8.2", "8.3"]
                 pagerfanta: [""]
-                symfony: ["^5.4", "~6.0.0", "~6.4.0", "~7.0.0"]
+                symfony: ["^5.4", "~6.0.0", "~6.4.0"]
                 persistence: ["^2.0", "^3.0"]
                 collections: ["^1.8", "^2.0"]
                 include:
                     - php: "8.0"
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
+                    - php: "8.2"
+                      pagerfanta: ""
+                      symfony: "~7.0.0"
                 exclude:
                     - php: "8.1"
                       collections: "^2.0"
