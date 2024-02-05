@@ -80,6 +80,7 @@ services:
                 connection: default
 
     App\Repository\ComicBookRepository: null
+    App\Repository\LegacyBookRepository: null
 
     App\Shared\:
         resource: '../src/Shared'
