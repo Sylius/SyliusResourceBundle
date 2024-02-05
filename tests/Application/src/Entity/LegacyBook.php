@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\LegacyBookRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: LegacyBookRepository::class)]
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: 'app_legacy_book')]
 class LegacyBook implements ResourceInterface, TranslatableInterface
