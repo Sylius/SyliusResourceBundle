@@ -101,3 +101,7 @@ services:
     app.service.legacy_autowired_factory:
         class: App\Service\LegacyAutowiredFactoryService
         autowire: true
+
+    app.service.legacy_autowired_translatable_factory:
+        class: App\Service\LegacyAutowiredTranslatableFactoryService
+        autowire: true

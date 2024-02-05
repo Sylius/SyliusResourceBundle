@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Driver;
 
 use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
+use Sylius\Component\Resource\Factory\TranslatableFactoryInterface as LegacyTranslatableFactoryInterface;
 use Sylius\Resource\Factory\Factory;
 use Sylius\Resource\Factory\TranslatableFactoryInterface;
 use Sylius\Resource\Metadata\Metadata;
@@ -124,6 +125,10 @@ abstract class AbstractDriver implements DriverInterface
             [$factoryClass, LegacyFactoryInterface::class],
             $factoryParents,
         );
+
+        if (in_array(TranslatableFactoryInterface::class, $factoryInterfaces, true)) {
+            $typehintClasses[] = LegacyTranslatableFactoryInterface::class;
+        }
 
         foreach ($typehintClasses as $typehintClass) {
             $container->registerAliasForArgument(
