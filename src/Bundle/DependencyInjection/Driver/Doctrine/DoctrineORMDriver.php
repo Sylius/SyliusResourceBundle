@@ -21,11 +21,11 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
+use Sylius\Component\Resource\Repository\RepositoryInterface as LegacyRepositoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Sylius\Component\Resource\Repository\RepositoryInterface as LegacyRepositoryInterface;
 
 final class DoctrineORMDriver extends AbstractDoctrineDriver
 {
