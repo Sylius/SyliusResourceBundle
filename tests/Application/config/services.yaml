@@ -80,6 +80,7 @@ services:
                 connection: default
 
     App\Repository\ComicBookRepository: null
+    App\Repository\LegacyBookRepository: null
 
     App\Shared\:
         resource: '../src/Shared'
@@ -92,3 +93,15 @@ services:
 
     App\Subscription\Factory\SubscriptionFactory:
         decorates: 'app.factory.subscription'
+
+    app.service.legacy_autowired_repository:
+        class: App\Service\LegacyAutowiredRepositoryService
+        autowire: true
+
+    app.service.legacy_autowired_factory:
+        class: App\Service\LegacyAutowiredFactoryService
+        autowire: true
+
+    app.service.legacy_autowired_translatable_factory:
+        class: App\Service\LegacyAutowiredTranslatableFactoryService
+        autowire: true

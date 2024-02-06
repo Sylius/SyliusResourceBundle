@@ -29,6 +29,14 @@ sylius_resource:
             classes:
                 model: App\Entity\ComicBook
 
+        app.legacy_book:
+            classes:
+                model: App\Entity\LegacyBook
+                factory: App\Factory\LegacyBookFactory
+            translation:
+                classes:
+                    model: App\Entity\LegacyBookTranslation
+
         app.science_book:
             classes:
                 model: App\Entity\ScienceBook
