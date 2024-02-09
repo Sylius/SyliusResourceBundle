@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class TranslatableValidatorTest extends JsonApiTestCase
 {
     /** @test */
-    public function it_fails_validation_with_empty_locale()
+    public function it_fails_validation_with_empty_locale(): void
     {
         $this->loadFixturesFromFile('books.yml');
         $book = $this->getBookBy();
@@ -32,7 +32,7 @@ final class TranslatableValidatorTest extends JsonApiTestCase
     }
 
     /** @test */
-    public function it_fails_validation_with_invalid_locale()
+    public function it_fails_validation_with_invalid_locale(): void
     {
         $this->loadFixturesFromFile('books.yml');
         $book = $this->getBookBy();
@@ -44,7 +44,7 @@ final class TranslatableValidatorTest extends JsonApiTestCase
     }
 
     /** @test */
-    public function it_fails_validation_with_not_unique_locale()
+    public function it_fails_validation_with_not_unique_locale(): void
     {
         $this->loadFixturesFromFile('books.yml');
         $book = $this->getBookBy();
