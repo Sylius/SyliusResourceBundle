@@ -164,7 +164,7 @@
                 <file name="src/Bundle/Routing/Configuration.php" />
             </errorLevel>
         </PossiblyNullReference>
-        
+
         <PossiblyUndefinedArrayOffset>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Controller/ParametersParser.php" />
@@ -198,7 +198,7 @@
                 <file name="src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
             </errorLevel>
         </RedundantConditionGivenDocblockType>
-        
+
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
                 <directory name="src" />

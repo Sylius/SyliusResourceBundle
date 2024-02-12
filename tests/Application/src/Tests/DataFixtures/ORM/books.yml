@@ -9,3 +9,9 @@ App\Entity\Book:
         currentLocale: en_US
         title: "Game of Thrones"
         author: "George R. R. Martin"
+
+App\Entity\BookTranslation:
+    book1_pl_PL:
+        title: "Władca Pierścieni"
+        locale: "pl_PL"
+        translatable: "@book1"

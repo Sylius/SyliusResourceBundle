@@ -20,6 +20,10 @@ These following services are now Doctrine listeners instead of Doctrine subscrib
 * Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber
 * Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber
 
+Applied the `UniqueEntity` constraint for `locale` and `translatable` fields, and added `NotBlank` & `Locale` constraints for the `locale` property in classes extending `Sylius\Resource\Model\AbstractTranslation`.
+
+Applied the `Valid` constraint for the `getTranslations` method for objects implementing `Sylius\Resource\Model\TranslatableInterface`.
+
 
 ## UPGRADE FOR `1.10.x`
 

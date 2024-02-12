@@ -2,3 +2,8 @@ sylius:
     resource:
         not_enabled: "Given resource is disabled"
         not_disabled: "Given resource is enabled"
+        translation:
+            locale:
+                not_blank: Please enter the locale.
+                invalid: This value is not a valid locale.
+                unique: A translation for the {{ value }} locale code already exists.
