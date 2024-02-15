@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Storage;
 
+use Sylius\Component\Resource\Exception\StorageUnavailableException;
 use Sylius\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -71,13 +73,20 @@ final class SessionStorage implements StorageInterface
         return $this->getSession()->all();
     }
 
+    /**
+     * @throws StorageUnavailableException
+     */
     private function getSession(): SessionInterface
     {
-        if ($this->requestStack instanceof SessionInterface) {
-            return $this->requestStack;
-        }
+        try {
+            if ($this->requestStack instanceof SessionInterface) {
+                return $this->requestStack;
+            }
 
-        /** @phpstan-ignore-next-line */
-        return $this->requestStack->getSession();
+            /** @phpstan-ignore-next-line */
+            return $this->requestStack->getSession();
+        } catch (SessionNotFoundException $exception) {
+            throw new StorageUnavailableException($exception->getMessage(), $exception);
+        }
     }
 }
