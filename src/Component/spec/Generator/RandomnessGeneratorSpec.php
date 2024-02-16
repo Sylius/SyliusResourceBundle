@@ -52,10 +52,10 @@ final class RandomnessGeneratorSpec extends ObjectBehavior
     public function getMatchers(): array
     {
         return [
-            'haveLength' => function ($subject, $length) {
+            'haveLength' => function (string $subject, int $length): bool {
                 return $length === strlen($subject);
             },
-            'beInRange' => function ($subject, $min, $max) {
+            'beInRange' => function (int $subject, int $min, int $max): bool {
                 return $subject >= $min && $subject <= $max;
             },
         ];
