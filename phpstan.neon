@@ -23,17 +23,17 @@ parameters:
         - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
         - %currentWorkingDirectory%/src/Bundle/spec/*
         - %currentWorkingDirectory%/src/Bundle/Tests/*
-        - %currentWorkingDirectory%/src/Component/Annotation/*
-        - %currentWorkingDirectory%/src/Component/Factory/*
-        - %currentWorkingDirectory%/src/Component/Metadata/*
-        - %currentWorkingDirectory%/src/Component/Generator/*
         - %currentWorkingDirectory%/src/Component/legacy/spec/*
-        - %currentWorkingDirectory%/src/Component/legacy/tests/*
-        - %currentWorkingDirectory%/src/Component/legacy/spec/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Annotation/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Factory/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Generator/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Metadata/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Model/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Reflection/ClassReflection.php
         - %currentWorkingDirectory%/src/Component/legacy/src/Repository/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Storage/*
+        - %currentWorkingDirectory%/src/Component/legacy/tests/*
+        - %currentWorkingDirectory%/src/Component/spec/*
         - %currentWorkingDirectory%/src/Component/tests/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 
