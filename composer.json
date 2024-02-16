@@ -27,6 +27,7 @@
     "require": {
         "php": "^8.0",
         "babdev/pagerfanta-bundle": "^3.7 || ^4.0",
+        "doctrine/annotations": "^2.0",
         "doctrine/collections": "^1.8 || ^2.0",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/event-manager": "^1.1",
