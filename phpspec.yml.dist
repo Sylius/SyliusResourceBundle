@@ -7,13 +7,13 @@ suites:
     Component:
         namespace: Sylius\Component\Resource
         psr4_prefix: Sylius\Component\Resource
-        src_path: src/Component
-        spec_path: src/Component
+        src_path: src/Component/legacy
+        spec_path: src/Component/legacy
     Package:
         namespace: Sylius\Resource
         psr4_prefix: Sylius\Resource
         src_path: src/Component/src
-        spec_path: src/Component/tests
+        spec_path: src/Component
 
 extensions:
     Akeneo\SkipExampleExtension: ~

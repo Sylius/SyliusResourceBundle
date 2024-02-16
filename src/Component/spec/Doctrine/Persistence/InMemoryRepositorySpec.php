@@ -21,7 +21,7 @@ use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-require_once dirname(__DIR__, 4) . '/spec/Fixtures/SampleBookResourceInterface.php';
+require_once dirname(__DIR__, 3) . '/legacy/spec/Fixtures/SampleBookResourceInterface.php';
 
 final class InMemoryRepositorySpec extends ObjectBehavior
 {

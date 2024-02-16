@@ -1,5 +1,10 @@
 suites:
-    main:
+    legacy:
+        namespace: Sylius\Component\Resource
+        psr4_prefix: Sylius\Component\Resource
+        src_path: legacy/src
+        spec_path: legacy
+    new:
         namespace: Sylius\Component\Resource
         psr4_prefix: Sylius\Component\Resource
         src_path: .

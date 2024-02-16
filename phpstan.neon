@@ -27,12 +27,13 @@ parameters:
         - %currentWorkingDirectory%/src/Component/Factory/*
         - %currentWorkingDirectory%/src/Component/Metadata/*
         - %currentWorkingDirectory%/src/Component/Generator/*
-        - %currentWorkingDirectory%/src/Component/legacyTests/*
-        - %currentWorkingDirectory%/src/Component/Model/*
-        - %currentWorkingDirectory%/src/Component/Reflection/ClassReflection.php
-        - %currentWorkingDirectory%/src/Component/Repository/*
-        - %currentWorkingDirectory%/src/Component/spec/*
-        - %currentWorkingDirectory%/src/Component/Storage/*
+        - %currentWorkingDirectory%/src/Component/legacy/spec/*
+        - %currentWorkingDirectory%/src/Component/legacy/tests/*
+        - %currentWorkingDirectory%/src/Component/legacy/spec/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Model/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Reflection/ClassReflection.php
+        - %currentWorkingDirectory%/src/Component/legacy/src/Repository/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/Storage/*
         - %currentWorkingDirectory%/src/Component/tests/*
         - %currentWorkingDirectory%/src/Component/vendor/*
 

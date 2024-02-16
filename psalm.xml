@@ -10,14 +10,15 @@
             <directory name="vendor" />
             <directory name="src/Bundle/Doctrine/ODM" />
             <directory name="src/Bundle/spec" />
-            <directory name="src/Component/legacyTests" />
+            <directory name="src/Component/legacy/spec" />
+            <directory name="src/Component/legacy/tests" />
             <directory name="src/Component/spec" />
             <directory name="src/Component/tests" />
             <directory name="src/Component/vendor" />
-            <file name="src/Component/Model/ArchivableTrait.php" />
-            <file name="src/Component/Model/TimestampableTrait.php" />
-            <file name="src/Component/Model/ToggleableTrait.php" />
-            <file name="src/Component/Model/TranslatableTrait.php" />
+            <file name="src/Component/legacy/src/Model/ArchivableTrait.php" />
+            <file name="src/Component/legacy/src/Model/TimestampableTrait.php" />
+            <file name="src/Component/legacy/src/Model/ToggleableTrait.php" />
+            <file name="src/Component/legacy/src/Model/TranslatableTrait.php" />
             <file name="src/Bundle/Controller/ControllerTrait.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />
@@ -222,14 +223,14 @@
 
         <TypeDoesNotContainType>
             <errorLevel type="suppress">
-                <directory name="src/Component/Annotation" />
-                <directory name="src/Component/Factory" />
-                <directory name="src/Component/Generator" />
-                <directory name="src/Component/Metadata" />
-                <directory name="src/Component/Model" />
-                <directory name="src/Component/Reflection" />
-                <directory name="src/Component/Repository" />
-                <directory name="src/Component/Storage" />
+                <directory name="src/Component/legacy/src/Annotation" />
+                <directory name="src/Component/legacy/src/Factory" />
+                <directory name="src/Component/legacy/src/Generator" />
+                <directory name="src/Component/legacy/src/Metadata" />
+                <directory name="src/Component/legacy/src/Model" />
+                <directory name="src/Component/legacy/src/Reflection" />
+                <directory name="src/Component/legacy/src/Repository" />
+                <directory name="src/Component/legacy/src/Storage" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
                 <file name="src/Component/src/Symfony/Request/State/TwigResponder.php" />
             </errorLevel>
@@ -262,12 +263,12 @@
 
         <UnrecognizedStatement>
             <errorLevel type="suppress">
-                <directory name="src/Component/Factory" />
-                <directory name="src/Component/Generator" />
-                <directory name="src/Component/Metadata" />
-                <directory name="src/Component/Model" />
-                <directory name="src/Component/Repository" />
-                <directory name="src/Component/Storage" />
+                <directory name="src/Component/legacy/src/Factory" />
+                <directory name="src/Component/legacy/src/Generator" />
+                <directory name="src/Component/legacy/src/Metadata" />
+                <directory name="src/Component/legacy/src/Model" />
+                <directory name="src/Component/legacy/src/Repository" />
+                <directory name="src/Component/legacy/src/Storage" />
             </errorLevel>
         </UnrecognizedStatement>
 
