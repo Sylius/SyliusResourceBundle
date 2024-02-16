@@ -12,7 +12,7 @@ suites:
     Package:
         namespace: Sylius\Resource
         psr4_prefix: Sylius\Resource
-        src_path: src/Component/src
+        src_path: src/Component
         spec_path: src/Component
 
 extensions:
