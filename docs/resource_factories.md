@@ -3,12 +3,14 @@
 Resource factories are used on Create operations to instantiate your resource.
 
 <!-- TOC -->
-* [Default factory for you resource](#default-factory-for-your-resource)
-* [Define your custom factory](#define-your-custom-factory)
-* [Use your custom method](#use-your-custom-method)
-* [Pass arguments to your method](#pass-arguments-to-your-method)
-* [Use a factory without declaring it](#use-a-factory-without-declaring-it)
-* [Use a callable for your custom factory](#use-a-callable-for-your-custom-factory)
+* [Resource factories](#resource-factories)
+  * [Default factory for your resource](#default-factory-for-your-resource)
+  * [Inject the factory in your service](#inject-the-factory-in-your-service)
+  * [Define your custom factory](#define-your-custom-factory)
+  * [Use your custom method](#use-your-custom-method)
+  * [Pass arguments to your method](#pass-arguments-to-your-method)
+  * [Use a factory without declaring it](#use-a-factory-without-declaring-it-)
+  * [Use a callable for your custom factory](#use-a-callable-for-your-custom-factory)
 <!-- TOC -->
 
 
@@ -17,6 +19,31 @@ Resource factories are used on Create operations to instantiate your resource.
 By default, a resource factory is defined to your resource `Sylius\Component\Resource\Factory\Factory`.
 
 It has a `createNew` method with no arguments.
+
+## Inject the factory in your service
+
+If you are using Symfony autowiring, you can inject the resource factory using the right variable name.
+
+```php
+namespace App;
+
+use Sylius\Resource\Factory\FactoryInterface;
+
+final class MyService
+{
+    public function __construct(
+        private FactoryInterface $bookFactory,
+    ) {}
+}
+```
+
+In this example, the `app.factory.book` will be injected in your `$bookFactory`
+
+You can find the variable name using this debug command:
+
+```shell
+$ bin/console debug:autowiring app.factory.book
+```
 
 ## Define your custom factory
 
