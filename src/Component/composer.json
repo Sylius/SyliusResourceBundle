@@ -65,15 +65,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Sylius\\Component\\Resource\\": "",
+            "Sylius\\Component\\Resource\\": "legacy/src/",
             "Sylius\\Resource\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sylius\\Component\\Resource\\spec\\": "spec/",
-            "Sylius\\Component\\Resource\\Tests\\": "legacyTests",
-            "Sylius\\Resource\\Tests\\": "tests"
+            "spec\\Sylius\\Component\\Resource\\": "legacy/spec/",
+            "spec\\Sylius\\Resource\\": "spec/",
+            "Sylius\\Component\\Resource\\Tests\\": "legacy/tests/",
+            "Sylius\\Resource\\Tests\\": "tests/"
         }
     }
 }

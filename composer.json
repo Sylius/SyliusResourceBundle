@@ -27,6 +27,7 @@
     "require": {
         "php": "^8.0",
         "babdev/pagerfanta-bundle": "^3.7 || ^4.0",
+        "doctrine/annotations": "^2.0",
         "doctrine/collections": "^1.8 || ^2.0",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/event-manager": "^1.1",
@@ -102,16 +103,18 @@
     "autoload": {
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
-            "Sylius\\Component\\Resource\\": "src/Component/",
+            "Sylius\\Component\\Resource\\": "src/Component/legacy/src/",
             "Sylius\\Resource\\": "src/Component/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sylius\\Bundle\\ResourceBundle\\spec\\": "src/Bundle/spec/",
+            "spec\\Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/spec/",
+            "spec\\Sylius\\Resource\\": "src/Component/spec/",
             "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/Bundle/",
-            "Sylius\\Component\\Resource\\spec\\": "src/Component/spec/",
-            "Sylius\\Component\\Resource\\Tests\\": "src/Component/legacyTests/",
+            "Sylius\\Component\\Resource\\spec\\": "src/Component/legacy/spec/",
+            "Sylius\\Component\\Resource\\Tests\\": "src/Component/legacy/tests/",
+            "Sylius\\Resource\\Tests\\": "src/Component/tests/",
             "App\\": "tests/Application/src/"
         }
     },

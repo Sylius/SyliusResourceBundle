@@ -15,7 +15,7 @@
     <testsuites>
         <testsuite name="SyliusResourceBundle Test Suite">
             <directory>./tests/</directory>
-            <directory>./src/Component/legacyTests/</directory>
+            <directory>./src/Component/legacy/tests/</directory>
             <directory>./src/Component/tests/</directory>
         </testsuite>
     </testsuites>

@@ -1,5 +1,6 @@
 suites:
     main:
-        namespace: Sylius\Component\Resource
-        psr4_prefix: Sylius\Component\Resource
+        namespace: Sylius\Resource
+        psr4_prefix: Sylius\Resource
         src_path: .
+        spec_path: .

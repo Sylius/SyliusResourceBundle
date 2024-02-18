@@ -6,7 +6,7 @@
 >
     <testsuites>
         <testsuite name="SyliusResource Test Suite">
-            <directory>./Tests/</directory>
+            <directory>./legacy/tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
