@@ -31,6 +31,10 @@ final class TargetEntitiesResolver implements TargetEntitiesResolverInterface
                     continue;
                 }
 
+                if (isset($interfaces[$interface]) && in_array($model, $interfaces[$interface], true)) {
+                    continue;
+                }
+
                 $interfaces[$interface][] = $model;
             }
         }
