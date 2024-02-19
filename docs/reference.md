@@ -12,7 +12,9 @@ sylius_resource:
                 repository: ~
                 factory: Sylius\Component\Resource\Factory\Factory
                 form: Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType
-                    validation_groups: [sylius]
+                #form:
+                    #options:
+                        #validation_groups: [sylius]
             options:
                 object_manager: default
             templates:
@@ -25,7 +27,9 @@ sylius_resource:
                     repository: ~
                     factory: Sylius\Component\Resource\Factory\Factory
                     form: Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType
-                        validation_groups: [sylius]
+                    #form:
+                        #options:
+                            #validation_groups: [sylius]
                 templates:
                     form: Book/Translation/_form.html.twig
                 options: ~
