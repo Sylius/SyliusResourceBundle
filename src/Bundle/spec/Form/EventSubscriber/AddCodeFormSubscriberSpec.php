@@ -15,8 +15,8 @@ namespace spec\Sylius\Bundle\ResourceBundle\Form\EventSubscriber;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Resource\Model\CodeAwareInterface;
 use Sylius\Resource\Exception\UnexpectedTypeException;
+use Sylius\Resource\Model\CodeAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
