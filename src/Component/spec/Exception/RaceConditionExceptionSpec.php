@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace spec\Sylius\Resource\Exception;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Exception\UpdateHandlingException;
