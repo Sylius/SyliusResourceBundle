@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Exception;
 
-class DeleteHandlingException extends \Exception
+class DeleteHandlingException extends RuntimeException
 {
     protected string $flash;
 
