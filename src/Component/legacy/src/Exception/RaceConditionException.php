@@ -13,16 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Exception;
 
-class RaceConditionException extends UpdateHandlingException
-{
-    public function __construct(?\Exception $previous = null)
+class_exists(\Sylius\Resource\Exception\RaceConditionException::class);
+
+if (false) {
+    class RaceConditionException extends \Sylius\Resource\Exception\RaceConditionException
     {
-        parent::__construct(
-            'Operated entity was previously modified.',
-            'race_condition_error',
-            409,
-            null !== $previous ? (int) $previous->getCode() : 0,
-            $previous,
-        );
     }
 }

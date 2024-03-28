@@ -13,32 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Exception;
 
-class DeleteHandlingException extends \Exception
-{
-    protected string $flash;
+class_exists(\Sylius\Resource\Exception\DeleteHandlingException::class);
 
-    protected int $apiResponseCode;
-
-    public function __construct(
-        string $message = 'Ups, something went wrong during deleting a resource, please try again.',
-        string $flash = 'something_went_wrong_error',
-        int $apiResponseCode = 500,
-        int $code = 0,
-        ?\Exception $previous = null,
-    ) {
-        parent::__construct($message, $code, $previous);
-
-        $this->flash = $flash;
-        $this->apiResponseCode = $apiResponseCode;
-    }
-
-    public function getFlash(): string
+if (false) {
+    class DeleteHandlingException extends \Sylius\Resource\Exception\DeleteHandlingException
     {
-        return $this->flash;
-    }
-
-    public function getApiResponseCode(): int
-    {
-        return $this->apiResponseCode;
     }
 }

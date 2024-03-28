@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Form\EventSubscriber;
 
-use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Sylius\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Model\CodeAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
