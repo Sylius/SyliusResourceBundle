@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\StateMachine\State;
+namespace spec\Sylius\Resource\StateMachine\State;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
-use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Resource\StateMachine\OperationStateMachineInterface;
+use Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
 final class ApplyStateMachineTransitionProcessorSpec extends ObjectBehavior
 {
