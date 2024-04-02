@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\StateMachine;
+namespace Sylius\Resource\StateMachine;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\Winzou\StateMachine;
 
 use SM\Factory\Factory;
-use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
+use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 use Webmozart\Assert\Assert;
 
 final class OperationStateMachine implements OperationStateMachineInterface

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Workflow;
 
-use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
+use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 use Symfony\Component\Workflow\Registry;
 use Webmozart\Assert\Assert;
 

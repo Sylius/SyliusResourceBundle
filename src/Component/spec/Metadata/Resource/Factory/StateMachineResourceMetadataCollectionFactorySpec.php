@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace spec\Sylius\Resource\Metadata\Resource\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
@@ -23,6 +22,7 @@ use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryI
 use Sylius\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
 final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {

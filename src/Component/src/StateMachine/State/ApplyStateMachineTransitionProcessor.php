@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\StateMachine\State;
+namespace Sylius\Resource\StateMachine\State;
 
-use Sylius\Component\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
+use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 
 final class ApplyStateMachineTransitionProcessor implements ProcessorInterface
 {
