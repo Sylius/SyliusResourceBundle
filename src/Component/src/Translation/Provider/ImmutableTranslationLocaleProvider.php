@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Translation\Provider;
+namespace Sylius\Resource\Translation\Provider;
 
 final class ImmutableTranslationLocaleProvider implements TranslationLocaleProviderInterface
 {

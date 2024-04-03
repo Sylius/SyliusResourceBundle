@@ -11,11 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Translation;
+namespace Sylius\Resource\Translation\Provider;
 
-use Sylius\Resource\Model\TranslatableInterface;
-
-interface TranslatableEntityLocaleAssignerInterface
+interface TranslationLocaleProviderInterface
 {
-    public function assignLocale(TranslatableInterface $translatableEntity): void;
+    /**
+     * @return string[]
+     */
+    public function getDefinedLocalesCodes(): array;
+
+    public function getDefaultLocaleCode(): string;
 }

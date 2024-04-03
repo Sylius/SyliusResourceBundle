@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Resource\Factory;
 
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Sylius\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableFactory implements TranslatableFactoryInterface
 {
