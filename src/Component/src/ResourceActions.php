@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource;
+namespace Sylius\Resource;
 
 final class ResourceActions
 {
