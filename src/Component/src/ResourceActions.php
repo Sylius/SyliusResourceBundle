@@ -31,3 +31,5 @@ final class ResourceActions
     {
     }
 }
+
+class_alias(ResourceActions::class, \Sylius\Component\Resource\ResourceActions::class);
