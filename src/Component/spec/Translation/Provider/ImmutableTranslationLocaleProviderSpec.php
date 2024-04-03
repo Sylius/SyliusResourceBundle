@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation\Provider;
+namespace spec\Sylius\Resource\Translation\Provider;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;

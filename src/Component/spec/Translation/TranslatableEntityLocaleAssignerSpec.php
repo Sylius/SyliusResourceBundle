@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation;
+namespace spec\Sylius\Resource\Translation;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Model\TranslatableInterface;
