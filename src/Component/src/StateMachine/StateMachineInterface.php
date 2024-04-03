@@ -29,3 +29,5 @@ interface StateMachineInterface extends BaseStateMachineInterface
      */
     public function getTransitionToState(string $toState): ?string;
 }
+
+class_alias(StateMachineInterface::class, \Sylius\Component\Resource\StateMachine\StateMachineInterface::class);
