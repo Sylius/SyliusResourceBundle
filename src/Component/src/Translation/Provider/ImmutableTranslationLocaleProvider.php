@@ -36,3 +36,5 @@ final class ImmutableTranslationLocaleProvider implements TranslationLocaleProvi
         return $this->defaultLocaleCode;
     }
 }
+
+class_alias(ImmutableTranslationLocaleProvider::class, \Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider::class);

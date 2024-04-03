@@ -33,3 +33,5 @@ final class TranslatableEntityLocaleAssigner implements TranslatableEntityLocale
         $translatableEntity->setFallbackLocale($localeCode);
     }
 }
+
+class_alias(TranslatableEntityLocaleAssigner::class, \Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner::class);
