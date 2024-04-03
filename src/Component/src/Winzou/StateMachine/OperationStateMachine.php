@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Winzou\StateMachine;
+namespace Sylius\Resource\Winzou\StateMachine;
 
 use SM\Factory\Factory;
 use Sylius\Resource\Context\Context;
