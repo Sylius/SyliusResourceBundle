@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Component\Resource\StateMachine;
 
-use App\Entity\PullRequest;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\StateMachine\StateMachine;
 use Sylius\Component\Resource\StateMachine\StateMachineInterface as LegacyStateMachineInterface;
 use Sylius\Resource\StateMachine\StateMachine as NewStateMachine;
 use Sylius\Resource\StateMachine\StateMachineInterface;
+use Sylius\Resource\Tests\Dummy\PullRequest;
 
 final class StateMachineSpec extends ObjectBehavior
 {

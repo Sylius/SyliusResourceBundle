@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Resource\StateMachine;
 
-use App\Entity\PullRequest;
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\StateMachine\StateMachine;
+use Sylius\Resource\Tests\Dummy\PullRequest;
 
 final class StateMachineSpec extends ObjectBehavior
 {
