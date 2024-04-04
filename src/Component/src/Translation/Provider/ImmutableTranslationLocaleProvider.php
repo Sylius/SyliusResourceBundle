@@ -18,7 +18,7 @@ final class ImmutableTranslationLocaleProvider implements TranslationLocaleProvi
     public function __construct(
         private array $definedLocalesCodes,
         private string $defaultLocaleCode,
-     ) {
+    ) {
     }
 
     public function getDefinedLocalesCodes(): array
