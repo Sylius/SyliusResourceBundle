@@ -15,9 +15,7 @@ namespace Sylius\Resource\Translation\Provider;
 
 interface TranslationLocaleProviderInterface
 {
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getDefinedLocalesCodes(): array;
 
     public function getDefaultLocaleCode(): string;

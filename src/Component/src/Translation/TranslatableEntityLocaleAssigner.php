@@ -18,11 +18,8 @@ use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableEntityLocaleAssigner implements TranslatableEntityLocaleAssignerInterface
 {
-    private TranslationLocaleProviderInterface $translationLocaleProvider;
-
-    public function __construct(TranslationLocaleProviderInterface $translationLocaleProvider)
+    public function __construct(private TranslationLocaleProviderInterface $translationLocaleProvider)
     {
-        $this->translationLocaleProvider = $translationLocaleProvider;
     }
 
     public function assignLocale(TranslatableInterface $translatableEntity): void

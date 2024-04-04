@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
-use Sylius\Component\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Factory\FactoryInterface;
+use Sylius\Resource\Factory\TranslatableFactoryInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class BookFactory implements TranslatableFactoryInterface
