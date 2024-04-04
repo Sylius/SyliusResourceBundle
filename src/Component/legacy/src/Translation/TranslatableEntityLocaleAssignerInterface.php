@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Translation;
 
-use Sylius\Resource\Model\TranslatableInterface;
-
 interface_exists(\Sylius\Resource\Translation\TranslatableEntityLocaleAssignerInterface::class);
 
 if (false) {
-    interface TranslatableEntityLocaleAssignerInterface
+    interface TranslatableEntityLocaleAssignerInterface extends \Sylius\Resource\Translation\TranslatableEntityLocaleAssignerInterface
     {
-        public function assignLocale(TranslatableInterface $translatableEntity): void;
     }
 }
