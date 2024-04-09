@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Book;
-use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class CustomBookFactory
 {

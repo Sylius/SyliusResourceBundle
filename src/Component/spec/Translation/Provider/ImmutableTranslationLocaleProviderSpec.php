@@ -11,11 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation\Provider;
+namespace spec\Sylius\Resource\Translation\Provider;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface as LegacyTranslationLocaleProviderInterface;
-use Sylius\Resource\Translation\Provider\ImmutableTranslationLocaleProvider as NewImmutableTranslationLocaleProvider;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class ImmutableTranslationLocaleProviderSpec extends ObjectBehavior
@@ -30,13 +28,13 @@ final class ImmutableTranslationLocaleProviderSpec extends ObjectBehavior
         $this->shouldImplement(TranslationLocaleProviderInterface::class);
     }
 
-    function it_implements_legacy_translation_locale_provider_interface(): void
+    function it_returns_defined_locales_codes(): void
     {
-        $this->shouldImplement(LegacyTranslationLocaleProviderInterface::class);
+        $this->getDefinedLocalesCodes()->shouldReturn(['pl_PL', 'en_US']);
     }
 
-    function it_is_an_alias_of_immutable_translation_locale_provider(): void
+    function it_returns_the_default_locale_code(): void
     {
-        $this->shouldHaveType(NewImmutableTranslationLocaleProvider::class);
+        $this->getDefaultLocaleCode()->shouldReturn('pl_PL');
     }
 }

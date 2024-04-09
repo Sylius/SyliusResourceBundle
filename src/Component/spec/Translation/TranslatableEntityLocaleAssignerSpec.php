@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation;
+namespace spec\Sylius\Resource\Translation;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface as LegacyTranslatableEntityLocaleAssignerInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
-use Sylius\Resource\Translation\TranslatableEntityLocaleAssigner as NewTranslatableEntityLocaleAssigner;
 use Sylius\Resource\Translation\TranslatableEntityLocaleAssignerInterface;
 
 final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
@@ -26,18 +25,20 @@ final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
         $this->beConstructedWith($translationLocaleProvider);
     }
 
-    function it_implements_translatable_entity_locale_assigner_interface(): void
+    function it_implements_traslatable_entity_locale_assigner_interface(): void
     {
         $this->shouldImplement(TranslatableEntityLocaleAssignerInterface::class);
     }
 
-    function it_implements_legacy_translatable_entity_locale_assigner_interface(): void
-    {
-        $this->shouldImplement(LegacyTranslatableEntityLocaleAssignerInterface::class);
-    }
+    function it_should_assign_current_and_default_locale_to_given_translatable_entity(
+        TranslationLocaleProviderInterface $translationLocaleProvider,
+        TranslatableInterface $translatableEntity,
+    ): void {
+        $translationLocaleProvider->getDefaultLocaleCode()->willReturn('en_US');
 
-    function it_is_an_alias_of_translatable_entity_local_assigner(): void
-    {
-        $this->shouldHaveType(NewTranslatableEntityLocaleAssigner::class);
+        $translatableEntity->setCurrentLocale('en_US')->shouldBeCalled();
+        $translatableEntity->setFallbackLocale('en_US')->shouldBeCalled();
+
+        $this->assignLocale($translatableEntity);
     }
 }

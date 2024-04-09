@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Form\Type;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType;
-use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;

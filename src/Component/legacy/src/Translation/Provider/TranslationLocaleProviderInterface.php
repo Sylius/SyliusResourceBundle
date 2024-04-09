@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Translation\Provider;
 
-interface TranslationLocaleProviderInterface
-{
-    /**
-     * @return string[]
-     */
-    public function getDefinedLocalesCodes(): array;
+interface_exists(\Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface::class);
 
-    public function getDefaultLocaleCode(): string;
+if (false) {
+    interface TranslationLocaleProviderInterface extends \Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface
+    {
+    }
 }

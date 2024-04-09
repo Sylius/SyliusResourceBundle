@@ -231,6 +231,7 @@
                 <directory name="src/Component/legacy/src/Reflection" />
                 <directory name="src/Component/legacy/src/Repository" />
                 <directory name="src/Component/legacy/src/Storage" />
+                <directory name="src/Component/legacy/src/Translation" />
                 <file name="src/Bundle/Event/ResourceControllerEvent.php" />
                 <file name="src/Component/src/Symfony/Request/State/TwigResponder.php" />
             </errorLevel>
@@ -269,6 +270,7 @@
                 <directory name="src/Component/legacy/src/Model" />
                 <directory name="src/Component/legacy/src/Repository" />
                 <directory name="src/Component/legacy/src/Storage" />
+                <directory name="src/Component/legacy/src/Translation" />
             </errorLevel>
         </UnrecognizedStatement>
 

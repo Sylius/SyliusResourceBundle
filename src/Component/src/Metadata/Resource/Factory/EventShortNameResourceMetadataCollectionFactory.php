@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Resource\Factory;
 
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\ResourceActions;
 
 final class EventShortNameResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {

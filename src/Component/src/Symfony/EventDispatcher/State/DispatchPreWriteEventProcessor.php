@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\EventDispatcher\State;
 
-use Sylius\Component\Resource\ResourceActions;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\ResourceActions;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;

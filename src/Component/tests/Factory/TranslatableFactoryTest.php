@@ -17,11 +17,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
-use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Factory\TranslatableFactory;
 use Sylius\Resource\Factory\TranslatableFactoryInterface;
 use Sylius\Resource\Model\TranslatableInterface;
+use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableFactoryTest extends TestCase
 {
