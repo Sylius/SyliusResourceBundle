@@ -33,6 +33,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/legacy/src/Repository/*
         - %currentWorkingDirectory%/src/Component/legacy/src/StateMachine/*
         - %currentWorkingDirectory%/src/Component/legacy/src/Storage/*
+        - %currentWorkingDirectory%/src/Component/legacy/src/ResourceActions.php
         - %currentWorkingDirectory%/src/Component/legacy/src/Translation/*
         - %currentWorkingDirectory%/src/Component/legacy/tests/*
         - %currentWorkingDirectory%/src/Component/spec/*
