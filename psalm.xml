@@ -19,6 +19,8 @@
             <file name="src/Component/legacy/src/Model/TimestampableTrait.php" />
             <file name="src/Component/legacy/src/Model/ToggleableTrait.php" />
             <file name="src/Component/legacy/src/Model/TranslatableTrait.php" />
+            <file name="src/Component/legacy/src/StateMachine/StateMachine.php" />
+            <file name="src/Component/legacy/src/StateMachine/StateMachineInterface.php" />
             <file name="src/Bundle/Controller/ControllerTrait.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php" />
             <file name="src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php" />

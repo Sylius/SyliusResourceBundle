@@ -30,7 +30,7 @@
     </imports>
 
     <parameters>
-        <parameter key="sylius.state_machine.class">Sylius\Component\Resource\StateMachine\StateMachine</parameter>
+        <parameter key="sylius.state_machine.class">Sylius\Resource\StateMachine\StateMachine</parameter>
     </parameters>
 
     <services>

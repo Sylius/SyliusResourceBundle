@@ -13,19 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\StateMachine;
 
-use SM\StateMachine\StateMachineInterface as BaseStateMachineInterface;
+interface_exists(\Sylius\Resource\StateMachine\StateMachineInterface::class);
 
-interface StateMachineInterface extends BaseStateMachineInterface
-{
-    /**
-     * Returns the possible transition from given state
-     * Returns null if no transition is possible
-     */
-    public function getTransitionFromState(string $fromState): ?string;
-
-    /**
-     * Returns the possible transition to the given state
-     * Returns null if no transition is possible
-     */
-    public function getTransitionToState(string $toState): ?string;
+if (false) {
+    interface StateMachineInterface extends \Sylius\Resource\StateMachine\StateMachineInterface
+    {
+    }
 }
