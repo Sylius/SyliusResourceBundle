@@ -25,7 +25,7 @@
             <tag name="sylius.state_machine" key="symfony" />
         </service>
 
-        <service id="sylius.state_machine.operation.winzou" class="Sylius\Component\Resource\Winzou\StateMachine\OperationStateMachine">
+        <service id="sylius.state_machine.operation.winzou" class="Sylius\Resource\Winzou\StateMachine\OperationStateMachine">
             <argument type="service" id="sm.factory" on-invalid="null" />
             <tag name="sylius.state_machine" key="winzou" />
         </service>
