@@ -14,12 +14,24 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Exception;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Exception\ExceptionInterface;
+use Sylius\Resource\Exception\RuntimeException;
 
 final class DeleteHandlingExceptionSpec extends ObjectBehavior
 {
     function it_extends_an_exception(): void
     {
         $this->shouldHaveType(\Exception::class);
+    }
+
+    function it_is_a_runtime_exception(): void
+    {
+        $this->shouldHaveType(RuntimeException::class);
+    }
+
+    function it_implements_exception_interface(): void
+    {
+        $this->shouldImplement(ExceptionInterface::class);
     }
 
     function it_has_a_message(): void

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Exception;
 
-class UpdateHandlingException extends \Exception
+class UpdateHandlingException extends Exception
 {
     protected string $flash;
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Exception;
 
-class UnsupportedMethodException extends \Exception
+class UnsupportedMethodException extends Exception
 {
     public function __construct(string $methodName)
     {

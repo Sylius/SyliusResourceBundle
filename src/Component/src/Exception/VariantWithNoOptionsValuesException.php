@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Exception;
 
-final class VariantWithNoOptionsValuesException extends \Exception
+final class VariantWithNoOptionsValuesException extends Exception
 {
     public function __construct()
     {
