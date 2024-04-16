@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Exception;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Exception\UnexpectedTypeException as NewUnexpectedTypeException;
 
 final class UnexpectedTypeExceptionSpec extends ObjectBehavior
 {
@@ -22,13 +23,8 @@ final class UnexpectedTypeExceptionSpec extends ObjectBehavior
         $this->beConstructedWith('stringValue', '\ExpectedType');
     }
 
-    function it_extends_invalid_argument_exception(): void
+    function it_should_be_an_alias_of_unexpected_type_exception(): void
     {
-        $this->shouldHaveType(\InvalidArgumentException::class);
-    }
-
-    function it_has_a_message(): void
-    {
-        $this->getMessage()->shouldReturn('Expected argument of type "\ExpectedType", "string" given.');
+        $this->shouldBeAnInstanceOf(NewUnexpectedTypeException::class);
     }
 }
