@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Component\Resource\Exception;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Exception\UnsupportedMethodException as NewUnsupportedMethodException;
 
 final class UnsupportedMethodExceptionSpec extends ObjectBehavior
 {
@@ -22,13 +23,8 @@ final class UnsupportedMethodExceptionSpec extends ObjectBehavior
         $this->beConstructedWith('methodName');
     }
 
-    function it_extends_exception(): void
+    function it_should_be_an_alias_of_unsupported_method_exception(): void
     {
-        $this->shouldHaveType(\Exception::class);
-    }
-
-    function it_has_a_message(): void
-    {
-        $this->getMessage()->shouldReturn('The method "methodName" is not supported.');
+        $this->shouldBeAnInstanceOf(NewUnsupportedMethodException::class);
     }
 }

@@ -11,12 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Exception;
+namespace Sylius\Resource\Exception;
 
-class_exists(\Sylius\Resource\Exception\RaceConditionException::class);
-
-if (false) {
-    class RaceConditionException extends \Sylius\Resource\Exception\RaceConditionException
-    {
-    }
+class Exception extends \Exception implements ExceptionInterface
+{
 }
