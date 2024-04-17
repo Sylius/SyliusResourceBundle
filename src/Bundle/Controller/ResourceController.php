@@ -240,7 +240,7 @@ class ResourceController
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
-        $resource = $this->findOr404($configuration);
+        $resource = $this->findOrCreate($configuration);
 
         $form = $this->resourceFormFactory->create($configuration, $resource);
         $form->handleRequest($request);
@@ -542,6 +542,15 @@ class ResourceController
         if (!$this->authorizationChecker->isGranted($configuration, $permission)) {
             throw new AccessDeniedException();
         }
+    }
+    
+    protected function findOrCreate(RequestConfiguration $configuration): ResourceInterface
+    {
+        if (null === $resource = $this->singleResourceProvider->get($configuration, $this->repository)) {
+            $resource = $this->newResourceFactory->create($configuration, $this->factory);
+        }
+
+        return $resource;
     }
 
     /**
