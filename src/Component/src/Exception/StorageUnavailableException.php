@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\Exception;
+namespace Sylius\Resource\Exception;
 
-class StorageUnavailableException extends \RuntimeException
+class StorageUnavailableException extends RuntimeException
 {
     public function __construct(string $message = '', \Exception $previous = null)
     {

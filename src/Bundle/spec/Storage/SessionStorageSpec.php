@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Storage;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Exception\StorageUnavailableException;
+use Sylius\Resource\Exception\StorageUnavailableException;
 use Sylius\Resource\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;

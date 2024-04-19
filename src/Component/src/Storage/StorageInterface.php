@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Storage;
 
-use Sylius\Component\Resource\Exception\StorageUnavailableException;
+use Sylius\Resource\Exception\StorageUnavailableException;
 
 interface StorageInterface
 {
