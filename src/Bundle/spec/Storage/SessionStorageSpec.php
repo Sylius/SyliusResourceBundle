@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Storage;
 
 use PhpSpec\ObjectBehavior;
+use Sylius\Resource\Exception\StorageUnavailableException;
 use Sylius\Resource\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -36,6 +38,18 @@ final class SessionStorageSpec extends ObjectBehavior
     function it_is_a_storage(): void
     {
         $this->shouldImplement(StorageInterface::class);
+    }
+
+    function it_throws_storage_unavailable_exception_when_there_is_no_session(RequestStack $requestStack): void
+    {
+        $requestStack->getSession()->willThrow(SessionNotFoundException::class);
+
+        $call = $this->shouldThrow(StorageUnavailableException::class);
+        $call->during('has', ['name']);
+        $call->during('get', ['name']);
+        $call->during('set', ['name', 'value']);
+        $call->during('remove', ['name']);
+        $call->during('all');
     }
 
     function it_does_not_have_a_named_value_if_it_was_not_set_previously(): void
