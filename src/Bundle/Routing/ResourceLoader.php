@@ -29,7 +29,7 @@ final class ResourceLoader implements LoaderInterface
 
     private RouteFactoryInterface $routeFactory;
 
-    protected LoaderResolverInterface $resolver;
+    private LoaderResolverInterface $resolver;
 
     public function __construct(RegistryInterface $resourceRegistry, RouteFactoryInterface $routeFactory)
     {

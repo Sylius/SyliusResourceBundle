@@ -24,8 +24,8 @@ final class RemoveHateoasAnnotationDriverPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         if (
-            $container->hasDefinition('annotation_reader')
-            || !$container->hasDefinition('hateoas.configuration.metadata.annotation_driver')
+            $container->hasDefinition('annotation_reader') ||
+            !$container->hasDefinition('hateoas.configuration.metadata.annotation_driver')
         ) {
             return;
         }
