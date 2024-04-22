@@ -160,6 +160,12 @@
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </PossiblyNullArgument>
+        
+        <PossiblyNullPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ContainerAwareTrait.php" />
+            </errorLevel>
+        </PossiblyNullPropertyAssignmentValue>
 
         <PossiblyNullReference>
             <errorLevel type="suppress">
@@ -191,6 +197,7 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
+                <file name="src/Bundle/Routing/ResourceLoader.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
