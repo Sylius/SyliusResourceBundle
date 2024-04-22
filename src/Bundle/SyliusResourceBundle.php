@@ -24,6 +24,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRe
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RemoveHateoasAnnotationDriverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
@@ -58,6 +59,7 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new RegisterResourceStateMachinePass());
         $container->addCompilerPass(new TwigPass());
         $container->addCompilerPass(new WinzouStateMachinePass());
+        $container->addCompilerPass(new RemoveHateoasAnnotationDriverPass());
 
         $container->registerExtension(new PagerfantaExtension(true));
         $container->addCompilerPass(new PagerfantaBridgePass(true), PassConfig::TYPE_BEFORE_OPTIMIZATION, -1); // Should run after all passes from BabDevPagerfantaBundle
