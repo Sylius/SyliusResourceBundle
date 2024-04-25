@@ -54,7 +54,7 @@
         "symfony/yaml": "^5.4 || ^6.0 || ^7.0",
         "webmozart/assert": "^1.8",
         "willdurand/hateoas-bundle": "^2.0",
-        "winzou/state-machine-bundle": "^0.6",
+        "winzou/state-machine-bundle": "dev-master",
         "willdurand/negotiation": "^3.1"
     },
     "replace": {
