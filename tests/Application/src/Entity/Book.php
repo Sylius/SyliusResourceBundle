@@ -19,36 +19,27 @@ use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Model\TranslatableTrait;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: 'app_book')]
+#[Serializer\ExclusionPolicy('all')]
 class Book implements ResourceInterface, TranslatableInterface
 {
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
     }
 
-    /**
-     * @Serializer\Expose
-     *
-     * @Serializer\Type("integer")
-     *
-     * @Serializer\XmlAttribute
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serializer\Expose]
+    #[Serializer\Type('integer')]
+    #[Serializer\XmlAttribute]
     private ?int $id = null;
 
-    /**
-     * @Serializer\Expose
-     *
-     * @Serializer\Type("string")
-     */
     #[ORM\Column(length: 255)]
+    #[Serializer\Expose]
+    #[Serializer\Type('string')]
     private ?string $author = null;
 
     public function getId(): ?int
@@ -56,11 +47,8 @@ class Book implements ResourceInterface, TranslatableInterface
         return $this->id;
     }
 
-    /**
-     * @Serializer\VirtualProperty()
-     *
-     * @Serializer\SerializedName("title")
-     */
+    #[Serializer\VirtualProperty]
+    #[Serializer\SerializedName('title')]
     public function getTitle(): ?string
     {
         return $this->getTranslation()->getTitle();

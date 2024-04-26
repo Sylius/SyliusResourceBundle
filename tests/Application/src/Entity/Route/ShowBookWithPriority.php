@@ -17,9 +17,6 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusRoute;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusRoute(
     name: 'show_book_without_priority',
     path: '/book/{id}',
@@ -31,6 +28,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
     controller: 'app.controller.book::showAction',
     priority: 2,
 )]
+#[Serializer\ExclusionPolicy('all')]
 class ShowBookWithPriority extends Book
 {
 }

@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Kernel;
 
-if (Kernel::MAJOR_VERSION === 6) {
+if (Kernel::MAJOR_VERSION >= 7) {
     class Parameters extends ParameterBag
     {
         /**

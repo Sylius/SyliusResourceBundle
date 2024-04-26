@@ -17,14 +17,12 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'redirect',
     redirect: 'update',
 )]
+#[Serializer\ExclusionPolicy('all')]
 class BookWithRedirect extends Book
 {
 }

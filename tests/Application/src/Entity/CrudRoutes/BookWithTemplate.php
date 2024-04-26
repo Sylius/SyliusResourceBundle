@@ -17,14 +17,12 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'template',
     templates: 'backend/crud',
 )]
+#[Serializer\ExclusionPolicy('all')]
 class BookWithTemplate extends Book
 {
 }

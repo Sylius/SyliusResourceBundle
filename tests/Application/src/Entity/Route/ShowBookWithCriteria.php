@@ -17,15 +17,13 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusRoute;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusRoute(
     name: 'show_book_with_criteria',
     path: '/library/{libraryId}/book/{id}',
     controller: 'app.controller.book::showAction',
     criteria: ['library' => '$libraryId'],
 )]
+#[Serializer\ExclusionPolicy('all')]
 class ShowBookWithCriteria extends Book
 {
 }

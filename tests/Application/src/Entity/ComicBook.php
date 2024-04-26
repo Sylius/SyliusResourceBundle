@@ -18,40 +18,28 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Model\ResourceInterface;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[ORM\Entity(repositoryClass: ComicBookRepository::class)]
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: 'app_comic_book')]
+#[Serializer\ExclusionPolicy('all')]
 class ComicBook implements ResourceInterface
 {
-    /**
-     * @Serializer\Expose
-     *
-     * @Serializer\Type("integer")
-     *
-     * @Serializer\XmlAttribute
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serializer\Expose]
+    #[Serializer\Type('integer')]
+    #[Serializer\XmlAttribute]
     private ?int $id = null;
 
-    /**
-     * @Serializer\Expose
-     *
-     * @Serializer\Until("1.1")
-     */
     #[ORM\Embedded]
+    #[Serializer\Expose]
+    #[Serializer\Until('1.1')]
     private ?Author $author = null;
 
-    /**
-     * @Serializer\Expose
-     *
-     * @Serializer\Type("string")
-     */
     #[ORM\Column(length: 255)]
+    #[Serializer\Expose]
+    #[Serializer\Type('string')]
     private ?string $title = null;
 
     public function getId(): ?int
@@ -69,21 +57,15 @@ class ComicBook implements ResourceInterface
         $this->title = $title;
     }
 
-    /**
-     * @Serializer\VirtualProperty()
-     *
-     * @Serializer\Since("1.1")
-     */
+    #[Serializer\VirtualProperty]
+    #[Serializer\Since('1.1')]
     public function getAuthorFirstName(): ?string
     {
         return $this->author?->getFirstName();
     }
 
-    /**
-     * @Serializer\VirtualProperty()
-     *
-     * @Serializer\Since("1.1")
-     */
+    #[Serializer\VirtualProperty]
+    #[Serializer\Since('1.1')]
     public function getAuthorLastName(): ?string
     {
         return $this->author?->getLastName();

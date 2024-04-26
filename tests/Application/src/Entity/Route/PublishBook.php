@@ -17,9 +17,6 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusRoute;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusRoute(
     name: 'publish_book',
     path: '/books/{id}',
@@ -27,6 +24,7 @@ use Sylius\Resource\Annotation\SyliusRoute;
     controller: 'app.controller.book::applyStateMachineTransitionAction',
     stateMachine: ['graph' => 'app_book', 'transition' => 'publish'],
 )]
+#[Serializer\ExclusionPolicy('all')]
 class PublishBook extends Book
 {
 }

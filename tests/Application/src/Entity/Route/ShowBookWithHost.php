@@ -17,15 +17,13 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusRoute;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
 #[SyliusRoute(
     name: 'show_book_with_host',
     path: '/book/{id}',
     controller: 'app.controller.book::showAction',
     host: 'm.example.com',
 )]
+#[Serializer\ExclusionPolicy('all')]
 class ShowBookWithHost extends Book
 {
 }

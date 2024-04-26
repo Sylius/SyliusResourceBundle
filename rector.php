@@ -1,18 +1,26 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void
-{
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+return RectorConfig::configure()
+    ->withImportNames(
+        importShortClasses: false,
+        removeUnusedImports: true,
+    )
+    ->withPaths([
+        'tests'
+    ])
+    ->withAttributesSets(jms: true)
+;
 
-    $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
-};

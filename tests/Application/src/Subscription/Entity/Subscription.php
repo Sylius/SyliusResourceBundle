@@ -17,6 +17,10 @@ use App\Subscription\Form\Type\SubscriptionType;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Metadata\Api;
+use Sylius\Resource\Metadata\Api\Get;
+use Sylius\Resource\Metadata\Api\GetCollection;
+use Sylius\Resource\Metadata\Api\Post;
+use Sylius\Resource\Metadata\Api\Put;
 use Sylius\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\BulkDelete;
@@ -59,11 +63,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => 'subscription:read'],
     denormalizationContext: ['groups' => 'subscription:write'],
 )]
-#[Api\GetCollection]
-#[Api\Post]
-#[Api\Put]
+#[GetCollection]
+#[Post]
+#[Put]
 #[Api\Delete]
-#[Api\Get]
+#[Get]
 
 #[ORM\Entity]
 class Subscription implements ResourceInterface
