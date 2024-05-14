@@ -14,7 +14,7 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sylius.state_machine.operation" class="Sylius\Resource\StateMachine\OperationStateMachine">
-            <argument type="tagged_locator" tag="sylius.state_machine" index-by="key" />
+            <argument type="tagged_locator" tag="sylius_resource.state_machine" index-by="key" />
         </service>
         <service id="Sylius\Resource\StateMachine\OperationStateMachineInterface" alias="sylius.state_machine.operation" />
 
@@ -22,12 +22,12 @@
 
         <service id="sylius.state_machine.operation.symfony" class="Sylius\Resource\Symfony\Workflow\OperationStateMachine">
             <argument type="service" id="workflow.registry" on-invalid="null" />
-            <tag name="sylius.state_machine" key="symfony" />
+            <tag name="sylius_resource.state_machine" key="symfony" />
         </service>
 
         <service id="sylius.state_machine.operation.winzou" class="Sylius\Resource\Winzou\StateMachine\OperationStateMachine">
             <argument type="service" id="sm.factory" on-invalid="null" />
-            <tag name="sylius.state_machine" key="winzou" />
+            <tag name="sylius_resource.state_machine" key="winzou" />
         </service>
     </services>
 </container>
