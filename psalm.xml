@@ -120,6 +120,13 @@
             </errorLevel>
         </MethodSignatureMismatch>
 
+        <MissingClassConstType>
+            <errorLevel type="suppress">
+                <directory name="src/Bundle" />
+                <directory name="src/Component" />
+            </errorLevel>
+        </MissingClassConstType>
+
         <MissingParamType>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Routing/ResourceLoader.php" />
