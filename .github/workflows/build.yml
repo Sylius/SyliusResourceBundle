@@ -160,8 +160,9 @@ jobs:
             -
                 name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
                 run: |
-                    composer remove friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
+                    composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
+                    (cd tests/Application && bin/console lint:container --env=test_without_fosrest)
                     composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
 
             -

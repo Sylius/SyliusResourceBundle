@@ -1,3 +1,13 @@
+## UPGRADE FOR `1.12.x`
+
+### FROM `1.11.x` to `1.12.x`
+
+We move these following dependencies on optional requirements, so explicit them in your app requirements if you need them.
+
+* friendsofsymfony/rest-bundle
+* jms/serializer-bundle
+* willdurand/hateoas-bundle
+
 ## UPGRADE FOR `1.11.x`
 
 ### FROM `1.10.x` to `1.11.x`
