@@ -1,5 +1,5 @@
 ARG COMPOSER_VERSION=2.3
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION=8.3
 
 FROM composer:${COMPOSER_VERSION} AS composer
 FROM mlocati/php-extension-installer AS php_extension_installer
