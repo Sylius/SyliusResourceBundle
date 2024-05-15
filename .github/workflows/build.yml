@@ -174,7 +174,7 @@ jobs:
                 name: Run lint container without winzou/state-machine-bundle package
                 if: matrix.app_env == 'test'
                 run: |
-                    composer remove winzou/state-machine-bundle --no-scripts
+                    composer remove --dev winzou/state-machine-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
                     (cd tests/Application && bin/console lint:container --env=test_without_state_machine)
                     composer require winzou/state-machine-bundle --no-scripts

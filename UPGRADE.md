@@ -7,6 +7,7 @@ In preparation of removal, following dependencies were moved to optional require
 * friendsofsymfony/rest-bundle
 * jms/serializer-bundle
 * willdurand/hateoas-bundle
+* winzou/state-machine-bundle
 
 ## UPGRADE FOR `1.11.x`
 
