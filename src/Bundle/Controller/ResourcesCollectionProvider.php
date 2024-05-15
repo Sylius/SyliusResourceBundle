@@ -21,14 +21,10 @@ use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class ResourcesCollectionProvider implements ResourcesCollectionProviderInterface
 {
-    private ResourcesResolverInterface $resourcesResolver;
-
-    private PagerfantaFactory $pagerfantaRepresentationFactory;
-
-    public function __construct(ResourcesResolverInterface $resourcesResolver, PagerfantaFactory $pagerfantaRepresentationFactory)
-    {
-        $this->resourcesResolver = $resourcesResolver;
-        $this->pagerfantaRepresentationFactory = $pagerfantaRepresentationFactory;
+    public function __construct(
+        private ResourcesResolverInterface $resourcesResolver,
+        private ?PagerfantaFactory $pagerfantaRepresentationFactory = null,
+    ) {
     }
 
     /**
@@ -61,6 +57,10 @@ final class ResourcesCollectionProvider implements ResourcesCollectionProviderIn
             $paginator->getCurrentPageResults();
 
             if (!$requestConfiguration->isHtmlRequest()) {
+                if (null === $this->pagerfantaRepresentationFactory) {
+                    throw new \LogicException('The "willdurand/hateoas-bundle" must be installed and configured to render a resource collection on non-HTML request. Try running "composer require willdurand/hateoas-bundle"');
+                }
+
                 $route = new Route($request->attributes->get('_route'), array_merge($request->attributes->get('_route_params'), $request->query->all()));
 
                 return $this->pagerfantaRepresentationFactory->createRepresentation($paginator, $route);
