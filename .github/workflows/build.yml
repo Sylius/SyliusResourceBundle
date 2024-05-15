@@ -158,7 +158,7 @@ jobs:
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
-                name: Run smoke tests without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
+                name: Run lint container without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
