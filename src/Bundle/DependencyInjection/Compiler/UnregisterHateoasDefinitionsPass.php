@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
-use FOS\RestBundle\FOSRestBundle;
+use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class FosRestPass implements CompilerPassInterface
+final class UnregisterHateoasDefinitionsPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
         /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (in_array(FOSRestBundle::class, $bundles, true)) {
+        if (in_array(BazingaHateoasBundle::class, $bundles, true)) {
             return;
         }
 
-        $container->removeDefinition('sylius.resource_controller.view_handler');
+        $container->removeDefinition('sylius.resource_controller.pagerfanta_representation_factory');
     }
 }

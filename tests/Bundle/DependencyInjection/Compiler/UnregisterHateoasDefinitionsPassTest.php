@@ -16,10 +16,10 @@ namespace Bundle\DependencyInjection\Compiler;
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\HateoasPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterHateoasDefinitionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class HateoasPassTest extends AbstractCompilerPassTestCase
+final class UnregisterHateoasDefinitionsPassTest extends AbstractCompilerPassTestCase
 {
     /** @test */
     public function it_remove_pagerfanta_representation_factory_if_hateoas_is_not_available(): void
@@ -46,6 +46,6 @@ final class HateoasPassTest extends AbstractCompilerPassTestCase
         $this->registerService('sylius.resource_controller.pagerfanta_representation_factory', PagerfantaFactory::class);
         $this->setParameter('kernel.bundles', []);
 
-        $container->addCompilerPass(new HateoasPass());
+        $container->addCompilerPass(new UnregisterHateoasDefinitionsPass());
     }
 }
