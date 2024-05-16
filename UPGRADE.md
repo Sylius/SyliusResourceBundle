@@ -2,7 +2,7 @@
 
 ### FROM `1.11.x` to `1.12.x`
 
-We move these following dependencies on optional requirements, so explicit them in your app requirements if you need them.
+In preparation of removal, following dependencies were moved to optional requirements. If still in use by your app, require them explicitly in your `composer.json`.
 
 * friendsofsymfony/rest-bundle
 * jms/serializer-bundle
