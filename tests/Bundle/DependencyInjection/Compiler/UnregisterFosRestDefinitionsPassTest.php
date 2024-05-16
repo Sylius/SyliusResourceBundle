@@ -16,10 +16,10 @@ namespace Bundle\DependencyInjection\Compiler;
 use FOS\RestBundle\FOSRestBundle;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ViewHandler;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\FosRestPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterFosRestDefinitionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class FosRestPassTest extends AbstractCompilerPassTestCase
+final class UnregisterFosRestDefinitionsPassTest extends AbstractCompilerPassTestCase
 {
     /** @test */
     public function it_remove_view_handler_if_fos_rest_is_not_available(): void
@@ -46,6 +46,6 @@ final class FosRestPassTest extends AbstractCompilerPassTestCase
         $this->registerService('sylius.resource_controller.view_handler', ViewHandler::class);
         $this->setParameter('kernel.bundles', []);
 
-        $container->addCompilerPass(new FosRestPass());
+        $container->addCompilerPass(new UnregisterFosRestDefinitionsPass());
     }
 }

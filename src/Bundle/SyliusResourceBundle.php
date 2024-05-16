@@ -16,8 +16,6 @@ namespace Sylius\Bundle\ResourceBundle;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\CsrfTokenManagerPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineContainerRepositoryFactoryPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\FosRestPass;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\HateoasPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
@@ -27,6 +25,8 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesP
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterFosRestDefinitionsPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterHateoasDefinitionsPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Sylius\Resource\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
@@ -52,14 +52,14 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new DisableMetadataCachePass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
-        $container->addCompilerPass(new FosRestPass());
-        $container->addCompilerPass(new HateoasPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
         $container->addCompilerPass(new RegisterFqcnControllersPass());
         $container->addCompilerPass(new RegisterResourceRepositoryPass());
         $container->addCompilerPass(new RegisterResourcesPass());
         $container->addCompilerPass(new RegisterStateMachinePass());
         $container->addCompilerPass(new RegisterResourceStateMachinePass());
+        $container->addCompilerPass(new UnregisterFosRestDefinitionsPass());
+        $container->addCompilerPass(new UnregisterHateoasDefinitionsPass());
         $container->addCompilerPass(new TwigPass());
         $container->addCompilerPass(new WinzouStateMachinePass());
 
