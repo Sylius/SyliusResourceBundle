@@ -124,10 +124,9 @@ class BookRepository extends ServiceEntityRepository
 }
 ```
 
-The generated code is not compatible with Sylius Resource yet, so we need to make few changes.
+The generated code could be not compatible with Sylius Resource in some cases, so we need to make few changes.
 
-* First, your repository should implement the `Sylius\Component\Resource\Repository\RepositoryInterface` interface
-* Then, add the `Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait` trait
+* Add the `Sylius\Bundle\ResourceBundle\Doctrine\ORM\PaginatedRepositoryTrait` trait
 
 Your repository should look like this:
 
@@ -139,7 +138,7 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\PaginatedRepositoryTrait;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
@@ -150,9 +149,9 @@ use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
  * @method Book[]    findAll()
  * @method Book[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BookRepository extends ServiceEntityRepository implements RepositoryInterface
+class BookRepository extends ServiceEntityRepository
 {
-    use ResourceRepositoryTrait;
+    use PaginatedRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {

@@ -2,6 +2,7 @@ sylius_resource:
     mapping:
         paths:
             - '%kernel.project_dir%/src/BoardGameBlog/Infrastructure/Sylius/Resource'
+            - '%kernel.project_dir%/src/Calendar/Entity'
             - '%kernel.project_dir%/src/Subscription/Entity'
 
     translation:

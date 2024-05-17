@@ -18,6 +18,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -54,6 +55,14 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             $repositoryClass = $metadata->getClass('repository');
         }
 
+        $entityAttributeRepositoryClass = (new \ReflectionClass($metadata->getClass('model')))
+            ->getAttributes(Entity::class)[0]
+            ->newInstance()->repositoryClass;
+
+        if (null !== $entityAttributeRepositoryClass) {
+            $repositoryClass = $entityAttributeRepositoryClass;
+        }
+
         $serviceId = $metadata->getServiceId('repository');
         $managerReference = new Reference($metadata->getServiceId('manager'));
         $definition = new Definition($repositoryClass);
@@ -73,7 +82,6 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         } else {
             if (is_a($repositoryClass, ServiceEntityRepository::class, true)) {
                 $definition->setArguments([new Reference('doctrine')]);
-                $container->setDefinition($serviceId, $definition);
             } else {
                 $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
             }

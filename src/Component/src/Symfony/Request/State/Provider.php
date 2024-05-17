@@ -24,6 +24,7 @@ use Sylius\Resource\Reflection\CallableReflection;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
+use Webmozart\Assert\Assert;
 
 final class Provider implements ProviderInterface
 {
@@ -59,10 +60,21 @@ final class Provider implements ProviderInterface
             $method = $operation->getRepositoryMethod() ?? $defaultMethod;
 
             if (!$this->locator->has($repository)) {
-                throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repository, $operation->getName() ?? ''));
+                throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s".', $repository, $operation->getName() ?? ''));
             }
 
+            /** @var object $repositoryInstance */
             $repositoryInstance = $this->locator->get($repository);
+
+            Assert::true(
+                (new \ReflectionClass($repositoryInstance))->hasMethod($method),
+                sprintf(
+                    'Repository "%s" does not contain "%s" method.  Configure it or configure another repository method in your operation "%s".',
+                    $repositoryInstance::class,
+                    $method,
+                    $operation->getName() ?? '',
+                ),
+            );
 
             // make it as callable
             /** @var callable $repository */

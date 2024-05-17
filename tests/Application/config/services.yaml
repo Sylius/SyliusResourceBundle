@@ -88,6 +88,9 @@ services:
     App\BoardGameBlog\:
         resource: '../src/BoardGameBlog'
 
+    App\Calendar\:
+        resource: '../src/Calendar'
+
     App\Subscription\:
         resource: '../src/Subscription'
 

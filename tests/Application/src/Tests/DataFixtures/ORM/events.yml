@@ -1,0 +1,3 @@
+App\Calendar\Entity\Event:
+    sylius_con_2023:
+        name: 'Sylius Con 2023'
