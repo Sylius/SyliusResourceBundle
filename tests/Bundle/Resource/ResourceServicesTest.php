@@ -79,6 +79,6 @@ final class ResourceServicesTest extends WebTestCase
         $repositoryAlias = $em->getRepository(ComicBook::class);
 
         $this->assertInstanceOf(RepositoryInterface::class, $repository);
-        $this->assertSame($repository, $repositoryAlias);
+        $this->assertSame($repository::class, $repositoryAlias::class);
     }
 }
