@@ -19,6 +19,11 @@ doctrine:
                 type: attribute
                 dir: '%kernel.project_dir%/src/BoardGameBlog/Domain'
                 prefix: 'App\BoardGameBlog\Domain'
+            Calendar:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Calendar/Entity'
+                prefix: 'App\Calendar\Entity'
             Subscription:
                 is_bundle: false
                 type: attribute

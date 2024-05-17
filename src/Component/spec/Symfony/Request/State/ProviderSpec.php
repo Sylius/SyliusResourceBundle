@@ -64,6 +64,7 @@ final class ProviderSpec extends ObjectBehavior
         RepositoryInterface $repository,
         \stdClass $stdClass,
     ): void {
+        $operation->getName()->willReturn('operation_name');
         $operation->getRepository()->willReturn('App\Repository');
         $operation->getRepositoryMethod()->willReturn(null);
         $operation->getRepositoryArguments()->willReturn(null);
@@ -133,6 +134,7 @@ final class ProviderSpec extends ObjectBehavior
         RepositoryInterface $repository,
         \stdClass $stdClass,
     ): void {
+        $operation->getName()->willReturn('operation_name');
         $operation->getRepository()->willReturn('App\Repository');
         $operation->getRepositoryMethod()->willReturn('find');
         $operation->getRepositoryArguments()->willReturn(null);
@@ -158,6 +160,7 @@ final class ProviderSpec extends ObjectBehavior
         ArgumentParserInterface $argumentParser,
         \stdClass $stdClass,
     ): void {
+        $operation->getName()->willReturn('operation_name');
         $operation->getRepository()->willReturn('App\Repository');
         $operation->getRepositoryMethod()->willReturn('find');
         $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
