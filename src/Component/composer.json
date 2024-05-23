@@ -53,7 +53,7 @@
         "phpspec/phpspec": "^7.3",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
-        "sylius/grid": "^1.7 || ^1.12",
+        "sylius/grid": "^1.7 || dev-symfony-7",
         "symfony/serializer": "^5.4 || ^6.4 || ^7.0",
         "symfony/workflow": "^5.4 || ^6.4 || ^7.0",
         "twig/twig": "^2.12 || ^3.0"
