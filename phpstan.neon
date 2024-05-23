@@ -44,6 +44,7 @@ parameters:
         - '/Call to method isChangeTrackingDeferredExplicit\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata./'
         - '/Call to an undefined method ReflectionClass::getAttributes\(\)./'
         - '/Call to an undefined method object::getRealClassName\(\)./'
+        - '/Class Bazinga\\Bundle\\HateoasBundle\\BazingaHateoasBundle not found\./'
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
         - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'
