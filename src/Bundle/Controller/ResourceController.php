@@ -23,7 +23,6 @@ use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\ResourceActions;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
