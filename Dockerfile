@@ -15,6 +15,8 @@ COPY . /app
 
 WORKDIR /app
 
+RUN composer global config --no-plugins allow-plugins.symfony/flex true
+RUN composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
 RUN composer update --with-all-dependencies --no-interaction --no-progress
 
 WORKDIR /app/tests/Application
