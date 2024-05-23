@@ -257,10 +257,13 @@
 
         <UndefinedClass>
             <errorLevel type="suppress">
+                <referencedClass name="Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle" />
                 <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
                 <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
                 <referencedClass name="Doctrine\Common\Persistence\ObjectManager" />
                 <referencedClass name="Doctrine\ODM\MongoDB\Mapping\ClassMetadata" />
+                <referencedClass name="Hateoas\Configuration\Route" />
+                <referencedClass name="Hateoas\Representation\Factory\PagerfantaFactory" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheAdapter" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>
