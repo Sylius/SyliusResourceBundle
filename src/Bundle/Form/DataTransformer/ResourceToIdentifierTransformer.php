@@ -33,13 +33,9 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
     }
 
     /**
-     * @psalm-suppress MissingParamType
-     *
-     * @param object|null $value
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (null === $value) {
             return null;
