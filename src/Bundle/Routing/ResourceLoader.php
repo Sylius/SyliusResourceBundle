@@ -29,6 +29,8 @@ final class ResourceLoader implements LoaderInterface
 
     private RouteFactoryInterface $routeFactory;
 
+    private LoaderResolverInterface $resolver;
+
     public function __construct(RegistryInterface $resourceRegistry, RouteFactoryInterface $routeFactory)
     {
         $this->resourceRegistry = $resourceRegistry;
@@ -105,17 +107,15 @@ final class ResourceLoader implements LoaderInterface
 
     /**
      * @psalm-suppress InvalidReturnType Symfony docblocks are messing with us
-     *
-     * @return LoaderResolverInterface
      */
-    public function getResolver()
+    public function getResolver(): LoaderResolverInterface
     {
-        // Intentionally left blank.
+        return $this->resolver;
     }
 
     public function setResolver(LoaderResolverInterface $resolver): void
     {
-        // Intentionally left blank.
+        $this->resolver = $resolver;
     }
 
     private function createRoute(
