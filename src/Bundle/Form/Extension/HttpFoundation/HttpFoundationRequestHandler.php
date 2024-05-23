@@ -60,7 +60,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                     return;
                 }
 
-                $data = $request->query->all($name);
+                $data = $request->query->all()[$name];
             }
         } else {
             // Mark the form with an error if the uploaded size was too large
@@ -93,12 +93,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                 /** @psalm-var array|null $default */
                 $default = $form->getConfig()->getCompound() ? [] : null;
 
-                if ($request->request->has($name)) {
-                    $params = $request->request->all($name);
-                } else {
-                    $params = $default;
-                }
-
+                $params = $request->request->all()[$name] ?? $default;
                 $files = $request->files->get($name, $default);
             } else {
                 // Don't submit the form if it is not present in the request
