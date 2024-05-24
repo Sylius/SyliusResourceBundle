@@ -17,7 +17,7 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Resource\Model\ResourceInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,7 +104,7 @@ final class RedirectHandlerSpec extends ObjectBehavior
         $this->redirect($configuration, 'http://myurl.com')->shouldHaveType(RedirectResponse::class);
     }
 
-    function it_redirect_to_referer(RequestConfiguration $configuration, Request $request, ParameterBag $bag): void
+    function it_redirect_to_referer(RequestConfiguration $configuration, Request $request, HeaderBag $bag): void
     {
         $request->headers = $bag;
 

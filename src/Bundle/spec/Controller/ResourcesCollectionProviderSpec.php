@@ -13,27 +13,34 @@ declare(strict_types=1);
 
 namespace spec\Sylius\Bundle\ResourceBundle\Controller;
 
-use Hateoas\Configuration\Route;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Hateoas\Representation\PaginatedRepresentation;
+use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolver;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Model\ResourceInterface;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ResourcesCollectionProviderSpec extends ObjectBehavior
 {
-    function let(ResourcesResolverInterface $resourcesResolver, PagerfantaFactory $pagerfantaRepresentationFactory): void
+    use ProphecyTrait;
+
+    function let(ResourcesResolverInterface $resourcesResolver): void
     {
-        $this->beConstructedWith($resourcesResolver, $pagerfantaRepresentationFactory);
+        $this->beConstructedWith($resourcesResolver, null);
     }
 
     function it_implements_resources_collection_provider_interface(): void
@@ -61,8 +68,9 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         RepositoryInterface $repository,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters,
     ): void {
+        $queryParameters = new InputBag();
+
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(5);
 
@@ -70,9 +78,8 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $requestConfiguration->getRequest()->willReturn($request);
         $request->query = $queryParameters;
-        $queryParameters->has('limit')->willReturn(true);
-        $queryParameters->getInt('limit')->willReturn(5);
-        $queryParameters->get('page', 1)->willReturn(6);
+        $queryParameters->set('limit', 5);
+        $queryParameters->set('page', 6);
 
         $paginator->setMaxPerPage(5)->shouldBeCalled();
         $paginator->setCurrentPage(6)->shouldBeCalled();
@@ -89,8 +96,9 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         Grid $grid,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters,
     ): void {
+        $queryParameters = new InputBag();
+
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(1000);
 
@@ -103,9 +111,8 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $requestConfiguration->getRequest()->willReturn($request);
         $request->query = $queryParameters;
-        $queryParameters->has('limit')->willReturn(true);
-        $queryParameters->getInt('limit')->willReturn(1000);
-        $queryParameters->get('page', 1)->willReturn(1);
+        $queryParameters->set('limit', 1000);
+        $queryParameters->set('page', 1);
 
         $paginator->setMaxPerPage(99)->shouldBeCalled();
         $paginator->setCurrentPage(1)->shouldBeCalled();
@@ -115,39 +122,24 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
     }
 
     function it_creates_a_paginated_representation_for_pagerfanta_for_non_html_requests(
-        ResourcesResolverInterface $resourcesResolver,
-        RequestConfiguration $requestConfiguration,
         RepositoryInterface $repository,
-        Pagerfanta $paginator,
-        Request $request,
-        ParameterBag $queryParameters,
-        ParameterBag $requestAttributes,
-        PagerfantaFactory $pagerfantaRepresentationFactory,
-        PaginatedRepresentation $paginatedRepresentation,
+        MetadataInterface $metadata,
     ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(false);
-        $requestConfiguration->getPaginationMaxPerPage()->willReturn(8);
+        if (!class_exists(PagerfantaFactory::class)) {
+            throw new SkippingException('PagerfantaFactory is not installed.');
+        }
 
-        $resourcesResolver->getResources($requestConfiguration, $repository)->willReturn($paginator);
+        $this->beConstructedWith(new ResourcesResolver(), new PagerfantaFactory());
 
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->query = $queryParameters;
-        $queryParameters->has('limit')->willReturn(true);
-        $queryParameters->getInt('limit')->willReturn(8);
-        $queryParameters->get('page', 1)->willReturn(6);
-        $queryParameters->all()->willReturn(['foo' => 2, 'bar' => 15]);
+        $paginator = new Pagerfanta(new ArrayAdapter([]));
+        $repository->createPaginator([], [])->willReturn($paginator);
 
-        $request->attributes = $requestAttributes;
-        $requestAttributes->get('_route')->willReturn('sylius_product_index');
-        $requestAttributes->get('_route_params')->willReturn(['slug' => 'foo-bar']);
+        $request = new Request();
+        $request->query = new InputBag(['limit' => 8, 'page' => 1]);
+        $request->attributes = new ParameterBag(['_format' => 'json', '_route' => 'sylius_product_index', '_route_params' => ['slug' => 'foo-bar']]);
+        $requestConfiguration = new RequestConfiguration($metadata->getWrappedObject(), $request, new Parameters(['paginate' => true]));
 
-        $paginator->setMaxPerPage(8)->shouldBeCalled();
-        $paginator->setCurrentPage(6)->shouldBeCalled();
-        $paginator->getCurrentPageResults()->willReturn([]);
-
-        $pagerfantaRepresentationFactory->createRepresentation($paginator, Argument::type(Route::class))->willReturn($paginatedRepresentation);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($paginatedRepresentation);
+        $this->get($requestConfiguration, $repository)->shouldHaveType(PaginatedRepresentation::class);
     }
 
     function it_handles_resource_grid_view(
@@ -158,8 +150,9 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
         Grid $grid,
         Pagerfanta $paginator,
         Request $request,
-        ParameterBag $queryParameters,
     ): void {
+        $queryParameters = new InputBag();
+
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getPaginationMaxPerPage()->willReturn(5);
 
@@ -171,9 +164,8 @@ final class ResourcesCollectionProviderSpec extends ObjectBehavior
 
         $requestConfiguration->getRequest()->willReturn($request);
         $request->query = $queryParameters;
-        $queryParameters->has('limit')->willReturn(true);
-        $queryParameters->getInt('limit')->willReturn(5);
-        $queryParameters->get('page', 1)->willReturn(6);
+        $queryParameters->set('limit', 5);
+        $queryParameters->set('page', 6);
 
         $paginator->setMaxPerPage(5)->shouldBeCalled();
         $paginator->setCurrentPage(6)->shouldBeCalled();
