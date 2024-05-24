@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\DependencyIjection\Compiler;
+namespace Sylius\Resource\Symfony\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
