@@ -25,6 +25,8 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourcesP
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\TwigPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterFosRestDefinitionsPass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterHateoasDefinitionsPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Sylius\Resource\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
@@ -56,6 +58,8 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new RegisterResourcesPass());
         $container->addCompilerPass(new RegisterStateMachinePass());
         $container->addCompilerPass(new RegisterResourceStateMachinePass());
+        $container->addCompilerPass(new UnregisterFosRestDefinitionsPass());
+        $container->addCompilerPass(new UnregisterHateoasDefinitionsPass());
         $container->addCompilerPass(new TwigPass());
         $container->addCompilerPass(new WinzouStateMachinePass());
 

@@ -19,11 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface
 {
-    private ConfigurableViewHandlerInterface $restViewHandler;
-
-    public function __construct(ConfigurableViewHandlerInterface $restViewHandler)
+    public function __construct(private ConfigurableViewHandlerInterface $restViewHandler)
     {
-        $this->restViewHandler = $restViewHandler;
     }
 
     public function handle(RequestConfiguration $requestConfiguration, View $view): Response
@@ -31,7 +28,8 @@ final class ViewHandler implements ViewHandlerInterface
         if (!$requestConfiguration->isHtmlRequest()) {
             $this->restViewHandler->setExclusionStrategyGroups($requestConfiguration->getSerializationGroups() ?? []);
 
-            if ($version = $requestConfiguration->getSerializationVersion()) {
+            $version = $requestConfiguration->getSerializationVersion();
+            if (null !== $version) {
                 $this->restViewHandler->setExclusionStrategyVersion($version);
             }
 

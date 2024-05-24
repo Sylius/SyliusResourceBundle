@@ -1,3 +1,13 @@
+## UPGRADE FOR `1.12.x`
+
+### FROM `1.11.x` to `1.12.x`
+
+In preparation of removal, following dependencies were moved to optional requirements. If still in use by your app, require them explicitly in your `composer.json`.
+
+* friendsofsymfony/rest-bundle
+* jms/serializer-bundle
+* willdurand/hateoas-bundle
+
 ## UPGRADE FOR `1.11.x`
 
 ### FROM `1.10.x` to `1.11.x`
