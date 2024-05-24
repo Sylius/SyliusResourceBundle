@@ -34,7 +34,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag([]);
-        $request->request = new ParameterBag();
+        $request->request = new InputBag();
 
         $attributes->all('_route_params')->willReturn(['id' => 'my_id']);
 
@@ -52,7 +52,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag(['id' => 'my_id']);
-        $request->request = new ParameterBag();
+        $request->request = new InputBag();
 
         $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
 
@@ -70,7 +70,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag();
-        $request->request = new ParameterBag(['id' => 'my_id']);
+        $request->request = new InputBag(['id' => 'my_id']);
 
         $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
 
@@ -88,7 +88,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag([]);
-        $request->request = new ParameterBag();
+        $request->request = new InputBag();
 
         $attributes->all('_route_params')->willReturn(['enabled' => 'true', 'author' => 'author@example.com']);
 
@@ -109,7 +109,7 @@ final class RepositoryArgumentResolverSpec extends ObjectBehavior
     ): void {
         $request->attributes = $attributes;
         $request->query = new InputBag();
-        $request->request = new ParameterBag(['ids' => ['first_id', 'second_id']]);
+        $request->request = new InputBag(['ids' => ['first_id', 'second_id']]);
 
         $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
 

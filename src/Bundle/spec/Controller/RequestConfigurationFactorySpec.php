@@ -138,7 +138,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
@@ -167,7 +167,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;
@@ -197,7 +197,7 @@ final class RequestConfigurationFactorySpec extends ObjectBehavior
         ParametersParserInterface $parametersParser,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $headersBag,
+        HeaderBag $headersBag,
         ParameterBag $attributesBag,
     ): void {
         $request->headers = $headersBag;

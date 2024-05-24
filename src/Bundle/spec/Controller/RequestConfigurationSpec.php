@@ -17,6 +17,8 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 use Sylius\Resource\Metadata\MetadataInterface;
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -132,7 +134,7 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $this->getRouteName('custom')->shouldReturn('sylius_admin_product_custom');
     }
 
-    function it_generates_redirect_referer(Parameters $parameters, Request $request, ParameterBag $bag): void
+    function it_generates_redirect_referer(Parameters $parameters, Request $request, HeaderBag $bag): void
     {
         $request->headers = $bag;
         $bag->get('referer')->willReturn('http://myurl.com');
@@ -275,9 +277,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Parameters $parameters,
         Request $request,
         ParameterBag $attributesBag,
-        ParameterBag $queryBag,
-        ParameterBag $requestBag,
     ): void {
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
         $criteria = ['property' => 'myNewValue'];
         $request->attributes = $attributesBag;
         $request->query = $queryBag;
@@ -287,9 +290,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $parameters->get('criteria', Argument::any())->willReturn([]);
 
         $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->has('criteria')->willReturn(true);
-        $queryBag->all()->willReturn(['criteria' => $criteria]);
-        $requestBag->all()->willReturn(['criteria' => []]);
+
+        $queryBag->set('criteria', $criteria);
+
+        $requestBag->set('criteria', []);
 
         $this->getCriteria()->shouldReturn($criteria);
     }
@@ -298,9 +302,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Parameters $parameters,
         Request $request,
         ParameterBag $attributesBag,
-        ParameterBag $queryBag,
-        ParameterBag $requestBag,
     ): void {
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
         $criteria = ['property' => 'myNewValue'];
         $request->attributes = $attributesBag;
         $request->query = $queryBag;
@@ -310,9 +315,8 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $parameters->get('criteria', Argument::any())->willReturn([]);
 
         $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->has('criteria')->willReturn(false);
-        $requestBag->has('criteria')->willReturn(true);
-        $requestBag->all()->willReturn(['criteria' => $criteria]);
+
+        $requestBag->set('criteria', $criteria);
 
         $this->getCriteria()->shouldReturn($criteria);
     }
@@ -321,9 +325,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Parameters $parameters,
         Request $request,
         ParameterBag $attributesBag,
-        ParameterBag $queryBag,
-        ParameterBag $requestBag,
     ): void {
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
         $criteria = ['property' => 'myValue'];
         $overriddenCriteria = ['other_property' => 'myNewValue'];
         $combinedCriteria = ['property' => 'myValue', 'other_property' => 'myNewValue'];
@@ -333,10 +338,12 @@ final class RequestConfigurationSpec extends ObjectBehavior
 
         $parameters->get('filterable', false)->willReturn(true);
         $parameters->get('criteria', [])->willReturn($criteria);
+
         $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->has('criteria')->willReturn(true);
-        $queryBag->all()->willReturn(['criteria' => $overriddenCriteria]);
-        $requestBag->all()->willReturn(['criteria' => []]);
+
+        $queryBag->set('criteria', $overriddenCriteria);
+
+        $requestBag->set('criteria', []);
 
         $this->getCriteria()->shouldReturn($combinedCriteria);
 
@@ -346,18 +353,16 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $parameters->get('filterable', false)->willReturn(true);
         $parameters->get('criteria', Argument::any())->willReturn($criteria);
         $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->has('criteria')->willReturn(true);
-        $queryBag->all()->willReturn(['criteria' => $overriddenCriteria]);
-        $requestBag->all()->willReturn(['criteria' => []]);
+        $queryBag->set('criteria', $overriddenCriteria);
+        $requestBag->set('criteria', []);
 
         $this->getCriteria($defaultCriteria)->shouldReturn($combinedDefaultCriteria);
 
         $parameters->get('filterable', false)->willReturn(true);
         $parameters->get('criteria', [])->willReturn(['filter' => 'route']);
         $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->has('criteria')->willReturn(true);
-        $queryBag->all()->willReturn(['criteria' => ['filter' => 'request']]);
-        $requestBag->all()->willReturn(['criteria' => []]);
+        $queryBag->set('criteria', ['filter' => 'request']);
+        $requestBag->set('criteria', []);
 
         $this->getCriteria(['filter' => 'default'])->shouldReturn(['filter' => 'request']);
     }
@@ -375,9 +380,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Parameters $parameters,
         Request $request,
         ParameterBag $attributesBag,
-        ParameterBag $queryBag,
-        ParameterBag $requestBag,
     ): void {
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
         $sorting = ['property' => 'asc'];
         $request->attributes = $attributesBag;
         $request->query = $queryBag;
@@ -385,10 +391,12 @@ final class RequestConfigurationSpec extends ObjectBehavior
 
         $parameters->get('sortable', false)->willReturn(true);
         $parameters->get('sorting', Argument::any())->willReturn($sorting);
+
         $attributesBag->get('sorting', $request)->willReturn($request);
-        $queryBag->has('sorting')->willReturn(true);
-        $queryBag->all()->willReturn(['sorting' => $sorting]);
-        $requestBag->get('sorting', [])->willReturn([]);
+
+        $queryBag->set('sorting', $sorting);
+
+        $requestBag->set('sorting', []);
 
         $this->getSorting()->shouldReturn($sorting);
     }
@@ -408,9 +416,10 @@ final class RequestConfigurationSpec extends ObjectBehavior
         Parameters $parameters,
         Request $request,
         ParameterBag $attributesBag,
-        ParameterBag $queryBag,
-        ParameterBag $requestBag,
     ): void {
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
         $sorting = ['property' => 'desc'];
         $overriddenSorting = ['other_property' => 'asc'];
         $combinedSorting = ['other_property' => 'asc', 'property' => 'desc'];
@@ -421,9 +430,8 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $parameters->get('sortable', false)->willReturn(true);
         $parameters->get('sorting', [])->willReturn($sorting);
         $attributesBag->get('sorting', $request)->willReturn($request);
-        $queryBag->has('sorting')->willReturn(true);
-        $queryBag->all()->willReturn(['sorting' => $overriddenSorting]);
-        $requestBag->get('sorting', [])->willReturn([]);
+        $queryBag->set('sorting', $overriddenSorting);
+        $requestBag->set('sorting', []);
 
         $this->getSorting()->shouldReturn($combinedSorting);
 
@@ -433,18 +441,16 @@ final class RequestConfigurationSpec extends ObjectBehavior
         $parameters->get('sortable', false)->willReturn(true);
         $parameters->get('sorting', Argument::any())->willReturn($sorting);
         $attributesBag->get('sorting', $request)->willReturn($request);
-        $queryBag->has('sorting')->willReturn(true);
-        $queryBag->all()->willReturn(['sorting' => $overriddenSorting]);
-        $requestBag->get('sorting', [])->willReturn([]);
+        $queryBag->set('sorting', $overriddenSorting);
+        $requestBag->set('sorting', []);
 
         $this->getSorting($defaultSorting)->shouldReturn($combinedDefaultSorting);
 
         $parameters->get('sortable', false)->willReturn(true);
         $parameters->get('sorting', [])->willReturn(['sort' => 'route']);
         $attributesBag->get('sorting', $request)->willReturn($request);
-        $queryBag->has('sorting')->willReturn(true);
-        $queryBag->all()->willReturn(['sorting' => ['sort' => 'request']]);
-        $requestBag->get('sorting', [])->willReturn([]);
+        $queryBag->set('sorting', ['sort' => 'request']);
+        $requestBag->set('sorting', []);
 
         $this->getSorting(['sort' => 'default'])->shouldReturn(['sort' => 'request']);
     }
