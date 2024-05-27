@@ -44,6 +44,8 @@ EOT;
      */
     public function it_allows_versioned_creating_a_comic_book()
     {
+        $this->markAsSkippedIfNecessary();
+
         $data =
 <<<EOT
         {
@@ -134,6 +136,8 @@ EOT;
      */
     public function it_allows_versioning_of_a_showing_comic_book_serialization()
     {
+        $this->markAsSkippedIfNecessary();
+
         $objects = $this->loadFixturesFromFile('comic_books.yml');
 
         $this->client->request('GET', '/v1.2/comic-books/' . $objects['comic-book1']->getId());
@@ -146,6 +150,8 @@ EOT;
      */
     public function it_allows_indexing_of_comic_books()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('comic_books.yml');
 
         $this->client->request('GET', '/v1/comic-books/');
@@ -158,6 +164,8 @@ EOT;
      */
     public function it_allows_versioned_indexing_of_comic_books()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('comic_books.yml');
 
         $this->client->request('GET', '/v1.2/comic-books/');
@@ -175,5 +183,12 @@ EOT;
         $this->client->request('GET', '/v1/comic-books/3');
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NOT_FOUND);
+    }
+
+    private function markAsSkippedIfNecessary(): void
+    {
+        if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
+            $this->markTestSkipped();
+        }
     }
 }
