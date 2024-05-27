@@ -70,14 +70,22 @@ services:
             - '%app.model.book_translation.class%'
         tags: ['form.type']
 
-    Gedmo\Sortable\SortableListener:
-        calls:
-            -
-                setAnnotationReader: ['@annotation_reader']
+    gedmo_doctrine_extensions.mapping.driver.attribute:
+        class: Gedmo\Mapping\Driver\AttributeReader
+        public: false
+
+    gedmo.listener.sortable:
+        class: Gedmo\Sortable\SortableListener
         tags:
-            -
-                name: doctrine.event_subscriber
-                connection: default
+            - { name: doctrine.event_listener, event: 'onFlush' }
+            - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+            - { name: doctrine.event_listener, event: 'prePersist' }
+            - { name: doctrine.event_listener, event: 'postPersist' }
+            - { name: doctrine.event_listener, event: 'preUpdate' }
+            - { name: doctrine.event_listener, event: 'postRemove' }
+            - { name: doctrine.event_listener, event: 'postFlush' }
+        calls:
+            - [ setAnnotationReader, [ "@gedmo_doctrine_extensions.mapping.driver.attribute" ] ]
 
     App\Repository\ComicBookRepository: null
     App\Repository\LegacyBookRepository: null

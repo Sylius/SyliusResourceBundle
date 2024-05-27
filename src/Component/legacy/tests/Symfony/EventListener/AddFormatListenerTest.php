@@ -20,6 +20,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Sylius\Resource\Symfony\EventListener\AddFormatListener;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -55,7 +56,7 @@ final class AddFormatListenerTest extends TestCase
         $this->operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $request->attributes = new ParameterBag();
-        $request->headers = new ParameterBag(['Accept' => 'application/json']);
+        $request->headers = new HeaderBag(['Accept' => 'application/json']);
 
         $request->getFormat('application/json')->willReturn('json')->shouldBeCalled();
 
@@ -76,7 +77,7 @@ final class AddFormatListenerTest extends TestCase
         $this->operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $request->attributes = new ParameterBag(['_format' => 'json']);
-        $request->headers = new ParameterBag();
+        $request->headers = new HeaderBag();
 
         $request->getRequestFormat(null)->willReturn('json')->shouldBeCalled();
 
@@ -97,7 +98,7 @@ final class AddFormatListenerTest extends TestCase
         $this->operationInitiator->initializeOperation($request)->willReturn($operation);
 
         $request->attributes = new ParameterBag(['_format' => 'json-ld']);
-        $request->headers = new ParameterBag();
+        $request->headers = new HeaderBag();
 
         $request->getRequestFormat(null)->willReturn('json-ld')->shouldBeCalled();
 
