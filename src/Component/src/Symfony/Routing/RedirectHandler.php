@@ -18,7 +18,7 @@ use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;

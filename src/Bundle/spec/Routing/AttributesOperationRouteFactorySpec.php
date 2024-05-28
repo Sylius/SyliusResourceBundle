@@ -25,8 +25,8 @@ use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollecti
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 

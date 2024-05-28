@@ -23,7 +23,7 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Symfony\Request\State\Responder;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {

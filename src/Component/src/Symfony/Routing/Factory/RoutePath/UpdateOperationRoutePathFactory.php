@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\ShowOperationInterface;
+use Sylius\Resource\Metadata\UpdateOperationInterface;
 
-final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryInterface
+final class UpdateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)
     {
@@ -27,9 +27,10 @@ final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryIn
         $shortName = $operation->getShortName();
         $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
 
-        if ($operation instanceof ShowOperationInterface) {
+        if ($operation instanceof UpdateOperationInterface) {
             $path = match ($shortName) {
-                'show', 'get' => '',
+                'update' => '/edit',
+                'put', 'patch' => '',
                 default => '/' . $shortName,
             };
 
