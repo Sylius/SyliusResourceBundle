@@ -98,12 +98,12 @@
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
 
-        <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory" public="false">
+        <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route" />
             <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
         </service>
-        <service id="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
+        <service id="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
 
         <service id="sylius.routing.factory.operation_route" class="Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory" public="false">
             <argument type="service" id="sylius.routing.factory.operation_route_path_factory" />

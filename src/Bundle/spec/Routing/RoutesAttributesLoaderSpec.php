@@ -15,9 +15,9 @@ namespace spec\Sylius\Bundle\ResourceBundle\Routing;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader;
+use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 
