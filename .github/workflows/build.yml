@@ -89,6 +89,10 @@ jobs:
                 run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
 
             -
+                name: Upgrade winzou-state-machine to dev branch
+                run: composer require "winzou/state-machine-bundle" "dev-master" --no-update --no-scripts
+
+            -
                 name: Install dependencies
                 run: |
                     composer update --no-scripts
