@@ -168,6 +168,12 @@
             </errorLevel>
         </PossiblyNullArgument>
 
+        <PossiblyNullPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ContainerAwareTrait.php" />
+            </errorLevel>
+        </PossiblyNullPropertyAssignmentValue>
+
         <PossiblyNullReference>
             <errorLevel type="suppress">
                 <file name="src/Bundle/DependencyInjection/Configuration.php" />
