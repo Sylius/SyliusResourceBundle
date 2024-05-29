@@ -20,6 +20,7 @@
             <argument type="service">
                 <service class="Sylius\Bundle\ResourceBundle\Routing\RouteFactory" />
             </argument>
+            <argument>%kernel.environment%</argument>
             <tag name="routing.loader" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\ResourceLoader" alias="sylius.routing.loader.resource" public="false" />

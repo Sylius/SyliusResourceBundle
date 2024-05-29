@@ -17,22 +17,24 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Loader\LoaderResolverInterface;
+use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 
-final class ResourceLoader implements LoaderInterface
+final class ResourceLoader extends Loader
 {
     private RegistryInterface $resourceRegistry;
 
     private RouteFactoryInterface $routeFactory;
 
-    private LoaderResolverInterface $resolver;
+    public function __construct(
+        RegistryInterface $resourceRegistry,
+        RouteFactoryInterface $routeFactory,
+        ?string $env = null,
+    ) {
+        parent::__construct($env);
 
-    public function __construct(RegistryInterface $resourceRegistry, RouteFactoryInterface $routeFactory)
-    {
         $this->resourceRegistry = $resourceRegistry;
         $this->routeFactory = $routeFactory;
     }
@@ -103,19 +105,6 @@ final class ResourceLoader implements LoaderInterface
     public function supports($resource, $type = null): bool
     {
         return 'sylius.resource' === $type || 'sylius.resource_api' === $type;
-    }
-
-    /**
-     * @psalm-suppress InvalidReturnType Symfony docblocks are messing with us
-     */
-    public function getResolver(): LoaderResolverInterface
-    {
-        return $this->resolver;
-    }
-
-    public function setResolver(LoaderResolverInterface $resolver): void
-    {
-        $this->resolver = $resolver;
     }
 
     private function createRoute(
