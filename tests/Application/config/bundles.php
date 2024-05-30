@@ -34,7 +34,7 @@ return [
     TwigBundle::class => ['all' => true, 'test_without_twig' => false],
     FOSRestBundle::class => ['all' => true, 'test_without_fosrest' => false],
     JMSSerializerBundle::class => ['all' => true, 'test_without_fosrest' => false],
-    BazingaHateoasBundle::class => ['all' => true, 'test_without_fosrest' => false],
+    BazingaHateoasBundle::class => ['all' => true, 'test_without_hateoas' => false, 'test_without_fosrest' => false, 'test_with_attributes' => false],
     FidryAliceDataFixturesBundle::class => ['all' => true],
     NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],

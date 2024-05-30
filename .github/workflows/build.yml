@@ -35,7 +35,7 @@ jobs:
                       experimental: false
                     - php: 8.3
                       symfony: "^7.0"
-                      app_env: "test_without_fosrest"
+                      app_env: "test_without_hateoas"
                       experimental: true
                 exclude:
                     - php: "8.1"
@@ -176,6 +176,7 @@ jobs:
 
             -
                 name: Run lint container without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
@@ -184,6 +185,7 @@ jobs:
 
             -
                 name: Run lint container without winzou/state-machine-bundle package
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove winzou/state-machine-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
@@ -192,6 +194,7 @@ jobs:
 
             -
                 name: Run lint container without twig/twig package
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove symfony/twig-bundle --no-scripts
                     composer remove sylius/grid-bundle --no-scripts --dev
