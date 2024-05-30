@@ -33,13 +33,9 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
     }
 
     /**
-     * @psalm-suppress MissingParamType
-     *
-     * @param object|null $value
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         if (null === $value) {
             return null;
@@ -51,8 +47,10 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
-    /** @param int|string|null $value */
-    public function reverseTransform($value): ?ResourceInterface
+    /**
+     * @inheritDoc
+     */
+    public function reverseTransform(mixed $value): ?ResourceInterface
     {
         if (null === $value) {
             return null;
