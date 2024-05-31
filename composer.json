@@ -50,7 +50,7 @@
         "symfony/validator": "^5.4 || ^6.4 || ^7.0",
         "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
         "webmozart/assert": "^1.8",
-        "winzou/state-machine-bundle": "^0.6",
+        "winzou/state-machine-bundle": "^0.6.2",
         "willdurand/negotiation": "^3.1"
     },
     "replace": {
