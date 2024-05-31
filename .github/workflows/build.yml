@@ -94,10 +94,6 @@ jobs:
                 run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
 
             -
-                name: Upgrade winzou-state-machine to dev branch
-                run: composer require "winzou/state-machine-bundle" "dev-master" --no-update --no-scripts
-
-            -
                 name: Remove hateoas on Symfony 7
                 if: matrix.symfony == '^7.0'
                 run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
