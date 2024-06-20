@@ -73,12 +73,6 @@
             </errorLevel>
         </InvalidArgument>
 
-        <InvalidDocblock>
-            <errorLevel type="suppress">
-                <file name="vendor/doctrine/orm/lib/Doctrine/ORM/EntityRepository.php" />
-            </errorLevel>
-        </InvalidDocblock>
-
         <InvalidReturnStatement>
             <errorLevel type="suppress">
                 <file name="src/Component/Repository/InMemoryRepository.php" />
