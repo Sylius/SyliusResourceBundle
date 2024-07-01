@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Response;
 
+/**
+ * @experimental
+ */
 final class ApiHeadersInitiator implements HeadersInitiatorInterface
 {
     public function initializeHeaders(string $mimeType): array

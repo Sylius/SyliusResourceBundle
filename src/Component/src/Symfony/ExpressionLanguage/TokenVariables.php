@@ -16,6 +16,9 @@ namespace Sylius\Resource\Symfony\ExpressionLanguage;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @experimental
+ */
 final class TokenVariables implements VariablesInterface
 {
     public function __construct(private ?TokenStorageInterface $tokenStorage = null)

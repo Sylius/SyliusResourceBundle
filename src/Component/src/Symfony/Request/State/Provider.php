@@ -25,6 +25,9 @@ use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
 
+/**
+ * @experimental
+ */
 final class Provider implements ProviderInterface
 {
     public function __construct(

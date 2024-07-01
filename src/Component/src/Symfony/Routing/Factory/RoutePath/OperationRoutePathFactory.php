@@ -15,6 +15,9 @@ namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 final class OperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function createRoutePath(Operation $operation, string $rootPath): string

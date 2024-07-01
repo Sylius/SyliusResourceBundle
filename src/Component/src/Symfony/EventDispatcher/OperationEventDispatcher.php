@@ -17,6 +17,9 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @experimental
+ */
 final class OperationEventDispatcher implements OperationEventDispatcherInterface
 {
     public function __construct(

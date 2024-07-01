@@ -17,6 +17,9 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 
+/**
+ * @experimental
+ */
 interface FlashHelperInterface
 {
     public function addSuccessFlash(Operation $operation, Context $context): void;

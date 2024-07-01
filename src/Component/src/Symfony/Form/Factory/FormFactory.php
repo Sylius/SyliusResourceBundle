@@ -19,6 +19,9 @@ use Sylius\Resource\Metadata\Operation;
 use Symfony\Component\Form\FormFactoryInterface as SymfonyFormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @experimental
+ */
 final class FormFactory implements FormFactoryInterface
 {
     private SymfonyFormFactoryInterface $formFactory;

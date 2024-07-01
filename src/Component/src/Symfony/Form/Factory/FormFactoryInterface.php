@@ -17,6 +17,9 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @experimental
+ */
 interface FormFactoryInterface
 {
     public function create(Operation $operation, Context $context, mixed $data = null): FormInterface;

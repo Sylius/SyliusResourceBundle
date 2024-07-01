@@ -16,6 +16,9 @@ namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\UpdateOperationInterface;
 
+/**
+ * @experimental
+ */
 final class UpdateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)

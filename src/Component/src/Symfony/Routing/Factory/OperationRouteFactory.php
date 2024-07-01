@@ -20,6 +20,9 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\Route;
 
+/**
+ * @experimental
+ */
 final class OperationRouteFactory implements OperationRouteFactoryInterface
 {
     public function __construct(
