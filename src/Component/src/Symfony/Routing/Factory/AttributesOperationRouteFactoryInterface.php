@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Routing;
+namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Symfony\Component\Routing\RouteCollection;
 
