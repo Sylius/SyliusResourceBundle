@@ -17,6 +17,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\Route;
 
 final class OperationRouteFactory implements OperationRouteFactoryInterface
