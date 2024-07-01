@@ -21,6 +21,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Serializes the data to the requested format.
+ *
+ * @experimental
  */
 final class SerializeProcessor implements ProcessorInterface
 {

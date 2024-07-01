@@ -17,6 +17,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Thrown when a validation error occurs.
+ *
+ * @experimental
  */
 final class ValidationException extends \RuntimeException implements ConstraintViolationListAwareExceptionInterface
 {

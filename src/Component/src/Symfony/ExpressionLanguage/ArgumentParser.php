@@ -15,6 +15,9 @@ namespace Sylius\Resource\Symfony\ExpressionLanguage;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+/**
+ * @experimental
+ */
 final class ArgumentParser implements ArgumentParserInterface
 {
     public function __construct(

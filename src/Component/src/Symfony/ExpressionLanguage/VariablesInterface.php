@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\ExpressionLanguage;
 
+/**
+ * @experimental
+ */
 interface VariablesInterface
 {
     public function getVariables(): array;

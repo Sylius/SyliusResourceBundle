@@ -20,6 +20,9 @@ use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class OperationStateMachine implements OperationStateMachineInterface
 {
     public function __construct(private ?Factory $factory = null)

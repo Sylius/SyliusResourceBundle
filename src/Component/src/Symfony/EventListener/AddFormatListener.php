@@ -19,6 +19,9 @@ use Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
+/**
+ * @experimental
+ */
 final class AddFormatListener
 {
     public function __construct(

@@ -24,6 +24,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @experimental
+ */
 final class RedirectHandler implements RedirectHandlerInterface
 {
     public function __construct(

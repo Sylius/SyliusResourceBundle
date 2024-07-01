@@ -20,6 +20,9 @@ use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class RespondProcessor implements ProcessorInterface
 {
     public function __construct(

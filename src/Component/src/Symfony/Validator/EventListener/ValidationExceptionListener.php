@@ -20,6 +20,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Handles validation errors.
+ *
+ * @experimental
  */
 final class ValidationExceptionListener
 {

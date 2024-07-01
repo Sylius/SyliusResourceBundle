@@ -18,6 +18,9 @@ use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Routing\Route;
 
+/**
+ * @experimental
+ */
 interface OperationRouteFactoryInterface
 {
     public function create(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route;

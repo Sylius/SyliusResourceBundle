@@ -17,6 +17,9 @@ use Sylius\Resource\Metadata\Api\ApiOperationInterface;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 
+/**
+ * @experimental
+ */
 final class DeleteOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)

@@ -24,6 +24,9 @@ use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class FlashHelper implements FlashHelperInterface
 {
     public function __construct(

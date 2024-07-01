@@ -20,6 +20,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProviderInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @experimental
+ */
 final class ReadProvider implements ProviderInterface
 {
     public function __construct(

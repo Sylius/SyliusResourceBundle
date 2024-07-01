@@ -24,6 +24,9 @@ use Sylius\Resource\Symfony\Response\HeadersInitiatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class ApiResponder implements ResponderInterface
 {
     public function __construct(private HeadersInitiatorInterface $headersInitializer)
