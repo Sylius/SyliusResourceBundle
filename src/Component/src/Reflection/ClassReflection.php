@@ -17,6 +17,9 @@ use Symfony\Component\Finder\Finder;
 
 final class ClassReflection
 {
+    /**
+     * @return \Generator<class-string>
+     */
     public static function getResourcesByPaths(array $paths): iterable
     {
         foreach ($paths as $resourceDirectory) {

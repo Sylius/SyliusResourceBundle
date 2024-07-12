@@ -20,6 +20,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\FactoryInterface;
 use Sylius\Resource\State\ProviderInterface;
 
+/**
+ * @experimental
+ */
 final class FactoryProvider implements ProviderInterface
 {
     public function __construct(

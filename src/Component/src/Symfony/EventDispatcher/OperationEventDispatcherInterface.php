@@ -16,6 +16,9 @@ namespace Sylius\Resource\Symfony\EventDispatcher;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 interface OperationEventDispatcherInterface
 {
     public function dispatch(mixed $data, Operation $operation, Context $context): OperationEvent;

@@ -1,5 +1,23 @@
 ## CHANGELOG
 
+## v1.11.0-RC.2 (2024-07-12)
+
+#### Details
+
+- [#900](https://github.com/Sylius/SyliusResourceBundle/issues/900) [Maintenance] Fix PHPStan errors related to class-string ([@lchrusciel](https://github.com/lchrusciel))
+
+## v1.11.0-RC.1 (2024-07-11)
+
+#### Details
+
+- [#874](https://github.com/Sylius/SyliusResourceBundle/issues/874) Remove PHP 8.0 support & not maintained Symfony versions ([@loic425](https://github.com/loic425))
+- [#878](https://github.com/Sylius/SyliusResourceBundle/issues/878) Fix dependency injection namespace ([@loic425](https://github.com/loic425))
+- [#883](https://github.com/Sylius/SyliusResourceBundle/issues/883) Fix form parameter bags accesing in request handler ([@NoResponseMate](https://github.com/NoResponseMate))
+- [#895](https://github.com/Sylius/SyliusResourceBundle/issues/895) Move some routing factories into 2 sub-directories ([@loic425](https://github.com/loic425))
+- [#896](https://github.com/Sylius/SyliusResourceBundle/issues/896) Move attributes operation route factory into sylius resource namespace ([@loic425](https://github.com/loic425))
+- [#898](https://github.com/Sylius/SyliusResourceBundle/issues/898) [Maintenance] Fix builds ([@NoResponseMate](https://github.com/NoResponseMate))
+- [#899](https://github.com/Sylius/SyliusResourceBundle/issues/899) Add missing experimental tags for new routing system ([@loic425](https://github.com/loic425))
+
 ## v1.11.0-BETA.2 (2024-05-14)
 
 #### Details

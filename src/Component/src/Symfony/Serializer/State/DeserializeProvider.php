@@ -22,6 +22,9 @@ use Sylius\Resource\State\ProviderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @experimental
+ */
 final class DeserializeProvider implements ProviderInterface
 {
     public function __construct(

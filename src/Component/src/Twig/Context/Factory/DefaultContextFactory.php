@@ -17,6 +17,9 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 final class DefaultContextFactory implements ContextFactoryInterface
 {
     public function create(mixed $data, Operation $operation, Context $context): array

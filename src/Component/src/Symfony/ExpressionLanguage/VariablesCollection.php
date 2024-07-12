@@ -15,6 +15,9 @@ namespace Sylius\Resource\Symfony\ExpressionLanguage;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class VariablesCollection implements VariablesCollectionInterface
 {
     /** @param iterable<int, VariablesInterface> $iterator */

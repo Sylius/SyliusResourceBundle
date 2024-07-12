@@ -21,6 +21,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class Factory implements FactoryInterface
 {
     public function __construct(

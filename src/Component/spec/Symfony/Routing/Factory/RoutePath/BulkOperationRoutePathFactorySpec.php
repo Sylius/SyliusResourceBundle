@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory;
+namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\BulkUpdate;
-use Sylius\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
 final class BulkOperationRoutePathFactorySpec extends ObjectBehavior
 {

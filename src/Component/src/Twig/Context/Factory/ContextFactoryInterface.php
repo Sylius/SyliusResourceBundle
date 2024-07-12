@@ -16,6 +16,9 @@ namespace Sylius\Resource\Twig\Context\Factory;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 interface ContextFactoryInterface
 {
     public function create(mixed $data, Operation $operation, Context $context): array;

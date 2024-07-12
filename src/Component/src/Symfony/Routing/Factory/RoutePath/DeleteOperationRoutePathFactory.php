@@ -11,12 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
+use Sylius\Resource\Metadata\Api\ApiOperationInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\UpdateOperationInterface;
 
-final class UpdateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
+/**
+ * @experimental
+ */
+final class DeleteOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)
     {
@@ -27,12 +31,8 @@ final class UpdateOperationRoutePathFactory implements OperationRoutePathFactory
         $shortName = $operation->getShortName();
         $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
 
-        if ($operation instanceof UpdateOperationInterface) {
-            $path = match ($shortName) {
-                'update' => '/edit',
-                'put', 'patch' => '',
-                default => '/' . $shortName,
-            };
+        if ($operation instanceof DeleteOperationInterface) {
+            $path = $operation instanceof ApiOperationInterface && 'delete' === $shortName ? '' : '/' . $shortName;
 
             return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
         }

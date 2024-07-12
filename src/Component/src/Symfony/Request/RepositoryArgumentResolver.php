@@ -16,6 +16,9 @@ namespace Sylius\Resource\Symfony\Request;
 use Sylius\Resource\Reflection\Filter\FunctionArgumentsFilter;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @experimental
+ */
 final class RepositoryArgumentResolver
 {
     public function getArguments(Request $request, \ReflectionFunctionAbstract $reflector): array

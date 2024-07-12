@@ -26,7 +26,7 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
 final class OperationRouteFactorySpec extends ObjectBehavior
 {

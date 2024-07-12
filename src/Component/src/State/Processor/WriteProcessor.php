@@ -18,6 +18,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @experimental
+ */
 final class WriteProcessor implements ProcessorInterface
 {
     public function __construct(

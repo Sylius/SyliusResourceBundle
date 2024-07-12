@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Routing;
+namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\MetadataInterface;
@@ -19,7 +19,6 @@ use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;

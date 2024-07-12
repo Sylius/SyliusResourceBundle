@@ -16,6 +16,9 @@ namespace Sylius\Resource\StateMachine;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 interface OperationStateMachineInterface
 {
     public function can(object $data, Operation $operation, Context $context): bool;

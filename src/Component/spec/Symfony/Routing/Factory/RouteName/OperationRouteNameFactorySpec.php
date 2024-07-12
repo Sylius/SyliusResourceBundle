@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory;
+namespace spec\Sylius\Resource\Symfony\Routing\Factory\RouteName;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
 final class OperationRouteNameFactorySpec extends ObjectBehavior
 {

@@ -21,6 +21,9 @@ use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * @experimental
+ */
 final class OperationEventHandler implements OperationEventHandlerInterface
 {
     public function __construct(

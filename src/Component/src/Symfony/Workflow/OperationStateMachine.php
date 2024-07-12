@@ -20,6 +20,9 @@ use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 use Symfony\Component\Workflow\Registry;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class OperationStateMachine implements OperationStateMachineInterface
 {
     public function __construct(private ?Registry $registry = null)

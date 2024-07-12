@@ -20,6 +20,9 @@ use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @experimental
+ */
 final class FlashProcessor implements ProcessorInterface
 {
     public function __construct(

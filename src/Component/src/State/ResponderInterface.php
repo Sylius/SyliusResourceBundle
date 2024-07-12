@@ -16,6 +16,9 @@ namespace Sylius\Resource\State;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 interface ResponderInterface
 {
     /**

@@ -20,7 +20,7 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
 use Sylius\Resource\Symfony\Routing\RedirectHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;

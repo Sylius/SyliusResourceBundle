@@ -19,6 +19,9 @@ use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class ContextFactory implements ContextFactoryInterface
 {
     public function __construct(private ContainerInterface $locator)

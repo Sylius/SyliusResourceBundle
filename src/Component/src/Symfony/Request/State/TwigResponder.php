@@ -26,6 +26,9 @@ use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
+/**
+ * @experimental
+ */
 final class TwigResponder implements ResponderInterface
 {
     public function __construct(

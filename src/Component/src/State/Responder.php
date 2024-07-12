@@ -18,6 +18,9 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class Responder implements ResponderInterface
 {
     public function __construct(private ContainerInterface $locator)

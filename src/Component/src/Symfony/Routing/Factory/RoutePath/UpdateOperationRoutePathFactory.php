@@ -11,12 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
-use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\UpdateOperationInterface;
 
-final class CreateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
+/**
+ * @experimental
+ */
+final class UpdateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)
     {
@@ -25,15 +28,16 @@ final class CreateOperationRoutePathFactory implements OperationRoutePathFactory
     public function createRoutePath(HttpOperation $operation, string $rootPath): string
     {
         $shortName = $operation->getShortName();
+        $identifier = $operation->getResource()?->getIdentifier() ?? 'id';
 
-        if ($operation instanceof CreateOperationInterface) {
+        if ($operation instanceof UpdateOperationInterface) {
             $path = match ($shortName) {
-                'create' => '/new',
-                'post' => '',
+                'update' => '/edit',
+                'put', 'patch' => '',
                 default => '/' . $shortName,
             };
 
-            return sprintf('%s%s', $rootPath, $path);
+            return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);
         }
 
         return $this->decorated->createRoutePath($operation, $rootPath);
