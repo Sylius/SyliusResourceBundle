@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Reflection;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Retrieves information about a class.
  *
@@ -22,6 +24,8 @@ trait ClassInfoTrait
 {
     /**
      * Get class name of the given object.
+     *
+     * @return class-string
      */
     private function getObjectClass(object $object): string
     {
@@ -30,6 +34,10 @@ trait ClassInfoTrait
 
     /**
      * Get the real class name of a class name that could be a proxy.
+     *
+     * @param class-string $className
+     *
+     * @return class-string
      */
     private function getRealClassName(string $className): string
     {
@@ -43,15 +51,23 @@ trait ClassInfoTrait
         }
 
         if (false !== $positionCg) {
-            return substr($className, $positionCg + 8);
+            $unProxiedClassName = substr($className, $positionCg + 8);
+
+            Assert::classExists($unProxiedClassName);
+
+            return $unProxiedClassName;
         }
 
         $className = ltrim($className, '\\');
 
-        return substr(
+        $unProxiedClassName = substr(
             $className,
             8 + $positionPm,
             strrpos($className, '\\') - ($positionPm + 8),
         );
+
+        Assert::classExists($unProxiedClassName);
+
+        return $unProxiedClassName;
     }
 }

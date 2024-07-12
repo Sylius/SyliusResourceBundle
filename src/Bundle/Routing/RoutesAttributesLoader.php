@@ -32,7 +32,6 @@ final class RoutesAttributesLoader implements RouteLoaderInterface
         $routeCollection = new RouteCollection();
         $paths = $this->mapping['paths'] ?? [];
 
-        /** @var string $className */
         foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
             $this->routesAttributesFactory->createRouteForClass($routeCollection, $className);
             $this->attributesOperationRouteFactory->createRouteForClass($routeCollection, $className);
