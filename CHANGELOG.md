@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+## v1.11.0-RC.2 (2024-07-12)
+
+#### Details
+
+- [#900](https://github.com/Sylius/SyliusResourceBundle/issues/900) [Maintenance] Fix PHPStan errors related to class-string ([@lchrusciel](https://github.com/lchrusciel))
+
 ## v1.11.0-RC.1 (2024-07-11)
 
 #### Details
