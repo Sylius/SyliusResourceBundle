@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
+use Sylius\Component\Grid\View\GridViewInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 final class TwigBulkActionGridRendererSpec extends ObjectBehavior
@@ -29,6 +32,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
         $this->beConstructedWith(
             $twig,
             $optionsParser,
+            new RequestStack(),
             ['delete' => '@SyliusGrid/BulkAction/_delete.html.twig'],
         );
     }
@@ -41,7 +45,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
     function it_uses_twig_to_render_the_bulk_action(
         Environment $twig,
         OptionsParserInterface $optionsParser,
-        ResourceGridView $gridView,
+        GridViewInterface $gridView,
         Action $bulkAction,
         RequestConfiguration $requestConfiguration,
         Request $request,
@@ -49,10 +53,7 @@ final class TwigBulkActionGridRendererSpec extends ObjectBehavior
         $bulkAction->getType()->willReturn('delete');
         $bulkAction->getOptions()->willReturn([]);
 
-        $gridView->getRequestConfiguration()->willReturn($requestConfiguration);
-        $requestConfiguration->getRequest()->willReturn($request);
-
-        $optionsParser->parseOptions([], $request, null)->shouldBeCalled();
+        $optionsParser->parseOptions([], Argument::type(Request::class), null)->shouldBeCalled();
 
         $twig
             ->render('@SyliusGrid/BulkAction/_delete.html.twig', [

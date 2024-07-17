@@ -14,35 +14,24 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
-use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\Definition\Filter;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
-use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
 {
-    private GridRendererInterface $gridRenderer;
-
-    private Environment $twig;
-
-    private OptionsParserInterface $optionsParser;
-
-    private array $actionTemplates;
-
     public function __construct(
-        GridRendererInterface $gridRenderer,
-        Environment $twig,
-        OptionsParserInterface $optionsParser,
-        array $actionTemplates = [],
+        private GridRendererInterface $gridRenderer,
+        private Environment $twig,
+        private OptionsParserInterface $optionsParser,
+        private RequestStack $requestStack,
+        private array $actionTemplates = [],
     ) {
-        $this->gridRenderer = $gridRenderer;
-        $this->twig = $twig;
-        $this->optionsParser = $optionsParser;
-        $this->actionTemplates = $actionTemplates;
     }
 
     public function render(GridViewInterface $gridView, ?string $template = null): string
@@ -63,7 +52,7 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        Assert::isInstanceOf($gridView, ResourceGridView::class);
+        $request = $this->requestStack->getCurrentRequest();
 
         $type = $action->getType();
         if (!isset($this->actionTemplates[$type])) {
@@ -72,7 +61,7 @@ final class TwigGridRenderer implements GridRendererInterface
 
         $options = $this->optionsParser->parseOptions(
             $action->getOptions(),
-            $gridView->getRequestConfiguration()->getRequest(),
+            $request ?? new Request(),
             $data,
         );
 

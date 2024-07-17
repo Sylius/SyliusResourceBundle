@@ -14,34 +14,26 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
-use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
-use Webmozart\Assert\Assert;
 
 final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterface
 {
-    private Environment $twig;
-
-    private OptionsParserInterface $optionsParser;
-
-    private array $bulkActionTemplates;
-
     public function __construct(
-        Environment $twig,
-        OptionsParserInterface $optionsParser,
-        array $bulkActionTemplates = [],
+        private Environment $twig,
+        private OptionsParserInterface $optionsParser,
+        private RequestStack $requestStack,
+        private array $bulkActionTemplates = [],
     ) {
-        $this->twig = $twig;
-        $this->optionsParser = $optionsParser;
-        $this->bulkActionTemplates = $bulkActionTemplates;
     }
 
     public function renderBulkAction(GridViewInterface $gridView, Action $bulkAction, $data = null): string
     {
-        Assert::isInstanceOf($gridView, ResourceGridView::class);
+        $request = $this->requestStack->getCurrentRequest();
 
         $type = $bulkAction->getType();
         if (!isset($this->bulkActionTemplates[$type])) {
@@ -50,7 +42,7 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
 
         $options = $this->optionsParser->parseOptions(
             $bulkAction->getOptions(),
-            $gridView->getRequestConfiguration()->getRequest(),
+            $request ?? new Request(),
             $data,
         );
 

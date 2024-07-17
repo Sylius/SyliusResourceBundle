@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
+use Sylius\Component\Grid\View\GridViewInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 final class TwigGridRendererSpec extends ObjectBehavior
@@ -38,6 +40,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
             $gridRenderer,
             $twig,
             $optionsParser,
+            new RequestStack(),
             $actionTemplates,
         );
     }
@@ -50,18 +53,13 @@ final class TwigGridRendererSpec extends ObjectBehavior
     function it_uses_twig_to_render_the_action(
         Environment $twig,
         OptionsParserInterface $optionsParser,
-        ResourceGridView $gridView,
+        GridViewInterface $gridView,
         Action $action,
-        RequestConfiguration $requestConfiguration,
-        Request $request,
     ): void {
         $action->getType()->willReturn('link');
         $action->getOptions()->willReturn([]);
 
-        $gridView->getRequestConfiguration()->willReturn($requestConfiguration);
-        $requestConfiguration->getRequest()->willReturn($request);
-
-        $optionsParser->parseOptions([], $request, null)->shouldBeCalled();
+        $optionsParser->parseOptions([], Argument::type(Request::class), null)->shouldBeCalled();
 
         $twig
             ->render('@SyliusGrid/Action/_link.html.twig', [
