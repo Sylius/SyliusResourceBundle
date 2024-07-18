@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
-use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Sylius\Resource\Grid\Parser\OptionsParserInterface;
 use Twig\Environment;
 use Webmozart\Assert\Assert;
 

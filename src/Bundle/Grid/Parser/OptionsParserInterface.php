@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
 
-use Symfony\Component\HttpFoundation\Request;
+interface_exists(\Sylius\Resource\Grid\Parser\OptionsParserInterface::class);
 
-interface OptionsParserInterface
-{
-    /**
-     * @param mixed $data
-     */
-    public function parseOptions(array $parameters, Request $request, $data = null): array;
+if (false) {
+    interface OptionsParserInterface extends \Sylius\Resource\Grid\Parser\OptionsParserInterface
+    {
+    }
 }

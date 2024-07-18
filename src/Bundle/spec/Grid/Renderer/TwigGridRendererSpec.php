@@ -15,10 +15,10 @@ namespace spec\Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
+use Sylius\Resource\Grid\Parser\OptionsParserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 

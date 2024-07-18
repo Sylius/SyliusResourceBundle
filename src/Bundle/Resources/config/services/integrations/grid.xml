@@ -45,12 +45,15 @@
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer" alias="sylius.custom_bulk_action_grid_renderer.twig" />
 
-        <service id="sylius.grid_options_parser" class="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser" public="false">
+        <service id="sylius.grid_options_parser" class="Sylius\Resource\Grid\Parser\OptionsParser" public="false">
             <argument type="service" id="service_container" />
             <argument type="service" id="sylius.expression_language" />
             <argument type="service" id="property_accessor" />
         </service>
-        <service id="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface" alias="sylius.grid_options_parser" public="false" />
+        <service id="Sylius\Resource\Grid\Parser\OptionsParserInterface" alias="sylius.grid_options_parser" public="false" />
+        <service id="Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface" alias="sylius.grid_options_parser" public="false">
+            <deprecated package="sylius/resource-bundle" version="1.11">The "%alias_id%" service alias is deprecated since sylius/resource-bundle 1.11 and will be removed in sylius/resource-bundle 2.0. Use Sylius\Resource\Grid\Parser\OptionsParserInterface instead.</deprecated>
+        </service>
 
         <service id="sylius.grid.view_factory.legacy"
                  class="Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory"
