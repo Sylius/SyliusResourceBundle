@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
+namespace Sylius\Resource\Grid\Renderer;
 
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
@@ -30,8 +30,8 @@ final class TwigGridRenderer implements GridRendererInterface
         private GridRendererInterface $gridRenderer,
         private Environment $twig,
         private OptionsParserInterface $optionsParser,
+        private RequestStack $requestStack,
         private array $actionTemplates = [],
-        private ?RequestStack $requestStack = null,
     ) {
     }
 
@@ -53,8 +53,6 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        $request = $this->requestStack->getCurrentRequest();
-
         $type = $action->getType();
         if (!isset($this->actionTemplates[$type])) {
             throw new \InvalidArgumentException(sprintf('Missing template for action type "%s".', $type));
@@ -62,7 +60,7 @@ final class TwigGridRenderer implements GridRendererInterface
 
         $options = $this->optionsParser->parseOptions(
             $action->getOptions(),
-            $request ?? new Request(),
+            $this->requestStack->getCurrentRequest() ?? new Request(),
             $data,
         );
 
@@ -77,14 +75,5 @@ final class TwigGridRenderer implements GridRendererInterface
     public function renderFilter(GridViewInterface $gridView, Filter $filter): string
     {
         return $this->gridRenderer->renderFilter($gridView, $filter);
-    }
-
-    private function getRequest(GridViewInterface $gridView): Request
-    {
-        if ($gridView instanceof ResourceGridView) {
-            return $gridView->getRequestConfiguration()->getRequest();
-        }
-
-        return $this->requestStack?->getCurrentRequest() ?? new Request();
     }
 }

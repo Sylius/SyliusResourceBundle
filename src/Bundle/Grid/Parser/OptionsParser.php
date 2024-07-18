@@ -13,108 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+class_exists(\Sylius\Resource\Grid\Parser\OptionsParser::class);
 
-final class OptionsParser implements OptionsParserInterface
-{
-    private ContainerInterface $container;
-
-    private ExpressionLanguage $expression;
-
-    private PropertyAccessorInterface $propertyAccessor;
-
-    public function __construct(
-        ContainerInterface $container,
-        ExpressionLanguage $expression,
-        PropertyAccessorInterface $propertyAccessor,
-    ) {
-        $this->container = $container;
-        $this->expression = $expression;
-        $this->propertyAccessor = $propertyAccessor;
-    }
-
-    /**
-     * @param array|object|null $data
-     */
-    public function parseOptions(array $parameters, Request $request, $data = null): array
+if (false) {
+    final class OptionsParser extends \Sylius\Resource\Grid\Parser\OptionsParser
     {
-        return array_map(
-            /**
-             * @param mixed $parameter
-             *
-             * @return mixed
-             */
-            function ($parameter) use ($request, $data) {
-                if (is_array($parameter)) {
-                    return $this->parseOptions($parameter, $request, $data);
-                }
-
-                return $this->parseOption($parameter, $request, $data);
-            },
-            $parameters,
-        );
-    }
-
-    /**
-     * @param mixed $parameter
-     * @param array|object|null $data
-     *
-     * @return mixed
-     */
-    private function parseOption($parameter, Request $request, $data)
-    {
-        if (!is_string($parameter)) {
-            return $parameter;
-        }
-
-        if (0 === strpos($parameter, '$')) {
-            return $request->get(substr($parameter, 1));
-        }
-
-        if (0 === strpos($parameter, 'expr:')) {
-            return $this->parseOptionExpression(substr($parameter, 5), $request);
-        }
-
-        if (0 === strpos($parameter, 'resource.')) {
-            return $this->parseOptionResourceField(substr($parameter, 9), $data);
-        }
-
-        if (0 === strpos($parameter, 'resource[')) {
-            return $this->parseOptionResourceField(substr($parameter, 8), $data);
-        }
-
-        return $parameter;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function parseOptionExpression(string $expression, Request $request)
-    {
-        $expression = (string) preg_replace_callback(
-            '/\$(\w+)/',
-            /** @return callable */
-            function (array $matches) use ($request) {
-                $variable = $request->get($matches[1]);
-
-                return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
-            },
-            $expression,
-        );
-
-        return $this->expression->evaluate($expression, ['container' => $this->container]);
-    }
-
-    /**
-     * @param array|object|null $data
-     *
-     * @return mixed
-     */
-    private function parseOptionResourceField(string $value, $data)
-    {
-        return $this->propertyAccessor->getValue($data, $value);
     }
 }
+

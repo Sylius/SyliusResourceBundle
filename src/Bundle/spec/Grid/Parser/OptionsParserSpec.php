@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace spec\Sylius\Bundle\ResourceBundle\Grid\Parser;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Resource\Grid\Parser\OptionsParserInterface;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
