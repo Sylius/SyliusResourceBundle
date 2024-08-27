@@ -50,3 +50,13 @@ sylius_resource:
             classes:
                 model: App\Entity\PullRequest
                 form: App\Form\Type\PullRequestType
+
+        app.zone:
+            classes:
+                model: App\Entity\Zone\Zone
+                interface: App\Entity\Zone\ZoneInterface
+
+        app.zone_member:
+            classes:
+                model: App\Entity\Zone\ZoneMember
+                interface: App\Entity\Zone\ZoneMemberInterface
