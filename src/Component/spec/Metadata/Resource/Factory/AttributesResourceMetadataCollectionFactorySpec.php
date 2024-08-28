@@ -41,7 +41,7 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Request\State\Responder;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
 final class AttributesResourceMetadataCollectionFactorySpec extends ObjectBehavior
 {

@@ -21,6 +21,9 @@ use Sylius\Resource\State\ProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @experimental
+ */
 final class MainController
 {
     public function __construct(

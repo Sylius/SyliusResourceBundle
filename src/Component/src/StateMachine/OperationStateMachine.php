@@ -19,6 +19,9 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @experimental
+ */
 final class OperationStateMachine implements OperationStateMachineInterface
 {
     public function __construct(private ContainerInterface $locator)

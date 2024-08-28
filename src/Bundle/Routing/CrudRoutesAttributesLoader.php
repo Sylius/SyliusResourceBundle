@@ -39,7 +39,6 @@ final class CrudRoutesAttributesLoader implements RouteLoaderInterface
         $routeCollection = new RouteCollection();
         $paths = $this->mapping['paths'] ?? [];
 
-        /** @var string $className */
         foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
             $this->addRoutesForSyliusCrudRoutesAttributes($routeCollection, $className);
         }
@@ -47,6 +46,9 @@ final class CrudRoutesAttributesLoader implements RouteLoaderInterface
         return $routeCollection;
     }
 
+    /**
+     * @param class-string $className
+     */
     private function addRoutesForSyliusCrudRoutesAttributes(RouteCollection $routeCollection, string $className): void
     {
         $attributes = ClassReflection::getClassAttributes($className, SyliusCrudRoutes::class);

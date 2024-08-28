@@ -40,16 +40,16 @@
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" alias="sylius.routing.loader.routes_attributes" public="false" />
 
-        <service id="sylius.routing.factory.operation_route_name_factory" class="Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory" public="false" />
-        <service id="Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactoryInterface" alias="sylius.routing.factory.operation_route_name_factory" />
+        <service id="sylius.routing.factory.operation_route_name_factory" class="Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory" public="false" />
+        <service id="Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface" alias="sylius.routing.factory.operation_route_name_factory" />
 
-        <service id="sylius.routing.factory.operation_route_path_factory.default" class="Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactory" public="false" />
+        <service id="sylius.routing.factory.operation_route_path_factory.default" class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactory" public="false" />
 
         <service id="sylius.routing.factory.operation_route_path_factory" alias="sylius.routing.factory.operation_route_path_factory.default" />
-        <service id="Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface" alias="sylius.routing.factory.operation_route_path_factory" />
+        <service id="Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface" alias="sylius.routing.factory.operation_route_path_factory" />
 
         <service id="sylius.routing.factory.operation_route_path_factory.collection"
-                 class="Sylius\Resource\Symfony\Routing\Factory\CollectionOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\CollectionOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="60"
         >
@@ -57,7 +57,7 @@
         </service>
 
         <service id="sylius.routing.factory.operation_route_path_factory.create"
-                 class="Sylius\Resource\Symfony\Routing\Factory\CreateOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\CreateOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-50"
         >
@@ -65,7 +65,7 @@
         </service>
 
         <service id="sylius.routing.factory.operation_route_path_factory.bulk_operation"
-                 class="Sylius\Resource\Symfony\Routing\Factory\BulkOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-40"
         >
@@ -73,7 +73,7 @@
         </service>
 
         <service id="sylius.routing.factory.operation_route_path_factory.update"
-                 class="Sylius\Resource\Symfony\Routing\Factory\UpdateOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\UpdateOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-30"
         >
@@ -81,7 +81,7 @@
         </service>
 
         <service id="sylius.routing.factory.operation_route_path_factory.delete"
-                 class="Sylius\Resource\Symfony\Routing\Factory\DeleteOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\DeleteOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-20"
         >
@@ -89,7 +89,7 @@
         </service>
 
         <service id="sylius.routing.factory.operation_route_path_factory.show"
-                 class="Sylius\Resource\Symfony\Routing\Factory\ShowOperationRoutePathFactory"
+                 class="Sylius\Resource\Symfony\Routing\Factory\RoutePath\ShowOperationRoutePathFactory"
                  decorates="sylius.routing.factory.operation_route_path_factory.default"
                  decoration-priority="-10"
         >
@@ -99,12 +99,12 @@
         <service id="sylius.routing.factory.route_attributes" class="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory" public="false" />
         <service id="Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface" alias="sylius.routing.factory.route_attributes" />
 
-        <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory" public="false">
+        <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route" />
             <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
         </service>
-        <service id="Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
+        <service id="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
 
         <service id="sylius.routing.factory.operation_route" class="Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory" public="false">
             <argument type="service" id="sylius.routing.factory.operation_route_path_factory" />

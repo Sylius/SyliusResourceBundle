@@ -5,8 +5,6 @@ includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
 
     excludePaths:
@@ -73,7 +71,7 @@ parameters:
         - '/Parameter \#1 \$maxPerPage of method Pagerfanta\\Pagerfanta<mixed>::setMaxPerPage\(\) expects int<1, max>, int given\./'
         - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
         - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
-        - '/Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class-string<object>|object, object|string given./'
+        - '/Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class-string<object>\|object, object\|string given./'
         - '/Parameter \#1 \$package of method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\)/'
         - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\CrudRoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
         - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\RoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
@@ -103,3 +101,7 @@ parameters:
         - '/Parameter #1 \$submittedData of method Symfony\\Component\\Form\\FormInterface::submit\(\) expects array\|string\|null, mixed given\./'
         - '/Parameter #2 \$callback of function preg_replace_callback expects callable\(array<int\|string, string>\): string, Closure\(array\): mixed given\./'
         - '/Unable to resolve the template type T in call to method Doctrine\\Persistence\\ObjectManager::getClassMetadata\(\)/'
+        -
+            identifier: missingType.generics
+        -
+            identifier: missingType.iterableValue

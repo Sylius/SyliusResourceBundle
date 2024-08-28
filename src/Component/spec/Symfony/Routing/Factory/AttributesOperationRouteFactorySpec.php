@@ -11,11 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Routing;
+namespace spec\Sylius\Resource\Symfony\Routing\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Sylius\Bundle\ResourceBundle\Routing\AttributesOperationRouteFactory;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
@@ -24,9 +23,10 @@ use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
+use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRouteNameFactory;
-use Sylius\Resource\Symfony\Routing\Factory\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 

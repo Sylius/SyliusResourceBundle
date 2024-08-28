@@ -11,11 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\ShowOperationInterface;
 
+/**
+ * @experimental
+ */
 final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
     public function __construct(private OperationRoutePathFactoryInterface $decorated)

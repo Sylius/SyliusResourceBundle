@@ -17,6 +17,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * An exception which has a constraint violation list.
+ *
+ * @experimental
  */
 interface ConstraintViolationListAwareExceptionInterface
 {

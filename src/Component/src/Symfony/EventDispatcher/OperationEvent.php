@@ -16,6 +16,9 @@ namespace Sylius\Resource\Symfony\EventDispatcher;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 final class OperationEvent extends GenericEvent
 {
     public function getOperation(): Operation

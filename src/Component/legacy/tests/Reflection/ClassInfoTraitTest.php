@@ -28,18 +28,38 @@ final class ClassInfoTraitTest extends TestCase
         };
     }
 
-    public function testDoctrineRealClassName(): void
+    /**
+     * @dataProvider getValidClasses
+     */
+    public function testRealClassName(string $class): void
     {
         $classInfo = $this->getClassInfoTraitImplementation();
 
-        $this->assertSame(Book::class, $classInfo->getRealClassName('Proxies\__CG__\App\Entity\Book'));
+        $this->assertSame(Book::class, $classInfo->getRealClassName($class));
     }
 
-    public function testProxyManagerRealClassName(): void
+    /**
+     * @dataProvider getInvalidClasses
+     */
+    public function testThrowsExceptionIfUnproxiedClassDoNotExist(string $class): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $classInfo = $this->getClassInfoTraitImplementation();
 
-        $this->assertSame(Book::class, $classInfo->getRealClassName('MongoDBODMProxies\__PM__\App\Entity\Book\Generated'));
+        $classInfo->getRealClassName($class);
+    }
+
+    public function getInvalidClasses(): Iterable
+    {
+        yield ['class' => 'Proxies\__CG__\App\Entity\Book1'];
+        yield ['class' => 'MongoDBODMProxies\__PM__\App\Entity\Book1\Generated'];
+    }
+
+    public function getValidClasses(): Iterable
+    {
+        yield ['class' => 'Proxies\__CG__\App\Entity\Book'];
+        yield ['class' => 'MongoDBODMProxies\__PM__\App\Entity\Book\Generated'];
     }
 
     public function testUnmarkedRealClassName(): void

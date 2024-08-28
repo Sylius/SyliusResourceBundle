@@ -23,6 +23,9 @@ use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\Form\Factory\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @experimental
+ */
 final class FormProvider implements ProviderInterface
 {
     public function __construct(

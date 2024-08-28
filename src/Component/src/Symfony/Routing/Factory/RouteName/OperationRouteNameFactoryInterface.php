@@ -11,10 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\RouteName;
 
 use Sylius\Resource\Metadata\Operation;
 
+/**
+ * @experimental
+ */
 interface OperationRouteNameFactoryInterface
 {
     public function createRouteName(Operation $operation, ?string $shortName = null): string;

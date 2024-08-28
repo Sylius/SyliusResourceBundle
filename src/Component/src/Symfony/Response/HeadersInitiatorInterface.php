@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Response;
 
+/**
+ * @experimental
+ */
 interface HeadersInitiatorInterface
 {
     public function initializeHeaders(string $mimeType): array;

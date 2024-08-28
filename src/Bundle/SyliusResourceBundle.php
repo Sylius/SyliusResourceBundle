@@ -29,7 +29,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterFosRestD
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterHateoasDefinitionsPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
-use Sylius\Resource\Symfony\DependencyIjection\Compiler\DisableMetadataCachePass;
+use Sylius\Resource\Symfony\DependencyInjection\Compiler\DisableMetadataCachePass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
