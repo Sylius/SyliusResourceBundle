@@ -67,6 +67,12 @@
                 <file name="src/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </DuplicateClass>
+        
+        <InternalClass>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/DependencyInjection/PagerfantaExtension.php" />
+            </errorLevel>
+        </InternalClass>
 
         <InternalMethod>
             <errorLevel type="suppress">

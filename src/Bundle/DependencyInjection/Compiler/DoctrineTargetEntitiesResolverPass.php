@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler;
 
-use Doctrine\Common\EventSubscriber;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolverInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -47,13 +46,7 @@ final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
             $resolveTargetEntityListener->addMethodCall('addResolveTargetEntity', [$interface, $model, []]);
         }
 
-        /** @var object|string $resolveTargetEntityListenerClass */
-        $resolveTargetEntityListenerClass = $container->getParameterBag()->resolveValue($resolveTargetEntityListener->getClass());
-        if (is_a($resolveTargetEntityListenerClass, EventSubscriber::class, true)) {
-            if (!$resolveTargetEntityListener->hasTag('doctrine.event_subscriber')) {
-                $resolveTargetEntityListener->addTag('doctrine.event_subscriber');
-            }
-        } elseif (!$resolveTargetEntityListener->hasTag('doctrine.event_listener')) {
+        if (!$resolveTargetEntityListener->hasTag('doctrine.event_listener')) {
             $resolveTargetEntityListener->addTag('doctrine.event_listener', ['event' => 'loadClassMetadata']);
         }
     }
