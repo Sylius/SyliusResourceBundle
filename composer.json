@@ -46,7 +46,7 @@
         "symfony/security-csrf": "^5.4 || ^6.4",
         "symfony/routing": "^5.4 || ^6.4",
         "symfony/translation": "^5.4 || ^6.4",
-        "symfony/twig-bundle": "^5.4 || ^6.4",
+        "symfony/twig-bundle": "^7.1.1",
         "symfony/validator": "^5.4 || ^6.4",
         "symfony/yaml": "^5.4 || ^6.4",
         "webmozart/assert": "^1.8",
