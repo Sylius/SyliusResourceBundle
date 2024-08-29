@@ -96,11 +96,6 @@
             "dealerdirect/phpcodesniffer-composer-installer": false
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.10-dev"
-        }
-    },
     "autoload": {
         "psr-4": {
             "Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/",
