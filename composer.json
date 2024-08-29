@@ -103,9 +103,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.10-dev"
-        },
         "symfony": {
             "require": "^6.4"
         }
