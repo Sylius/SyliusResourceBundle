@@ -1,5 +1,7 @@
 ## CHANGELOG
 
+## v1.11.0 (2024-08-29)
+
 ## v1.11.0-RC.2 (2024-07-12)
 
 #### Details
@@ -22,8 +24,7 @@
 
 #### Details
 
-- [#871](https://github.com/Sylius/SyliusResourceBundle/issues/871) Fix state machine tag ([@Zales0123](https://github.com/Zales0123))
-Working on Sylius/SyliusResourceBundle (branch 1.11)
+- [#871](https://github.com/Sylius/SyliusResourceBundle/issues/871) Fix state machine tag ([@Zales0123](https://github.com/Zales0123)) Working on Sylius/SyliusResourceBundle (branch 1.11)
 
 ## v1.11.0-BETA.1 (2024-04-19)
 
