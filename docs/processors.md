@@ -5,8 +5,9 @@ Processors process data: send an email, persist to storage, add to queue etc.
 <!-- TOC -->
 * [Default processors](#default-processors)
 * [Custom processors](#custom-processors)
-  * [Sending an email after persisting data](#example-1-sending-an-email-after-persisting-data)
-  * [Use a custom delete processor](#example-2-use-a-custom-delete-processor)
+  * [Example #1: Sending an email after persisting data](#example-1-sending-an-email-after-persisting-data)
+  * [Example #2: Use a custom delete processor](#example-2-use-a-custom-delete-processor)
+* [Disable processing data](#disable-processing-data)
 <!-- TOC -->
 
 ## Default processors
@@ -129,6 +130,38 @@ final class BoardGameResource implements ResourceInterface
 
 Note that in a delete operation, you can disable providing data.
 See [Disable providing data](providers.md#disable-providing-data) chapter.
+
+## Disable processing data
+
+In some cases, you may want not to write data.
+
+For example, you can implement a preview for the updated data without saving them into your storage.
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+
+namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
+
+use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameItemProvider;
+use App\BoardGameBlog\Infrastructure\Symfony\Form\Type\BoardGameType;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Update;
+use Sylius\Resource\Model\ResourceInterface;
+
+#[AsResource(
+    alias: 'app.board_game',
+    section: 'admin',
+    formType: BoardGameType::class,
+    templatesDir: 'crud',
+    routePrefix: '/admin',
+)]
+#[Update(
+    shortName: 'update_preview',
+    provider: BoardGameItemProvider::class,
+    write: false,    
+)]
+final class BoardGameResource implements ResourceInterface
+```
 
 **[Go back to the documentation's index](index.md)**
 
