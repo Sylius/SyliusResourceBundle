@@ -37,8 +37,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 #[Show(repositoryMethod: 'findOneByEmail')]
@@ -68,8 +68,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 #[Show(repositoryMethod: 'findOneByEmail', repositoryArguments: ['email' => "request.attributes.get('email')"])]
@@ -126,8 +126,8 @@ namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
 use App\BoardGameBlog\Infrastructure\Sylius\State\Provider\BoardGameItemProvider;
 use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 #[Show(provider: BoardGameItemProvider::class)]
@@ -152,8 +152,8 @@ namespace App\Entity;
 
 use App\BoardgameBlog\Infrastructure\Sylius\State\Provider\DeleteBoardGameProcessor;
 use Sylius\Resource\Metadata\AsResource;
-use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[AsResource]
 #[Delete(
