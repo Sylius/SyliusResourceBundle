@@ -171,6 +171,9 @@ final class BoardGameResource implements ResourceInterface
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\State\Processor;
 
+use Sylius\Resource\Context\Option\RequestOption;
+use Webmozart\Assert\Assert;
+
 final class DeleteBoardGameProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -181,8 +184,12 @@ final class DeleteBoardGameProcessor implements ProcessorInterface
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
         Assert::isInstanceOf($data, BoardGameResource::class);
+        
+        // Data is not provided in this case, so you will need to get it from the HTTP request
+        $id = $context->get(RequestOption::class)?->attributes->get('id') ?? null;
+        Assert::notNull($id);
 
-        $this->commandBus->dispatch(new DeleteBoardGameCommand(new BoardGameId($data->id)));
+        $this->commandBus->dispatch(new DeleteBoardGameCommand(new BoardGameId($id)));
 
         return null;
     }

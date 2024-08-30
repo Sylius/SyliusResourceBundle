@@ -127,7 +127,7 @@ use Sylius\Resource\Model\ResourceInterface;
 final class BoardGameResource implements ResourceInterface
 ```
 
-Note that in this case, you can disable providing data.
+Note that in that kind of operation, you can disable providing data.
 
 ```php
 // src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
@@ -150,6 +150,38 @@ use Sylius\Resource\Model\ResourceInterface;
     read: false,    
 )]
 final class BoardGameResource implements ResourceInterface
+```
+
+But you will also need to adapt your processor.
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/State/Processor/DeleteBoardGameProcessor.php
+
+namespace App\BoardGameBlog\Infrastructure\Sylius\State\Processor;
+
+use Sylius\Resource\Context\Option\RequestOption;
+use Webmozart\Assert\Assert;
+
+final class DeleteBoardGameProcessor implements ProcessorInterface
+{
+    public function __construct(
+        private CommandBusInterface $commandBus,
+    ) {
+    }
+
+    public function process(mixed $data, Operation $operation, Context $context): mixed
+    {
+        Assert::isInstanceOf($data, BoardGameResource::class);
+        
+        // Data is not provided in this case, so you will need to get it from the HTTP request
+        $id = $context->get(RequestOption::class)?->attributes->get('id') ?? null;
+        Assert::notNull($id);
+
+        $this->commandBus->dispatch(new DeleteBoardGameCommand(new BoardGameId($id)));
+
+        return null;
+    }
+}
 ```
 
 **[Go back to the documentation's index](index.md)**
