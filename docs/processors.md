@@ -120,6 +120,27 @@ namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 final class BoardGameResource implements ResourceInterface
 ```
 
+Note that in this case, you can disable providing data.
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+
+namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
+
+#[Resource(
+    alias: 'app.board_game',
+    section: 'admin',
+    formType: BoardGameType::class,
+    templatesDir: 'crud',
+    routePrefix: '/admin',
+)]
+#[Delete(
+    processor: DeleteBoardGameProcessor::class,
+    read: false,    
+)]
+final class BoardGameResource implements ResourceInterface
+```
+
 **[Go back to the documentation's index](index.md)**
 
 **[> Next chapter: Responders](responders.md)**
