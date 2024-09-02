@@ -11,6 +11,18 @@
         {
             "state": "accepted",
             "email": "biff.tannen@bttf.com"
+        },
+        {
+            "state": "new",
+            "email": "lorraine.baines@bttf.com"
+        },
+        {
+            "state": "new",
+            "email": "george.mcfly@bttf.com"
+        },
+        {
+            "state": "new",
+            "email": "jennifer.parker@bttf.com"
         }
     ],
     "pagination": {
@@ -18,7 +30,7 @@
         "has_previous_page": false,
         "has_next_page": false,
         "per_page": 10,
-        "total_items": 3,
+        "total_items": 6,
         "total_pages": 1
     }
 }

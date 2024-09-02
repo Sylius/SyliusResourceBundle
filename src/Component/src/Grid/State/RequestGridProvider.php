@@ -64,8 +64,32 @@ final class RequestGridProvider implements ProviderInterface
         if ($data instanceof Pagerfanta) {
             $currentPage = $request->query->getInt('page', 1);
             $data->setCurrentPage($currentPage);
+
+            $maxPerPage = $this->resolveMaxPerPage(
+                $request->query->has('limit') ? $request->query->getInt('limit') : null,
+                $gridDefinition->getLimits(),
+            );
+            $data->setMaxPerPage($maxPerPage);
         }
 
         return $gridView;
+    }
+
+    private function resolveMaxPerPage(?int $requestLimit, array $gridLimits = []): int
+    {
+        if (null === $requestLimit) {
+            $firstGridLimit = reset($gridLimits);
+
+            return false === $firstGridLimit ? 10 : $firstGridLimit;
+        }
+
+        if (!empty($gridLimits)) {
+            $maxGridLimit = max($gridLimits);
+
+            // Cannot retrieve more items than configured in the grid
+            return min($requestLimit, $maxGridLimit);
+        }
+
+        return $requestLimit;
     }
 }

@@ -38,6 +38,7 @@ final class SubscriptionGrid extends AbstractGrid implements ResourceAwareGridIn
     {
         $gridBuilder
             ->orderBy('email', 'asc')
+            ->setLimits([5, 3, 10])
             ->addField(
                 StringField::create('email')
                     ->setLabel('Email')
