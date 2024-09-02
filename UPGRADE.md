@@ -1,5 +1,10 @@
 ## UPGRADE FOR `1.11.x`
 
+### FROM `1.11.0` to `1.11.1`
+
+The `Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener` service has become a Doctrine subscriber again 
+to fully support Symfony 5.
+
 ### FROM `1.10.x` to `1.11.x`
 
 We remove the default mapping paths which are used to read PHP 8 attributes to build routes.
