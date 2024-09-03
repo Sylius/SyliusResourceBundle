@@ -7,6 +7,7 @@ Providers retrieve data from your persistence layer.
   * [Custom repository method](#custom-repository-method)
   * [Custom repository arguments](#custom-repository-arguments)
 * [Custom providers](#custom-providers)
+* [Disable providing data](#disable-providing-data)
 <!-- TOC -->
 
 ## Default providers
@@ -34,7 +35,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-#[Resource]
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
+
+#[AsResource]
 #[Show(repositoryMethod: 'findOneByEmail')]
 final class Customer implements ResourceInterface
 {
@@ -61,7 +66,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-#[Resource]
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
+
+#[AsResource]
 #[Show(repositoryMethod: 'findOneByEmail', repositoryArguments: ['email' => "request.attributes.get('email')"])]
 final class Customer implements ResourceInterface
 {
@@ -115,12 +124,81 @@ declare(strict_types=1);
 namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
 use App\BoardGameBlog\Infrastructure\Sylius\State\Provider\BoardGameItemProvider;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Show(provider: BoardGameItemProvider::class)]
 final class BoardGameResource implements ResourceInterface
 {
     // [...]
+}
+```
+
+## Disable providing data
+
+In some cases, you may want not to read data.
+
+For example, in a delete operation, you can implement your custom delete processor without reading it before.
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/Resource/BoardGameResource.php
+
+declare(strict_types=1);
+
+namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
+
+use App\BoardgameBlog\Infrastructure\Sylius\State\Provider\DeleteBoardGameProcessor;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Model\ResourceInterface;
+
+#[AsResource]
+#[Delete(
+    processor: DeleteBoardGameProcessor::class,
+    read: false,
+ )]
+final class BoardGameResource implements ResourceInterface
+{
+    // [...]
+}
+```
+
+```php
+// src/BoardGameBlog/Infrastructure/Sylius/State/Processor/DeleteBoardGameProcessor.php
+
+namespace App\BoardGameBlog\Infrastructure\Sylius\State\Processor;
+
+use App\BoardGameBlog\Application\Command\DeleteBoardGameCommand;
+use App\BoardGameBlog\Domain\ValueObject\BoardGameId;
+use App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource;
+use App\Shared\Application\Command\CommandBusInterface;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\State\ProcessorInterface;
+use Webmozart\Assert\Assert;
+
+final class DeleteBoardGameProcessor implements ProcessorInterface
+{
+    public function __construct(
+        private CommandBusInterface $commandBus,
+    ) {
+    }
+
+    public function process(mixed $data, Operation $operation, Context $context): mixed
+    {
+        Assert::isInstanceOf($data, BoardGameResource::class);
+        
+        // Data is not provided in this case, so you will need to get it from the HTTP request
+        $id = $context->get(RequestOption::class)?->attributes->get('id') ?? null;
+        Assert::notNull($id);
+
+        $this->commandBus->dispatch(new DeleteBoardGameCommand(new BoardGameId($id)));
+
+        return null;
+    }
 }
 ```
 
