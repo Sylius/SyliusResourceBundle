@@ -147,7 +147,7 @@ For example, in a delete operation, you can implement your custom delete process
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
 use App\BoardgameBlog\Infrastructure\Sylius\State\Provider\DeleteBoardGameProcessor;
 use Sylius\Resource\Metadata\AsResource;
