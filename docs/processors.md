@@ -69,8 +69,11 @@ Use this processor on your operation.
 namespace App\Entity\Customer;
 
 use App\Sylius\State\Processor\CreateCustomerProcessor;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Model\ResourceInterface;
 
-#[Resource]
+#[AsResource]
 #[Create(processor: CreateCustomerProcessor::class)]
 final class BoardGameResource implements ResourceInterface
 ```
@@ -109,7 +112,11 @@ Use this processor on your operation.
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
-#[Resource(
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Model\ResourceInterface;
+
+#[AsResource(
     alias: 'app.board_game',
     section: 'admin',
     formType: BoardGameType::class,
@@ -119,6 +126,9 @@ namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 #[Delete(processor: DeleteBoardGameProcessor::class)]
 final class BoardGameResource implements ResourceInterface
 ```
+
+Note that in a delete operation, you can disable providing data.
+See [Disable providing data](providers.md#disable-providing-data) chapter.
 
 **[Go back to the documentation's index](index.md)**
 

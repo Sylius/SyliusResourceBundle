@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+## v1.11.1 (2024-09-02)
+
+#### Details
+
+- [#917](https://github.com/Sylius/SyliusResourceBundle/issues/917) Quick Fix ORM translatable listener for Symfony 5 ([@loic425](https://github.com/loic425))
+
 ## v1.11.0 (2024-08-29)
 
 ## v1.11.0-RC.2 (2024-07-12)
