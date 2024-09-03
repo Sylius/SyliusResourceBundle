@@ -127,7 +127,7 @@ use Sylius\Resource\Model\ResourceInterface;
 final class BoardGameResource implements ResourceInterface
 ```
 
-Note that in that kind of operation, you can disable providing data.
+Note that in a delete operation, you can disable providing data.
 See [Disable providing data](providers.md#disable-providing-data) chapter.
 
 **[Go back to the documentation's index](index.md)**

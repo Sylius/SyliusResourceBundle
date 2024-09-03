@@ -3,12 +3,11 @@
 Providers retrieve data from your persistence layer.
 
 <!-- TOC -->
-* [Providers](#providers)
-  * [Default providers](#default-providers)
-    * [Custom repository method](#custom-repository-method)
-    * [Custom repository arguments](#custom-repository-arguments)
-  * [Custom providers](#custom-providers)
-  * [Disable providing data](#disable-providing-data)
+* [Default providers](#default-providers)
+  * [Custom repository method](#custom-repository-method)
+  * [Custom repository arguments](#custom-repository-arguments)
+* [Custom providers](#custom-providers)
+* [Disable providing data](#disable-providing-data)
 <!-- TOC -->
 
 ## Default providers
@@ -171,7 +170,14 @@ final class BoardGameResource implements ResourceInterface
 
 namespace App\BoardGameBlog\Infrastructure\Sylius\State\Processor;
 
+use App\BoardGameBlog\Application\Command\DeleteBoardGameCommand;
+use App\BoardGameBlog\Domain\ValueObject\BoardGameId;
+use App\BoardGameBlog\Infrastructure\Sylius\Resource\BoardGameResource;
+use App\Shared\Application\Command\CommandBusInterface;
+use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\State\ProcessorInterface;
 use Webmozart\Assert\Assert;
 
 final class DeleteBoardGameProcessor implements ProcessorInterface
