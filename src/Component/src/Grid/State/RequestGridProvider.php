@@ -25,6 +25,8 @@ use Sylius\Resource\State\ProviderInterface;
 
 final class RequestGridProvider implements ProviderInterface
 {
+    private const DEFAULT_MAX_PER_PAGE = 10;
+
     public function __construct(
         private ?GridViewFactoryInterface $gridViewFactory = null,
         private ?GridProviderInterface $gridProvider = null,
@@ -80,7 +82,7 @@ final class RequestGridProvider implements ProviderInterface
         if (null === $requestLimit) {
             $firstGridLimit = reset($gridLimits);
 
-            return false === $firstGridLimit ? 10 : $firstGridLimit;
+            return false === $firstGridLimit ? self::DEFAULT_MAX_PER_PAGE : $firstGridLimit;
         }
 
         if (!empty($gridLimits)) {
