@@ -30,7 +30,7 @@ jobs:
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
                       app_env: "test"
-                    - php: 8.3
+                    - php: "8.3"
                       symfony: "^7.0"
                       app_env: "test_without_hateoas"
                 exclude:
