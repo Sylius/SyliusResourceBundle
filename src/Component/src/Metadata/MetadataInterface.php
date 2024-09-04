@@ -30,9 +30,6 @@ interface MetadataInterface
 
     public function getDriver(): string|false;
 
-    /**
-     * @return ?string
-     */
     public function getTemplatesNamespace(): ?string;
 
     /**
