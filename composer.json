@@ -83,14 +83,15 @@
         "symfony/messenger": "^5.4 || ^6.4 || ^7.0",
         "symfony/serializer": "^5.4 || ^6.4 || ^7.0",
         "symfony/security-bundle": "^5.4 || ^6.4 || ^7.0",
-        "twig/twig": "^2.12 || ^3.0",
+        "twig/twig": "^3.0",
         "vimeo/psalm": "^5.20",
         "willdurand/hateoas-bundle": "^2.0"
     },
     "conflict": {
         "friendsofsymfony/rest-bundle": "<3.0",
         "jms/serializer-bundle": "<3.5",
-        "willdurand/hateoas-bundle": "<2.0 || ^2.6"
+        "willdurand/hateoas-bundle": "<2.0 || ^2.6",
+        "twig/twig": "<3.0"
     },
     "suggest": {
         "doctrine/orm": "^2.5",

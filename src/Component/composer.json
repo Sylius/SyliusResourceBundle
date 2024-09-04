@@ -56,7 +56,10 @@
         "sylius/grid": "^1.7 || dev-symfony-7",
         "symfony/serializer": "^5.4 || ^6.4 || ^7.0",
         "symfony/workflow": "^5.4 || ^6.4 || ^7.0",
-        "twig/twig": "^2.12 || ^3.0"
+        "twig/twig": "^3.0"
+    },
+    "conflict": {
+        "twig/twig": "<3.0"
     },
     "extra": {
         "branch-alias": {
