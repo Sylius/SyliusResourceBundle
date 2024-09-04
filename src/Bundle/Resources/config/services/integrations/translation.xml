@@ -30,7 +30,8 @@
         <service id="sylius.translation.translatable_listener.doctrine.orm" class="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.translatable_entity_locale_assigner" />
-            <tag name="doctrine.event_subscriber" connection="default" priority="99" />
+            <tag name="doctrine.event_listener" connection="default" event="loadClassMetadata" priority="99" />
+            <tag name="doctrine.event_listener" connection="default" event="postLoad" priority="99" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener" alias="sylius.translation.translatable_listener.doctrine.orm" />
 
