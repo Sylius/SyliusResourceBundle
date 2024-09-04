@@ -13,7 +13,7 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}, Persistence: ${{ matrix.persistence }}, Collections: ${{ matrix.collections }}"
+        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Persistence: ${{ matrix.persistence }}, Collections: ${{ matrix.collections }}"
         env:
             APP_ENV: ${{ matrix.app_env }}
         strategy:
@@ -73,11 +73,6 @@ jobs:
                     composer require "babdev/pagerfanta-bundle:${{ matrix.pagerfanta }}" --no-update --no-scripts
                     composer require "pagerfanta/pagerfanta:${{ matrix.pagerfanta }}" --dev --no-update --no-scripts
                     (cd src/Component && composer require "pagerfanta/core:${{ matrix.pagerfanta }}" --no-update --no-scripts)
-
-            -
-                name: Restrict twig/twig version
-                if: matrix.twig != ''
-                run: composer require "twig/twig:${{ matrix.twig }}" --no-update --no-scripts
 
             -
                 name: Restrict doctrine/persistence version
