@@ -60,7 +60,7 @@
         "sylius/resource": "self.version"
     },
     "require-dev": {
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.14",
         "lchrusciel/api-test-case": "^5.0",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2.1",
         "pagerfanta/pagerfanta": "^3.7 || ^4.0",
@@ -87,7 +87,7 @@
         "symfony/security-bundle": "^5.4 || ^6.4"
     },
     "suggest": {
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.14",
         "sylius/locale": "^1.0"
     },
     "config": {
