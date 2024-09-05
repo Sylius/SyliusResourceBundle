@@ -22,6 +22,7 @@ So far we support:
 * [Create a new resource](create_new_resource.md)
 * [Configure your resource](configure_your_resource.md)
 * [Configure your operations](configure_your_operations.md)
+* [Validation](validation.md)
 * [Redirect](redirect.md)
 * [Resource Factories](resource_factories.md)
 * [Providers](providers.md)
