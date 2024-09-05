@@ -6,3 +6,9 @@ App\Subscription\Entity\Subscription:
     subscription_biff:
         email: 'biff.tannen@bttf.com'
         state: accepted
+    subscription_lorraine:
+        email: 'lorraine.baines@bttf.com'
+    subscription_george:
+        email: 'george.mcfly@bttf.com'
+    subscription_jennifer:
+        email: 'jennifer.parker@bttf.com'

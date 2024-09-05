@@ -80,12 +80,101 @@ final class RequestGridProviderSpec extends ObjectBehavior
         $request->query = new InputBag(['page' => 42]);
 
         $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $gridDefinition->getLimits()->willReturn([]);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
 
         $gridViewFactory->create($gridDefinition, $context, new Parameters(['page' => 42]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setMaxPerPage(10)->willReturn($pagerfanta)->shouldBeCalled();
+
+        $this->provide($operation, $context)
+            ->shouldReturn($gridView)
+        ;
+    }
+
+    function it_sets_max_per_page_from_request(
+        Request $request,
+        GridViewFactoryInterface $gridViewFactory,
+        GridProviderInterface $gridProvider,
+        Grid $gridDefinition,
+        GridView $gridView,
+        Pagerfanta $pagerfanta,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $operation = new Index(grid: 'app_book');
+
+        $request->query = new InputBag(['limit' => 25]);
+
+        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $gridDefinition->getDriverConfiguration()->willReturn([]);
+        $gridDefinition->getLimits()->willReturn([10, 25]);
+
+        $gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 25]), [])->willReturn($gridView);
+
+        $gridView->getData()->willReturn($pagerfanta);
+        $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setMaxPerPage(25)->willReturn($pagerfanta)->shouldBeCalled();
+
+        $this->provide($operation, $context)
+            ->shouldReturn($gridView)
+        ;
+    }
+
+    function it_sets_max_per_page_from_grid_configuration(
+        Request $request,
+        GridViewFactoryInterface $gridViewFactory,
+        GridProviderInterface $gridProvider,
+        Grid $gridDefinition,
+        GridView $gridView,
+        Pagerfanta $pagerfanta,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $operation = new Index(grid: 'app_book');
+
+        $request->query = new InputBag();
+
+        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $gridDefinition->getDriverConfiguration()->willReturn([]);
+        $gridDefinition->getLimits()->willReturn([15, 30]);
+
+        $gridViewFactory->create($gridDefinition, $context, new Parameters([]), [])->willReturn($gridView);
+
+        $gridView->getData()->willReturn($pagerfanta);
+        $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setMaxPerPage(15)->willReturn($pagerfanta)->shouldBeCalled();
+
+        $this->provide($operation, $context)
+            ->shouldReturn($gridView)
+        ;
+    }
+
+    function it_limits_max_per_page_with_max_grid_configuration_limit(
+        Request $request,
+        GridViewFactoryInterface $gridViewFactory,
+        GridProviderInterface $gridProvider,
+        Grid $gridDefinition,
+        GridView $gridView,
+        Pagerfanta $pagerfanta,
+    ): void {
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $operation = new Index(grid: 'app_book');
+
+        $request->query = new InputBag(['limit' => 40]);
+
+        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $gridDefinition->getDriverConfiguration()->willReturn([]);
+        $gridDefinition->getLimits()->willReturn([15, 30]);
+
+        $gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 40]), [])->willReturn($gridView);
+
+        $gridView->getData()->willReturn($pagerfanta);
+        $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
+        $pagerfanta->setMaxPerPage(30)->willReturn($pagerfanta)->shouldBeCalled();
 
         $this->provide($operation, $context)
             ->shouldReturn($gridView)
