@@ -23,6 +23,8 @@ class BookApiTest extends JsonApiTestCase
      */
     public function it_allows_creating_a_book()
     {
+        $this->markAsSkippedIfNecessary();
+
         $data =
 <<<EOT
         {
@@ -103,6 +105,8 @@ EOT;
      */
     public function it_allows_showing_a_book()
     {
+        $this->markAsSkippedIfNecessary();
+
         $objects = $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/books/' . $objects['book1']->getId());
@@ -115,6 +119,8 @@ EOT;
      */
     public function it_allows_indexing_books()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/books/');
@@ -127,6 +133,8 @@ EOT;
      */
     public function it_allows_paginating_the_index_of_books()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('more_books.yml');
 
         $this->client->request('GET', '/books/', ['page' => 2]);
@@ -139,6 +147,8 @@ EOT;
      */
     public function it_does_not_allow_showing_resource_if_it_not_exists()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/books/3');
@@ -151,6 +161,8 @@ EOT;
      */
     public function it_does_not_apply_sorting_for_un_existing_field()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('more_books.yml');
 
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['name' => 'DESC']]);
@@ -164,6 +176,8 @@ EOT;
      */
     public function it_does_not_apply_filtering_for_un_existing_field()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('more_books.yml');
 
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['name' => 'John']]);
@@ -177,6 +191,8 @@ EOT;
      */
     public function it_applies_sorting_for_existing_field()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('more_books.yml');
 
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['id' => 'DESC']]);
@@ -190,6 +206,8 @@ EOT;
      */
     public function it_applies_filtering_for_existing_field()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('more_books.yml');
 
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['author' => 'J.R.R. Tolkien']]);
@@ -203,6 +221,8 @@ EOT;
      */
     public function it_allows_creating_a_book_via_custom_factory()
     {
+        $this->markAsSkippedIfNecessary();
+
         $data =
             <<<EOT
                     {
@@ -225,6 +245,8 @@ EOT;
      */
     public function it_allows_indexing_books_via_custom_repository(): void
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/find-custom-books');
@@ -237,10 +259,19 @@ EOT;
      */
     public function it_allows_showing_a_book_via_custom_repository()
     {
+        $this->markAsSkippedIfNecessary();
+
         $this->loadFixturesFromFile('books.yml');
 
         $this->client->request('GET', '/find-custom-book');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'books/show_response');
+    }
+
+    private function markAsSkippedIfNecessary(): void
+    {
+        if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
+            $this->markTestSkipped();
+        }
     }
 }

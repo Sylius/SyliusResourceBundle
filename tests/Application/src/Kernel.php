@@ -32,5 +32,11 @@ class Kernel extends BaseKernel
         $container->registerForAutoconfiguration(CommandHandlerInterface::class)
             ->addTag('messenger.message_handler', ['bus' => 'command.bus'])
         ;
+
+        if (self::MAJOR_VERSION < 7) {
+            $container->prependExtensionConfig('security', [
+                'enable_authenticator_manager' => true,
+            ]);
+        }
     }
 }

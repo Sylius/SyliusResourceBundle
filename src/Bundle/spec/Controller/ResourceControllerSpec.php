@@ -43,7 +43,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -1784,7 +1784,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::BULK_DELETE)->willReturn('sylius.product.bulk_delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -1903,7 +1903,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -1954,7 +1954,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2005,7 +2005,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2056,7 +2056,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2109,7 +2109,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2159,7 +2159,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2207,7 +2207,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
@@ -2259,7 +2259,7 @@ final class ResourceControllerSpec extends ObjectBehavior
         $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
         $configuration->hasPermission()->willReturn(true);
         $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new ParameterBag(['_csrf_token' => 'xyz']);
+        $request->request = new InputBag(['_csrf_token' => 'xyz']);
 
         $container->has('security.csrf.token_manager')->willReturn(true);
         $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);

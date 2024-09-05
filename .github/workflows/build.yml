@@ -14,6 +14,8 @@ jobs:
     tests:
         runs-on: ubuntu-latest
         name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, Twig ${{ matrix.twig }}, Persistence: ${{ matrix.persistence }}, Collections: ${{ matrix.collections }}"
+        env:
+            APP_ENV: ${{ matrix.app_env }}
         strategy:
             fail-fast: false
             matrix:
@@ -22,10 +24,15 @@ jobs:
                 symfony: ["^5.4", "^6.4"]
                 persistence: ["^2.0", "^3.0"]
                 collections: ["^1.8", "^2.0"]
+                app_env: ["test"]
                 include:
                     - php: "8.1"
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
+                      app_env: "test"
+                    - php: "8.3"
+                      symfony: "^7.0"
+                      app_env: "test_without_hateoas"
                 exclude:
                     - php: "8.1"
                       collections: "^2.0"
@@ -83,6 +90,11 @@ jobs:
                 run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
 
             -
+                name: Remove hateoas on Symfony 7
+                if: matrix.symfony == '^7.0'
+                run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
+
+            -
                 name: Install dependencies
                 run: |
                     composer update --no-scripts
@@ -124,7 +136,7 @@ jobs:
                 if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear --env=test)
+                    (cd tests/Application && bin/console cache:clear)
                     vendor/bin/phpspec run --ansi --no-interaction
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
 
@@ -133,7 +145,7 @@ jobs:
                 name: Run state machine PHPUnit tests with winzou/state-machine package
                 run: |
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear --env=test)
+                    (cd tests/Application && bin/console cache:clear)
                     vendor/bin/phpunit --colors=always
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
 
@@ -142,7 +154,7 @@ jobs:
                 if: ${{ true != contains( matrix.php, '8.2' ) }}
                 run: |
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear --env=test)
+                    (cd tests/Application && bin/console cache:clear)
                     vendor/bin/phpspec run --ansi --no-interaction
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
@@ -150,20 +162,22 @@ jobs:
                 name: Run state machine PHPUnit tests with symfony/workflow package
                 run: |
                     sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear --env=test)
+                    (cd tests/Application && bin/console cache:clear)
                     vendor/bin/phpunit --colors=always
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
                 name: Run lint container without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
                     (cd tests/Application && bin/console lint:container --env=test_without_fosrest)
-                    composer require friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
+                    composer require --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
 
             -
                 name: Run lint container without winzou/state-machine-bundle package
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove winzou/state-machine-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
@@ -172,6 +186,7 @@ jobs:
 
             -
                 name: Run lint container without twig/twig package
+                if: matrix.app_env == 'test'
                 run: |
                     composer remove symfony/twig-bundle --no-scripts
                     composer remove sylius/grid-bundle --no-scripts --dev

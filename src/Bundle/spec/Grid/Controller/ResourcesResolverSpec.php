@@ -26,7 +26,7 @@ use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Model\ResourceInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ResourcesResolverSpec extends ObjectBehavior
@@ -66,7 +66,6 @@ final class ResourcesResolverSpec extends ObjectBehavior
         ResourceGridView $gridView,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->hasGrid()->willReturn(true);
         $requestConfiguration->getGrid()->willReturn('sylius_admin_tax_category');
@@ -74,8 +73,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         $requestConfiguration->isHtmlRequest()->willReturn(true);
         $requestConfiguration->getRequest()->willReturn($request);
 
-        $request->query = $queryParameters;
-        $queryParameters->all()->willReturn(['foo' => 'bar']);
+        $request->query = new InputBag(['foo' => 'bar']);
 
         $gridProvider->get('sylius_admin_tax_category')->willReturn($gridDefinition);
         $gridViewFactory->create($gridDefinition, Argument::type(Parameters::class), $metadata, $requestConfiguration)->willReturn($gridView);
@@ -93,7 +91,6 @@ final class ResourcesResolverSpec extends ObjectBehavior
         Pagerfanta $paginator,
         MetadataInterface $metadata,
         Request $request,
-        ParameterBag $queryParameters,
     ): void {
         $requestConfiguration->hasGrid()->willReturn(true);
         $requestConfiguration->getGrid()->willReturn('sylius_admin_tax_category');
@@ -101,8 +98,7 @@ final class ResourcesResolverSpec extends ObjectBehavior
         $requestConfiguration->isHtmlRequest()->willReturn(false);
         $requestConfiguration->getRequest()->willReturn($request);
 
-        $request->query = $queryParameters;
-        $queryParameters->all()->willReturn(['foo' => 'bar']);
+        $request->query = new InputBag(['foo' => 'bar']);
 
         $gridProvider->get('sylius_admin_tax_category')->willReturn($gridDefinition);
         $gridViewFactory->create($gridDefinition, Argument::type(Parameters::class), $metadata, $requestConfiguration)->willReturn($gridView);

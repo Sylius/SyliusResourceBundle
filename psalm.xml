@@ -67,6 +67,12 @@
                 <file name="src/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </DuplicateClass>
+        
+        <InternalClass>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/DependencyInjection/PagerfantaExtension.php" />
+            </errorLevel>
+        </InternalClass>
 
         <InternalMethod>
             <errorLevel type="suppress">
@@ -168,6 +174,12 @@
             </errorLevel>
         </PossiblyNullArgument>
 
+        <PossiblyNullPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/Controller/ContainerAwareTrait.php" />
+            </errorLevel>
+        </PossiblyNullPropertyAssignmentValue>
+
         <PossiblyNullReference>
             <errorLevel type="suppress">
                 <file name="src/Bundle/DependencyInjection/Configuration.php" />
@@ -198,6 +210,7 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
+                <file name="src/Bundle/Routing/ResourceLoader.php" />
                 <file name="src/Bundle/Validator/Constraints/UniqueWithinCollectionConstraint.php" />
                 <file name="src/Bundle/Validator/Constraints/Enabled.php" />
                 <file name="src/Bundle/Validator/Constraints/Disabled.php" />
@@ -250,10 +263,13 @@
 
         <UndefinedClass>
             <errorLevel type="suppress">
+                <referencedClass name="Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle" />
                 <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
                 <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
                 <referencedClass name="Doctrine\Common\Persistence\ObjectManager" />
                 <referencedClass name="Doctrine\ODM\MongoDB\Mapping\ClassMetadata" />
+                <referencedClass name="Hateoas\Configuration\Route" />
+                <referencedClass name="Hateoas\Representation\Factory\PagerfantaFactory" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheAdapter" />
                 <referencedClass name="Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface" />
             </errorLevel>

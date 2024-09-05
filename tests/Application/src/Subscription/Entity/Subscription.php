@@ -41,11 +41,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Update]
 #[Delete]
 #[BulkDelete]
-#[ApplyStateMachineTransition(stateMachineTransition: 'accept')]
-#[ApplyStateMachineTransition(stateMachineTransition: 'reject')]
+#[ApplyStateMachineTransition(stateMachineTransition: 'accept', stateMachineGraph: 'subscription')]
+#[ApplyStateMachineTransition(stateMachineTransition: 'reject', stateMachineGraph: 'subscription')]
 #[BulkUpdate(
     shortName: 'bulk_accept',
     stateMachineTransition: 'accept',
+    stateMachineGraph: 'subscription',
 )]
 #[Show(
     template: 'subscription/show.html.twig',
