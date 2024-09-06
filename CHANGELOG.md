@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+## v1.11.2 (2024-09-06)
+
+#### Details
+
+- [#913](https://github.com/Sylius/SyliusResourceBundle/issues/913) [Docs] Disable providing data ([@loic425](https://github.com/loic425))
+- [#918](https://github.com/Sylius/SyliusResourceBundle/issues/918) Fix grid limits on request grid provider ([@loic425](https://github.com/loic425))
+- [#914](https://github.com/Sylius/SyliusResourceBundle/issues/914) [Docs] Disable processing data ([@loic425](https://github.com/loic425))
+- [#925](https://github.com/Sylius/SyliusResourceBundle/issues/925) [Docs] Resource validation ([@loic425](https://github.com/loic425))
+
 ## v1.11.1 (2024-09-02)
 
 #### Details
