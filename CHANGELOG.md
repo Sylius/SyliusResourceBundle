@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+## v1.12.0-ALPHA.1 (2024-09-09)
+
+#### Details
+
+- [#872](https://github.com/Sylius/SyliusResourceBundle/issues/872) Move fos rest, jms serializer and hateoas on optional requirements ([@loic425](https://github.com/loic425))
+- [#863](https://github.com/Sylius/SyliusResourceBundle/issues/863) Adding support for Symfony 7 ([@loic425](https://github.com/loic425))
+- [#924](https://github.com/Sylius/SyliusResourceBundle/issues/924) Remove Twig 2 support ([@loic425](https://github.com/loic425))
+- [#926](https://github.com/Sylius/SyliusResourceBundle/issues/926) [Composer] Allow GridBundle ^v1.13@alpha ([@GSadee](https://github.com/GSadee))
+
 ## v1.11.2 (2024-09-06)
 
 #### Details
