@@ -72,7 +72,7 @@
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^0.18.2",
         "sylius-labs/coding-standard": "^4.0",
-        "sylius/grid-bundle": "^1.7 || dev-symfony-7",
+        "sylius/grid-bundle": "^1.7 || ^1.13@alpha",
         "symfony/console": "^5.4 || ^6.4 || ^7.0",
         "symfony/css-selector": "^5.4 || ^6.4 || ^7.0",
         "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
