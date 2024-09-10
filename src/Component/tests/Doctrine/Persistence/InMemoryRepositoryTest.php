@@ -249,18 +249,9 @@ final class InMemoryRepositoryTest extends TestCase
 
 interface SampleBookResourceInterface extends ResourceInterface
 {
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 
-    /**
-     * @return int
-     */
-    public function getRating();
+    public function getRating(): int;
 
-    /**
-     * @return string
-     */
-    public function getTitle();
+    public function getTitle(): string;
 }
