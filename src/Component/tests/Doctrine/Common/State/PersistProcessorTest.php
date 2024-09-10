@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Doctrine\Common\State;
@@ -19,6 +28,7 @@ final class PersistProcessorTest extends TestCase
     use ProphecyTrait;
 
     private ManagerRegistry|ObjectProphecy $managerRegistry;
+
     private PersistProcessor $persistProcessor;
 
     protected function setUp(): void

@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Doctrine\Common\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
@@ -16,15 +27,15 @@ use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
     private RegistryInterface|ObjectProphecy $resourceRegistry;
+
     private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
     private DoctrineResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
@@ -34,7 +45,7 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
         $this->factory = new DoctrineResourceMetadataCollectionFactory(
             $this->resourceRegistry->reveal(),
-            $this->decorated->reveal()
+            $this->decorated->reveal(),
         );
     }
 
@@ -60,7 +71,7 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
         $this->assertEquals(
             PersistProcessor::class,
-            $result->getOperation('app.dummy', 'app_dummy_create')->getProcessor()
+            $result->getOperation('app.dummy', 'app_dummy_create')->getProcessor(),
         );
     }
 
@@ -81,7 +92,7 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
         $this->assertEquals(
             PersistProcessor::class,
-            $result->getOperation('app.dummy', 'app_dummy_create')->getProcessor()
+            $result->getOperation('app.dummy', 'app_dummy_create')->getProcessor(),
         );
     }
 
@@ -102,7 +113,7 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
         $this->assertEquals(
             RemoveProcessor::class,
-            $result->getOperation('app.dummy', 'app_dummy_delete')->getProcessor()
+            $result->getOperation('app.dummy', 'app_dummy_delete')->getProcessor(),
         );
     }
 }
