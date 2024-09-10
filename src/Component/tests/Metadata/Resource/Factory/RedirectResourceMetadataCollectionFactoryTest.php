@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Metadata\Resource\Factory;
+namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\Index;
@@ -26,21 +28,30 @@ use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
-final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
+final class RedirectResourceMetadataCollectionFactoryTest extends TestCase
 {
-    function let(ResourceMetadataCollectionFactoryInterface $decorated): void
+    use ProphecyTrait;
+
+    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
+    private RedirectResourceMetadataCollectionFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new OperationRouteNameFactory(), $decorated);
+        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new RedirectResourceMetadataCollectionFactory(
+            new OperationRouteNameFactory(),
+            $this->decorated->reveal(),
+        );
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(RedirectResourceMetadataCollectionFactory::class);
+        $this->assertInstanceOf(RedirectResourceMetadataCollectionFactory::class, $this->factory);
     }
 
-    function it_redirects_create_to_show_if_route_exists(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItRedirectsCreateToShowIfRouteExists(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
@@ -54,21 +65,20 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getRedirectToRoute()->shouldReturn('app_book_show');
+        $this->assertSame('app_book_show', $create->getRedirectToRoute());
     }
 
-    function it_redirects_create_to_index_if_route_exists(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItRedirectsCreateToIndexIfRouteExists(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
-        $index = (new Create(name: 'app_book_index'))->withResource($resource);
+        $index = (new Index(name: 'app_book_index'))->withResource($resource);
 
         $resource = $resource->withOperations(new Operations([
             $create->getName() => $create,
@@ -78,17 +88,16 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getRedirectToRoute()->shouldReturn('app_book_index');
+        $this->assertSame('app_book_index', $create->getRedirectToRoute());
     }
 
-    function it_redirects_update_to_show_if_route_exists(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItRedirectsUpdateToShowIfRouteExists(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $update = (new Update(name: 'app_book_update'))->withResource($resource);
@@ -102,17 +111,16 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $update = $resourceMetadataCollection->getOperation('app.book', 'app_book_update');
-        $update->getRedirectToRoute()->shouldReturn('app_book_show');
+        $this->assertSame('app_book_show', $update->getRedirectToRoute());
     }
 
-    function it_redirects_update_to_index_if_route_exists(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItRedirectsUpdateToIndexIfRouteExists(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $update = (new Update(name: 'app_book_update'))->withResource($resource);
@@ -126,17 +134,16 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $update = $resourceMetadataCollection->getOperation('app.book', 'app_book_update');
-        $update->getRedirectToRoute()->shouldReturn('app_book_index');
+        $this->assertSame('app_book_index', $update->getRedirectToRoute());
     }
 
-    function it_redirects_delete_to_index_if_route_exists(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItRedirectsDeleteToIndexIfRouteExists(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $delete = (new Delete(name: 'app_book_delete'))->withResource($resource);
@@ -150,11 +157,11 @@ final class RedirectResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $delete = $resourceMetadataCollection->getOperation('app.book', 'app_book_delete');
-        $delete->getRedirectToRoute()->shouldReturn('app_book_index');
+        $this->assertSame('app_book_index', $delete->getRedirectToRoute());
     }
 }

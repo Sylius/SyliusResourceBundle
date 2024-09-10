@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Metadata\Resource\Factory;
+namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -22,22 +24,33 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 
-final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
+final class VarsResourceMetadataCollectionFactoryTest extends TestCase
 {
-    function let(ResourceMetadataCollectionFactoryInterface $decorated): void
+    use ProphecyTrait;
+
+    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
+    private VarsResourceMetadataCollectionFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($decorated);
+        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new VarsResourceMetadataCollectionFactory($this->decorated->reveal());
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(VarsResourceMetadataCollectionFactory::class);
+        $this->assertInstanceOf(VarsResourceMetadataCollectionFactory::class, $this->factory);
     }
 
-    function it_merge_resource_vars_with_operation_vars(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
-        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app', vars: ['header' => 'Library', 'subheader' => 'Managing your library']);
+    public function testItMergeResourceVarsWithOperationVars(): void
+    {
+        $resource = new ResourceMetadata(
+            alias: 'app.book',
+            name: 'book',
+            applicationName: 'app',
+            vars: ['header' => 'Library', 'subheader' => 'Managing your library'],
+        );
 
         $create = (new Create(name: 'app_book_create', vars: ['subheader' => 'Adding a new book']))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -50,21 +63,24 @@ final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getVars()->shouldReturn([
+        $this->assertSame([
             'header' => 'Library',
             'subheader' => 'Adding a new book',
-        ]);
+        ], $create->getVars());
     }
 
-    function it_does_nothing_when_resource_has_no_vars(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
-        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
+    public function testItDoesNothingWhenResourceHasNoVars(): void
+    {
+        $resource = new ResourceMetadata(
+            alias: 'app.book',
+            name: 'book',
+            applicationName: 'app',
+        );
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
@@ -77,11 +93,11 @@ final class VarsResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getVars()->shouldReturn(null);
+        $this->assertNull($create->getVars());
     }
 }

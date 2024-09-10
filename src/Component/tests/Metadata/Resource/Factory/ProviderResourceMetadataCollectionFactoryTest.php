@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Metadata\Resource\Factory;
+namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operations;
@@ -23,22 +25,27 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Request\State\Provider;
 
-final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
+final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
 {
-    function let(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
-        $this->beConstructedWith($decorated);
-    }
+    use ProphecyTrait;
 
-    function it_is_initializable(): void
+    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
+    private ProviderResourceMetadataCollectionFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(ProviderResourceMetadataCollectionFactory::class);
+        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new ProviderResourceMetadataCollectionFactory($this->decorated->reveal());
     }
 
-    function it_creates_resource_metadata_with_default_provider_on_http_operations(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(ProviderResourceMetadataCollectionFactory::class, $this->factory);
+    }
+
+    public function testItCreatesResourceMetadataWithDefaultProviderOnHttpOperations(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $index = (new Index(name: 'app_book_index'))->withResource($resource);
@@ -50,17 +57,16 @@ final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $index = $resourceMetadataCollection->getOperation('app.book', 'app_book_index');
-        $index->getProvider()->shouldReturn(Provider::class);
+        $this->assertSame(Provider::class, $index->getProvider());
     }
 
-    function it_configures_request_grid_provider_if_operation_has_a_grid(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItConfiguresRequestGridProviderIfOperationHasAGrid(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $index = (new Index(name: 'app_book_index', grid: 'app_book'))->withResource($resource);
@@ -72,11 +78,11 @@ final class ProviderResourceMetadataCollectionFactorySpec extends ObjectBehavior
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $index = $resourceMetadataCollection->getOperation('app.book', 'app_book_index');
-        $index->getProvider()->shouldReturn(RequestGridProvider::class);
+        $this->assertSame(RequestGridProvider::class, $index->getProvider());
     }
 }
