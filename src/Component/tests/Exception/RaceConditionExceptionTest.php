@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Exception\RaceConditionException;
 use Sylius\Resource\Exception\UpdateHandlingException;
 
-final class RaceConditionExceptionSpec extends TestCase
+final class RaceConditionExceptionTest extends TestCase
 {
     public function testItExtendsAnUpdateHandlingException(): void
     {
