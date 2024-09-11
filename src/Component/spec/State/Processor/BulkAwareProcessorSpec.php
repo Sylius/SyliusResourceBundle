@@ -11,57 +11,63 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State\Processor;
+namespace Sylius\Resource\Tests\State\Processor;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Api\Delete;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\State\Processor\BulkAwareProcessor;
 use Sylius\Resource\State\ProcessorInterface;
-use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 
-final class BulkAwareProcessorSpec extends ObjectBehavior
+final class BulkAwareProcessorTest extends TestCase
 {
-    function let(ProcessorInterface $processor, OperationEventDispatcherInterface $operationEventDispatcher): void
+    private BulkAwareProcessor $bulkAwareProcessor;
+
+    private ProcessorInterface|MockObject $processor;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($processor, $operationEventDispatcher);
+        $this->processor = $this->createMock(ProcessorInterface::class);
+        $this->bulkAwareProcessor = new BulkAwareProcessor($this->processor);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(BulkAwareProcessor::class);
+        $this->assertInstanceOf(BulkAwareProcessor::class, $this->bulkAwareProcessor);
     }
 
-    function it_calls_decorated_processor_for_each_data_for_bulk_operation(
-        ProcessorInterface $processor,
-        \stdClass $firstItem,
-        \stdClass $secondItem,
-    ): void {
+    public function testItCallsDecoratedProcessorForEachDataForBulkOperation(): void
+    {
+        $firstItem = new \stdClass();
+        $secondItem = new \stdClass();
         $operation = new BulkDelete();
         $context = new Context();
 
-        $data = [
-            $firstItem->getWrappedObject(),
-            $secondItem->getWrappedObject(),
-        ];
+        $this->processor->expects($this->exactly(2))
+            ->method('process')
+            ->willReturnCallback(function () {
+                return null;
+            });
 
-        $processor->process($firstItem, $operation, $context)->willReturn(null)->shouldBeCalled();
-        $processor->process($secondItem, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $data = [$firstItem, $secondItem];
 
-        $this->process($data, $operation, $context)->shouldReturn(null);
+        $this->bulkAwareProcessor->process($data, $operation, $context);
     }
 
-    function it_calls_decorated_processor_for_data_for_other_operation_than_bulk_one(
-        ProcessorInterface $processor,
-        \stdClass $data,
-        \stdClass $result,
-    ): void {
+    public function testItCallsDecoratedProcessorForDataForOtherOperationThanBulkOne(): void
+    {
+        $data = new \stdClass();
+        $result = new \stdClass();
         $operation = new Delete();
         $context = new Context();
 
-        $processor->process($data, $operation, $context)->willReturn($result)->shouldBeCalled();
+        $this->processor->expects($this->once())
+            ->method('process')
+            ->with($data, $operation, $context)
+            ->willReturn($result);
 
-        $this->process($data, $operation, $context)->shouldReturn($result);
+        $this->assertSame($result, $this->bulkAwareProcessor->process($data, $operation, $context));
     }
 }

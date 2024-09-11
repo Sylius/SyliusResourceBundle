@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State;
+namespace Sylius\Resource\Tests\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Tests\Dummy\ResponderWithCallable;
 use Sylius\Resource\Context\Context;
@@ -22,60 +23,84 @@ use Sylius\Resource\State\Responder;
 use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ResponderSpec extends ObjectBehavior
+final class ResponderTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    private Responder $responder;
+
+    private ContainerInterface|MockObject $locator;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->responder = new Responder($this->locator);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(Responder::class);
+        $this->assertInstanceOf(Responder::class, $this->responder);
     }
 
-    function it_calls_respond_method_from_operation_responder_as_string(
-        ContainerInterface $locator,
-        ResponderInterface $responder,
-    ): void {
+    public function testItCallsRespondMethodFromOperationResponderAsString(): void
+    {
         $operation = new Create(responder: '\App\Responder');
         $context = new Context();
+        $responder = $this->createMock(ResponderInterface::class);
 
-        $locator->has('\App\Responder')->willReturn(true);
-        $locator->get('\App\Responder')->willReturn($responder);
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('\App\Responder')
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('\App\Responder')
+            ->willReturn($responder);
 
-        $responder->respond([], $operation, $context)->willReturn('response_data')->shouldBeCalled();
+        $responder->expects($this->once())
+            ->method('respond')
+            ->with([], $operation, $context)
+            ->willReturn('response_data');
 
-        $this->respond([], $operation, $context);
+        $result = $this->responder->respond([], $operation, $context);
+        $this->assertEquals('response_data', $result);
     }
 
-    function it_calls_process_method_from_operation_processor_as_callable(): void
+    public function testItCallsRespondMethodFromOperationResponderAsCallable(): void
     {
         $operation = new Create(responder: [ResponderWithCallable::class, 'respond']);
         $context = new Context();
 
-        $this->respond([], $operation, $context)->shouldHaveType(Response::class);
+        $result = $this->responder->respond([], $operation, $context);
+
+        $this->assertInstanceOf(Response::class, $result);
     }
 
-    function it_returns_null_if_operation_has_no_responder(): void
+    public function testItReturnsNullIfOperationHasNoResponder(): void
     {
         $operation = new Create();
         $context = new Context();
 
-        $this->respond([], $operation, $context)->shouldReturn(null);
+        $result = $this->responder->respond([], $operation, $context);
+
+        $this->assertNull($result);
     }
 
-    function it_throws_an_exception_when_configured_responder_is_not_a_responder_instance(
-        ContainerInterface $locator,
-    ): void {
+    public function testItThrowsExceptionWhenConfiguredResponderIsNotAResponderInstance(): void
+    {
         $operation = new Create(responder: '\stdClass');
         $context = new Context();
 
-        $locator->has('\stdClass')->willReturn(true);
-        $locator->get('\stdClass')->willReturn(new \stdClass());
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('\stdClass')
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('\stdClass')
+            ->willReturn(new \stdClass());
 
-        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ResponderInterface. Got: stdClass'))
-            ->during('respond', [[], $operation, $context])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected an instance of Sylius\Resource\State\ResponderInterface. Got: stdClass');
+
+        $this->responder->respond([], $operation, $context);
     }
 }

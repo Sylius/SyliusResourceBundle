@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State;
+namespace Sylius\Resource\Tests\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProviderWithCallable;
 use Sylius\Resource\Context\Context;
@@ -21,60 +22,82 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Provider;
 use Sylius\Resource\State\ProviderInterface;
 
-final class ProviderSpec extends ObjectBehavior
+final class ProviderTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    private Provider $provider;
+
+    private ContainerInterface|MockObject $locator;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->provider = new Provider($this->locator);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(Provider::class);
+        $this->assertInstanceOf(Provider::class, $this->provider);
     }
 
-    function it_calls_provide_method_from_operation_provider_as_string(
-        ContainerInterface $locator,
-        ProviderInterface $provider,
-    ): void {
+    public function testItCallsProvideMethodFromOperationProviderAsString(): void
+    {
         $operation = new Create(provider: '\App\Provider');
         $context = new Context();
+        $provider = $this->createMock(ProviderInterface::class);
 
-        $locator->has('\App\Provider')->willReturn(true);
-        $locator->get('\App\Provider')->willReturn($provider);
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('\App\Provider')
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('\App\Provider')
+            ->willReturn($provider);
 
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $provider->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context);
 
-        $this->provide($operation, $context);
+        $this->provider->provide($operation, $context);
     }
 
-    function it_calls_provide_method_from_operation_provider_as_callable(): void
+    public function testItCallsProvideMethodFromOperationProviderAsCallable(): void
     {
         $operation = new Create(provider: [ProviderWithCallable::class, 'provide']);
         $context = new Context();
 
-        $this->provide($operation, $context)->shouldHaveType(\stdClass::class);
+        $result = $this->provider->provide($operation, $context);
+
+        $this->assertInstanceOf(\stdClass::class, $result);
     }
 
-    function it_returns_null_if_operation_has_no_provider(): void
+    public function testItReturnsNullIfOperationHasNoProvider(): void
     {
         $operation = new Create();
         $context = new Context();
 
-        $this->provide($operation, $context)->shouldReturn(null);
+        $result = $this->provider->provide($operation, $context);
+
+        $this->assertNull($result);
     }
 
-    function it_throws_an_exception_when_configured_provider_is_not_a_provider_instance(
-        ContainerInterface $locator,
-    ): void {
+    public function testItThrowsExceptionWhenConfiguredProviderIsNotAProviderInstance(): void
+    {
         $operation = new Create(provider: '\stdClass');
         $context = new Context();
 
-        $locator->has('\stdClass')->willReturn(true);
-        $locator->get('\stdClass')->willReturn(new \stdClass());
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('\stdClass')
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('\stdClass')
+            ->willReturn(new \stdClass());
 
-        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ProviderInterface. Got: stdClass'))
-            ->during('provide', [$operation, $context])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected an instance of Sylius\Resource\State\ProviderInterface. Got: stdClass');
+
+        $this->provider->provide($operation, $context);
     }
 }

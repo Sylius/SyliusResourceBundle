@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State;
+namespace Sylius\Resource\Tests\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Factory\FactoryInterface;
@@ -21,107 +22,105 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Factory;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 
-final class FactorySpec extends ObjectBehavior
+final class FactoryTest extends TestCase
 {
-    function let(
-        ContainerInterface $locator,
-        ArgumentParserInterface $argumentParser,
-    ): void {
-        $this->beConstructedWith($locator, $argumentParser);
-    }
+    private Factory $factory;
 
-    function it_is_initializable(): void
+    private ContainerInterface|MockObject $locator;
+
+    private ArgumentParserInterface|MockObject $argumentParser;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(Factory::class);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->argumentParser = $this->createMock(ArgumentParserInterface::class);
+        $this->factory = new Factory($this->locator, $this->argumentParser);
     }
 
-    function it_calls_factory_from_operation_as_callable(): void
+    public function testItIsInitializable(): void
     {
-        $factory = [FactoryCallable::class, 'create'];
-
-        $operation = new Create(factory: $factory);
-
-        $this->create($operation, new Context())->shouldHaveType(\stdClass::class);
+        $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    function it_calls_factory_with_arguments_from_operation_as_callable(
-        ArgumentParserInterface $argumentParser,
-    ): void {
-        $factory = [FactoryCallable::class, 'create'];
-
-        $operation = new Create(factory: $factory, factoryArguments: ['userId' => 'user.getUserIdentifier()']);
-
-        $argumentParser->parseExpression('user.getUserIdentifier()')->willReturn('51353e91-5295-4876-a994-cae4b3ff3a7c');
-
-        $result = $this->create($operation, new Context());
-        $result->shouldHaveType(\stdClass::class);
-        $result->userId->shouldReturn('51353e91-5295-4876-a994-cae4b3ff3a7c');
-    }
-
-    function it_calls_factory_from_operation_as_string(
-        FactoryInterface $factory,
-        ContainerInterface $locator,
-        \stdClass $data,
-    ): void {
-        $operation = new Create(name: 'app_dummy_create', factory: $factory::class, factoryMethod: 'createNew');
-
-        $locator->has($factory::class)->willReturn(true);
-        $locator->get($factory::class)->willReturn($factory);
-
-        $factory->createNew()->willReturn($data);
-
-        $this->create($operation, new Context())->shouldReturn($data);
-    }
-
-    function it_throws_an_exception_when_factory_is_not_found_on_locator(
-        FactoryInterface $factory,
-        ContainerInterface $locator,
-        \stdClass $data,
-    ): void {
-        $operation = new Create(name: 'app_dummy_create', factory: $factory::class, factoryMethod: 'createNew');
-
-        $locator->has($factory::class)->willReturn(false);
-        $locator->get($factory::class)->willReturn($factory);
-
-        $factory->createNew()->willReturn($data);
-
-        $this->shouldThrow(
-            new \RuntimeException(sprintf('Factory "%s" not found on operation "app_dummy_create"', $factory::class)),
-        )->during('create', [$operation, new Context()]);
-    }
-
-    function it_throws_an_exception_when_factory_method_is_null(
-        FactoryInterface $factory,
-        ContainerInterface $locator,
-        \stdClass $data,
-    ): void {
-        $operation = new Create(name: 'app_dummy_create', factory: $factory::class);
-
-        $locator->has($factory::class)->willReturn(true);
-        $locator->get($factory::class)->willReturn($factory);
-
-        $factory->createNew()->willReturn($data);
-
-        $this->shouldThrow(
-            new \RuntimeException('No Factory method was configured on operation "app_dummy_create"'),
-        )->during('create', [$operation, new Context()]);
-    }
-}
-
-final class ResourceFactory implements FactoryInterface
-{
-    public function createNew(): object
+    public function testItCallsFactoryFromOperationAsCallable(): void
     {
-        return new \stdClass();
+        $operation = new Create(factory: [FactoryCallable::class, 'create']);
+        $result = $this->factory->create($operation, new Context());
+
+        $this->assertInstanceOf(\stdClass::class, $result);
     }
 
-    public function createForUser(string $userId): object
+    public function testItCallsFactoryWithArgumentsFromOperationAsCallable(): void
     {
-        $object = $this->createNew();
+        $operation = new Create(factory: [FactoryCallable::class, 'create'], factoryArguments: ['userId' => 'user.getUserIdentifier()']);
+        $this->argumentParser->expects($this->once())
+            ->method('parseExpression')
+            ->with('user.getUserIdentifier()')
+            ->willReturn('51353e91-5295-4876-a994-cae4b3ff3a7c');
 
-        $object->userId = $userId;
+        $result = $this->factory->create($operation, new Context());
 
-        return $object;
+        $this->assertInstanceOf(\stdClass::class, $result);
+        $this->assertEquals('51353e91-5295-4876-a994-cae4b3ff3a7c', $result->userId);
+    }
+
+    public function testItCallsFactoryFromOperationAsString(): void
+    {
+        $factory = $this->createMock(FactoryInterface::class);
+        $operation = new Create(name: 'app_dummy_create', factory: get_class($factory), factoryMethod: 'createNew');
+        $data = new \stdClass();
+
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with(get_class($factory))
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with(get_class($factory))
+            ->willReturn($factory);
+        $factory->expects($this->once())
+            ->method('createNew')
+            ->willReturn($data);
+
+        $result = $this->factory->create($operation, new Context());
+
+        $this->assertSame($data, $result);
+    }
+
+    public function testItThrowsExceptionWhenFactoryIsNotFoundOnLocator(): void
+    {
+        $factory = $this->createMock(FactoryInterface::class);
+        $operation = new Create(name: 'app_dummy_create', factory: get_class($factory), factoryMethod: 'createNew');
+
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with(get_class($factory))
+            ->willReturn(false);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('Factory "%s" not found on operation "app_dummy_create"', get_class($factory)));
+
+        $this->factory->create($operation, new Context());
+    }
+
+    public function testItThrowsExceptionWhenFactoryMethodIsNull(): void
+    {
+        $factory = $this->createMock(FactoryInterface::class);
+        $operation = new Create(name: 'app_dummy_create', factory: get_class($factory));
+
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with(get_class($factory))
+            ->willReturn(true);
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with(get_class($factory))
+            ->willReturn($factory);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No Factory method was configured on operation "app_dummy_create"');
+
+        $this->factory->create($operation, new Context());
     }
 }
 
@@ -130,7 +129,6 @@ final class FactoryCallable
     public static function create(?string $userId = null): object
     {
         $object = new \stdClass();
-
         $object->userId = $userId;
 
         return $object;
