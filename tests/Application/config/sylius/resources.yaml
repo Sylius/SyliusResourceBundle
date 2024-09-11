@@ -23,6 +23,7 @@ sylius_resource:
             translation:
                 classes:
                     model: App\Entity\BookTranslation
+                    interface: App\Entity\BookTranslationInterface
                     form: App\Form\Type\BookTranslationType
 
         app.comic_book:
