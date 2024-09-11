@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State;
+namespace Sylius\Resource\Tests\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 use Sylius\Resource\Context\Context;
@@ -21,60 +23,70 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Processor;
 use Sylius\Resource\State\ProcessorInterface;
 
-final class ProcessorSpec extends ObjectBehavior
+final class ProcessorTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    use ProphecyTrait;
+
+    private Processor $processor;
+
+    private ContainerInterface|ObjectProphecy $locator;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->prophesize(ContainerInterface::class);
+        $this->processor = new Processor($this->locator->reveal());
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(Processor::class);
+        $this->assertInstanceOf(Processor::class, $this->processor);
     }
 
-    function it_calls_process_method_from_operation_processor_as_string(
-        ContainerInterface $locator,
-        ProcessorInterface $processor,
-    ): void {
+    public function testItCallsProcessMethodFromOperationProcessorAsString(): void
+    {
         $operation = new Create(processor: '\App\Processor');
         $context = new Context();
+        $processor = $this->prophesize(ProcessorInterface::class);
 
-        $locator->has('\App\Processor')->willReturn(true);
-        $locator->get('\App\Processor')->willReturn($processor);
+        $this->locator->has('\App\Processor')->willReturn(true);
+        $this->locator->get('\App\Processor')->willReturn($processor->reveal());
 
-        $processor->process([], $operation, $context)->willReturn(null)->shouldBeCalled();
+        $processor->process([], $operation, $context)->shouldBeCalled()->willReturn(null);
 
-        $this->process([], $operation, $context);
+        $this->processor->process([], $operation, $context);
     }
 
-    function it_calls_process_method_from_operation_processor_as_callable(): void
+    public function testItCallsProcessMethodFromOperationProcessorAsCallable(): void
     {
         $operation = new Create(processor: [ProcessorWithCallable::class, 'process']);
         $context = new Context();
 
-        $this->process([], $operation, $context)->shouldHaveType(\stdClass::class);
+        $result = $this->processor->process([], $operation, $context);
+
+        $this->assertInstanceOf(\stdClass::class, $result);
     }
 
-    function it_returns_null_if_operation_has_no_processor(): void
+    public function testItReturnsNullIfOperationHasNoProcessor(): void
     {
         $operation = new Create();
         $context = new Context();
 
-        $this->process([], $operation, $context)->shouldReturn(null);
+        $result = $this->processor->process([], $operation, $context);
+
+        $this->assertNull($result);
     }
 
-    function it_throws_an_exception_when_configured_processor_is_not_a_processor_instance(
-        ContainerInterface $locator,
-    ): void {
+    public function testItThrowsExceptionWhenConfiguredProcessorIsNotAProcessorInstance(): void
+    {
         $operation = new Create(processor: '\stdClass');
         $context = new Context();
 
-        $locator->has('\stdClass')->willReturn(true);
-        $locator->get('\stdClass')->willReturn(new \stdClass());
+        $this->locator->has('\stdClass')->willReturn(true);
+        $this->locator->get('\stdClass')->willReturn(new \stdClass());
 
-        $this->shouldThrow(new \InvalidArgumentException('Expected an instance of Sylius\Resource\State\ProcessorInterface. Got: stdClass'))
-            ->during('process', [[], $operation, $context])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected an instance of Sylius\Resource\State\ProcessorInterface. Got: stdClass');
+
+        $this->processor->process([], $operation, $context);
     }
 }

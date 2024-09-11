@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\State\Processor;
+namespace Sylius\Resource\Tests\State\Processor;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Resource\Tests\Dummy\ProcessorWithCallable;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\BulkDelete;
@@ -22,33 +24,46 @@ use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 
-final class EventDispatcherBulkAwareProcessorSpec extends ObjectBehavior
+final class EventDispatcherBulkAwareProcessorTest extends TestCase
 {
-    function let(ProcessorInterface $decorated, OperationEventDispatcherInterface $operationEventDispatcher): void
+    use ProphecyTrait;
+
+    private EventDispatcherBulkAwareProcessor $processor;
+
+    private ProcessorInterface|ObjectProphecy $decorated;
+
+    private OperationEventDispatcherInterface|ObjectProphecy $operationEventDispatcher;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($decorated, $operationEventDispatcher);
+        $this->decorated = $this->prophesize(ProcessorInterface::class);
+        $this->operationEventDispatcher = $this->prophesize(OperationEventDispatcherInterface::class);
+        $this->processor = new EventDispatcherBulkAwareProcessor(
+            $this->decorated->reveal(),
+            $this->operationEventDispatcher->reveal(),
+        );
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(EventDispatcherBulkAwareProcessor::class);
+        $this->assertInstanceOf(EventDispatcherBulkAwareProcessor::class, $this->processor);
     }
 
-    function it_dispatches_events_for_bulk_operation(
-        ProcessorInterface $decorated,
-        OperationEventDispatcherInterface $operationEventDispatcher,
-    ): void {
+    public function testItDispatchesEventsForBulkOperation(): void
+    {
         $operation = new BulkDelete(processor: [ProcessorWithCallable::class, 'process']);
         $context = new Context();
-
         $operationEvent = new OperationEvent();
-
         $data = [];
 
-        $operationEventDispatcher->dispatchBulkEvent($data, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
+        $this->operationEventDispatcher->dispatchBulkEvent($data, $operation, $context)
+            ->willReturn($operationEvent)
+            ->shouldBeCalled();
 
-        $decorated->process($data, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $this->decorated->process($data, $operation, $context)
+            ->willReturn(null)
+            ->shouldBeCalled();
 
-        $this->process($data, $operation, $context);
+        $this->processor->process($data, $operation, $context);
     }
 }
