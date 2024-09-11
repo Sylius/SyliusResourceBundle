@@ -57,6 +57,12 @@ final class DoctrineTargetEntitiesResolverPassTest extends AbstractCompilerPassT
             'doctrine.event_listener',
             ['event' => 'loadClassMetadata'],
         );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithTag(
+            'doctrine.orm.listeners.resolve_target_entity',
+            'doctrine.event_listener',
+            ['event' => 'onClassMetadataNotFound'],
+        );
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
