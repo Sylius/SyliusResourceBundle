@@ -11,33 +11,40 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Reflection\Filter;
+namespace Sylius\Resource\Tests\Reflection\Filter;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Reflection\CallableReflection;
 use Sylius\Resource\Reflection\Filter\FunctionArgumentsFilter;
 
-final class FunctionArgumentsFilterSpec extends ObjectBehavior
+final class FunctionArgumentsFilterTest extends TestCase
 {
-    function it_is_initializable(): void
+    private FunctionArgumentsFilter $functionArgumentsFilter;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(FunctionArgumentsFilter::class);
+        $this->functionArgumentsFilter = new FunctionArgumentsFilter();
     }
 
-    function it_filters_matching_arguments(): void
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(FunctionArgumentsFilter::class, $this->functionArgumentsFilter);
+    }
+
+    public function testItFiltersMatchingArguments(): void
     {
         $callable = [RepositoryWithCallables::class, 'find'];
         $reflector = CallableReflection::from($callable);
 
-        $this->filter(
+        $result = $this->functionArgumentsFilter->filter(
             $reflector,
             [
                 'id' => 'my_id',
                 'foo' => 'fighters',
             ],
-        )->shouldReturn([
-            'id' => 'my_id',
-        ]);
+        );
+
+        $this->assertSame(['id' => 'my_id'], $result);
     }
 }

@@ -11,36 +11,42 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Reflection;
+namespace Sylius\Resource\Tests\Reflection;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use ReflectionFunctionAbstract;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Reflection\CallableReflection;
 
-class CallableReflectionSpec extends ObjectBehavior
+final class CallableReflectionTest extends TestCase
 {
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(CallableReflection::class);
+        $callableReflection = new CallableReflection();
+        $this->assertInstanceOf(CallableReflection::class, $callableReflection);
     }
 
-    function it_reflects_an_array_callable(): void
+    public function testItReflectsAnArrayCallable(): void
     {
-        $this::from([RepositoryWithCallables::class, 'find'])->shouldHaveType(\ReflectionFunctionAbstract::class);
+        $reflection = CallableReflection::from([RepositoryWithCallables::class, 'find']);
+        $this->assertInstanceOf(ReflectionFunctionAbstract::class, $reflection);
     }
 
-    function it_reflects_a_closure_callable(): void
+    public function testItReflectsAClosureCallable(): void
     {
-        $this::from(fn (): array => [])->shouldHaveType(\ReflectionFunctionAbstract::class);
+        $reflection = CallableReflection::from(fn (): array => []);
+        $this->assertInstanceOf(ReflectionFunctionAbstract::class, $reflection);
     }
 
-    function it_reflects_a_string_callable(): void
+    public function testItReflectsAStringCallable(): void
     {
-        $this::from('Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables::find')->shouldHaveType(\ReflectionFunctionAbstract::class);
+        $reflection = CallableReflection::from('Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables::find');
+        $this->assertInstanceOf(ReflectionFunctionAbstract::class, $reflection);
     }
 
-    function it_reflects_an_invokable_callable(): void
+    public function testItReflectsAnInvokableCallable(): void
     {
-        $this::from(new RepositoryWithCallables())->shouldHaveType(\ReflectionFunctionAbstract::class);
+        $reflection = CallableReflection::from(new RepositoryWithCallables());
+        $this->assertInstanceOf(ReflectionFunctionAbstract::class, $reflection);
     }
 }
