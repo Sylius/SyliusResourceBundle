@@ -15,12 +15,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Model\AbstractTranslation;
-use Sylius\Resource\Model\ResourceInterface;
 
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: 'app_book_translation')]
-class BookTranslation extends AbstractTranslation implements ResourceInterface
+class BookTranslation extends AbstractTranslation implements BookTranslationInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
