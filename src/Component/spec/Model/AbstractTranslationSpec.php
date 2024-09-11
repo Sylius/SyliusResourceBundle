@@ -11,48 +11,56 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Model;
+namespace Sylius\Resource\Tests\Model;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Model\AbstractTranslation;
 use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Model\TranslationInterface;
 
-final class AbstractTranslationSpec extends ObjectBehavior
+final class AbstractTranslationTest extends TestCase
 {
-    function let(): void
+    use ProphecyTrait;
+
+    private AbstractTranslation $translation;
+
+    protected function setUp(): void
     {
-        $this->beAnInstanceOf('spec\Sylius\Resource\Model\ConcreteTranslation');
+        $this->translation = new ConcreteTranslation();
     }
 
-    function it_is_a_translation(): void
+    public function testItIsATranslation(): void
     {
-        $this->shouldImplement(TranslationInterface::class);
+        $this->assertInstanceOf(TranslationInterface::class, $this->translation);
     }
 
-    function its_translatable_is_mutable(TranslatableInterface $translatable): void
+    public function testItsTranslatableIsMutable(): void
     {
-        $this->setTranslatable($translatable);
-        $this->getTranslatable()->shouldReturn($translatable);
+        $translatable = $this->prophesize(TranslatableInterface::class);
+
+        $this->translation->setTranslatable($translatable->reveal());
+        $this->assertSame($translatable->reveal(), $this->translation->getTranslatable());
     }
 
-    function its_detaches_from_its_translatable_correctly(
-        TranslatableInterface $translatable1,
-        TranslatableInterface $translatable2,
-    ): void {
-        $translatable1->addTranslation(Argument::type(AbstractTranslation::class));
-        $this->setTranslatable($translatable1);
+    public function testItsDetachesFromItsTranslatableCorrectly(): void
+    {
+        $translatable1 = $this->prophesize(TranslatableInterface::class);
+        $translatable2 = $this->prophesize(TranslatableInterface::class);
 
-        $translatable1->removeTranslation(Argument::type(AbstractTranslation::class));
-        $translatable2->addTranslation(Argument::type(AbstractTranslation::class));
-        $this->setTranslatable($translatable2);
+        $translatable1->addTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
+        $this->translation->setTranslatable($translatable1->reveal());
+
+        $translatable1->removeTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
+        $translatable2->addTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
+        $this->translation->setTranslatable($translatable2->reveal());
     }
 
-    function its_locale_is_mutable(): void
+    public function testItsLocaleIsMutable(): void
     {
-        $this->setLocale('en');
-        $this->getLocale()->shouldReturn('en');
+        $this->translation->setLocale('en');
+        $this->assertSame('en', $this->translation->getLocale());
     }
 }
 
