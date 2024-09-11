@@ -11,30 +11,35 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Exception;
+namespace Sylius\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Exception\RaceConditionException;
 use Sylius\Resource\Exception\UpdateHandlingException;
 
-final class RaceConditionExceptionSpec extends ObjectBehavior
+final class RaceConditionExceptionSpec extends TestCase
 {
-    function it_extends_an_update_handling_exception(): void
+    public function testItExtendsAnUpdateHandlingException(): void
     {
-        $this->shouldHaveType(UpdateHandlingException::class);
+        $exception = new RaceConditionException();
+        $this->assertInstanceOf(UpdateHandlingException::class, $exception);
     }
 
-    function it_has_a_message(): void
+    public function testItHasAMessage(): void
     {
-        $this->getMessage()->shouldReturn('Operated entity was previously modified.');
+        $exception = new RaceConditionException();
+        $this->assertSame('Operated entity was previously modified.', $exception->getMessage());
     }
 
-    function it_has_a_flash(): void
+    public function testItHasAFlash(): void
     {
-        $this->getFlash()->shouldReturn('race_condition_error');
+        $exception = new RaceConditionException();
+        $this->assertSame('race_condition_error', $exception->getFlash());
     }
 
-    function it_has_an_api_response_code(): void
+    public function testItHasAnApiResponseCode(): void
     {
-        $this->getApiResponseCode()->shouldReturn(409);
+        $exception = new RaceConditionException();
+        $this->assertSame(409, $exception->getApiResponseCode());
     }
 }
