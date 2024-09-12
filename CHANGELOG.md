@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+## v1.12.0-ALPHA.2 (2024-09-12)
+
+#### Details
+
+- [#934](https://github.com/Sylius/SyliusResourceBundle/issues/934) Reproduce getting the translation repository by its interface use case ([@loic425](https://github.com/loic425))
+- [#935](https://github.com/Sylius/SyliusResourceBundle/issues/935) Fix getting translation repository ([@loic425](https://github.com/loic425))
+
 ## v1.12.0-ALPHA.1 (2024-09-09)
 
 #### Details
