@@ -11,27 +11,53 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Generator;
+namespace Sylius\Resource\Tests\Generator;
 
-use PhpSpec\ObjectBehavior;
-use Sylius\Component\Resource\Generator\RandomnessGeneratorInterface as LegacyRandomnessGeneratorInterface;
-use Sylius\Resource\Generator\RandomnessGenerator as NewRandomnessGenerator;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Generator\RandomnessGenerator;
 use Sylius\Resource\Generator\RandomnessGeneratorInterface;
 
-final class RandomnessGeneratorSpec extends ObjectBehavior
+final class RandomnessGeneratorTest extends TestCase
 {
-    function it_implements_randomness_generator_interface(): void
+    private RandomnessGeneratorInterface $generator;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(RandomnessGeneratorInterface::class);
+        $this->generator = new RandomnessGenerator();
     }
 
-    function it_implements_legacy_randomness_generator_interface(): void
+    public function testItImplementsRandomnessGeneratorInterface(): void
     {
-        $this->shouldImplement(LegacyRandomnessGeneratorInterface::class);
+        $this->assertInstanceOf(RandomnessGeneratorInterface::class, $this->generator);
     }
 
-    function it_should_be_an_alias_of_randomness_generator(): void
+    public function testItGeneratesRandomUriSafeStringOfLength(): void
     {
-        $this->shouldBeAnInstanceOf(NewRandomnessGenerator::class);
+        $length = 9;
+        $result = $this->generator->generateUriSafeString($length);
+
+        $this->assertIsString($result);
+        $this->assertSame($length, strlen($result));
+    }
+
+    public function testItGeneratesRandomNumericStringOfLength(): void
+    {
+        $length = 12;
+        $result = $this->generator->generateNumeric($length);
+
+        $this->assertIsString($result);
+        $this->assertIsNumeric($result);
+        $this->assertSame($length, strlen($result));
+    }
+
+    public function testItGeneratesRandomIntInRange(): void
+    {
+        $min = 12;
+        $max = 2000000;
+        $result = $this->generator->generateInt($min, $max);
+
+        $this->assertIsInt($result);
+        $this->assertGreaterThanOrEqual($min, $result);
+        $this->assertLessThanOrEqual($max, $result);
     }
 }
