@@ -11,10 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Grid\State;
+namespace Sylius\Resource\Tests\Grid\State;
 
 use Pagerfanta\Pagerfanta;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
@@ -28,182 +30,159 @@ use Sylius\Resource\Metadata\Index;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RequestGridProviderSpec extends ObjectBehavior
+final class RequestGridProviderTest extends TestCase
 {
-    function let(
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-    ): void {
-        $this->beConstructedWith($gridViewFactory, $gridProvider);
-    }
+    use ProphecyTrait;
 
-    function it_is_initializable(): void
+    private RequestGridProvider $provider;
+
+    private GridViewFactoryInterface|ObjectProphecy $gridViewFactory;
+
+    private GridProviderInterface|ObjectProphecy $gridProvider;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(RequestGridProvider::class);
+        $this->gridViewFactory = $this->prophesize(GridViewFactoryInterface::class);
+        $this->gridProvider = $this->prophesize(GridProviderInterface::class);
+        $this->provider = new RequestGridProvider(
+            $this->gridViewFactory->reveal(),
+            $this->gridProvider->reveal(),
+        );
     }
 
-    function it_provides_a_grid_view(
-        Request $request,
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-        Grid $gridDefinition,
-        GridView $gridView,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(RequestGridProvider::class, $this->provider);
+    }
 
+    public function testItProvidesAGridView(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $context = new Context(new RequestOption($request->reveal()));
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag();
+        $gridDefinition = $this->prophesize(Grid::class);
+        $gridView = $this->prophesize(GridView::class);
 
-        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $this->gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
+        $this->gridViewFactory->create($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
 
-        $gridViewFactory->create($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
-
-        $this->provide($operation, $context)
-            ->shouldReturn($gridView)
-        ;
+        $this->assertSame($gridView->reveal(), $this->provider->provide($operation, $context));
     }
 
-    function it_sets_current_page_from_request(
-        Request $request,
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-        Grid $gridDefinition,
-        GridView $gridView,
-        Pagerfanta $pagerfanta,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
+    public function testItSetsCurrentPageFromRequest(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $context = new Context(new RequestOption($request->reveal()));
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag(['page' => 42]);
+        $gridDefinition = $this->prophesize(Grid::class);
+        $gridView = $this->prophesize(GridView::class);
+        $pagerfanta = $this->prophesize(Pagerfanta::class);
 
-        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $this->gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getLimits()->willReturn([]);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
-
-        $gridViewFactory->create($gridDefinition, $context, new Parameters(['page' => 42]), [])->willReturn($gridView);
+        $this->gridViewFactory->create($gridDefinition, $context, new Parameters(['page' => 42]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
         $pagerfanta->setMaxPerPage(10)->willReturn($pagerfanta)->shouldBeCalled();
 
-        $this->provide($operation, $context)
-            ->shouldReturn($gridView)
-        ;
+        $this->assertSame($gridView->reveal(), $this->provider->provide($operation, $context));
     }
 
-    function it_sets_max_per_page_from_request(
-        Request $request,
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-        Grid $gridDefinition,
-        GridView $gridView,
-        Pagerfanta $pagerfanta,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
+    public function testItSetsMaxPerPageFromRequest(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $context = new Context(new RequestOption($request->reveal()));
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag(['limit' => 25]);
+        $gridDefinition = $this->prophesize(Grid::class);
+        $gridView = $this->prophesize(GridView::class);
+        $pagerfanta = $this->prophesize(Pagerfanta::class);
 
-        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $this->gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
         $gridDefinition->getLimits()->willReturn([10, 25]);
-
-        $gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 25]), [])->willReturn($gridView);
+        $this->gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 25]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
         $pagerfanta->setMaxPerPage(25)->willReturn($pagerfanta)->shouldBeCalled();
 
-        $this->provide($operation, $context)
-            ->shouldReturn($gridView)
-        ;
+        $this->assertSame($gridView->reveal(), $this->provider->provide($operation, $context));
     }
 
-    function it_sets_max_per_page_from_grid_configuration(
-        Request $request,
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-        Grid $gridDefinition,
-        GridView $gridView,
-        Pagerfanta $pagerfanta,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
+    public function testItSetsMaxPerPageFromGridConfiguration(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $context = new Context(new RequestOption($request->reveal()));
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag();
+        $gridDefinition = $this->prophesize(Grid::class);
+        $gridView = $this->prophesize(GridView::class);
+        $pagerfanta = $this->prophesize(Pagerfanta::class);
 
-        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $this->gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
         $gridDefinition->getLimits()->willReturn([15, 30]);
-
-        $gridViewFactory->create($gridDefinition, $context, new Parameters([]), [])->willReturn($gridView);
+        $this->gridViewFactory->create($gridDefinition, $context, new Parameters([]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
         $pagerfanta->setMaxPerPage(15)->willReturn($pagerfanta)->shouldBeCalled();
 
-        $this->provide($operation, $context)
-            ->shouldReturn($gridView)
-        ;
+        $this->assertSame($gridView->reveal(), $this->provider->provide($operation, $context));
     }
 
-    function it_limits_max_per_page_with_max_grid_configuration_limit(
-        Request $request,
-        GridViewFactoryInterface $gridViewFactory,
-        GridProviderInterface $gridProvider,
-        Grid $gridDefinition,
-        GridView $gridView,
-        Pagerfanta $pagerfanta,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
+    public function testItLimitsMaxPerPageWithMaxGridConfigurationLimit(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $context = new Context(new RequestOption($request->reveal()));
         $operation = new Index(grid: 'app_book');
 
         $request->query = new InputBag(['limit' => 40]);
+        $gridDefinition = $this->prophesize(Grid::class);
+        $gridView = $this->prophesize(GridView::class);
+        $pagerfanta = $this->prophesize(Pagerfanta::class);
 
-        $gridProvider->get('app_book')->willReturn($gridDefinition);
+        $this->gridProvider->get('app_book')->willReturn($gridDefinition);
         $gridDefinition->getDriverConfiguration()->willReturn([]);
         $gridDefinition->getLimits()->willReturn([15, 30]);
-
-        $gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 40]), [])->willReturn($gridView);
+        $this->gridViewFactory->create($gridDefinition, $context, new Parameters(['limit' => 40]), [])->willReturn($gridView);
 
         $gridView->getData()->willReturn($pagerfanta);
         $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
         $pagerfanta->setMaxPerPage(30)->willReturn($pagerfanta)->shouldBeCalled();
 
-        $this->provide($operation, $context)
-            ->shouldReturn($gridView)
-        ;
+        $this->assertSame($gridView->reveal(), $this->provider->provide($operation, $context));
     }
 
-    function it_throws_an_exception_when_operation_has_no_grid(
-        Request $request,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationHasNoGrid(): void
+    {
+        $request = $this->prophesize(Request::class);
         $operation = new Index(name: 'app_book');
 
-        $this->shouldThrow(new \RuntimeException('Operation has no grid, so you cannot use this provider for operation "app_book"'))
-            ->during('provide', [
-                $operation,
-                new Context(new RequestOption($request->getWrappedObject())),
-            ])
-        ;
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Operation has no grid, so you cannot use this provider for operation "app_book"');
+
+        $this->provider->provide($operation, new Context(new RequestOption($request->reveal())));
     }
 
-    function it_throws_an_exception_when_operation_does_not_implement_the_grid_aware_interface(
-        Request $request,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationDoesNotImplementTheGridAwareInterface(): void
+    {
+        $request = $this->prophesize(Request::class);
         $operation = new Create(name: 'app_book');
 
-        $this->shouldThrow(new \LogicException('You can not use a grid if your operation does not implement "Sylius\Resource\Metadata\GridAwareOperationInterface".'))
-            ->during('provide', [
-                $operation,
-                new Context(new RequestOption($request->getWrappedObject())),
-            ])
-        ;
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('You can not use a grid if your operation does not implement "Sylius\Resource\Metadata\GridAwareOperationInterface".');
+
+        $this->provider->provide($operation, new Context(new RequestOption($request->reveal())));
     }
 }
