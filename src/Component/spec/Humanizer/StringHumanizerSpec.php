@@ -11,22 +11,25 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Humanizer;
+namespace Sylius\Resource\Tests\Humanizer;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Humanizer\StringHumanizer;
 
-final class StringHumanizerSpec extends ObjectBehavior
+final class StringHumanizerTest extends TestCase
 {
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(StringHumanizer::class);
+        $humanizer = new StringHumanizer();
+        $this->assertInstanceOf(StringHumanizer::class, $humanizer);
     }
 
-    function it_humanizes_a_string(): void
+    public function testItHumanizesAString(): void
     {
-        $this::humanize('admin_user')->shouldReturn('admin user');
-        $this::humanize('Admin_user')->shouldReturn('admin user');
-        $this::humanize('AdminUser')->shouldReturn('admin user');
+        $humanizer = new StringHumanizer();
+
+        $this->assertSame('admin user', $humanizer::humanize('admin_user'));
+        $this->assertSame('admin user', $humanizer::humanize('Admin_user'));
+        $this->assertSame('admin user', $humanizer::humanize('AdminUser'));
     }
 }
