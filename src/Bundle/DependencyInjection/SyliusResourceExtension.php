@@ -176,7 +176,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     }
 
     /**
-     * @param array<string, array{driver: string|false}> $resources
+     * @param array<string, array{driver?: string|false}> $resources
      */
     private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader, ContainerBuilder $container): void
     {
@@ -217,7 +217,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     }
 
     /**
-     * @param array<string, array{driver: string|false}> $resources
+     * @param array<string, array{driver?: string|false}> $resources
      *
      * @return array<string, string>
      */
