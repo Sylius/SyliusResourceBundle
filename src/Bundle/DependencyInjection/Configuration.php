@@ -146,7 +146,7 @@ final class Configuration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('drivers')
-                    ->defaultValue([SyliusResourceBundle::DRIVER_DOCTRINE_ORM])
+                    ->defaultValue([])
                     ->enumPrototype()->values(SyliusResourceBundle::getAvailableDrivers())->end()
                 ->end()
             ->end()

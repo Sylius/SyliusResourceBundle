@@ -45,6 +45,8 @@ parameters:
         - '/Call to an undefined method ReflectionClass::getAttributes\(\)./'
         - '/Call to an undefined method object::getRealClassName\(\)./'
         - '/Class Bazinga\\Bundle\\HateoasBundle\\BazingaHateoasBundle not found\./'
+        - '/Class Doctrine\\ODM\\MongoDB\\DocumentManager not found\./'
+        - '/Class Doctrine\\ODM\\PHPCR\\Document\\Resource not found\./'
         - '/Class Doctrine\\Bundle\\MongoDBBundle/'
         - '/Class Doctrine\\Bundle\\PHPCRBundle/'
         - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'

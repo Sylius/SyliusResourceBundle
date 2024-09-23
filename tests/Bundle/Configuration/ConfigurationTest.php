@@ -16,15 +16,14 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Configuration;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Configuration;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ConfigurationTest extends TestCase
 {
     use ConfigurationTestCaseTrait;
 
-    /**
-     * @test
-     */
-    public function it_does_not_break_if_not_customized()
+    /** @test */
+    public function it_does_not_break_if_not_customized(): void
     {
         $this->assertConfigurationIsValid(
             [
@@ -33,10 +32,38 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_has_no_default_mapping_paths()
+    /** @test */
+    public function it_has_no_default_drivers(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [],
+            [
+                'drivers' => [],
+            ],
+            'drivers',
+        );
+    }
+
+    /** @test */
+    public function its_drivers_can_be_customized(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['drivers' => [
+                    'doctrine/orm',
+                ]],
+            ],
+            [
+                'drivers' => [
+                    'doctrine/orm',
+                ],
+            ],
+            'drivers',
+        );
+    }
+
+    /** @test */
+    public function it_has_no_default_mapping_paths(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -51,10 +78,8 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function its_mapping_paths_can_be_customized()
+    /** @test */
+    public function its_mapping_paths_can_be_customized(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -73,10 +98,8 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function its_default_templates_dir_can_be_customized()
+    /** @test */
+    public function its_default_templates_dir_can_be_customized(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -93,10 +116,8 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_has_default_authorization_checker()
+    /** @test */
+    public function it_has_default_authorization_checker(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -107,10 +128,8 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function its_authorization_checker_can_be_customized()
+    /** @test */
+    public function its_authorization_checker_can_be_customized(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -121,10 +140,8 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function its_authorization_checker_cannot_be_empty()
+    /** @test */
+    public function its_authorization_checker_cannot_be_empty(): void
     {
         $this->assertPartialConfigurationIsInvalid(
             [
@@ -134,7 +151,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    protected function getConfiguration()
+    protected function getConfiguration(): ConfigurationInterface
     {
         return new Configuration();
     }
