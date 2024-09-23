@@ -20,8 +20,8 @@
 
 #### Details
 
-- [#934](https://github.com/sylius/sylius/issues/934) Reproduce getting the translation repository by its interface use case ([@loic425](https://github.com/loic425))
-- [#941](https://github.com/sylius/sylius/issues/941) Fix Doctrine dependency on state processors ([@loic425](https://github.com/loic425))
+- [#934](https://github.com/Sylius/SyliusResourceBundle/issues/934) Reproduce getting the translation repository by its interface use case ([@loic425](https://github.com/loic425))
+- [#941](https://github.com/Sylius/SyliusResourceBundle/issues/941) Fix Doctrine dependency on state processors ([@loic425](https://github.com/loic425))
 
 ## v1.11.2 (2024-09-06)
 
