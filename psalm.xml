@@ -264,6 +264,8 @@
         <UndefinedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle" />
+                <referencedClass name="Doctrine\ODM\MongoDB\DocumentManager" />
+                <referencedClass name="Doctrine\ODM\PHPCR\Document\Resource" />
                 <referencedClass name="Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass" />
                 <referencedClass name="Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass" />
                 <referencedClass name="Doctrine\Common\Persistence\ObjectManager" />
