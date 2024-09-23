@@ -50,7 +50,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $loader->load('services.xml');
 
-        /** @var array $bundles */
+        /** @var array<string, string> $bundles */
         $bundles = $container->getParameter('kernel.bundles');
         if (array_key_exists('SyliusGridBundle', $bundles)) {
             $loader->load('services/integrations/grid.xml');
@@ -68,7 +68,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $this->autoRegisterResources($config, $container);
 
-        $this->loadPersistence($config['drivers'], $config['resources'], $loader);
+        $this->loadPersistence($config['drivers'], $config['resources'], $loader, $container);
         $this->loadResources($config['resources'], $container);
 
         $container->registerForAutoconfiguration(ProviderInterface::class)
@@ -175,28 +175,26 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         return 'app.' . u($shortName)->snake()->toString();
     }
 
-    private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader): void
+    /**
+     * @param array<string, array{driver: string|false}> $resources
+     */
+    private function loadPersistence(array $drivers, array $resources, LoaderInterface $loader, ContainerBuilder $container): void
     {
+        $availableDrivers = $this->getAvailableDrivers($container);
+
+        // Enable all available drivers if there is no configured drivers
+        $drivers = [] !== $drivers ? $drivers : $availableDrivers;
+
+        $resourceDrivers = $this->getResourceDrivers($resources);
+
+        $this->checkConfiguredDrivers($drivers, $availableDrivers, $resourceDrivers);
+
         $integrateDoctrine = array_reduce($drivers, function (bool $result, string $driver): bool {
             return $result || in_array($driver, [SyliusResourceBundle::DRIVER_DOCTRINE_ORM, SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM], true);
         }, false);
 
         if ($integrateDoctrine) {
             $loader->load('services/integrations/doctrine.xml');
-        }
-
-        foreach ($resources as $alias => $resource) {
-            if (false === $resource['driver']) {
-                break;
-            }
-
-            if (!in_array($resource['driver'], $drivers, true)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Resource "%s" uses driver "%s", but this driver has not been enabled.',
-                    $alias,
-                    $resource['driver'],
-                ));
-            }
         }
 
         foreach ($drivers as $driver) {
@@ -209,7 +207,86 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 );
             }
 
+            // Only Doctrine drivers need service integration file
+            if (!str_starts_with($driver, 'doctrine')) {
+                continue;
+            }
+
             $loader->load(sprintf('services/integrations/%s.xml', $driver));
+        }
+    }
+
+    /**
+     * @param array<string, array{driver: string|false}> $resources
+     *
+     * @return array<string, string>
+     */
+    private function getResourceDrivers(array $resources): array
+    {
+        $resourceDrivers = array_map(function (array $resource): string|false {
+            return $resource['driver'] ?? false;
+        }, $resources);
+
+        // Remove resources with disabled driver
+        return array_filter($resourceDrivers, function (string|false $driver): bool {
+            return false !== $driver;
+        });
+    }
+
+    private function getAvailableDrivers(ContainerBuilder $container): array
+    {
+        $availableDrivers = [];
+
+        if ($container::willBeAvailable(SyliusResourceBundle::DRIVER_DOCTRINE_ORM, \Doctrine\ORM\EntityManagerInterface::class, ['doctrine/doctrine-bundle'])) {
+            $availableDrivers[] = SyliusResourceBundle::DRIVER_DOCTRINE_ORM;
+        }
+
+        if ($container::willBeAvailable(SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM, \Doctrine\ODM\PHPCR\Document\Resource::class, ['doctrine/doctrine-bundle'])) {
+            $availableDrivers[] = SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM;
+        }
+
+        if ($container::willBeAvailable(SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM, \Doctrine\ODM\MongoDB\DocumentManager::class, ['doctrine/doctrine-bundle'])) {
+            $availableDrivers[] = SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM;
+        }
+
+        return $availableDrivers;
+    }
+
+    /**
+     * @param string[] $configuredDrivers
+     * @param string[] $availableDrivers
+     * @param array<string, string> $resourceDrivers
+     */
+    private function checkConfiguredDrivers(array $configuredDrivers, array $availableDrivers, array $resourceDrivers): void
+    {
+        foreach ($configuredDrivers as $driver) {
+            if (!in_array($driver, $availableDrivers, true)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Driver "%s" is configured, but this driver is not available. Try running "composer require %s"',
+                    $driver,
+                    $driver,
+                ));
+            }
+        }
+
+        foreach ($resourceDrivers as $resource => $driver) {
+            if (!in_array($driver, $availableDrivers, true)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Resource "%s" uses drivers "%s", but this driver is not available. Try running "composer require %s"',
+                    $resource,
+                    $driver,
+                    $driver,
+                ));
+            }
+
+            if (!in_array($driver, $configuredDrivers, true)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Resource "%s" uses drivers "%s", but this driver is not enabled. Try adding "%s" in sylius_resource.drivers option',
+                    $resource,
+                    $driver,
+                    $driver,
+                ));
+            }
         }
     }
 

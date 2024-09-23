@@ -21,22 +21,20 @@ use App\Form\Type\BookType;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
+use Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\DummyResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\NoDriverResource;
+use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
+use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Resource\Factory\Factory;
 
 class SyliusResourceExtensionTest extends AbstractExtensionTestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function it_registers_services_and_parameters_for_resources(): void
     {
-        // TODO: Move Resource-Grid integration to a dedicated compiler pass
-        $this->setParameter('kernel.bundles', []);
-
         $this->load([
             'resources' => [
                 'app.book' => [
@@ -65,14 +63,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('app.form.book.class', BookType::class);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_aliases_authorization_checker_with_the_one_given_in_configuration(): void
     {
-        // TODO: Move Resource-Grid integration to a dedicated compiler pass
-        $this->setParameter('kernel.bundles', []);
-
         $this->load([
             'authorization_checker' => 'custom_service',
         ]);
@@ -80,14 +73,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasAlias('sylius.resource_controller.authorization_checker', 'custom_service');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_registers_default_translation_parameters(): void
     {
-        // TODO: Move ResourceGrid integration to a dedicated compiler pass
-        $this->setParameter('kernel.bundles', []);
-
         $this->load([
              'translation' => [
                  'locale_provider' => 'test.custom_locale_provider',
@@ -97,13 +85,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasAlias('sylius.translation_locale_provider', 'test.custom_locale_provider');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_does_not_break_when_aliasing_two_resources_use_same_factory_class(): void
     {
-        // TODO: Move Resource-Grid integration to a dedicated compiler pass
-        $this->setParameter('kernel.bundles', []);
         $this->load([
             'resources' => [
                 'app.book' => [
@@ -127,12 +111,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasAlias(sprintf('%s $comicBookFactory', BookFactory::class), 'app.factory.comic_book');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_registers_parameter_for_paths(): void
     {
-        $this->setParameter('kernel.bundles', []);
         $this->load([
             'mapping' => [
                 'paths' => [
@@ -148,12 +129,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_auto_registers_resources(): void
     {
-        $this->setParameter('kernel.bundles', []);
         $this->load([
             'mapping' => [
                 'paths' => [
@@ -193,8 +171,20 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
     }
 
+    /** @test */
+    public function it_registers_doctrine_related_services_when_doctrine_is_available(): void
+    {
+        $this->load();
+
+        $this->assertContainerBuilderHasService(ResourceMappingDriverChain::class);
+        $this->assertContainerBuilderHasService(PersistProcessor::class);
+        $this->assertContainerBuilderHasService(RemoveProcessor::class);
+    }
+
     protected function getContainerExtensions(): array
     {
+        $this->setParameter('kernel.bundles', []);
+
         return [
             new SyliusResourceExtension(),
         ];
