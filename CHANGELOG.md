@@ -16,6 +16,13 @@
 - [#924](https://github.com/Sylius/SyliusResourceBundle/issues/924) Remove Twig 2 support ([@loic425](https://github.com/loic425))
 - [#926](https://github.com/Sylius/SyliusResourceBundle/issues/926) [Composer] Allow GridBundle ^v1.13@alpha ([@GSadee](https://github.com/GSadee))
 
+## v1.11.3 (2024-09-23)
+
+#### Details
+
+- [#934](https://github.com/sylius/sylius/issues/934) Reproduce getting the translation repository by its interface use case ([@loic425](https://github.com/loic425))
+- [#941](https://github.com/sylius/sylius/issues/941) Fix Doctrine dependency on state processors ([@loic425](https://github.com/loic425))
+
 ## v1.11.2 (2024-09-06)
 
 #### Details
