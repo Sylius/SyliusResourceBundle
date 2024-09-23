@@ -13,13 +13,22 @@
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults public="true" />
-
         <service id="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain"
-                 decorates="doctrine.orm.default_metadata_driver">
+                 decorates="doctrine.orm.default_metadata_driver"
+                 public="true">
             <argument type="service" id="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain.inner" />
             <argument type="service" id="sylius.resource_registry" />
         </service>
         <service id="sylius_resource.doctrine.mapping_driver_chain" alias="Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain" />
+
+        <service id="Sylius\Resource\Doctrine\Common\State\PersistProcessor">
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.state_processor" />
+        </service>
+
+        <service id="Sylius\Resource\Doctrine\Common\State\RemoveProcessor">
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.state_processor" />
+        </service>
     </services>
 </container>
