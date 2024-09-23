@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Metadata\Resource\Factory;
+namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\Create;
@@ -24,22 +26,27 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 
-final class EventShortNameResourceMetadataCollectionFactorySpec extends ObjectBehavior
+final class EventShortNameResourceMetadataCollectionFactoryTest extends TestCase
 {
-    function let(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
-        $this->beConstructedWith($decorated);
-    }
+    use ProphecyTrait;
 
-    function it_is_initializable(): void
+    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
+    private EventShortNameResourceMetadataCollectionFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(EventShortNameResourceMetadataCollectionFactory::class);
+        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new EventShortNameResourceMetadataCollectionFactory($this->decorated->reveal());
     }
 
-    function it_configures_default_event_short_name_on_operations(
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(EventShortNameResourceMetadataCollectionFactory::class, $this->factory);
+    }
+
+    public function testItConfiguresDefaultEventShortNameOnOperations(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
@@ -57,20 +64,20 @@ final class EventShortNameResourceMetadataCollectionFactorySpec extends ObjectBe
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getEventShortName()->shouldReturn('create');
+        $this->assertSame('create', $create->getEventShortName());
 
         $show = $resourceMetadataCollection->getOperation('app.book', 'app_book_show');
-        $show->getEventShortName()->shouldReturn('show');
+        $this->assertSame('show', $show->getEventShortName());
 
         $publish = $resourceMetadataCollection->getOperation('app.book', 'app_book_publish');
-        $publish->getEventShortName()->shouldReturn('update');
+        $this->assertSame('update', $publish->getEventShortName());
 
         $bulkDelete = $resourceMetadataCollection->getOperation('app.book', 'app_book_bulk_delete');
-        $bulkDelete->getEventShortName()->shouldReturn('delete');
+        $this->assertSame('delete', $bulkDelete->getEventShortName());
     }
 }

@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Metadata\Resource\Factory;
+namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
@@ -24,31 +26,34 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
-final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBehavior
+final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
 {
-    function let(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $decorated,
-    ): void {
-        $this->beConstructedWith($resourceRegistry, $decorated, null);
-    }
+    use ProphecyTrait;
 
-    function it_is_initializable(): void
+    private RegistryInterface|ObjectProphecy $resourceRegistry;
+
+    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+
+    private StateMachineResourceMetadataCollectionFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(StateMachineResourceMetadataCollectionFactory::class);
+        $this->resourceRegistry = $this->prophesize(RegistryInterface::class);
+        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry->reveal(), $this->decorated->reveal(), null);
     }
 
-    function it_sets_the_default_state_machine_component_from_settings(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $decorated,
-        MetadataInterface $resourceConfiguration,
-    ): void {
-        $this->beConstructedWith($resourceRegistry, $decorated, 'symfony');
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(StateMachineResourceMetadataCollectionFactory::class, $this->factory);
+    }
+
+    public function testItSetsTheDefaultStateMachineComponentFromSettings(): void
+    {
+        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry->reveal(), $this->decorated->reveal(), 'symfony');
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
-
         $resource = $resource->withOperations(new Operations([
             $create->getName() => $create,
         ]));
@@ -56,27 +61,22 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceRegistry->get('app.book')->willReturn($resourceConfiguration);
-
+        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
         $resourceConfiguration->getStateMachineComponent()->willReturn(null);
+        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getStateMachineComponent()->shouldReturn('symfony');
+        $this->assertEquals('symfony', $create->getStateMachineComponent());
     }
 
-    function it_sets_the_default_state_machine_component_from_resource_configuration(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $decorated,
-        MetadataInterface $resourceConfiguration,
-    ): void {
+    public function testItSetsTheDefaultStateMachineComponentFromResourceConfiguration(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
-
         $resource = $resource->withOperations(new Operations([
             $create->getName() => $create,
         ]));
@@ -84,27 +84,22 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceRegistry->get('app.book')->willReturn($resourceConfiguration);
-
+        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
         $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
+        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getStateMachineComponent()->shouldReturn('symfony');
+        $this->assertEquals('symfony', $create->getStateMachineComponent());
     }
 
-    function it_sets_the_configured_state_machine_component_from_operation(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $decorated,
-        MetadataInterface $resourceConfiguration,
-    ): void {
+    public function testItSetsTheConfiguredStateMachineComponentFromOperation(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-
         $create = (new Create(name: 'app_book_create', stateMachineComponent: 'winzou'))->withResource($resource);
-
         $resource = $resource->withOperations(new Operations([
             $create->getName() => $create,
         ]));
@@ -112,27 +107,22 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceRegistry->get('app.book')->willReturn($resourceConfiguration);
-
+        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
         $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
+        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getStateMachineComponent()->shouldReturn('winzou');
+        $this->assertEquals('winzou', $create->getStateMachineComponent());
     }
 
-    function it_configures_apply_state_machine_transition_processor_if_operation_has_a_transition(
-        RegistryInterface $resourceRegistry,
-        ResourceMetadataCollectionFactoryInterface $decorated,
-        MetadataInterface $resourceConfiguration,
-    ): void {
+    public function testItConfiguresApplyStateMachineTransitionProcessorIfOperationHasATransition(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-
         $create = (new Create(name: 'app_book_create', stateMachineTransition: 'publish'))->withResource($resource);
-
         $resource = $resource->withOperations(new Operations([
             $create->getName() => $create,
         ]));
@@ -140,15 +130,15 @@ final class StateMachineResourceMetadataCollectionFactorySpec extends ObjectBeha
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceRegistry->get('app.book')->willReturn($resourceConfiguration);
-
+        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
         $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
+        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
 
-        $resourceMetadataCollection = $this->create('App\Resource');
+        $resourceMetadataCollection = $this->factory->create('App\Resource');
 
         $create = $resourceMetadataCollection->getOperation('app.book', 'app_book_create');
-        $create->getProcessor()->shouldReturn(ApplyStateMachineTransitionProcessor::class);
+        $this->assertEquals(ApplyStateMachineTransitionProcessor::class, $create->getProcessor());
     }
 }
