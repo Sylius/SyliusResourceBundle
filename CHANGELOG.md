@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+## v1.12.0-ALPHA.3 (2024-09-23)
+
+#### Details
+
+- [#941](https://github.com/Sylius/SyliusResourceBundle/issues/941) Fix Doctrine dependency on state processors ([@loic425](https://github.com/loic425))
+- [#932](https://github.com/Sylius/SyliusResourceBundle/issues/932) [phpspec-2-phpunit] migration of tests (Humanizer) ([@loic425](https://github.com/loic425))
+- [#928](https://github.com/Sylius/SyliusResourceBundle/issues/928) [phpspec-2-phpunit] migration of tests (Doctrine) ([@loic425](https://github.com/loic425))
+- [#929](https://github.com/Sylius/SyliusResourceBundle/issues/929) [phpspec-2-phpunit] migration of tests (Exception) ([@loic425](https://github.com/loic425))
+- [#930](https://github.com/Sylius/SyliusResourceBundle/issues/930) [phpspec-2-phpunit] migration of tests (Generator) ([@loic425](https://github.com/loic425))
+- [#931](https://github.com/Sylius/SyliusResourceBundle/issues/931) [phpspec-2-phpunit] migration of tests (Grid) ([@loic425](https://github.com/loic425))
+- [#942](https://github.com/Sylius/SyliusResourceBundle/issues/942) Doctrine requirement is now optional ([@loic425](https://github.com/loic425))
+- [#933](https://github.com/Sylius/SyliusResourceBundle/issues/933) [phpspec-2-phpunit] migration of tests (Metadata) ([@loic425](https://github.com/loic425))
+
 ## v1.12.0-ALPHA.2 (2024-09-12)
 
 #### Details
