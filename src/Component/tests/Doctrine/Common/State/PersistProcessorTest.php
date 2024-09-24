@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Doctrine\Common\State;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -79,7 +79,7 @@ final class PersistProcessorTest extends TestCase
     {
         $manager = $this->prophesize(ObjectManager::class);
         $operation = $this->prophesize(Operation::class);
-        $classMetadataInfo = $this->prophesize(ClassMetadataInfo::class);
+        $classMetadataInfo = $this->prophesize(ClassMetadata::class);
         $data = new \stdClass();
 
         $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager);
