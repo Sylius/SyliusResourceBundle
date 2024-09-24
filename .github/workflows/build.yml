@@ -22,10 +22,12 @@ jobs:
                 symfony: ["^5.4", "^6.4"]
                 persistence: ["^2.0", "^3.0"]
                 collections: ["^1.8", "^2.0"]
+                orm: [""]
                 include:
                     - php: "8.1"
                       pagerfanta: "^3.7"
                       symfony: "^5.4"
+                      orm: "^2.5"
                 exclude:
                     - php: "8.1"
                       collections: "^2.0"
@@ -58,6 +60,13 @@ jobs:
                     composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
                     (cd src/Component && composer config extra.symfony.require "${{ matrix.symfony }}")
+
+            -
+                name: Restrict Doctrine ORM version
+                if: matrix.orm != ''
+                run: |
+                    composer require --dev "doctrine/orm:${{ matrix.orm }}" --no-update --no-scripts
+                    (cd src/Component && composer require "doctrine/orm:${{ matrix.orm }}" --no-update --no-scripts)
 
             -
                 name: Restrict Pagerfanta version

@@ -45,7 +45,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
         }
     }
 
-    private function setAssociationMappings(ClassMetadataInfo $metadata, Configuration $configuration): void
+    private function setAssociationMappings(ClassMetadata $metadata, Configuration $configuration): void
     {
         $class = $metadata->getName();
         if (!class_exists($class)) {
