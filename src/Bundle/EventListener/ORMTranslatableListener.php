@@ -18,7 +18,6 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Model\TranslatableInterface;
@@ -108,7 +107,7 @@ final class ORMTranslatableListener implements EventSubscriber
                 'fieldName' => 'translations',
                 'targetEntity' => $translationResourceMetadata->getClass('model'),
                 'mappedBy' => 'translatable',
-                'fetch' => ClassMetadataInfo::FETCH_EXTRA_LAZY,
+                'fetch' => ClassMetadata::FETCH_EXTRA_LAZY,
                 'indexBy' => 'locale',
                 'cascade' => ['persist', 'merge', 'remove'],
                 'orphanRemoval' => true,

@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Doctrine\Common\State;
 
-use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager as DoctrineObjectManager;
 use Sylius\Resource\Context\Context;
@@ -60,7 +59,7 @@ final class PersistProcessor implements ProcessorInterface
     private function isDeferredExplicit(DoctrineObjectManager $manager, object $data): bool
     {
         $classMetadata = $manager->getClassMetadata($this->getObjectClass($data));
-        if (($classMetadata instanceof ClassMetadataInfo || $classMetadata instanceof ClassMetadata) && method_exists($classMetadata, 'isChangeTrackingDeferredExplicit')) {
+        if ($classMetadata instanceof ClassMetadata && method_exists($classMetadata, 'isChangeTrackingDeferredExplicit')) {
             return $classMetadata->isChangeTrackingDeferredExplicit();
         }
 
