@@ -18,7 +18,6 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Webmozart\Assert\Assert;
 
@@ -45,7 +44,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
         }
     }
 
-    private function setAssociationMappings(ClassMetadataInfo $metadata, Configuration $configuration): void
+    private function setAssociationMappings(ClassMetadata $metadata, Configuration $configuration): void
     {
         $class = $metadata->getName();
         if (!class_exists($class)) {
@@ -90,7 +89,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
         }
     }
 
-    private function unsetAssociationMappings(ClassMetadataInfo $metadata): void
+    private function unsetAssociationMappings(ClassMetadata $metadata): void
     {
         /** @psalm-suppress InvalidArgument */
         if (false === $this->isResource($metadata)) {
@@ -109,9 +108,9 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
         return in_array(
             $type,
             [
-                ClassMetadataInfo::MANY_TO_MANY,
-                ClassMetadataInfo::ONE_TO_MANY,
-                ClassMetadataInfo::ONE_TO_ONE,
+                ClassMetadata::MANY_TO_MANY,
+                ClassMetadata::ONE_TO_MANY,
+                ClassMetadata::ONE_TO_ONE,
             ],
             true,
         );

@@ -15,7 +15,7 @@ namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
@@ -38,11 +38,11 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->identifier = ['id', 'slug'];
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->identifier = ['id', 'slug'];
 
         $this
             ->shouldThrow(\RuntimeException::class)
@@ -54,18 +54,18 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['id', 'name', 'description', 'enabled'];
-        $classMetadataInfo->identifier = ['id'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(false);
-        $classMetadataInfo->getAssociationMappings()->willReturn([]);
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['id', 'name', 'description', 'enabled'];
+        $classMetadata->identifier = ['id'];
+        $classMetadata->isIdentifierNatural()->willReturn(false);
+        $classMetadata->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
         $formBuilder->add('description', null, [])->willReturn($formBuilder);
@@ -83,19 +83,19 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['id', 'name', 'description', 'enabled'];
-        $classMetadataInfo->identifier = ['id'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(true);
-        $classMetadataInfo->getAssociationMappings()->willReturn([]);
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['id', 'name', 'description', 'enabled'];
+        $classMetadata->identifier = ['id'];
+        $classMetadata->isIdentifierNatural()->willReturn(true);
+        $classMetadata->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('id')->willReturn(Types::INTEGER);
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('id')->willReturn(Types::INTEGER);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('id', null, [])->willReturn($formBuilder);
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
@@ -114,17 +114,17 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['name', 'description', 'enabled'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(true);
-        $classMetadataInfo->getAssociationMappings()->willReturn([]);
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['name', 'description', 'enabled'];
+        $classMetadata->isIdentifierNatural()->willReturn(true);
+        $classMetadata->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
 
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
         $formBuilder->add('description', null, [])->willReturn($formBuilder);
@@ -141,18 +141,18 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(true);
-        $classMetadataInfo->getAssociationMappings()->willReturn([]);
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
+        $classMetadata->isIdentifierNatural()->willReturn(true);
+        $classMetadata->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
         $formBuilder->add('description', null, [])->willReturn($formBuilder);
@@ -171,21 +171,21 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(true);
-        $classMetadataInfo->getAssociationMappings()->willReturn([
-            'category' => ['type' => ClassMetadataInfo::MANY_TO_ONE],
-            'users' => ['type' => ClassMetadataInfo::ONE_TO_MANY],
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
+        $classMetadata->isIdentifierNatural()->willReturn(true);
+        $classMetadata->getAssociationMappings()->willReturn([
+            'category' => ['type' => ClassMetadata::MANY_TO_ONE],
+            'users' => ['type' => ClassMetadata::ONE_TO_MANY],
         ]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
         $formBuilder->add('description', null, [])->willReturn($formBuilder);
@@ -208,19 +208,19 @@ final class DefaultFormBuilderSpec extends ObjectBehavior
         MetadataInterface $metadata,
         FormBuilderInterface $formBuilder,
         EntityManagerInterface $entityManager,
-        ClassMetadataInfo $classMetadataInfo,
+        ClassMetadata $classMetadata,
     ): void {
         $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadataInfo);
-        $classMetadataInfo->fieldNames = ['name', 'description', 'enabled', 'createdAt', 'updatedAt'];
-        $classMetadataInfo->isIdentifierNatural()->willReturn(true);
-        $classMetadataInfo->getAssociationMappings()->willReturn([]);
+        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
+        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'createdAt', 'updatedAt'];
+        $classMetadata->isIdentifierNatural()->willReturn(true);
+        $classMetadata->getAssociationMappings()->willReturn([]);
 
-        $classMetadataInfo->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadataInfo->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadataInfo->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadataInfo->getTypeOfField('createdAt')->willReturn(Types::DATETIME_MUTABLE);
-        $classMetadataInfo->getTypeOfField('updatedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
+        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
+        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $classMetadata->getTypeOfField('createdAt')->willReturn(Types::DATETIME_MUTABLE);
+        $classMetadata->getTypeOfField('updatedAt')->willReturn(Types::DATETIME_MUTABLE);
 
         $formBuilder->add('name', null, [])->willReturn($formBuilder);
         $formBuilder->add('description', null, [])->willReturn($formBuilder);

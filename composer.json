@@ -57,7 +57,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.18",
         "friendsofsymfony/rest-bundle": "^3.0",
         "jms/serializer-bundle": "^3.5 || ^4.0 || ^5.0",
         "lchrusciel/api-test-case": "^5.0",
@@ -89,6 +89,7 @@
         "willdurand/hateoas-bundle": "^2.0"
     },
     "conflict": {
+        "doctrine/orm": "<2.18 || ^3.0",
         "doctrine/doctrine-bundle": "<2.0 || ^3.0",
         "friendsofsymfony/rest-bundle": "<3.0",
         "jms/serializer-bundle": "<3.5",
@@ -96,7 +97,7 @@
         "twig/twig": "<3.0"
     },
     "suggest": {
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.20",
         "sylius/locale": "^1.0"
     },
     "config": {

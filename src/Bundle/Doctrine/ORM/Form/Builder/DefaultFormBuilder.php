@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -41,7 +41,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
         $this->doBuild($classMetadata, $formBuilder);
     }
 
-    private function doBuild(ClassMetadataInfo $classMetadata, FormBuilderInterface $formBuilder): void
+    private function doBuild(ClassMetadata $classMetadata, FormBuilderInterface $formBuilder): void
     {
         $fields = $classMetadata->fieldNames;
 
@@ -79,7 +79,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
         }
 
         foreach ($classMetadata->getAssociationMappings() as $fieldName => $associationMapping) {
-            if (ClassMetadataInfo::ONE_TO_MANY !== $associationMapping['type']) {
+            if (ClassMetadata::ONE_TO_MANY !== $associationMapping['type']) {
                 $formBuilder->add($fieldName, null, ['choice_label' => 'id']);
             }
         }
