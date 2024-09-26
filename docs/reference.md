@@ -13,8 +13,6 @@ sylius_resource:
                 factory: Sylius\Component\Resource\Factory\Factory
                 form: Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType
                     validation_groups: [sylius]
-            options:
-                object_manager: default
             templates:
                 form: Book/_form.html.twig
             translation:
@@ -28,7 +26,6 @@ sylius_resource:
                         validation_groups: [sylius]
                 templates:
                     form: Book/Translation/_form.html.twig
-                options: ~
 ```
 
 ## Routing Generator Configuration Reference
