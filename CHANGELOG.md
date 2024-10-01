@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+## v1.12.0-BETA.1 (2024-10-01)
+
+#### Details
+
+- [#945](https://github.com/Sylius/SyliusResourceBundle/issues/945) Restrict Doctrine orm package version ([@loic425](https://github.com/loic425))
+- [#861](https://github.com/Sylius/SyliusResourceBundle/issues/861) Merge pull request  from NoResponseMate/1.11-remove-unused-options-node ([@NoResponseMate](https://github.com/NoResponseMate))
+
 ## v1.12.0-ALPHA.3 (2024-09-23)
 
 #### Details
