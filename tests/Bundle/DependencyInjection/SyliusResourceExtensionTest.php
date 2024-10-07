@@ -18,6 +18,7 @@ use App\Entity\BookTranslation;
 use App\Entity\ComicBook;
 use App\Factory\BookFactory;
 use App\Form\Type\BookType;
+use App\Repository\ComicBookRepository;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
@@ -63,6 +64,26 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('app.model.book_translation.class', BookTranslation::class);
 
         $this->assertContainerBuilderHasParameter('app.form.book.class', BookType::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_the_entity_repository_classes_from_entity_attributes(): void
+    {
+        $this->setParameter('kernel.bundles', []);
+
+        $this->load([
+            'resources' => [
+                'app.comic_book' => [
+                    'classes' => [
+                        'model' => ComicBook::class,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasService('app.repository.comic_book', ComicBookRepository::class);
     }
 
     /**

@@ -18,6 +18,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -39,7 +40,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
     protected function addRepository(ContainerBuilder $container, MetadataInterface $metadata): void
     {
         $repositoryClassParameterName = sprintf('%s.repository.%s.class', $metadata->getApplicationName(), $metadata->getName());
-        $repositoryClass = EntityRepository::class;
+        $repositoryClass = null;
 
         /** @var string[] $genericEntities */
         $genericEntities = $container->hasParameter(self::GENERIC_ENTITIES_PARAMETER) ? $container->getParameter(self::GENERIC_ENTITIES_PARAMETER) : [];
@@ -52,6 +53,21 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
         if ($metadata->hasClass('repository')) {
             /** @var string $repositoryClass */
             $repositoryClass = $metadata->getClass('repository');
+        }
+
+        $entityAttributes = (new \ReflectionClass($metadata->getClass('model')))
+            ->getAttributes(Entity::class);
+
+        $entityAttributeRepositoryClass = ($entityAttributes[0] ?? null)
+            ?->newInstance()
+            ->repositoryClass;
+
+        if (null !== $entityAttributeRepositoryClass) {
+            $repositoryClass = $entityAttributeRepositoryClass;
+        }
+
+        if (null === $repositoryClass) {
+            $repositoryClass = EntityRepository::class;
         }
 
         $serviceId = $metadata->getServiceId('repository');
