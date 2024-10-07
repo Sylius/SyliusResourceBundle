@@ -49,7 +49,6 @@
         "symfony/validator": "^5.4 || ^6.4 || ^7.0",
         "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
         "webmozart/assert": "^1.8",
-        "winzou/state-machine-bundle": "^0.6.2",
         "willdurand/negotiation": "^3.1"
     },
     "replace": {
@@ -86,7 +85,8 @@
         "symfony/security-bundle": "^5.4 || ^6.4 || ^7.0",
         "twig/twig": "^3.0",
         "vimeo/psalm": "^5.20",
-        "willdurand/hateoas-bundle": "^2.0"
+        "willdurand/hateoas-bundle": "^2.0",
+        "winzou/state-machine-bundle": "^0.6.2"
     },
     "conflict": {
         "doctrine/orm": "<2.18 || ^3.0",
@@ -94,6 +94,7 @@
         "friendsofsymfony/rest-bundle": "<3.0",
         "jms/serializer-bundle": "<3.5",
         "willdurand/hateoas-bundle": "<2.0 || ^2.6",
+        "winzou/state-machine-bundle": "<0.6.2",
         "twig/twig": "<3.0"
     },
     "suggest": {
