@@ -36,6 +36,13 @@
 - [#924](https://github.com/Sylius/SyliusResourceBundle/issues/924) Remove Twig 2 support ([@loic425](https://github.com/loic425))
 - [#926](https://github.com/Sylius/SyliusResourceBundle/issues/926) [Composer] Allow GridBundle ^v1.13@alpha ([@GSadee](https://github.com/GSadee))
 
+## v1.11.4 (2024-10-07)
+
+#### Details
+
+- [#948](https://github.com/Sylius/SyliusResourceBundle/issues/948) Remove usage of Symfony\Component\HttpKernel\DependencyInjection\Exte… ([@loic425](https://github.com/loic425))
+- [#949](https://github.com/Sylius/SyliusResourceBundle/issues/949) [Composer] Bump sylius/grid-bundle dev dependency ([@GSadee](https://github.com/GSadee))
+
 ## v1.11.3 (2024-09-23)
 
 #### Details

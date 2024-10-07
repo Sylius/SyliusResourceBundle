@@ -180,12 +180,10 @@ jobs:
                     composer require winzou/state-machine-bundle --no-scripts
 
             -
-                name: Run lint container without twig/twig package
+                name: Run lint container without sylius/grid-bundle package
                 if: matrix.app_env == 'test'
                 run: |
-                    composer remove symfony/twig-bundle --no-scripts
                     composer remove sylius/grid-bundle --no-scripts --dev
                     (cd tests/Application && bin/console cache:clear --env=test_without_twig)
                     (cd tests/Application && bin/console lint:container --env=test_without_twig)
-                    composer require symfony/twig-bundle --no-scripts
-                    composer require "sylius/grid-bundle: ^1.7 || v1.12.0-ALPHA.1" --no-scripts --dev
+                    composer require "sylius/grid-bundle: ^1.11" --no-scripts --dev
