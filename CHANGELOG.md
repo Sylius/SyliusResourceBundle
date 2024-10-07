@@ -1,11 +1,20 @@
 ## CHANGELOG
 
+## v1.12.0-BETA.2 (2024-10-07)
+
+#### Details
+
+- [#948](https://github.com/Sylius/SyliusResourceBundle/issues/948) Remove usage of Symfony\Component\HttpKernel\DependencyInjection\Exte… ([@loic425](https://github.com/loic425))
+- [#949](https://github.com/Sylius/SyliusResourceBundle/issues/949) [Composer] Bump sylius/grid-bundle dev dependency ([@GSadee](https://github.com/GSadee))
+- [#873](https://github.com/Sylius/SyliusResourceBundle/issues/873) Move winzou state machine on optional requirements ([@loic425](https://github.com/loic425), [@GSadee](https://github.com/GSadee))
+- [#951](https://github.com/Sylius/SyliusResourceBundle/issues/951) [Composer] Add GridBundle 1.13 beta in dev dependencies for SF7 builds ([@GSadee](https://github.com/GSadee))
+
 ## v1.12.0-BETA.1 (2024-10-01)
 
 #### Details
 
 - [#945](https://github.com/Sylius/SyliusResourceBundle/issues/945) Restrict Doctrine orm package version ([@loic425](https://github.com/loic425))
-- [#861](https://github.com/Sylius/SyliusResourceBundle/issues/861) Merge pull request  from NoResponseMate/1.11-remove-unused-options-node ([@NoResponseMate](https://github.com/NoResponseMate))
+- [#861](https://github.com/Sylius/SyliusResourceBundle/issues/861) [Maintenance] Deprecate unused configuration nodes ([@NoResponseMate](https://github.com/NoResponseMate))
 
 ## v1.12.0-ALPHA.3 (2024-09-23)
 
