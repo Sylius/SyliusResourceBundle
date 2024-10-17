@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Twig\Context\Factory;
+namespace Sylius\Resource\Tests\Twig\Context\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
@@ -21,68 +23,66 @@ use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Twig\Context\Factory\ContextFactory;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
-final class ContextFactorySpec extends ObjectBehavior
+final class ContextFactoryTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    use ProphecyTrait;
+
+    private ContextFactory $contextFactory;
+
+    private ContainerInterface|ObjectProphecy $locator;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->prophesize(ContainerInterface::class);
+        $this->contextFactory = new ContextFactory($this->locator->reveal());
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(ContextFactory::class);
+        $this->assertInstanceOf(ContextFactory::class, $this->contextFactory);
     }
 
-    function it_creates_twig_context_from_operation_twig_context_factory_as_callable(
-        \stdClass $data,
-        ContainerInterface $locator,
-    ): void {
+    public function testItCreatesTwigContextFromOperationTwigContextFactoryAsCallable(): void
+    {
+        $data = new \stdClass();
         $twigContextFactory = [TwigContextFactoryCallable::class, 'create'];
-
         $operation = new Show(twigContextFactory: $twigContextFactory);
-
         $context = new Context();
 
-        $this->create($data, $operation, $context)->shouldReturn([
-            'foo' => 'bar',
-        ]);
+        $result = $this->contextFactory->create($data, $operation, $context);
+
+        $this->assertSame(['foo' => 'bar'], $result);
     }
 
-    function it_creates_twig_context_from_operation_twig_context_factory_as_string(
-        \stdClass $data,
-        ContainerInterface $locator,
-        ContextFactoryInterface $twigContextFactory,
-    ): void {
+    public function testItCreatesTwigContextFromOperationTwigContextFactoryAsString(): void
+    {
+        $data = new \stdClass();
+        $twigContextFactory = $this->prophesize(ContextFactoryInterface::class);
         $operation = new Show(twigContextFactory: $twigContextFactory::class);
-
         $context = new Context();
 
-        $locator->has($twigContextFactory::class)->willReturn(true)->shouldBeCalled();
-        $locator->get($twigContextFactory::class)->willReturn($twigContextFactory)->shouldBeCalled();
+        $this->locator->has($twigContextFactory::class)->willReturn(true);
+        $this->locator->get($twigContextFactory::class)->willReturn($twigContextFactory->reveal());
 
-        $twigContextFactory->create($data, $operation, $context)->willReturn([
-            'foo' => 'bar',
-        ]);
+        $twigContextFactory->create($data, $operation, $context)->willReturn(['foo' => 'bar']);
 
-        $this->create($data, $operation, $context)->shouldReturn([
-            'foo' => 'bar',
-        ]);
+        $result = $this->contextFactory->create($data, $operation, $context);
+
+        $this->assertSame(['foo' => 'bar'], $result);
     }
 
-    function it_throws_an_exception_when_twig_context_factory_was_not_found_on_the_locator(
-        \stdClass $data,
-        ContainerInterface $locator,
-        ContextFactoryInterface $twigContextFactory,
-    ): void {
-        $operation = new Show(name: 'app_dummy_show', twigContextFactory: $twigContextFactory::class);
+    public function testItThrowsExceptionWhenTwigContextFactoryNotFoundOnLocator(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('Twig context factory "%s" not found on operation "app_dummy_show"', ContextFactoryInterface::class));
 
+        $data = new \stdClass();
+        $operation = new Show(name: 'app_dummy_show', twigContextFactory: ContextFactoryInterface::class);
         $context = new Context();
 
-        $locator->has($twigContextFactory::class)->willReturn(false)->shouldBeCalled();
+        $this->locator->has(ContextFactoryInterface::class)->willReturn(false);
 
-        $this->shouldThrow(new \RuntimeException(sprintf('Twig context factory "%s" not found on operation "app_dummy_show"', $twigContextFactory::class)))
-            ->during('create', [$data, $operation, $context])
-        ;
+        $this->contextFactory->create($data, $operation, $context);
     }
 }
 
@@ -90,8 +90,6 @@ final class TwigContextFactoryCallable
 {
     public static function create(mixed $data, Operation $operation, Context $context): array
     {
-        return [
-            'foo' => 'bar',
-        ];
+        return ['foo' => 'bar'];
     }
 }
