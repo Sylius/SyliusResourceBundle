@@ -11,47 +11,60 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Twig\Context\Factory;
+namespace Sylius\Resource\Tests\Twig\Context\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Twig\Context\Factory\DefaultContextFactory;
 
-final class DefaultContextFactorySpec extends ObjectBehavior
+final class DefaultContextFactoryTest extends TestCase
 {
-    function it_is_initializable(): void
+    private DefaultContextFactory $defaultContextFactory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(DefaultContextFactory::class);
+        $this->defaultContextFactory = new DefaultContextFactory();
     }
 
-    function it_creates_twig_context_for_resource(
-        \stdClass $data,
-    ): void {
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(DefaultContextFactory::class, $this->defaultContextFactory);
+    }
+
+    public function testItCreatesTwigContextForResource(): void
+    {
+        $data = new \stdClass();
         $resourceMetadata = new ResourceMetadata(alias: 'app.dummy', name: 'dummy');
         $operation = (new Show())->withResource($resourceMetadata);
+        $context = new Context();
 
-        $this->create($data, $operation, new Context())->shouldReturn([
+        $result = $this->defaultContextFactory->create($data, $operation, $context);
+
+        $this->assertSame([
             'operation' => $operation,
             'resource_metadata' => $resourceMetadata,
             'resource' => $data,
             'dummy' => $data,
-        ]);
+        ], $result);
     }
 
-    function it_creates_twig_context_for_resource_collection(
-        \stdClass $data,
-    ): void {
+    public function testItCreatesTwigContextForResourceCollection(): void
+    {
+        $data = new \stdClass();
         $resourceMetadata = new ResourceMetadata(alias: 'app.dummy', pluralName: 'dummies');
         $operation = (new Index())->withResource($resourceMetadata);
+        $context = new Context();
 
-        $this->create($data, $operation, new Context())->shouldReturn([
+        $result = $this->defaultContextFactory->create($data, $operation, $context);
+
+        $this->assertSame([
             'operation' => $operation,
             'resource_metadata' => $resourceMetadata,
             'resources' => $data,
             'dummies' => $data,
-        ]);
+        ], $result);
     }
 }
