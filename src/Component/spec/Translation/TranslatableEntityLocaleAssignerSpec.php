@@ -11,34 +11,47 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Translation;
+namespace Sylius\Resource\Tests\Translation;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Sylius\Resource\Translation\TranslatableEntityLocaleAssigner;
 use Sylius\Resource\Translation\TranslatableEntityLocaleAssignerInterface;
 
-final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
+final class TranslatableEntityLocaleAssignerTest extends TestCase
 {
-    function let(TranslationLocaleProviderInterface $translationLocaleProvider): void
+    private TranslationLocaleProviderInterface $translationLocaleProvider;
+
+    private TranslatableEntityLocaleAssigner $localeAssigner;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($translationLocaleProvider);
+        $this->translationLocaleProvider = $this->createMock(TranslationLocaleProviderInterface::class);
+        $this->localeAssigner = new TranslatableEntityLocaleAssigner($this->translationLocaleProvider);
     }
 
-    function it_implements_traslatable_entity_locale_assigner_interface(): void
+    public function testItImplementsTranslatableEntityLocaleAssignerInterface(): void
     {
-        $this->shouldImplement(TranslatableEntityLocaleAssignerInterface::class);
+        $this->assertInstanceOf(TranslatableEntityLocaleAssignerInterface::class, $this->localeAssigner);
     }
 
-    function it_should_assign_current_and_default_locale_to_given_translatable_entity(
-        TranslationLocaleProviderInterface $translationLocaleProvider,
-        TranslatableInterface $translatableEntity,
-    ): void {
-        $translationLocaleProvider->getDefaultLocaleCode()->willReturn('en_US');
+    public function testItAssignsCurrentAndDefaultLocaleToGivenTranslatableEntity(): void
+    {
+        $translatableEntity = $this->createMock(TranslatableInterface::class);
 
-        $translatableEntity->setCurrentLocale('en_US')->shouldBeCalled();
-        $translatableEntity->setFallbackLocale('en_US')->shouldBeCalled();
+        $this->translationLocaleProvider
+            ->method('getDefaultLocaleCode')
+            ->willReturn('en_US');
 
-        $this->assignLocale($translatableEntity);
+        $translatableEntity->expects($this->once())
+            ->method('setCurrentLocale')
+            ->with('en_US');
+
+        $translatableEntity->expects($this->once())
+            ->method('setFallbackLocale')
+            ->with('en_US');
+
+        $this->localeAssigner->assignLocale($translatableEntity);
     }
 }

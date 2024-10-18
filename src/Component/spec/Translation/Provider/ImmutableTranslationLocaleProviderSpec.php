@@ -11,30 +11,33 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Translation\Provider;
+namespace Sylius\Resource\Tests\Translation\Provider;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Translation\Provider\ImmutableTranslationLocaleProvider;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
-final class ImmutableTranslationLocaleProviderSpec extends ObjectBehavior
+final class ImmutableTranslationLocaleProviderTest extends TestCase
 {
-    function let(): void
+    private ImmutableTranslationLocaleProvider $localeProvider;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(['pl_PL', 'en_US'], 'pl_PL');
+        $this->localeProvider = new ImmutableTranslationLocaleProvider(['pl_PL', 'en_US'], 'pl_PL');
     }
 
-    function it_implements_translation_locale_provider_interface(): void
+    public function testItImplementsTranslationLocaleProviderInterface(): void
     {
-        $this->shouldImplement(TranslationLocaleProviderInterface::class);
+        $this->assertInstanceOf(TranslationLocaleProviderInterface::class, $this->localeProvider);
     }
 
-    function it_returns_defined_locales_codes(): void
+    public function testItReturnsDefinedLocalesCodes(): void
     {
-        $this->getDefinedLocalesCodes()->shouldReturn(['pl_PL', 'en_US']);
+        $this->assertSame(['pl_PL', 'en_US'], $this->localeProvider->getDefinedLocalesCodes());
     }
 
-    function it_returns_the_default_locale_code(): void
+    public function testItReturnsTheDefaultLocaleCode(): void
     {
-        $this->getDefaultLocaleCode()->shouldReturn('pl_PL');
+        $this->assertSame('pl_PL', $this->localeProvider->getDefaultLocaleCode());
     }
 }
