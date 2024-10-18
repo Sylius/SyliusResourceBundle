@@ -11,60 +11,80 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\StateMachine\State;
+namespace Sylius\Resource\Tests\StateMachine\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 use Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
-final class ApplyStateMachineTransitionProcessorSpec extends ObjectBehavior
+final class ApplyStateMachineTransitionProcessorTest extends TestCase
 {
-    function let(
-        OperationStateMachineInterface $operationStateMachine,
-        ProcessorInterface $writeProcessor,
-    ): void {
-        $this->beConstructedWith($operationStateMachine, $writeProcessor);
-    }
+    private OperationStateMachineInterface $operationStateMachine;
 
-    function it_is_initializable(): void
+    private ProcessorInterface $writeProcessor;
+
+    private ApplyStateMachineTransitionProcessor $processor;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(ApplyStateMachineTransitionProcessor::class);
+        $this->operationStateMachine = $this->createMock(OperationStateMachineInterface::class);
+        $this->writeProcessor = $this->createMock(ProcessorInterface::class);
+        $this->processor = new ApplyStateMachineTransitionProcessor(
+            $this->operationStateMachine,
+            $this->writeProcessor,
+        );
     }
 
-    function it_applies_state_machine_transition_if_possible(
-        \stdClass $data,
-        OperationStateMachineInterface $operationStateMachine,
-        ProcessorInterface $writeProcessor,
-    ): void {
-        $operation = new Create();
-
-        $context = new Context();
-
-        $operationStateMachine->can($data, $operation, $context)->willReturn(true)->shouldBeCalled();
-        $operationStateMachine->apply($data, $operation, $context)->shouldBeCalled();
-
-        $writeProcessor->process($data, $operation, $context)->willReturn(null)->shouldBeCalled();
-
-        $this->process($data, $operation, $context);
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(ApplyStateMachineTransitionProcessor::class, $this->processor);
     }
 
-    function it_does_nothing_when_transition_is_not_possible(
-        \stdClass $data,
-        OperationStateMachineInterface $operationStateMachine,
-        ProcessorInterface $writeProcessor,
-    ): void {
+    public function testItAppliesStateMachineTransitionIfPossible(): void
+    {
+        $data = new \stdClass();
         $operation = new Create();
-
         $context = new Context();
 
-        $operationStateMachine->can($data, $operation, $context)->willReturn(false)->shouldBeCalled();
-        $operationStateMachine->apply($data, $operation, $context)->shouldNotBeCalled();
+        $this->operationStateMachine->expects($this->once())
+            ->method('can')
+            ->with($data, $operation, $context)
+            ->willReturn(true);
 
-        $writeProcessor->process($data, $operation, $context)->willReturn(null)->shouldBeCalled();
+        $this->operationStateMachine->expects($this->once())
+            ->method('apply')
+            ->with($data, $operation, $context);
 
-        $this->process($data, $operation, $context)->shouldReturn(null);
+        $this->writeProcessor->expects($this->once())
+            ->method('process')
+            ->with($data, $operation, $context)
+            ->willReturn(null);
+
+        $this->processor->process($data, $operation, $context);
+    }
+
+    public function testItDoesNothingWhenTransitionIsNotPossible(): void
+    {
+        $data = new \stdClass();
+        $operation = new Create();
+        $context = new Context();
+
+        $this->operationStateMachine->expects($this->once())
+            ->method('can')
+            ->with($data, $operation, $context)
+            ->willReturn(false);
+
+        $this->operationStateMachine->expects($this->never())
+            ->method('apply');
+
+        $this->writeProcessor->expects($this->once())
+            ->method('process')
+            ->with($data, $operation, $context)
+            ->willReturn(null);
+
+        $this->assertNull($this->processor->process($data, $operation, $context));
     }
 }

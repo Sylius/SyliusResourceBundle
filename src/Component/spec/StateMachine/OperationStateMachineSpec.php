@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\StateMachine;
+namespace Sylius\Resource\Tests\StateMachine;
 
-use PhpSpec\ObjectBehavior;
+use LogicException;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
@@ -22,80 +23,99 @@ use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Resource\StateMachine\OperationStateMachine;
 use Sylius\Resource\StateMachine\OperationStateMachineInterface;
 
-final class OperationStateMachineSpec extends ObjectBehavior
+final class OperationStateMachineTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    private ContainerInterface $locator;
+
+    private OperationStateMachine $operationStateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->operationStateMachine = new OperationStateMachine($this->locator);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(OperationStateMachine::class);
+        $this->assertInstanceOf(OperationStateMachine::class, $this->operationStateMachine);
     }
 
-    function it_calls_can_method_from_operation_state_machine_as_string(
-        ContainerInterface $locator,
-        OperationStateMachineInterface $stateMachine,
-        \stdClass $data,
-    ): void {
+    public function testItCallsCanMethodFromOperationStateMachineAsString(): void
+    {
+        $stateMachine = $this->createMock(OperationStateMachineInterface::class);
+        $data = new \stdClass();
         $operation = (new Create())->withStateMachineComponent('symfony');
         $context = new Context();
 
-        $locator->has('symfony')->willReturn(true);
-        $locator->get('symfony')->willReturn($stateMachine);
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('symfony')
+            ->willReturn(true);
 
-        $stateMachine->can($data, $operation, $context)->willReturn(true)->shouldBeCalled();
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('symfony')
+            ->willReturn($stateMachine);
 
-        $this->can($data, $operation, $context)->shouldReturn(true);
+        $stateMachine->expects($this->once())
+            ->method('can')
+            ->with($data, $operation, $context)
+            ->willReturn(true);
+
+        $this->assertTrue($this->operationStateMachine->can($data, $operation, $context));
     }
 
-    function it_returns_false_if_no_operation_state_machine_has_been_configured_on_operation(
-        ContainerInterface $locator,
-        OperationStateMachineInterface $stateMachine,
-        \stdClass $data,
-    ): void {
+    public function testItReturnsFalseIfNoOperationStateMachineHasBeenConfiguredOnOperation(): void
+    {
+        $data = new \stdClass();
         $operation = new Create();
         $context = new Context();
 
-        $locator->has('\App\StateMachine')->willReturn(false);
-
-        $this->can($data, $operation, $context)->shouldReturn(false);
+        $this->assertFalse($this->operationStateMachine->can($data, $operation, $context));
     }
 
-    function it_calls_apply_method_from_operation_state_machine_as_string(
-        ContainerInterface $locator,
-        OperationStateMachineInterface $stateMachine,
-        \stdClass $data,
-    ): void {
+    public function testItCallsApplyMethodFromOperationStateMachineAsString(): void
+    {
+        $stateMachine = $this->createMock(OperationStateMachineInterface::class);
+        $data = new \stdClass();
         $operation = (new Create())->withStateMachineComponent('symfony');
         $context = new Context();
 
-        $locator->has('symfony')->willReturn(true);
-        $locator->get('symfony')->willReturn($stateMachine);
+        $this->locator->expects($this->once())
+            ->method('has')
+            ->with('symfony')
+            ->willReturn(true);
 
-        $stateMachine->apply($data, $operation, $context)->shouldBeCalled();
+        $this->locator->expects($this->once())
+            ->method('get')
+            ->with('symfony')
+            ->willReturn($stateMachine);
 
-        $this->apply($data, $operation, $context);
+        $stateMachine->expects($this->once())
+            ->method('apply')
+            ->with($data, $operation, $context);
+
+        $this->operationStateMachine->apply($data, $operation, $context);
     }
 
-    function it_does_nothing_if_no_operation_state_machine_has_been_configured_on_operation(
-        ContainerInterface $locator,
-        \stdClass $data,
-    ): void {
+    public function testItDoesNothingIfNoOperationStateMachineHasBeenConfiguredOnOperation(): void
+    {
+        $data = new \stdClass();
         $operation = new Create();
         $context = new Context();
 
-        $this->apply($data, $operation, $context);
+        $this->operationStateMachine->apply($data, $operation, $context);
+        $this->expectNotToPerformAssertions();
     }
 
-    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
-        \stdClass $data,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationDoesNotImplementAStateMachine(): void
+    {
+        $data = new \stdClass();
         $operation = new Index();
 
-        $this->shouldThrow(
-            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
-        )->during('can', [$data, $operation, new Context()]);
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class));
+
+        $this->operationStateMachine->can($data, $operation, new Context());
     }
 }
