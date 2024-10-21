@@ -11,53 +11,45 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\tests\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
+use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class ArgumentParserTest extends KernelTestCase
+final class ArgumentParserTest extends TestCase
 {
-    public function testResourceFactoryArgumentParser(): void
+    private ArgumentParser $argumentParser;
+
+    private VariablesCollectionInterface $variablesCollection;
+
+    protected function setUp(): void
     {
-        self::bootKernel();
-
-        $container = static::getContainer();
-
-        /** @var ArgumentParserInterface $argumentParser */
-        $argumentParser = $container->get('sylius.expression_language.argument_parser.factory');
-
-        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
-        $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
-        $this->assertTrue($argumentParser->parseExpression('user === null'));
-        $this->assertTrue($argumentParser->parseExpression('request === null'));
+        $this->variablesCollection = $this->createMock(VariablesCollectionInterface::class);
+        $this->argumentParser = new ArgumentParser(new ExpressionLanguage(), $this->variablesCollection);
     }
 
-    public function testRepositoryArgumentParser(): void
+    public function testItIsInitializable(): void
     {
-        self::bootKernel();
-
-        $container = static::getContainer();
-
-        /** @var ArgumentParserInterface $argumentParser */
-        $argumentParser = $container->get('sylius.expression_language.argument_parser.repository');
-
-        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
-        $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
-        $this->assertTrue($argumentParser->parseExpression('user === null'));
-        $this->assertTrue($argumentParser->parseExpression('request === null'));
+        $this->assertInstanceOf(ArgumentParser::class, $this->argumentParser);
     }
 
-    public function testRoutingArgumentParser(): void
+    public function testItParsesExpressions(): void
     {
-        self::bootKernel();
+        $this->variablesCollection->method('getVariables')->willReturn(['foo' => 'fighters']);
 
-        $container = static::getContainer();
+        $result = $this->argumentParser->parseExpression('foo');
 
-        /** @var ArgumentParserInterface $argumentParser */
-        $argumentParser = $container->get('sylius.expression_language.argument_parser.routing');
-        $this->assertTrue($argumentParser->parseExpression('request === null'));
+        $this->assertSame('fighters', $result);
+    }
 
-        $this->assertInstanceOf(ArgumentParserInterface::class, $argumentParser);
+    public function testItMergesVariables(): void
+    {
+        $this->variablesCollection->method('getVariables')->willReturn(['foo' => 'fighters']);
+
+        $result = $this->argumentParser->parseExpression('foo', ['foo' => 'bar']);
+
+        $this->assertSame('bar', $result);
     }
 }
