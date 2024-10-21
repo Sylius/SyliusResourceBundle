@@ -69,7 +69,7 @@ final class FormFactoryTest extends TestCase
             ->with('App\Form\DummyType', null, ['foo' => 'fighters'])
             ->willReturn($form);
 
-        $this->assertSame($form, $this->formFactoryInstance->create($operation, new Context(new RequestOption($request->getWrappedObject()))));
+        $this->assertSame($form, $this->formFactoryInstance->create($operation, new Context(new RequestOption($request))));
     }
 
     public function testItThrowsAnExceptionWhenOperationHasNoFormType(): void
