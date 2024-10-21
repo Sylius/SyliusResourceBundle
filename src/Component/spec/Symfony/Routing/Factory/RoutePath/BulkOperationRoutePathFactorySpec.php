@@ -11,37 +11,41 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
+namespace Sylius\Tests\Resource\Symfony\Routing\Factory\RoutePath;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
-final class BulkOperationRoutePathFactorySpec extends ObjectBehavior
+final class BulkOperationRoutePathFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private BulkOperationRoutePathFactory $bulkOperationRoutePathFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->bulkOperationRoutePathFactory = new BulkOperationRoutePathFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
-    {
-        $this->shouldHaveType(BulkOperationRoutePathFactory::class);
-    }
-
-    function it_generates_route_path_for_bulk_delete_operations(): void
+    public function testItGeneratesRoutePathForBulkDeleteOperations(): void
     {
         $operation = new BulkDelete();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/bulk_delete');
+        $result = $this->bulkOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/bulk_delete', $result);
     }
 
-    function it_generates_route_path_for_bulk_update_operations(): void
+    public function testItGeneratesRoutePathForBulkUpdateOperations(): void
     {
         $operation = new BulkUpdate();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/bulk_update');
+        $result = $this->bulkOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/bulk_update', $result);
     }
 }

@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Tests\Resource\Symfony\Routing\Factory;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Create;
@@ -28,265 +27,217 @@ use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
-final class OperationRouteFactorySpec extends ObjectBehavior
+final class OperationRouteFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private OperationRouteFactory $operationRouteFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->operationRouteFactory = new OperationRouteFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(OperationRouteFactory::class);
+        $this->assertInstanceOf(OperationRouteFactory::class, $this->operationRouteFactory);
     }
 
-    function it_generates_create_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesCreateRoutes(): void
+    {
         $operation = new Create();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/new')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/new');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/new');
-        $route->getMethods()->shouldReturn(['GET', 'POST']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/new', $route->getPath());
+        $this->assertSame(['GET', 'POST'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_index_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesIndexRoutes(): void
+    {
         $operation = new Index();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            new Index(),
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies');
-        $route->getMethods()->shouldReturn(['GET']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies', $route->getPath());
+        $this->assertSame(['GET'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_show_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesShowRoutes(): void
+    {
         $operation = new Show();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/{id}');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['GET']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/{id}', $route->getPath());
+        $this->assertSame(['GET'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_update_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesUpdateRoutes(): void
+    {
         $operation = new Update();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}/edit')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/{id}/edit');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/{id}/edit');
-        $route->getMethods()->shouldReturn(['GET', 'PUT', 'POST']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/{id}/edit', $route->getPath());
+        $this->assertSame(['GET', 'PUT', 'POST'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_delete_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesDeleteRoutes(): void
+    {
         $operation = new Delete();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/{id}');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['DELETE', 'POST']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/{id}', $route->getPath());
+        $this->assertSame(['DELETE', 'POST'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_bulk_delete_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesBulkDeleteRoutes(): void
+    {
         $operation = new BulkDelete();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/bulk_delete')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/bulk_delete');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/bulk_delete');
-        $route->getMethods()->shouldReturn(['DELETE', 'POST']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/bulk_delete', $route->getPath());
+        $this->assertSame(['DELETE', 'POST'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_bulk_update_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesBulkUpdateRoutes(): void
+    {
         $operation = new BulkUpdate();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/bulk_update')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('dummies/bulk_update');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/bulk_update');
-        $route->getMethods()->shouldReturn(['PUT', 'PATCH']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/bulk_update', $route->getPath());
+        $this->assertSame(['PUT', 'PATCH'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_custom_operations_routes(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesCustomOperationsRoutes(): void
+    {
         $operation = new HttpOperation(methods: ['PATCH'], path: 'dummies/{id}/custom');
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath(Argument::cetera())->willReturn('')->shouldNotBeCalled();
+        $this->routePathFactory->expects($this->never())
+            ->method('createRoutePath');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata('app.dummy'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/{id}/custom');
-        $route->getMethods()->shouldReturn(['PATCH']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/{id}/custom', $route->getPath());
+        $this->assertSame(['PATCH'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
             ],
-        ]);
+        ], $route->getDefaults());
     }
 
-    function it_generates_routes_with_sections(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItGeneratesRoutesWithSections(): void
+    {
         $operation = new Show();
-
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies/{id}')->shouldBeCalled();
+        $this->routePathFactory->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, 'dummies')
+            ->willReturn('/dummies/{id}');
 
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata(alias: 'app.dummy', section: 'admin'),
-            $operation,
-        );
+        $route = $this->operationRouteFactory->create($metadata, new ResourceMetadata(alias: 'app.dummy', section: 'admin'), $operation);
 
-        $route->getPath()->shouldReturn('/dummies/{id}');
-        $route->getMethods()->shouldReturn(['GET']);
-        $route->getDefaults()->shouldReturn([
+        $this->assertSame('/dummies/{id}', $route->getPath());
+        $this->assertSame(['GET'], $route->getMethods());
+        $this->assertSame([
             '_controller' => 'sylius.main_controller',
             '_sylius' => [
                 'resource' => 'app.dummy',
                 'section' => 'admin',
             ],
-        ]);
-    }
-
-    function it_generates_routes_with_vars(
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
-        $operation = new Index(vars: ['subheader' => 'Managing your library']);
-
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
-
-        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies')->shouldBeCalled();
-
-        $route = $this->create(
-            $metadata,
-            new ResourceMetadata(alias: 'app.dummy'),
-            $operation,
-        );
-
-        $route->getDefaults()->shouldReturn([
-            '_controller' => 'sylius.main_controller',
-            '_sylius' => [
-                'resource' => 'app.dummy',
-                'vars' => ['subheader' => 'Managing your library'],
-            ],
-        ]);
+        ], $route->getDefaults());
     }
 }

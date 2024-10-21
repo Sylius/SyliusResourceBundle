@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Workflow;
+namespace Tests\Sylius\Resource\Symfony\Workflow;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
@@ -23,85 +23,91 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow;
 
-final class OperationStateMachineSpec extends ObjectBehavior
+final class OperationStateMachineTest extends TestCase
 {
-    function let(Registry $registry): void
+    private OperationStateMachine $operationStateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($registry);
+        $registry = $this->createMock(Registry::class);
+        $this->operationStateMachine = new OperationStateMachine($registry);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(OperationStateMachine::class);
+        $this->assertInstanceOf(OperationStateMachine::class, $this->operationStateMachine);
     }
 
-    function it_returns_if_transition_is_possible(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-    ): void {
+    public function testReturnsIfTransitionIsPossible(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
 
-        $registry->get($data, null)->willReturn($workflow);
+        $registry = $this->createMock(Registry::class);
+        $workflow = $this->createMock(Workflow::class);
+        $registry->method('get')->with($data, null)->willReturn($workflow);
+        $workflow->method('can')->with($data, 'publish')->willReturn(true);
 
-        $workflow->can($data, 'publish')->willReturn(true);
+        $this->operationStateMachine = new OperationStateMachine($registry);
 
-        $this->can($data, $operation, new Context())->shouldReturn(true);
+        $this->assertTrue($this->operationStateMachine->can($data, $operation, new Context()));
     }
 
-    function it_applies_transition(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-        Marking $marking,
-    ): void {
+    public function testAppliesTransition(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
 
-        $registry->get($data, null)->willReturn($workflow);
+        $registry = $this->createMock(Registry::class);
+        $workflow = $this->createMock(Workflow::class);
+        $marking = $this->createMock(Marking::class);
 
-        $workflow->apply($data, 'publish')->willReturn($marking)->shouldBeCalled();
+        $registry->method('get')->with($data, null)->willReturn($workflow);
+        $workflow->expects($this->once())->method('apply')->with($data, 'publish')->willReturn($marking);
 
-        $this->apply($data, $operation, new Context());
+        $this->operationStateMachine = new OperationStateMachine($registry);
+
+        $this->operationStateMachine->apply($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_operation_has_no_defined_transition(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-        Marking $marking,
-    ): void {
+    public function testThrowsExceptionWhenOperationHasNoDefinedTransition(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(name: 'app_dummy_create');
 
-        $registry->get($data, null)->willReturn($workflow);
+        $registry = $this->createMock(Registry::class);
+        $registry->method('get')->with($data, null)->willReturn($this->createMock(Workflow::class));
 
-        $this->shouldThrow(new \InvalidArgumentException('No State machine transition was found on operation "app_dummy_create".'))
-            ->during('can', [$data, $operation, new Context()])
-        ;
+        $this->operationStateMachine = new OperationStateMachine($registry);
 
-        $this->shouldThrow(new \InvalidArgumentException('No State machine transition was found on operation "app_dummy_create".'))
-            ->during('apply', [$data, $operation, new Context()])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No State machine transition was found on operation "app_dummy_create".');
+        $this->operationStateMachine->can($data, $operation, new Context());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No State machine transition was found on operation "app_dummy_create".');
+        $this->operationStateMachine->apply($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_symfony_workflow_is_not_available(
-        \stdClass $data,
-    ): void {
-        $this->beConstructedWith(null);
+    public function testThrowsExceptionWhenSymfonyWorkflowIsNotAvailable(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('You can not use the "state-machine" if Symfony workflow is not available. Try running "composer require symfony/workflow".');
 
+        $this->operationStateMachine = new OperationStateMachine(null);
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
-
-        $this->shouldThrow(
-            new \LogicException('You can not use the "state-machine" if Symfony workflow is not available. Try running "composer require symfony/workflow".'),
-        )->during('can', [$data, $operation, new Context()]);
+        $this->operationStateMachine->can($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
-        \stdClass $data,
-    ): void {
+    public function testThrowsExceptionWhenOperationDoesNotImplementAStateMachine(): void
+    {
+        $data = new \stdClass();
         $operation = new Index();
 
-        $this->shouldThrow(
-            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
-        )->during('can', [$data, $operation, new Context()]);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class));
+
+        $this->operationStateMachine->can($data, $operation, new Context());
     }
 }

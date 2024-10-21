@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Request\State;
+namespace Tests\Sylius\Resource\Symfony\Request\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
@@ -23,85 +23,92 @@ use Sylius\Resource\Symfony\Request\State\Responder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ResponderSpec extends ObjectBehavior
+final class ResponderTest extends TestCase
 {
-    function let(ContainerInterface $locator): void
+    private Responder $responder;
+
+    private ContainerInterface $locator;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->responder = new Responder($this->locator);
     }
 
-    function it_is_initializable(): void
+    public function testIsInitializable(): void
     {
-        $this->shouldHaveType(Responder::class);
+        $this->assertInstanceOf(Responder::class, $this->responder);
     }
 
-    function it_uses_html_responder_on_html_format(
-        \stdClass $data,
-        Request $request,
-        ContainerInterface $locator,
-        ResponderInterface $htmlResponder,
-        HttpOperation $operation,
-        Response $response,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-        $request->getRequestFormat()->willReturn('html');
+    public function testUsesHtmlResponderOnHtmlFormat(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $operation = $this->createMock(HttpOperation::class);
+        $htmlResponder = $this->createMock(ResponderInterface::class);
+        $response = $this->createMock(Response::class);
+        $context = new Context(new RequestOption($request));
 
-        $locator->has('sylius.state_responder.html')->willReturn(true);
-        $locator->get('sylius.state_responder.html')->willReturn($htmlResponder);
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $htmlResponder->respond($data, $operation, $context)->willReturn($response)->shouldBeCalled();
+        $this->locator->method('has')->with('sylius.state_responder.html')->willReturn(true);
+        $this->locator->method('get')->with('sylius.state_responder.html')->willReturn($htmlResponder);
 
-        $this->respond($data, $operation, $context);
+        $htmlResponder->expects($this->once())->method('respond')->with($data, $operation, $context)->willReturn($response);
+
+        $this->responder->respond($data, $operation, $context);
     }
 
-    function it_uses_api_responder_on_json_format(
-        \stdClass $data,
-        Request $request,
-        ContainerInterface $locator,
-        ResponderInterface $apiResponder,
-        HttpOperation $operation,
-        Response $response,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-        $request->getRequestFormat()->willReturn('json');
+    public function testUsesApiResponderOnJsonFormat(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $operation = $this->createMock(HttpOperation::class);
+        $apiResponder = $this->createMock(ResponderInterface::class);
+        $response = $this->createMock(Response::class);
+        $context = new Context(new RequestOption($request));
 
-        $locator->has('sylius.state_responder.api')->willReturn(true);
-        $locator->get('sylius.state_responder.api')->willReturn($apiResponder);
+        $request->method('getRequestFormat')->willReturn('json');
 
-        $apiResponder->respond($data, $operation, $context)->willReturn($response)->shouldBeCalled();
+        $this->locator->method('has')->with('sylius.state_responder.api')->willReturn(true);
+        $this->locator->method('get')->with('sylius.state_responder.api')->willReturn($apiResponder);
 
-        $this->respond($data, $operation, $context);
+        $apiResponder->expects($this->once())->method('respond')->with($data, $operation, $context)->willReturn($response);
+
+        $this->responder->respond($data, $operation, $context);
     }
 
-    function it_throw_an_exception_when_html_responder_was_not_found(
-        \stdClass $data,
-        Request $request,
-        ContainerInterface $locator,
-        HttpOperation $operation,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-        $request->getRequestFormat()->willReturn('html');
+    public function testThrowExceptionWhenHtmlResponderWasNotFound(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $operation = $this->createMock(HttpOperation::class);
+        $context = new Context(new RequestOption($request));
 
-        $locator->has('sylius.state_responder.html')->willReturn(false);
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $this->shouldThrow(new \LogicException('Responder "sylius.state_responder.html" was not found but it should.'))
-            ->during('respond', [$data, $operation, $context])
-        ;
+        $this->locator->method('has')->with('sylius.state_responder.html')->willReturn(false);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Responder "sylius.state_responder.html" was not found but it should.');
+
+        $this->responder->respond($data, $operation, $context);
     }
 
-    function it_throw_an_exception_when_json_responder_was_not_found(
-        \stdClass $data,
-        Request $request,
-        ContainerInterface $locator,
-        HttpOperation $operation,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-        $request->getRequestFormat()->willReturn('json');
+    public function testThrowExceptionWhenJsonResponderWasNotFound(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $operation = $this->createMock(HttpOperation::class);
+        $context = new Context(new RequestOption($request));
 
-        $locator->has('sylius.state_responder.api')->willReturn(false);
+        $request->method('getRequestFormat')->willReturn('json');
 
-        $this->shouldThrow(new \LogicException('Responder "sylius.state_responder.api" was not found but it should.'))
-            ->during('respond', [$data, $operation, $context])
-        ;
+        $this->locator->method('has')->with('sylius.state_responder.api')->willReturn(false);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Responder "sylius.state_responder.api" was not found but it should.');
+
+        $this->responder->respond($data, $operation, $context);
     }
 }

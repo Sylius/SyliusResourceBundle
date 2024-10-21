@@ -11,44 +11,50 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
+namespace Sylius\Tests\Resource\Symfony\Routing\Factory\RoutePath;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\CollectionOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
-final class CollectionOperationRoutePathFactorySpec extends ObjectBehavior
+final class CollectionOperationRoutePathFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private CollectionOperationRoutePathFactory $collectionOperationRoutePathFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->collectionOperationRoutePathFactory = new CollectionOperationRoutePathFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
-    {
-        $this->shouldHaveType(CollectionOperationRoutePathFactory::class);
-    }
-
-    function it_generates_route_path_for_index_operations(): void
+    public function testItGeneratesRoutePathForIndexOperations(): void
     {
         $operation = new Index();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies');
+        $result = $this->collectionOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies', $result);
     }
 
-    function it_generates_route_path_for_index_operations_with_custom_short_name(): void
+    public function testItGeneratesRoutePathForIndexOperationsWithCustomShortName(): void
     {
         $operation = new Index(shortName: 'list');
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/list');
+        $result = $this->collectionOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/list', $result);
     }
 
-    function it_generates_route_path_for_api_get_collection_operations(): void
+    public function testItGeneratesRoutePathForApiGetCollectionOperations(): void
     {
         $operation = new Api\GetCollection();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies');
+        $result = $this->collectionOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies', $result);
     }
 }

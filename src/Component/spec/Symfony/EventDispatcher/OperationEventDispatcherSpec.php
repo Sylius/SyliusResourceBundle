@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\EventDispatcher;
+namespace Sylius\Resource\Tests\Symfony\EventDispatcher;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\Create;
@@ -23,110 +23,115 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class OperationEventDispatcherSpec extends ObjectBehavior
+final class OperationEventDispatcherTest extends TestCase
 {
-    function let(EventDispatcherInterface $eventDispatcher): void
+    private OperationEventDispatcher $operationEventDispatcher;
+
+    private EventDispatcherInterface $eventDispatcher;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($eventDispatcher);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->operationEventDispatcher = new OperationEventDispatcher($this->eventDispatcher);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(OperationEventDispatcher::class);
+        $this->assertInstanceOf(OperationEventDispatcher::class, $this->operationEventDispatcher);
     }
 
-    function it_dispatches_events(
-        EventDispatcherInterface $eventDispatcher,
-        \stdClass $data,
-    ): void {
+    public function testItDispatchesEvents(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $show = (new Show(eventShortName: 'read'))->withResource($resource);
-
         $context = new Context();
+        $data = new \stdClass();
 
-        $operationEvent = new OperationEvent($data->getWrappedObject(), [
+        $operationEvent = new OperationEvent($data, [
             'operation' => $show,
             'context' => $context,
         ]);
 
-        $eventDispatcher->dispatch($operationEvent, 'app.book.read')->shouldBeCalled();
+        $this->eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with($operationEvent, 'app.book.read');
 
-        $this->dispatch($data, $show, $context)->shouldHaveType(OperationEvent::class);
+        $this->operationEventDispatcher->dispatch($data, $show, $context);
     }
 
-    function it_dispatches_events_for_bulk_operations(
-        EventDispatcherInterface $eventDispatcher,
-        \ArrayObject $data,
-    ): void {
+    public function testItDispatchesEventsForBulkOperations(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $bulkDelete = (new BulkDelete(eventShortName: 'delete'))->withResource($resource);
-
         $context = new Context();
+        $data = new \ArrayObject();
 
-        $operationEvent = new OperationEvent($data->getWrappedObject(), [
+        $operationEvent = new OperationEvent($data, [
             'operation' => $bulkDelete,
             'context' => $context,
         ]);
 
-        $eventDispatcher->dispatch($operationEvent, 'app.book.bulk_delete')->shouldBeCalled();
+        $this->eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with($operationEvent, 'app.book.bulk_delete');
 
-        $this->dispatchBulkEvent($data, $bulkDelete, $context)->shouldHaveType(OperationEvent::class);
+        $this->operationEventDispatcher->dispatchBulkEvent($data, $bulkDelete, $context);
     }
 
-    function it_dispatches_pre_events(
-        EventDispatcherInterface $eventDispatcher,
-        \stdClass $data,
-    ): void {
+    public function testItDispatchesPreEvents(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
-
         $context = new Context();
+        $data = new \stdClass();
 
-        $operationEvent = new OperationEvent($data->getWrappedObject(), [
+        $operationEvent = new OperationEvent($data, [
             'operation' => $create,
             'context' => $context,
         ]);
 
-        $eventDispatcher->dispatch($operationEvent, 'app.book.pre_create')->shouldBeCalled();
+        $this->eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with($operationEvent, 'app.book.pre_create');
 
-        $this->dispatchPreEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
+        $this->operationEventDispatcher->dispatchPreEvent($data, $create, $context);
     }
 
-    function it_dispatches_post_events(
-        EventDispatcherInterface $eventDispatcher,
-        \stdClass $data,
-    ): void {
+    public function testItDispatchesPostEvents(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
-
         $context = new Context();
+        $data = new \stdClass();
 
-        $operationEvent = new OperationEvent($data->getWrappedObject(), [
+        $operationEvent = new OperationEvent($data, [
             'operation' => $create,
             'context' => $context,
         ]);
 
-        $eventDispatcher->dispatch($operationEvent, 'app.book.post_create')->shouldBeCalled();
+        $this->eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with($operationEvent, 'app.book.post_create');
 
-        $this->dispatchPostEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
+        $this->operationEventDispatcher->dispatchPostEvent($data, $create, $context);
     }
 
-    function it_dispatches_initialize_events(
-        EventDispatcherInterface $eventDispatcher,
-        \stdClass $data,
-    ): void {
+    public function testItDispatchesInitializeEvents(): void
+    {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(eventShortName: 'create'))->withResource($resource);
-
         $context = new Context();
+        $data = new \stdClass();
 
-        $operationEvent = new OperationEvent($data->getWrappedObject(), [
+        $operationEvent = new OperationEvent($data, [
             'operation' => $create,
             'context' => $context,
         ]);
 
-        $eventDispatcher->dispatch($operationEvent, 'app.book.initialize_create')->shouldBeCalled();
+        $this->eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with($operationEvent, 'app.book.initialize_create');
 
-        $this->dispatchInitializeEvent($data, $create, $context)->shouldHaveType(OperationEvent::class);
+        $this->operationEventDispatcher->dispatchInitializeEvent($data, $create, $context);
     }
 }

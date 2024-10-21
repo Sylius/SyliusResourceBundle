@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\EventDispatcher\State;
+namespace Sylius\Resource\Tests\Symfony\EventDispatcher\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
@@ -23,69 +23,77 @@ use Sylius\Resource\Symfony\EventDispatcher\OperationEvent;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostReadEventProvider;
 
-final class DispatchPostReadEventProviderSpec extends ObjectBehavior
+final class DispatchPostReadEventProviderTest extends TestCase
 {
-    function let(
-        ProviderInterface $provider,
-        OperationEventDispatcherInterface $operationEventDispatcher,
-    ): void {
-        $this->beConstructedWith($provider, $operationEventDispatcher);
-    }
+    private DispatchPostReadEventProvider $dispatchPostReadEventProvider;
 
-    function it_is_initializable(): void
+    private ProviderInterface $provider;
+
+    private OperationEventDispatcherInterface $operationEventDispatcher;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(DispatchPostReadEventProvider::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
+        $this->operationEventDispatcher = $this->createMock(OperationEventDispatcherInterface::class);
+        $this->dispatchPostReadEventProvider = new DispatchPostReadEventProvider(
+            $this->provider,
+            $this->operationEventDispatcher,
+        );
     }
 
-    function it_dispatches_events_for_index_operation(
-        ProviderInterface $provider,
-        OperationEventDispatcherInterface $operationEventDispatcher,
-    ): void {
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(DispatchPostReadEventProvider::class, $this->dispatchPostReadEventProvider);
+    }
+
+    public function testItDispatchesEventsForIndexOperation(): void
+    {
         $operation = new Index(provider: '\App\Provider');
         $context = new Context();
-
         $operationEvent = new OperationEvent();
 
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $this->provider->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context);
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $this->operationEventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(null, $operation, $context)
+            ->willReturn($operationEvent);
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
-
-        $this->provide($operation, $context);
+        $this->dispatchPostReadEventProvider->provide($operation, $context);
     }
 
-    function it_dispatches_events_for_show_operation(
-        ProviderInterface $provider,
-        OperationEventDispatcherInterface $operationEventDispatcher,
-    ): void {
+    public function testItDispatchesEventsForShowOperation(): void
+    {
         $operation = new Show(provider: '\App\Provider');
         $context = new Context();
-
         $operationEvent = new OperationEvent();
 
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $this->provider->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context);
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->willReturn($operationEvent)->shouldBeCalled();
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $this->operationEventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(null, $operation, $context)
+            ->willReturn($operationEvent);
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldBeCalled();
-
-        $this->provide($operation, $context);
+        $this->dispatchPostReadEventProvider->provide($operation, $context);
     }
 
-    function it_does_not_dispatch_events_for_create_operation(
-        ProviderInterface $provider,
-        OperationEventDispatcherInterface $operationEventDispatcher,
-    ): void {
+    public function testItDoesNotDispatchEventsForCreateOperation(): void
+    {
         $operation = new Create(provider: '\App\Provider');
         $context = new Context();
 
-        $provider->provide($operation, $context)->shouldBeCalled();
+        $this->provider->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context);
 
-        $operationEventDispatcher->dispatch(null, $operation, $context)->shouldNotBeCalled();
+        $this->operationEventDispatcher->expects($this->never())
+            ->method('dispatch');
 
-        $this->provide($operation, $context);
+        $this->dispatchPostReadEventProvider->provide($operation, $context);
     }
 }

@@ -11,42 +11,51 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RouteName;
+namespace Tests\Sylius\Resource\Symfony\Routing\Factory\RouteName;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
-final class OperationRouteNameFactorySpec extends ObjectBehavior
+final class OperationRouteNameFactoryTest extends TestCase
 {
-    function it_is_initializable(): void
+    private OperationRouteNameFactory $operationRouteNameFactory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(OperationRouteNameFactory::class);
+        $this->operationRouteNameFactory = new OperationRouteNameFactory();
     }
 
-    function it_create_a_route_name(): void
+    public function testIsInitializable(): void
+    {
+        $this->assertInstanceOf(OperationRouteNameFactory::class, $this->operationRouteNameFactory);
+    }
+
+    public function testCreateRouteName(): void
     {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
 
-        $this->createRouteName($operation)->shouldReturn('app_book_create');
+        $this->assertSame('app_book_create', $this->operationRouteNameFactory->createRouteName($operation));
     }
 
-    function it_create_a_route_name_with_a_section(): void
+    public function testCreateRouteNameWithASection(): void
     {
         $resource = new ResourceMetadata(alias: 'app.book', section: 'admin', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
 
-        $this->createRouteName($operation)->shouldReturn('app_admin_book_create');
+        $this->assertSame('app_admin_book_create', $this->operationRouteNameFactory->createRouteName($operation));
     }
 
-    function it_throws_an_exception_when_operation_has_no_resource(): void
+    public function testThrowsExceptionWhenOperationHasNoResource(): void
     {
         $operation = new Create();
 
-        $this->shouldThrow(new \RuntimeException('No resource was found on the operation "create"'))
-            ->during('createRouteName', [$operation])
-        ;
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No resource was found on the operation "create"');
+
+        $this->operationRouteNameFactory->createRouteName($operation);
     }
 }

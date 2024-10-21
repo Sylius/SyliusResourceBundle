@@ -11,44 +11,50 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
+namespace Sylius\Tests\Resource\Symfony\Routing\Factory\RoutePath;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\CreateOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
-final class CreateOperationRoutePathFactorySpec extends ObjectBehavior
+final class CreateOperationRoutePathFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private CreateOperationRoutePathFactory $createOperationRoutePathFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->createOperationRoutePathFactory = new CreateOperationRoutePathFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
-    {
-        $this->shouldHaveType(CreateOperationRoutePathFactory::class);
-    }
-
-    function it_generates_route_path_for_create_operations(): void
+    public function testItGeneratesRoutePathForCreateOperations(): void
     {
         $operation = new Create();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/new');
+        $result = $this->createOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/new', $result);
     }
 
-    function it_generates_route_path_for_create_operations_with_custom_short_name(): void
+    public function testItGeneratesRoutePathForCreateOperationsWithCustomShortName(): void
     {
         $operation = new Create(shortName: 'register');
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/register');
+        $result = $this->createOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/register', $result);
     }
 
-    function it_generates_route_path_for_api_post_operations(): void
+    public function testItGeneratesRoutePathForApiPostOperations(): void
     {
         $operation = new Api\Post();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies');
+        $result = $this->createOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies', $result);
     }
 }

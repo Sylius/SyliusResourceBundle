@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing;
+namespace Sylius\Tests\Resource\Symfony\Routing;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
@@ -25,166 +24,182 @@ use Sylius\Resource\Symfony\Routing\RedirectHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
-final class RedirectHandlerSpec extends ObjectBehavior
+final class RedirectHandlerTest extends TestCase
 {
-    function let(
-        RouterInterface $router,
-        ArgumentParserInterface $argumentParser,
-        OperationRouteNameFactoryInterface $operationRouteNameFactory,
-    ): void {
-        $this->beConstructedWith(
-            $router,
-            $argumentParser,
-            $operationRouteNameFactory,
-        );
-    }
+    private RouterInterface $router;
 
-    function it_is_initializable(): void
+    private ArgumentParserInterface $argumentParser;
+
+    private OperationRouteNameFactoryInterface $operationRouteNameFactory;
+
+    private RedirectHandler $redirectHandler;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(RedirectHandler::class);
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->argumentParser = $this->createMock(ArgumentParserInterface::class);
+        $this->operationRouteNameFactory = $this->createMock(OperationRouteNameFactoryInterface::class);
+        $this->redirectHandler = new RedirectHandler($this->router, $this->argumentParser, $this->operationRouteNameFactory);
     }
 
-    function it_redirects_to_resource_with_id_argument_by_default(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(RedirectHandler::class, $this->redirectHandler);
+    }
+
+    public function testItRedirectsToResourceWithIdArgumentByDefault(): void
+    {
+        $data = new \stdClass();
         $data->id = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index');
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_dummy_index', ['id' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', ['id' => 'xyz'])
+            ->willReturn('/dummies');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_with_custom_identifier_argument_by_default(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItRedirectsToResourceWithCustomIdentifierArgumentByDefault(): void
+    {
+        $data = new \stdClass();
         $data->code = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index');
         $resource = new ResourceMetadata(alias: 'app.ok', identifier: 'code');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', ['code' => 'xyz'])
+            ->willReturn('/dummies');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_with_id_via_property_access(
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItRedirectsToResourceWithIdViaPropertyAccess(): void
+    {
         $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index');
         $resource = new ResourceMetadata(alias: 'app.board_game');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_board_game_index', ['id' => 'uid'])->willReturn('/board-games')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_board_game_index', ['id' => 'uid'])
+            ->willReturn('/board-games');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_with_custom_arguments(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItRedirectsToResourceWithCustomArguments(): void
+    {
+        $data = new \stdClass();
         $data->code = 'xyz';
         $operation = new Create(redirectToRoute: 'app_dummy_index', redirectArguments: ['code' => 'resource.code']);
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', ['code' => 'xyz'])
+            ->willReturn('/dummies');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_with_id_via_the_getter(
-        Request $request,
-        RouterInterface $router,
-        ArgumentParserInterface $argumentParser,
-    ): void {
+    public function testItRedirectsToResourceWithIdViaTheGetter(): void
+    {
         $data = new BoardGameResource('uid');
         $operation = new Create(redirectToRoute: 'app_board_game_index', redirectArguments: ['id' => 'resource.id()']);
         $resource = new ResourceMetadata(alias: 'app.board_game');
         $operation = $operation->withResource($resource);
 
-        $argumentParser->parseExpression('resource.id()', ['resource' => $data])->willReturn('uid');
+        $this->argumentParser->expects($this->once())
+            ->method('parseExpression')
+            ->with('resource.id()', ['resource' => $data])
+            ->willReturn('uid');
 
-        $router->generate('app_board_game_index', ['id' => 'uid'])->willReturn('/board-games')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_board_game_index', ['id' => 'uid'])
+            ->willReturn('/board-games');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_without_arguments_after_delete_operation_by_default(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItRedirectsToResourceWithoutArgumentsAfterDeleteOperationByDefault(): void
+    {
+        $data = new \stdClass();
         $data->id = 'xyz';
         $operation = new Delete(redirectToRoute: 'app_dummy_index');
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', [])
+            ->willReturn('/dummies');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_resource_without_arguments_after_bulk_operation_by_default(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItRedirectsToResourceWithoutArgumentsAfterBulkOperationByDefault(): void
+    {
+        $data = new \stdClass();
         $data->id = 'xyz';
         $operation = new BulkUpdate(redirectToRoute: 'app_dummy_index');
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
-        $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', [])
+            ->willReturn('/dummies');
 
-        $this->redirectToResource($data, $operation, $request);
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_redirects_to_route(
-        \stdClass $data,
-        RouterInterface $router,
-    ): void {
-        $router->generate('app_dummy_index', [])->willReturn('/dummies')->shouldBeCalled();
+    public function testItRedirectsToRoute(): void
+    {
+        $data = new \stdClass();
 
-        $this->redirectToRoute($data, 'app_dummy_index');
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('app_dummy_index', [])
+            ->willReturn('/dummies');
+
+        $this->redirectHandler->redirectToRoute($data, 'app_dummy_index');
     }
 
-    function it_throws_an_exception_when_operation_has_no_resource(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationHasNoResource(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(redirectToRoute: 'app_dummy_index', name: 'app_dummy_create');
 
-        $router->generate(Argument::cetera())->shouldNotBeCalled();
+        $this->router->expects($this->never())
+            ->method('generate');
 
-        $this->shouldThrow(
-            new \RuntimeException('Operation "app_dummy_create" has no resource, but it should.'),
-        )->during('redirectToResource', [$data, $operation, $request]);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Operation "app_dummy_create" has no resource, but it should.');
+
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 
-    function it_throws_an_exception_when_operation_has_no_route_redirection(
-        \stdClass $data,
-        Request $request,
-        RouterInterface $router,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationHasNoRouteRedirection(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(name: 'app_dummy_create');
 
-        $router->generate(Argument::cetera())->shouldNotBeCalled();
+        $this->router->expects($this->never())
+            ->method('generate');
 
-        $this->shouldThrow(
-            new \RuntimeException('Operation "app_dummy_create" has no redirection route, but it should.'),
-        )->during('redirectToResource', [$data, $operation, $request]);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Operation "app_dummy_create" has no redirection route, but it should.');
+
+        $this->redirectHandler->redirectToResource($data, $operation, new Request());
     }
 }
 

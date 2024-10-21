@@ -11,77 +11,72 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Symfony\ExpressionLanguage\TokenVariables;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class TokenVariablesSpec extends ObjectBehavior
+final class TokenVariablesTest extends TestCase
 {
-    function let(TokenStorageInterface $tokenStorage): void
+    private TokenStorageInterface $tokenStorage;
+
+    private TokenVariables $tokenVariables;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($tokenStorage);
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->tokenVariables = new TokenVariables($this->tokenStorage);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(TokenVariables::class);
+        $this->assertInstanceOf(TokenVariables::class, $this->tokenVariables);
     }
 
-    function it_returns_token_and_user_vars(
-        TokenStorageInterface $tokenStorage,
-        TokenInterface $token,
-        UserInterface $user,
-    ): void {
-        $tokenStorage->getToken()->willReturn($token);
+    public function testItReturnsTokenAndUserVars(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $user = $this->createMock(UserInterface::class);
 
-        $token->getUser()->willReturn($user);
+        $this->tokenStorage->method('getToken')->willReturn($token);
+        $token->method('getUser')->willReturn($user);
 
-        $this->getVariables()->shouldReturn([
+        $this->assertSame([
             'token' => $token,
             'user' => $user,
-        ]);
+        ], $this->tokenVariables->getVariables());
     }
 
-    function it_returns_a_null_token_if_there_is_no_token_on_storage(
-        TokenStorageInterface $tokenStorage,
-        TokenInterface $token,
-    ): void {
-        $tokenStorage->getToken()->willReturn(null);
+    public function testItReturnsANullTokenIfThereIsNoTokenOnStorage(): void
+    {
+        $this->tokenStorage->method('getToken')->willReturn(null);
 
-        $token->getUser()->willReturn(null);
-
-        $this->getVariables()['token']->shouldHaveType(NullToken::class);
+        $this->assertInstanceOf(NullToken::class, $this->tokenVariables->getVariables()['token']);
     }
 
-    function it_can_return_null_as_user(
-        TokenStorageInterface $tokenStorage,
-        TokenInterface $token,
-        UserInterface $user,
-    ): void {
-        $tokenStorage->getToken()->willReturn($token);
+    public function testItCanReturnNullAsUser(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
 
-        $token->getUser()->willReturn(null);
+        $this->tokenStorage->method('getToken')->willReturn($token);
+        $token->method('getUser')->willReturn(null);
 
-        $this->getVariables()->shouldReturn([
+        $this->assertSame([
             'token' => $token,
             'user' => null,
-        ]);
+        ], $this->tokenVariables->getVariables());
     }
 
-    function it_throws_an_exception_when_there_is_no_token_storage(
-        TokenStorageInterface $tokenStorage,
-        TokenInterface $token,
-        UserInterface $user,
-    ): void {
-        $this->beConstructedWith(null);
+    public function testItThrowsAnExceptionWhenThereIsNoTokenStorage(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The "symfony/security-bundle" must be installed and configured to use the "token" & "user" attribute. Try running "composer require symfony/security-bundle"');
 
-        $this->shouldThrow(new \LogicException('The "symfony/security-bundle" must be installed and configured to use the "token" & "user" attribute. Try running "composer require symfony/security-bundle"'))
-            ->during('getVariables')
-        ;
+        $tokenVariables = new TokenVariables(null);
+        $tokenVariables->getVariables();
     }
 }

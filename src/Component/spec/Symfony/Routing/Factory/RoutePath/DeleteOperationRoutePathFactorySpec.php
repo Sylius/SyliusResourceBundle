@@ -11,59 +11,69 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
+namespace Sylius\Tests\Resource\Symfony\Routing\Factory\RoutePath;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\DeleteOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
-final class DeleteOperationRoutePathFactorySpec extends ObjectBehavior
+final class DeleteOperationRoutePathFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private DeleteOperationRoutePathFactory $deleteOperationRoutePathFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->deleteOperationRoutePathFactory = new DeleteOperationRoutePathFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
-    {
-        $this->shouldHaveType(DeleteOperationRoutePathFactory::class);
-    }
-
-    function it_generates_route_path_for_delete_operations(): void
+    public function testItGeneratesRoutePathForDeleteOperations(): void
     {
         $operation = new Delete();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/delete');
+        $result = $this->deleteOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}/delete', $result);
     }
 
-    function it_generates_route_path_for_delete_operations_with_custom_identifier(): void
+    public function testItGeneratesRoutePathForDeleteOperationsWithCustomIdentifier(): void
     {
         $operation = (new Delete())->withResource(new ResourceMetadata(identifier: 'code'));
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{code}/delete');
+        $result = $this->deleteOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{code}/delete', $result);
     }
 
-    function it_generates_route_path_for_update_operations_with_custom_short_name(): void
+    public function testItGeneratesRoutePathForUpdateOperationsWithCustomShortName(): void
     {
         $operation = new Delete(shortName: 'remove');
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/remove');
+        $result = $this->deleteOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}/remove', $result);
     }
 
-    function it_generates_route_path_for_api_delete_operations(): void
+    public function testItGeneratesRoutePathForApiDeleteOperations(): void
     {
         $operation = new Api\Delete();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
+        $result = $this->deleteOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}', $result);
     }
 
-    function it_generates_route_path_for_api_delete_operations_with_custom_short_name(): void
+    public function testItGeneratesRoutePathForApiDeleteOperationsWithCustomShortName(): void
     {
         $operation = new Api\Delete(shortName: 'remove');
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/remove');
+        $result = $this->deleteOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}/remove', $result);
     }
 }

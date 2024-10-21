@@ -11,36 +11,45 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
 use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollectionInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class ArgumentParserSpec extends ObjectBehavior
+final class ArgumentParserTest extends TestCase
 {
-    function let(VariablesCollectionInterface $variablesCollection): void
+    private ArgumentParser $argumentParser;
+
+    private VariablesCollectionInterface $variablesCollection;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new ExpressionLanguage(), $variablesCollection);
+        $this->variablesCollection = $this->createMock(VariablesCollectionInterface::class);
+        $this->argumentParser = new ArgumentParser(new ExpressionLanguage(), $this->variablesCollection);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(ArgumentParser::class);
+        $this->assertInstanceOf(ArgumentParser::class, $this->argumentParser);
     }
 
-    function it_parses_expressions(VariablesCollectionInterface $variablesCollection): void
+    public function testItParsesExpressions(): void
     {
-        $variablesCollection->getVariables()->willReturn(['foo' => 'fighters']);
+        $this->variablesCollection->method('getVariables')->willReturn(['foo' => 'fighters']);
 
-        $this->parseExpression('foo')->shouldReturn('fighters');
+        $result = $this->argumentParser->parseExpression('foo');
+
+        $this->assertSame('fighters', $result);
     }
 
-    function it_merges_variables(VariablesCollectionInterface $variablesCollection): void
+    public function testItMergesVariables(): void
     {
-        $variablesCollection->getVariables()->willReturn(['foo' => 'fighters']);
+        $this->variablesCollection->method('getVariables')->willReturn(['foo' => 'fighters']);
 
-        $this->parseExpression('foo', ['foo' => 'bar'])->shouldReturn('bar');
+        $result = $this->argumentParser->parseExpression('foo', ['foo' => 'bar']);
+
+        $this->assertSame('bar', $result);
     }
 }

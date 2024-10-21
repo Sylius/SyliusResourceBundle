@@ -11,55 +11,74 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Validator\Exception;
+namespace Tests\Sylius\Resource\Symfony\Validator\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Symfony\Validator\Exception\ValidationException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
-final class ValidationExceptionSpec extends ObjectBehavior
+final class ValidationExceptionTest extends TestCase
 {
-    function let(
-        ConstraintViolationInterface $firstViolation,
-        ConstraintViolationInterface $secondViolation,
-    ): void {
-        $this->beConstructedWith(new ConstraintViolationList([
-            $firstViolation->getWrappedObject(),
-            $secondViolation->getWrappedObject(),
-        ]));
-    }
+    private ValidationException $validationException;
 
-    function it_transforms_exception_into_a_string(
-        ConstraintViolationInterface $firstViolation,
-        ConstraintViolationInterface $secondViolation,
-    ): void {
-        $firstViolation->getPropertyPath()->willReturn('name');
-        $firstViolation->getMessage()->willReturn('This value should not be blank.');
-
-        $secondViolation->getPropertyPath()->willReturn('email');
-        $secondViolation->getMessage()->willReturn('This value should not be blank.');
-
-        $this->__toString()->shouldReturn("name: This value should not be blank.\nemail: This value should not be blank.");
-    }
-
-    function it_can_be_constructed_with_a_message(): void
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new ConstraintViolationList([]), 'You should not pass!');
+        $firstViolation = $this->createMock(ConstraintViolationInterface::class);
+        $secondViolation = $this->createMock(ConstraintViolationInterface::class);
 
-        $this->getMessage()->shouldReturn('You should not pass!');
+        $violationList = new ConstraintViolationList([
+            $firstViolation,
+            $secondViolation,
+        ]);
+
+        $this->validationException = new ValidationException($violationList);
     }
 
-    function it_can_be_constructed_with_a_code(): void
+    public function testItTransformsExceptionIntoAString(): void
     {
-        $this->beConstructedWith(new ConstraintViolationList([]), '', 42);
+        $firstViolation = $this->createMock(ConstraintViolationInterface::class);
+        $secondViolation = $this->createMock(ConstraintViolationInterface::class);
 
-        $this->getCode()->shouldReturn(42);
+        $firstViolation->method('getPropertyPath')->willReturn('name');
+        $firstViolation->method('getMessage')->willReturn('This value should not be blank.');
+
+        $secondViolation->method('getPropertyPath')->willReturn('email');
+        $secondViolation->method('getMessage')->willReturn('This value should not be blank.');
+
+        $violationList = new ConstraintViolationList([
+            $firstViolation,
+            $secondViolation,
+        ]);
+
+        $this->validationException = new ValidationException($violationList);
+
+        $this->assertEquals(
+            "name: This value should not be blank.\nemail: This value should not be blank.",
+            $this->validationException->__toString(),
+        );
     }
 
-    function it_can_be_constructed_with_a_previous_exception(\Exception $previous): void
+    public function testItCanBeConstructedWithAMessage(): void
     {
-        $this->beConstructedWith(new ConstraintViolationList([]), '', 0, $previous->getWrappedObject());
+        $this->validationException = new ValidationException(new ConstraintViolationList([]), 'You should not pass!');
 
-        $this->getPrevious()->shouldReturn($previous);
+        $this->assertEquals('You should not pass!', $this->validationException->getMessage());
+    }
+
+    public function testItCanBeConstructedWithACode(): void
+    {
+        $this->validationException = new ValidationException(new ConstraintViolationList([]), '', 42);
+
+        $this->assertEquals(42, $this->validationException->getCode());
+    }
+
+    public function testItCanBeConstructedWithAPreviousException(): void
+    {
+        $previous = new \Exception();
+
+        $this->validationException = new ValidationException(new ConstraintViolationList([]), '', 0, $previous);
+
+        $this->assertSame($previous, $this->validationException->getPrevious());
     }
 }
