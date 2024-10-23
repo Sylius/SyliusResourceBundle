@@ -46,6 +46,8 @@
         <DeprecatedClass>
             <errorLevel type="info">
                 <referencedClass name="Doctrine\ORM\Event\LifecycleEventArgs" /> <!-- deprecated in doctrine/orm 2.14 -->
+                <referencedClass name="Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException" />
+                <referencedClass name="Sylius\Resource\Exception\VariantWithNoOptionsValuesException" />
             </errorLevel>
         </DeprecatedClass>
 
@@ -67,7 +69,7 @@
                 <file name="src/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </DuplicateClass>
-        
+
         <InternalClass>
             <errorLevel type="suppress">
                 <file name="src/Bundle/DependencyInjection/PagerfantaExtension.php" />
