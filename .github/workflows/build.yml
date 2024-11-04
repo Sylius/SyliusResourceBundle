@@ -32,7 +32,7 @@ jobs:
                       app_env: "test"
                     - php: "8.3"
                       symfony: "^7.0"
-                      app_env: "test_without_hateoas"
+                      app_env: "test"
                 exclude:
                     - php: "8.1"
                       collections: "^2.0"
@@ -83,11 +83,6 @@ jobs:
                 name: Restrict doctrine/collections version
                 if: matrix.collections != ''
                 run: composer require "doctrine/collections:${{ matrix.collections }}" --no-update --no-scripts
-
-            -
-                name: Remove hateoas on Symfony 7
-                if: matrix.symfony == '^7.0'
-                run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
 
             -
                 name: Install dependencies
