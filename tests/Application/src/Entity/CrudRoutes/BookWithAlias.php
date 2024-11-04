@@ -20,6 +20,7 @@ use Sylius\Resource\Annotation\SyliusCrudRoutes;
 /**
  * @Serializer\ExclusionPolicy("all")
  */
+#[Serializer\ExclusionPolicy(policy: 'ALL')]
 #[SyliusCrudRoutes(
     alias: 'app.book',
 )]

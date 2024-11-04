@@ -17,9 +17,7 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
+#[Serializer\ExclusionPolicy(policy: 'ALL')]
 #[SyliusCrudRoutes(
     alias: 'app.book',
     section: 'grid',
