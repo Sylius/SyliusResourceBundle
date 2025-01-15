@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
+use Tests\PurgeDatabaseTrait;
 
-final class GedmoApiTest extends JsonApiTestCase
+final class GedmoApiTest extends ApiTestCase
 {
-    /**
-     * @test
-     */
-    public function it_allows_creating_a_comic_book()
+    use PurgeDatabaseTrait;
+
+    #[Test]
+    public function it_allows_creating_a_comic_book(): void
     {
         $data =
 <<<EOT
@@ -31,7 +33,19 @@ final class GedmoApiTest extends JsonApiTestCase
 EOT;
 
         $this->client->request('POST', '/gedmos/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'gedmos/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "position": 0,
+                "extra": "Some info"
+            }
+            JSON
+        );
     }
 }

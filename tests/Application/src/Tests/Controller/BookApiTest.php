@@ -13,18 +13,21 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
+use App\Entity\BookTranslation;
 use App\Foundry\Factory\BookFactory;
 use App\Foundry\Factory\BookTranslationFactory;
 use App\Foundry\Story\DefaultBooksStory;
 use App\Foundry\Story\MoreBooksStory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
+use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
 
-class BookApiTest extends JsonApiTestCase
+class BookApiTest extends ApiTestCase
 {
     use Factories;
+    use PurgeDatabaseTrait;
 
     #[Test]
     public function it_allows_creating_a_book(): void
@@ -44,8 +47,20 @@ class BookApiTest extends JsonApiTestCase
 EOT;
 
         $this->client->request('POST', '/books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "title":"Star Wars: Dark Disciple", 
+                "author":"Christie Golden"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -54,23 +69,34 @@ EOT;
         $book = BookFactory::createOne();
 
         $data =
-<<<EOT
-        {
-             "translations": {
-                "en_US": {
-                    "title": "Star Wars: Dark Disciple"
+            <<<EOT
+            {
+                 "translations": {
+                    "en_US": {
+                        "title": "Star Wars: Dark Disciple"
+                    },
+                    "pl_PL": {
+                        "title": "Gwiezdne Wojny: Mroczny Uczeń"
+                    }
                 },
-                "pl_PL": {
-                    "title": "Gwiezdne Wojny: Mroczny Uczeń"
-                }
-            },
-            "author": "Christie Golden"
-        }
-EOT;
+                "author": "Christie Golden"
+            }
+            EOT;
 
         $this->client->request('PUT', '/books/' . $book->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $book->_refresh();
+
+        $enUsTranslation = $book->getTranslation('en_US');
+        $plPLTranslation = $book->getTranslation('pl_PL');
+        $this->assertInstanceOf(BookTranslation::class, $enUsTranslation);
+        $this->assertInstanceOf(BookTranslation::class, $plPLTranslation);
+        $this->assertEquals('Star Wars: Dark Disciple', $enUsTranslation->getTitle());
+        $this->assertEquals('Gwiezdne Wojny: Mroczny Uczeń', $plPLTranslation->getTitle());
+        $this->assertEquals('Christie Golden', $book->getAuthor());
     }
 
     #[Test]
@@ -79,25 +105,35 @@ EOT;
         $book = BookFactory::createOne();
 
         $data =
- <<<EOT
+     <<<EOT
         {
             "author": "Christie Golden"
         }
-EOT;
+    EOT;
 
         $this->client->request('PATCH', '/books/' . $book->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $book->_refresh();
+
+        $this->assertEquals('Christie Golden', $book->getAuthor());
     }
 
     #[Test]
     public function it_allows_removing_a_book(): void
     {
         $book = BookFactory::createOne();
+        $bookId = $book->getId();
 
         $this->client->request('DELETE', '/books/' . $book->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $deletedBook = $this->getContainer()->get('app.repository.book')->find($bookId);
+        $this->assertNull($deletedBook);
     }
 
     #[Test]
@@ -119,8 +155,20 @@ EOT;
         ;
 
         $this->client->request('GET', '/books/' . $book->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/show_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "title":"Lord of The Rings", 
+                "author":"J.R.R. Tolkien"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -131,8 +179,12 @@ EOT;
         DefaultBooksStory::load();
 
         $this->client->request('GET', '/books/');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/index_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesDefaultBooksIndex();
     }
 
     #[Test]
@@ -143,8 +195,12 @@ EOT;
         MoreBooksStory::load();
 
         $this->client->request('GET', '/books/', ['page' => 2]);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/paginated_index_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesMoreBooksIndexPage2();
     }
 
     #[Test]
@@ -152,37 +208,41 @@ EOT;
     {
         $this->markAsSkippedIfNecessary();
 
-        DefaultBooksStory::load();
-
         $this->client->request('GET', '/books/3');
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NOT_FOUND);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     #[Test]
-    public function it_does_not_apply_sorting_for_un_existing_field(): void
+    public function it_does_not_apply_sorting_for_non_existing_field(): void
     {
         $this->markAsSkippedIfNecessary();
 
         MoreBooksStory::load();
 
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['name' => 'DESC']]);
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesMoreBooksIndex();
     }
 
     #[Test]
-    public function it_does_not_apply_filtering_for_un_existing_field(): void
+    public function it_does_not_apply_filtering_for_non_existing_field(): void
     {
         $this->markAsSkippedIfNecessary();
 
         MoreBooksStory::load();
 
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['name' => 'John']]);
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesMoreBooksIndex();
     }
 
     #[Test]
@@ -193,9 +253,88 @@ EOT;
         MoreBooksStory::load();
 
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['id' => 'DESC']]);
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 3,
+                "total": 22,
+                 "_links": {
+                    "first": {
+                        "href": "/sortable-books/?sorting%5Bid%5D=DESC&page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "/sortable-books/?sorting%5Bid%5D=DESC&page=3&limit=10"
+                    },
+                    "next": {
+                        "href": "/sortable-books/?sorting%5Bid%5D=DESC&page=2&limit=10"
+                    },
+                    "self": {
+                        "href": "/sortable-books/?sorting%5Bid%5D=DESC&page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 22"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 21"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 20"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 19"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 18"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 17"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 16"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 15"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 14"
+                        },
+                        {
+                            "author": "@string@",
+                            "id": @integer@,
+                            "title": "Book 13"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -204,11 +343,42 @@ EOT;
         $this->markAsSkippedIfNecessary();
 
         MoreBooksStory::load();
+        BookFactory::new()->withAuthor('J.R.R. Tolkien')->create();
 
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['author' => 'J.R.R. Tolkien']]);
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 1,
+                "_links": {
+                    "self": {
+                        "href": "\/filterable-books\/?criteria%5Bauthor%5D=J.R.R.%20Tolkien&page=1&limit=10"
+                    },
+                    "first": {
+                        "href": "\/filterable-books\/?criteria%5Bauthor%5D=J.R.R.%20Tolkien&page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "\/filterable-books\/?criteria%5Bauthor%5D=J.R.R.%20Tolkien&page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "author":  "J.R.R. Tolkien"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -217,20 +387,33 @@ EOT;
         $this->markAsSkippedIfNecessary();
 
         $data =
-            <<<EOT
-                    {
-            "translations": {
-                "en_US": {
-                    "title": "Star Wars: Dark Disciple"
-                }
-            },
-            "author": "Christie Golden"
-        }
-EOT;
+            <<<'JSON'
+            {
+                "translations": {
+                    "en_US": {
+                        "title": "Star Wars: Dark Disciple"
+                    }
+                },
+                "author": "Christie Golden"
+            }
+            JSON
+        ;
 
         $this->client->request('POST', '/create-custom-book', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "title":"Star Wars: Dark Disciple", 
+                "author":"Christie Golden"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -241,8 +424,12 @@ EOT;
         DefaultBooksStory::load();
 
         $this->client->request('GET', '/find-custom-books');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/index_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesDefaultBooksIndex();
     }
 
     #[Test]
@@ -253,13 +440,231 @@ EOT;
         DefaultBooksStory::load();
 
         $this->client->request('GET', '/find-custom-book');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/show_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "title":"Lord of The Rings", 
+                "author":"J.R.R. Tolkien"
+            }
+            JSON
+        );
+    }
+
+    private function assertResponseMatchesDefaultBooksIndex(): void
+    {
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 2,
+                "_links": {
+                    "self": {
+                        "href": "@string@"
+                    },
+                    "first": {
+                        "href": "@string@"
+                    },
+                    "last": {
+                        "href": "@string@"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "title": "Lord of The Rings",
+                            "author": "J.R.R. Tolkien"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Game of Thrones",
+                            "author": "George R. R. Martin"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
+    }
+
+    private function assertResponseMatchesMoreBooksIndex(): void
+    {
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 3,
+                "total": 22,
+                "_links": {
+                    "self": {
+                        "href": "@string@"
+                    },
+                    "first": {
+                        "href": "@string@"
+                    },
+                    "last": {
+                        "href": "@string@"
+                    },
+                    "next": {
+                        "href": "@string@"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "title": "Book 1",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 2",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 3",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 4",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 5",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 6",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 7",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 8",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 9",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 10",
+                            "author": "@string@"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
+    }
+
+    private function assertResponseMatchesMoreBooksIndexPage2(): void
+    {
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 2,
+                "limit": 10,
+                "pages": 3,
+                "total": 22,
+                "_links": {
+                    "self": {
+                        "href": "@string@"
+                    },
+                    "first": {
+                        "href": "@string@"
+                    },
+                    "last": {
+                        "href": "@string@"
+                    },
+                    "next": {
+                        "href": "@string@"
+                    },
+                    "previous": {
+                        "href": "@string@"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "title": "Book 11",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 12",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 13",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 14",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 15",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 16",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 17",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 18",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 19",
+                            "author": "@string@"
+                        },
+                        {
+                            "id": @integer@,
+                            "title": "Book 20",
+                            "author": "@string@"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
     }
 
     private function markAsSkippedIfNecessary(): void
     {
-        if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
+        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
         }
     }
