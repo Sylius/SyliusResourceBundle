@@ -16,15 +16,21 @@ namespace App\Tests\Controller;
 use App\Kernel;
 use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
+use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
 
-final class SubscriptionXmlApiTest extends XmlApiTestCase
+final class SubscriptionXmlApiTest extends ApiTestCase
 {
     use Factories;
+    use PurgeDatabaseTrait;
+
+    private static array $headersWithContentType = [
+        'CONTENT_TYPE' => 'application/xml',
+        'HTTP_ACCEPT' => 'application/xml',
+    ];
 
     #[Test]
     public function it_allows_showing_a_subscription(): void
@@ -34,10 +40,20 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId());
-        $response = $this->client->getResponse();
+        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType);
 
-        $this->assertResponse($response, 'subscriptions/show_response', Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'XML'
+            <response>
+                <state>new</state>
+                <email>marty.mcfly@bttf.com</email>
+            </response>
+            XML
+        );
     }
 
     #[Test]
@@ -45,42 +61,135 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
     {
         DefaultSubscriptionsStory::load();
 
-        $this->client->request('GET', '/ajax/subscriptions');
-        $response = $this->client->getResponse();
+        $this->client->request('GET', '/ajax/subscriptions', server: self::$headersWithContentType);
 
-        $this->assertResponse($response, 'subscriptions/index_response', Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'XML'
+            <response>
+              <items>
+                <state>new</state>
+                <email>marty.mcfly@bttf.com</email>
+              </items>
+              <items>
+                <state>new</state>
+                <email>doc.brown@bttf.com</email>
+              </items>
+              <items>
+                <state>accepted</state>
+                <email>biff.tannen@bttf.com</email>
+              </items>
+              <items>
+                <state>new</state>
+                <email>lorraine.baines@bttf.com</email>
+              </items>
+              <items>
+                <state>new</state>
+                <email>george.mcfly@bttf.com</email>
+              </items>
+              <items>
+                <state>new</state>
+                <email>jennifer.parker@bttf.com</email>
+              </items>
+              <pagination>
+                <current_page>1</current_page>
+                <has_previous_page>0</has_previous_page>
+                <has_next_page>0</has_next_page>
+                <per_page>10</per_page>
+                <total_items>6</total_items>
+                <total_pages>1</total_pages>
+              </pagination>
+            </response>
+            XML
+        );
     }
 
     #[Test]
     public function it_allows_creating_a_subscription(): void
     {
-        $data = <<<EOT
-<?xml version="1.0"?>
-<root>
-	<email>marty.mcfly@bttf.com</email>
-</root>
-EOT;
+        $data =
+            <<<'XML'
+            <root>
+                <email>marty.mcfly@bttf.com</email>
+            </root>
+            XML
+        ;
 
         $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'XML'
+            <response>
+                <state>new</state>
+                <email>marty.mcfly@bttf.com</email>
+            </response>
+            XML
+        );
     }
 
     #[Test]
     public function it_does_not_allow_to_create_a_subscription_if_there_is_a_validation_error(): void
     {
-        $data = <<<EOT
-<?xml version="1.0"?>
-<root>
-	<email></email>
-</root>
-EOT;
+        $data =
+            <<<'XML'
+            <root>
+                <email></email>
+            </root>
+            XML
+        ;
 
         $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
 
-        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/create_validation' : 'subscriptions/create_validation_legacy';
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
 
-        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (Kernel::VERSION_ID < 60400) {
+            $this->assertResponseMatchesPattern(
+                <<<'XML'
+                <response>
+                    <type>https://symfony.com/errors/validation</type>
+                    <title>Validation Failed</title>
+                    <detail>email: This value should not be blank.</detail>
+                    <violations>
+                        <propertyPath>email</propertyPath>
+                        <title>This value should not be blank.</title>
+                        <parameters>
+                            <item key="{{ value }}">""</item>
+                        </parameters>
+                        <type>urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3</type>
+                    </violations>
+                </response>
+                XML
+            );
+
+            return;
+        }
+
+        $this->assertResponseMatchesPattern(
+            <<<'XML'
+            <response>
+                <type>https://symfony.com/errors/validation</type>
+                <title>Validation Failed</title>
+                <detail>email: This value should not be blank.</detail>
+                <violations>
+                    <propertyPath>email</propertyPath>
+                    <title>This value should not be blank.</title>
+                    <template>This value should not be blank.</template>
+                    <parameters>
+                        <item key="{{ value }}">""</item>
+                    </parameters>
+                    <type>urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3</type>
+                </violations>
+            </response>
+            XML
+        );
     }
 
     #[Test]
@@ -88,16 +197,18 @@ EOT;
     {
         $subscription = SubscriptionFactory::createOne();
 
-        $data = <<<EOT
-<?xml version="1.0"?>
-<root>
-	<email>calvin.klein@bttf.com</email>
-</root>
-EOT;
+        $data =
+            <<<'XML'
+            <root>
+                <email>calvin.klein@bttf.com</email>
+            </root>
+            XML
+        ;
 
         $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     #[Test]
@@ -105,18 +216,59 @@ EOT;
     {
         $subscription = SubscriptionFactory::createOne();
 
-        $data = <<<EOT
-<?xml version="1.0"?>
-<root>
-	<email></email>
-</root>
-EOT;
+        $data =
+            <<<'XML'
+            <root>
+                <email></email>
+            </root>
+            XML
+        ;
 
         $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
 
-        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/update_validation' : 'subscriptions/update_validation_legacy';
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
 
-        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (Kernel::VERSION_ID < 60400) {
+            $this->assertResponseMatchesPattern(
+                <<<'XML'
+                <response>
+                    <type>https://symfony.com/errors/validation</type>
+                    <title>Validation Failed</title>
+                    <detail>email: This value should not be blank.</detail>
+                    <violations>
+                        <propertyPath>email</propertyPath>
+                        <title>This value should not be blank.</title>
+                        <parameters>
+                            <item key="{{ value }}">""</item>
+                        </parameters>
+                        <type>urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3</type>
+                    </violations>
+                </response>
+                XML
+            );
+
+            return;
+        }
+
+        $this->assertResponseMatchesPattern(
+            <<<'XML'
+            <response>
+                <type>https://symfony.com/errors/validation</type>
+                <title>Validation Failed</title>
+                <detail>email: This value should not be blank.</detail>
+                <violations>
+                    <propertyPath>email</propertyPath>
+                    <title>This value should not be blank.</title>
+                    <template>This value should not be blank.</template>
+                    <parameters>
+                        <item key="{{ value }}">""</item>
+                    </parameters>
+                    <type>urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3</type>
+                </violations>
+            </response>
+            XML
+        );
     }
 
     #[Test]
@@ -125,12 +277,8 @@ EOT;
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
-    }
 
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 }
