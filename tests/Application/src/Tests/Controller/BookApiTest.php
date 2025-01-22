@@ -21,13 +21,13 @@ use App\Foundry\Story\MoreBooksStory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class BookApiTest extends ApiTestCase
 {
     use Factories;
-    use PurgeDatabaseTrait;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_creating_a_book(): void
@@ -132,8 +132,7 @@ EOT;
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $deletedBook = $this->getContainer()->get('app.repository.book')->find($bookId);
-        $this->assertNull($deletedBook);
+        $this->assertEquals(0, $this->getContainer()->get('app.repository.book')->count([]));
     }
 
     #[Test]
@@ -667,5 +666,10 @@ EOT;
         if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
         }
+    }
+
+    public function assert()
+    {
+        return $this->assertEquals();
     }
 }

@@ -17,13 +17,13 @@ use App\Foundry\Factory\PullRequestFactory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class PullRequestApiTest extends ApiTestCase
 {
     use Factories;
-    use PurgeDatabaseTrait;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_creating_a_pull_request(): void

@@ -16,11 +16,11 @@ namespace App\Tests\Controller;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Tests\PurgeDatabaseTrait;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class GedmoApiTest extends ApiTestCase
 {
-    use PurgeDatabaseTrait;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_creating_a_comic_book(): void

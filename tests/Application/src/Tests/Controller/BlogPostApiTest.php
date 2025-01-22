@@ -18,13 +18,13 @@ use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class BlogPostApiTest extends ApiTestCase
 {
     use Factories;
-    use PurgeDatabaseTrait;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_creating_a_blog_post(): void

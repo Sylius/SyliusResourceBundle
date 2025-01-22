@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Factory\MatcherFactory;
-use Coduo\PHPMatcher\Matcher;
 use Coduo\PHPMatcher\PHPUnit\PHPMatcherAssertions;
 use PHPUnit\Framework\Attributes\Before;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -27,18 +24,10 @@ abstract class ApiTestCase extends WebTestCase
 
     protected KernelBrowser $client;
 
-    protected Matcher $matcher;
-
     #[Before]
     protected function _createClient(): void
     {
         $this->client = self::createClient();
-    }
-
-    #[Before]
-    protected static function _createMatcher(): Matcher
-    {
-        return (new MatcherFactory())->createMatcher(new VoidBacktrace());
     }
 
     protected function assertResponseMatchesPattern(string $pattern): void

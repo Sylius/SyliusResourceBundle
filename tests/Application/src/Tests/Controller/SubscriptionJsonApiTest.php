@@ -19,13 +19,13 @@ use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class SubscriptionJsonApiTest extends ApiTestCase
 {
     use Factories;
-    use PurgeDatabaseTrait;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_showing_a_subscription(): void

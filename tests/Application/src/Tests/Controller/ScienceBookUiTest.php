@@ -13,21 +13,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\Entity\ScienceBook;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ScienceBookFactory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class ScienceBookUiTest extends ApiTestCase
+final class ScienceBookUiTest extends WebTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = self::createClient();
+    }
 
     #[Test]
     public function it_allows_showing_a_book(): void
@@ -45,7 +51,9 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->client->request('GET', '/science-books/' . $scienceBook->getId());
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $content = $response->getContent();
         $this->assertStringContainsString(sprintf('ID: %d', $scienceBook->getId()), $content);
         $this->assertStringContainsString('Title: A Brief History of Time', $content);
@@ -78,7 +86,9 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->client->request('GET', '/science-books/');
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
@@ -128,7 +138,7 @@ final class ScienceBookUiTest extends ApiTestCase
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         /** @var ScienceBook $book */
         $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
@@ -163,7 +173,9 @@ final class ScienceBookUiTest extends ApiTestCase
     #[Test]
     public function it_does_not_allow_to_update_a_book_if_there_is_a_validation_error(): void
     {
-        $scienceBook = ScienceBookFactory::createOne();
+        $scienceBook = ScienceBookFactory::new()
+            ->withTitle('The Shinning')
+        ->create();
 
         $newBookTitle = 'The Book of Why';
         $newBookAuthorLastName = 'Pearl';
@@ -175,10 +187,13 @@ final class ScienceBookUiTest extends ApiTestCase
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(expectedCode: Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        $scienceBook->_refresh();
-        $this->assertNotEquals($newBookTitle, $scienceBook->getTitle());
+        /** @var ScienceBook $book */
+        $book = static::getContainer()->get('app.repository.science_book')->find($scienceBook->getId());
+        $this->getContainer()->get('doctrine.orm.entity_manager')->refresh($book);
+
+        $this->assertNotEquals($newBookTitle, $book->getTitle());
     }
 
     #[Test]
@@ -223,7 +238,7 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->client->request('GET', '/science-books/?criteria[search][value]=history of time');
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(expectedCode: Response::HTTP_OK);
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
@@ -234,10 +249,5 @@ final class ScienceBookUiTest extends ApiTestCase
             sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }

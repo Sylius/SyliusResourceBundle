@@ -13,20 +13,26 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\Conference\Entity\Speaker;
 use App\Conference\Factory\SpeakerFactory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SpeakerUiTest extends ApiTestCase
+final class SpeakerUiTest extends WebTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = $this->createClient();
+    }
 
     /** @test */
     public function it_allows_browsing_speakers(): void
@@ -46,7 +52,7 @@ final class SpeakerUiTest extends ApiTestCase
         $this->client->request('GET', '/admin/speakers');
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $content = $response->getContent();
 
         $this->assertStringContainsString('<td>Francis Hilaire</td>', $content);
@@ -58,7 +64,8 @@ final class SpeakerUiTest extends ApiTestCase
     {
         $this->client->request('GET', '/admin/speakers/new');
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_OK);
+        $response = $this->client->getResponse();
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /** @test */
@@ -110,10 +117,5 @@ final class SpeakerUiTest extends ApiTestCase
         $speakers = static::getContainer()->get(EntityManagerInterface::class)->getRepository(Speaker::class)->findAll();
 
         $this->assertEmpty($speakers);
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }
