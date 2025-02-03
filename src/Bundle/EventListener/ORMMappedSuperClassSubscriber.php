@@ -85,6 +85,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
                  * @var AssociationMapping|array{type: int} $value
                  */
                 foreach ($parentMetadata->getAssociationMappings() as $key => $value) {
+                    /** @var int $type */
                     $type = \is_array($value) ? $value['type'] : $value->type();
                     if ($this->isRelation($type) && !isset($metadata->associationMappings[$key])) {
                         $metadata->associationMappings[$key] = $value; /** @phpstan-ignore-line */
@@ -105,6 +106,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
          * @var AssociationMapping|array{type: int} $value
          */
         foreach ($metadata->getAssociationMappings() as $key => $value) {
+            /** @var int $type */
             $type = \is_array($value) ? $value['type'] : $value->type();
             if ($this->isRelation($type)) {
                 unset($metadata->associationMappings[$key]);

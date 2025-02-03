@@ -23,13 +23,13 @@ final class RandomnessGenerator implements RandomnessGeneratorInterface
 
     public function __construct()
     {
-        $this->digits = implode(range(0, 9));
+        $this->digits = implode('', range(0, 9));
 
         $this->uriSafeAlphabet =
-            implode(range(0, 9))
-            . implode(range('a', 'z'))
-            . implode(range('A', 'Z'))
-            . implode(['-', '_', '~'])
+            implode('', range(0, 9))
+            . implode('', range('a', 'z'))
+            . implode('', range('A', 'Z'))
+            . implode('', ['-', '_', '~'])
         ;
     }
 

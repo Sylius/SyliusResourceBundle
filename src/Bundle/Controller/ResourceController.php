@@ -36,76 +36,25 @@ class ResourceController
     use ControllerTrait;
     use ContainerAwareTrait;
 
-    protected MetadataInterface $metadata;
-
-    protected RequestConfigurationFactoryInterface $requestConfigurationFactory;
-
-    protected ?ViewHandlerInterface $viewHandler;
-
-    protected RepositoryInterface $repository;
-
-    protected FactoryInterface $factory;
-
-    protected NewResourceFactoryInterface $newResourceFactory;
-
-    protected ObjectManager $manager;
-
-    protected SingleResourceProviderInterface $singleResourceProvider;
-
-    protected ResourcesCollectionProviderInterface $resourcesCollectionProvider;
-
-    protected ResourceFormFactoryInterface $resourceFormFactory;
-
-    protected RedirectHandlerInterface $redirectHandler;
-
-    protected FlashHelperInterface $flashHelper;
-
-    protected AuthorizationCheckerInterface $authorizationChecker;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ?StateMachineInterface $stateMachine;
-
-    protected ResourceUpdateHandlerInterface $resourceUpdateHandler;
-
-    protected ResourceDeleteHandlerInterface $resourceDeleteHandler;
-
     public function __construct(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ?ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourcesCollectionProviderInterface $resourcesFinder,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ?StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
+        protected MetadataInterface $metadata,
+        protected RequestConfigurationFactoryInterface $requestConfigurationFactory,
+        protected ?ViewHandlerInterface $viewHandler,
+        protected RepositoryInterface $repository,
+        protected FactoryInterface $factory,
+        protected NewResourceFactoryInterface $newResourceFactory,
+        protected ObjectManager $manager,
+        protected SingleResourceProviderInterface $singleResourceProvider,
+        protected ResourcesCollectionProviderInterface $resourcesCollectionProvider,
+        protected ResourceFormFactoryInterface $resourceFormFactory,
+        protected RedirectHandlerInterface $redirectHandler,
+        protected FlashHelperInterface $flashHelper,
+        protected AuthorizationCheckerInterface $authorizationChecker,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected ?StateMachineInterface $stateMachine,
+        protected ResourceUpdateHandlerInterface $resourceUpdateHandler,
+        protected ResourceDeleteHandlerInterface $resourceDeleteHandler,
     ) {
-        $this->metadata = $metadata;
-        $this->requestConfigurationFactory = $requestConfigurationFactory;
-        $this->viewHandler = $viewHandler;
-        $this->repository = $repository;
-        $this->factory = $factory;
-        $this->newResourceFactory = $newResourceFactory;
-        $this->manager = $manager;
-        $this->singleResourceProvider = $singleResourceProvider;
-        $this->resourcesCollectionProvider = $resourcesFinder;
-        $this->resourceFormFactory = $resourceFormFactory;
-        $this->redirectHandler = $redirectHandler;
-        $this->flashHelper = $flashHelper;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->stateMachine = $stateMachine;
-        $this->resourceUpdateHandler = $resourceUpdateHandler;
-        $this->resourceDeleteHandler = $resourceDeleteHandler;
     }
 
     public function showAction(Request $request): Response

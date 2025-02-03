@@ -1,0 +1,847 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$pass of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:addCompilerPass\(\) expects Symfony\\Component\\DependencyInjection\\Compiler\\CompilerPassInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/AbstractResourceBundle.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: '#^Parameter \#1 \$alias of method Sylius\\Resource\\Metadata\\RegistryInterface\:\:get\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Context/Initiator/LegacyRequestContextInitiator.php
+
+		-
+			message: '#^Parameter \#1 \$className of method Sylius\\Resource\\Metadata\\RegistryInterface\:\:getByClass\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Context/Initiator/LegacyRequestContextInitiator.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Context/Initiator/LegacyRequestContextInitiator.php
+
+		-
+			message: '#^Cannot access offset ''classes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: '#^Cannot access offset ''interface'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: '#^Cannot access offset ''model'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: '#^Method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:getModel\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: '#^Parameter \#2 \$configuration of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:getModel\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: '#^Parameter \#3 \$attributes of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\PrioritizedCompositeServicePass\:\:addMethodCall\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/PrioritizedCompositeServicePass.php
+
+		-
+			message: '#^Cannot access offset ''type'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterFormBuilderPass.php
+
+		-
+			message: '#^Parameter \#2 \$parameters of static method Sylius\\Resource\\Metadata\\Metadata\:\:fromAliasAndConfiguration\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterFqcnControllersPass.php
+
+		-
+			message: '#^Cannot access offset ''state_machine_component'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
+
+		-
+			message: '#^Cannot access offset ''classes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: '#^Cannot access offset ''model'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: '#^PHPDoc tag @var with type array is not subtype of native type array\<string, class\-string\>\|false\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: '#^Parameter \#1 \$class of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\RegisterResourcesPass\:\:validateSyliusResource\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: '#^Parameter \#2 \$stateMachine of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\RegisterStateMachinePass\:\:setStateMachine\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php
+
+		-
+			message: '#^PHPDoc tag @var with type array is not subtype of native type array\<string, class\-string\>\|false\.$#'
+			identifier: varTag.nativeType
+			count: 2
+			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
+
+		-
+			message: '#^Parameter \#2 \$type of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:registerAliasForArgument\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
+
+		-
+			message: '#^PHPDoc tag @var with type array is not subtype of native type array\<string, class\-string\>\|false\.$#'
+			identifier: varTag.nativeType
+			count: 2
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
+
+		-
+			message: '#^Parameter \#2 \$type of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:registerAliasForArgument\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$config of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:prependExtensionConfig\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
+
+		-
+			message: '#^Cannot access offset ''driver'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Cannot access offset ''enabled'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Cannot access offset ''locale_provider'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Cannot access offset ''translation'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#1 \$configuredDrivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:checkConfiguredDrivers\(\) expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#1 \$drivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadPersistence\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#1 \$loadedResources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadResources\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#1 \$paths of static method Sylius\\Resource\\Reflection\\ClassReflection\:\:getResourcesByPaths\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$availableDrivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:checkConfiguredDrivers\(\) expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_reduce expects callable\(bool, mixed\)\: bool, Closure\(bool, string\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$id of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:setAlias\(\) expects string\|Symfony\\Component\\DependencyInjection\\Alias, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$parameters of static method Sylius\\Resource\\Metadata\\Metadata\:\:fromAliasAndConfiguration\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$resources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadPersistence\(\) expects array\<string, array\{driver\?\: string\|false\}\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: '#^Parameter \#2 \$order of method Doctrine\\ORM\\QueryBuilder\:\:addOrderBy\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: '#^Parameter \#1 \$className of method Doctrine\\ORM\\EntityManagerInterface\:\:getClassMetadata\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Doctrine/ORM/Form/Builder/DefaultFormBuilder.php
+
+		-
+			message: '#^PHPDoc tag @var with type class\-string\<Doctrine\\ORM\\EntityRepository\>\|null is not subtype of native type string\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Bundle/EventListener/ORMRepositoryClassSubscriber.php
+
+		-
+			message: '#^Cannot access offset ''columns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_diff expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: '#^PHPDoc tag @var with type Psr\\Cache\\CacheItemPoolInterface is not subtype of native type Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Bundle/ExpressionLanguage/ExpressionLanguage.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/ExpressionLanguage/NotNullExpressionFunctionProvider.php
+
+		-
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: src/Bundle/Form/Registry/FormTypeRegistry.php
+
+		-
+			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Form\\Registry\\FormTypeRegistry\:\:get\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bundle/Form/Registry/FormTypeRegistry.php
+
+		-
+			message: '#^Binary operation "\." between ''\['' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Bundle/Form/Type/FixedCollectionType.php
+
+		-
+			message: '#^Parameter \#1 \$child of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects string\|Symfony\\Component\\Form\\FormBuilderInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Form/Type/FixedCollectionType.php
+
+		-
+			message: '#^Parameter \#2 \$type of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Form/Type/FixedCollectionType.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$replacements of function array_replace expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Form/Type/FixedCollectionType.php
+
+		-
+			message: '#^Parameter \#1 \$parameters of class Sylius\\Component\\Grid\\Parameters constructor expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Grid/Controller/ResourcesResolver.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<string\>\)\: string, Closure\(array\)\: mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Twig\\Environment\:\:render\(\) expects string\|Twig\\TemplateWrapper, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigBulkActionGridRenderer.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Twig\\Environment\:\:render\(\) expects string\|Twig\\TemplateWrapper, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigGridRenderer.php
+
+		-
+			message: '#^Parameter \#1 \$paths of static method Sylius\\Resource\\Reflection\\ClassReflection\:\:getResourcesByPaths\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Symfony\\Component\\Routing\\RouteCollection\:\:add\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#1 \$path of class Symfony\\Component\\Routing\\Route constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#3 \$priority of method Symfony\\Component\\Routing\\RouteCollection\:\:add\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#3 \$requirements of class Symfony\\Component\\Routing\\Route constructor expects array\<string\|Stringable\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#4 \$options of class Symfony\\Component\\Routing\\Route constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#5 \$host of class Symfony\\Component\\Routing\\Route constructor expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#6 \$schemes of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#7 \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteAttributesFactory.php
+
+		-
+			message: '#^Parameter \#3 \$requirements of class Symfony\\Component\\Routing\\Route constructor expects array\<string\|Stringable\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: '#^Parameter \#6 \$schemes of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: '#^Parameter \#7 \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: '#^Parameter \#1 \$paths of static method Sylius\\Resource\\Reflection\\ClassReflection\:\:getResourcesByPaths\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bundle/Routing/RoutesAttributesLoader.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:nullOrString\(\) with string\|null will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bundle/Storage/CookieStorage.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Context\\Context\:\:get\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Component/src/Context/Context.php
+
+		-
+			message: '#^Call to function method_exists\(\) with Doctrine\\ORM\\Mapping\\ClassMetadata and ''isChangeTrackingDef…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Component/src/Doctrine/Common/State/PersistProcessor.php
+
+		-
+			message: '#^PHPDoc tag @var with type array is not subtype of native type array\<string, class\-string\>\|false\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: '#^Parameter \#2 \$offset of function array_slice expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: '#^Parameter \#3 \$length of function array_slice expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$previous \(Exception\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Component/src/Exception/StorageUnavailableException.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Grid\\State\\RequestGridProvider\:\:provide\(\) never returns array so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Component/src/Grid/State/RequestGridProvider.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Grid\\State\\RequestGridProvider\:\:resolveMaxPerPage\(\) should return int but returns mixed\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Component/src/Grid/State/RequestGridProvider.php
+
+		-
+			message: '#^Parameter \#1 \$parameters of class Sylius\\Component\\Grid\\Parameters constructor expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Grid/State/RequestGridProvider.php
+
+		-
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getClass\(\) should return class\-string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getDriver\(\) never returns false so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getParameter\(\) should return array\|string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getTemplatesNamespace\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Parameter \#1 \$name of class Sylius\\Resource\\Metadata\\Metadata constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Parameter \#2 \$applicationName of class Sylius\\Resource\\Metadata\\Metadata constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$driver \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$stateMachineComponent \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$templatesNamespace \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: '#^Parameter \#1 \$alias of method Sylius\\Resource\\Metadata\\RegistryInterface\:\:get\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Operation/HttpOperationInitiator.php
+
+		-
+			message: '#^Parameter \#1 \$className of method Sylius\\Resource\\Metadata\\RegistryInterface\:\:getByClass\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Operation/HttpOperationInitiator.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Operation/HttpOperationInitiator.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Metadata\\Operations\:\:get\(\) should return Sylius\\Resource\\Metadata\\Operation but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Metadata/Operations.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Sylius\\Resource\\Metadata\\Operations\:\:add\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Parameter \#1 \$operations of class Sylius\\Resource\\Metadata\\Operations constructor expects array\<int\|string, Sylius\\Resource\\Metadata\\Operation\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Sylius\\Resource\\Metadata\\Operations\:\:add\(\) expects Sylius\\Resource\\Metadata\\Operation, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Parameter \#1 \$array of class Sylius\\Resource\\Metadata\\Resource\\ResourceMetadataCollection constructor expects array\<mixed\>\|object, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Component/src/Metadata/Resource/Factory/CachedResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Call to function method_exists\(\) with Sylius\\Resource\\Metadata\\MetadataInterface and ''getStateMachineComp…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/StateMachineResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^PHPDoc tag @var with type Sylius\\Resource\\Metadata\\Operation is not subtype of native type Sylius\\Resource\\Metadata\\StateMachineAwareOperationInterface\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/StateMachineResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/TemplatesDirResourceMetadataCollectionFactory.php
+
+		-
+			message: '#^Parameter \#1 \$operations of class Sylius\\Resource\\Metadata\\Operations constructor expects array\<int\|string, Sylius\\Resource\\Metadata\\Operation\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Trait Sylius\\Resource\\Model\\ArchivableTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Component/src/Model/ArchivableTrait.php
+
+		-
+			message: '#^Trait Sylius\\Resource\\Model\\TimestampableTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Component/src/Model/TimestampableTrait.php
+
+		-
+			message: '#^Trait Sylius\\Resource\\Model\\ToggleableTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Component/src/Model/ToggleableTrait.php
+
+		-
+			message: '#^Trait Sylius\\Resource\\Model\\TranslatableTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Component/src/Model/TranslatableTrait.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrMethod of class ReflectionMethod constructor expects object\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Reflection/CallableReflection.php
+
+		-
+			message: '#^Parameter \#2 \$method of class ReflectionMethod constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Reflection/CallableReflection.php
+
+		-
+			message: '#^Generator expects value type class\-string, mixed given\.$#'
+			identifier: generator.valueType
+			count: 1
+			path: src/Component/src/Reflection/ClassReflection.php
+
+		-
+			message: '#^Parameter \#1 \$path of static method Sylius\\Resource\\Reflection\\ClassReflection\:\:getResourcesByPath\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Reflection/ClassReflection.php
+
+		-
+			message: '#^Method Sylius\\Resource\\State\\Factory\:\:create\(\) should return object\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Component/src/State/Factory.php
+
+		-
+			message: '#^Parameter \#1 \$expression of method Sylius\\Resource\\Symfony\\ExpressionLanguage\\ArgumentParserInterface\:\:parseExpression\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/State/Factory.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with Sylius\\Resource\\State\\ProcessorInterface and ''Sylius\\\\Resource\\\\State\\\\ProcessorInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Component/src/State/Processor.php
+
+		-
+			message: '#^Method Sylius\\Resource\\State\\Provider\:\:provide\(\) should return array\|object\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/State/Provider.php
+
+		-
+			message: '#^Cannot access offset ''from'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Cannot access offset ''to'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Cannot access offset mixed on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Method Sylius\\Resource\\StateMachine\\StateMachine\:\:getTransitionFromState\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Method Sylius\\Resource\\StateMachine\\StateMachine\:\:getTransitionToState\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/StateMachine/StateMachine.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and Symfony\\Component\\HttpFoundation\\Request will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/OperationEventHandler.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with iterable\<int, Sylius\\Resource\\Symfony\\ExpressionLanguage\\VariablesInterface\> and ''Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VariablesInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VariablesCollection.php
+
+		-
+			message: '#^Parameter \#1 \$arguments of method Sylius\\Resource\\Symfony\\Request\\RepositoryArgumentResolver\:\:filterPrivateArguments\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Symfony\\Request\\State\\Provider\:\:provide\(\) should return array\|object\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Symfony/Request/State/Provider.php
+
+		-
+			message: '#^Parameter \#1 \$expression of method Sylius\\Resource\\Symfony\\ExpressionLanguage\\ArgumentParserInterface\:\:parseExpression\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Request/State/Provider.php
+
+		-
+			message: '#^Parameter \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
+
+		-
+			message: '#^Parameter \#1 \$expression of method Sylius\\Resource\\Symfony\\ExpressionLanguage\\ArgumentParserInterface\:\:parseExpression\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: '#^Parameter \#4 \$context of method Symfony\\Component\\Serializer\\SerializerInterface\:\:deserialize\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Serializer/State/DeserializeProvider.php
+
+		-
+			message: '#^Parameter \#3 \$context of method Symfony\\Component\\Serializer\\SerializerInterface\:\:serialize\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Serializer/State/SerializeProcessor.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#4 \$previous \(Exception\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Component/src/Symfony/Validator/Exception/ValidationException.php
+
+		-
+			message: '#^Parameter \$groups of method Symfony\\Component\\Validator\\Validator\\ValidatorInterface\:\:validate\(\) expects array\<string\|Symfony\\Component\\Validator\\Constraints\\GroupSequence\>\|string\|Symfony\\Component\\Validator\\Constraints\\GroupSequence\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Component/src/Symfony/Validator/State/ValidateProvider.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Translation\\Provider\\ImmutableTranslationLocaleProvider\:\:getDefinedLocalesCodes\(\) should return array\<string\> but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Translation/Provider/ImmutableTranslationLocaleProvider.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with Sylius\\Resource\\Twig\\Context\\Factory\\ContextFactoryInterface and ''Sylius\\\\Resource\\\\Twig\\\\Context\\\\Factory\\\\ContextFactoryInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/ContextFactory.php
+
+		-
+			message: '#^Method Sylius\\Resource\\Twig\\Context\\Factory\\ContextFactory\:\:create\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/ContextFactory.php

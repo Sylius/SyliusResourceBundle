@@ -28,6 +28,8 @@ interface ResourceBundleInterface
     /**
      * Returns a vector of supported drivers.
      *
+     * @return string[]
+     *
      * @see SyliusResourceBundle::DRIVER_DOCTRINE_ORM
      * @see SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM
      * @see SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM

@@ -65,11 +65,11 @@
         "pamil/phpspec-skip-example-extension": "^4.2",
         "phpspec/phpspec": "^7.5",
         "phpspec/prophecy-phpunit": "^2.2",
-        "phpstan/phpstan": "^1.12",
-        "phpstan/phpstan-phpunit": "^1.4",
-        "phpstan/phpstan-webmozart-assert": "^1.2",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^10.0",
-        "rector/rector": "^0.18.2",
+        "rector/rector": "^2.0",
         "sylius-labs/coding-standard": "^4.4",
         "sylius/grid-bundle": "^1.13",
         "symfony/console": "^6.4 || ^7.1",
@@ -137,7 +137,8 @@
         "analyse": [
             "@composer validate --strict",
             "vendor/bin/ecs check",
-            "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon -l max src"
+            "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon -l max src",
+            "vendor/bin/rector process --dry-run"
         ],
         "fix": [
             "vendor/bin/ecs check --fix"

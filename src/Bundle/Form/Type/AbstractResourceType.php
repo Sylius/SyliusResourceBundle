@@ -18,19 +18,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractResourceType extends AbstractType
 {
-    protected string $dataClass;
-
-    /** @var string[] */
-    protected array $validationGroups = [];
-
     /**
      * @param string $dataClass FQCN
      * @param string[] $validationGroups
      */
-    public function __construct(string $dataClass, array $validationGroups = [])
+    public function __construct(protected string $dataClass, protected array $validationGroups = [])
     {
-        $this->dataClass = $dataClass;
-        $this->validationGroups = $validationGroups;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -19,12 +19,8 @@ use Webmozart\Assert\Assert;
 
 final class Workflow implements StateMachineInterface
 {
-    /** @var Registry */
-    private $registry;
-
-    public function __construct(Registry $registry)
+    public function __construct(private Registry $registry)
     {
-        $this->registry = $registry;
     }
 
     /**

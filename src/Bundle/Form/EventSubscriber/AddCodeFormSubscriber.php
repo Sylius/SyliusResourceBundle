@@ -24,12 +24,9 @@ final class AddCodeFormSubscriber implements EventSubscriberInterface
 {
     private string $type;
 
-    private array $options;
-
-    public function __construct(?string $type = null, array $options = [])
+    public function __construct(?string $type = null, private array $options = [])
     {
         $this->type = $type ?? TextType::class;
-        $this->options = $options;
     }
 
     public static function getSubscribedEvents(): array

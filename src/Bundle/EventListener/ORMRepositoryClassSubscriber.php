@@ -40,7 +40,7 @@ final class ORMRepositoryClassSubscriber extends AbstractDoctrineListener implem
     {
         try {
             $resourceMetadata = $this->resourceRegistry->getByClass($metadata->getName());
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 

@@ -15,21 +15,14 @@ namespace Sylius\Resource\Exception;
 
 class DeleteHandlingException extends RuntimeException
 {
-    protected string $flash;
-
-    protected int $apiResponseCode;
-
     public function __construct(
         string $message = 'Ups, something went wrong during deleting a resource, please try again.',
-        string $flash = 'something_went_wrong_error',
-        int $apiResponseCode = 500,
+        protected string $flash = 'something_went_wrong_error',
+        protected int $apiResponseCode = 500,
         int $code = 0,
         ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
-
-        $this->flash = $flash;
-        $this->apiResponseCode = $apiResponseCode;
     }
 
     public function getFlash(): string

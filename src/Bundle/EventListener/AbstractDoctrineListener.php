@@ -21,13 +21,10 @@ use Sylius\Resource\Model\ResourceInterface;
 
 abstract class AbstractDoctrineListener
 {
-    protected RegistryInterface $resourceRegistry;
-
     private ?RuntimeReflectionService $reflectionService = null;
 
-    public function __construct(RegistryInterface $resourceRegistry)
+    public function __construct(protected RegistryInterface $resourceRegistry)
     {
-        $this->resourceRegistry = $resourceRegistry;
     }
 
     protected function isResource(ClassMetadata $metadata): bool

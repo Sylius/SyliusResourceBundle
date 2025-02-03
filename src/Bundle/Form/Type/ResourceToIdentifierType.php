@@ -24,14 +24,8 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierType extends AbstractType
 {
-    private RepositoryInterface $repository;
-
-    private MetadataInterface $metadata;
-
-    public function __construct(RepositoryInterface $repository, MetadataInterface $metadata)
+    public function __construct(private RepositoryInterface $repository, private MetadataInterface $metadata)
     {
-        $this->repository = $repository;
-        $this->metadata = $metadata;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -19,14 +19,10 @@ use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableFactory implements TranslatableFactoryInterface
 {
-    private FactoryInterface $factory;
-
-    private TranslationLocaleProviderInterface $localeProvider;
-
-    public function __construct(FactoryInterface $factory, TranslationLocaleProviderInterface $localeProvider)
-    {
-        $this->factory = $factory;
-        $this->localeProvider = $localeProvider;
+    public function __construct(
+        private FactoryInterface $factory,
+        private TranslationLocaleProviderInterface $localeProvider,
+    ) {
     }
 
     /**

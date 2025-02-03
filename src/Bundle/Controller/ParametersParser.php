@@ -21,14 +21,8 @@ use Webmozart\Assert\Assert;
 
 final class ParametersParser implements ParametersParserInterface
 {
-    private ContainerInterface $container;
-
-    private ExpressionLanguage $expression;
-
-    public function __construct(ContainerInterface $container, ExpressionLanguage $expression)
+    public function __construct(private ContainerInterface $container, private ExpressionLanguage $expression)
     {
-        $this->container = $container;
-        $this->expression = $expression;
     }
 
     public function parseRequestValues(array $parameters, Request $request): array
@@ -61,15 +55,15 @@ final class ParametersParser implements ParametersParserInterface
             return $parameter;
         }
 
-        if (0 === strpos($parameter, '$')) {
+        if (str_starts_with($parameter, '$')) {
             return RequestParameterProvider::provide($request, substr($parameter, 1));
         }
 
-        if (0 === strpos($parameter, 'expr:')) {
+        if (str_starts_with($parameter, 'expr:')) {
             return $this->parseRequestValueExpression(substr($parameter, 5), $request);
         }
 
-        if (0 === strpos($parameter, '!!')) {
+        if (str_starts_with($parameter, '!!')) {
             return $this->parseRequestValueTypecast($parameter, $request);
         }
 

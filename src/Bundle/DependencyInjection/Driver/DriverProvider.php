@@ -39,15 +39,11 @@ final class DriverProvider
 
         Assert::notFalse($type, sprintf('No driver was configured on the resource "%s".', $metadata->getAlias()));
 
-        switch ($type) {
-            case SyliusResourceBundle::DRIVER_DOCTRINE_ORM:
-                return self::$drivers[$type] = new DoctrineORMDriver();
-            case SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM:
-                return self::$drivers[$type] = new DoctrineODMDriver();
-            case SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM:
-                return self::$drivers[$type] = new DoctrinePHPCRDriver();
-        }
-
-        throw new UnknownDriverException($type);
+        return self::$drivers[$type] = match ($type) {
+            SyliusResourceBundle::DRIVER_DOCTRINE_ORM => new DoctrineORMDriver(),
+            SyliusResourceBundle::DRIVER_DOCTRINE_MONGODB_ODM => new DoctrineODMDriver(),
+            SyliusResourceBundle::DRIVER_DOCTRINE_PHPCR_ODM => new DoctrinePHPCRDriver(),
+            default => throw new UnknownDriverException($type),
+        };
     }
 }

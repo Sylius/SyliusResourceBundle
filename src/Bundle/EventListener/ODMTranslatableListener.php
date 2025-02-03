@@ -28,17 +28,8 @@ final class ODMTranslatableListener implements EventSubscriber
     /** @var string */
     private $currentLocale;
 
-    private string $fallbackLocale;
-
-    private array $mappings;
-
-    /**
-     * @param string $fallbackLocale
-     */
-    public function __construct(array $mappings, $fallbackLocale)
+    public function __construct(private array $mappings, private string $fallbackLocale)
     {
-        $this->mappings = $mappings;
-        $this->fallbackLocale = $fallbackLocale;
     }
 
     public function setCurrentLocale($currentLocale)
@@ -145,7 +136,7 @@ final class ODMTranslatableListener implements EventSubscriber
         $document = $args->getDocument();
 
         // Sometimes $document is a doctrine proxy class, we therefore need to retrieve it's real class
-        $name = $args->getDocumentManager()->getClassMetadata(get_class($document))->getName();
+        $name = $args->getDocumentManager()->getClassMetadata($document::class)->getName();
 
         if (!isset($this->mappings[$name])) {
             return;

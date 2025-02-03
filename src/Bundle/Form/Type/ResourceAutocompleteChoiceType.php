@@ -29,11 +29,8 @@ use Webmozart\Assert\Assert;
 
 class ResourceAutocompleteChoiceType extends AbstractType
 {
-    protected ServiceRegistryInterface $resourceRepositoryRegistry;
-
-    public function __construct(ServiceRegistryInterface $resourceRepositoryRegistry)
+    public function __construct(protected ServiceRegistryInterface $resourceRepositoryRegistry)
     {
-        $this->resourceRepositoryRegistry = $resourceRepositoryRegistry;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

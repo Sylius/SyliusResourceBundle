@@ -22,11 +22,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class RedirectHandler implements RedirectHandlerInterface
 {
-    private RouterInterface $router;
-
-    public function __construct(RouterInterface $router)
+    public function __construct(private RouterInterface $router)
     {
-        $this->router = $router;
     }
 
     public function redirectToResource(RequestConfiguration $configuration, ResourceInterface $resource): Response
@@ -37,7 +34,7 @@ final class RedirectHandler implements RedirectHandlerInterface
                 (string) $configuration->getRedirectRoute(ResourceActions::SHOW),
                 $configuration->getRedirectParameters($resource),
             );
-        } catch (RouteNotFoundException $exception) {
+        } catch (RouteNotFoundException) {
             return $this->redirectToRoute(
                 $configuration,
                 (string) $configuration->getRedirectRoute(ResourceActions::INDEX),

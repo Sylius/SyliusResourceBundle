@@ -26,24 +26,17 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
 
     private const API_GROUPS_REGEXP = '/(g|groups)=(?P<groups>[a-z,_\s]+)/i';
 
-    private ParametersParserInterface $parametersParser;
-
-    /**
-     * @var string
-     * @psalm-var class-string<RequestConfiguration>
-     */
-    private $configurationClass;
-
-    private array $defaultParameters;
-
     /**
      * @psalm-param class-string<RequestConfiguration> $configurationClass
      */
-    public function __construct(ParametersParserInterface $parametersParser, string $configurationClass, array $defaultParameters = [])
-    {
-        $this->parametersParser = $parametersParser;
-        $this->configurationClass = $configurationClass;
-        $this->defaultParameters = $defaultParameters;
+    public function __construct(
+        private ParametersParserInterface $parametersParser,
+        /**
+         * @psalm-param class-string<RequestConfiguration>
+         */
+        private string $configurationClass,
+        private array $defaultParameters = [],
+    ) {
     }
 
     public function create(MetadataInterface $metadata, Request $request): RequestConfiguration

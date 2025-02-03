@@ -24,11 +24,8 @@ use Symfony\Component\Form\FormInterface;
  */
 final class FormFactory implements FormFactoryInterface
 {
-    private SymfonyFormFactoryInterface $formFactory;
-
-    public function __construct(SymfonyFormFactoryInterface $formFactory)
+    public function __construct(private SymfonyFormFactoryInterface $formFactory)
     {
-        $this->formFactory = $formFactory;
     }
 
     public function create(Operation $operation, Context $context, mixed $data = null): FormInterface

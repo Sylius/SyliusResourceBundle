@@ -27,14 +27,10 @@ final class FlashHelper implements FlashHelperInterface
     /** @var RequestStack|SessionInterface */
     private $requestStack;
 
-    private TranslatorInterface $translator;
-
-    private string $defaultLocale;
-
     /**
      * @param RequestStack|SessionInterface $requestStack
      */
-    public function __construct(/* RequestStack */ $requestStack, TranslatorInterface $translator, string $defaultLocale)
+    public function __construct(/* RequestStack */ $requestStack, private TranslatorInterface $translator, private string $defaultLocale)
     {
         /** @phpstan-ignore-next-line */
         if (!$requestStack instanceof SessionInterface && !$requestStack instanceof RequestStack) {
@@ -53,8 +49,6 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         $this->requestStack = $requestStack;
-        $this->translator = $translator;
-        $this->defaultLocale = $defaultLocale;
     }
 
     public function addSuccessFlash(

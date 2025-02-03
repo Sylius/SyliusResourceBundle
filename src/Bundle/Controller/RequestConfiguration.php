@@ -20,17 +20,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class RequestConfiguration
 {
-    private Request $request;
-
-    private MetadataInterface $metadata;
-
-    private Parameters $parameters;
-
-    public function __construct(MetadataInterface $metadata, Request $request, Parameters $parameters)
+    public function __construct(private MetadataInterface $metadata, private Request $request, private Parameters $parameters)
     {
-        $this->metadata = $metadata;
-        $this->request = $request;
-        $this->parameters = $parameters;
     }
 
     /**
@@ -82,7 +73,7 @@ class RequestConfiguration
     {
         $templatesNamespace = (string) $this->metadata->getTemplatesNamespace();
 
-        if (false !== strpos($templatesNamespace, ':')) {
+        if (str_contains($templatesNamespace, ':')) {
             return sprintf('%s:%s.%s', $templatesNamespace ?: ':', $name, 'twig');
         }
 
@@ -128,11 +119,8 @@ class RequestConfiguration
     public function getFormOptions()
     {
         $form = $this->parameters->get('form');
-        if (isset($form['options'])) {
-            return $form['options'];
-        }
 
-        return [];
+        return $form['options'] ?? [];
     }
 
     /**
@@ -541,7 +529,7 @@ class RequestConfiguration
                 $parameters[$key] = $this->parseResourceValues($value, $resource);
             }
 
-            if (is_string($value) && 0 === strpos($value, 'resource.')) {
+            if (is_string($value) && str_starts_with($value, 'resource.')) {
                 $parameters[$key] = $accessor->getValue($resource, substr($value, 9));
             }
         }

@@ -27,15 +27,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class ORMTranslatableListener implements EventSubscriber
 {
-    private RegistryInterface $resourceMetadataRegistry;
-
     private TranslatableEntityLocaleAssignerInterface $translatableEntityLocaleAssigner;
 
     public function __construct(
-        RegistryInterface $resourceMetadataRegistry,
+        private RegistryInterface $resourceMetadataRegistry,
         object $translatableEntityLocaleAssigner,
     ) {
-        $this->resourceMetadataRegistry = $resourceMetadataRegistry;
         $this->translatableEntityLocaleAssigner = $this->processTranslatableEntityLocaleAssigner($translatableEntityLocaleAssigner);
     }
 
@@ -92,7 +89,7 @@ final class ORMTranslatableListener implements EventSubscriber
 
         try {
             $resourceMetadata = $this->resourceMetadataRegistry->getByClass($className);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 
@@ -125,7 +122,7 @@ final class ORMTranslatableListener implements EventSubscriber
 
         try {
             $resourceMetadata = $this->resourceMetadataRegistry->getByClass($className);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 
@@ -210,7 +207,7 @@ final class ORMTranslatableListener implements EventSubscriber
             throw new \InvalidArgumentException(sprintf(
                 '`$translatableEntityLocaleAssigner` was expected to return an instance of "%s" , "%s" found',
                 TranslatableEntityLocaleAssignerInterface::class,
-                get_class($translatableEntityLocaleAssigner),
+                $translatableEntityLocaleAssigner::class,
             ));
         }
 

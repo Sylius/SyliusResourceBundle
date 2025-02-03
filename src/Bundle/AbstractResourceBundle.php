@@ -94,7 +94,7 @@ abstract class AbstractResourceBundle extends Bundle implements ResourceBundleIn
     /**
      * Return mapping compiler pass class depending on driver.
      *
-     *
+     * @return string[]
      *
      * @throws UnknownDriverException
      */
