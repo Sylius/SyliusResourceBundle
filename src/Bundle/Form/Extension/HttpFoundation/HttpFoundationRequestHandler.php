@@ -42,7 +42,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
     public function handleRequest(FormInterface $form, mixed $request = null): void
     {
         if (!$request instanceof Request) {
-            throw new UnexpectedTypeException($request, 'Symfony\Component\HttpFoundation\Request');
+            throw new UnexpectedTypeException($request, \Symfony\Component\HttpFoundation\Request::class);
         }
 
         $name = $form->getName();

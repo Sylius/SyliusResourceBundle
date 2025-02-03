@@ -113,7 +113,7 @@ trait ResourceRepositoryTrait
 
     protected function getPropertyName(string $name): string
     {
-        if (false === strpos($name, '.')) {
+        if (!str_contains($name, '.')) {
             return 'o' . '.' . $name;
         }
 

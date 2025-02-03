@@ -18,11 +18,8 @@ use Sylius\Resource\Model\ResourceInterface;
 
 final class StateMachine implements StateMachineInterface
 {
-    private FactoryInterface $stateMachineFactory;
-
-    public function __construct(FactoryInterface $stateMachineFactory)
+    public function __construct(private FactoryInterface $stateMachineFactory)
     {
-        $this->stateMachineFactory = $stateMachineFactory;
     }
 
     public function can(RequestConfiguration $configuration, ResourceInterface $resource): bool

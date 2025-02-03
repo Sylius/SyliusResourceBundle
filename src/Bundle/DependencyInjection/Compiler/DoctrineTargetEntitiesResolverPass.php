@@ -24,11 +24,8 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
  */
 final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
 {
-    private TargetEntitiesResolverInterface $targetEntitiesResolver;
-
-    public function __construct(TargetEntitiesResolverInterface $targetEntitiesResolver)
+    public function __construct(private TargetEntitiesResolverInterface $targetEntitiesResolver)
     {
-        $this->targetEntitiesResolver = $targetEntitiesResolver;
     }
 
     public function process(ContainerBuilder $container): void
@@ -37,7 +34,7 @@ final class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
             /** @var array $resources */
             $resources = $container->getParameter('sylius.resources');
             $resolveTargetEntityListener = $container->findDefinition('doctrine.orm.listeners.resolve_target_entity');
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             return;
         }
 

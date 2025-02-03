@@ -40,7 +40,7 @@ final class ODMRepositoryClassSubscriber extends AbstractDoctrineSubscriber
     {
         try {
             $resourceMetadata = $this->resourceRegistry->getByClass($metadata->getName());
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 

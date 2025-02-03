@@ -21,10 +21,6 @@ use Sylius\Resource\Metadata\MetadataInterface;
 
 class ResourceGridView extends GridView
 {
-    private MetadataInterface $metadata;
-
-    private RequestConfiguration $requestConfiguration;
-
     /**
      * @param mixed $data
      */
@@ -32,13 +28,10 @@ class ResourceGridView extends GridView
         $data,
         Grid $gridDefinition,
         Parameters $parameters,
-        MetadataInterface $resourceMetadata,
-        RequestConfiguration $requestConfiguration,
+        private MetadataInterface $metadata,
+        private RequestConfiguration $requestConfiguration,
     ) {
         parent::__construct($data, $gridDefinition, $parameters);
-
-        $this->metadata = $resourceMetadata;
-        $this->requestConfiguration = $requestConfiguration;
     }
 
     public function getMetadata(): MetadataInterface

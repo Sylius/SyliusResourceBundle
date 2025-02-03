@@ -22,13 +22,10 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierTransformer implements DataTransformerInterface
 {
-    private RepositoryInterface $repository;
-
     private string $identifier;
 
-    public function __construct(RepositoryInterface $repository, ?string $identifier = null)
+    public function __construct(private RepositoryInterface $repository, ?string $identifier = null)
     {
-        $this->repository = $repository;
         $this->identifier = $identifier ?? 'id';
     }
 

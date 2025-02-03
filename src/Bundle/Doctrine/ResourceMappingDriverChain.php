@@ -25,12 +25,8 @@ use Sylius\Resource\Metadata\RegistryInterface;
  */
 final class ResourceMappingDriverChain extends MappingDriverChain
 {
-    private RegistryInterface $resourceRegistry;
-
-    public function __construct(MappingDriver $mappingDriver, RegistryInterface $resourceRegistry)
+    public function __construct(MappingDriver $mappingDriver, private RegistryInterface $resourceRegistry)
     {
-        $this->resourceRegistry = $resourceRegistry;
-
         $this->setDefaultDriver($mappingDriver);
     }
 
@@ -56,7 +52,7 @@ final class ResourceMappingDriverChain extends MappingDriverChain
 
         try {
             $resourceMetadata = $this->resourceRegistry->getByClass($metadata->getName());
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 

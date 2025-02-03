@@ -30,27 +30,26 @@ class NameFilterListener
     /** @var DocumentManagerInterface */
     private $documentManager;
 
-    /** @var string */
-    private $replacementCharacter;
-
+    /**
+     * @param string $replacementCharacter
+     */
     public function __construct(
         DocumentManagerInterface $documentManager,
-        $replacementCharacter = ' ',
+        private $replacementCharacter = ' ',
     ) {
         $this->documentManager = $documentManager;
-        $this->replacementCharacter = $replacementCharacter;
     }
 
     public function onEvent(ResourceControllerEvent $event)
     {
         $document = $event->getSubject();
 
-        $metadata = $this->documentManager->getClassMetadata(get_class($document));
+        $metadata = $this->documentManager->getClassMetadata($document::class);
 
         if (null === $nameField = $metadata->nodename) {
             throw new \RuntimeException(sprintf(
                 'In order to use the node name filter on "%s" it is necessary to map a field as the "nodename"',
-                get_class($document),
+                $document::class,
             ));
         }
 

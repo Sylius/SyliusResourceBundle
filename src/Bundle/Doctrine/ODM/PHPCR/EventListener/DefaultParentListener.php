@@ -28,33 +28,19 @@ class DefaultParentListener
     /** @var DocumentManagerInterface */
     private $documentManager;
 
-    private string $parentPath;
-
-    private bool $autocreate;
-
-    private bool $force;
-
-    /**
-     * @param string $parentPath
-     * @param bool $autocreate
-     * @param bool $force
-     */
     public function __construct(
         DocumentManagerInterface $documentManager,
-        $parentPath,
-        $autocreate = false,
-        $force = false,
+        private string $parentPath,
+        private bool $autocreate = false,
+        private bool $force = false,
     ) {
         $this->documentManager = $documentManager;
-        $this->parentPath = $parentPath;
-        $this->autocreate = $autocreate;
-        $this->force = $force;
     }
 
     public function onPreCreate(ResourceControllerEvent $event)
     {
         $document = $event->getSubject();
-        $class = get_class($document);
+        $class = $document::class;
 
         $this->resolveParent(
             $document,
@@ -69,7 +55,7 @@ class DefaultParentListener
         if (!$parentField = $metadata->parentMapping) {
             throw new \RuntimeException(sprintf(
                 'A default parent path has been specified, but no parent mapping has been applied to document "%s"',
-                get_class($document),
+                $document::class,
             ));
         }
 

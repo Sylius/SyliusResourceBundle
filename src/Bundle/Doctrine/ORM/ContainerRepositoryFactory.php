@@ -20,21 +20,14 @@ use Doctrine\ORM\Repository\RepositoryFactory;
 
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
-    private RepositoryFactory $doctrineFactory;
-
-    /** @var string[] */
-    private array $genericEntities;
-
     /** @var DoctrineEntityRepository[] */
     private array $managedRepositories = [];
 
     /**
      * @param string[] $genericEntities
      */
-    public function __construct(RepositoryFactory $doctrineFactory, array $genericEntities)
+    public function __construct(private RepositoryFactory $doctrineFactory, private array $genericEntities)
     {
-        $this->doctrineFactory = $doctrineFactory;
-        $this->genericEntities = $genericEntities;
     }
 
     /**

@@ -24,19 +24,12 @@ use Symfony\Component\Yaml\Yaml;
 
 final class ResourceLoader extends Loader
 {
-    private RegistryInterface $resourceRegistry;
-
-    private RouteFactoryInterface $routeFactory;
-
     public function __construct(
-        RegistryInterface $resourceRegistry,
-        RouteFactoryInterface $routeFactory,
+        private RegistryInterface $resourceRegistry,
+        private RouteFactoryInterface $routeFactory,
         ?string $env = null,
     ) {
         parent::__construct($env);
-
-        $this->resourceRegistry = $resourceRegistry;
-        $this->routeFactory = $routeFactory;
     }
 
     public function load($resource, $type = null): RouteCollection
@@ -148,7 +141,7 @@ final class ResourceLoader extends Loader
         }
         if (isset($configuration['templates']) && in_array($actionName, ['show', 'index', 'create', 'update'], true)) {
             $defaults['_sylius']['template'] = sprintf(
-                false === strpos($configuration['templates'], ':') ? '%s/%s.html.twig' : '%s:%s.html.twig',
+                !str_contains($configuration['templates'], ':') ? '%s/%s.html.twig' : '%s:%s.html.twig',
                 $configuration['templates'],
                 $actionName,
             );

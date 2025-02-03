@@ -32,7 +32,7 @@ final class DisabledValidator extends ConstraintValidator
         if (!$value instanceof ToggleableInterface) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" validates "%s" instances only',
-                __CLASS__,
+                self::class,
                 ToggleableInterface::class,
             ));
         }

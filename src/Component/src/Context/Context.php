@@ -25,7 +25,7 @@ final class Context implements \IteratorAggregate
     {
         $map = [];
         foreach ($options as $option) {
-            $map[get_class($option)] = $option;
+            $map[$option::class] = $option;
         }
 
         $this->optionMap = $map;

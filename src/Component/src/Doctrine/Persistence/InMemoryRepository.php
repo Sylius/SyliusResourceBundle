@@ -71,9 +71,7 @@ class InMemoryRepository implements RepositoryInterface
 
     public function remove(ResourceInterface $resource): void
     {
-        $newResources = array_filter($this->findAll(), static function ($object) use ($resource) {
-            return $object !== $resource;
-        });
+        $newResources = array_filter($this->findAll(), static fn ($object) => $object !== $resource);
 
         $this->arrayObject->exchangeArray($newResources);
     }

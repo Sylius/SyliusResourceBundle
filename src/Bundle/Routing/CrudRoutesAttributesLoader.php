@@ -22,16 +22,8 @@ use Symfony\Component\Yaml\Yaml;
 
 final class CrudRoutesAttributesLoader implements RouteLoaderInterface
 {
-    private array $mapping;
-
-    private ResourceLoader $resourceLoader;
-
-    public function __construct(
-        array $mapping,
-        ResourceLoader $resourceLoader,
-    ) {
-        $this->mapping = $mapping;
-        $this->resourceLoader = $resourceLoader;
+    public function __construct(private array $mapping, private ResourceLoader $resourceLoader)
+    {
     }
 
     public function __invoke(): RouteCollection

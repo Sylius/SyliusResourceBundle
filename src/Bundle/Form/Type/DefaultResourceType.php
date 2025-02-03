@@ -22,14 +22,8 @@ use Webmozart\Assert\Assert;
 
 final class DefaultResourceType extends AbstractType
 {
-    private RegistryInterface $metadataRegistry;
-
-    private ServiceRegistryInterface $formBuilderRegistry;
-
-    public function __construct(RegistryInterface $metadataRegistry, ServiceRegistryInterface $formBuilderRegistry)
+    public function __construct(private RegistryInterface $metadataRegistry, private ServiceRegistryInterface $formBuilderRegistry)
     {
-        $this->metadataRegistry = $metadataRegistry;
-        $this->formBuilderRegistry = $formBuilderRegistry;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -42,7 +36,7 @@ final class DefaultResourceType extends AbstractType
 
         Assert::notFalse($driver, sprintf(
             'Form "%s" cannot be used with no driver configured on the resource "%s". Please define a form.',
-            __CLASS__,
+            self::class,
             $metadata->getAlias(),
         ));
 

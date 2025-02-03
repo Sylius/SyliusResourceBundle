@@ -40,12 +40,12 @@ class NameResolverListener
     {
         $document = $event->getSubject();
 
-        $metadata = $this->documentManager->getClassMetadata(get_class($document));
+        $metadata = $this->documentManager->getClassMetadata($document::class);
 
         if ($metadata->idGenerator !== ClassMetadata::GENERATOR_TYPE_PARENT) {
             throw new \RuntimeException(sprintf(
                 'Document of class "%s" must be using the GENERATOR_TYPE_PARENT identificatio strategy (value %s), it is current using "%s" (this may be an automatic configuration: be sure to map both the `nodename` and the `parentDocument`).',
-                get_class($document),
+                $document::class,
                 ClassMetadata::GENERATOR_TYPE_PARENT,
                 $metadata->idGenerator,
             ));

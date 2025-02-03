@@ -26,7 +26,7 @@ final class RegisterResourcesPass implements CompilerPassInterface
             /** @var array $resources */
             $resources = $container->getParameter('sylius.resources');
             $registry = $container->findDefinition('sylius.resource_registry');
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             return;
         }
 

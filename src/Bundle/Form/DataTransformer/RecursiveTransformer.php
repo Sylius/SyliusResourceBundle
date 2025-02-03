@@ -21,11 +21,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class RecursiveTransformer implements DataTransformerInterface
 {
-    private DataTransformerInterface $decoratedTransformer;
-
-    public function __construct(DataTransformerInterface $decoratedTransformer)
+    public function __construct(private DataTransformerInterface $decoratedTransformer)
     {
-        $this->decoratedTransformer = $decoratedTransformer;
     }
 
     /** @param Collection|null $value */
@@ -43,9 +40,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              *
              * @return mixed
              */
-            function ($currentValue) {
-                return $this->decoratedTransformer->transform($currentValue);
-            },
+            fn ($currentValue) => $this->decoratedTransformer->transform($currentValue),
         );
     }
 
@@ -64,9 +59,7 @@ final class RecursiveTransformer implements DataTransformerInterface
              *
              * @return mixed
              */
-            function ($currentValue) {
-                return $this->decoratedTransformer->reverseTransform($currentValue);
-            },
+            fn ($currentValue) => $this->decoratedTransformer->reverseTransform($currentValue),
         );
     }
 
@@ -82,7 +75,7 @@ final class RecursiveTransformer implements DataTransformerInterface
                 sprintf(
                     'Expected "%s", but got "%s"',
                     $expectedType,
-                    is_object($value) ? get_class($value) : gettype($value),
+                    get_debug_type($value),
                 ),
             );
         }

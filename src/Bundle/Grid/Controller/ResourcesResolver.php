@@ -22,20 +22,11 @@ use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class ResourcesResolver implements ResourcesResolverInterface
 {
-    private ResourcesResolverInterface $decoratedResolver;
-
-    private GridProviderInterface $gridProvider;
-
-    private ResourceGridViewFactoryInterface $gridViewFactory;
-
     public function __construct(
-        ResourcesResolverInterface $decoratedResolver,
-        GridProviderInterface $gridProvider,
-        ResourceGridViewFactoryInterface $gridViewFactory,
+        private ResourcesResolverInterface $decoratedResolver,
+        private GridProviderInterface $gridProvider,
+        private ResourceGridViewFactoryInterface $gridViewFactory,
     ) {
-        $this->decoratedResolver = $decoratedResolver;
-        $this->gridProvider = $gridProvider;
-        $this->gridViewFactory = $gridViewFactory;
     }
 
     /**

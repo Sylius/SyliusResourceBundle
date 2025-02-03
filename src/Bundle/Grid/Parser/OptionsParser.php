@@ -20,20 +20,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class OptionsParser implements OptionsParserInterface
 {
-    private ContainerInterface $container;
-
-    private ExpressionLanguage $expression;
-
-    private PropertyAccessorInterface $propertyAccessor;
-
     public function __construct(
-        ContainerInterface $container,
-        ExpressionLanguage $expression,
-        PropertyAccessorInterface $propertyAccessor,
+        private ContainerInterface $container,
+        private ExpressionLanguage $expression,
+        private PropertyAccessorInterface $propertyAccessor,
     ) {
-        $this->container = $container;
-        $this->expression = $expression;
-        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -70,19 +61,19 @@ final class OptionsParser implements OptionsParserInterface
             return $parameter;
         }
 
-        if (0 === strpos($parameter, '$')) {
+        if (str_starts_with($parameter, '$')) {
             return $request->get(substr($parameter, 1));
         }
 
-        if (0 === strpos($parameter, 'expr:')) {
+        if (str_starts_with($parameter, 'expr:')) {
             return $this->parseOptionExpression(substr($parameter, 5), $request);
         }
 
-        if (0 === strpos($parameter, 'resource.')) {
+        if (str_starts_with($parameter, 'resource.')) {
             return $this->parseOptionResourceField(substr($parameter, 9), $data);
         }
 
-        if (0 === strpos($parameter, 'resource[')) {
+        if (str_starts_with($parameter, 'resource[')) {
             return $this->parseOptionResourceField(substr($parameter, 8), $data);
         }
 

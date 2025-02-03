@@ -19,11 +19,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as SymfonyEventDi
 
 final class EventDispatcher implements EventDispatcherInterface
 {
-    private SymfonyEventDispatcherInterface $eventDispatcher;
-
-    public function __construct(SymfonyEventDispatcherInterface $eventDispatcher)
+    public function __construct(private SymfonyEventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function dispatch(

@@ -19,15 +19,11 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Webmozart\Assert\Assert;
 
 class DefaultFormBuilder implements DefaultFormBuilderInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function build(MetadataInterface $metadata, FormBuilderInterface $formBuilder, array $options): void
@@ -53,7 +49,7 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
             $options = [];
 
             // Skip fields coming from embeddables
-            if (strpos($fieldName, '.') !== false) {
+            if (str_contains($fieldName, '.')) {
                 continue;
             }
 
@@ -70,8 +66,6 @@ class DefaultFormBuilder implements DefaultFormBuilderInterface
 
         foreach ($classMetadata->embeddedClasses as $fieldName => $embeddedMapping) {
             $nestedFormBuilder = $formBuilder->create($fieldName, null, ['data_class' => $embeddedMapping['class'], 'compound' => true]);
-
-            Assert::stringNotEmpty($embeddedMapping['class']);
 
             $this->doBuild($this->entityManager->getClassMetadata($embeddedMapping['class']), $nestedFormBuilder);
 
