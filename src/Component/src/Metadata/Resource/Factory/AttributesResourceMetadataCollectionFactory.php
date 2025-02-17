@@ -48,6 +48,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
     /**
      * @param \ReflectionAttribute[] $attributes
+     * @param class-string $resourceClass
      *
      * @return ResourceMetadata[]
      */
@@ -118,6 +119,9 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
+    /**
+     * @param class-string $resourceClass
+     */
     private function getResourceWithDefaults(string $resourceClass, ResourceMetadata $resource, MetadataInterface $resourceConfiguration): ResourceMetadata
     {
         $resource = $resource->withClass($resourceClass);
@@ -170,10 +174,6 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         }
 
         $operation = $operation->withResource($resource);
-
-        if (null === $operation->getRepository()) {
-            $operation = $operation->withRepository($resourceConfiguration->getServiceId('repository'));
-        }
 
         if (null === $operation->getFormType()) {
             $formType = $resource->getFormType() ?? $resourceConfiguration->getClass('form');

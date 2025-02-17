@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Grid\State;
 
-use Pagerfanta\Pagerfanta;
+use Pagerfanta\PagerfantaInterface;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Resource\Context\Context;
@@ -63,7 +63,7 @@ final class RequestGridProvider implements ProviderInterface
 
         $data = $gridView->getData();
 
-        if ($data instanceof Pagerfanta) {
+        if ($data instanceof PagerfantaInterface) {
             $currentPage = $request->query->getInt('page', 1);
             $data->setCurrentPage($currentPage);
 

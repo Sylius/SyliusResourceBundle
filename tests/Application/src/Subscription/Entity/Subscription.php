@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Subscription\Entity;
 
+use App\Subscription\Factory\SubscriptionFactory;
 use App\Subscription\Form\Type\SubscriptionType;
+use App\Subscription\Repository\SubscriptionRepository;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Metadata\Api;
@@ -35,9 +37,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     formType: SubscriptionType::class,
     templatesDir: 'crud',
     routePrefix: '/admin',
+    driver: false,
 )]
 #[Index(grid: 'app_subscription')]
-#[Create]
+#[Create(factory: [SubscriptionFactory::class, 'createNew'])]
 #[Update]
 #[Delete]
 #[BulkDelete]
@@ -59,6 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     routePrefix: '/ajax',
     normalizationContext: ['groups' => 'subscription:read'],
     denormalizationContext: ['groups' => 'subscription:write'],
+    driver: false,
 )]
 #[Api\GetCollection]
 #[Api\Post]
@@ -66,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Api\Delete]
 #[Api\Get]
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
 class Subscription implements ResourceInterface
 {
     #[ORM\Column(type: 'string')]

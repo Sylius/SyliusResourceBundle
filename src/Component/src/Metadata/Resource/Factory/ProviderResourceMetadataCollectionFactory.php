@@ -19,7 +19,6 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\Request\State\Provider;
 
 final class ProviderResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
@@ -60,10 +59,6 @@ final class ProviderResourceMetadataCollectionFactory implements ResourceMetadat
             null !== $operation->getGrid()
         ) {
             $operation = $operation->withProvider(RequestGridProvider::class);
-        }
-
-        if (null === $operation->getProvider()) {
-            $operation = $operation->withProvider(Provider::class);
         }
 
         return $operation;

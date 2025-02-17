@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace App\Subscription\Factory;
 
 use App\Subscription\Entity\Subscription;
-use Sylius\Resource\Factory\FactoryInterface;
 
-final class SubscriptionFactory implements FactoryInterface
+final class SubscriptionFactory
 {
-    public function createNew(): Subscription
+    public static function createNew(): Subscription
     {
         return new Subscription(email: 'new@example.com');
     }

@@ -11,26 +11,26 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory;
+namespace Sylius\Resource\Doctrine\ORM\Metadata\Resource\Factory;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
-use Sylius\Resource\Doctrine\ORM\Metadata\Resource\Factory\DoctrineORMResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
+use Sylius\Resource\Metadata\GridAwareOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
-use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 
-final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
+final class DoctrineORMResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
     public function __construct(
-        private RegistryInterface $resourceRegistry,
+        private ManagerRegistry $managerRegistry,
         private ResourceMetadataCollectionFactoryInterface $decorated,
     ) {
-        trigger_deprecation('sylius/resource', '1.13', 'The "%s" is deprecated use "%s instead.', self::class, DoctrineORMResourceMetadataCollectionFactory::class);
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
@@ -41,12 +41,26 @@ final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadat
         foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
             $operations = $resource->getOperations() ?? new Operations();
 
+            $entityClass = $resource->getClass();
+
+            if (null === $entityClass) {
+                continue;
+            }
+
             /** @var Operation $operation */
             foreach ($operations as $operation) {
                 /** @var string $key */
                 $key = $operation->getName();
 
-                $operations->add($key, $this->addDefaults($resource, $operation));
+                $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
+
+                if (!$entityManager instanceof EntityManagerInterface) {
+                    $operations->add($key, $operation);
+
+                    continue;
+                }
+
+                $operations->add($key, $this->addDefaults($operation));
             }
 
             $resource = $resource->withOperations($operations);
@@ -57,16 +71,24 @@ final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadat
         return $resourceCollectionMetadata;
     }
 
-    private function addDefaults(ResourceMetadata $resource, Operation $operation): Operation
+    private function addDefaults(Operation $operation): Operation
     {
-        $metadata = $this->resourceRegistry->get($resource->getAlias() ?? '');
-        $driver = $metadata->getDriver();
+        $operation = $operation->withProvider($this->getProvider($operation));
 
-        if ($driver && str_starts_with($driver, 'doctrine/')) {
-            $operation = $operation->withProcessor($this->getProcessor($operation));
+        return $operation->withProcessor($this->getProcessor($operation));
+    }
+
+    private function getProvider(Operation $operation): callable|string|null
+    {
+        if (null !== $provider = $operation->getProvider()) {
+            return $provider;
         }
 
-        return $operation;
+        if ($operation instanceof GridAwareOperationInterface && null !== $operation->getGrid()) {
+            return null;
+        }
+
+        return 'sylius.state_provider.doctrine.orm.state.provider';
     }
 
     private function getProcessor(Operation $operation): callable|string
