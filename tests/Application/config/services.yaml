@@ -99,9 +99,6 @@ services:
     App\Subscription\:
         resource: '../src/Subscription'
 
-    App\Subscription\Factory\SubscriptionFactory:
-        decorates: 'app.factory.subscription'
-
     app.service.legacy_autowired_repository:
         class: App\Service\LegacyAutowiredRepositoryService
         autowire: true

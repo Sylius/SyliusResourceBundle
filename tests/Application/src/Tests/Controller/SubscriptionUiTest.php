@@ -19,6 +19,8 @@ use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
@@ -123,8 +125,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        /** @var Subscription $subscription */
-        $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'biff.tannen@bttf.com']);
+        $subscription = $this->getSubscriptionRepository()->findOneBy(['email' => 'biff.tannen@bttf.com']);
 
         $this->assertNotNull($subscription);
         $this->assertSame('biff.tannen@bttf.com', (string) $subscription->email);
@@ -180,8 +181,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        /** @var Subscription[] $subscriptions */
-        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+        $subscriptions = $this->getSubscriptionRepository()->findAll();
 
         $this->assertEmpty($subscriptions);
     }
@@ -196,8 +196,7 @@ final class SubscriptionUiTest extends ApiTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        /** @var Subscription[] $subscriptions */
-        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+        $subscriptions = $this->getSubscriptionRepository()->findAll();
 
         $this->assertEmpty($subscriptions);
     }
@@ -239,5 +238,13 @@ final class SubscriptionUiTest extends ApiTestCase
     protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->createMatcher(new VoidBacktrace());
+    }
+
+    /**
+     * @return ObjectRepository<Subscription>
+     */
+    private function getSubscriptionRepository(): ObjectRepository
+    {
+        return static::getContainer()->get(EntityManagerInterface::class)->getRepository(Subscription::class);
     }
 }

@@ -16,6 +16,9 @@ namespace Sylius\Resource\Metadata;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class AsResource
 {
+    /**
+     * @param class-string|null $class
+     */
     public function __construct(
         private ?string $alias = null,
         private ?string $section = null,
