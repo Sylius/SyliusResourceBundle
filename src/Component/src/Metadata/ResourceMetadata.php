@@ -41,7 +41,11 @@ final class ResourceMetadata
         $this->operations = null === $operations ? null : new Operations($operations);
 
         if (null !== $driver && false !== $driver) {
-            trigger_deprecation('sylius/resource', '1.13', 'Using driver is deprecated. If your resource is managed by Doctrine you have nothing to do, otherwise use a customer provider.');
+            trigger_deprecation(
+                'sylius/resource',
+                '1.13',
+                'Using driver is deprecated. If your resource is managed by Doctrine you have nothing to do, otherwise use a custom provider.',
+            );
         }
     }
 

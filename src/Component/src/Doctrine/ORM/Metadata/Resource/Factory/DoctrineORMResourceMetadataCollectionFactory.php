@@ -40,7 +40,6 @@ final class DoctrineORMResourceMetadataCollectionFactory implements ResourceMeta
         /** @var ResourceMetadata $resource */
         foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
             $operations = $resource->getOperations() ?? new Operations();
-
             $entityClass = $resource->getClass();
 
             if (null === $entityClass) {
@@ -51,7 +50,6 @@ final class DoctrineORMResourceMetadataCollectionFactory implements ResourceMeta
             foreach ($operations as $operation) {
                 /** @var string $key */
                 $key = $operation->getName();
-
                 $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
 
                 if (!$entityManager instanceof EntityManagerInterface) {
@@ -64,7 +62,6 @@ final class DoctrineORMResourceMetadataCollectionFactory implements ResourceMeta
             }
 
             $resource = $resource->withOperations($operations);
-
             $resourceCollectionMetadata[$i] = $resource;
         }
 
