@@ -30,7 +30,13 @@ final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadat
         private RegistryInterface $resourceRegistry,
         private ResourceMetadataCollectionFactoryInterface $decorated,
     ) {
-        trigger_deprecation('sylius/resource', '1.13', 'The "%s" is deprecated use "%s instead.', self::class, DoctrineORMResourceMetadataCollectionFactory::class);
+        trigger_deprecation(
+            'sylius/resource',
+            '1.13',
+            'The "%s" class is deprecated, use "%s instead.  It will be removed in 2.0.',
+            self::class,
+            DoctrineORMResourceMetadataCollectionFactory::class,
+        );
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
