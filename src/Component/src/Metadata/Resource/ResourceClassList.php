@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\Metadata\Resource;
 
 /**
- * A collection of resource names.
+ * A list of resource class names.
  *
  * @experimental
  */
-final class ResourceNameCollection implements \IteratorAggregate, \Countable
+final class ResourceClassList implements \IteratorAggregate, \Countable
 {
     /**
      * @param string[] $names

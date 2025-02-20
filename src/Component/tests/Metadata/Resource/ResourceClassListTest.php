@@ -14,27 +14,27 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata\Resource;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\Resource\Metadata\Resource\ResourceNameCollection;
+use Sylius\Resource\Metadata\Resource\ResourceClassList;
 
-final class ResourceNameCollectionTest extends TestCase
+final class ResourceClassListTest extends TestCase
 {
     public function testItIsAnIteratorAggregate(): void
     {
-        $collection = new ResourceNameCollection();
+        $collection = new ResourceClassList();
 
         $this->assertInstanceOf(\IteratorAggregate::class, $collection);
     }
 
     public function testItIsCountable(): void
     {
-        $collection = new ResourceNameCollection();
+        $collection = new ResourceClassList();
 
         $this->assertInstanceOf(\Countable::class, $collection);
     }
 
-    public function testItIsACollectionOfResourceNames(): void
+    public function testItIsAListOfResourceClassNames(): void
     {
-        $collection = new ResourceNameCollection(['first_resource', 'second_resource']);
+        $collection = new ResourceClassList(['first_resource', 'second_resource']);
 
         $this->assertCount(2, $collection);
         $this->assertEquals('first_resource', $collection->getIterator()[0]);
