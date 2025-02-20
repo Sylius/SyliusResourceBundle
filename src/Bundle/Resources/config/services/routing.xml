@@ -106,7 +106,7 @@
         <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route" />
-            <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
         </service>
         <service id="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
 
