@@ -126,6 +126,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
             'paths' => [
                 __DIR__ . '/Dummy',
             ],
+            'imports' => [],
         ]);
     }
 

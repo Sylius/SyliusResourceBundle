@@ -116,6 +116,12 @@
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
             </errorLevel>
         </InvalidReturnStatement>
+        
+        <InvalidNullableReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+            </errorLevel>
+        </InvalidNullableReturnType>
 
         <InvalidReturnType>
             <errorLevel type="suppress">
@@ -178,6 +184,12 @@
                 <directory name="src" />
             </errorLevel>
         </NullArgument>
+
+        <NullableReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+            </errorLevel>
+        </NullableReturnStatement>
 
         <PossiblyFalseOperand>
             <errorLevel type="suppress">
@@ -320,6 +332,12 @@
                 <directory name="src/Component/legacy/src/Translation" />
             </errorLevel>
         </UnrecognizedStatement>
+        
+        <UnresolvableInclude>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+            </errorLevel>
+        </UnresolvableInclude>
 
         <UnsupportedReferenceUsage>
             <errorLevel type="suppress">
