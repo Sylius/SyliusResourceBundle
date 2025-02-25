@@ -20,15 +20,15 @@ use Sylius\Resource\Tests\Dummy\PullRequest;
 
 final class AttributesResourceClassListFactoryTest extends TestCase
 {
-    public function testCreateAResourceClassListForResourcesWithAsResourceAttribute(): void
+    public function testCreateWithInstanceOfApiResource(): void
     {
-        $attributesResourceClassListFactory = new AttributesResourceClassListFactory(
+        $attributesResourceNameCollectionFactory = new AttributesResourceClassListFactory(
             mapping: ['paths' => [dirname(__DIR__, 3) . '/Dummy']],
         );
 
-        $list = $attributesResourceClassListFactory->create();
+        $collection = $attributesResourceNameCollectionFactory->create();
 
-        $this->assertContains(DummyResource::class, $list->getIterator());
-        $this->assertNotContains(PullRequest::class, $list->getIterator());
+        $this->assertContains(DummyResource::class, $collection->getIterator());
+        $this->assertNotContains(PullRequest::class, $collection->getIterator());
     }
 }

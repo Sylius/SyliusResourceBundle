@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Symfony\Routing\Factory\Resource;
 
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * @deprecated use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface instead
+ * @experimental
  */
-interface AttributesOperationRouteFactoryInterface
+interface ResourceRouteCollectionFactoryInterface
 {
     /** @psalm-param class-string $className */
-    public function createRouteForClass(RouteCollection $routeCollection, string $className): void;
+    public function createRouteCollectionForClass(string $className): RouteCollection;
 }

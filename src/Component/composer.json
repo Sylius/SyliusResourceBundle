@@ -34,6 +34,7 @@
         "pagerfanta/core": "^3.7 || ^4.0",
         "symfony/event-dispatcher": "^6.4 || ^7.1",
         "symfony/form": "^6.4 || ^7.1",
+        "symfony/framework-bundle": "^6.4 || ^7.1",
         "symfony/http-foundation": "^6.4 || ^7.1",
         "symfony/http-kernel": "^6.4 || ^7.1",
         "symfony/property-access": "^6.4 || ^7.1",

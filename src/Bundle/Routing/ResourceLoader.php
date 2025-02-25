@@ -22,6 +22,9 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @deprecated use Sylius\Resource\Symfony\Routing\Loader\ResourceLoader instead
+ */
 final class ResourceLoader extends Loader
 {
     private RegistryInterface $resourceRegistry;
