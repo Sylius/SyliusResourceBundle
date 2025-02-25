@@ -20,24 +20,24 @@ final class ResourceClassListTest extends TestCase
 {
     public function testItIsAnIteratorAggregate(): void
     {
-        $collection = new ResourceClassList();
+        $list = new ResourceClassList();
 
-        $this->assertInstanceOf(\IteratorAggregate::class, $collection);
+        $this->assertInstanceOf(\IteratorAggregate::class, $list);
     }
 
     public function testItIsCountable(): void
     {
-        $collection = new ResourceClassList();
+        $list = new ResourceClassList();
 
-        $this->assertInstanceOf(\Countable::class, $collection);
+        $this->assertInstanceOf(\Countable::class, $list);
     }
 
     public function testItIsAListOfResourceClassNames(): void
     {
-        $collection = new ResourceClassList(['first_resource', 'second_resource']);
+        $list = new ResourceClassList(['first_resource', 'second_resource']);
 
-        $this->assertCount(2, $collection);
-        $this->assertEquals('first_resource', $collection->getIterator()[0]);
-        $this->assertEquals('second_resource', $collection->getIterator()[1]);
+        $this->assertCount(2, $list);
+        $this->assertEquals('first_resource', $list->getIterator()[0]);
+        $this->assertEquals('second_resource', $list->getIterator()[1]);
     }
 }

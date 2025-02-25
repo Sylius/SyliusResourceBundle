@@ -18,7 +18,7 @@ use Sylius\Resource\Metadata\Resource\ResourceClassList;
 use Sylius\Resource\Reflection\ClassReflection;
 
 /**
- * Creates a resource name collection from {@see AsResource} attributes.
+ * Creates a resource class list from {@see AsResource} attributes.
  *
  * @experimental
  */

@@ -21,9 +21,9 @@ namespace Sylius\Resource\Metadata\Resource;
 final class ResourceClassList implements \IteratorAggregate, \Countable
 {
     /**
-     * @param string[] $names
+     * @param string[] $classes
      */
-    public function __construct(private readonly array $names = [])
+    public function __construct(private readonly array $classes = [])
     {
     }
 
@@ -32,11 +32,11 @@ final class ResourceClassList implements \IteratorAggregate, \Countable
      */
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->names);
+        return new \ArrayIterator($this->classes);
     }
 
     public function count(): int
     {
-        return \count($this->names);
+        return \count($this->classes);
     }
 }

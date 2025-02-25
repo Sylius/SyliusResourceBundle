@@ -23,7 +23,7 @@ use Sylius\Resource\Metadata\Resource\ResourceClassList;
 interface ResourceClassListFactoryInterface
 {
     /**
-     * Creates the resource name collection.
+     * Creates the resource class list.
      */
     public function create(): ResourceClassList;
 }
