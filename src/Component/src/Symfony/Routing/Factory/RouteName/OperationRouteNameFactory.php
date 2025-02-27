@@ -28,6 +28,12 @@ final class OperationRouteNameFactory implements OperationRouteNameFactoryInterf
             throw new \RuntimeException(sprintf('No resource was found on the operation "%s"', $operation->getShortName() ?? ''));
         }
 
+        $operationName = $operation->getName();
+
+        if (null === $shortName && null !== $operationName) {
+            return $operationName;
+        }
+
         $section = $resource->getSection();
         $sectionPrefix = $section ? $section . '_' : '';
 

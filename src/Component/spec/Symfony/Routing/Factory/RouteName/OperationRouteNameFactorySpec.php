@@ -25,7 +25,7 @@ final class OperationRouteNameFactorySpec extends ObjectBehavior
         $this->shouldHaveType(OperationRouteNameFactory::class);
     }
 
-    function it_create_a_route_name(): void
+    function it_creates_a_route_name(): void
     {
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
@@ -33,12 +33,28 @@ final class OperationRouteNameFactorySpec extends ObjectBehavior
         $this->createRouteName($operation)->shouldReturn('app_book_create');
     }
 
-    function it_create_a_route_name_with_a_section(): void
+    function it_uses_the_operation_name_when_specified(): void
+    {
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
+        $operation = (new Create(name: 'app_book_new'))->withResource($resource);
+
+        $this->createRouteName($operation)->shouldReturn('app_book_new');
+    }
+
+    function it_creates_a_route_name_with_a_section(): void
     {
         $resource = new ResourceMetadata(alias: 'app.book', section: 'admin', name: 'book', applicationName: 'app');
         $operation = (new Create())->withResource($resource);
 
         $this->createRouteName($operation)->shouldReturn('app_admin_book_create');
+    }
+
+    function it_creates_a_route_name_from_another_operation(): void
+    {
+        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
+        $operation = (new Create())->withResource($resource);
+
+        $this->createRouteName($operation, 'index')->shouldReturn('app_book_index');
     }
 
     function it_throws_an_exception_when_operation_has_no_resource(): void
