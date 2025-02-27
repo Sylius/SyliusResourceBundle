@@ -283,6 +283,7 @@ final class DebugResourceCommandTest extends TestCase
               path                     null                      
               routeName                null                      
               routePrefix              null                      
+              routeRequirements        null                      
               redirectToRoute          null                      
               redirectArguments        null                      
               vars                     [                         

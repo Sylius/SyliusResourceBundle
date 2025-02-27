@@ -289,4 +289,22 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             ],
         ]);
     }
+
+    function it_generates_routes_with_requirements(
+        OperationRoutePathFactoryInterface $routePathFactory,
+    ): void {
+        $operation = new Index(routeRequirements: ['country', 'province', 'zone']);
+
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+
+        $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies')->shouldBeCalled();
+
+        $route = $this->create(
+            $metadata,
+            new ResourceMetadata(alias: 'app.dummy'),
+            $operation,
+        );
+
+        $route->getRequirements()->shouldReturn(['country', 'province', 'zone']);
+    }
 }
