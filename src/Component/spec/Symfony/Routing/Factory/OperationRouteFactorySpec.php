@@ -293,7 +293,7 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_routes_with_requirements(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Index(routeRequirements: ['country', 'province', 'zone']);
+        $operation = new Index(routeRequirements: ['type' => 'country|province|zone']);
 
         $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
 
@@ -305,6 +305,6 @@ final class OperationRouteFactorySpec extends ObjectBehavior
             $operation,
         );
 
-        $route->getRequirements()->shouldReturn(['country', 'province', 'zone']);
+        $route->getRequirements()->shouldReturn(['type' => 'country|province|zone']);
     }
 }
