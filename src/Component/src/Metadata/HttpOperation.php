@@ -46,6 +46,7 @@ class HttpOperation extends Operation
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         string|callable|null $twigContextFactory = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
@@ -72,6 +73,7 @@ class HttpOperation extends Operation
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
         );
 
         $this->twigContextFactory = $twigContextFactory;
