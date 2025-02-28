@@ -22,6 +22,7 @@ final class BulkUpdate extends HttpOperation implements UpdateOperationInterface
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?array $routeRequirements = null,
         ?string $template = null,
@@ -52,6 +53,7 @@ final class BulkUpdate extends HttpOperation implements UpdateOperationInterface
         parent::__construct(
             methods: $methods ?? ['PUT', 'PATCH'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             routeRequirements: $routeRequirements,
             template: $template,

@@ -22,6 +22,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?array $routeRequirements = null,
         ?string $template = null,
@@ -49,6 +50,7 @@ final class Show extends HttpOperation implements ShowOperationInterface
         parent::__construct(
             methods: $methods ?? ['GET'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             routeRequirements: $routeRequirements,
             template: $template,
