@@ -47,6 +47,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -75,6 +76,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
             redirectToRoute: $redirectToRoute,
         );
     }

@@ -309,6 +309,7 @@ final class DebugResourceCommandTest extends TestCase
               denormalizationContext   null                      
               validationContext        null                      
               eventShortName           "register"                
+              notificationMessage      null                      
              ------------------------ -------------------------- 
             
             
