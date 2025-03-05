@@ -18,7 +18,6 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\State\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Webmozart\Assert\Assert;
 
 /**
  * @experimental
@@ -36,9 +35,6 @@ final class RespondProcessor implements ProcessorInterface
             return $data;
         }
 
-        $response = $this->responder->respond($data, $operation, $context);
-        Assert::isInstanceOf($response, Response::class);
-
-        return $response;
+        return $this->responder->respond($data, $operation, $context);
     }
 }

@@ -21,5 +21,20 @@
             <tag name="console.command" />
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand" alias="sylius.console.command.resource_debug" />
+
+        <service id="sylius.console.command.resource"  class="Sylius\Resource\Symfony\Console\ResourceCommand">
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.state_provider.main" />
+            <argument type="service" id="sylius.state_processor.main" />
+            <tag name="console.command" />
+        </service>
+        <service id="Sylius\Resource\Symfony\Console\ResourceCommand" alias="sylius.console.command.resource" />
+
+        <service id="Sylius\Resource\Symfony\Console\State\ConsoleGridProvider">
+            <argument type="service" id="sylius.grid.view_factory.resource" on-invalid="null" />
+            <argument type="service" id="sylius.grid.provider" on-invalid="null" />
+            <tag name="sylius.state_provider" />
+        </service>
     </services>
 </container>

@@ -40,7 +40,7 @@ final class Metadata implements MetadataInterface
         $this->name = $name;
         $this->applicationName = $applicationName;
 
-        $this->driver = $parameters['driver'];
+        $this->driver = $parameters['driver'] ?? false;
         $this->templatesNamespace = array_key_exists('templates', $parameters) ? $parameters['templates'] : null;
         $this->stateMachineComponent = $parameters['state_machine_component'] ?? null;
 

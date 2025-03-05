@@ -15,10 +15,13 @@ namespace Sylius\Resource\Metadata\Resource\Factory;
 
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Metadata\GridAwareOperationInterface;
+use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\Console\Operation\ConsoleOperation;
+use Sylius\Resource\Symfony\Console\State\ConsoleGridProvider;
 
 final class ProviderResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
@@ -54,11 +57,19 @@ final class ProviderResourceMetadataCollectionFactory implements ResourceMetadat
     private function addDefaults(Operation $operation): Operation
     {
         if (
-            null === $operation->getProvider() &&
-            $operation instanceof GridAwareOperationInterface &&
-            null !== $operation->getGrid()
+            null !== $operation->getProvider() ||
+            !$operation instanceof GridAwareOperationInterface ||
+            null === $operation->getGrid()
         ) {
+            return $operation;
+        }
+
+        if ($operation instanceof HttpOperation) {
             $operation = $operation->withProvider(RequestGridProvider::class);
+        }
+
+        if ($operation instanceof ConsoleOperation) {
+            $operation = $operation->withProvider(ConsoleGridProvider::class);
         }
 
         return $operation;

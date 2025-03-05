@@ -16,6 +16,9 @@ namespace App\Subscription\Entity;
 use App\Subscription\Factory\SubscriptionFactory;
 use App\Subscription\Form\Type\SubscriptionType;
 use App\Subscription\Repository\SubscriptionRepository;
+use App\Subscription\State\BrowseSubscriptionsResponder;
+use App\Subscription\State\ShowSubscriptionResponder;
+use App\Subscription\State\SubscriptionItemProvider;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Metadata\Api;
@@ -29,6 +32,8 @@ use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Model\ResourceInterface;
+use Sylius\Resource\Symfony\Console\Operation\Browse;
+use Sylius\Resource\Symfony\Console\Operation\Read;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -54,6 +59,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Show(
     template: 'subscription/show.html.twig',
     twigContextFactory: ShowSubscriptionContextFactory::class,
+)]
+
+#[AsResource(
+    operations: [
+        new Read(
+            provider: SubscriptionItemProvider::class,
+            responder: ShowSubscriptionResponder::class,
+        ),
+        new Browse(
+            grid: 'app_subscription',
+            responder: BrowseSubscriptionsResponder::class,
+        ),
+    ],
 )]
 
 #[AsResource(
