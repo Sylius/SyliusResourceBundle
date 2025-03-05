@@ -20,6 +20,6 @@ use Symfony\Component\Routing\RouteCollection;
  */
 interface ResourceRouteCollectionFactoryInterface
 {
-    /** @psalm-param class-string $className */
+    /** @param class-string $className */
     public function createRouteCollectionForClass(string $className): RouteCollection;
 }

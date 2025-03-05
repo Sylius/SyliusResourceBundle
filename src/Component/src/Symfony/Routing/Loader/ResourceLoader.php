@@ -24,7 +24,7 @@ use Symfony\Component\Routing\RouteCollection;
 final class ResourceLoader implements RouteLoaderInterface
 {
     public function __construct(
-        private readonly ResourceClassListFactoryInterface $resourceClassListCollectionFactory,
+        private readonly ResourceClassListFactoryInterface $resourceClassListFactory,
         private readonly ResourceRouteCollectionFactoryInterface $resourceRouteCollectionFactory,
     ) {
     }
@@ -32,14 +32,13 @@ final class ResourceLoader implements RouteLoaderInterface
     public function __invoke(): RouteCollection
     {
         $routeCollection = new RouteCollection();
-
-        $resourceClasses = $this->resourceClassListCollectionFactory->create();
+        $resourceClasses = $this->resourceClassListFactory->create();
 
         /**
-         * @var class-string $classes
+         * @var class-string $class
          */
-        foreach ($resourceClasses as $classes) {
-            $routeCollection->addCollection($this->resourceRouteCollectionFactory->createRouteCollectionForClass($classes));
+        foreach ($resourceClasses as $class) {
+            $routeCollection->addCollection($this->resourceRouteCollectionFactory->createRouteCollectionForClass($class));
         }
 
         return $routeCollection;

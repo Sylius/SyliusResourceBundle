@@ -52,9 +52,9 @@ final class ResourceLoaderTest extends TestCase
         $routeCollection->add('first_route', new Route('/first-route'));
         $routeCollection->add('second_route', new Route('/second-route'));
 
-        $resourceNameCollection = new ResourceClassList(['\DummyClass']);
+        $resourceClassList = new ResourceClassList(['\DummyClass']);
 
-        $this->resourceClassListFactory->method('create')->willReturn($resourceNameCollection);
+        $this->resourceClassListFactory->method('create')->willReturn($resourceClassList);
         $this->resourceRouteCollectionFactory->method('createRouteCollectionForClass')->with('\DummyClass')->willReturn($routeCollection);
 
         $this->assertEquals($routeCollection, ($this->loader)());
