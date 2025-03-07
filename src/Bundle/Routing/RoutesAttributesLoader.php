@@ -18,6 +18,9 @@ use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInter
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * @deprecated use Sylius\Resource\Symfony\Routing\Loader\ResourceLoader instead
+ */
 final class RoutesAttributesLoader implements RouteLoaderInterface
 {
     public function __construct(

@@ -38,7 +38,6 @@ final class AttributesResourceClassListFactory implements ResourceClassListFacto
      */
     public function create(): ResourceClassList
     {
-        /** @var class-string[] $classes */
         $classes = [];
 
         if ($this->decorated) {
