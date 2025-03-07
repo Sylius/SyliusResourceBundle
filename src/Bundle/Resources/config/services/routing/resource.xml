@@ -15,7 +15,7 @@
     <services>
         <service id="sylius.routing.resource.route_collection_factory" class="Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactory">
             <argument type="service" id="sylius.routing.factory.operation_route" />
-            <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
             <argument type="service" id="sylius.resource_registry" />
         </service>
         <service id="Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface" alias="sylius.routing.resource.route_collection_factory" />
