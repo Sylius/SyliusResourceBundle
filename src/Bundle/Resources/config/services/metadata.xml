@@ -26,6 +26,11 @@
             <argument type="service" id="service_container" />
         </service>
 
+        <service id="sylius.operation.metadata_updater.custom_php_file" class="Sylius\Resource\Metadata\Operation\CustomPhpFileOperationUpdater">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
         <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.php_file" />
         <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.php_file" />
 
@@ -42,6 +47,15 @@
         >
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory.custom"
+                 class="Sylius\Resource\Metadata\Resource\Factory\CustomResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="350"
+        >
+            <argument type="service" id="sylius.operation.metadata_updater.custom_php_file" />
             <argument type="service" id=".inner" />
         </service>
 
@@ -104,7 +118,7 @@
         <service id="sylius.resource_metadata_collection.factory.cached"
                  class="Sylius\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
-                 decoration-priority="-10"
+                 decoration-priority="-20"
         >
             <argument type="service" id="sylius.cache.metadata.resource_collection" />
             <argument type="service" id=".inner" />

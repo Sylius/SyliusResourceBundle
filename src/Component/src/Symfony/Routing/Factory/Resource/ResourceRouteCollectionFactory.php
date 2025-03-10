@@ -39,10 +39,11 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
     public function createRouteCollectionForClass(string $className): RouteCollection
     {
         $routeCollection = new RouteCollection();
-        $resourceMetadata = $this->resourceMetadataFactory->create($className);
+
+        $resourceMetadataCollection = $this->resourceMetadataFactory->create($className);
 
         /** @var ResourceMetadata $resource */
-        foreach ($resourceMetadata->getIterator() as $resource) {
+        foreach ($resourceMetadataCollection->getIterator() as $resource) {
             $this->createRoutesForResource($routeCollection, $resource);
         }
 
