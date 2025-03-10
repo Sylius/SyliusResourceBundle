@@ -120,6 +120,7 @@
         <InvalidNullableReturnType>
             <errorLevel type="suppress">
                 <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+                <file name="src/Component/src/Metadata/Operation/CustomPhpFileOperationUpdater.php" />
             </errorLevel>
         </InvalidNullableReturnType>
 
@@ -188,6 +189,7 @@
         <NullableReturnStatement>
             <errorLevel type="suppress">
                 <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+                <file name="src/Component/src/Metadata/Operation/CustomPhpFileOperationUpdater.php" />
             </errorLevel>
         </NullableReturnStatement>
 
@@ -336,6 +338,7 @@
         <UnresolvableInclude>
             <errorLevel type="suppress">
                 <file name="src/Component/src/Metadata/Extractor/PhpFileMetadataExtractor.php" />
+                <file name="src/Component/src/Metadata/Operation/CustomPhpFileOperationUpdater.php" />
             </errorLevel>
         </UnresolvableInclude>
 
