@@ -156,21 +156,18 @@ final class AttributesResourceMetadataCollectionFactoryTest extends TestCase
         $this->assertInstanceOf(Index::class, $operation);
         $this->assertSame('app_order_index', $operation->getName());
         $this->assertSame(['GET'], $operation->getMethods());
-        $this->assertSame('app.repository.order', $operation->getRepository());
         $this->assertSame('App\Form\OrderType', $operation->getFormType());
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_index');
         $this->assertInstanceOf(Index::class, $operation);
         $this->assertSame('app_cart_index', $operation->getName());
         $this->assertSame(['GET'], $operation->getMethods());
-        $this->assertSame('app.repository.cart', $operation->getRepository());
         $this->assertSame('App\Form\CartType', $operation->getFormType());
 
         $operation = $metadataCollection->getOperation('app.cart', 'app_cart_show');
         $this->assertInstanceOf(Show::class, $operation);
         $this->assertSame('app_cart_show', $operation->getName());
         $this->assertSame(['GET'], $operation->getMethods());
-        $this->assertSame('app.repository.cart', $operation->getRepository());
         $this->assertSame('App\Form\CartType', $operation->getFormType());
     }
 

@@ -17,6 +17,9 @@ final class ResourceMetadata
 {
     private ?Operations $operations;
 
+    /**
+     * @param class-string|null $class
+     */
     public function __construct(
         private ?string $alias = null,
         private ?string $section = null,
@@ -36,13 +39,27 @@ final class ResourceMetadata
         ?array $operations = null,
     ) {
         $this->operations = null === $operations ? null : new Operations($operations);
+
+        if (null !== $driver && false !== $driver) {
+            trigger_deprecation(
+                'sylius/resource',
+                '1.13',
+                'Using driver is deprecated. If your resource is managed by Doctrine you have nothing to do, otherwise use a custom provider.',
+            );
+        }
     }
 
+    /**
+     * @return class-string|null
+     */
     public function getClass(): ?string
     {
         return $this->class;
     }
 
+    /**
+     * @param class-string $class
+     */
     public function withClass(string $class): self
     {
         $self = clone $this;

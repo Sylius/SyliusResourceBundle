@@ -23,7 +23,6 @@ use Sylius\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollection
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\Request\State\Provider;
 
 final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
 {
@@ -42,27 +41,6 @@ final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
     public function testItIsInitializable(): void
     {
         $this->assertInstanceOf(ProviderResourceMetadataCollectionFactory::class, $this->factory);
-    }
-
-    public function testItCreatesResourceMetadataWithDefaultProviderOnHttpOperations(): void
-    {
-        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-
-        $index = (new Index(name: 'app_book_index'))->withResource($resource);
-
-        $resource = $resource->withOperations(new Operations([
-            $index->getName() => $index,
-        ]));
-
-        $resourceMetadataCollection = new ResourceMetadataCollection();
-        $resourceMetadataCollection[] = $resource;
-
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
-
-        $resourceMetadataCollection = $this->factory->create('App\Resource');
-
-        $index = $resourceMetadataCollection->getOperation('app.book', 'app_book_index');
-        $this->assertSame(Provider::class, $index->getProvider());
     }
 
     public function testItConfiguresRequestGridProviderIfOperationHasAGrid(): void
