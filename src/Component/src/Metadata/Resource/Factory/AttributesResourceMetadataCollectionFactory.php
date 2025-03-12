@@ -134,6 +134,12 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $resource = $resource->withName($resourceConfiguration->getName());
         }
 
+        if (null === $resource->getPluralName()) {
+            $resourcePluralName = $resourceConfiguration->getPluralName();
+
+            $resource = $resource->withPluralName($resourcePluralName);
+        }
+
         return $resource;
     }
 
@@ -142,20 +148,6 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
 
         $operation = $operation->withResource($resource);
-
-        if (null === $resource->getName()) {
-            $resourceName = $resourceConfiguration->getName();
-
-            $resource = $resource->withName($resourceName);
-            $operation = $operation->withResource($resource);
-        }
-
-        if (null === $resource->getPluralName()) {
-            $resourcePluralName = $resourceConfiguration->getPluralName();
-
-            $resource = $resource->withPluralName($resourcePluralName);
-            $operation = $operation->withResource($resource);
-        }
 
         if (null === $operation->getNormalizationContext()) {
             $operation = $operation->withNormalizationContext($resource->getNormalizationContext());

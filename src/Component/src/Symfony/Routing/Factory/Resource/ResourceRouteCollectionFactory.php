@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Routing\Factory\Resource;
 
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
-use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface;
@@ -32,7 +30,6 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
     public function __construct(
         private readonly OperationRouteFactoryInterface $operationRouteFactory,
         private readonly ResourceMetadataCollectionFactoryInterface $resourceMetadataFactory,
-        private readonly RegistryInterface $resourceRegistry,
     ) {
     }
 
@@ -65,7 +62,6 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
         $alias = $resource->getAlias();
         Assert::notNull($alias, sprintf('Resource of %s has no alias.', $resource->getClass() ?? ''));
 
-        $metadata = $this->resourceRegistry->get($alias);
         $routeName = $operation->getRouteName();
 
         Assert::notNull($routeName, sprintf(
@@ -74,12 +70,12 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
             $alias,
         ));
 
-        $route = $this->createRoute($metadata, $resource, $operation);
+        $route = $this->createRoute($resource, $operation);
         $routeCollection->add($routeName, $route);
     }
 
-    private function createRoute(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
+    private function createRoute(ResourceMetadata $resource, HttpOperation $operation): Route
     {
-        return $this->operationRouteFactory->create($metadata, $resource, $operation);
+        return $this->operationRouteFactory->create($resource, $operation);
     }
 }

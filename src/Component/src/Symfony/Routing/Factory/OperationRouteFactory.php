@@ -15,10 +15,10 @@ namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\Route;
+use Webmozart\Assert\Assert;
 
 /**
  * @experimental
@@ -30,9 +30,9 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
     ) {
     }
 
-    public function create(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
+    public function create(ResourceMetadata $resource, HttpOperation $operation): Route
     {
-        $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $operation);
+        $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($resource, $operation);
 
         if (null !== $routePrefix = $operation->getRoutePrefix()) {
             $routePath = $routePrefix . '/' . $routePath;
@@ -49,14 +49,17 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         );
     }
 
-    private function getDefaultRoutePath(MetadataInterface $metadata, HttpOperation $operation): string
+    private function getDefaultRoutePath(ResourceMetadata $resource, HttpOperation $operation): string
     {
-        return $this->getDefaultRoutePathForOperation($metadata, $operation);
+        return $this->getDefaultRoutePathForOperation($resource, $operation);
     }
 
-    private function getDefaultRoutePathForOperation(MetadataInterface $metadata, HttpOperation $operation): string
+    private function getDefaultRoutePathForOperation(ResourceMetadata $resource, HttpOperation $operation): string
     {
-        $rootPath = sprintf('%s', Urlizer::urlize($metadata->getPluralName()));
+        $pluralName = $resource->getPluralName();
+        Assert::notNull($pluralName, 'Plural name of the resource should be defined');
+
+        $rootPath = sprintf('%s', Urlizer::urlize($pluralName));
 
         if (null !== $path = $operation->getPath()) {
             return $path;

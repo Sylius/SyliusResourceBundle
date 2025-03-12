@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Symfony\Component\Routing\Route;
 
@@ -23,5 +22,5 @@ use Symfony\Component\Routing\Route;
  */
 interface OperationRouteFactoryInterface
 {
-    public function create(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route;
+    public function create(ResourceMetadata $resource, HttpOperation $operation): Route;
 }

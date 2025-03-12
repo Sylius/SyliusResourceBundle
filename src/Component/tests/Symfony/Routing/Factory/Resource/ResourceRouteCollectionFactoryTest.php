@@ -42,7 +42,6 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
                 $this->resourceRegistry,
                 new OperationRouteNameFactory(),
             ),
-            $this->resourceRegistry,
         );
     }
 

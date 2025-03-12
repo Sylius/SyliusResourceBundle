@@ -87,6 +87,7 @@ parameters:
         - '/Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<int\|string\, string\>\): string, Closure\(array\)\: mixed given\./'
         - '/Parameter \#1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface\:\:getValue\(\) expects array\|object, array\|object\|null given\./'
         - '/Parameter \#1 \$min \(0\) of function random_int expects lower number than parameter \#2 \$max \(int\<\-1, max\>\)\./'
+        - '/Property Sylius\\Resource\\Symfony\\Routing\\Factory\\AttributesOperationRouteFactory\:\:\$resourceRegistry is never read, only written\./'
         - '/Method Sylius\\Resource\\Model\\ResourceInterface\:\:getId\(\) has no return type specified\./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
