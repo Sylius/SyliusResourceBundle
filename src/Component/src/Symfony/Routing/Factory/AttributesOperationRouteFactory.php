@@ -19,10 +19,16 @@ use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactory;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Webmozart\Assert\Assert;
 
+trigger_deprecation('sylius/resource', '1.13', '"%s" is deprecated, use "%s" instead.', AttributesOperationRouteFactory::class, ResourceRouteCollectionFactory::class);
+
+/**
+ * @deprecated
+ */
 final class AttributesOperationRouteFactory implements AttributesOperationRouteFactoryInterface
 {
     public function __construct(

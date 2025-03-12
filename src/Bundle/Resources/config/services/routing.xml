@@ -12,6 +12,10 @@
 -->
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="routing/**/**.xml" />
+    </imports>
+
     <services>
         <defaults public="true" />
 
@@ -102,7 +106,7 @@
         <service id="sylius.routing.factory.attributes_operation_route" class="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory" public="false">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route" />
-            <argument type="service" id="sylius.resource_metadata_collection.factory.attributes" />
+            <argument type="service" id="sylius.resource_metadata_collection.factory" />
         </service>
         <service id="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface" alias="sylius.routing.factory.attributes_operation_route" />
 

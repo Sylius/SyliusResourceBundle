@@ -15,6 +15,7 @@ namespace Sylius\Resource\Metadata\Resource\Factory;
 
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
@@ -22,6 +23,7 @@ use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Symfony\Console\Operation\ConsoleOperation;
 use Sylius\Resource\Symfony\Request\State\Responder;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
@@ -30,12 +32,16 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private OperationRouteNameFactory $operationRouteNameFactory,
+        private ?ResourceMetadataCollectionFactoryInterface $decorated = null,
     ) {
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
     {
         $resourceMetadataCollection = new ResourceMetadataCollection();
+        if ($this->decorated) {
+            $resourceMetadataCollection = $this->decorated->create($resourceClass);
+        }
 
         $attributes = ClassReflection::getClassAttributes($resourceClass);
 
@@ -48,6 +54,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
     /**
      * @param \ReflectionAttribute[] $attributes
+     * @param class-string $resourceClass
      *
      * @return ResourceMetadata[]
      */
@@ -118,6 +125,9 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
         return $resources;
     }
 
+    /**
+     * @param class-string $resourceClass
+     */
     private function getResourceWithDefaults(string $resourceClass, ResourceMetadata $resource, MetadataInterface $resourceConfiguration): ResourceMetadata
     {
         $resource = $resource->withClass($resourceClass);
@@ -171,10 +181,6 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
         $operation = $operation->withResource($resource);
 
-        if (null === $operation->getRepository()) {
-            $operation = $operation->withRepository($resourceConfiguration->getServiceId('repository'));
-        }
-
         if (null === $operation->getFormType()) {
             $formType = $resource->getFormType() ?? $resourceConfiguration->getClass('form');
             $operation = $operation->withFormType($formType);
@@ -204,9 +210,35 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             $operation = $operation->withName($routeName);
         }
 
+        if ($operation instanceof ConsoleOperation) {
+            if (null === $commandName = $operation->getCommandName()) {
+                $commandName = $this->createCommandName($resource, $operation);
+                $operation = $operation->withCommandName($commandName);
+            }
+
+            if (null === $operation->getResponder()) {
+                $operation = $operation->withResponder(Responder::class);
+            }
+
+            $operation = $operation->withName($commandName);
+        }
+
         $operationName = $operation->getName();
 
         return [$operationName, $operation];
+    }
+
+    private function createCommandName(ResourceMetadata $resourceMetadata, ConsoleOperation $operation): string
+    {
+        $metadata = Metadata::fromAliasAndConfiguration($resourceMetadata->getAlias() ?? '', []);
+        $section = $resourceMetadata->getSection();
+
+        return sprintf(
+            '%s:%s-%s',
+            (null !== $section ? $section . ':' : '') . $metadata->getApplicationName(),
+            $operation->getShortName() ?? '',
+            $metadata->getName(),
+        );
     }
 
     private function buildFormOptions(Operation $operation, MetadataInterface $resourceConfiguration): array

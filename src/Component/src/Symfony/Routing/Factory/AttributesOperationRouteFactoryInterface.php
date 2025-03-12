@@ -13,8 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Routing\Factory;
 
+use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
 
+trigger_deprecation('sylius/resource', '1.13', '"%s" is deprecated, use "%s" instead.', AttributesOperationRouteFactoryInterface::class, ResourceRouteCollectionFactoryInterface::class);
+
+/**
+ * @deprecated
+ */
 interface AttributesOperationRouteFactoryInterface
 {
     /** @psalm-param class-string $className */

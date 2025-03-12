@@ -22,6 +22,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?string $template = null,
         ?string $shortName = null,
@@ -45,6 +46,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         parent::__construct(
             methods: $methods ?? ['PUT', 'PATCH', 'POST'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             template: $template,
             shortName: $shortName ?? $stateMachineTransition ?? 'apply_state_machine_transition',

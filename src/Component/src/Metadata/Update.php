@@ -22,6 +22,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?array $routeRequirements = null,
         ?string $template = null,
@@ -54,6 +55,7 @@ final class Update extends HttpOperation implements UpdateOperationInterface, St
         parent::__construct(
             methods: $methods ?? ['GET', 'PUT', 'POST'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             routeRequirements: $routeRequirements,
             template: $template,

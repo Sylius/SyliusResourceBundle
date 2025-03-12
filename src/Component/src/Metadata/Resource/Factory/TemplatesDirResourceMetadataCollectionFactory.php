@@ -28,10 +28,10 @@ final class TemplatesDirResourceMetadataCollectionFactory implements ResourceMet
 
     public function create(string $resourceClass): ResourceMetadataCollection
     {
-        $resourceCollectionMetadata = $this->decorated->create($resourceClass);
+        $resourceMetadataCollection = $this->decorated->create($resourceClass);
 
         /** @var ResourceMetadata $resource */
-        foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
+        foreach ($resourceMetadataCollection->getIterator() as $i => $resource) {
             $operations = $resource->getOperations() ?? new Operations();
 
             /** @var Operation $operation */
@@ -44,10 +44,10 @@ final class TemplatesDirResourceMetadataCollectionFactory implements ResourceMet
 
             $resource = $resource->withOperations($operations);
 
-            $resourceCollectionMetadata[$i] = $resource;
+            $resourceMetadataCollection[$i] = $resource;
         }
 
-        return $resourceCollectionMetadata;
+        return $resourceMetadataCollection;
     }
 
     private function addDefaults(ResourceMetadata $resource, Operation $operation): Operation

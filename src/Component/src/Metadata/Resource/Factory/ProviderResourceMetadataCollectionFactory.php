@@ -15,11 +15,13 @@ namespace Sylius\Resource\Metadata\Resource\Factory;
 
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Metadata\GridAwareOperationInterface;
+use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\Request\State\Provider;
+use Sylius\Resource\Symfony\Console\Operation\ConsoleOperation;
+use Sylius\Resource\Symfony\Console\State\ConsoleGridProvider;
 
 final class ProviderResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
@@ -30,10 +32,10 @@ final class ProviderResourceMetadataCollectionFactory implements ResourceMetadat
 
     public function create(string $resourceClass): ResourceMetadataCollection
     {
-        $resourceCollectionMetadata = $this->decorated->create($resourceClass);
+        $resourceMetadataCollection = $this->decorated->create($resourceClass);
 
         /** @var ResourceMetadata $resource */
-        foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
+        foreach ($resourceMetadataCollection->getIterator() as $i => $resource) {
             $operations = $resource->getOperations() ?? new Operations();
 
             /** @var Operation $operation */
@@ -46,24 +48,28 @@ final class ProviderResourceMetadataCollectionFactory implements ResourceMetadat
 
             $resource = $resource->withOperations($operations);
 
-            $resourceCollectionMetadata[$i] = $resource;
+            $resourceMetadataCollection[$i] = $resource;
         }
 
-        return $resourceCollectionMetadata;
+        return $resourceMetadataCollection;
     }
 
     private function addDefaults(Operation $operation): Operation
     {
         if (
-            null === $operation->getProvider() &&
-            $operation instanceof GridAwareOperationInterface &&
-            null !== $operation->getGrid()
+            null !== $operation->getProvider() ||
+            !$operation instanceof GridAwareOperationInterface ||
+            null === $operation->getGrid()
         ) {
+            return $operation;
+        }
+
+        if ($operation instanceof HttpOperation) {
             $operation = $operation->withProvider(RequestGridProvider::class);
         }
 
-        if (null === $operation->getProvider()) {
-            $operation = $operation->withProvider(Provider::class);
+        if ($operation instanceof ConsoleOperation) {
+            $operation = $operation->withProvider(ConsoleGridProvider::class);
         }
 
         return $operation;

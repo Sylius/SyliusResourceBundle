@@ -42,7 +42,6 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
             new AttributesResourceMetadataCollectionFactory(
                 $resourceRegistry->getWrappedObject(),
                 new OperationRouteNameFactory(),
-                'symfony',
             ),
         );
     }

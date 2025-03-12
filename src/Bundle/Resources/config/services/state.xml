@@ -37,13 +37,6 @@
         </service>
         <service id="Sylius\Resource\State\ResponderInterface" alias="sylius.state_responder" />
 
-        <service id="Sylius\Resource\Symfony\Request\State\Provider">
-            <argument type="tagged_locator" tag="sylius.repository" />
-            <argument type="service" id="sylius.repository_argument_resolver.request" />
-            <argument type="service" id="sylius.expression_language.argument_parser.repository" />
-            <tag name="sylius.state_provider" />
-        </service>
-
         <service id="Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor">
             <argument type="service" id="sylius.state_machine.operation" />
             <argument type="service" id="Sylius\Resource\Doctrine\Common\State\PersistProcessor" on-invalid="null" />

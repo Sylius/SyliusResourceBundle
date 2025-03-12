@@ -30,6 +30,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\UnregisterHateoasD
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachinePass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Sylius\Resource\Symfony\DependencyInjection\Compiler\DisableMetadataCachePass;
+use Sylius\Resource\Symfony\DependencyInjection\Compiler\RegisterResourceCommandsPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -50,6 +51,7 @@ final class SyliusResourceBundle extends Bundle
 
         $container->addCompilerPass(new CsrfTokenManagerPass());
         $container->addCompilerPass(new DisableMetadataCachePass());
+        $container->addCompilerPass(new RegisterResourceCommandsPass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterFormBuilderPass());

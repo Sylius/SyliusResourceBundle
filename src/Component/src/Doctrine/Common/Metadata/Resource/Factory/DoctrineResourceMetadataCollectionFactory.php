@@ -15,6 +15,7 @@ namespace Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory;
 
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
+use Sylius\Resource\Doctrine\ORM\Metadata\Resource\Factory\DoctrineORMResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\Operations;
@@ -29,6 +30,13 @@ final class DoctrineResourceMetadataCollectionFactory implements ResourceMetadat
         private RegistryInterface $resourceRegistry,
         private ResourceMetadataCollectionFactoryInterface $decorated,
     ) {
+        trigger_deprecation(
+            'sylius/resource',
+            '1.13',
+            'The "%s" class is deprecated, use "%s instead.  It will be removed in 2.0.',
+            self::class,
+            DoctrineORMResourceMetadataCollectionFactory::class,
+        );
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection

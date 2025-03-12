@@ -20,6 +20,24 @@
     <services>
         <defaults public="true" />
 
+        <service id="sylius.doctrine_orm.metadata.resource.metadata_collection_factory"
+                 class="Sylius\Resource\Doctrine\ORM\Metadata\Resource\Factory\DoctrineORMResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="200"
+        >
+            <argument type="service" id="doctrine" />
+            <argument type="service" id=".inner" />
+        </service>
+
+        <service id="sylius.state_provider.doctrine.orm.state.provider" class="Sylius\Resource\Doctrine\ORM\State\Provider">
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="sylius.repository_argument_resolver.request" />
+            <argument type="service" id="sylius.expression_language.argument_parser.repository" />
+            <argument type="tagged_locator" tag="sylius.state_provider" />
+            <tag name="sylius.state_provider" />
+        </service>
+        <service id="Sylius\Resource\Doctrine\ORM\State\Provider" alias="sylius.state_provider.doctrine.orm.state.provider" />
+
         <service id="sylius.event_subscriber.orm_mapped_super_class" class="Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber">
             <argument type="service" id="sylius.resource_registry" />
             <tag name="doctrine.event_listener" event="loadClassMetadata" priority="8192" />

@@ -24,6 +24,7 @@ final class Get extends HttpOperation implements ShowOperationInterface, ApiOper
 {
     public function __construct(
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?array $routeRequirements = null,
         ?string $template = null,
@@ -52,6 +53,7 @@ final class Get extends HttpOperation implements ShowOperationInterface, ApiOper
         parent::__construct(
             methods: ['GET'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             routeRequirements: $routeRequirements,
             template: $template,
