@@ -1,14 +1,25 @@
 ## CHANGELOG
 
+## v1.13.0-ALPHA.3 (2025-03-12)
+
+#### Details
+
+- [#977](https://github.com/Sylius/SyliusResourceBundle/issues/977) Fix implicit nullable parameter ([@loic425](https://github.com/loic425))
+- [#979](https://github.com/Sylius/SyliusResourceBundle/issues/979) [De] Show legacy resource metadata on de command when specified ([@loic425](https://github.com/loic425))
+- [#990](https://github.com/Sylius/SyliusResourceBundle/issues/990) Fix Grid provider used in Request grid provider to allow using grid c… ([@loic425](https://github.com/loic425))
+- [#991](https://github.com/Sylius/SyliusResourceBundle/issues/991) [CI] Add GitHub Action for creating upmerge PRs ([@GSadee](https://github.com/GSadee))
+- [#993](https://github.com/Sylius/SyliusResourceBundle/issues/993) Add route requirements ([@loic425](https://github.com/loic425))
+- [#995](https://github.com/Sylius/SyliusResourceBundle/issues/995) Custom notification message ([@loic425](https://github.com/loic425))
+
 ## v1.13.0-ALPHA.2 (2025-01-21)
 
 #### Details
 
-- [#970](https://github.com/Sylius/Sylius/issues/970) [DX][Internal] use Foundry for comic books ([@loic425](https://github.com/loic425))
-- [#973](https://github.com/Sylius/Sylius/issues/973) Fix Delete handling exception previous argument type ([@loic425](https://github.com/loic425))
-- [#971](https://github.com/Sylius/Sylius/issues/971) [DX][Internal] Do not use Alice anymore ([@loic425](https://github.com/loic425))
-- [#963](https://github.com/Sylius/Sylius/issues/963) [Doc] Documentation migration to SyliusStack using gitbook ([@Prometee](https://github.com/Prometee))
-- [#975](https://github.com/Sylius/Sylius/issues/975) Add missing package and version attributes in deprecated element ([@GSadee](https://github.com/GSadee))
+- [#970](https://github.com/Sylius/SyliusResourceBundle/issues/970) [DX][Internal] use Foundry for comic books ([@loic425](https://github.com/loic425))
+- [#973](https://github.com/Sylius/SyliusResourceBundle/issues/973) Fix Delete handling exception previous argument type ([@loic425](https://github.com/loic425))
+- [#971](https://github.com/Sylius/SyliusResourceBundle/issues/971) [DX][Internal] Do not use Alice anymore ([@loic425](https://github.com/loic425))
+- [#963](https://github.com/Sylius/SyliusResourceBundle/issues/963) [Doc] Documentation migration to SyliusStack using gitbook ([@Prometee](https://github.com/Prometee))
+- [#975](https://github.com/Sylius/SyliusResourceBundle/issues/975) Add missing package and version attributes in deprecated element ([@GSadee](https://github.com/GSadee))
 
 ## v1.13.0-ALPHA.1 (2025-01-17)
 
