@@ -63,12 +63,16 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
     private function addRouteForOperation(RouteCollection $routeCollection, ResourceMetadata $resource, HttpOperation $operation): void
     {
         $alias = $resource->getAlias();
-        Assert::notNull($alias);
+        Assert::notNull($alias, sprintf('Resource of %s has no alias.', $resource->getClass() ?? ''));
 
         $metadata = $this->resourceRegistry->get($alias);
         $routeName = $operation->getRouteName();
 
-        Assert::notNull($routeName, sprintf('Operation %s has no route name. Please define one.', $operation::class));
+        Assert::notNull($routeName, sprintf(
+            'Operation %s of %s has no route name. Please define one.',
+            $operation::class,
+            $alias,
+        ));
 
         $route = $this->createRoute($metadata, $resource, $operation);
         $routeCollection->add($routeName, $route);

@@ -34,9 +34,7 @@ final class ResourceLoader implements RouteLoaderInterface
         $routeCollection = new RouteCollection();
         $resourceClasses = $this->resourceClassListFactory->create();
 
-        /**
-         * @var class-string $class
-         */
+        /** @var class-string $class */
         foreach ($resourceClasses as $class) {
             $routeCollection->addCollection($this->resourceRouteCollectionFactory->createRouteCollectionForClass($class));
         }
