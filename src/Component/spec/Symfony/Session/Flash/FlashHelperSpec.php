@@ -91,6 +91,31 @@ final class FlashHelperSpec extends ObjectBehavior
         $this->addSuccessFlash($operation, $context);
     }
 
+    function it_adds_success_flashes_with_custom_message(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+    ): void {
+        $operation = (new Create(notificationMessage: 'app.dummy.shipped'))->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('app.dummy.shipped', 'flashes')->willReturn(true)->shouldBeCalled();
+
+        $translator->trans('app.dummy.shipped', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was shipped successfully.')->shouldBeCalled();
+
+        $flashBag->add('success', 'Dummy was shipped successfully.')->shouldBeCalled();
+
+        $this->addSuccessFlash($operation, $context);
+    }
+
     function it_adds_success_flashes_with_default_message_when_translator_is_not_a_bag(
         Request $request,
         SessionInterface $session,

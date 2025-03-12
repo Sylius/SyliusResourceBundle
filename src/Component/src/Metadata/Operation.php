@@ -53,6 +53,7 @@ abstract class Operation
         protected ?array $denormalizationContext = null,
         protected ?array $validationContext = null,
         protected ?string $eventShortName = null,
+        protected ?string $notificationMessage = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -329,6 +330,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->eventShortName = $eventShortName;
+
+        return $self;
+    }
+
+    public function getNotificationMessage(): ?string
+    {
+        return $this->notificationMessage;
+    }
+
+    public function withNotificationMessage(string $notificationMessage): self
+    {
+        $self = clone $this;
+        $self->notificationMessage = $notificationMessage;
 
         return $self;
     }

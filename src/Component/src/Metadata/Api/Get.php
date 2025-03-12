@@ -46,6 +46,7 @@ final class Get extends HttpOperation implements ShowOperationInterface, ApiOper
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -73,6 +74,7 @@ final class Get extends HttpOperation implements ShowOperationInterface, ApiOper
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
             redirectToRoute: $redirectToRoute,
         );
     }

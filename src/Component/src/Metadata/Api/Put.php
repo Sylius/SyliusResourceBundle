@@ -46,6 +46,7 @@ final class Put extends HttpOperation implements UpdateOperationInterface, ApiOp
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -73,6 +74,7 @@ final class Put extends HttpOperation implements UpdateOperationInterface, ApiOp
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
             redirectToRoute: $redirectToRoute,
         );
     }
