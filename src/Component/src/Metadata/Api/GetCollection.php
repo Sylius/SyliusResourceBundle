@@ -25,6 +25,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
     public function __construct(
         ?string $path = null,
         ?string $routePrefix = null,
+        ?array $routeRequirements = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -51,6 +52,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
             methods: ['GET'],
             path: $path,
             routePrefix: $routePrefix,
+            routeRequirements: $routeRequirements,
             template: $template,
             shortName: $shortName ?? 'get_collection',
             name: $name,

@@ -44,6 +44,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
                 '_controller' => 'sylius.main_controller',
                 '_sylius' => $this->getSyliusOptions($resource, $operation),
             ],
+            requirements: $operation->getRouteRequirements() ?? [],
             methods: $operation->getMethods() ?? [],
         );
     }
