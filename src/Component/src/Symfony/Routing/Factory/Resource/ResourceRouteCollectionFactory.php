@@ -30,9 +30,9 @@ use Webmozart\Assert\Assert;
 final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFactoryInterface
 {
     public function __construct(
-        private OperationRouteFactoryInterface $operationRouteFactory,
-        private ResourceMetadataCollectionFactoryInterface $resourceMetadataFactory,
-        private RegistryInterface $resourceRegistry,
+        private readonly OperationRouteFactoryInterface $operationRouteFactory,
+        private readonly ResourceMetadataCollectionFactoryInterface $resourceMetadataFactory,
+        private readonly RegistryInterface $resourceRegistry,
     ) {
     }
 

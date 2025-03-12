@@ -26,7 +26,7 @@
             </argument>
             <argument>%kernel.environment%</argument>
             <tag name="routing.loader" />
-            <deprecated package="sylius/resource" version="1.13">The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius_resource.symfony.routing.loader.resource" instead.</deprecated>
+            <deprecated package="sylius/resource" version="1.13">The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.symfony.routing.loader.resource" instead.</deprecated>
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\ResourceLoader" alias="sylius.routing.loader.resource" public="false" />
 
@@ -42,7 +42,7 @@
             <argument type="service" id="sylius.routing.factory.route_attributes" />
             <argument type="service" id="sylius.routing.factory.attributes_operation_route" />
             <tag name="routing.route_loader" />
-            <deprecated package="sylius/resource" version="1.13">The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius_resource.symfony.routing.loader.resource" instead.</deprecated>
+            <deprecated package="sylius/resource" version="1.13">The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.symfony.routing.loader.resource" instead.</deprecated>
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader" alias="sylius.routing.loader.routes_attributes" public="false" />
 

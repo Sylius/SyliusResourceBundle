@@ -24,9 +24,7 @@ use Sylius\Resource\Reflection\ClassReflection;
  */
 final class AttributesResourceClassListFactory implements ResourceClassListFactoryInterface
 {
-    /**
-     * @param array{paths: string[]} $mapping
-     */
+    /** @param array{paths: string[]} $mapping */
     public function __construct(
         private readonly array $mapping,
         private readonly ?ResourceClassListFactoryInterface $decorated = null,
