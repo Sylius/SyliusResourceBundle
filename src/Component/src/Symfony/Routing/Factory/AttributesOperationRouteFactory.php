@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Sylius\Resource\Metadata\HttpOperation;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -59,17 +58,16 @@ final class AttributesOperationRouteFactory implements AttributesOperationRouteF
 
     private function addRouteForOperation(RouteCollection $routeCollection, ResourceMetadata $resource, HttpOperation $operation): void
     {
-        $metadata = $this->resourceRegistry->get($resource->getAlias() ?? '');
         $routeName = $operation->getRouteName();
 
         Assert::notNull($routeName, sprintf('Operation %s has no route name. Please define one.', $operation::class));
 
-        $route = $this->createRoute($metadata, $resource, $operation);
+        $route = $this->createRoute($resource, $operation);
         $routeCollection->add($routeName, $route);
     }
 
-    private function createRoute(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
+    private function createRoute(ResourceMetadata $resource, HttpOperation $operation): Route
     {
-        return $this->operationRouteFactory->create($metadata, $resource, $operation);
+        return $this->operationRouteFactory->create($resource, $operation);
     }
 }

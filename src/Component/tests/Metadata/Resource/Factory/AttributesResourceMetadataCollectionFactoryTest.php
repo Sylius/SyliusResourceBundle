@@ -474,6 +474,8 @@ final class AttributesResourceMetadataCollectionFactoryTest extends TestCase
         $this->assertInstanceOf(ResourceMetadata::class, $resource);
         $this->assertSame('app.dummy', $resource->getAlias());
 
+        $this->assertSame('books', $resource->getPluralName());
+
         $operations = $resource->getOperations();
         $this->assertInstanceOf(Operations::class, $operations);
         $this->assertCount(4, $operations);

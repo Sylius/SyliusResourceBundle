@@ -21,7 +21,6 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Index;
-use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
@@ -43,15 +42,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_create_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Create();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Create())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/new')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -68,16 +71,20 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_index_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Index();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Index())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
-            new Index(),
+            $resource,
+            $operation,
         );
 
         $route->getPath()->shouldReturn('/dummies');
@@ -93,15 +100,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_show_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Show();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Show())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -118,15 +129,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_update_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Update();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Update())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}/edit')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -143,15 +158,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_delete_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Delete();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Delete())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/{id}')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -168,15 +187,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_bulk_delete_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new BulkDelete();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new BulkDelete())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/bulk_delete')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -193,15 +216,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_bulk_update_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new BulkUpdate();
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new BulkUpdate())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('dummies/bulk_update')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -218,15 +245,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_custom_operations_routes(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new HttpOperation(methods: ['PATCH'], path: 'dummies/{id}/custom');
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new HttpOperation(methods: ['PATCH'], path: 'dummies/{id}/custom'))
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath(Argument::cetera())->willReturn('')->shouldNotBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata('app.dummy'),
+            $resource,
             $operation,
         );
 
@@ -243,15 +274,20 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_routes_with_sections(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Show();
+        $resource = (new ResourceMetadata())
+            ->withSection('admin')
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Show())
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies/{id}')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata(alias: 'app.dummy', section: 'admin'),
+            $resource,
             $operation,
         );
 
@@ -269,15 +305,19 @@ final class OperationRouteFactorySpec extends ObjectBehavior
     function it_generates_routes_with_vars(
         OperationRoutePathFactoryInterface $routePathFactory,
     ): void {
-        $operation = new Index(vars: ['subheader' => 'Managing your library']);
+        $resource = (new ResourceMetadata())
+            ->withAlias('app.dummy')
+            ->withPluralName('dummies')
+        ;
 
-        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', ['driver' => 'dummy_driver']);
+        $operation = (new Index(vars: ['subheader' => 'Managing your library']))
+            ->withResource($resource)
+        ;
 
         $routePathFactory->createRoutePath($operation, 'dummies')->willReturn('/dummies')->shouldBeCalled();
 
         $route = $this->create(
-            $metadata,
-            new ResourceMetadata(alias: 'app.dummy'),
+            $resource,
             $operation,
         );
 
