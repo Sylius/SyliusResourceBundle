@@ -1,5 +1,7 @@
 sylius_resource:
     mapping:
+        imports:
+            - '%kernel.project_dir%/config/sylius/resources'
         paths:
             - '%kernel.project_dir%/src/BoardGameBlog/Infrastructure/Sylius/Resource'
             - '%kernel.project_dir%/src/Subscription/Entity'
@@ -61,3 +63,7 @@ sylius_resource:
             classes:
                 model: App\Entity\Zone\ZoneMember
                 interface: App\Entity\Zone\ZoneMemberInterface
+
+        app.speaker:
+            classes:
+                model: App\Conference\Entity\Speaker

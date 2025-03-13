@@ -29,12 +29,16 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private OperationRouteNameFactory $operationRouteNameFactory,
+        private ?ResourceMetadataCollectionFactoryInterface $decorated = null,
     ) {
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
     {
         $resourceMetadataCollection = new ResourceMetadataCollection();
+        if ($this->decorated) {
+            $resourceMetadataCollection = $this->decorated->create($resourceClass);
+        }
 
         $attributes = ClassReflection::getClassAttributes($resourceClass);
 

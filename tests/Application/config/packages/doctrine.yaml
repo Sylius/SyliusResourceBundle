@@ -19,6 +19,11 @@ doctrine:
                 type: attribute
                 dir: '%kernel.project_dir%/src/BoardGameBlog/Domain'
                 prefix: 'App\BoardGameBlog\Domain'
+            Conference:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Conference/Entity'
+                prefix: 'App\Conference\Entity'
             Subscription:
                 is_bundle: false
                 type: attribute
