@@ -17,12 +17,29 @@
             <tag name="cache.pool" />
         </service>
 
-        <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
+        <service id="sylius.resource.metadata.extractor.php_file" class="Sylius\Resource\Metadata\Extractor\PhpFileMetadataExtractor">
+            <argument>%sylius.resource.mapping%</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.php_file" />
+        <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.php_file" />
+
+        <service id="sylius.resource_metadata_collection.factory.php_file" class="Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id="sylius.resource.metadata.extractor.php_file" />
         </service>
-        <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
-        <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
+
+        <service id="sylius.resource_metadata_collection.factory.attributes"
+                 class="Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="400"
+        >
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id=".inner" />
+        </service>
 
         <service id="sylius.resource_metadata_collection.factory.state_machine"
                  class="Sylius\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"

@@ -22,5 +22,15 @@
             <argument>%sylius.resource.mapping%</argument>
         </service>
         <service id="Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory" alias="sylius.metadata.resource_class_list.factory.attributes" />
+
+        <service id="sylius.metadata.resource_class_list.factory.php_file"
+                 class="Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory"
+                 decorates="sylius.metadata.resource_class_list.factory"
+                 decoration-priority="100"
+        >
+            <argument type="service" id="sylius.resource.metadata.extractor.php_file"  />
+            <argument type="service" id=".inner" />
+        </service>
+        <service id="Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory" alias="sylius.metadata.resource_class_list.factory.php_file" />
     </services>
 </container>
