@@ -62,6 +62,7 @@ parameters:
         - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent::stop\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return typehint specified./'
         - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
+        - '/Method Sylius\\Resource\\Metadata\\Extractor\\AbstractResourceExtractor::getResources\(\) should return array<Sylius\\Resource\\Metadata\\ResourceMetadata> but returns array<Sylius\\Resource\\Metadata\\ResourceMetadata>\|null./'
         - '/Method Sylius\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
         - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
