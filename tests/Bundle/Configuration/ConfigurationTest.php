@@ -74,7 +74,7 @@ class ConfigurationTest extends TestCase
                     'paths' => [],
                 ],
             ],
-            'mapping',
+            'mapping.paths',
         );
     }
 
@@ -94,7 +94,43 @@ class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'mapping',
+            'mapping.paths',
+        );
+    }
+
+    /** @test */
+    public function it_has_no_default_mapping_imports(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [],
+            ],
+            [
+                'mapping' => [
+                    'imports' => [],
+                ],
+            ],
+            'mapping.imports',
+        );
+    }
+
+    /** @test */
+    public function its_mapping_imports_can_be_customized(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                ['mapping' => [
+                    'imports' => ['path/to/resources'],
+                ]],
+            ],
+            [
+                'mapping' => [
+                    'imports' => [
+                        'path/to/resources',
+                    ],
+                ],
+            ],
+            'mapping.imports',
         );
     }
 

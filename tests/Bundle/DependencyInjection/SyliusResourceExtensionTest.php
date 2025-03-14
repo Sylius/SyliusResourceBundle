@@ -112,10 +112,13 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     }
 
     /** @test */
-    public function it_registers_parameter_for_paths(): void
+    public function it_registers_parameter_for_mapping(): void
     {
         $this->load([
             'mapping' => [
+                'imports' => [
+                    __DIR__ . '/php',
+                ],
                 'paths' => [
                     __DIR__ . '/Dummy',
                 ],
@@ -123,10 +126,30 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.mapping', [
+            'imports' => [
+                __DIR__ . '/php',
+            ],
             'paths' => [
                 __DIR__ . '/Dummy',
             ],
         ]);
+    }
+
+    /** @test */
+    public function it_registers_metadata_configuration(): void
+    {
+        $this->load([
+            'mapping' => [
+                'imports' => [
+                    __DIR__ . '/php',
+                ],
+            ],
+        ]);
+
+        $emptyPhpFile = realpath(__DIR__ . '/php/empty_php_file.php');
+
+        $this->assertContainerBuilderHasService('sylius.metadata.resource_extractor.php_file');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('sylius.metadata.resource_extractor.php_file', 0, [$emptyPhpFile]);
     }
 
     /** @test */
