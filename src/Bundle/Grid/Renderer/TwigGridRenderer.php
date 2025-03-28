@@ -21,7 +21,6 @@ use Sylius\Component\Grid\Definition\Filter;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
 use Twig\Environment;
-use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
 {
@@ -63,7 +62,9 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        Assert::isInstanceOf($gridView, ResourceGridView::class);
+        if (!$gridView instanceof ResourceGridView) {
+            return $this->gridRenderer->renderAction($gridView, $action, $data);
+        }
 
         $type = $action->getType();
         if (!isset($this->actionTemplates[$type])) {
