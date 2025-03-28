@@ -43,4 +43,6 @@ class UpdateHandlingException extends Exception
     }
 }
 
-class_alias(UpdateHandlingException::class, \Sylius\Component\Resource\Exception\UpdateHandlingException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\UpdateHandlingException::class, false)) {
+    class_alias(UpdateHandlingException::class, \Sylius\Component\Resource\Exception\UpdateHandlingException::class);
+}

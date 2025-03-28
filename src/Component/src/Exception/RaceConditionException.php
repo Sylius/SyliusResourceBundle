@@ -27,4 +27,6 @@ class RaceConditionException extends UpdateHandlingException
     }
 }
 
-class_alias(RaceConditionException::class, \Sylius\Component\Resource\Exception\RaceConditionException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\RaceConditionException::class, false)) {
+    class_alias(RaceConditionException::class, \Sylius\Component\Resource\Exception\RaceConditionException::class);
+}

@@ -29,4 +29,6 @@ final class VariantWithNoOptionsValuesException extends Exception
     }
 }
 
-class_alias(VariantWithNoOptionsValuesException::class, \Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException::class, false)) {
+    class_alias(VariantWithNoOptionsValuesException::class, \Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException::class);
+}

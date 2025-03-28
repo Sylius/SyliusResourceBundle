@@ -32,4 +32,6 @@ trait ArchivableTrait
     }
 }
 
-class_alias(ArchivableTrait::class, \Sylius\Component\Resource\Model\ArchivableTrait::class);
+if (!class_exists(\Sylius\Component\Resource\Model\ArchivableTrait::class, false)) {
+    class_alias(ArchivableTrait::class, \Sylius\Component\Resource\Model\ArchivableTrait::class);
+}

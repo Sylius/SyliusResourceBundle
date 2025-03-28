@@ -60,4 +60,6 @@ interface MetadataInterface
     public function getPermissionCode(string $permissionName): string;
 }
 
-class_alias(MetadataInterface::class, \Sylius\Component\Resource\Metadata\MetadataInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Metadata\MetadataInterface::class, false)) {
+    class_alias(MetadataInterface::class, \Sylius\Component\Resource\Metadata\MetadataInterface::class);
+}
