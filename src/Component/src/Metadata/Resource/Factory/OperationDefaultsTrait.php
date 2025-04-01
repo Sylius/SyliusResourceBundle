@@ -49,10 +49,10 @@ trait OperationDefaultsTrait
     }
 
     private function getOperationWithDefaults(
+        Operation $operation,
+        ResourceMetadata $resource,
         OperationRouteNameFactory $operationRouteNameFactory,
         RegistryInterface $resourceRegistry,
-        ResourceMetadata $resource,
-        Operation $operation,
     ): array {
         $resourceConfiguration = $resourceRegistry->get($resource->getAlias() ?? '');
 

@@ -76,7 +76,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
                 /** @var Operation $operation */
                 foreach ($resource->getOperations() ?? new Operations() as $operation) {
-                    [$key, $operation] = $this->getOperationWithDefaults($this->operationRouteNameFactory, $this->resourceRegistry, $resources[$index], $operation);
+                    [$key, $operation] = $this->getOperationWithDefaults($operation, $resources[$index], $this->operationRouteNameFactory, $this->resourceRegistry);
                     $operations[$key] = $operation;
                 }
 
@@ -106,7 +106,7 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
             /** @var Operation $operationAttribute */
             $operationAttribute = $attribute->newInstance();
 
-            [$key, $operation] = $this->getOperationWithDefaults($this->operationRouteNameFactory, $this->resourceRegistry, $resources[$index], $operationAttribute);
+            [$key, $operation] = $this->getOperationWithDefaults($operationAttribute, $resources[$index], $this->operationRouteNameFactory, $this->resourceRegistry);
 
             $operations = $resources[$index]->getOperations() ?? new Operations();
 
