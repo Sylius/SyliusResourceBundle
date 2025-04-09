@@ -19,4 +19,6 @@ interface ResourceInterface
     public function getId();
 }
 
-class_alias(ResourceInterface::class, \Sylius\Component\Resource\Model\ResourceInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Model\ResourceInterface::class, false)) {
+    class_alias(ResourceInterface::class, \Sylius\Component\Resource\Model\ResourceInterface::class);
+}

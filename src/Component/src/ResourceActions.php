@@ -32,4 +32,6 @@ final class ResourceActions
     }
 }
 
-class_alias(ResourceActions::class, \Sylius\Component\Resource\ResourceActions::class);
+if (!class_exists(\Sylius\Component\Resource\ResourceActions::class, false)) {
+    class_alias(ResourceActions::class, \Sylius\Component\Resource\ResourceActions::class);
+}

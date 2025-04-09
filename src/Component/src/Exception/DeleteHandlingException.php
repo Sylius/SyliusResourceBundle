@@ -43,4 +43,6 @@ class DeleteHandlingException extends RuntimeException
     }
 }
 
-class_alias(DeleteHandlingException::class, \Sylius\Component\Resource\Exception\DeleteHandlingException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\DeleteHandlingException::class, false)) {
+    class_alias(DeleteHandlingException::class, \Sylius\Component\Resource\Exception\DeleteHandlingException::class);
+}

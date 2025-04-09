@@ -21,4 +21,6 @@ class ResourceExistsException extends \RuntimeException implements ExceptionInte
     }
 }
 
-class_alias(ResourceExistsException::class, \Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class);
+if (!class_exists(\Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class, false)) {
+    class_alias(ResourceExistsException::class, \Sylius\Component\Resource\Repository\Exception\ExistingResourceException::class);
+}

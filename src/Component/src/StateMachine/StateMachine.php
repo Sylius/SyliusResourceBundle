@@ -42,4 +42,6 @@ final class StateMachine extends BaseStateMachine implements StateMachineInterfa
     }
 }
 
-class_alias(StateMachine::class, \Sylius\Component\Resource\StateMachine\StateMachine::class);
+if (!class_exists(\Sylius\Component\Resource\StateMachine\StateMachine::class, false)) {
+    class_alias(StateMachine::class, \Sylius\Component\Resource\StateMachine\StateMachine::class);
+}

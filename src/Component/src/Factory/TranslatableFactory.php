@@ -47,4 +47,6 @@ final class TranslatableFactory implements TranslatableFactoryInterface
     }
 }
 
-class_alias(TranslatableFactory::class, \Sylius\Component\Resource\Factory\TranslatableFactory::class);
+if (!class_exists(\Sylius\Component\Resource\Factory\TranslatableFactory::class, false)) {
+    class_alias(TranslatableFactory::class, \Sylius\Component\Resource\Factory\TranslatableFactory::class);
+}

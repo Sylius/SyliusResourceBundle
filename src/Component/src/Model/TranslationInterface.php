@@ -24,4 +24,6 @@ interface TranslationInterface
     public function setLocale(?string $locale): void;
 }
 
-class_alias(TranslationInterface::class, \Sylius\Component\Resource\Model\TranslationInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Model\TranslationInterface::class, false)) {
+    class_alias(TranslationInterface::class, \Sylius\Component\Resource\Model\TranslationInterface::class);
+}

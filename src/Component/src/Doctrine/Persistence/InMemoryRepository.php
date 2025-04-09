@@ -212,4 +212,6 @@ class InMemoryRepository implements RepositoryInterface
     }
 }
 
-class_alias(InMemoryRepository::class, \Sylius\Component\Resource\Repository\InMemoryRepository::class);
+if (!class_exists(\Sylius\Component\Resource\Repository\InMemoryRepository::class, false)) {
+    class_alias(InMemoryRepository::class, \Sylius\Component\Resource\Repository\InMemoryRepository::class);
+}

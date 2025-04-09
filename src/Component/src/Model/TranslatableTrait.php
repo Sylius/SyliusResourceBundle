@@ -135,4 +135,6 @@ trait TranslatableTrait
     abstract protected function createTranslation(): TranslationInterface;
 }
 
-class_alias(TranslatableTrait::class, \Sylius\Component\Resource\Model\TranslatableTrait::class);
+if (!class_exists(\Sylius\Component\Resource\Model\TranslatableTrait::class, false)) {
+    class_alias(TranslatableTrait::class, \Sylius\Component\Resource\Model\TranslatableTrait::class);
+}

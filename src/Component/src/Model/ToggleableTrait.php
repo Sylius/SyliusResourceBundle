@@ -39,4 +39,6 @@ trait ToggleableTrait
     }
 }
 
-class_alias(ToggleableTrait::class, \Sylius\Component\Resource\Model\ToggleableTrait::class);
+if (!class_exists(\Sylius\Component\Resource\Model\ToggleableTrait::class, false)) {
+    class_alias(ToggleableTrait::class, \Sylius\Component\Resource\Model\ToggleableTrait::class);
+}

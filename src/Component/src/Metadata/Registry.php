@@ -54,4 +54,6 @@ final class Registry implements RegistryInterface
     }
 }
 
-class_alias(Registry::class, \Sylius\Component\Resource\Metadata\Registry::class);
+if (!class_exists(\Sylius\Component\Resource\Metadata\Registry::class, false)) {
+    class_alias(Registry::class, \Sylius\Component\Resource\Metadata\Registry::class);
+}

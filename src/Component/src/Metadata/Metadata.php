@@ -163,4 +163,6 @@ final class Metadata implements MetadataInterface
     }
 }
 
-class_alias(Metadata::class, \Sylius\Component\Resource\Metadata\Metadata::class);
+if (!class_exists(\Sylius\Component\Resource\Metadata\Metadata::class, false)) {
+    class_alias(Metadata::class, \Sylius\Component\Resource\Metadata\Metadata::class);
+}

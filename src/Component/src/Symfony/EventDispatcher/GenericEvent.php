@@ -114,4 +114,6 @@ class GenericEvent extends BaseGenericEvent
     }
 }
 
-\class_alias(GenericEvent::class, \Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent::class);
+if (!class_exists(\Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent::class, false)) {
+    class_alias(GenericEvent::class, \Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent::class);
+}
