@@ -19,6 +19,7 @@ use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
+use Sylius\Component\Grid\View\GridView;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -86,5 +87,28 @@ final class TwigGridRendererSpec extends ObjectBehavior
             ->shouldThrow(new \InvalidArgumentException('Missing template for action type "foo".'))
             ->during('renderAction', [$gridView, $action])
         ;
+    }
+
+    function it_calls_the_inner_renderer_with_a_non_resource_grid_view(
+        GridRendererInterface $gridRenderer,
+        GridView $gridView,
+        Action $action,
+    ): void {
+        $action->getType()->willReturn('link');
+        $action->getOptions()->willReturn([]);
+
+        $gridRenderer
+            ->renderAction($gridView, $action, null)
+            ->willReturn('foo')
+            ->shouldBeCalled();
+
+        $this->shouldNotThrow(
+            new \InvalidArgumentException(
+                sprintf('Expected an instance of %s. Got: %s', ResourceGridView::class, get_class($gridView)),
+            ),
+        )
+            ->during('renderAction', [$gridView, $action]);
+
+        $this->renderAction($gridView, $action)->shouldReturn('foo');
     }
 }
