@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Validator\Constraints;
 use Sylius\Bundle\ResourceBundle\Validator\EnabledValidator;
 use Symfony\Component\Validator\Constraint;
 
+#[\Attribute]
 final class Enabled extends Constraint
 {
     public string $message = 'sylius.resource.not_enabled';
