@@ -54,6 +54,7 @@ abstract class Operation
         protected ?array $validationContext = null,
         protected ?string $eventShortName = null,
         protected ?string $notificationMessage = null,
+        protected ?bool $security = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -343,6 +344,19 @@ abstract class Operation
     {
         $self = clone $this;
         $self->notificationMessage = $notificationMessage;
+
+        return $self;
+    }
+
+    public function canSecurity(): ?bool
+    {
+        return $this->security;
+    }
+
+    public function withSecurity(bool $security): self
+    {
+        $self = clone $this;
+        $self->security = $security;
 
         return $self;
     }

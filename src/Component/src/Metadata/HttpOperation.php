@@ -48,6 +48,7 @@ class HttpOperation extends Operation
         ?array $validationContext = null,
         ?string $eventShortName = null,
         ?string $notificationMessage = null,
+        ?bool $security = null,
         string|callable|null $twigContextFactory = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
@@ -75,6 +76,7 @@ class HttpOperation extends Operation
             validationContext: $validationContext,
             eventShortName: $eventShortName,
             notificationMessage: $notificationMessage,
+            security: $security,
         );
 
         $this->twigContextFactory = $twigContextFactory;

@@ -47,6 +47,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
         ?array $validationContext = null,
         ?string $eventShortName = null,
         ?string $notificationMessage = null,
+        ?bool $security = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -75,6 +76,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
             validationContext: $validationContext,
             eventShortName: $eventShortName,
             notificationMessage: $notificationMessage,
+            security: $security,
             redirectToRoute: $redirectToRoute,
         );
     }

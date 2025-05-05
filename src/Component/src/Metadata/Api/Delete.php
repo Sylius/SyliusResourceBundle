@@ -47,6 +47,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface, Ap
         ?array $validationContext = null,
         ?string $eventShortName = null,
         ?string $notificationMessage = null,
+        ?bool $security = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -75,6 +76,7 @@ final class Delete extends HttpOperation implements DeleteOperationInterface, Ap
             validationContext: $validationContext,
             eventShortName: $eventShortName,
             notificationMessage: $notificationMessage,
+            security: $security,
             redirectToRoute: $redirectToRoute,
         );
     }

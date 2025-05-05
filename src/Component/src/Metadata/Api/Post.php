@@ -47,6 +47,7 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
         ?array $validationContext = null,
         ?string $eventShortName = null,
         ?string $notificationMessage = null,
+        ?bool $security = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -75,6 +76,7 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
             validationContext: $validationContext,
             eventShortName: $eventShortName,
             notificationMessage: $notificationMessage,
+            security: $security,
             redirectToRoute: $redirectToRoute,
         );
     }
