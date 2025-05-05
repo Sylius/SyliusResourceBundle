@@ -21,7 +21,7 @@ use Sylius\Resource\Metadata\Operation;
  */
 final class SecurityAttributeProvider implements SecurityAttributeProviderInterface
 {
-    public function getAttribute(Operation $operation, Context $context): array|string
+    public function getAttribute(Operation $operation, Context $context): array|string|null
     {
         return $operation->getShortName();
     }

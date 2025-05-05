@@ -37,14 +37,18 @@ final class SecurityProvider implements ProviderInterface
 
         $attribute = $this->securityAttributeProvider->getAttribute($operation, $context);
 
-        if (!$this->authorizationChecker->isGranted($attribute, $data)) {
-            $exception = new AccessDeniedException();
-            $exception->setAttributes($attribute);
-            $exception->setSubject($data);
-
-            throw $exception;
+        if (null === $attribute) {
+            return $data;
         }
 
-        return $data;
+        if ($this->authorizationChecker->isGranted($attribute, $data)) {
+            return $data;
+        }
+
+        $exception = new AccessDeniedException();
+        $exception->setAttributes($attribute);
+        $exception->setSubject($data);
+
+        throw $exception;
     }
 }
