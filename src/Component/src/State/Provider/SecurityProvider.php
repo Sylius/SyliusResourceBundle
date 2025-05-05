@@ -35,12 +35,11 @@ final class SecurityProvider implements ProviderInterface
     {
         $data = $this->provider->provide($operation, $context);
 
-        $attribute = $this->securityAttributeProvider->getAttribute($operation, $context);
-
-        if (null === $attribute) {
+        if (false === ($operation->canSecurity() ?? false)) {
             return $data;
         }
 
+        $attribute = $this->securityAttributeProvider->getAttribute($operation, $context);
         if ($this->authorizationChecker->isGranted($attribute, $data)) {
             return $data;
         }
