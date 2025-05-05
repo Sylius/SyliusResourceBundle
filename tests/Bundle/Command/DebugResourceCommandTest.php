@@ -310,6 +310,8 @@ final class DebugResourceCommandTest extends TestCase
               validationContext        null                      
               eventShortName           "register"                
               notificationMessage      null                      
+              security                 null                      
+              securityMessage          null                      
              ------------------------ -------------------------- 
             
             

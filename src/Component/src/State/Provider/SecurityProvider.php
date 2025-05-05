@@ -15,8 +15,8 @@ namespace Sylius\Resource\State\Provider;
 
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\OperationAccessCheckerInterface;
 use Sylius\Resource\State\ProviderInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -25,9 +25,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class SecurityProvider implements ProviderInterface
 {
     public function __construct(
-        private ProviderInterface $provider,
-        private readonly SecurityAttributeProviderInterface $securityAttributeProvider,
-        private AuthorizationCheckerInterface $authorizationChecker,
+        private readonly ProviderInterface $provider,
+        private readonly OperationAccessCheckerInterface $operationAccessChecker,
     ) {
     }
 
@@ -35,17 +34,15 @@ final class SecurityProvider implements ProviderInterface
     {
         $data = $this->provider->provide($operation, $context);
 
-        if (false === ($operation->canSecurity() ?? false)) {
+        if ($this->operationAccessChecker->isGranted($operation, $context, ['object' => $data])) {
             return $data;
         }
 
-        $attribute = $this->securityAttributeProvider->getAttribute($operation, $context);
-        if ($this->authorizationChecker->isGranted($attribute, $data)) {
-            return $data;
-        }
-
-        $exception = new AccessDeniedException();
-        $exception->setAttributes($attribute);
+        $exception = new AccessDeniedException($operation->getSecurityMessage() ?? 'Access denied.');
+        $exception->setAttributes([
+            'operation' => $operation,
+            'context' => $context,
+        ]);
         $exception->setSubject($data);
 
         throw $exception;
