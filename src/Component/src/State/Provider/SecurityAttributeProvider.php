@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\State\Provider;
 
+use Sylius\Resource\ResourceActions;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Operation;
 
@@ -21,8 +22,8 @@ use Sylius\Resource\Metadata\Operation;
  */
 final class SecurityAttributeProvider implements SecurityAttributeProviderInterface
 {
-    public function getAttribute(Operation $operation, Context $context): array|string|null
+    public function getAttribute(Operation $operation, Context $context): array|string
     {
-        return $operation->getShortName();
+        return $operation->getShortName() ?? ResourceActions::SHOW;
     }
 }
