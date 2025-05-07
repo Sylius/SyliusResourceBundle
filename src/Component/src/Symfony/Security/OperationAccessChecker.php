@@ -50,17 +50,12 @@ final class OperationAccessChecker implements OperationAccessCheckerInterface
             return true;
         }
 
-        $variables = array_merge($extraVariables, [
-            'trust_resolver' => $this->authenticationTrustResolver,
-            'auth_checker' => $this->authorizationChecker, // needed for the is_granted expression function
-        ]);
-
         $token = $this->tokenStorage->getToken();
         if (null === $token) {
             $token = new NullToken();
         }
 
-        $variables = array_merge($variables, $this->getVariables($token));
+        $variables = array_merge($extraVariables, $this->getVariables($token));
 
         return (bool) $this->expressionLanguage->evaluate($expression, $variables);
     }
@@ -70,22 +65,18 @@ final class OperationAccessChecker implements OperationAccessCheckerInterface
      */
     private function getVariables(TokenInterface $token): array
     {
+        $roleNames = $token->getRoleNames();
+
+        if (null !== $this->roleHierarchy) {
+            $roleNames = $this->roleHierarchy->getReachableRoleNames($roleNames);
+        }
+
         return [
             'token' => $token,
             'user' => $token->getUser(),
-            'roles' => $this->getEffectiveRoles($token),
+            'roles' => $roleNames,
+            'trust_resolver' => $this->authenticationTrustResolver,
+            'auth_checker' => $this->authorizationChecker, // needed for the is_granted expression function
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getEffectiveRoles(TokenInterface $token): array
-    {
-        if (null === $this->roleHierarchy) {
-            return $token->getRoleNames();
-        }
-
-        return $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
     }
 }
