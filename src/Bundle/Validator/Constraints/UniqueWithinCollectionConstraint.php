@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Validator\Constraints;
 use Sylius\Bundle\ResourceBundle\Validator\UniqueWithinCollectionConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 
+#[\Attribute]
 final class UniqueWithinCollectionConstraint extends Constraint
 {
     public string $message = 'This code must be unique within this collection.';
