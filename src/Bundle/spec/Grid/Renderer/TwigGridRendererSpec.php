@@ -81,6 +81,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
         ResourceGridView $gridView,
         Action $action,
     ): void {
+        $action->getOptions()->willReturn([]);
         $action->getType()->willReturn('foo');
 
         $this
