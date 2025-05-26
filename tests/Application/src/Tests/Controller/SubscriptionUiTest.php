@@ -65,12 +65,12 @@ final class SubscriptionUiTest extends ApiTestCase
         }
 
         $this->assertStringContainsString('<td>doc.brown@bttf.com</td>', $content);
-        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $docBrownSubscription->getId()), $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s" data-custom-show>Show</a>', $docBrownSubscription->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $docBrownSubscription->getId()), $content);
         $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s/delete" method="post">', $docBrownSubscription->getId()), $content);
 
         $this->assertStringContainsString('<td>biff.tannen@bttf.com</td>', $content);
-        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $biffTannenSubscription->getId()), $content);
+        $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s" data-custom-show>Show</a>', $biffTannenSubscription->getId()), $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s/edit">Edit</a>', $biffTannenSubscription->getId()), $content);
         $this->assertStringContainsString(sprintf('<form action="/admin/subscriptions/%s/delete" method="post">', $biffTannenSubscription->getId()), $content);
     }
