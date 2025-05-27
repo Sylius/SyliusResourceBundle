@@ -21,4 +21,6 @@ interface TranslationLocaleProviderInterface
     public function getDefaultLocaleCode(): string;
 }
 
-class_alias(TranslationLocaleProviderInterface::class, \Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface::class, false)) {
+    class_alias(TranslationLocaleProviderInterface::class, \Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface::class);
+}

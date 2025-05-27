@@ -45,4 +45,6 @@ final class SyliusRoute
     }
 }
 
-class_alias(SyliusRoute::class, \Sylius\Component\Resource\Annotation\SyliusRoute::class);
+if (!class_exists(\Sylius\Component\Resource\Annotation\SyliusRoute::class, false)) {
+    class_alias(SyliusRoute::class, \Sylius\Component\Resource\Annotation\SyliusRoute::class);
+}

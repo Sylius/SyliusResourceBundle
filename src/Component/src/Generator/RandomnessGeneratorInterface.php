@@ -22,4 +22,6 @@ interface RandomnessGeneratorInterface
     public function generateInt(int $min, int $max): int;
 }
 
-class_alias(RandomnessGeneratorInterface::class, \Sylius\Component\Resource\Generator\RandomnessGeneratorInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Generator\RandomnessGeneratorInterface::class, false)) {
+    class_alias(RandomnessGeneratorInterface::class, \Sylius\Component\Resource\Generator\RandomnessGeneratorInterface::class);
+}

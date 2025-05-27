@@ -39,4 +39,5 @@ return [
     NelmioAliceBundle::class => ['all' => true],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
     SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
+    Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
 ];

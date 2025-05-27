@@ -14,14 +14,20 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use App\Foundry\Factory\AuthorFactory;
+use App\Foundry\Factory\ComicBookFactory;
+use App\Foundry\Story\DefaultComicBooksStory;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 final class ComicBookApiTest extends JsonApiTestCase
 {
+    use Factories;
+
     /**
      * @test
      */
-    public function it_allows_creating_a_comic_book()
+    public function it_allows_creating_a_comic_book(): void
     {
         $data =
 <<<EOT
@@ -42,7 +48,7 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_versioned_creating_a_comic_book()
+    public function it_allows_versioned_creating_a_comic_book(): void
     {
         $this->markAsSkippedIfNecessary();
 
@@ -65,9 +71,9 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_updating_a_comic_book()
+    public function it_allows_updating_a_comic_book(): void
     {
-        $objects = $this->loadFixturesFromFile('comic_books.yml');
+        $comicBook = self::someComicBook()->create();
 
         $data =
 <<<EOT
@@ -80,7 +86,7 @@ EOT;
         }
 EOT;
 
-        $this->client->request('PUT', '/v1/comic-books/' . $objects['comic-book1']->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('PUT', '/v1/comic-books/' . $comicBook->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
     }
@@ -88,9 +94,9 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_updating_partial_information_about_a_comic_book()
+    public function it_allows_updating_partial_information_about_a_comic_book(): void
     {
-        $objects = $this->loadFixturesFromFile('comic_books.yml');
+        $comicBook = self::someComicBook()->create();
 
         $data =
  <<<EOT
@@ -102,7 +108,7 @@ EOT;
         }
 EOT;
 
-        $this->client->request('PATCH', '/v1/comic-books/' . $objects['comic-book1']->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('PATCH', '/v1/comic-books/' . $comicBook->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
     }
@@ -110,11 +116,11 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_removing_a_comic_book()
+    public function it_allows_removing_a_comic_book(): void
     {
-        $objects = $this->loadFixturesFromFile('comic_books.yml');
+        $comicBook = self::someComicBook()->create();
 
-        $this->client->request('DELETE', '/v1/comic-books/' . $objects['comic-book1']->getId());
+        $this->client->request('DELETE', '/v1/comic-books/' . $comicBook->getId());
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
     }
@@ -122,11 +128,11 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_showing_a_comic_book()
+    public function it_allows_showing_a_comic_book(): void
     {
-        $objects = $this->loadFixturesFromFile('comic_books.yml');
+        $comicBook = self::someComicBook()->create();
 
-        $this->client->request('GET', '/v1/comic-books/' . $objects['comic-book1']->getId());
+        $this->client->request('GET', '/v1/comic-books/' . $comicBook->getId());
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'comic-books/show_response');
     }
@@ -134,13 +140,13 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_versioning_of_a_showing_comic_book_serialization()
+    public function it_allows_versioning_of_a_showing_comic_book_serialization(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('comic_books.yml');
+        $comicBook = self::someComicBook()->create();
 
-        $this->client->request('GET', '/v1.2/comic-books/' . $objects['comic-book1']->getId());
+        $this->client->request('GET', '/v1.2/comic-books/' . $comicBook->getId());
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'comic-books/versioned_show_response');
     }
@@ -148,11 +154,11 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_indexing_of_comic_books()
+    public function it_allows_indexing_of_comic_books(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $this->loadFixturesFromFile('comic_books.yml');
+        DefaultComicBooksStory::load();
 
         $this->client->request('GET', '/v1/comic-books/');
         $response = $this->client->getResponse();
@@ -162,11 +168,11 @@ EOT;
     /**
      * @test
      */
-    public function it_allows_versioned_indexing_of_comic_books()
+    public function it_allows_versioned_indexing_of_comic_books(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $this->loadFixturesFromFile('comic_books.yml');
+        DefaultComicBooksStory::load();
 
         $this->client->request('GET', '/v1.2/comic-books/');
         $response = $this->client->getResponse();
@@ -176,10 +182,8 @@ EOT;
     /**
      * @test
      */
-    public function it_does_not_allow_showing_resource_if_it_does_not_exist()
+    public function it_does_not_allow_showing_resource_if_it_does_not_exist(): void
     {
-        $this->loadFixturesFromFile('comic_books.yml');
-
         $this->client->request('GET', '/v1/comic-books/3');
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NOT_FOUND);
@@ -190,5 +194,17 @@ EOT;
         if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
             $this->markTestSkipped();
         }
+    }
+
+    private static function someComicBook(): ComicBookFactory
+    {
+        return ComicBookFactory::new()
+            ->withTitle('Old Man Logan')
+            ->withAuthor(
+                AuthorFactory::new()
+                ->withFirstName('Andrea')
+                ->withLastName('Sorrentino'),
+            )
+        ;
     }
 }

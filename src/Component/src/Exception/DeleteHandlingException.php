@@ -24,7 +24,7 @@ class DeleteHandlingException extends RuntimeException
         string $flash = 'something_went_wrong_error',
         int $apiResponseCode = 500,
         int $code = 0,
-        ?\Exception $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
 
@@ -43,4 +43,6 @@ class DeleteHandlingException extends RuntimeException
     }
 }
 
-class_alias(DeleteHandlingException::class, \Sylius\Component\Resource\Exception\DeleteHandlingException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\DeleteHandlingException::class, false)) {
+    class_alias(DeleteHandlingException::class, \Sylius\Component\Resource\Exception\DeleteHandlingException::class);
+}

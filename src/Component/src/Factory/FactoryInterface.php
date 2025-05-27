@@ -24,4 +24,6 @@ interface FactoryInterface
     public function createNew();
 }
 
-class_alias(FactoryInterface::class, \Sylius\Component\Resource\Factory\FactoryInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Factory\FactoryInterface::class, false)) {
+    class_alias(FactoryInterface::class, \Sylius\Component\Resource\Factory\FactoryInterface::class);
+}

@@ -26,6 +26,7 @@ class HttpOperation extends Operation
         protected ?string $path = null,
         protected ?string $routeName = null,
         protected ?string $routePrefix = null,
+        protected ?array $routeRequirements = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -46,6 +47,7 @@ class HttpOperation extends Operation
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         string|callable|null $twigContextFactory = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
@@ -72,6 +74,7 @@ class HttpOperation extends Operation
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
         );
 
         $this->twigContextFactory = $twigContextFactory;
@@ -125,6 +128,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    public function getRouteRequirements(): ?array
+    {
+        return $this->routeRequirements;
+    }
+
+    public function withRouteRequirements(array $routeRequirements): self
+    {
+        $self = clone $this;
+        $self->routeRequirements = $routeRequirements;
 
         return $self;
     }

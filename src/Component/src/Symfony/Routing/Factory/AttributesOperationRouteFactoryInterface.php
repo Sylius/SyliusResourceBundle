@@ -15,6 +15,9 @@ namespace Sylius\Resource\Symfony\Routing\Factory;
 
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * @deprecated use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface instead
+ */
 interface AttributesOperationRouteFactoryInterface
 {
     /** @psalm-param class-string $className */

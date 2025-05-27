@@ -49,4 +49,6 @@ interface StorageInterface
     public function all(): array;
 }
 
-class_alias(StorageInterface::class, \Sylius\Component\Resource\Storage\StorageInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Storage\StorageInterface::class, false)) {
+    class_alias(StorageInterface::class, \Sylius\Component\Resource\Storage\StorageInterface::class);
+}

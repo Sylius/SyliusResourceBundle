@@ -24,6 +24,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -56,6 +57,7 @@ EOT
         );
         $this->addArgument('resource', InputArgument::OPTIONAL, 'Resource to debug');
         $this->addArgument('operation', InputArgument::OPTIONAL, 'Operation to debug');
+        $this->addOption('legacy', null, InputOption::VALUE_NONE, 'Show legacy resource metadata.');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -92,6 +94,12 @@ EOT
             return Command::SUCCESS;
         }
 
+        if ($input->getOption('legacy')) {
+            $this->debugLegacyResourceMetadata($metadata, $input, $io, $dumper);
+
+            return Command::SUCCESS;
+        }
+
         $this->debugResource($metadata, $input, $io, $dumper);
 
         return Command::SUCCESS;
@@ -115,6 +123,19 @@ EOT
 
     private function debugResource(MetadataInterface $metadata, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
     {
+        $resourceMetadataCollection = $this->getResourceMetadataCollection($metadata);
+
+        $this->debugResourceMetadata($resourceMetadataCollection, $io, $dumper);
+
+        $this->debugResourceCollectionOperation($metadata, $input, $io, $dumper);
+    }
+
+    private function debugLegacyResourceMetadata(
+        MetadataInterface $metadata,
+        InputInterface $input,
+        SymfonyStyle $io,
+        Dumper $dumper,
+    ): void {
         $io->section('Configuration');
 
         $values = $this->configurationToArray($metadata);
@@ -126,12 +147,6 @@ EOT
         }
 
         $io->table(['Option', 'Value'], $rows);
-
-        $resourceMetadataCollection = $this->getResourceMetadataCollection($metadata);
-
-        $this->debugNewResourceMetadata($resourceMetadataCollection, $io, $dumper);
-
-        $this->debugResourceCollectionOperation($metadata, $input, $io, $dumper);
     }
 
     private function getResourceMetadataCollection(MetadataInterface $resourceConfiguration): ResourceMetadataCollection
@@ -154,12 +169,12 @@ EOT
         $io->table(['Option', 'Value'], $rows);
     }
 
-    private function debugNewResourceMetadata(ResourceMetadataCollection $resourceMetadataCollection, SymfonyStyle $io, Dumper $dumper): void
+    private function debugResourceMetadata(ResourceMetadataCollection $resourceMetadataCollection, SymfonyStyle $io, Dumper $dumper): void
     {
-        $io->section('New Resource Metadata');
+        $io->section('Resource Metadata');
 
         if (0 === $resourceMetadataCollection->count()) {
-            $io->info('This resource has no new metadata.');
+            $io->info('This resource has no metadata.');
 
             return;
         }
@@ -179,7 +194,7 @@ EOT
 
     private function debugResourceCollectionOperation(MetadataInterface $metadata, InputInterface $input, SymfonyStyle $io, Dumper $dumper): void
     {
-        $io->section('New operations');
+        $io->section('Operations');
 
         $resourceMetadataCollection = $this->resourceMetadataCollectionFactory->create($metadata->getClass('model'));
 

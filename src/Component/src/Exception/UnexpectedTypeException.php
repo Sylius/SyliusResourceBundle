@@ -28,4 +28,6 @@ class UnexpectedTypeException extends InvalidArgumentException
     }
 }
 
-class_alias(UnexpectedTypeException::class, \Sylius\Component\Resource\Exception\UnexpectedTypeException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\UnexpectedTypeException::class, false)) {
+    class_alias(UnexpectedTypeException::class, \Sylius\Component\Resource\Exception\UnexpectedTypeException::class);
+}

@@ -21,7 +21,6 @@ use Sylius\Component\Grid\Definition\Filter;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
 use Twig\Environment;
-use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
 {
@@ -63,10 +62,15 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        Assert::isInstanceOf($gridView, ResourceGridView::class);
+        if (!$gridView instanceof ResourceGridView) {
+            return $this->gridRenderer->renderAction($gridView, $action, $data);
+        }
 
         $type = $action->getType();
-        if (!isset($this->actionTemplates[$type])) {
+        $template = method_exists($action, 'getTemplate') ? $action->getTemplate() : null;
+        $template ??= $this->actionTemplates[$type] ?? null;
+
+        if (null === $template) {
             throw new \InvalidArgumentException(sprintf('Missing template for action type "%s".', $type));
         }
 
@@ -76,7 +80,7 @@ final class TwigGridRenderer implements GridRendererInterface
             $data,
         );
 
-        return $this->twig->render($this->actionTemplates[$type], [
+        return $this->twig->render($template, [
             'grid' => $gridView,
             'action' => $action,
             'data' => $data,

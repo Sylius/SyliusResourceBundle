@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository as DoctrineEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Repository\RepositoryFactory;
-use Doctrine\Persistence\ObjectRepository;
 
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
@@ -25,7 +25,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     /** @var string[] */
     private array $genericEntities;
 
-    /** @var ObjectRepository[] */
+    /** @var DoctrineEntityRepository[] */
     private array $managedRepositories = [];
 
     /**
@@ -37,8 +37,11 @@ final class ContainerRepositoryFactory implements RepositoryFactory
         $this->genericEntities = $genericEntities;
     }
 
-    /** @psalm-suppress InvalidReturnType */
-    public function getRepository(EntityManagerInterface $entityManager, $entityName): ObjectRepository
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnType
+     */
+    public function getRepository(EntityManagerInterface $entityManager, $entityName): DoctrineEntityRepository
     {
         $metadata = $entityManager->getClassMetadata($entityName);
 
@@ -47,13 +50,16 @@ final class ContainerRepositoryFactory implements RepositoryFactory
             return $this->getOrCreateRepository($entityManager, $metadata);
         }
 
-        return $this->doctrineFactory->getRepository($entityManager, $entityName);
+        /** @var DoctrineEntityRepository $repository */
+        $repository = $this->doctrineFactory->getRepository($entityManager, $entityName);
+
+        return $repository;
     }
 
     private function getOrCreateRepository(
         EntityManagerInterface $entityManager,
         ClassMetadata $metadata,
-    ): ObjectRepository {
+    ): DoctrineEntityRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
 
         if (!isset($this->managedRepositories[$repositoryHash])) {

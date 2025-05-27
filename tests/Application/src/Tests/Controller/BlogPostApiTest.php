@@ -14,12 +14,17 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use App\Foundry\Factory\BlogPostFactory;
+use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 final class BlogPostApiTest extends JsonApiTestCase
 {
-    /** @test */
+    use Factories;
+
+    #[Test]
     public function it_allows_creating_a_blog_post(): void
     {
         $this->markAsSkippedIfNecessary();
@@ -29,62 +34,77 @@ final class BlogPostApiTest extends JsonApiTestCase
         $this->assertResponse($response, 'blog-posts/create_response', Response::HTTP_CREATED);
     }
 
-    /** @test */
-    public function it_allows_reviewing_a_blog_post()
+    #[Test]
+    public function it_allows_reviewing_a_blog_post(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('blog-posts.yml');
+        $blogPost = BlogPostFactory::new()
+            ->onDraft()
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/blog-posts/' . $objects['blog_post_draft']->getId() . '/to_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/to_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'blog-posts/to_review_response', Response::HTTP_OK);
     }
 
-    /** @test */
-    public function it_allows_publishing_a_blog_post()
+    #[Test]
+    public function it_allows_publishing_a_blog_post(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('blog-posts.yml');
+        $blogPost = BlogPostFactory::new()
+            ->reviewed()
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/blog-posts/' . $objects['blog_post_reviewed']->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'blog-posts/publish_response', Response::HTTP_OK);
     }
 
-    /** @test */
-    public function it_allows_rejecting_a_blog_post()
+    #[Test]
+    public function it_allows_rejecting_a_blog_post(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('blog-posts.yml');
+        $blogPost = BlogPostFactory::new()
+            ->reviewed()
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/blog-posts/' . $objects['blog_post_reviewed']->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'blog-posts/reject_response', Response::HTTP_OK);
     }
 
-    /** @test */
-    public function it_does_not_allow_to_publish_a_blog_post_with_draft_status()
+    #[Test]
+    public function it_does_not_allow_to_publish_a_blog_post_with_draft_status(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('blog-posts.yml');
+        $blogPost = BlogPostFactory::new()
+            ->onDraft()
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/blog-posts/' . $objects['blog_post_draft']->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
     }
 
-    /** @test */
-    public function it_does_not_allow_to_reject_a_blog_post_with_draft_status()
+    #[Test]
+    public function it_does_not_allow_to_reject_a_blog_post_with_draft_status(): void
     {
         $this->markAsSkippedIfNecessary();
 
-        $objects = $this->loadFixturesFromFile('blog-posts.yml');
+        $blogPost = BlogPostFactory::new()
+            ->onDraft()
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/blog-posts/' . $objects['blog_post_draft']->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
     }

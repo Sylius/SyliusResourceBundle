@@ -81,4 +81,6 @@ final class SyliusCrudRoutes
     }
 }
 
-class_alias(SyliusCrudRoutes::class, \Sylius\Component\Resource\Annotation\SyliusCrudRoutes::class);
+if (!class_exists(\Sylius\Component\Resource\Annotation\SyliusCrudRoutes::class, false)) {
+    class_alias(SyliusCrudRoutes::class, \Sylius\Component\Resource\Annotation\SyliusCrudRoutes::class);
+}

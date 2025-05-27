@@ -25,6 +25,7 @@ final class Put extends HttpOperation implements UpdateOperationInterface, ApiOp
     public function __construct(
         ?string $path = null,
         ?string $routePrefix = null,
+        ?array $routeRequirements = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -45,12 +46,14 @@ final class Put extends HttpOperation implements UpdateOperationInterface, ApiOp
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
             methods: ['PUT'],
             path: $path,
             routePrefix: $routePrefix,
+            routeRequirements: $routeRequirements,
             template: $template,
             shortName: $shortName ?? 'put',
             name: $name,
@@ -71,6 +74,7 @@ final class Put extends HttpOperation implements UpdateOperationInterface, ApiOp
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
             redirectToRoute: $redirectToRoute,
         );
     }

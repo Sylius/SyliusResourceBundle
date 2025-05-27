@@ -13,16 +13,23 @@ declare(strict_types=1);
 
 namespace App\Tests\Validator;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Entity\Book;
+use App\Foundry\Story\DefaultBooksStory;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class TranslatableValidatorTest extends JsonApiTestCase
+final class TranslatableValidatorTest extends KernelTestCase
 {
+    use Factories;
+    use ResetDatabase;
+
     /** @test */
     public function it_fails_validation_with_empty_locale(): void
     {
-        $this->loadFixturesFromFile('books.yml');
+        DefaultBooksStory::load();
+
         $book = $this->getBookBy();
         $book->getTranslation('pl_PL')->setLocale('');
 
@@ -34,7 +41,8 @@ final class TranslatableValidatorTest extends JsonApiTestCase
     /** @test */
     public function it_fails_validation_with_invalid_locale(): void
     {
-        $this->loadFixturesFromFile('books.yml');
+        DefaultBooksStory::load();
+
         $book = $this->getBookBy();
         $book->getTranslation('pl_PL')->setLocale('invalid');
 
@@ -46,7 +54,8 @@ final class TranslatableValidatorTest extends JsonApiTestCase
     /** @test */
     public function it_fails_validation_with_not_unique_locale(): void
     {
-        $this->loadFixturesFromFile('books.yml');
+        DefaultBooksStory::load();
+
         $book = $this->getBookBy();
         $book->getTranslation('pl_PL')->setLocale('en_US');
 
@@ -57,7 +66,7 @@ final class TranslatableValidatorTest extends JsonApiTestCase
 
     private function getValidator(): ValidatorInterface
     {
-        return self::getContainer()->get('validator');
+        return self::getContainer()->get(ValidatorInterface::class);
     }
 
     private function getBookBy(array $criteria = ['author' => 'J.R.R. Tolkien']): ?Book

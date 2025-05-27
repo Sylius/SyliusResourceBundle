@@ -17,9 +17,7 @@ use App\Entity\Book;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Resource\Annotation\SyliusRoute;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
+#[Serializer\ExclusionPolicy(policy: 'ALL')]
 #[SyliusRoute(
     name: 'show_book_with_vars',
     path: '/book/{id}',

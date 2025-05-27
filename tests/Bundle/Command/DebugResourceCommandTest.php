@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Command;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -118,31 +119,8 @@ final class DebugResourceCommandTest extends TestCase
         $this->assertEquals(
             <<<TXT
             
-            Configuration
-            -------------
-            
-             ----------------------- ----------------------------- 
-              Option                  Value                        
-             ----------------------- ----------------------------- 
-              name                    "one"                        
-              applicationName         "sylius"                     
-              driver                  "doctrine/foobar"            
-              stateMachineComponent   null                         
-              templatesNamespace      null                         
-              classes                 [                            
-                                        "model" => "App\One",      
-                                        "foo" => "bar",            
-                                        "bar" => "foo"             
-                                      ]                            
-              whatever                [                            
-                                        "something" => [           
-                                          "elephants" => "camels"  
-                                        ]                          
-                                      ]                            
-             ----------------------- ----------------------------- 
-            
-            New Resource Metadata
-            ---------------------
+            Resource Metadata
+            -----------------
             
              ------------------------ ------- 
               Option                   Value  
@@ -164,8 +142,8 @@ final class DebugResourceCommandTest extends TestCase
               vars                     null   
              ------------------------ ------- 
             
-            New operations
-            --------------
+            Operations
+            ----------
             
              ---------------- --------------------------------------------------------------- 
               Name             Details                                                        
@@ -206,31 +184,8 @@ final class DebugResourceCommandTest extends TestCase
         $this->assertEquals(
             <<<TXT
             
-            Configuration
-            -------------
-            
-             ----------------------- ----------------------------- 
-              Option                  Value                        
-             ----------------------- ----------------------------- 
-              name                    "one"                        
-              applicationName         "sylius"                     
-              driver                  "doctrine/foobar"            
-              stateMachineComponent   null                         
-              templatesNamespace      null                         
-              classes                 [                            
-                                        "model" => "App\One",      
-                                        "foo" => "bar",            
-                                        "bar" => "foo"             
-                                      ]                            
-              whatever                [                            
-                                        "something" => [           
-                                          "elephants" => "camels"  
-                                        ]                          
-                                      ]                            
-             ----------------------- ----------------------------- 
-            
-            New Resource Metadata
-            ---------------------
+            Resource Metadata
+            -----------------
             
              ------------------------ -------------- 
               Option                   Value         
@@ -252,8 +207,8 @@ final class DebugResourceCommandTest extends TestCase
               vars                     null          
              ------------------------ -------------- 
             
-            New operations
-            --------------
+            Operations
+            ----------
             
              ---------------- --------------------------------------------------------------- 
               Name             Details                                                        
@@ -328,6 +283,7 @@ final class DebugResourceCommandTest extends TestCase
               path                     null                      
               routeName                null                      
               routePrefix              null                      
+              routeRequirements        null                      
               redirectToRoute          null                      
               redirectArguments        null                      
               vars                     [                         
@@ -353,7 +309,59 @@ final class DebugResourceCommandTest extends TestCase
               denormalizationContext   null                      
               validationContext        null                      
               eventShortName           "register"                
+              notificationMessage      null                      
              ------------------------ -------------------------- 
+            
+            
+            TXT
+            ,
+            $display,
+        );
+    }
+
+    #[Test]
+    public function it_displays_the_legacy_resource_metadata_for_given_resource_alias(): void
+    {
+        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+
+        $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'));
+
+        $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
+
+        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+
+        $this->tester->execute([
+            'resource' => 'metadata.one',
+            '--legacy' => true,
+        ]);
+
+        $display = $this->tester->getDisplay();
+
+        $this->assertEquals(
+            <<<TXT
+            
+            Configuration
+            -------------
+            
+             ----------------------- ----------------------------- 
+              Option                  Value                        
+             ----------------------- ----------------------------- 
+              name                    "one"                        
+              applicationName         "sylius"                     
+              driver                  "doctrine/foobar"            
+              stateMachineComponent   null                         
+              templatesNamespace      null                         
+              classes                 [                            
+                                        "model" => "App\One",      
+                                        "foo" => "bar",            
+                                        "bar" => "foo"             
+                                      ]                            
+              whatever                [                            
+                                        "something" => [           
+                                          "elephants" => "camels"  
+                                        ]                          
+                                      ]                            
+             ----------------------- ----------------------------- 
             
             
             TXT

@@ -24,4 +24,6 @@ class UnsupportedMethodException extends Exception
     }
 }
 
-class_alias(UnsupportedMethodException::class, \Sylius\Component\Resource\Exception\UnsupportedMethodException::class);
+if (!class_exists(\Sylius\Component\Resource\Exception\UnsupportedMethodException::class, false)) {
+    class_alias(UnsupportedMethodException::class, \Sylius\Component\Resource\Exception\UnsupportedMethodException::class);
+}

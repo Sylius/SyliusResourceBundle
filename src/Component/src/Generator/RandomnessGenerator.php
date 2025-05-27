@@ -65,4 +65,6 @@ final class RandomnessGenerator implements RandomnessGeneratorInterface
     }
 }
 
-class_alias(RandomnessGenerator::class, \Sylius\Component\Resource\Generator\RandomnessGenerator::class);
+if (!class_exists(\Sylius\Component\Resource\Generator\RandomnessGenerator::class, false)) {
+    class_alias(RandomnessGenerator::class, \Sylius\Component\Resource\Generator\RandomnessGenerator::class);
+}
