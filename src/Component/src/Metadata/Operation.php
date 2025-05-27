@@ -54,6 +54,8 @@ abstract class Operation
         protected ?array $validationContext = null,
         protected ?string $eventShortName = null,
         protected ?string $notificationMessage = null,
+        protected string|\Stringable|null $security = null,
+        protected ?string $securityMessage = null,
     ) {
         $this->provider = $provider;
         $this->processor = $processor;
@@ -343,6 +345,32 @@ abstract class Operation
     {
         $self = clone $this;
         $self->notificationMessage = $notificationMessage;
+
+        return $self;
+    }
+
+    public function getSecurity(): ?string
+    {
+        return $this->security instanceof \Stringable ? (string) $this->security : $this->security;
+    }
+
+    public function withSecurity(string|\Stringable|null $security): static
+    {
+        $self = clone $this;
+        $self->security = $security;
+
+        return $self;
+    }
+
+    public function getSecurityMessage(): ?string
+    {
+        return $this->securityMessage;
+    }
+
+    public function withSecurityMessage(?string $securityMessage): static
+    {
+        $self = clone $this;
+        $self->securityMessage = $securityMessage;
 
         return $self;
     }

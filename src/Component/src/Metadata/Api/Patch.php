@@ -47,6 +47,8 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
         ?array $validationContext = null,
         ?string $eventShortName = null,
         ?string $notificationMessage = null,
+        string|\Stringable|null $security = null,
+        ?string $securityMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -75,6 +77,8 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
             validationContext: $validationContext,
             eventShortName: $eventShortName,
             notificationMessage: $notificationMessage,
+            security: $security,
+            securityMessage: $securityMessage,
             redirectToRoute: $redirectToRoute,
         );
     }
