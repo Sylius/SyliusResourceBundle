@@ -157,3 +157,33 @@ jobs:
                     (cd tests/Application && bin/console cache:clear --env=test_without_twig)
                     (cd tests/Application && bin/console lint:container --env=test_without_twig)
                     composer require "sylius/grid-bundle: ^1.11" --no-scripts --dev
+
+    tests_with_skeleton:
+        runs-on: ubuntu-latest
+        name: "Tests with the Symfony Skeleton PHP ${{ matrix.php }}${{ matrix.skeleton != '' && format(', Skeleton {0}', matrix.skeleton) || '' }}"
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ["8.3"]
+                skeleton: ["^6", "^7"]
+
+        steps:
+            -
+                uses: actions/checkout@v2
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "${{ matrix.php }}"
+                    coverage: none
+
+            -
+                name: Create-project with skeleton
+                run: |
+                    set -x
+                    php -v
+                    composer create-project --ansi "symfony/skeleton:${{ matrix.skeleton }}" skeleton_app
+                    cd skeleton_app
+                    composer config extra.symfony.allow-contrib true
+                    composer config repositories.local '{"type": "path", "url": "../", "options": {"symlink": true}}' --json
+                    composer require -W --ansi sylius/resource-bundle "*@dev"
