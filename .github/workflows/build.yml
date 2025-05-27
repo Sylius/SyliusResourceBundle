@@ -1,7 +1,10 @@
 name: Build
 
 on:
-    push: ~
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+            - 'upmerge/**'
     pull_request: ~
     release:
         types: [created]
@@ -30,7 +33,7 @@ jobs:
 
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
 
             -
                 name: Setup PHP
@@ -169,7 +172,7 @@ jobs:
 
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
             -
                 name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -180,8 +183,6 @@ jobs:
             -
                 name: Create-project with skeleton
                 run: |
-                    set -x
-                    php -v
                     composer create-project --ansi "symfony/skeleton:${{ matrix.skeleton }}" skeleton_app
                     cd skeleton_app
                     composer config extra.symfony.allow-contrib true
