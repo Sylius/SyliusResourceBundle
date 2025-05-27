@@ -25,6 +25,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?string $template = null,
         ?string $shortName = null,
@@ -58,6 +59,7 @@ final class Create extends HttpOperation implements CreateOperationInterface, St
         parent::__construct(
             methods: $methods ?? ['GET', 'POST'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             template: $template,
             shortName: $shortName ?? 'create',

@@ -22,6 +22,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
     public function __construct(
         ?array $methods = null,
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?string $template = null,
         ?string $shortName = null,
@@ -44,6 +45,7 @@ final class BulkDelete extends HttpOperation implements DeleteOperationInterface
         parent::__construct(
             methods: $methods ?? ['DELETE', 'POST'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             template: $template,
             shortName: $shortName ?? 'bulk_delete',
