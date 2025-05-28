@@ -33,6 +33,16 @@
 - [#968](https://github.com/Sylius/SyliusResourceBundle/issues/968) Add support for Doctrine ORM 3 ([@loic425](https://github.com/loic425))
 - [#969](https://github.com/Sylius/SyliusResourceBundle/issues/969) [DX][Internal] Start using Foundry ([@loic425](https://github.com/loic425))
 
+## v1.12.2 (2025-05-28)
+
+#### Details
+
+- [#990](https://github.com/Sylius/SyliusResourceBundle/pull/990) Fix Grid provider used in Request grid provider to allow using grid c… ([@loic425](https://github.com/loic425))
+- [#1010](https://github.com/Sylius/SyliusResourceBundle/pull/1010) Add `#[Attribute]` annotation to validator constraints ([@Rafikooo](https://github.com/Rafikooo))
+- [#1014](https://github.com/Sylius/SyliusResourceBundle/pull/1014) Add tests with skeleton ([@loic425](https://github.com/loic425))
+- [#1016](https://github.com/Sylius/SyliusResourceBundle/pull/1016) Fix ClassReflection resource class resolving edge case ([@Pierstoval](https://github.com/Pierstoval))
+- [#994](https://github.com/Sylius/SyliusResourceBundle/pull/994) Fix missing route name on operations attributes ([@loic425](https://github.com/loic425))
+
 ## v1.12.1 (2025-01-21)
 
 #### Details
