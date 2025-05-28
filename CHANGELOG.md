@@ -1,5 +1,25 @@
 ## CHANGELOG
 
+## v1.13.0-BETA.1 (2025-05-28)
+
+#### Details
+
+- [#985](https://github.com/Sylius/SyliusResourceBundle/pull/985) Add resource name collection ([@loic425](https://github.com/loic425))
+- [#986](https://github.com/Sylius/SyliusResourceBundle/pull/986) Init resource class list factory with attributes ([@loic425](https://github.com/loic425))
+- [#987](https://github.com/Sylius/SyliusResourceBundle/pull/987) Resource route collection factory ([@loic425](https://github.com/loic425))
+- [#997](https://github.com/Sylius/SyliusResourceBundle/pull/997) New resource loader ([@loic425](https://github.com/loic425))
+- [#984](https://github.com/Sylius/SyliusResourceBundle/pull/984) Add Operation defaults trait ([@loic425](https://github.com/loic425))
+- [#1003](https://github.com/Sylius/SyliusResourceBundle/pull/1003) Fix implicit nullable parameter on createRestView method ([@loic425](https://github.com/loic425))
+- [#1006](https://github.com/Sylius/SyliusResourceBundle/pull/1006) Wrap `class_alias` calls in `class_exists` checks ([@quentint](https://github.com/quentint))
+- [#1007](https://github.com/Sylius/SyliusResourceBundle/pull/1007) Gracefully handle rendering actions for non-resource grid view ([@vvasiloi](https://github.com/vvasiloi))
+- [#1010](https://github.com/Sylius/SyliusResourceBundle/pull/1010) Add `#[Attribute]` annotation to validator constraints ([@Rafikooo](https://github.com/Rafikooo))
+- [#1015](https://github.com/Sylius/SyliusResourceBundle/pull/1015) Allow to define a template in grid action options ([@loic425](https://github.com/loic425))
+- [#1014](https://github.com/Sylius/SyliusResourceBundle/pull/1014) Add tests with skeleton ([@loic425](https://github.com/loic425))
+- [#1016](https://github.com/Sylius/SyliusResourceBundle/pull/1016) Fix ClassReflection resource class resolving edge case ([@Pierstoval](https://github.com/Pierstoval))
+- [#1021](https://github.com/Sylius/SyliusResourceBundle/pull/1021) [Maintenance] Exclude dependabot and upmerge push builds ([@NoResponseMate](https://github.com/NoResponseMate))
+- [#1013](https://github.com/Sylius/SyliusResourceBundle/pull/1013) Add new SecurityProvider to allow managing access to resource ([@Prometee](https://github.com/Prometee))
+- [#994](https://github.com/Sylius/SyliusResourceBundle/pull/994) Fix missing route name on operations attributes ([@loic425](https://github.com/loic425))
+
 ## v1.13.0-ALPHA.3 (2025-03-12)
 
 #### Details
