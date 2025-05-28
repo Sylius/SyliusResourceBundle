@@ -47,7 +47,18 @@
             <errorLevel type="info">
                 <referencedClass name="Doctrine\ORM\Event\LifecycleEventArgs" /> <!-- deprecated in doctrine/orm 2.14 -->
             </errorLevel>
+            <errorLevel type="suppress">
+                <referencedClass name="Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException" />
+                <referencedClass name="Sylius\Resource\Exception\VariantWithNoOptionsValuesException" />
+                <referencedClass name="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory" />
+            </errorLevel>
         </DeprecatedClass>
+
+        <DeprecatedInterface>
+            <errorLevel type="suppress">
+                <referencedClass name="Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface" />
+            </errorLevel>
+        </DeprecatedInterface>
 
         <DeprecatedMethod>
             <errorLevel type="suppress">
@@ -67,7 +78,7 @@
                 <file name="src/Bundle/Controller/Parameters.php" />
             </errorLevel>
         </DuplicateClass>
-        
+
         <InternalClass>
             <errorLevel type="suppress">
                 <file name="src/Bundle/DependencyInjection/PagerfantaExtension.php" />
@@ -92,6 +103,12 @@
                 <file name="src/Component/src/Reflection/ClassReflection.php" />
             </errorLevel>
         </InvalidArgument>
+
+        <InvalidPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <file name="src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php" />
+            </errorLevel>
+        </InvalidPropertyAssignmentValue>
 
         <InvalidReturnStatement>
             <errorLevel type="suppress">
@@ -279,7 +296,8 @@
 
         <UndefinedDocblockClass>
             <errorLevel type="suppress">
-                <referencedClass name="UnitEnum"/>
+                <referencedClass name="UnitEnum" />
+                <referencedClass name="Doctrine\ORM\Mapping\AssociationMapping" />
             </errorLevel>
         </UndefinedDocblockClass>
 

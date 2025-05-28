@@ -26,6 +26,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
         ?string $path = null,
         ?string $routeName = null,
         ?string $routePrefix = null,
+        ?array $routeRequirements = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -46,6 +47,9 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
+        string|\Stringable|null $security = null,
+        ?string $securityMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -53,6 +57,7 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
             path: $path,
             routeName: $routeName,
             routePrefix: $routePrefix,
+            routeRequirements: $routeRequirements,
             template: $template,
             shortName: $shortName ?? 'get_collection',
             name: $name,
@@ -73,6 +78,9 @@ final class GetCollection extends HttpOperation implements CollectionOperationIn
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
+            security: $security,
+            securityMessage: $securityMessage,
             redirectToRoute: $redirectToRoute,
         );
     }

@@ -42,4 +42,6 @@ trait TimestampableTrait
     }
 }
 
-class_alias(TimestampableTrait::class, \Sylius\Component\Resource\Model\TimestampableTrait::class);
+if (!class_exists(\Sylius\Component\Resource\Model\TimestampableTrait::class, false)) {
+    class_alias(TimestampableTrait::class, \Sylius\Component\Resource\Model\TimestampableTrait::class);
+}

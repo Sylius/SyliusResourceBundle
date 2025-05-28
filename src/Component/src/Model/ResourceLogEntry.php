@@ -19,4 +19,6 @@ abstract class ResourceLogEntry extends AbstractLogEntry implements ResourceInte
 {
 }
 
-class_alias(ResourceLogEntry::class, \Sylius\Component\Resource\Model\ResourceLogEntry::class);
+if (!class_exists(\Sylius\Component\Resource\Model\ResourceLogEntry::class, false)) {
+    class_alias(ResourceLogEntry::class, \Sylius\Component\Resource\Model\ResourceLogEntry::class);
+}

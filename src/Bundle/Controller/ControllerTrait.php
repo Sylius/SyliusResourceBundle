@@ -143,7 +143,7 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function file($file, string $fileName = null, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): BinaryFileResponse
+    protected function file($file, ?string $fileName = null, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): BinaryFileResponse
     {
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition($disposition, null === $fileName ? $response->getFile()->getFilename() : $fileName);
@@ -236,7 +236,7 @@ trait ControllerTrait
     protected function render(
         string $view,
         array $parameters = [],
-        Response $response = null,
+        ?Response $response = null,
         ?int $responseCode = null
     ): Response {
         if ($this->container->has('templating')) {
@@ -266,7 +266,7 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function stream(string $view, array $parameters = [], StreamedResponse $response = null): StreamedResponse
+    protected function stream(string $view, array $parameters = [], ?StreamedResponse $response = null): StreamedResponse
     {
         if ($this->container->has('templating')) {
             @trigger_error('Using the "templating" service is deprecated since Symfony 4.3 and will be removed in 5.0; use Twig instead.', \E_USER_DEPRECATED);
@@ -304,7 +304,7 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function createNotFoundException(string $message = 'Not Found', \Throwable $previous = null): NotFoundHttpException
+    protected function createNotFoundException(string $message = 'Not Found', ?\Throwable $previous = null): NotFoundHttpException
     {
         return new NotFoundHttpException($message, $previous);
     }
@@ -320,7 +320,7 @@ trait ControllerTrait
      *
      * @final
      */
-    protected function createAccessDeniedException(string $message = 'Access Denied.', \Throwable $previous = null): AccessDeniedException
+    protected function createAccessDeniedException(string $message = 'Access Denied.', ?\Throwable $previous = null): AccessDeniedException
     {
         if (!class_exists(AccessDeniedException::class)) {
             throw new \LogicException('You can not use the "createAccessDeniedException" method if the Security component is not available. Try running "composer require symfony/security-bundle".');

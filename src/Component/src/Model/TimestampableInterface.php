@@ -26,4 +26,6 @@ interface TimestampableInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt);
 }
 
-class_alias(TimestampableInterface::class, \Sylius\Component\Resource\Model\TimestampableInterface::class);
+if (!class_exists(\Sylius\Component\Resource\Model\TimestampableInterface::class, false)) {
+    class_alias(TimestampableInterface::class, \Sylius\Component\Resource\Model\TimestampableInterface::class);
+}

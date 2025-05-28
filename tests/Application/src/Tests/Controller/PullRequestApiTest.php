@@ -14,11 +14,16 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use App\Foundry\Factory\PullRequestFactory;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 final class PullRequestApiTest extends JsonApiTestCase
 {
-    /** @test */
+    use Factories;
+
+    #[Test]
     public function it_allows_creating_a_pull_request(): void
     {
         $this->client->request('POST', '/pull-requests/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
@@ -26,32 +31,41 @@ final class PullRequestApiTest extends JsonApiTestCase
         $this->assertResponse($response, 'pull-requests/create_response', Response::HTTP_CREATED);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_submitting_a_pull_request(): void
     {
-        $objects = $this->loadFixturesFromFile('pull-requests.yml');
+        $pullRequest = PullRequestFactory::new()
+            ->withCurrentPlace('start')
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/pull-requests/' . $objects['pull_request_start']->getId() . '/submit', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/submit', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'pull-requests/submit_response', Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_waiting_for_review_a_pull_request(): void
     {
-        $objects = $this->loadFixturesFromFile('pull-requests.yml');
+        $pullRequest = PullRequestFactory::new()
+            ->withCurrentPlace('test')
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/pull-requests/' . $objects['pull_request_test']->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'pull-requests/wait_for_review_response', Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_wait_for_review_on_pull_request_with_start_status(): void
     {
-        $objects = $this->loadFixturesFromFile('pull-requests.yml');
+        $pullRequest = PullRequestFactory::new()
+            ->withCurrentPlace('start')
+            ->create()
+        ;
 
-        $this->client->request('PUT', '/pull-requests/' . $objects['pull_request_start']->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
     }

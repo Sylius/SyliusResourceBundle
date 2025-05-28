@@ -15,31 +15,65 @@ namespace App\Tests\Controller;
 
 use ApiTestCase\ApiTestCase;
 use App\Entity\ScienceBook;
+use App\Foundry\Factory\AuthorFactory;
+use App\Foundry\Factory\ScienceBookFactory;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class ScienceBookUiTest extends ApiTestCase
 {
-    /** @test */
+    use Factories;
+    use ResetDatabase;
+
+    #[Test]
     public function it_allows_showing_a_book(): void
     {
-        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+        $scienceBook = ScienceBookFactory::new()
+            ->withTitle('A Brief History of Time')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Stephen')
+                    ->withLastName('Hawking'),
+            )
+            ->create()
+        ;
 
-        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId());
+        $this->client->request('GET', '/science-books/' . $scienceBook->getId());
         $response = $this->client->getResponse();
 
         $this->assertResponseCode($response, Response::HTTP_OK);
         $content = $response->getContent();
-        $this->assertStringContainsString(sprintf('ID: %d', $scienceBooks['science-book1']->getId()), $content);
+        $this->assertStringContainsString(sprintf('ID: %d', $scienceBook->getId()), $content);
         $this->assertStringContainsString('Title: A Brief History of Time', $content);
         $this->assertStringContainsString('Author: Stephen Hawking', $content);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_indexing_books(): void
     {
-        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+        $firstBook = ScienceBookFactory::new()
+            ->withTitle('A Brief History of Time')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Stephen')
+                    ->withLastName('Hawking'),
+            )
+            ->create()
+        ;
+
+        $secondBook = ScienceBookFactory::new()
+            ->withTitle('The Future of Humanity')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Michio')
+                    ->withLastName('Kaku'),
+            )
+            ->create()
+        ;
 
         $this->client->request('GET', '/science-books/');
         $response = $this->client->getResponse();
@@ -48,23 +82,21 @@ final class ScienceBookUiTest extends ApiTestCase
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
-            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $scienceBooks['science-book1']->getId()),
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
             $content,
         );
         $this->assertStringContainsString(
-            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $scienceBooks['science-book2']->getId()),
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_creating_a_book(): void
     {
         $newBookTitle = 'The Book of Why';
         $newBookAuthorFirstName = 'Judea';
         $newBookAuthorLastName = 'Pearl';
-
-        $this->loadFixturesFromFile('science_books.yml');
 
         $this->client->request('GET', '/science-books/new');
         $this->client->submitForm('Create', [
@@ -84,13 +116,11 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_create_a_book_if_there_is_a_validation_error(): void
     {
         $newBookTitle = 'The Book of Why';
         $newBookAuthorLastName = 'Pearl';
-
-        $this->loadFixturesFromFile('science_books.yml');
 
         $this->client->request('GET', '/science-books/new');
         $this->client->submitForm('Create', [
@@ -106,16 +136,16 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertNull($book);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_updating_a_book(): void
     {
+        $scienceBook = ScienceBookFactory::createOne();
+
         $newBookTitle = 'The Book of Why';
         $newBookAuthorFirstName = 'Judea';
         $newBookAuthorLastName = 'Pearl';
 
-        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
-
-        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
+        $this->client->request('GET', '/science-books/' . $scienceBook->getId() . '/edit');
         $this->client->submitForm('Save changes', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][firstName]' => $newBookAuthorFirstName,
@@ -124,24 +154,21 @@ final class ScienceBookUiTest extends ApiTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        /** @var ScienceBook $book */
-        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
-
-        $this->assertNotNull($book);
-        $this->assertSame($newBookTitle, $book->getTitle());
-        $this->assertSame($newBookAuthorFirstName, $book->getAuthorFirstName());
-        $this->assertSame($newBookAuthorLastName, $book->getAuthorLastName());
+        $scienceBook->_refresh();
+        $this->assertSame($newBookTitle, $scienceBook->getTitle());
+        $this->assertSame($newBookAuthorFirstName, $scienceBook->getAuthorFirstName());
+        $this->assertSame($newBookAuthorLastName, $scienceBook->getAuthorLastName());
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_update_a_book_if_there_is_a_validation_error(): void
     {
+        $scienceBook = ScienceBookFactory::createOne();
+
         $newBookTitle = 'The Book of Why';
         $newBookAuthorLastName = 'Pearl';
 
-        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
-
-        $this->client->request('GET', '/science-books/' . $scienceBooks['science-book1']->getId() . '/edit');
+        $this->client->request('GET', '/science-books/' . $scienceBook->getId() . '/edit');
         $this->client->submitForm('Save changes', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][firstName]' => null,
@@ -150,16 +177,14 @@ final class ScienceBookUiTest extends ApiTestCase
 
         $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        /** @var ScienceBook $book */
-        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
-
-        $this->assertNull($book);
+        $scienceBook->_refresh();
+        $this->assertNotEquals($newBookTitle, $scienceBook->getTitle());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_deleting_a_book(): void
     {
-        $this->loadFixturesFromFile('single_science_book.yml');
+        ScienceBookFactory::createOne();
 
         $this->client->request('GET', '/science-books/');
         $this->client->submitForm('Delete');
@@ -172,10 +197,28 @@ final class ScienceBookUiTest extends ApiTestCase
         $this->assertEmpty($books);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_filtering_books(): void
     {
-        $scienceBooks = $this->loadFixturesFromFile('science_books.yml');
+        $firstBook = ScienceBookFactory::new()
+            ->withTitle('A Brief History of Time')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Stephen')
+                    ->withLastName('Hawking'),
+            )
+            ->create()
+        ;
+
+        $secondBook = ScienceBookFactory::new()
+            ->withTitle('The Future of Humanity')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Michio')
+                    ->withLastName('Kaku'),
+            )
+            ->create()
+        ;
 
         $this->client->request('GET', '/science-books/?criteria[search][value]=history of time');
         $response = $this->client->getResponse();
@@ -184,11 +227,11 @@ final class ScienceBookUiTest extends ApiTestCase
         $content = $response->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
-            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $scienceBooks['science-book1']->getId()),
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
             $content,
         );
         $this->assertStringNotContainsString(
-            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $scienceBooks['science-book2']->getId()),
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
     }

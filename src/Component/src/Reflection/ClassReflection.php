@@ -75,4 +75,6 @@ final class ClassReflection
     }
 }
 
-class_alias(ClassReflection::class, \Sylius\Component\Resource\Reflection\ClassReflection::class);
+if (!class_exists(\Sylius\Component\Resource\Reflection\ClassReflection::class, false)) {
+    class_alias(ClassReflection::class, \Sylius\Component\Resource\Reflection\ClassReflection::class);
+}

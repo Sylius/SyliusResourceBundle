@@ -35,4 +35,6 @@ final class Factory implements FactoryInterface
     }
 }
 
-class_alias(Factory::class, \Sylius\Component\Resource\Factory\Factory::class);
+if (!class_exists(\Sylius\Component\Resource\Factory\Factory::class, false)) {
+    class_alias(Factory::class, \Sylius\Component\Resource\Factory\Factory::class);
+}

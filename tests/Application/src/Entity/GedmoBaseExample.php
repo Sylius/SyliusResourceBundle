@@ -17,9 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Resource\Model\ResourceInterface;
 
-#[ORM\Entity]
 #[ORM\MappedSuperclass]
-#[ORM\Table(name: 'gedmo')]
 class GedmoBaseExample implements ResourceInterface
 {
     #[ORM\Id]

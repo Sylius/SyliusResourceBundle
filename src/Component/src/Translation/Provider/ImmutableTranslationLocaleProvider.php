@@ -32,4 +32,6 @@ final class ImmutableTranslationLocaleProvider implements TranslationLocaleProvi
     }
 }
 
-class_alias(ImmutableTranslationLocaleProvider::class, \Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider::class);
+if (!class_exists(\Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider::class, false)) {
+    class_alias(ImmutableTranslationLocaleProvider::class, \Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider::class);
+}

@@ -43,5 +43,10 @@
             <argument type="service" id=".inner" />
             <argument type="service" id="validator" />
         </service>
+
+        <service id="sylius.state_provider.security" class="Sylius\Resource\State\Provider\SecurityProvider" decorates="sylius.state_provider.read" decoration-priority="-100">
+            <argument type="service" id=".inner" />
+            <argument type="service" id="sylius.security.operation_access_checker" />
+        </service>
     </services>
 </container>

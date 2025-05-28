@@ -40,6 +40,7 @@ parameters:
         - %currentWorkingDirectory%/src/Component/vendor/*
 
     ignoreErrors:
+        - '/Call to method type\(\) on an unknown class Doctrine\\ORM\\Mapping\\AssociationMapping./'
         - '/Call to method getArguments\(\) on an unknown class ReflectionAttribute./'
         - '/Call to method isChangeTrackingDeferredExplicit\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata./'
         - '/Call to an undefined method ReflectionClass::getAttributes\(\)./'
@@ -75,6 +76,7 @@ parameters:
         - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
         - '/Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class-string<object>\|object, object\|string given./'
         - '/Parameter \#1 \$package of method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\)/'
+        - '/PHPDoc tag @var for variable \$value contains unknown class Doctrine\\ORM\\Mapping\\AssociationMapping./'
         - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\CrudRoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
         - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\RoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
         - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'

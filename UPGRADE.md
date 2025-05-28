@@ -1,3 +1,10 @@
+## UPGRADE FOR `1.13.x`
+
+### FROM `1.12.x` to `1.13.x`
+
+The `Sylius\Resource\Exception\VariantWithNoOptionsValuesException` and `Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException` 
+classes have been deprecated and will be removed in `2.0`.
+
 ## UPGRADE FOR `1.12.x`
 
 ### FROM `1.11.x` to `1.12.x`

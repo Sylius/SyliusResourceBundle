@@ -15,12 +15,14 @@ COPY . /app
 
 WORKDIR /app
 
+ENV PHP_MEMORY_LIMIT=512M
+
 RUN composer global config --no-plugins allow-plugins.symfony/flex true
 RUN composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
 RUN composer update --with-all-dependencies --no-interaction --no-progress
 
 WORKDIR /app/tests/Application
 
-RUN php bin/console doctrine:database:create && php bin/console doctrine:schema:update --force
+RUN php bin/console doctrine:schema:create
 
 WORKDIR /app

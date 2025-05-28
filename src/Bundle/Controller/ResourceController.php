@@ -558,7 +558,7 @@ class ResourceController
     /**
      * @param mixed $data
      */
-    protected function createRestView(RequestConfiguration $configuration, $data, int $statusCode = null): Response
+    protected function createRestView(RequestConfiguration $configuration, $data, ?int $statusCode = null): Response
     {
         if (null === $this->viewHandler) {
             throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');

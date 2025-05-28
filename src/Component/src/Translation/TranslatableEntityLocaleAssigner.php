@@ -31,4 +31,6 @@ final class TranslatableEntityLocaleAssigner implements TranslatableEntityLocale
     }
 }
 
-class_alias(TranslatableEntityLocaleAssigner::class, \Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner::class);
+if (!class_exists(\Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner::class, false)) {
+    class_alias(TranslatableEntityLocaleAssigner::class, \Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner::class);
+}

@@ -58,6 +58,7 @@ final class ORMTranslatableListener implements EventSubscriber
         $classMetadata = $eventArgs->getClassMetadata();
         $reflection = $classMetadata->getReflectionClass();
 
+        /** @psalm-suppress PossiblyNullReference */
         if ($reflection->isAbstract()) {
             return;
         }
@@ -109,7 +110,7 @@ final class ORMTranslatableListener implements EventSubscriber
                 'mappedBy' => 'translatable',
                 'fetch' => ClassMetadata::FETCH_EXTRA_LAZY,
                 'indexBy' => 'locale',
-                'cascade' => ['persist', 'merge', 'remove'],
+                'cascade' => ['persist', 'remove'],
                 'orphanRemoval' => true,
             ]);
         }

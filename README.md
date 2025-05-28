@@ -60,7 +60,7 @@ make test
 Documentation
 -------------
 
-[Documentation is available in the *docs* folder.](docs/index.md)
+[Sylius Stack documentation &raquo; Resource Bundle](https://stack.sylius.com/resource/index)
 
 Contributing
 ------------

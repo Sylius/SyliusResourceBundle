@@ -14,27 +14,36 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Kernel;
+use App\Subscription\Foundry\Factory\SubscriptionFactory;
+use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 final class SubscriptionXmlApiTest extends XmlApiTestCase
 {
-    /** @test */
+    use Factories;
+
+    #[Test]
     public function it_allows_showing_a_subscription(): void
     {
-        $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
+        $subscription = SubscriptionFactory::new()
+            ->withEmail('marty.mcfly@bttf.com')
+            ->create()
+        ;
 
-        $this->client->request('GET', '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId());
+        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId());
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'subscriptions/show_response', Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_indexing_subscriptions(): void
     {
-        $this->loadFixturesFromFile('subscriptions.yml');
+        DefaultSubscriptionsStory::load();
 
         $this->client->request('GET', '/ajax/subscriptions');
         $response = $this->client->getResponse();
@@ -42,7 +51,7 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
         $this->assertResponse($response, 'subscriptions/index_response', Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_creating_a_subscription(): void
     {
         $data = <<<EOT
@@ -57,11 +66,9 @@ EOT;
         $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_create_a_subscription_if_there_is_a_validation_error(): void
     {
-        $this->loadFixturesFromFile('subscriptions.yml');
-
         $data = <<<EOT
 <?xml version="1.0"?>
 <root>
@@ -76,10 +83,10 @@ EOT;
         $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_updating_a_subscription(): void
     {
-        $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
+        $subscription = SubscriptionFactory::createOne();
 
         $data = <<<EOT
 <?xml version="1.0"?>
@@ -88,15 +95,15 @@ EOT;
 </root>
 EOT;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_update_a_subscription_if_there_is_a_validation_error(): void
     {
-        $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
+        $subscription = SubscriptionFactory::createOne();
 
         $data = <<<EOT
 <?xml version="1.0"?>
@@ -105,19 +112,19 @@ EOT;
 </root>
 EOT;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
 
         $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/update_validation' : 'subscriptions/update_validation_legacy';
 
         $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_removing_a_subscription(): void
     {
-        $subscriptions = $this->loadFixturesFromFile('subscriptions.yml');
+        $subscription = SubscriptionFactory::createOne();
 
-        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscriptions['subscription_marty']->getId());
+        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
         $response = $this->client->getResponse();
         $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
     }

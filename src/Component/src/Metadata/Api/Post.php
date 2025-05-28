@@ -26,6 +26,7 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
         ?string $path = null,
         ?string $routeName = null,
         ?string $routePrefix = null,
+        ?array $routeRequirements = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -46,6 +47,9 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
         ?array $denormalizationContext = null,
         ?array $validationContext = null,
         ?string $eventShortName = null,
+        ?string $notificationMessage = null,
+        string|\Stringable|null $security = null,
+        ?string $securityMessage = null,
         ?string $redirectToRoute = null,
     ) {
         parent::__construct(
@@ -53,6 +57,7 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
             path: $path,
             routeName: $routeName,
             routePrefix: $routePrefix,
+            routeRequirements: $routeRequirements,
             template: $template,
             shortName: $shortName ?? 'post',
             name: $name,
@@ -73,6 +78,9 @@ final class Post extends HttpOperation implements CreateOperationInterface, ApiO
             denormalizationContext: $denormalizationContext,
             validationContext: $validationContext,
             eventShortName: $eventShortName,
+            notificationMessage: $notificationMessage,
+            security: $security,
+            securityMessage: $securityMessage,
             redirectToRoute: $redirectToRoute,
         );
     }

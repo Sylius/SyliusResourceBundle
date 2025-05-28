@@ -60,4 +60,6 @@ class AbstractTranslation implements TranslationInterface
     }
 }
 
-class_alias(AbstractTranslation::class, \Sylius\Component\Resource\Model\AbstractTranslation::class);
+if (!class_exists(\Sylius\Component\Resource\Model\AbstractTranslation::class, false)) {
+    class_alias(AbstractTranslation::class, \Sylius\Component\Resource\Model\AbstractTranslation::class);
+}

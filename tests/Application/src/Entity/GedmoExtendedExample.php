@@ -16,8 +16,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\MappedSuperclass]
-
 class GedmoExtendedExample extends GedmoBaseExample
 {
     #[ORM\Column(length: 255)]

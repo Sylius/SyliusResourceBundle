@@ -5,7 +5,6 @@
 /.php_cs.dist export-ignore
 /docker-compose.yml export-ignore
 /Dockerfile export-ignore
-/docs export-ignore
 /ecs.php export-ignore
 /Makefile export-ignore
 /phpspec.yml.dist export-ignore

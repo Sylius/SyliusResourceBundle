@@ -37,6 +37,9 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         ?bool $validate = null,
         ?string $formType = null,
         ?array $formOptions = null,
+        ?string $notificationMessage = null,
+        string|\Stringable|null $security = null,
+        ?string $securityMessage = null,
         ?string $redirectToRoute = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
@@ -60,6 +63,9 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
             validate: $validate ?? false,
             formType: $formType,
             formOptions: $formOptions,
+            notificationMessage: $notificationMessage,
+            security: $security,
+            securityMessage: $securityMessage,
             redirectToRoute: $redirectToRoute,
         );
     }
