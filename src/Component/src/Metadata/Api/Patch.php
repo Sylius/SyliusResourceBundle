@@ -24,6 +24,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
 {
     public function __construct(
         ?string $path = null,
+        ?string $routeName = null,
         ?string $routePrefix = null,
         ?array $routeRequirements = null,
         ?string $template = null,
@@ -54,6 +55,7 @@ final class Patch extends HttpOperation implements UpdateOperationInterface, Api
         parent::__construct(
             methods: ['PATCH'],
             path: $path,
+            routeName: $routeName,
             routePrefix: $routePrefix,
             routeRequirements: $routeRequirements,
             template: $template,

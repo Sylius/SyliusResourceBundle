@@ -46,7 +46,7 @@ final class ClassReflection
 
             $namespace = $matches[1] ?? null;
 
-            if (!preg_match('/class +([^{ ]+)/', $fileContent, $matches)) {
+            if (!preg_match('/class\s+(\w+)/', $fileContent, $matches)) {
                 // no class found
                 continue;
             }
