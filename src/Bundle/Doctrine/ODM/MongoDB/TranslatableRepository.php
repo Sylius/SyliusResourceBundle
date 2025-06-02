@@ -23,7 +23,7 @@ trigger_deprecation('sylius/resource-bundle', '1.3', 'The "%s" class is deprecat
  */
 class TranslatableRepository extends DocumentRepository implements TranslatableRepositoryInterface
 {
-    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null): void
+    protected function applyCriteria(QueryBuilder $queryBuilder, ?array $criteria = null): void
     {
         if (null === $criteria) {
             return;
@@ -42,7 +42,7 @@ class TranslatableRepository extends DocumentRepository implements TranslatableR
         }
     }
 
-    protected function applySorting(QueryBuilder $queryBuilder, array $sorting = null): void
+    protected function applySorting(QueryBuilder $queryBuilder, ?array $sorting = null): void
     {
         if (null === $sorting) {
             return;
