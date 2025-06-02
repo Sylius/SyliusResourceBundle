@@ -22,7 +22,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 final class ValidationException extends \RuntimeException implements ConstraintViolationListAwareExceptionInterface
 {
-    public function __construct(private ConstraintViolationListInterface $constraintViolationList, string $message = '', int $code = 0, \Exception $previous = null)
+    public function __construct(private ConstraintViolationListInterface $constraintViolationList, string $message = '', int $code = 0, ?\Exception $previous = null)
     {
         parent::__construct($message ?: $this->__toString(), $code, $previous);
     }
