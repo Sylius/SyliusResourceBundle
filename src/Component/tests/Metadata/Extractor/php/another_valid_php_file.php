@@ -13,4 +13,4 @@ declare(strict_types=1);
 
 use Sylius\Resource\Metadata\ResourceMetadata;
 
-return new ResourceMetadata(alias: 'dummy');
+return new ResourceMetadata(alias: 'another_dummy');

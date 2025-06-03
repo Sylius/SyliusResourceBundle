@@ -16,17 +16,16 @@ namespace Sylius\Resource\Tests\Metadata\Extractor;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Extractor\PhpFileResourceExtractor;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Tests\Dummy\PullRequest;
 
 final class PhpFileResourceExtractorTest extends TestCase
 {
     public function testItGetsResourcesFromPhpFileThatReturnsResourceMetadata(): void
     {
-        $extractor = new PhpFileResourceExtractor([__DIR__ . '/php/valid_php_file.php']);
+        $extractor = new PhpFileResourceExtractor([__DIR__ . '/php/valid_php_file.php', __DIR__ . '/php/another_valid_php_file.php']);
 
-        $expectedResource = $this->createPullRequestResourceMetadata();
+        $expectedResources = [new ResourceMetadata(alias: 'dummy'), new ResourceMetadata(alias: 'another_dummy')];
 
-        $this->assertEquals([$expectedResource], $extractor->getResources());
+        $this->assertEquals($expectedResources, $extractor->getResources());
     }
 
     public function testItExcludesResourcesFromPhpFileThatDoesNotReturnResourceMetadata(): void
@@ -34,12 +33,5 @@ final class PhpFileResourceExtractorTest extends TestCase
         $extractor = new PhpFileResourceExtractor([__DIR__ . '/php/invalid_php_file.php']);
 
         $this->assertEquals([], $extractor->getResources());
-    }
-
-    private function createPullRequestResourceMetadata(): ResourceMetadata
-    {
-        return (new ResourceMetadata())
-            ->withClass(PullRequest::class)
-        ;
     }
 }
