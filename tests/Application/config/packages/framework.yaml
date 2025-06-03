@@ -6,7 +6,7 @@ framework:
     secret: "%secret%"
     form: ~
     csrf_protection: true
-    default_locale: "%locale%"
+    enabled_locales: ["%locale%"]
     session:
         handler_id: ~
         storage_factory_id: session.storage.factory.mock_file
