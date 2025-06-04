@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 /**
  * Base file extractor.
+ *
+ * @experimental
  */
 abstract class AbstractResourceExtractor implements ResourceExtractorInterface
 {

@@ -15,6 +15,9 @@ namespace Sylius\Resource\Metadata\Extractor;
 
 use Sylius\Resource\Metadata\ResourceMetadata;
 
+/**
+ * @experimental
+ */
 final class PhpFileResourceExtractor extends AbstractResourceExtractor
 {
     protected function extractFromPath(string $path): void
