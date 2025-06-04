@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+## v1.13.0 (2025-06-04)
+
+- [#1025](https://github.com/Sylius/SyliusResourceBundle/pull/1025) Fix implicit nullable parameter + add ECS rule to 1.12 ([@GSadee](https://github.com/GSadee))
+- [#1024](https://github.com/Sylius/SyliusResourceBundle/pull/1024) Fix implicit nullable parameter + add ECS rule ([@GSadee](https://github.com/GSadee))
+
+#### Details
+
 ## v1.13.0-BETA.1 (2025-05-28)
 
 #### Details
