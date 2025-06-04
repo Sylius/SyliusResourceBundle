@@ -123,6 +123,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.mapping', [
+            'imports' => [],
             'paths' => [
                 __DIR__ . '/Dummy',
             ],
