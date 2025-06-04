@@ -33,11 +33,14 @@ use Sylius\Resource\State\ResponderInterface;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\Finder\Finder;
 use function Symfony\Component\String\u;
 
 final class SyliusResourceExtension extends Extension implements PrependExtensionInterface
@@ -66,6 +69,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->setParameter('sylius.resource.settings', $config['settings']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 
+        $this->registerMetadataConfiguration($container, $config);
         $this->autoRegisterResources($config, $container);
 
         $this->loadPersistence($config['drivers'], $config['resources'], $loader, $container);
@@ -319,5 +323,44 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 }
             }
         }
+    }
+
+    private function registerMetadataConfiguration(ContainerBuilder $container, array $config): void
+    {
+        $resources = $this->getResourceFilesToWatch($container, $config);
+
+        $container->getDefinition('sylius.metadata.resource_extractor.php_file')->replaceArgument(0, $resources);
+    }
+
+    private function getResourceFilesToWatch(ContainerBuilder $container, array $config): array
+    {
+        $files = [];
+
+        /** @var string $path */
+        foreach ($config['mapping']['imports'] ?? [] as $path) {
+            if (is_dir($path)) {
+                foreach (Finder::create()->followLinks()->files()->in($path)->name('/\.php$/')->sortByName() as $file) {
+                    $files[] = $file->getRealPath();
+                }
+
+                $container->addResource(new DirectoryResource($path, '/\.php$/'));
+
+                continue;
+            }
+
+            if ($container->fileExists($path, false)) {
+                if (!str_ends_with($path, '.php')) {
+                    throw new RuntimeException(\sprintf('Unsupported mapping type in "%s", supported type is PHP.', $path));
+                }
+
+                $files[] = $path;
+
+                continue;
+            }
+
+            throw new RuntimeException(\sprintf('Could not open file or directory "%s".', $path));
+        }
+
+        return $files;
     }
 }
