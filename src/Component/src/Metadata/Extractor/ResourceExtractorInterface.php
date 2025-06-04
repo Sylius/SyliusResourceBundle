@@ -17,6 +17,8 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 
 /**
  * Extracts an array of metadata from a file or a list of files.
+ *
+ * @experimental
  */
 interface ResourceExtractorInterface
 {
