@@ -6,6 +6,7 @@ framework:
     secret: "%secret%"
     form: ~
     csrf_protection: true
+    enabled_locales: ["%locale%"]
     default_locale: "%locale%"
     session:
         handler_id: ~

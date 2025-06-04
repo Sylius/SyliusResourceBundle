@@ -70,7 +70,7 @@
         <service id="sylius.resource_controller.flash_helper" class="Sylius\Bundle\ResourceBundle\Controller\FlashHelper" public="false">
             <argument type="service" id="request_stack" />
             <argument type="service" id="translator" />
-            <argument>%locale%</argument>
+            <argument>%kernel.default_locale%</argument>
         </service>
         <service id="Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface" alias="sylius.resource_controller.flash_helper" public="false" />
 

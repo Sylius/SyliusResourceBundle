@@ -16,10 +16,8 @@
         <defaults public="true" />
 
         <service id="sylius.translation_locale_provider.immutable" class="Sylius\Resource\Translation\Provider\ImmutableTranslationLocaleProvider">
-            <argument type="collection">
-                <argument>%locale%</argument>
-            </argument>
-            <argument>%locale%</argument>
+            <argument>%kernel.enabled_locales%</argument>
+            <argument>%kernel.default_locale%</argument>
         </service>
         <service id="Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider" alias="sylius.translation_locale_provider.immutable">
             <deprecated package="sylius/resource-bundle" version="1.11">The "%alias_id%" service alias is deprecated since sylius/resource-bundle 1.11 and will be removed in sylius/resource-bundle 2.0. Use Sylius\Resource\Translation\Provider\ImmutableTranslationLocaleProvider instead.</deprecated>
