@@ -71,6 +71,7 @@ class ConfigurationTest extends TestCase
             ],
             [
                 'mapping' => [
+                    'imports' => [],
                     'paths' => [],
                 ],
             ],
@@ -89,6 +90,7 @@ class ConfigurationTest extends TestCase
             ],
             [
                 'mapping' => [
+                    'imports' => [],
                     'paths' => [
                         'path/to/resources',
                     ],
