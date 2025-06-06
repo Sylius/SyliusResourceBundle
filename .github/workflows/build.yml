@@ -188,4 +188,4 @@ jobs:
                     cd skeleton_app
                     composer config extra.symfony.allow-contrib true
                     composer config repositories.local '{"type": "path", "url": "../", "options": {"symlink": true}}' --json
-                    composer require -W --ansi sylius/resource-bundle "*@dev"
+                    composer require -W --ansi sylius/resource-bundle "dev-php-file-resource-metadata-collection-factory"

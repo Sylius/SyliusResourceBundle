@@ -19,7 +19,7 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\Request\State\Responder;
-use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
 
 /**
  * @internal
@@ -51,7 +51,7 @@ trait OperationDefaultsTrait
     private function getOperationWithDefaults(
         Operation $operation,
         ResourceMetadata $resource,
-        OperationRouteNameFactory $operationRouteNameFactory,
+        OperationRouteNameFactoryInterface $operationRouteNameFactory,
         RegistryInterface $resourceRegistry,
     ): array {
         $resourceConfiguration = $resourceRegistry->get($resource->getAlias() ?? '');
