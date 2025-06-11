@@ -48,9 +48,8 @@ final class PhpFileResourceMetadataCollectionFactory implements ResourceMetadata
             }
 
             $resourceAlias = $resource->getAlias();
-
             if (null !== $resourceAlias) {
-                $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
+                $resourceConfiguration = $this->resourceRegistry->get($resourceAlias);
             } else {
                 $resourceConfiguration = $this->resourceRegistry->getByClass($resourceClass);
             }
