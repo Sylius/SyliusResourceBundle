@@ -183,6 +183,7 @@ jobs:
             -
                 name: Create-project with skeleton
                 run: |
+                    set -x
                     composer create-project --ansi "symfony/skeleton:${{ matrix.skeleton }}" skeleton_app
                     cd skeleton_app
                     composer config extra.symfony.allow-contrib true
