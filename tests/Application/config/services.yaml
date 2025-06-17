@@ -95,6 +95,9 @@ services:
     App\BoardGameBlog\:
         resource: '../src/BoardGameBlog'
 
+    App\Conference\:
+        resource: '../src/Conference'
+
     App\Subscription\:
         resource: '../src/Subscription'
 
