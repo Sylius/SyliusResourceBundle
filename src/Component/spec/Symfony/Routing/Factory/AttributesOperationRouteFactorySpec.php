@@ -60,6 +60,7 @@ final class AttributesOperationRouteFactorySpec extends ObjectBehavior
         $routeCollection = new RouteCollection();
 
         $metadata->getServiceId('repository')->willReturn('app.repository.dummy');
+        $metadata->hasClass('form')->willReturn(true);
         $metadata->getClass('form')->willReturn('App\Form');
         $metadata->getClass('model')->willReturn('App\Dummy');
         $metadata->getStateMachineComponent()->willReturn('symfony');
