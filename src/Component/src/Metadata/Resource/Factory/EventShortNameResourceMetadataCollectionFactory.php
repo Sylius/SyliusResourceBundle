@@ -40,7 +40,7 @@ final class EventShortNameResourceMetadataCollectionFactory implements ResourceM
                 /** @var string $key */
                 $key = $operation->getName();
 
-                $operations->add($key, $this->addDefaults($resource, $operation));
+                $operations->add($key, $this->addDefaults($operation));
             }
 
             $resource = $resource->withOperations($operations);
@@ -51,7 +51,7 @@ final class EventShortNameResourceMetadataCollectionFactory implements ResourceM
         return $resourceCollectionMetadata;
     }
 
-    private function addDefaults(ResourceMetadata $resource, Operation $operation): Operation
+    private function addDefaults(Operation $operation): Operation
     {
         if (null === $operation->getEventShortName()) {
             $shortName = $operation instanceof ApplyStateMachineTransition ? ResourceActions::UPDATE : $operation->getShortName() ?? '';
