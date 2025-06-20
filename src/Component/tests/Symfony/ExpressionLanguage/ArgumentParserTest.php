@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\tests\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -31,6 +31,7 @@ final class ArgumentParserTest extends KernelTestCase
         $this->assertTrue($argumentParser->parseExpression('token.getUser() === null'));
         $this->assertTrue($argumentParser->parseExpression('user === null'));
         $this->assertTrue($argumentParser->parseExpression('request === null'));
+        $this->assertTrue($argumentParser->parseExpression('throw_not_found_on_null(true)'));
     }
 
     public function testRepositoryArgumentParser(): void

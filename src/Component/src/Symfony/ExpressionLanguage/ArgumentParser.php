@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\ExpressionLanguage;
 
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Webmozart\Assert\Assert;
 
 /**
  * @experimental
@@ -21,9 +23,15 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 final class ArgumentParser implements ArgumentParserInterface
 {
     public function __construct(
-        private ExpressionLanguage $expressionLanguage,
-        private VariablesCollectionInterface $variablesCollection,
+        private readonly ExpressionLanguage $expressionLanguage,
+        private readonly VariablesCollectionInterface $variablesCollection,
+        readonly ?iterable $providers = null,
     ) {
+        foreach ($providers ?? [] as $provider) {
+            Assert::isInstanceOf($provider, ExpressionFunctionProviderInterface::class);
+
+            $this->expressionLanguage->registerProvider($provider);
+        }
     }
 
     public function parseExpression(string $expression, array $variables = []): mixed

@@ -42,19 +42,26 @@
             <argument type="tagged_iterator" tag="sylius.routing_variables" />
         </service>
 
+        <service id="sylius.expression_language.providers.throw_not_found_on_null" class="Sylius\Resource\Symfony\ExpressionLanguage\Provider\ThrowNotFoundOnNullExpressionFunctionProvider">
+            <tag name="sylius.resource_factory_providers" />
+        </service>
+
         <service id="sylius.expression_language.argument_parser.factory" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.resource_factory.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.factory"  />
+            <argument type="tagged_iterator" tag="sylius.resource_factory_providers" />
         </service>
 
         <service id="sylius.expression_language.argument_parser.repository" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.repository.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.repository"  />
+            <argument type="tagged_iterator" tag="sylius.repository_providers" />
         </service>
 
         <service id="sylius.expression_language.argument_parser.routing" class="Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser">
             <argument type="service" id="sylius.routing.expression_language" />
             <argument type="service" id="sylius.expression_language.variables_collection.routing"  />
+            <argument type="tagged_iterator" tag="sylius.routing_providers" />
         </service>
     </services>
 </container>
