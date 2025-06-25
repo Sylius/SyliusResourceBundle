@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation\HttpOperationInitiator;
 use Sylius\Resource\Metadata\Operations;
@@ -24,6 +25,7 @@ use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Symfony\ExpressionLanguage\VarsResolverInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,10 +37,13 @@ final class HttpOperationInitiatorTest extends TestCase
 
     private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $resourceMetadataCollectionFactory;
 
+    private VarsResolverInterface|ObjectProphecy $varsResolver;
+
     protected function setUp(): void
     {
         $this->resourceRegistry = $this->prophesize(RegistryInterface::class);
         $this->resourceMetadataCollectionFactory = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->varsResolver = $this->prophesize(VarsResolverInterface::class);
     }
 
     public function testItIsInitializable(): void
@@ -46,6 +51,7 @@ final class HttpOperationInitiatorTest extends TestCase
         $initiator = new HttpOperationInitiator(
             $this->resourceRegistry->reveal(),
             $this->resourceMetadataCollectionFactory->reveal(),
+            $this->varsResolver->reveal(),
         );
 
         $this->assertInstanceOf(HttpOperationInitiator::class, $initiator);
@@ -72,6 +78,8 @@ final class HttpOperationInitiatorTest extends TestCase
         $metadata->getAlias()->willReturn('app.dummy');
 
         $operation->getName()->willReturn('app_dummy_index');
+        $operation->getVars()->willReturn(null);
+        $operation->getResource()->willReturn(null);
 
         $operations = new Operations();
         $operations->add('app_dummy_index', $operation->reveal());
@@ -87,6 +95,48 @@ final class HttpOperationInitiatorTest extends TestCase
         );
 
         $this->assertSame($operation->reveal(), $initiator->initializeOperation($request->reveal()));
+    }
+
+    public function testResolvesOperationVars(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $attributes = $this->prophesize(ParameterBag::class);
+        $metadata = $this->prophesize(MetadataInterface::class);
+        $operation = new Index(name: 'app_dummy_index', vars: ['product' => '@=get_current_product()']);
+
+        $request->attributes = $attributes;
+
+        $attributes->get('_route')->willReturn('app_dummy_index');
+        $attributes->all('_sylius')->willReturn([
+            'resource' => 'app.dummy',
+        ]);
+        $attributes->set('_sylius', ['resource' => 'app.dummy', 'resource_class' => 'App\DummyResource'])->shouldBeCalled();
+
+        $this->resourceRegistry->get('app.dummy')->willReturn($metadata);
+
+        $metadata->getClass('model')->willReturn('App\DummyResource');
+        $metadata->getAlias()->willReturn('app.dummy');
+
+        $operations = new Operations();
+        $operations->add('app_dummy_index', $operation);
+
+        $product = new \stdClass();
+        $this->varsResolver->resolve(['product' => '@=get_current_product()'])->willReturn(['product' => $product])->shouldBeCalled();
+
+        $resourceMetadataCollection = new ResourceMetadataCollection();
+        $resourceMetadataCollection[] = (new ResourceMetadata(alias: 'app.dummy'))->withOperations($operations);
+
+        $this->resourceMetadataCollectionFactory->create('App\DummyResource')->willReturn($resourceMetadataCollection);
+
+        $initiator = new HttpOperationInitiator(
+            $this->resourceRegistry->reveal(),
+            $this->resourceMetadataCollectionFactory->reveal(),
+            $this->varsResolver->reveal(),
+        );
+
+        $result = $initiator->initializeOperation($request->reveal());
+        $this->assertNotNull($result);
+        $this->assertSame(['product' => $product], $result->getVars());
     }
 
     public function testItReturnsNullWhenRequestHasNoSyliusOptions(): void

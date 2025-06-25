@@ -195,6 +195,7 @@
         <PossiblyNullArgument>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/Component/src/Metadata/Operation/HttpOperationInitiator.php" />
             </errorLevel>
         </PossiblyNullArgument>
 

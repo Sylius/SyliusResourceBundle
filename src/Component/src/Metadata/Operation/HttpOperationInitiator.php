@@ -16,6 +16,7 @@ namespace Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\VarsResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class HttpOperationInitiator implements HttpOperationInitiatorInterface
@@ -23,6 +24,7 @@ final class HttpOperationInitiator implements HttpOperationInitiatorInterface
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
+        private ?VarsResolverInterface $varsResolver = null,
     ) {
     }
 
@@ -54,6 +56,33 @@ final class HttpOperationInitiator implements HttpOperationInitiatorInterface
             ->getOperation($metadata->getAlias(), $operationName)
         ;
 
-        return $operation;
+        return $this->getOperationWithVars($operation);
+    }
+
+    private function getOperationWithVars(HttpOperation $operation): HttpOperation
+    {
+        $operationVars = null !== $operation->getVars() ? $this->resolveVars($operation->getVars()) : null;
+
+        if (null !== $operationVars) {
+            $operation = $operation->withVars($operationVars);
+        }
+
+        $resource = $operation->getResource();
+        $resourceVars = $resource?->getVars();
+
+        if (null === $resourceVars) {
+            return $operation;
+        }
+
+        return $operation->withVars(\array_merge($this->resolveVars($resourceVars), $operationVars ?? []));
+    }
+
+    private function resolveVars(array $vars): array
+    {
+        if (null === $this->varsResolver) {
+            return $vars;
+        }
+
+        return $this->varsResolver->resolve($vars);
     }
 }

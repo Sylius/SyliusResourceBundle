@@ -19,6 +19,7 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
 use Sylius\Resource\Context\Option\MetadataOption;
 use Sylius\Resource\Metadata\RegistryInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\VarsResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class LegacyRequestContextInitiator implements RequestContextInitiatorInterface
@@ -27,6 +28,7 @@ final class LegacyRequestContextInitiator implements RequestContextInitiatorInte
         private RegistryInterface $resourceRegistry,
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private RequestContextInitiatorInterface $decorated,
+        private ?VarsResolverInterface $varsResolver = null,
     ) {
     }
 
@@ -49,7 +51,19 @@ final class LegacyRequestContextInitiator implements RequestContextInitiatorInte
         }
 
         $configuration = $this->requestConfigurationFactory->create($metadata, $request);
+        $configurationVars = $this->resolveVars($configuration->getVars());
+
+        $configuration->getParameters()->set('vars', $configurationVars);
 
         return $context->with(new MetadataOption($metadata), new RequestConfigurationOption($configuration));
+    }
+
+    private function resolveVars(array $vars): array
+    {
+        if (null === $this->varsResolver) {
+            return $vars;
+        }
+
+        return $this->varsResolver->resolve($vars);
     }
 }
