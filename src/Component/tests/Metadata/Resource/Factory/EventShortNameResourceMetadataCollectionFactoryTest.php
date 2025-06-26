@@ -51,7 +51,7 @@ final class EventShortNameResourceMetadataCollectionFactoryTest extends TestCase
 
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
         $show = (new Show(name: 'app_book_show'))->withResource($resource);
-        $applyStateMachineTransition = (new ApplyStateMachineTransition(name: 'app_book_publish'))->withResource($resource);
+        $applyStateMachineTransition = (new ApplyStateMachineTransition(name: 'app_book_publish', stateMachineTransition: 'publish'))->withResource($resource);
         $bulkDelete = (new BulkDelete(name: 'app_book_bulk_delete'))->withResource($resource);
 
         $resource = $resource->withOperations(new Operations([
