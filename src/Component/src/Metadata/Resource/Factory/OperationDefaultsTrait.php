@@ -91,12 +91,18 @@ trait OperationDefaultsTrait
         }
 
         if (null === $operation->getFormType()) {
-            $formType = $resource->getFormType() ?? $resourceConfiguration->getClass('form');
-            $operation = $operation->withFormType($formType);
+            $formType = $resource->getFormType();
+            $formType ??= $resourceConfiguration->hasClass('form') ? $resourceConfiguration->getClass('form') : null;
+
+            if (null !== $formType) {
+                $operation = $operation->withFormType($formType);
+            }
         }
 
-        $formOptions = $this->buildFormOptions($operation, $resourceConfiguration);
-        $operation = $operation->withFormOptions($formOptions);
+        if (null !== $operation->getFormType()) {
+            $formOptions = $this->buildFormOptions($operation, $resourceConfiguration);
+            $operation = $operation->withFormOptions($formOptions);
+        }
 
         if ($operation instanceof HttpOperation) {
             if (null === $operation->getRoutePrefix()) {

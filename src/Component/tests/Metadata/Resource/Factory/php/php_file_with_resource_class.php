@@ -11,6 +11,11 @@
 
 declare(strict_types=1);
 
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\ResourceMetadata;
 
-return new ResourceMetadata(class: \stdClass::class);
+return (new ResourceMetadata(class: \stdClass::class))
+    ->withOperations(new Operations([
+        new Create(),
+    ]));
