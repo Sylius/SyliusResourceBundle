@@ -32,6 +32,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         string|callable|null $responder = null,
         string|callable|null $repository = null,
         ?string $repositoryMethod = null,
+        ?array $repositoryArguments = null,
         ?bool $read = null,
         ?bool $write = null,
         ?bool $validate = null,
@@ -42,6 +43,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
         string|\Stringable|null $security = null,
         ?string $securityMessage = null,
         ?string $redirectToRoute = null,
+        ?array $redirectArguments = null,
         private ?string $stateMachineComponent = null,
         private ?string $stateMachineTransition = null,
         private ?string $stateMachineGraph = null,
@@ -59,6 +61,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
             responder: $responder,
             repository: $repository,
             repositoryMethod: $repositoryMethod,
+            repositoryArguments: $repositoryArguments,
             read: $read,
             write: $write,
             validate: $validate ?? false,
@@ -69,6 +72,7 @@ final class ApplyStateMachineTransition extends HttpOperation implements UpdateO
             security: $security,
             securityMessage: $securityMessage,
             redirectToRoute: $redirectToRoute,
+            redirectArguments: $redirectArguments,
         );
     }
 
