@@ -26,6 +26,15 @@ final class HttpOperationInitiator implements HttpOperationInitiatorInterface
         private ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory,
         private ?VarsResolverInterface $varsResolver = null,
     ) {
+        if (null === $varsResolver) {
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.14',
+                'Not passing an instance of "%s" as the third constructor argument for "%s" is deprecated and will not be supported in 2.0.',
+                VarsResolverInterface::class,
+                self::class,
+            );
+        }
     }
 
     public function initializeOperation(Request $request): ?HttpOperation
@@ -61,20 +70,19 @@ final class HttpOperationInitiator implements HttpOperationInitiatorInterface
 
     private function getOperationWithVars(HttpOperation $operation): HttpOperation
     {
-        $operationVars = null !== $operation->getVars() ? $this->resolveVars($operation->getVars()) : null;
+        $operationVars = $operation->getVars();
+        $resolvedOperationVars = $operationVars !== null ? $this->resolveVars($operationVars) : null;
 
-        if (null !== $operationVars) {
-            $operation = $operation->withVars($operationVars);
-        }
+        $resourceVars = $operation->getResource()?->getVars();
+        $resolvedResourceVars = $resourceVars !== null ? $this->resolveVars($resourceVars) : null;
 
-        $resource = $operation->getResource();
-        $resourceVars = $resource?->getVars();
-
-        if (null === $resourceVars) {
+        if (null === $resolvedOperationVars && null === $resolvedResourceVars) {
             return $operation;
         }
 
-        return $operation->withVars(\array_merge($this->resolveVars($resourceVars), $operationVars ?? []));
+        $mergedVars = array_merge($resolvedResourceVars ?? [], $resolvedOperationVars ?? []);
+
+        return $operation->withVars($mergedVars);
     }
 
     private function resolveVars(array $vars): array

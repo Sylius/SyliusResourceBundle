@@ -30,6 +30,15 @@ final class LegacyRequestContextInitiator implements RequestContextInitiatorInte
         private RequestContextInitiatorInterface $decorated,
         private ?VarsResolverInterface $varsResolver = null,
     ) {
+        if (null === $varsResolver) {
+            trigger_deprecation(
+                'sylius/resource-bundle',
+                '1.14',
+                'Not passing an instance of "%s" as the fourth constructor argument for "%s" is deprecated and will not be supported in 2.0.',
+                VarsResolverInterface::class,
+                self::class,
+            );
+        }
     }
 
     public function initializeContext(Request $request): Context

@@ -97,7 +97,7 @@ final class HttpOperationInitiatorTest extends TestCase
         $this->assertSame($operation->reveal(), $initiator->initializeOperation($request->reveal()));
     }
 
-    public function testResolvesOperationVars(): void
+    public function testItResolvesOperationVars(): void
     {
         $request = $this->prophesize(Request::class);
         $attributes = $this->prophesize(ParameterBag::class);
