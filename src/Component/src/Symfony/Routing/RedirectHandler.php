@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Routing;
 
+use Sylius\Bundle\GridBundle\Storage\FilterStorageInterface;
 use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
@@ -33,6 +34,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         private RouterInterface $router,
         private ArgumentParserInterface $argumentParser,
         private OperationRouteNameFactoryInterface $operationRouteNameFactory,
+        private ?FilterStorageInterface $filterStorage = null,
     ) {
     }
 
@@ -44,7 +46,7 @@ final class RedirectHandler implements RedirectHandlerInterface
             throw new \RuntimeException(sprintf('Operation "%s" has no redirection route, but it should.', $operation->getName() ?? ''));
         }
 
-        $parameters = $this->getRouteArguments($data, $operation, $request);
+        $parameters = $this->getRouteArguments($data, $operation);
 
         return $this->redirectToRoute($data, $route, $parameters);
     }
@@ -53,17 +55,21 @@ final class RedirectHandler implements RedirectHandlerInterface
     {
         $route = $this->operationRouteNameFactory->createRouteName($operation, $newOperation);
 
-        $parameters = $this->getRouteArguments($data, $operation, $request);
+        $parameters = $this->getRouteArguments($data, $operation);
 
         return $this->redirectToRoute($data, $route, $parameters);
     }
 
     public function redirectToRoute(mixed $data, string $route, array $parameters = []): RedirectResponse
     {
+        if (\str_ends_with($route, '_index')) {
+            $parameters = array_merge($parameters, $this->filterStorage?->all() ?? []);
+        }
+
         return new RedirectResponse($this->router->generate($route, $parameters));
     }
 
-    private function getRouteArguments(mixed $data, HttpOperation $operation, Request $request): array
+    private function getRouteArguments(mixed $data, HttpOperation $operation): array
     {
         $resource = $operation->getResource();
 
