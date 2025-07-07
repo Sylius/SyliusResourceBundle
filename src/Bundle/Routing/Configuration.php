@@ -43,6 +43,7 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('templates')->cannotBeEmpty()->end()
                 ->scalarNode('grid')->cannotBeEmpty()->end()
                 ->booleanNode('permission')->defaultValue(false)->end()
+                ->scalarNode('condition')->cannotBeEmpty()->end()
                 ->arrayNode('except')
                     ->scalarPrototype()->end()
                 ->end()

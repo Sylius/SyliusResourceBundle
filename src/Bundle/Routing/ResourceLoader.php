@@ -179,7 +179,9 @@ final class ResourceLoader extends Loader
             ];
         }
 
-        return $this->routeFactory->createRoute($path, $defaults, [], [], '', [], $methods);
+        $condition = $configuration['condition'] ?? '';
+
+        return $this->routeFactory->createRoute($path, $defaults, [], [], '', [], $methods, $condition);
     }
 
     private function getRouteName(MetadataInterface $metadata, array $configuration, string $actionName): string
