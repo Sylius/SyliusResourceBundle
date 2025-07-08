@@ -23,6 +23,7 @@ final class ResourceMetadata
         private ?string $formType = null,
         private ?string $templatesDir = null,
         private ?string $routePrefix = null,
+        private ?string $routeCondition = null,
         private ?string $name = null,
         private ?string $pluralName = null,
         private ?string $applicationName = null,
@@ -151,6 +152,19 @@ final class ResourceMetadata
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    public function getRouteCondition(): ?string
+    {
+        return $this->routeCondition;
+    }
+
+    public function withRouteCondition(?string $routeCondition): self
+    {
+        $self = clone $this;
+        $self->routeCondition = $routeCondition;
 
         return $self;
     }

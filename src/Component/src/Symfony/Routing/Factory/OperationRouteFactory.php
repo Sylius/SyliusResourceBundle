@@ -46,6 +46,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
             ],
             requirements: $operation->getRouteRequirements() ?? [],
             methods: $operation->getMethods() ?? [],
+            condition: $operation->getRouteCondition(),
         );
     }
 
