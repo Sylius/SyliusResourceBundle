@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithNormalizationContext;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithPluralName;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRouteCondition;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePrefix;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
@@ -579,6 +580,42 @@ final class AttributesResourceMetadataCollectionFactoryTest extends TestCase
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $this->assertInstanceOf(Show::class, $operation);
         $this->assertSame('/admin', $operation->getRoutePrefix());
+    }
+
+    public function testItCreatesResourceMetadataWithRouteCondition(): void
+    {
+        $this->resourceRegistry
+            ->method('get')
+            ->with('app.dummy')
+            ->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+                'driver' => 'dummy_driver',
+                'classes' => [
+                    'model' => 'App\Dummy',
+                    'form' => 'App\Form',
+                ],
+            ]));
+
+        $metadataCollection = $this->factory->create(DummyResourceWithRouteCondition::class);
+        $this->assertInstanceOf(ResourceMetadataCollection::class, $metadataCollection);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $this->assertInstanceOf(ResourceMetadata::class, $resource);
+        $this->assertSame('app.dummy', $resource->getAlias());
+
+        $operations = $resource->getOperations();
+        $this->assertInstanceOf(Operations::class, $operations);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $this->assertSame('custom_condition', $operation->getRouteCondition());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $this->assertSame('custom_condition', $operation->getRouteCondition());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $this->assertSame('custom_condition', $operation->getRouteCondition());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $this->assertSame('custom_condition', $operation->getRouteCondition());
     }
 
     public function testItCreatesResourceMetadataWithNormalizationContext(): void

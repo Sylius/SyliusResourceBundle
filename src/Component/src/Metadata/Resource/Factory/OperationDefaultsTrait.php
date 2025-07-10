@@ -106,7 +106,11 @@ trait OperationDefaultsTrait
 
         if ($operation instanceof HttpOperation) {
             if (null === $operation->getRoutePrefix()) {
-                $operation = $operation->withRoutePrefix($resource->getRoutePrefix() ?? null);
+                $operation = $operation->withRoutePrefix($resource->getRoutePrefix());
+            }
+
+            if (null === $operation->getRouteCondition()) {
+                $operation = $operation->withRouteCondition($resource->getRouteCondition());
             }
 
             if (null === $operation->getTwigContextFactory()) {
