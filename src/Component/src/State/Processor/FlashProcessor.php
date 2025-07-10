@@ -18,6 +18,7 @@ use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -50,8 +51,19 @@ final class FlashProcessor implements ProcessorInterface
             return $this->processor->process($data, $operation, $context);
         }
 
-        $this->flashHelper->addSuccessFlash($operation, $context);
+        $this->addFlash($request, $operation, $context);
 
         return $this->processor->process($data, $operation, $context);
+    }
+
+    private function addFlash(Request $request, Operation $operation, Context $context): void
+    {
+        if ($request->attributes->has('error')) {
+            $this->flashHelper->addErrorFlash($operation, $context);
+
+            return;
+        }
+
+        $this->flashHelper->addSuccessFlash($operation, $context);
     }
 }

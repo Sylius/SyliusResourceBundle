@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Doctrine\Common\State;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager as DoctrineObjectManager;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Exception\DeleteResourceException;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Reflection\ClassInfoTrait;
 use Sylius\Resource\State\ProcessorInterface;
@@ -34,8 +36,12 @@ final class RemoveProcessor implements ProcessorInterface
             return null;
         }
 
-        $manager->remove($data);
-        $manager->flush();
+        try {
+            $manager->remove($data);
+            $manager->flush();
+        } catch (ForeignKeyConstraintViolationException) {
+            throw new DeleteResourceException();
+        }
 
         return null;
     }

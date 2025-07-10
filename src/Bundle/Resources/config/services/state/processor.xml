@@ -17,10 +17,11 @@
     </imports>
 
     <services>
+        <service id="sylius.state_processor.main" alias="sylius.state_processor.respond" />
+
         <service id="sylius.state_processor.respond" class="Sylius\Resource\State\Processor\RespondProcessor">
             <argument type="service" id="sylius.state_responder" />
         </service>
-        <service id="sylius.state_processor.main" alias="sylius.state_processor.respond" />
 
         <service id="sylius.state_processor.write" class="Sylius\Resource\State\Processor\WriteProcessor" decorates="sylius.state_processor.main" decoration-priority="100">
             <argument type="service" id=".inner" />

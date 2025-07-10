@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Resource\State\Processor;
 
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Exception\WriteResourceException;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +41,13 @@ final class WriteProcessor implements ProcessorInterface
             return $this->processor->process($data, $operation, $context);
         }
 
-        return $this->processor->process($this->locatorProcessor->process($data, $operation, $context), $operation, $context);
+        try {
+            return $this->processor->process($this->locatorProcessor->process($data, $operation, $context), $operation, $context);
+        } catch (WriteResourceException $exception) {
+            $request = $context->get(RequestOption::class)?->request();
+            $request?->attributes->set('error', $exception->getMessage());
+
+            return $this->processor->process(null, $operation, $context);
+        }
     }
 }
