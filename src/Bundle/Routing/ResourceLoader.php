@@ -27,14 +27,11 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class ResourceLoader extends Loader
 {
-    private RegistryInterface $resourceRegistry;
-
-    private RouteFactoryInterface $routeFactory;
-
     public function __construct(
-        RegistryInterface $resourceRegistry,
-        RouteFactoryInterface $routeFactory,
+        private RegistryInterface $resourceRegistry,
+        private RouteFactoryInterface $routeFactory,
         ?string $env = null,
+        private ?bool $routingPathBcLayer = null,
     ) {
         parent::__construct($env);
 
@@ -69,36 +66,55 @@ final class ResourceLoader extends Loader
         $metadata = $this->resourceRegistry->get($configuration['alias']);
         $routes = $this->routeFactory->createRouteCollection();
 
-        $rootPath = sprintf('/%s/', $configuration['path'] ?? Urlizer::urlize($metadata->getPluralName()));
+        $rootPath = sprintf('/%s', $configuration['path'] ?? Urlizer::urlize($metadata->getPluralName()));
         $identifier = sprintf('{%s}', $configuration['identifier']);
 
+        /** @var bool $bcLayerEnabled */
+        $bcLayerEnabled = $this->routingPathBcLayer ?? true;
+        $trailingSlash = $bcLayerEnabled ? '/' : '';
+
         if (in_array('index', $routesToGenerate, true)) {
-            $indexRoute = $this->createRoute($metadata, $configuration, $rootPath, 'index', ['GET'], $isApi);
+            $indexRoute = $this->createRoute($metadata, $configuration, $rootPath . $trailingSlash, 'index', ['GET'], $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'index'), $indexRoute);
         }
 
         if (in_array('create', $routesToGenerate, true)) {
-            $createRoute = $this->createRoute($metadata, $configuration, $isApi ? $rootPath : $rootPath . 'new', 'create', $isApi ? ['POST'] : ['GET', 'POST'], $isApi);
+            $createRoute = $this->createRoute($metadata, $configuration, $isApi ? $rootPath . $trailingSlash : $rootPath . '/new', 'create', $isApi ? ['POST'] : ['GET', 'POST'], $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'create'), $createRoute);
         }
 
         if (in_array('update', $routesToGenerate, true)) {
-            $updateRoute = $this->createRoute($metadata, $configuration, $isApi ? $rootPath . $identifier : $rootPath . $identifier . '/edit', 'update', $isApi ? ['PUT', 'PATCH'] : ['GET', 'PUT', 'PATCH'], $isApi);
+            $httpMethods = ['GET', 'PUT', 'PATCH'];
+            if (!$bcLayerEnabled) {
+                $httpMethods[] = 'POST';
+            }
+
+            $updateRoute = $this->createRoute($metadata, $configuration, $isApi ? $rootPath . '/' . $identifier : $rootPath . '/' . $identifier . '/edit', 'update', $isApi ? ['PUT', 'PATCH'] : $httpMethods, $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'update'), $updateRoute);
         }
 
         if (in_array('show', $routesToGenerate, true)) {
-            $showRoute = $this->createRoute($metadata, $configuration, $rootPath . $identifier, 'show', ['GET'], $isApi);
+            $showRoute = $this->createRoute($metadata, $configuration, $rootPath . '/' . $identifier, 'show', ['GET'], $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'show'), $showRoute);
         }
 
         if (!$isApi && in_array('bulkDelete', $routesToGenerate, true)) {
-            $bulkDeleteRoute = $this->createRoute($metadata, $configuration, $rootPath . 'bulk-delete', 'bulkDelete', ['DELETE'], $isApi);
+            $httpMethods = ['DELETE'];
+            if (!$bcLayerEnabled) {
+                $httpMethods[] = 'POST';
+            }
+
+            $bulkDeleteRoute = $this->createRoute($metadata, $configuration, $rootPath . '/' . ($bcLayerEnabled ? 'bulk-delete' : 'bulk_delete'), 'bulkDelete', $httpMethods, $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'bulk_delete'), $bulkDeleteRoute);
         }
 
         if (in_array('delete', $routesToGenerate, true)) {
-            $deleteRoute = $this->createRoute($metadata, $configuration, $rootPath . $identifier, 'delete', ['DELETE'], $isApi);
+            $httpMethods = ['DELETE'];
+            if (!$bcLayerEnabled) {
+                $httpMethods[] = 'POST';
+            }
+
+            $deleteRoute = $this->createRoute($metadata, $configuration, $isApi ? $rootPath . '/' . $identifier : $rootPath . '/' . $identifier . ($bcLayerEnabled ? '' : '/delete'), 'delete', $isApi ? ['DELETE'] : $httpMethods, $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'delete'), $deleteRoute);
         }
 

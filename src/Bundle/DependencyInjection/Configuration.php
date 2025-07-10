@@ -51,6 +51,9 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue('sylius.resource_controller.authorization_checker.disabled')
                     ->cannotBeEmpty()
                 ->end()
+                ->booleanNode('routing_path_bc_layer')
+                    ->defaultTrue()
+                ->end()
             ->end()
         ;
 
