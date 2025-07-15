@@ -67,6 +67,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $container->setParameter('sylius.resource.mapping', $config['mapping']);
         $container->setParameter('sylius.resource.settings', $config['settings']);
+        $container->setParameter('sylius.routing_path_bc_layer', $config['routing_path_bc_layer']);
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
 
         $this->registerMetadataConfiguration($container, $config);
