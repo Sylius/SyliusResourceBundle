@@ -41,6 +41,23 @@ final class FlashHelperSpec extends ObjectBehavior
         $this->shouldHaveType(FlashHelper::class);
     }
 
+    function it_adds_success_flashes_with_custom_message(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+    ): void {
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $flashBag->add('success', 'Custom message.')->shouldBeCalled();
+
+        $this->addSuccessFlash($operation, $context, 'Custom message.');
+    }
+
     function it_adds_success_flashes_with_specific_message(
         Request $request,
         SessionInterface $session,
@@ -91,7 +108,7 @@ final class FlashHelperSpec extends ObjectBehavior
         $this->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_custom_message(
+    function it_adds_success_flashes_with_custom_message_on_its_operation(
         Request $request,
         SessionInterface $session,
         FlashBagInterface $flashBag,
@@ -184,6 +201,73 @@ final class FlashHelperSpec extends ObjectBehavior
         $flashBag->add('success', 'Admin users was removed successfully.')->shouldBeCalled();
 
         $this->addSuccessFlash($operation, $context);
+    }
+
+    function it_adds_error_flashes_with_custom_message(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+    ): void {
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $flashBag->add('error', 'Custom error message.')->shouldBeCalled();
+
+        $this->addErrorFlash($operation, $context, 'Custom error message.');
+    }
+
+    function it_adds_error_flashes_with_specific_message(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+    ): void {
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('app.dummy.create_error', 'flashes')->willReturn(true)->shouldBeCalled();
+
+        $translator->trans('app.dummy.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.')->shouldBeCalled();
+
+        $flashBag->add('error', 'Cannot create Dummy resource.')->shouldBeCalled();
+
+        $this->addErrorFlash($operation, $context);
+    }
+
+    function it_adds_error_flashes_with_fallback_message(
+        Request $request,
+        SessionInterface $session,
+        FlashBagInterface $flashBag,
+        TranslatorBagInterface $translator,
+        MessageCatalogueInterface $messageCatalogue,
+    ): void {
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request->getWrappedObject()));
+
+        $request->getSession()->willReturn($session);
+
+        $session->getBag('flashes')->willReturn($flashBag);
+
+        $translator->getCatalogue()->willReturn($messageCatalogue);
+
+        $messageCatalogue->has('app.dummy.create_error', 'flashes')->willReturn(false)->shouldBeCalled();
+
+        $translator->trans('sylius.resource.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.')->shouldBeCalled();
+
+        $flashBag->add('error', 'Cannot create Dummy resource.')->shouldBeCalled();
+
+        $this->addErrorFlash($operation, $context);
     }
 
     function it_translates_flashes_from_event_when_translator_is_not_a_bag(

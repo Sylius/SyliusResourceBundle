@@ -22,6 +22,7 @@ use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\State\Processor\FlashProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,11 +48,12 @@ final class FlashProcessorTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_flash(): void
+    public function it_adds_success_flash(): void
     {
         $request = $this->prophesize(Request::class);
         $operation = $this->prophesize(HttpOperation::class);
 
+        $request->attributes = new ParameterBag();
         $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
         $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
 
@@ -62,6 +64,27 @@ final class FlashProcessorTest extends TestCase
         $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
 
         $this->flashHelper->addSuccessFlash($operation, $context)->shouldBeCalled();
+
+        $this->flashProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
+    }
+
+    /** @test */
+    public function it_adds_error_flash(): void
+    {
+        $request = $this->prophesize(Request::class);
+        $operation = $this->prophesize(HttpOperation::class);
+
+        $request->attributes = new ParameterBag(['error' => 'Cannot delete, the resource is in use.']);
+        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
+        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
+
+        $operation->canWrite()->willReturn(null)->shouldBeCalled();
+
+        $context = new Context(new RequestOption($request->reveal()));
+
+        $this->decorated->process(['foo' => 'fighters'], $operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+
+        $this->flashHelper->addErrorFlash($operation, $context)->shouldBeCalled();
 
         $this->flashProcessor->process(['foo' => 'fighters'], $operation->reveal(), $context);
     }

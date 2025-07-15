@@ -22,7 +22,9 @@ use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
  */
 interface FlashHelperInterface
 {
-    public function addSuccessFlash(Operation $operation, Context $context): void;
+    public function addSuccessFlash(Operation $operation, Context $context, ?string $message = null): void;
+
+    public function addErrorFlash(Operation $operation, Context $context, ?string $message = null): void;
 
     public function addFlashFromEvent(GenericEvent $event, Context $context): void;
 }
