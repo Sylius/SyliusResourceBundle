@@ -79,12 +79,10 @@ final class FlashHelper implements FlashHelperInterface
         $resource = $operation->getResource();
         Assert::notNull($resource);
 
-        $keySuffix = 'error' === $type ? '_error' : '';
-
+        $translationKeySuffix = sprintf('%s%s', $operation->getShortName() ?? '', 'error' === $type ? '_error' : '');
         $key = 'success' === $type ? $operation->getNotificationMessage() : null;
-        $key ??= sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', ($operation->getShortName() ?? '') . $keySuffix);
-
-        $fallbackKey = sprintf('sylius.resource.%s', ($operation->getShortName() ?? '') . $keySuffix);
+        $key ??= sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $translationKeySuffix);
+        $fallbackKey = sprintf('sylius.resource.%s', $translationKeySuffix);
 
         $parameters = $this->getTranslationParameters($operation);
 
