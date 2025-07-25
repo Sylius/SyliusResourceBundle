@@ -19,6 +19,7 @@ use App\Entity\Route\ShowBookWithPriority;
 use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassOne;
 use Sylius\Component\Resource\Tests\Dummy\DummyClassTwo;
+use Sylius\Component\Resource\Tests\Dummy\DummyClassWithDocBlock;
 use Sylius\Component\Resource\Tests\Dummy\TraitPass;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 use Sylius\Resource\Annotation\SyliusRoute;
@@ -38,16 +39,25 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_returns_resource_classes_from_a_directory(): void
     {
-        $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
+        $resources = iterator_to_array(ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy'));
 
         $this->assertContains(DummyClassOne::class, $resources);
         $this->assertContains(DummyClassTwo::class, $resources);
     }
 
     /** @test */
+    public function it_excludes_docblock_comments(): void
+    {
+        $resources = iterator_to_array(ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy'));
+
+        $this->assertContains(DummyClassWithDocBlock::class, $resources);
+        $this->assertNotContains('This docblock for this class explains what to do', $resources);
+    }
+
+    /** @test */
     public function it_excludes_traits(): void
     {
-        $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
+        $resources = iterator_to_array(ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy'));
 
         $this->assertNotContains(TraitPass::class, $resources);
     }
