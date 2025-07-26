@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy;
 
-use Sylius\Resource\Metadata\AsResource;
+use Symfony\Component\Form\AbstractType;
 
-#[AsResource(alias: 'app.book', formType: BookFormType::class)]
-final class BookWithAliasResource
+final class BookFormType extends AbstractType
 {
 }

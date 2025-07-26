@@ -23,6 +23,7 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 use Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookFormType;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\BookWithAliasResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\DummyResource;
 use Sylius\Bundle\ResourceBundle\Tests\DependencyInjection\Dummy\NoDriverResource;
@@ -147,7 +148,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
                     'model' => BookWithAliasResource::class,
                     'controller' => ResourceController::class,
                     'factory' => Factory::class,
-                    'form' => DefaultResourceType::class,
+                    'form' => BookFormType::class,
                 ],
                 'driver' => 'doctrine/orm',
             ],

@@ -150,7 +150,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                         'model' => $className,
                         'controller' => ResourceController::class,
                         'factory' => Factory::class,
-                        'form' => DefaultResourceType::class,
+                        'form' => $resourceMetadata->getFormType() ?? DefaultResourceType::class,
                     ],
                     'driver' => $resourceMetadata->getDriver() ?? SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
                 ];
