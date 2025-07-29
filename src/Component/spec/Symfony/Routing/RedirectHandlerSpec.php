@@ -16,6 +16,7 @@ namespace spec\Sylius\Resource\Symfony\Routing;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Bundle\GridBundle\Storage\FilterStorageInterface;
+use Sylius\Resource\Exception\InvalidArgumentException;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Delete;
@@ -104,14 +105,30 @@ final class RedirectHandlerSpec extends ObjectBehavior
         FilterStorageInterface $filterStorage,
     ): void {
         $data->code = 'xyz';
-        $operation = new Create(redirectToRoute: 'app_dummy_index', redirectArguments: ['code' => 'resource.code']);
+        $operation = new Create(redirectToRoute: 'app_dummy_index', redirectArguments: ['code' => 'resource.code', 'criteria' => ['foo' => 'resource.code', 'bar' => 1]]);
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = $operation->withResource($resource);
 
         $filterStorage->all()->willReturn([]);
-        $router->generate('app_dummy_index', ['code' => 'xyz'])->willReturn('/dummies')->shouldBeCalled();
+        $router->generate('app_dummy_index', ['code' => 'xyz', 'criteria' => ['foo' => 'xyz', 'bar' => 1]])->willReturn('/dummies')->shouldBeCalled();
 
         $this->redirectToResource($data, $operation, $request);
+    }
+
+    function it_throws_an_exception_when_trying_redirect_with_custom_arguments_that_are_not_scalar_ones(
+        \stdClass $data,
+        Request $request,
+        RouterInterface $router,
+        FilterStorageInterface $filterStorage,
+    ): void {
+        $data->code = 'xyz';
+        $operation = new Create(redirectToRoute: 'app_dummy_index', redirectArguments: ['code' => 'resource.code', 'criteria' => ['foo' => 'resource.code', 'bar' => new \stdClass()]]);
+        $resource = new ResourceMetadata(alias: 'app.book');
+        $operation = $operation->withResource($resource);
+
+        $this->shouldThrow(
+            new InvalidArgumentException('Parameter "bar" should be a scalar or an array.'),
+        )->during('redirectToResource', [$data, $operation, $request]);
     }
 
     function it_redirects_to_resource_with_id_via_the_getter(
@@ -163,6 +180,23 @@ final class RedirectHandlerSpec extends ObjectBehavior
 
         $filterStorage->all()->willReturn(['criteria' => ['enabled' => true]]);
         $router->generate('app_dummy_index', ['criteria' => ['enabled' => true]])->willReturn('/dummies')->shouldBeCalled();
+
+        $this->redirectToResource($data, $operation, $request);
+    }
+
+    function it_does_not_use_grid_filters_when_redirect_parameters_are_defined_on_the_operation(
+        \stdClass $data,
+        Request $request,
+        RouterInterface $router,
+        FilterStorageInterface $filterStorage,
+    ): void {
+        $data->id = 'xyz';
+        $operation = new Delete(redirectToRoute: 'app_dummy_index', redirectArguments: ['criteria' => ['archival' => true]]);
+        $resource = new ResourceMetadata(alias: 'app.book');
+        $operation = $operation->withResource($resource);
+
+        $filterStorage->all()->willReturn(['criteria' => ['enabled' => true]]);
+        $router->generate('app_dummy_index', ['criteria' => ['archival' => true]])->willReturn('/dummies')->shouldBeCalled();
 
         $this->redirectToResource($data, $operation, $request);
     }
