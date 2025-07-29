@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\BoardGameBlog\Infrastructure\Sylius\Resource;
 
 use App\BoardGameBlog\Domain\Model\BoardGame;
-use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\CreateBoardGameProcessor;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\DeleteBoardGameProcessor;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Processor\UpdateBoardGameProcessor;
 use App\BoardGameBlog\Infrastructure\Sylius\State\Http\Provider\BoardGameCollectionProvider;
@@ -34,13 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     alias: 'app.board_game',
     section: 'admin',
     formType: BoardGameType::class,
-    templatesDir: 'crud',
     routePrefix: '/admin',
     driver: false,
 )]
-#[Create(
-    processor: CreateBoardGameProcessor::class,
-)]
+#[Create]
 #[Update(
     provider: BoardGameItemProvider::class,
     processor: UpdateBoardGameProcessor::class,

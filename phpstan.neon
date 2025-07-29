@@ -44,6 +44,9 @@ parameters:
         # return type mixed of method ParameterBag::get()"
         - 'src/Bundle/Controller/Parameters.php'
 
+        # ResourceMetadata will need to use the generic T
+        - 'src/Component/src/Metadata/ResourceMetadata.php'
+
     ignoreErrors:
         # Optional MongoDB ODM support - requires doctrine/mongodb-odm-bundle package
         # These classes are only loaded when MongoDB driver is configured and the bundle is installed
@@ -93,6 +96,9 @@ parameters:
         # when children() is called. PHPStan cannot track these runtime type transformations
         # See: src/Bundle/DependencyInjection/Configuration.php:30-37
         - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface::(end|variableNode|scalarNode)\(\)/'
+
+        # Symfony Dependency Injection Component can use ReflectionClass type as second argument instead of Reflector one.
+        -  '/Parameter #2 \$configurator of method Symfony\\Component\\DependencyInjection\\ContainerBuilder::registerAttributeForAutoconfiguration\(\)/'
 
         # Backward compatibility for Symfony DependencyInjection Alias::setDeprecated()
         # Method signature changed between Symfony versions:

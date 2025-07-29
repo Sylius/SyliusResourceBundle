@@ -17,13 +17,15 @@ use RuntimeException;
 
 /**
  * @internal
+ *
+ * @template T of Operation
  */
 final class Operations implements \IteratorAggregate, \Countable
 {
     private array $operations = [];
 
     /**
-     * @param array<string|int, Operation> $operations
+     * @param array<string|int, T> $operations
      */
     public function __construct(array $operations = [])
     {
@@ -32,6 +34,9 @@ final class Operations implements \IteratorAggregate, \Countable
         }
     }
 
+    /**
+     * @return \Iterator<string, T>
+     */
     public function getIterator(): \Traversable
     {
         return (function (): \Generator {
@@ -52,6 +57,11 @@ final class Operations implements \IteratorAggregate, \Countable
         throw new \RuntimeException(sprintf('No Operation with key "%s" was found', $key));
     }
 
+    /**
+     * @param T $value
+     *
+     * @return self<T>
+     */
     public function add(string $key, Operation $value): self
     {
         foreach ($this->operations as $i => [$operationName, $operation]) {
@@ -67,6 +77,9 @@ final class Operations implements \IteratorAggregate, \Countable
         return $this;
     }
 
+    /**
+     * @return self<T>
+     */
     public function remove(string $key): self
     {
         foreach ($this->operations as $i => [$operationName, $operation]) {
