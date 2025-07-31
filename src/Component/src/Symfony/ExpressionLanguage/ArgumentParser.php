@@ -25,7 +25,7 @@ final class ArgumentParser implements ArgumentParserInterface
     public function __construct(
         private readonly ExpressionLanguage $expressionLanguage,
         private readonly VariablesCollectionInterface $variablesCollection,
-        readonly ?iterable $providers = null,
+        ?iterable $providers = null,
     ) {
         foreach ($providers ?? [] as $provider) {
             Assert::isInstanceOf($provider, ExpressionFunctionProviderInterface::class);
