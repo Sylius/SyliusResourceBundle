@@ -31,5 +31,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.listener.exception.validation', ValidationExceptionListener::class)
         ->args([service('serializer')->nullOnInvalid()])
-        ->tag('kernel.event_listener', ['event' => 'kernel.exception', 'method' => 'onKernelException']);
+        ->tag('kernel.event_listener', ['event' => 'kernel.exception', 'method' => 'onKernelException'])
+        ->lazy();
 };

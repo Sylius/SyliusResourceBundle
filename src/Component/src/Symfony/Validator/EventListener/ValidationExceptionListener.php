@@ -22,8 +22,10 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Handles validation errors.
  *
  * @experimental
+ *
+ * @final
  */
-final class ValidationExceptionListener
+class ValidationExceptionListener
 {
     public function __construct(private ?SerializerInterface $serializer = null)
     {
