@@ -69,7 +69,7 @@
         <service id="Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType" alias="sylius.form.type.default" />
 
         <service id="sylius.registry.resource_repository" class="Sylius\Component\Registry\ServiceRegistry" public="false">
-            <argument>Sylius\Component\Resource\Repository\RepositoryInterface</argument>
+            <argument>Doctrine\Persistence\ObjectRepository</argument>
             <argument>resource repository</argument>
         </service>
         <service id="sylius.registry.form_builder" class="Sylius\Component\Registry\ServiceRegistry" public="false">
