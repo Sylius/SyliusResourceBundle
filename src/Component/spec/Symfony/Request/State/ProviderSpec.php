@@ -16,10 +16,12 @@ namespace spec\Sylius\Resource\Symfony\Request\State;
 use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Psr\Container\ContainerInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
@@ -171,5 +173,39 @@ final class ProviderSpec extends ObjectBehavior
 
         $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
         $response->shouldReturn($stdClass);
+    }
+
+    function it_throws_an_exception_when_repository_method_does_not_exist(
+        Operation $operation,
+        Request $request,
+        ContainerInterface $locator,
+    ): void {
+        $operation->getRepository()->willReturn('App\Repository');
+        $operation->getRepositoryMethod()->willReturn('notFoundMethod');
+        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+
+        $locator->has('App\Repository')->willReturn(true);
+        $locator->get('App\Repository')->willReturn(new \stdClass());
+
+        $errorMessage = sprintf('Method "notFoundMethod" not found on repository "%s". You can either add it or configure another one in the repositoryMethod option for your operation.', \stdClass::class);
+
+        $this->shouldThrow(new RuntimeException($errorMessage))->during('provide', [$operation, new Context(new RequestOption($request->getWrappedObject()))]);
+    }
+
+    function it_throws_an_exception_when_repository_method_does_not_exist_and_suggest_to_use_create_paginator_if_it_is_appropriated(
+        Operation $operation,
+        Request $request,
+        ContainerInterface $locator,
+    ): void {
+        $operation->getRepository()->willReturn('App\Repository');
+        $operation->getRepositoryMethod()->willReturn('createPaginator');
+        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+
+        $locator->has('App\Repository')->willReturn(true);
+        $locator->get('App\Repository')->willReturn(new \stdClass());
+
+        $errorMessage = sprintf('Method "createPaginator" not found on repository "%s". You can use the "%s" trait on this repository class.', \stdClass::class, CreatePaginatorTrait::class);
+
+        $this->shouldThrow(new RuntimeException($errorMessage))->during('provide', [$operation, new Context(new RequestOption($request->getWrappedObject()))]);
     }
 }
