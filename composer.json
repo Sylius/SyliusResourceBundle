@@ -26,6 +26,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "behat/transliterator": "^1.2",
         "babdev/pagerfanta-bundle": "^4.4",
         "doctrine/annotations": "^2.0",
         "doctrine/collections": "^2.2",
