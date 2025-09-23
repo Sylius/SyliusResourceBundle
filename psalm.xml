@@ -46,6 +46,7 @@
         <DeprecatedClass>
             <errorLevel type="info">
                 <referencedClass name="Doctrine\ORM\Event\LifecycleEventArgs" /> <!-- deprecated in doctrine/orm 2.14 -->
+                <referencedClass name="Gedmo\Sluggable\Util\Urlizer" /> <!-- deprecated in gedmo/doctrine-extensions 3.21 -->
             </errorLevel>
             <errorLevel type="suppress">
                 <referencedClass name="Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException" />
