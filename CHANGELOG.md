@@ -1,11 +1,20 @@
 ## CHANGELOG
 
+## v1.13.1 (2025-09-24)
+
+#### Details
+
+- [#1037](https://github.com/Sylius/SyliusResourceBundle/pull/1037) Add missing event short name on apply state machine transition ([@loic425](https://github.com/loic425))
+- [#1045](https://github.com/Sylius/SyliusResourceBundle/pull/1045) Fix - Add missing redirect & redirect arguments ([@loic425](https://github.com/loic425))
+- [#1064](https://github.com/Sylius/SyliusResourceBundle/pull/1064) Fix missing behat transliterator package ([@loic425](https://github.com/loic425))
+- [#1063](https://github.com/Sylius/SyliusResourceBundle/pull/1063) Add an error message for non existing repository method & suggest to use CreatePaginatorTrait ([@loic425](https://github.com/loic425))
+
 ## v1.13.0 (2025-06-04)
+
+#### Details
 
 - [#1025](https://github.com/Sylius/SyliusResourceBundle/pull/1025) Fix implicit nullable parameter + add ECS rule to 1.12 ([@GSadee](https://github.com/GSadee))
 - [#1024](https://github.com/Sylius/SyliusResourceBundle/pull/1024) Fix implicit nullable parameter + add ECS rule ([@GSadee](https://github.com/GSadee))
-
-#### Details
 
 ## v1.13.0-BETA.1 (2025-05-28)
 
