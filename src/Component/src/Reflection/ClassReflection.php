@@ -42,11 +42,19 @@ final class ClassReflection
                 throw new \RuntimeException(sprintf('Unable to read "%s" file', $file->getRealPath()));
             }
 
-            preg_match('/namespace (.+);/', $fileContent, $matches);
+            $cleanFileContent = '';
+            foreach (\PhpToken::tokenize($fileContent) as $t) {
+                if (\in_array($t->id, [T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING], true)) {
+                    continue;
+                }
+                $cleanFileContent .= $t->text;
+            }
+
+            preg_match('/namespace (.+);/', $cleanFileContent, $matches);
 
             $namespace = $matches[1] ?? null;
 
-            if (!preg_match('/class\s+(\w+)/', $fileContent, $matches)) {
+            if (!preg_match('/class\s+(\w+)/', $cleanFileContent, $matches)) {
                 // no class found
                 continue;
             }
