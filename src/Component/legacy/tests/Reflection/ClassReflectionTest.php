@@ -29,7 +29,7 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_returns_resource_classes_from_paths(): void
     {
-        $resources = ClassReflection::getResourcesByPaths([__DIR__ . '/../Dummy']);
+        $resources = iterator_to_array(ClassReflection::getResourcesByPaths([__DIR__ . '/../Dummy']));
 
         $this->assertContains(DummyClassOne::class, $resources);
         $this->assertContains(DummyClassTwo::class, $resources);
@@ -38,7 +38,7 @@ final class ClassReflectionTest extends TestCase
     /** @test */
     public function it_returns_resource_classes_from_a_directory(): void
     {
-        $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
+        $resources = iterator_to_array(ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy'));
 
         $this->assertContains(DummyClassOne::class, $resources);
         $this->assertContains(DummyClassTwo::class, $resources);
@@ -50,6 +50,14 @@ final class ClassReflectionTest extends TestCase
         $resources = ClassReflection::getResourcesByPath(__DIR__ . '/../Dummy');
 
         $this->assertNotContains(TraitPass::class, $resources);
+    }
+
+    /** @test */
+    public function it_excludes_class_word_in_a_comment(): void
+    {
+        $resources = iterator_to_array(ClassReflection::getResourcesByPaths([__DIR__ . '/../Dummy']));
+
+        $this->assertNotContains("Dummy\contains", $resources);
     }
 
     /** @test */

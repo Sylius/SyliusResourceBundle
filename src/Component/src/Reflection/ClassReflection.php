@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Reflection;
 
+use PhpParser\Error;
+use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\ParserFactory;
 use Symfony\Component\Finder\Finder;
 
 final class ClassReflection
@@ -34,30 +39,60 @@ final class ClassReflection
     public static function getResourcesByPath(string $path): iterable
     {
         $finder = new Finder();
-        $finder->files()->in($path)->name('*.php')->sortByName(true);
+        $finder->files()->in($path)->name('*.php');
+
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
 
         foreach ($finder as $file) {
-            $fileContent = file_get_contents((string) $file->getRealPath());
-            if (false === $fileContent) {
-                throw new \RuntimeException(sprintf('Unable to read "%s" file', $file->getRealPath()));
+            $code = file_get_contents($file->getRealPath());
+            if ($code === false) {
+                continue; // unreadable file
             }
 
-            preg_match('/namespace (.+);/', $fileContent, $matches);
+            try {
+                $ast = $parser->parse($code);
+            } catch (Error) {
+                continue; // invalid PHP
+            }
 
-            $namespace = $matches[1] ?? null;
-
-            if (!preg_match('/class\s+(\w+)/', $fileContent, $matches)) {
-                // no class found
+            if ($ast === null) {
                 continue;
             }
 
-            $className = trim($matches[1]);
+            $traverser = new NodeTraverser();
+            $visitor = new class extends NodeVisitorAbstract {
+                public string $namespace = '';
+                public array $found = [];
 
-            if (null !== $namespace) {
-                yield $namespace . '\\' . $className;
-            } else {
-                yield $className;
+                public function enterNode(Node $node): ?int
+                {
+                    if ($node instanceof Node\Stmt\Namespace_) {
+                        $this->namespace = $node->name ? $node->name->toString() : '';
+                    }
+
+                    if ($node instanceof Node\Stmt\Class_) {
+                        if ($node->name === null) {
+                            // skip anonymous class
+                            return null;
+                        }
+
+                        $name = $node->name->toString();
+                        $fqcn = $this->namespace ? $this->namespace . '\\' . $name : $name;
+                        $this->found[] = $fqcn;
+                    }
+
+                    return null;
+                }
+            };
+
+            $traverser->addVisitor($visitor);
+            $traverser->traverse($ast);
+
+            foreach ($visitor->found as $fqcn) {
+                yield $fqcn; // yield immediately to save memory
             }
+
+            unset($ast, $visitor, $traverser); // free memory
         }
     }
 
@@ -68,10 +103,7 @@ final class ClassReflection
      */
     public static function getClassAttributes(string $className, ?string $attributeName = null): array
     {
-        $reflectionClass = new \ReflectionClass($className);
-
-        /** @psalm-suppress ArgumentTypeCoercion */
-        return $reflectionClass->getAttributes($attributeName);
+        return (new \ReflectionClass($className))->getAttributes($attributeName);
     }
 }
 
