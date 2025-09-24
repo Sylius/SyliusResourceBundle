@@ -37,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     routePrefix: '/admin',
 )]
 #[Index(grid: 'app_subscription')]
+#[Index(shortName: 'withoutGrid', template: 'crud/index.html.twig')]
 #[Create]
 #[Update]
 #[Delete]
@@ -66,7 +67,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Api\Delete]
 #[Api\Get]
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
 class Subscription implements ResourceInterface
 {
     #[ORM\Column(type: 'string')]

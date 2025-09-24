@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Request\State;
 
-use Pagerfanta\Pagerfanta;
+use Pagerfanta\PagerfantaInterface;
 use Psr\Container\ContainerInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Operation;
@@ -59,13 +61,27 @@ final class Provider implements ProviderInterface
                 $defaultMethod = 'findById';
             }
 
-            $method = $operation->getRepositoryMethod() ?? $defaultMethod;
+            $customMethod = $operation->getRepositoryMethod();
+            $method = $customMethod ?? $defaultMethod;
 
             if (!$this->locator->has($repository)) {
-                throw new \RuntimeException(sprintf('Repository "%s" not found on operation "%s"', $repository, $operation->getName() ?? ''));
+                throw new RuntimeException(sprintf('Repository "%s" not found on operation "%s".', $repository, $operation->getName() ?? ''));
             }
 
+            /** @var object $repositoryInstance */
             $repositoryInstance = $this->locator->get($repository);
+
+            if (
+                !str_starts_with($method, 'find') &&  // to allow magic calls on Doctrine repository methods
+                !\method_exists($repositoryInstance, $method)) {
+                $errorMessage = sprintf('Method "%s" not found on repository "%s". You can either add it or configure another one in the repositoryMethod option for your operation.', $method, get_debug_type($repositoryInstance));
+
+                if ('createPaginator' === $method) {
+                    $errorMessage = sprintf('Method "%s" not found on repository "%s". You can use the "%s" trait on this repository class.', $method, get_debug_type($repositoryInstance), CreatePaginatorTrait::class);
+                }
+
+                throw new RuntimeException($errorMessage);
+            }
 
             // make it as callable
             /** @var callable $repository */
@@ -91,7 +107,7 @@ final class Provider implements ProviderInterface
 
         $data = $repository(...$arguments);
 
-        if ($data instanceof Pagerfanta) {
+        if ($data instanceof PagerfantaInterface) {
             $currentPage = $request->query->getInt('page', 1);
             $data->setCurrentPage($currentPage);
         }
