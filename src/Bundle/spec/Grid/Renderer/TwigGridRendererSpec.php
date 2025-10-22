@@ -58,6 +58,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
     ): void {
         $action->getType()->willReturn('link');
         $action->getOptions()->willReturn([]);
+        $action->getTemplate()->willReturn(null);
 
         $gridView->getRequestConfiguration()->willReturn($requestConfiguration);
         $requestConfiguration->getRequest()->willReturn($request);
@@ -83,6 +84,7 @@ final class TwigGridRendererSpec extends ObjectBehavior
     ): void {
         $action->getOptions()->willReturn([]);
         $action->getType()->willReturn('foo');
+        $action->getTemplate()->willReturn(null);
 
         $this
             ->shouldThrow(new \InvalidArgumentException('Missing template for action type "foo".'))
