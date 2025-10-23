@@ -50,13 +50,13 @@ final class ClassInfoTraitTest extends TestCase
         $classInfo->getRealClassName($class);
     }
 
-    public function getInvalidClasses(): Iterable
+    public static function getInvalidClasses(): Iterable
     {
         yield ['class' => 'Proxies\__CG__\App\Entity\Book1'];
         yield ['class' => 'MongoDBODMProxies\__PM__\App\Entity\Book1\Generated'];
     }
 
-    public function getValidClasses(): Iterable
+    public static function getValidClasses(): Iterable
     {
         yield ['class' => 'Proxies\__CG__\App\Entity\Book'];
         yield ['class' => 'MongoDBODMProxies\__PM__\App\Entity\Book\Generated'];

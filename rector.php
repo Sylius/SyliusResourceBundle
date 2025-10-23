@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
+use Rector\PhpSpecToPHPUnit\Set\MigrationSetList;
+use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\ValueObject\LevelSetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void
-{
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
-
-    $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
-};
+return RectorConfig::configure()
+    ->withImportNames(importShortClasses: false, removeUnusedImports: true)
+    ->withSets([
+        LevelSetList::UP_TO_PHP_82,
+        PHPUnitSetList::PHPUNIT_100,
+        MigrationSetList::PHPSPEC_TO_PHPUNIT
+    ])
+;
