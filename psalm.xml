@@ -40,12 +40,14 @@
                 <referencedFunction name="ReflectionClass::getAttributes" />
                 <file name="src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
                 <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/Component/src/Symfony/Request/State/Provider.php" />
             </errorLevel>
         </ArgumentTypeCoercion>
 
         <DeprecatedClass>
             <errorLevel type="info">
                 <referencedClass name="Doctrine\ORM\Event\LifecycleEventArgs" /> <!-- deprecated in doctrine/orm 2.14 -->
+                <referencedClass name="Gedmo\Sluggable\Util\Urlizer" /> <!-- deprecated in gedmo/doctrine-extensions 3.21 -->
             </errorLevel>
             <errorLevel type="suppress">
                 <referencedClass name="Sylius\Component\Resource\Exception\VariantWithNoOptionsValuesException" />

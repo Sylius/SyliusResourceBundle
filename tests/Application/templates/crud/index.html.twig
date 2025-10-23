@@ -4,7 +4,7 @@
     <h1>{{ (operation.resource.applicationName ~ '.ui.' ~ operation.resource.pluralName)|trans }}</h1>
 
     {% set grid = resources %}
-    {% set definition = grid.definition %}
+    {% set definition = grid.definition|default(null) %}
 
     {% if definition.actionGroups.bulk is defined and definition.getEnabledActions('bulk')|length > 0 %}
         {% for action in definition.getEnabledActions('bulk') %}
@@ -12,35 +12,40 @@
         {% endfor %}
     {% endif %}
 
-    <table>
-        <thead>
-        <tr>
-            {% for field in definition.fields %}
-                {% if field.enabled %}
-                    <th class="sylius-table-column-{{ field.name }}">{{ field.label|trans }}</th>
-                {% endif %}
-                {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
-                    <th class="sylius-table-column-actions">Actions</th>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for resource in resources.data %}
+    {% if not definition %}
+        This template doesn't support non-grid data.
+    {% endif %}
+
+    {% if definition %}
+        <table>
+            <thead>
             <tr>
-                {% for field in definition.enabledFields %}
-                    <td>{{ sylius_grid_render_field(grid, field, resource) }}</td>
+                {% for field in definition.fields %}
+                    {% if field.enabled %}
+                        <th class="sylius-table-column-{{ field.name }}">{{ field.label|trans }}</th>
+                    {% endif %}
                     {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
-                        <td>
-                            {% for action in definition.getEnabledActions('item') %}
-                                {{ sylius_grid_render_action(grid, action, resource) }}
-                            {% endfor %}
-                        </td>
+                        <th class="sylius-table-column-actions">Actions</th>
                     {% endif %}
                 {% endfor %}
             </tr>
-        {% endfor %}
-        </tbody>
-
-    </table>
+            </thead>
+            <tbody>
+            {% for resource in resources.data %}
+                <tr>
+                    {% for field in definition.enabledFields %}
+                        <td>{{ sylius_grid_render_field(grid, field, resource) }}</td>
+                        {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
+                            <td>
+                                {% for action in definition.getEnabledActions('item') %}
+                                    {{ sylius_grid_render_action(grid, action, resource) }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
