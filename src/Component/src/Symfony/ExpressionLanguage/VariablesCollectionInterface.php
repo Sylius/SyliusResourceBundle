@@ -18,5 +18,8 @@ namespace Sylius\Resource\Symfony\ExpressionLanguage;
  */
 interface VariablesCollectionInterface
 {
-    public function getVariables(): array;
+    /**
+     * @return array<string, mixed>
+     */
+    public function getCollection(): array;
 }

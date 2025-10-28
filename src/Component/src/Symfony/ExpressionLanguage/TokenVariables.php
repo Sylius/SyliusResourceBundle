@@ -19,13 +19,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * @experimental
  */
-final class TokenVariables implements VariablesInterface
+final class TokenVariables implements VariablesCollectionInterface
 {
     public function __construct(private ?TokenStorageInterface $tokenStorage = null)
     {
     }
 
-    public function getVariables(): array
+    public function getCollection(): array
     {
         if (null === $this->tokenStorage) {
             throw new \LogicException('The "symfony/security-bundle" must be installed and configured to use the "token" & "user" attribute. Try running "composer require symfony/security-bundle"');

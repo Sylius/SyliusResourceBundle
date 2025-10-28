@@ -16,7 +16,7 @@ namespace Sylius\Resource\Symfony\ExpressionLanguage;
 /**
  * @experimental
  */
-interface VariablesInterface
+interface ExpressionEvaluatorInterface
 {
-    public function getVariables(): array;
+    public function evaluateExpression(string $expression, array $variables = []): mixed;
 }

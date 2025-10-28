@@ -21,6 +21,8 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\DriverProvider;
 use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
+use Sylius\Resource\Annotation\AsExpressionProvider;
+use Sylius\Resource\Annotation\AsExpressionVariables;
 use Sylius\Resource\Factory\Factory;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\AsResource;
@@ -33,6 +35,7 @@ use Sylius\Resource\State\ResponderInterface;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -100,6 +103,20 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $container->addObjectResource(DoctrineORMDriver::class);
         $container->addObjectResource(DoctrineODMDriver::class);
         $container->addObjectResource(DoctrinePHPCRDriver::class);
+
+        $container->registerAttributeForAutoconfiguration(
+            AsExpressionVariables::class,
+            static function (ChildDefinition $definition, AsExpressionVariables $attribute, \Reflector $reflector): void {
+                $definition->addTag(sprintf(AsExpressionVariables::BASE_SERVICE_TAG, $attribute->name));
+            },
+        );
+
+        $container->registerAttributeForAutoconfiguration(
+            AsExpressionProvider::class,
+            static function (ChildDefinition $definition, AsExpressionProvider $attribute, \Reflector $reflector): void {
+                $definition->addTag(sprintf(AsExpressionProvider::BASE_SERVICE_TAG, $attribute->name));
+            },
+        );
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): Configuration

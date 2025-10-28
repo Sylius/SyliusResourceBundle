@@ -24,7 +24,7 @@ use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Reflection\CallableReflection;
 use Sylius\Resource\State\ProviderInterface;
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ExpressionEvaluatorInterface;
 use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
 
 /**
@@ -35,7 +35,7 @@ final class Provider implements ProviderInterface
     public function __construct(
         private ContainerInterface $locator,
         private RepositoryArgumentResolver $argumentResolver,
-        private ArgumentParserInterface $argumentParser,
+        private ExpressionEvaluatorInterface $expressionEvaluator,
     ) {
     }
 
@@ -118,7 +118,7 @@ final class Provider implements ProviderInterface
     private function parseArgumentValues(array $arguments): array
     {
         foreach ($arguments as $key => $value) {
-            $arguments[$key] = $this->argumentParser->parseExpression($value);
+            $arguments[$key] = $this->expressionEvaluator->evaluateExpression($value);
         }
 
         return $arguments;

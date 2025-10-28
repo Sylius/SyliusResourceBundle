@@ -18,7 +18,7 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Factory\FactoryInterface as ResourceFactoryInterface;
 use Sylius\Resource\Metadata\FactoryAwareOperationInterface;
 use Sylius\Resource\Metadata\Operation;
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ExpressionEvaluatorInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,7 +28,7 @@ final class Factory implements FactoryInterface
 {
     public function __construct(
         private ContainerInterface $locator,
-        private ArgumentParserInterface $argumentParser,
+        private ExpressionEvaluatorInterface $expressionEvaluator,
     ) {
     }
 
@@ -69,7 +69,7 @@ final class Factory implements FactoryInterface
     private function parseArgumentValues(array $arguments): array
     {
         foreach ($arguments as $key => $value) {
-            $arguments[$key] = $this->argumentParser->parseExpression($value);
+            $arguments[$key] = $this->expressionEvaluator->evaluateExpression($value);
         }
 
         return $arguments;

@@ -17,7 +17,7 @@ use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\ResourceMetadata;
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Resource\Symfony\ExpressionLanguage\ExpressionEvaluatorInterface;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ final class RedirectHandler implements RedirectHandlerInterface
 {
     public function __construct(
         private RouterInterface $router,
-        private ArgumentParserInterface $argumentParser,
+        private ExpressionEvaluatorInterface $expressionEvaluator,
         private OperationRouteNameFactoryInterface $operationRouteNameFactory,
     ) {
     }
@@ -108,7 +108,7 @@ final class RedirectHandler implements RedirectHandlerInterface
                 $variables[$resourceName] = $data;
             }
 
-            $parameters[$key] = $this->argumentParser->parseExpression($value, $variables);
+            $parameters[$key] = $this->expressionEvaluator->evaluateExpression($value, $variables);
         }
 
         return $parameters;

@@ -40,7 +40,7 @@
         <service id="Sylius\Resource\Symfony\Request\State\Provider">
             <argument type="tagged_locator" tag="sylius.repository" />
             <argument type="service" id="sylius.repository_argument_resolver.request" />
-            <argument type="service" id="sylius.expression_language.argument_parser.repository" />
+            <argument type="service" id="sylius.repository.expression_evaluator" />
             <tag name="sylius.state_provider" />
         </service>
 

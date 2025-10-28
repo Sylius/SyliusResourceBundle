@@ -18,7 +18,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 /**
  * @experimental
  */
-final class ArgumentParser implements ArgumentParserInterface
+final class ExpressionEvaluator implements ExpressionEvaluatorInterface
 {
     public function __construct(
         private ExpressionLanguage $expressionLanguage,
@@ -26,12 +26,12 @@ final class ArgumentParser implements ArgumentParserInterface
     ) {
     }
 
-    public function parseExpression(string $expression, array $variables = []): mixed
+    public function evaluateExpression(string $expression, array $variables = []): mixed
     {
         return $this->expressionLanguage->evaluate(
             $expression,
             array_merge(
-                $this->variablesCollection->getVariables(),
+                $this->variablesCollection->getCollection(),
                 $variables,
             ),
         );

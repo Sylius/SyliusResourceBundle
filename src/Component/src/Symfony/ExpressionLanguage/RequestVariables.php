@@ -18,13 +18,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @experimental
  */
-final class RequestVariables implements VariablesInterface
+final class RequestVariables implements VariablesCollectionInterface
 {
     public function __construct(private RequestStack $requestStack)
     {
     }
 
-    public function getVariables(): array
+    public function getCollection(): array
     {
         return [
             'request' => $this->requestStack->getCurrentRequest(),

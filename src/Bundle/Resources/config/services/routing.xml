@@ -126,7 +126,7 @@
 
         <service id="sylius.routing.redirect_handler" class="Sylius\Resource\Symfony\Routing\RedirectHandler">
             <argument type="service" id="router" />
-            <argument type="service" id="sylius.expression_language.argument_parser.routing" />
+            <argument type="service" id="sylius.routing.expression_evaluator" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
         </service>
         <service id="Sylius\Resource\Symfony\Routing\RedirectHandlerInterface" alias="sylius.routing.redirect_handler" />
