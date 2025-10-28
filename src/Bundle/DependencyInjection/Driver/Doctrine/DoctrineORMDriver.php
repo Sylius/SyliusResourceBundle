@@ -64,9 +64,7 @@ final class DoctrineORMDriver extends AbstractDoctrineDriver
             /** @var string $entityClass */
             $entityClass = $metadata->getClass('model');
 
-            $definition->setFactory([$managerReference, 'getRepository']);
-            $definition->setArguments([$entityClass]);
-
+            $definition->setArguments([$managerReference, $this->getClassMetadataDefinition($metadata)]);
             $container->setDefinition($serviceId, $definition);
 
             $genericEntities[] = $entityClass;

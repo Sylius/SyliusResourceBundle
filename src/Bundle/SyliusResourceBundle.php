@@ -18,6 +18,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineContainerR
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\Helper\TargetEntitiesResolver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\PagerfantaBridgePass;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterAliasesForDoctrineRepositoriesPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFormBuilderPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterFqcnControllersPass;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\RegisterResourceRepositoryPass;
@@ -50,6 +51,7 @@ final class SyliusResourceBundle extends Bundle
 
         $container->addCompilerPass(new CsrfTokenManagerPass());
         $container->addCompilerPass(new DisableMetadataCachePass());
+        $container->addCompilerPass(new RegisterAliasesForDoctrineRepositoriesPass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterFormBuilderPass());
