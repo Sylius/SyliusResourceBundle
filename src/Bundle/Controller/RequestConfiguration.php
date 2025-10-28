@@ -161,6 +161,10 @@ class RequestConfiguration
             return $this->getRouteName($name);
         }
 
+        if (is_string($redirect) && str_ends_with($redirect, 'referer')) {
+            return 'referer';
+        }
+
         if (is_array($redirect)) {
             if (!empty($redirect['referer'])) {
                 return 'referer';
