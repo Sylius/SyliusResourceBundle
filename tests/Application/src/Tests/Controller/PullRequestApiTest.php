@@ -13,22 +13,35 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\PullRequestFactory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
+use Tests\PurgeDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
 
-final class PullRequestApiTest extends JsonApiTestCase
+final class PullRequestApiTest extends ApiTestCase
 {
     use Factories;
+    use PurgeDatabaseTrait;
 
     #[Test]
     public function it_allows_creating_a_pull_request(): void
     {
         $this->client->request('POST', '/pull-requests/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'pull-requests/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": "start"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -40,8 +53,19 @@ final class PullRequestApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/submit', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'pull-requests/submit_response', Response::HTTP_OK);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": "test"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -53,8 +77,19 @@ final class PullRequestApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'pull-requests/wait_for_review_response', Response::HTTP_OK);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": "review"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -66,7 +101,8 @@ final class PullRequestApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
     }
 }

@@ -131,7 +131,8 @@
             "Sylius\\Component\\Resource\\spec\\": "src/Component/legacy/spec/",
             "Sylius\\Component\\Resource\\Tests\\": "src/Component/legacy/tests/",
             "Sylius\\Resource\\Tests\\": "src/Component/tests/",
-            "App\\": "tests/Application/src/"
+            "App\\": "tests/Application/src/",
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
