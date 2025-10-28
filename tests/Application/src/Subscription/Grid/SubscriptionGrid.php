@@ -51,7 +51,8 @@ final class SubscriptionGrid extends AbstractGrid implements ResourceAwareGridIn
             )
             ->addActionGroup(
                 ItemActionGroup::create(
-                    ShowAction::create(),
+                    ShowAction::create()
+                        ->setTemplate('subscription/grid/action/show.html.twig'),
                     UpdateAction::create(),
                     DeleteAction::create(),
                     Action::create('accept', 'apply_transition')
