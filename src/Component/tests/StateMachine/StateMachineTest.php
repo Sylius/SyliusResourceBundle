@@ -11,17 +11,19 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\StateMachine;
+namespace Sylius\Resource\Tests\StateMachine;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\StateMachine\StateMachine;
 use Sylius\Resource\Tests\Dummy\PullRequest;
 
-final class StateMachineSpec extends ObjectBehavior
+final class StateMachineTest extends TestCase
 {
-    function let(): void
+    private StateMachine $stateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new PullRequest(), [
+        $this->stateMachine = new StateMachine(new PullRequest(), [
             'graph' => 'pull_request',
             'property_path' => 'currentPlace',
             'places' => [
@@ -37,18 +39,18 @@ final class StateMachineSpec extends ObjectBehavior
         ]);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(StateMachine::class);
+        $this->assertInstanceOf(StateMachine::class, $this->stateMachine);
     }
 
-    function it_gets_transition_from_a_state(): void
+    public function testItGetsTransitionFromAState(): void
     {
-        $this->getTransitionFromState('start')->shouldReturn('submit');
+        $this->assertSame('submit', $this->stateMachine->getTransitionFromState('start'));
     }
 
-    function it_gets_transition_to_a_state(): void
+    public function testItGetsTransitionToAState(): void
     {
-        $this->getTransitionToState('test')->shouldReturn('submit');
+        $this->assertSame('submit', $this->stateMachine->getTransitionToState('test'));
     }
 }
