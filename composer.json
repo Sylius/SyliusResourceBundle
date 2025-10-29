@@ -138,7 +138,7 @@
         "analyse": [
             "@composer validate --strict",
             "vendor/bin/ecs check",
-            "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon -l max src"
+            "vendor/bin/phpstan analyse --ansi --memory-limit=256M -c phpstan.neon src"
         ],
         "fix": [
             "vendor/bin/ecs check --fix"
