@@ -14,6 +14,10 @@ return static function (ECSConfig $ecsConfig): void {
         __DIR__ . '/tests',
     ]);
 
+    $ecsConfig->skip([
+        __DIR__ . '/tests/Application/config/reference.php',
+    ]);
+
     $ecsConfig->import('vendor/sylius-labs/coding-standard/ecs.php');
 
     $ecsConfig->ruleWithConfiguration(HeaderCommentFixer::class, [

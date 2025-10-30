@@ -6,3 +6,5 @@
 /symfony.lock
 
 /.phpunit.result.cache
+
+tests/Application/config/reference.php
