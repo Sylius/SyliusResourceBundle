@@ -17,23 +17,31 @@ jobs:
     tests:
         runs-on: ubuntu-latest
         name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, ORM ${{ matrix.orm }}"
-        env:
-            APP_ENV: ${{ matrix.app_env }}
         strategy:
             fail-fast: false
             matrix:
                 orm: ['2.*', '3.*']
-                php: ["8.1", "8.2", "8.3"]
+                php: ["8.2", "8.3"]
                 composer-flags: ['--no-scripts --prefer-stable --prefer-dist']
-                symfony: ["^6.4", "^7.1"]
-                app_env: ["test"]
-                exclude:
-                    - php: "8.1"
-                      symfony: "^7.1"
+                minimum_stability: [""]
+                symfony: ["^6.4", "^7.2"]
+                include:
+                    -   php: 8.3
+                        symfony: "7.4.*"
+                        minimum_stability: "beta"
 
         steps:
             -
                 uses: actions/checkout@v4
+
+            -
+                name: Change minimum-stability
+                if: matrix.minimum_stability != ''
+                run: |
+                    composer config minimum-stability ${{ matrix.minimum_stability }}
+                    composer config prefer-stable true
+                    (cd src/Component && composer config  minimum-stability ${{ matrix.minimum_stability }})
+                    (cd src/Component && composer config prefer-stable true)                
 
             -
                 name: Setup PHP
@@ -73,10 +81,6 @@ jobs:
                 name: Prepare test application
                 run: |
                     (cd tests/Application && bin/console doctrine:schema:create)
-
-            -
-                name: Run Psalm
-                run: vendor/bin/psalm --php-version=${{ matrix.php }}
 
             -
                 name: Run analysis
@@ -136,7 +140,6 @@ jobs:
 
             -
                 name: Run lint container without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
-                if: matrix.app_env == 'test'
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
@@ -145,7 +148,6 @@ jobs:
 
             -
                 name: Run lint container without winzou/state-machine-bundle package
-                if: matrix.app_env == 'test'
                 run: |
                     composer remove --dev winzou/state-machine-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
@@ -154,7 +156,6 @@ jobs:
 
             -
                 name: Run lint container without sylius/grid-bundle package
-                if: matrix.app_env == 'test'
                 run: |
                     composer remove sylius/grid-bundle --no-scripts --dev
                     (cd tests/Application && bin/console cache:clear --env=test_without_twig)
