@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Context\Option;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 
@@ -30,7 +30,7 @@ final class RequestConfigurationOptionTest extends TestCase
         $this->requestConfigurationOption = new RequestConfigurationOption($this->requestConfigurationMock);
     }
 
-    function testReturnsRequestConfiguration(): void
+    public function testReturnsRequestConfiguration(): void
     {
         $this->assertSame($this->requestConfigurationMock, $this->requestConfigurationOption->requestConfiguration());
     }

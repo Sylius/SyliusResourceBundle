@@ -51,14 +51,14 @@ final class LegacyRequestContextInitiatorTest extends TestCase
         $this->legacyRequestContextInitiator = new LegacyRequestContextInitiator(
             $this->resourceRegistryMock,
             $this->requestConfigurationFactoryMock,
-            $this->decoratedMock
+            $this->decoratedMock,
         );
         $this->requestMock = $this->createMock(Request::class);
         $this->metadataMock = $this->createMock(MetadataInterface::class);
         $this->requestConfigurationMock = $this->createMock(RequestConfiguration::class);
     }
 
-    function testAddsMetadataAndRequestConfigurationToTheContext(): void
+    public function testAddsMetadataAndRequestConfigurationToTheContext(): void
     {
         $parameterBag = new ParameterBag(['_sylius' => ['resource' => 'app.dummy']]);
 
@@ -94,11 +94,11 @@ final class LegacyRequestContextInitiatorTest extends TestCase
         $this->assertSame($this->metadataMock, $result->get(MetadataOption::class)?->metadata());
         $this->assertSame(
             $this->requestConfigurationMock,
-            $result->get(RequestConfigurationOption::class)?->requestConfiguration()
+            $result->get(RequestConfigurationOption::class)?->requestConfiguration(),
         );
     }
 
-    function testDirectlyReturnsTheContextWhenRequestHasNoSyliusAttributes(): void
+    public function testDirectlyReturnsTheContextWhenRequestHasNoSyliusAttributes(): void
     {
         $this->requestMock->attributes = new ParameterBag();
 
@@ -130,7 +130,7 @@ final class LegacyRequestContextInitiatorTest extends TestCase
         $this->assertNull($result->get(RequestConfigurationOption::class));
     }
 
-    function testDirectlyReturnsTheContextWhenRequestHasNoResourceOnAttributes(): void
+    public function testDirectlyReturnsTheContextWhenRequestHasNoResourceOnAttributes(): void
     {
         $this->requestMock->attributes = new ParameterBag(['_sylius' => ['section' => 'admin']]);
 
