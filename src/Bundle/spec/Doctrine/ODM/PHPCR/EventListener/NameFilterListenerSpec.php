@@ -15,61 +15,78 @@ namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener;
 
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\NameFilterListener;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 
 /**
  * @require Doctrine\ODM\PHPCR\DocumentManagerInterface
  */
-final class NameFilterListenerSpec extends ObjectBehavior
+final class NameFilterListenerSpec extends TestCase
 {
-    function let(DocumentManagerInterface $documentManager): void
+    private DocumentManagerInterface|MockObject $documentManagerMock;
+
+    private NameFilterListener $nameFilterListener;
+
+    private ResourceControllerEvent|MockObject $eventMock;
+
+    private ClassMetadata|MockObject $metadataMock;
+
+    private \stdClass $document;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($documentManager);
+        if (!interface_exists(DocumentManagerInterface::class)) {
+            $this->markTestSkipped('Doctrine PHPCR ODM not installed');
+        }
+
+        $this->documentManagerMock = $this->createMock(DocumentManagerInterface::class);
+        $this->nameFilterListener = new NameFilterListener($this->documentManagerMock);
+        $this->eventMock = $this->createMock(ResourceControllerEvent::class);
+        $this->metadataMock = $this->createMock(ClassMetadata::class);
+        $this->document = new \stdClass();
     }
 
-    function it_throws_an_exception_if_nodename_is_not_mapped(
-        ResourceControllerEvent $event,
-        DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata,
-    ): void {
-        $document = new \stdClass();
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->nodename = null;
+    function testThrowsAnExceptionIfNodenameIsNotMapped(): void
+    {
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
-        $this->shouldThrow(new \RuntimeException('In order to use the node name filter on "stdClass" it is necessary to map a field as the "nodename"'))->during('onEvent', [$event]);
+        $this->documentManagerMock->expects($this->once())->method('getClassMetadata')->with('stdClass')->willReturn($this->metadataMock);
+
+        $this->metadataMock->nodename = null;
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('In order to use the node name filter on "stdClass" it is necessary to map a field as the "nodename"');
+
+        $this->nameFilterListener->onEvent($this->eventMock);
     }
 
-    function it_should_clean_the_name(
-        ResourceControllerEvent $event,
-        DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata,
-    ): void {
-        $document = new \stdClass();
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->nodename = 'foobar';
-        $metadata->getFieldValue($document, 'foobar')->willReturn('Hello//Foo');
-        $metadata->setFieldValue($document, 'foobar', 'Hello  Foo')->shouldBeCalled();
+    function testCleanTheName(): void
+    {
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
-        $this->onEvent($event);
+        $this->documentManagerMock->expects($this->once())->method('getClassMetadata')->with('stdClass')->willReturn($this->metadataMock);
+
+        $this->metadataMock->nodename = 'foobar';
+        $this->metadataMock->expects($this->once())->method('getFieldValue')->with($this->document, 'foobar')->willReturn('Hello//Foo');
+        $this->metadataMock->expects($this->once())->method('setFieldValue')->with($this->document, 'foobar', 'Hello  Foo');
+
+        $this->nameFilterListener->onEvent($this->eventMock);
     }
 
-    function it_should_use_the_given_replacement_char(
-        ResourceControllerEvent $event,
-        DocumentManagerInterface $documentManager,
-        ClassMetadata $metadata,
-    ): void {
-        $this->beConstructedWith($documentManager, '_');
+    function testUseTheGivenReplacementChar(): void
+    {
+        $this->nameFilterListener = new NameFilterListener($this->documentManagerMock, '_');
 
-        $document = new \stdClass();
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->nodename = 'foobar';
-        $metadata->getFieldValue($document, 'foobar')->willReturn('Hello//Foo');
-        $metadata->setFieldValue($document, 'foobar', 'Hello__Foo')->shouldBeCalled();
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
-        $this->onEvent($event);
+        $this->documentManagerMock->expects($this->once())->method('getClassMetadata')->with('stdClass')->willReturn($this->metadataMock);
+
+        $this->metadataMock->nodename = 'foobar';
+        $this->metadataMock->expects($this->once())->method('getFieldValue')->with($this->document, 'foobar')->willReturn('Hello//Foo');
+        $this->metadataMock->expects($this->once())->method('setFieldValue')->with($this->document, 'foobar', 'Hello__Foo');
+
+        $this->nameFilterListener->onEvent($this->eventMock);
     }
 }

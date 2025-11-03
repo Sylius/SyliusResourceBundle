@@ -17,169 +17,246 @@ use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
 use PHPCR\NodeInterface;
 use PHPCR\SessionInterface;
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\DefaultParentListener;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 
 /**
  * @require Doctrine\ODM\PHPCR\DocumentManagerInterface
  */
-final class DefaultParentListenerSpec extends ObjectBehavior
+final class DefaultParentListenerSpec extends TestCase
 {
-    function let(DocumentManagerInterface $documentManager): void
+    private DocumentManagerInterface|MockObject $documentManagerMock;
+
+    private DefaultParentListener $defaultParentListener;
+
+    private ResourceControllerEvent|MockObject $eventMock;
+
+    private ClassMetadata|MockObject $documentMetadataMock;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($documentManager, '/path/to');
+        if (!interface_exists(DocumentManagerInterface::class)) {
+            $this->markTestSkipped('Doctrine PHPCR ODM not installed');
+        }
+
+        $this->documentManagerMock = $this->createMock(DocumentManagerInterface::class);
+        $this->defaultParentListener = new DefaultParentListener($this->documentManagerMock, '/path/to');
+        $this->eventMock = $this->createMock(ResourceControllerEvent::class);
+        $this->documentMetadataMock = $this->createMock(ClassMetadata::class);
     }
 
-    function it_should_throw_an_exception_if_no_parent_mapping_exists(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-    ): void {
-        $event->getSubject()->willReturn(new \stdClass());
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
-        $documentMetadata->parentMapping = null;
+    public function testThrowAnExceptionIfNoParentMappingExists(): void
+    {
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn(new \stdClass());
 
-        $this->shouldThrow(new \RuntimeException(
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
+
+        $this->documentMetadataMock->parentMapping = null;
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
             'A default parent path has been specified, but no parent mapping has been applied to document "stdClass"',
-        ))->during(
-            'onPreCreate',
-            [$event],
         );
+
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
-    function it_should_throw_an_exception_if_the_parent_does_not_exist_and_autocreate_is_false(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-    ): void {
-        $this->beConstructedWith(
-            $documentManager,
-            '/path/to',
-            false,
-        );
-        $event->getSubject()->willReturn(new \stdClass());
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
-        $documentMetadata->parentMapping = 'parent';
-        $documentManager->find(null, '/path/to')->willReturn(null);
+    public function testThrowAnExceptionIfTheParentDoesNotExistAndAutocreateIsFalse(): void
+    {
+        $this->defaultParentListener = new DefaultParentListener($this->documentManagerMock, '/path/to', false);
 
-        $this->shouldThrow(new \RuntimeException(
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn(new \stdClass());
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
+
+        $this->documentMetadataMock->parentMapping = 'parent';
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('find')
+            ->with(null, '/path/to')
+            ->willReturn(null)
+        ;
+
+        $this->expectException(\RuntimeException::class);
+
+        $this->expectExceptionMessage(
             'Document at default parent path "/path/to" does not exist. `autocreate` was set to "false"',
-        ))->during(
-            'onPreCreate',
-            [$event],
         );
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
-    function it_should_set_the_parent_document(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-    ): void {
+    public function testSetTheParentDocument(): void
+    {
         $subjectDocument = new \stdClass();
+
         $parentDocument = new \stdClass();
 
-        $event->getSubject()->willReturn($subjectDocument);
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
-        $documentMetadata->parentMapping = 'parent';
-        $documentMetadata->getFieldValue($subjectDocument, 'parent')->willReturn(null);
-        $documentManager->find(null, '/path/to')->willReturn($parentDocument);
-        $documentMetadata->setFieldValue($subjectDocument, 'parent', $parentDocument)->shouldBeCalled();
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($subjectDocument);
 
-        $this->onPreCreate($event);
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
+
+        $this->documentMetadataMock->parentMapping = 'parent';
+
+        $this->documentMetadataMock
+            ->expects($this->once())
+            ->method('getFieldValue')
+            ->with($subjectDocument, 'parent')
+            ->willReturn(null)
+        ;
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('find')
+            ->with(null, '/path/to')
+            ->willReturn($parentDocument)
+        ;
+
+        $this->documentMetadataMock
+            ->expects($this->once())
+            ->method('setFieldValue')
+            ->with($subjectDocument, 'parent', $parentDocument)
+        ;
+
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
-    function it_should_autocreate_and_set_the_parent_document(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-        SessionInterface $session,
-        NodeInterface $node,
-    ): void {
-        $this->beConstructedWith(
-            $documentManager,
-            '/path/to',
-            true,
-        );
+    public function testAutocreateAndSetTheParentDocument(): void
+    {
+        /** @var SessionInterface|MockObject $sessionMock */
+        $sessionMock = $this->createMock(SessionInterface::class);
+        /** @var NodeInterface|MockObject $nodeMock */
+        $nodeMock = $this->createMock(NodeInterface::class);
+
+        $this->defaultParentListener = new DefaultParentListener($this->documentManagerMock, '/path/to', true);
 
         $subjectDocument = new \stdClass();
+
         $parentDocument = new \stdClass();
 
-        $event->getSubject()->willReturn($subjectDocument);
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
-        $documentMetadata->parentMapping = 'parent';
-        $documentManager->find(null, '/path/to')->willReturn(null, $parentDocument);
-        $documentManager->getPhpcrSession()->willReturn($session);
-        $session->getRootNode()->willReturn($node);
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($subjectDocument);
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
+
+        $this->documentMetadataMock->parentMapping = 'parent';
+
+        $this->documentManagerMock
+            ->expects($this->exactly(2))
+            ->method('find')
+            ->with(null, '/path/to')
+            ->willReturn(null, $parentDocument)
+        ;
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getPhpcrSession')
+            ->willReturn($sessionMock)
+        ;
+
+        $sessionMock->expects($this->once())->method('getRootNode')->willReturn($nodeMock);
 
         // we need to mock the behavior of the node helper
         // see: https://github.com/phpcr/phpcr-utils/issues/106
-        $node->hasNode(Argument::cetera())->willReturn(true);
-        $node->getNode(Argument::cetera())
-            ->willReturn($node)
-            ->shouldBeCalledTimes(2)
+        $nodeMock
+            ->expects($this->exactly(2))
+            ->method('hasNode')
+            ->with($this->anything())
+            ->willReturn(true)
+        ;
+        $nodeMock
+            ->expects($this->exactly(2))
+            ->method('getNode')
+            ->with($this->anything())
+            ->willReturn($nodeMock)
         ;
 
-        $documentMetadata->setFieldValue($subjectDocument, 'parent', $parentDocument);
-        $this->onPreCreate($event);
+        $this->documentMetadataMock->setFieldValue($subjectDocument, 'parent', $parentDocument);
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
-    function it_should_set_the_parent_document_if_force_is_true_and_the_parent_is_already_set(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-    ): void {
-        $this->beConstructedWith(
-            $documentManager,
-            '/path/to',
-            false,
-            true,
-        );
+    public function testSetTheParentDocumentIfForceIsTrueAndTheParentIsAlreadySet(): void
+    {
+        $this->defaultParentListener = new DefaultParentListener($this->documentManagerMock, '/path/to', false, true);
 
         $subjectDocument = new \stdClass();
+
         $parentDocument = new \stdClass();
 
-        $event->getSubject()->willReturn($subjectDocument);
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($subjectDocument);
 
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
 
-        $documentMetadata->getFieldValue($subjectDocument, 'parent')->shouldNotBeCalled();
-        $documentMetadata->setFieldValue($subjectDocument, 'parent', $parentDocument)->shouldBeCalled();
+        $this->documentMetadataMock
+            ->expects($this->never())
+            ->method('getFieldValue')
+            ->with($subjectDocument, 'parent')
+        ;
+        $this->documentMetadataMock
+            ->expects($this->once())
+            ->method('setFieldValue')
+            ->with($subjectDocument, 'parent', $parentDocument)
+        ;
+        $this->documentMetadataMock->parentMapping = 'parent';
 
-        $documentMetadata->parentMapping = 'parent';
-        $documentManager->find(null, '/path/to')->willReturn($parentDocument);
-        $this->onPreCreate($event);
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('find')
+            ->with(null, '/path/to')
+            ->willReturn($parentDocument)
+        ;
+
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
-    function it_should_return_early_if_force_is_false_and_subject_already_has_a_parent(
-        ResourceControllerEvent $event,
-        ClassMetadata $documentMetadata,
-        DocumentManagerInterface $documentManager,
-    ): void {
+    public function testReturnEarlyIfForceIsFalseAndSubjectAlreadyHasAParent(): void
+    {
         $subjectDocument = new \stdClass();
 
-        $event->getSubject()->willReturn($subjectDocument);
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($subjectDocument);
 
-        $documentManager->getClassMetadata(\stdClass::class)->willReturn(
-            $documentMetadata,
-        );
-        $documentMetadata->parentMapping = 'parent';
-        $documentMetadata->getFieldValue($subjectDocument, 'parent')
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($this->documentMetadataMock)
+        ;
+
+        $this->documentMetadataMock->parentMapping = 'parent';
+        $this->documentMetadataMock
+            ->expects($this->once())
+            ->method('getFieldValue')
+            ->with($subjectDocument, 'parent')
             ->willReturn(new \stdClass())
         ;
 
-        $documentManager->find(null, '/path/to')->shouldNotBeCalled();
+        $this->documentManagerMock->expects($this->never())->method('find')->with(null, '/path/to');
 
-        $this->onPreCreate($event);
+        $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 }

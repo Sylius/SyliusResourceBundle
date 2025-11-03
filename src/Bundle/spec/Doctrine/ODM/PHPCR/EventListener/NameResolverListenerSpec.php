@@ -16,98 +16,140 @@ namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener;
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
 use PHPCR\NodeInterface;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener\NameResolverListener;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 
 /**
  * @require Doctrine\ODM\PHPCR\DocumentManagerInterface
  */
-final class NameResolverListenerSpec extends ObjectBehavior
+final class NameResolverListenerSpec extends TestCase
 {
-    function let(DocumentManagerInterface $documentManager): void
+    private DocumentManagerInterface|MockObject $documentManagerMock;
+
+    private NameResolverListener $nameResolverListener;
+
+    private ResourceControllerEvent|MockObject $eventMock;
+
+    private ClassMetadata|MockObject $metadataMock;
+
+    private NodeInterface|MockObject $nodeMock;
+
+    private \stdClass $document;
+
+    private \stdClass $parentDocument;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($documentManager);
+        if (!interface_exists(DocumentManagerInterface::class)) {
+            $this->markTestSkipped('Doctrine PHPCR ODM not installed');
+        }
+
+        $this->documentManagerMock = $this->createMock(DocumentManagerInterface::class);
+        $this->nameResolverListener = new NameResolverListener($this->documentManagerMock);
+        $this->eventMock = $this->createMock(ResourceControllerEvent::class);
+        $this->metadataMock = $this->createMock(ClassMetadata::class);
+        $this->nodeMock = $this->createMock(NodeInterface::class);
+        $this->document = new \stdClass();
+        $this->parentDocument = new \stdClass();
     }
 
-    function it_throws_an_exception_when_the_generator_type_is_not_parent(
-        DocumentManagerInterface $documentManager,
-        ResourceControllerEvent $event,
-        ClassMetadata $metadata,
-    ): void {
-        $document = new \stdClass();
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->idGenerator = 'foo';
+    public function testThrowsAnExceptionWhenTheGeneratorTypeIsNotParent(): void
+    {
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
-        $this->shouldThrow(new \RuntimeException('Document of class "stdClass" must be using the GENERATOR_TYPE_PARENT identificatio strategy (value 3), it is current using "foo" (this may be an automatic configuration: be sure to map both the `nodename` and the `parentDocument`).'))->during(
-            'onEvent',
-            [$event],
-        );
-    }
-
-    function it_should_retain_the_original_name_when_no_conflict_exists(
-        DocumentManagerInterface $documentManager,
-        ResourceControllerEvent $event,
-        ClassMetadata $metadata,
-        NodeInterface $node,
-    ): void {
-        $document = new \stdClass();
-        $parentDocument = new \stdClass();
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->idGenerator = ClassMetadata::GENERATOR_TYPE_PARENT;
-        $metadata->nodename = 'title';
-        $metadata->parentMapping = 'parent';
-        $metadata->getFieldValue($document, 'parent')->willReturn($parentDocument);
-        $documentManager->getNodeForDocument($parentDocument)
-            ->willReturn($node)
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->willReturn($this->metadataMock)
         ;
-        $node->getPath()->willReturn('/path/to');
-        $metadata->getFieldValue($document, 'title')->willReturn('Hello World');
 
-        $documentManager->find(null, '/path/to/Hello World')->willReturn(null);
-        $metadata->setFieldValue($document, 'title', 'Hello World')->shouldBeCalled();
+        $this->metadataMock->idGenerator = 1;
 
-        $this->onEvent($event);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Document of class "stdClass" must be using the GENERATOR_TYPE_PARENT identificatio strategy (value 3), it is current using "1" (this may be an automatic configuration: be sure to map both the `nodename` and the `parentDocument`).');
+
+        $this->nameResolverListener->onEvent($this->eventMock);
     }
 
-    function it_should_auto_increment_the_name_if_a_conflict_exists(
-        DocumentManagerInterface $documentManager,
-        ResourceControllerEvent $event,
-        ClassMetadata $metadata,
-        NodeInterface $node,
-    ): void {
-        $document = new \stdClass();
-        $parentDocument = new \stdClass();
+    public function testRetainTheOriginalNameWhenNoConflictExists(): void
+    {
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
+
+        $this->documentManagerMock->expects($this->once())->method('getClassMetadata')->with('stdClass')->willReturn($this->metadataMock);
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getNodeForDocument')
+            ->with($this->parentDocument)
+            ->willReturn($this->nodeMock)
+        ;
+
+        $this->metadataMock->idGenerator = ClassMetadata::GENERATOR_TYPE_PARENT;
+        $this->metadataMock->nodename = 'title';
+        $this->metadataMock->parentMapping = 'parent';
+        $this->metadataMock
+            ->expects($this->exactly(2))
+            ->method('getFieldValue')
+            ->willReturnMap([
+                [$this->document, 'parent', $this->parentDocument],
+                [$this->document, 'title', 'Hello World'],
+            ])
+        ;
+
+        $this->nodeMock->expects($this->once())->method('getPath')->willReturn('/path/to');
+
+        $this->documentManagerMock->expects($this->once())->method('find')->with(null, '/path/to/Hello World')->willReturn(null);
+
+        $this->metadataMock->expects($this->once())->method('setFieldValue')->with($this->document, 'title', 'Hello World');
+
+        $this->nameResolverListener->onEvent($this->eventMock);
+    }
+
+    public function testAutoIncrementTheNameIfAConflictExists(): void
+    {
         $existingDocument = new \stdClass();
 
-        $event->getSubject()->willReturn($document);
-        $documentManager->getClassMetadata('stdClass')->willReturn($metadata);
-        $metadata->idGenerator = ClassMetadata::GENERATOR_TYPE_PARENT;
-        $metadata->nodename = 'title';
-        $metadata->parentMapping = 'parent';
-        $metadata->getFieldValue($document, 'parent')->willReturn($parentDocument);
-        $documentManager->getNodeForDocument($parentDocument)
-            ->willReturn($node)
+        $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
+
+        $this->documentManagerMock
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->willReturn($this->metadataMock)
         ;
-        $node->getPath()->willReturn('/path/to');
-        $metadata->getFieldValue($document, 'title')->willReturn('Hello World');
 
-        $documentManager->find(null, '/path/to/Hello World')->willReturn(
-            $existingDocument,
-        );
-        $documentManager->find(null, '/path/to/Hello World-1')->willReturn(
-            $existingDocument,
-        );
-        $documentManager->find(null, '/path/to/Hello World-2')->willReturn(
-            $existingDocument,
-        );
-        $documentManager->find(null, '/path/to/Hello World-3')->willReturn(
-            null,
-        );
+        $this->metadataMock->idGenerator = ClassMetadata::GENERATOR_TYPE_PARENT;
+        $this->metadataMock->nodename = 'title';
+        $this->metadataMock->parentMapping = 'parent';
+        $this->metadataMock
+            ->expects($this->exactly(2))
+            ->method('getFieldValue')
+            ->willReturnMap([
+                [$this->document, 'parent', $this->parentDocument],
+                [$this->document, 'title', 'Hello World'],
+            ])
+        ;
 
-        $metadata->setFieldValue($document, 'title', 'Hello World-3')->shouldBeCalled();
+        $this->documentManagerMock->expects($this->once())->method('getNodeForDocument')->with($this->parentDocument)->willReturn($this->nodeMock);
 
-        $this->onEvent($event);
+        $this->nodeMock->expects($this->once())->method('getPath')->willReturn('/path/to');
+
+        $this->documentManagerMock
+            ->expects($this->exactly(4))
+            ->method('find')
+            ->willReturnMap([
+                [null, '/path/to/Hello World', $existingDocument],
+                [null, '/path/to/Hello World-1', $existingDocument],
+                [null, '/path/to/Hello World-2', $existingDocument],
+                [null, '/path/to/Hello World-3', null],
+            ])
+        ;
+
+        $this->metadataMock->expects($this->once())->method('setFieldValue')->with($this->document, 'title', 'Hello World-3');
+
+        $this->nameResolverListener->onEvent($this->eventMock);
     }
 }

@@ -16,224 +16,285 @@ namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class DefaultFormBuilderSpec extends ObjectBehavior
+final class DefaultFormBuilderSpec extends TestCase
 {
-    function let(EntityManagerInterface $entityManager): void
+    private EntityManagerInterface|MockObject $entityManagerMock;
+
+    private DefaultFormBuilder $defaultFormBuilder;
+
+    private MetadataInterface|MockObject $metadataMock;
+
+    private FormBuilderInterface|MockObject $formBuilderMock;
+
+    private ClassMetadata|MockObject $classMetadataMock;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($entityManager);
+        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $this->defaultFormBuilder = new DefaultFormBuilder($this->entityManagerMock);
+        $this->metadataMock = $this->createMock(MetadataInterface::class);
+        $this->formBuilderMock = $this->createMock(FormBuilderInterface::class);
+        $this->classMetadataMock = $this->createMock(ClassMetadata::class);
     }
 
-    function it_is_a_default_form_builder(): void
+    function testADefaultFormBuilder(): void
     {
-        $this->shouldImplement(DefaultFormBuilderInterface::class);
+        $this->assertInstanceOf(DefaultFormBuilderInterface::class, $this->defaultFormBuilder);
     }
 
-    function it_does_not_support_entities_with_multiple_primary_keys(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->identifier = ['id', 'slug'];
+    function testDoesNotSupportEntitiesWithMultiplePrimaryKeys(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $this
-            ->shouldThrow(\RuntimeException::class)
-            ->during('build', [$metadata, $formBuilder, []])
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
+
+        $this->classMetadataMock->identifier = ['id', 'slug'];
+
+        $this->expectException(\RuntimeException::class);
+
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
+    }
+
+    function testExcludesNonNaturalIdentifierFromTheFieldList(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
+
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
+
+        $this->classMetadataMock->fieldNames = ['id', 'name', 'description', 'enabled'];
+        $this->classMetadataMock->identifier = ['id'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(false);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([]);
+        $this->classMetadataMock
+            ->expects($this->exactly(3))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+            ])
         ;
+
+        $this->formBuilderMock
+            ->expects($this->exactly(3))
+            ->method('add')
+            ->willReturnMap([
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['id', Argument::cetera()],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+            ])
+        ;
+
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function it_excludes_non_natural_identifier_from_the_field_list(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['id', 'name', 'description', 'enabled'];
-        $classMetadata->identifier = ['id'];
-        $classMetadata->isIdentifierNatural()->willReturn(false);
-        $classMetadata->getAssociationMappings()->willReturn([]);
+    function testDoesNotExcludeNaturalIdentifierFromTheFieldList(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
 
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $this->classMetadataMock->fieldNames = ['id', 'name', 'description', 'enabled'];
+        $this->classMetadataMock->identifier = ['id'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(true);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([]);
+        $this->classMetadataMock
+            ->expects($this->exactly(4))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['id', Types::INTEGER],
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+            ])
+        ;
 
-        $formBuilder->add('id', Argument::cetera())->shouldNotBeCalled();
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
+        $this->formBuilderMock
+            ->expects($this->exactly(4))
+            ->method('add')
+            ->willReturnMap([
+                ['id', null, [], $this->formBuilderMock],
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['id', null, []],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+            ])
+        ;
 
-        $this->build($metadata, $formBuilder, []);
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function it_does_not_exclude_natural_identifier_from_the_field_list(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['id', 'name', 'description', 'enabled'];
-        $classMetadata->identifier = ['id'];
-        $classMetadata->isIdentifierNatural()->willReturn(true);
-        $classMetadata->getAssociationMappings()->willReturn([]);
+    function testUsesMetadataToCreateAppropriateFields(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $classMetadata->getTypeOfField('id')->willReturn(Types::INTEGER);
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
 
-        $formBuilder->add('id', null, [])->willReturn($formBuilder);
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $this->classMetadataMock->fieldNames = ['name', 'description', 'enabled'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(true);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([]);
+        $this->classMetadataMock
+            ->expects($this->exactly(3))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+            ])
+        ;
 
-        $formBuilder->add('id', null, [])->shouldBeCalled();
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
+        $this->formBuilderMock
+            ->expects($this->exactly(3))
+            ->method('add')
+            ->willReturnMap([
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+            ])
+        ;
 
-        $this->build($metadata, $formBuilder, []);
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function it_uses_metadata_to_create_appropriate_fields(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['name', 'description', 'enabled'];
-        $classMetadata->isIdentifierNatural()->willReturn(true);
-        $classMetadata->getAssociationMappings()->willReturn([]);
+    function testUsesSingleTextWidgetForDatetimeField(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
 
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
+        $this->classMetadataMock->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(true);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([]);
+        $this->classMetadataMock
+            ->expects($this->exactly(4))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+                ['publishedAt', Types::DATETIME_MUTABLE],
+            ])
+        ;
 
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
+        $this->formBuilderMock
+            ->expects($this->exactly(4))
+            ->method('add')
+            ->willReturnMap([
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['publishedAt', null, ['widget' => 'single_text'], $this->formBuilderMock],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+                ['publishedAt', null, ['widget' => 'single_text']],
+            ])
+        ;
 
-        $this->build($metadata, $formBuilder, []);
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function it_uses_single_text_widget_for_datetime_field(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
-        $classMetadata->isIdentifierNatural()->willReturn(true);
-        $classMetadata->getAssociationMappings()->willReturn([]);
+    function testAlsoCreatesFieldsForRelationsOtherThanOneToMany(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadata->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
 
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
-        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->willReturn($formBuilder);
-
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
-        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->shouldBeCalled();
-
-        $this->build($metadata, $formBuilder, []);
-    }
-
-    function it_also_creates_fields_for_relations_other_than_one_to_many(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
-        $classMetadata->isIdentifierNatural()->willReturn(true);
-        $classMetadata->getAssociationMappings()->willReturn([
+        $this->classMetadataMock->fieldNames = ['name', 'description', 'enabled', 'publishedAt'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(true);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([
             'category' => ['type' => ClassMetadata::MANY_TO_ONE],
             'users' => ['type' => ClassMetadata::ONE_TO_MANY],
         ]);
+        $this->classMetadataMock
+            ->expects($this->exactly(4))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+                ['publishedAt', Types::DATETIME_MUTABLE],
+            ])
+        ;
 
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadata->getTypeOfField('publishedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $this->formBuilderMock
+            ->expects($this->exactly(5))
+            ->method('add')
+            ->willReturnMap([
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['publishedAt', null, ['widget' => 'single_text'], $this->formBuilderMock],
+                ['category', null, ['choice_label' => 'id'], $this->formBuilderMock],
+                ['users', Argument::cetera(), $this->formBuilderMock],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+                ['publishedAt', null, ['widget' => 'single_text']],
+                ['category', null, ['choice_label' => 'id']],
+                ['users', Argument::cetera()],
+            ])
+        ;
 
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
-        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->willReturn($formBuilder);
-        $formBuilder->add('category', null, ['choice_label' => 'id'])->willReturn($formBuilder);
-        $formBuilder->add('users', Argument::cetera())->willReturn($formBuilder);
-
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
-        $formBuilder->add('publishedAt', null, ['widget' => 'single_text'])->shouldBeCalled();
-        $formBuilder->add('category', null, ['choice_label' => 'id'])->shouldBeCalled();
-        $formBuilder->add('users', Argument::cetera())->shouldNotBeCalled();
-
-        $this->build($metadata, $formBuilder, []);
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function it_excludes_common_fields_like_createdAt_and_updatedAt(
-        MetadataInterface $metadata,
-        FormBuilderInterface $formBuilder,
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
-    ): void {
-        $metadata->getClass('model')->willReturn('AppBundle\Entity\Book');
-        $entityManager->getClassMetadata('AppBundle\Entity\Book')->willReturn($classMetadata);
-        $classMetadata->fieldNames = ['name', 'description', 'enabled', 'createdAt', 'updatedAt'];
-        $classMetadata->isIdentifierNatural()->willReturn(true);
-        $classMetadata->getAssociationMappings()->willReturn([]);
+    function testExcludesCommonFieldsLikeCreatedAtAndUpdatedAt(): void
+    {
+        $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
-        $classMetadata->getTypeOfField('name')->willReturn(Types::STRING);
-        $classMetadata->getTypeOfField('description')->willReturn(Types::TEXT);
-        $classMetadata->getTypeOfField('enabled')->willReturn(Types::BOOLEAN);
-        $classMetadata->getTypeOfField('createdAt')->willReturn(Types::DATETIME_MUTABLE);
-        $classMetadata->getTypeOfField('updatedAt')->willReturn(Types::DATETIME_MUTABLE);
+        $this->entityManagerMock->expects($this->once())->method('getClassMetadata')->with('AppBundle\Entity\Book')->willReturn($this->classMetadataMock);
 
-        $formBuilder->add('name', null, [])->willReturn($formBuilder);
-        $formBuilder->add('description', null, [])->willReturn($formBuilder);
-        $formBuilder->add('enabled', null, [])->willReturn($formBuilder);
-        $formBuilder->add('createdAt', Argument::cetera())->willReturn($formBuilder);
-        $formBuilder->add('updatedAt', Argument::cetera())->willReturn($formBuilder);
+        $this->classMetadataMock->fieldNames = ['name', 'description', 'enabled', 'createdAt', 'updatedAt'];
+        $this->classMetadataMock->expects($this->once())->method('isIdentifierNatural')->willReturn(true);
+        $this->classMetadataMock->expects($this->once())->method('getAssociationMappings')->willReturn([]);
+        $this->classMetadataMock
+            ->expects($this->exactly(3))
+            ->method('getTypeOfField')
+            ->willReturnMap([
+                ['name', Types::STRING],
+                ['description', Types::TEXT],
+                ['enabled', Types::BOOLEAN],
+                ['createdAt', Types::DATETIME_MUTABLE],
+                ['updatedAt', Types::DATETIME_MUTABLE],
+            ])
+        ;
 
-        $formBuilder->add('name', null, [])->shouldBeCalled();
-        $formBuilder->add('description', null, [])->shouldBeCalled();
-        $formBuilder->add('enabled', null, [])->shouldBeCalled();
-        $formBuilder->add('createdAt', Argument::cetera())->shouldNotBeCalled();
-        $formBuilder->add('updatedAt', Argument::cetera())->shouldNotBeCalled();
+        $this->formBuilderMock
+            ->expects($this->exactly(3))
+            ->method('add')
+            ->willReturnMap([
+                ['name', null, [], $this->formBuilderMock],
+                ['description', null, [], $this->formBuilderMock],
+                ['enabled', null, [], $this->formBuilderMock],
+                ['createdAt', Argument::cetera(), $this->formBuilderMock],
+                ['updatedAt', Argument::cetera(), $this->formBuilderMock],
+                ['name', null, []],
+                ['description', null, []],
+                ['enabled', null, []],
+                ['createdAt', Argument::cetera()],
+                ['updatedAt', Argument::cetera()],
+            ])
+        ;
 
-        $this->build($metadata, $formBuilder, []);
+        $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 }
