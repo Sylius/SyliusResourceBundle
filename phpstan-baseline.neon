@@ -801,6 +801,16 @@ parameters:
 			path: src/Bundle/DependencyInjection/Compiler/WinzouStateMachinePass.php
 
 		-
+			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 3
+			path: src/Bundle/DependencyInjection/Configuration.php
+
+		-
+			message: "#^Cannot call method variableNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 2
+			path: src/Bundle/DependencyInjection/Configuration.php
+
+		-
 			message: "#^PHPDoc tag @var for variable \\$factoryInterfaces has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
@@ -844,6 +854,16 @@ parameters:
 			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
+
+		-
+			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
+
+		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
 
 		-
 			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\PagerfantaExtension\\:\\:getConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
@@ -907,6 +927,11 @@ parameters:
 
 		-
 			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:getOrCreateRepository\\(\\) return type with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:getRepository\\(\\) return type with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: T$#"
 			count: 1
 			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
 
@@ -1204,6 +1229,11 @@ parameters:
 			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\ResourceBundleInterface\\:\\:getSupportedDrivers\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Bundle/ResourceBundleInterface.php
+
+		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/Routing/Configuration.php
 
 		-
 			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\CrudRoutesAttributesLoader\\:\\:__construct\\(\\) has parameter \\$mapping with no value type specified in iterable type array\\.$#"
