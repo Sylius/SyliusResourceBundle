@@ -157,6 +157,7 @@ jobs:
             -
                 name: Run lint container without sylius/grid-bundle package
                 run: |
+                    find tests/Application/src -type f -name '*Grid.php' -delete
                     composer remove sylius/grid-bundle --no-scripts --dev
                     (cd tests/Application && bin/console cache:clear --env=test_without_twig)
                     (cd tests/Application && bin/console lint:container --env=test_without_twig)
