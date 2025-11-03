@@ -11,58 +11,98 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactory;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-final class NewResourceFactorySpec extends ObjectBehavior
+final class NewResourceFactoryTest extends TestCase
 {
-    function it_implements_new_resource_factory_interface(): void
+    private NewResourceFactory $newResourceFactory;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(NewResourceFactoryInterface::class);
+        $this->newResourceFactory = new NewResourceFactory();
     }
 
-    function it_calls_create_new_by_default_if_no_custom_method_configured(
-        RequestConfiguration $requestConfiguration,
-        FactoryInterface $factory,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getFactoryMethod()->willReturn(null);
-
-        $factory->createNew()->willReturn($resource);
-
-        $this->create($requestConfiguration, $factory)->shouldReturn($resource);
+    public function testImplementsNewResourceFactoryInterface(): void
+    {
+        $this->assertInstanceOf(NewResourceFactoryInterface::class, $this->newResourceFactory);
     }
 
-    function it_calls_proper_factory_methods_based_on_configuration(
-        RequestConfiguration $requestConfiguration,
-        FactoryInterface $factory,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getFactoryMethod()->willReturn('createNew');
-        $requestConfiguration->getFactoryArguments()->willReturn(['00032']);
+    public function testCallsCreateNewByDefaultIfNoCustomMethodConfigured(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null, []);
+        $factory = $this->createMock(FactoryInterface::class);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $factory->createNew('00032')->willReturn($resource);
+        $factory
+            ->expects($this->once())
+            ->method('createNew')
+            ->willReturn($resource);
 
-        $this->create($requestConfiguration, $factory)->shouldReturn($resource);
+        $result = $this->newResourceFactory->create($requestConfiguration, $factory);
+
+        $this->assertSame($resource, $result);
     }
 
-    function it_calls_proper_service_based_on_configuration(
-        RequestConfiguration $requestConfiguration,
-        FactoryInterface $factory,
-        FactoryInterface $customFactory,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getFactoryMethod()->willReturn([$customFactory, 'createNew']);
-        $requestConfiguration->getFactoryArguments()->willReturn(['foo', 'bar']);
+    public function testCallsProperFactoryMethodsBasedOnConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('createNew', ['00032']);
+        $factory = $this->createMock(FactoryInterface::class);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $customFactory->createNew('foo', 'bar')->willReturn($resource);
-        $factory->createNew()->shouldNotBeCalled();
+        $factory
+            ->expects($this->once())
+            ->method('createNew')
+            ->with('00032')
+            ->willReturn($resource);
 
-        $this->create($requestConfiguration, $factory)->shouldReturn($resource);
+        $result = $this->newResourceFactory->create($requestConfiguration, $factory);
+
+        $this->assertSame($resource, $result);
+    }
+
+    public function testCallsProperServiceBasedOnConfiguration(): void
+    {
+        $customFactory = $this->createMock(FactoryInterface::class);
+        $requestConfiguration = $this->createRequestConfiguration([$customFactory, 'createNew'], ['foo', 'bar']);
+        $factory = $this->createMock(FactoryInterface::class);
+        $resource = $this->createMock(ResourceInterface::class);
+
+        $customFactory
+            ->expects($this->once())
+            ->method('createNew')
+            ->with('foo', 'bar')
+            ->willReturn($resource);
+
+        $factory
+            ->expects($this->never())
+            ->method('createNew');
+
+        $result = $this->newResourceFactory->create($requestConfiguration, $factory);
+
+        $this->assertSame($resource, $result);
+    }
+
+    /**
+     * @param string|array<object|string>|null $factoryMethod
+     * @param array<mixed> $factoryArguments
+     *
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfiguration(string|array|null $factoryMethod, array $factoryArguments): MockObject
+    {
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('getFactoryMethod')->willReturn($factoryMethod);
+        $requestConfiguration->method('getFactoryArguments')->willReturn($factoryArguments);
+
+        return $requestConfiguration;
     }
 }

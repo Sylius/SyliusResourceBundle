@@ -11,276 +11,258 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RequestConfigurationFactorySpec extends ObjectBehavior
+final class RequestConfigurationFactoryTest extends TestCase
 {
-    function let(ParametersParserInterface $parametersParser): void
+    /** @var ParametersParserInterface|MockObject */
+    private MockObject $parametersParserMock;
+
+    private RequestConfigurationFactory $requestConfigurationFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($parametersParser, RequestConfiguration::class);
+        $this->parametersParserMock = $this->createMock(ParametersParserInterface::class);
+        $this->requestConfigurationFactory = new RequestConfigurationFactory($this->parametersParserMock, RequestConfiguration::class);
     }
 
-    function it_implements_request_configuration_factory_interface(): void
+    public function testImplementsRequestConfigurationFactoryInterface(): void
     {
-        $this->shouldImplement(RequestConfigurationFactoryInterface::class);
+        $this->assertInstanceOf(RequestConfigurationFactoryInterface::class, $this->requestConfigurationFactory);
     }
 
-    function it_creates_configuration_from_resource_metadata_and_request(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $headersBag->all('Accept')->willReturn([]);
-
-        $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:show.html.twig']);
-        $parametersParser
-            ->parseRequestValues(['template' => ':Product:show.html.twig'], $request)
+    public function testCreatesConfigurationFromResourceMetadataAndRequest(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn([]);
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn(['template' => ':Product:show.html.twig']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['template' => ':Product:show.html.twig'], $requestMock)
             ->willReturn(['template' => ':Product:list.html.twig'])
         ;
-
-        $this->create($metadata, $request)->shouldHaveType(RequestConfiguration::class);
+        $this->assertInstanceOf(RequestConfiguration::class, $this->requestConfigurationFactory->create($metadataMock, $requestMock));
     }
 
-    function it_creates_configuration_without_default_settings(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $headersBag->all('Accept')->willReturn([]);
-
-        $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
-        $parametersParser
-            ->parseRequestValues(['template' => ':Product:list.html.twig'], $request)
+    public function testCreatesConfigurationWithoutDefaultSettings(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn([]);
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['template' => ':Product:list.html.twig'], $requestMock)
             ->willReturn(['template' => ':Product:list.html.twig'])
         ;
-
-        $this->create($metadata, $request)->isSortable()->shouldReturn(false);
+        $this->assertFalse($this->requestConfigurationFactory->create($metadataMock, $requestMock)->isSortable());
     }
 
-    function it_creates_configuration_for_serialization_group_from_single_header(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $attributesBag->get('_sylius', [])->willReturn([
+    public function testCreatesConfigurationForSerializationGroupFromSingleHeader(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
         ]);
-        $headersBag->all('Accept')->willReturn(['groups=Default,Detailed']);
-
-        $parametersParser
-            ->parseRequestValues(
-                [
-                    'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
-                    'serialization_groups' => ['Default', 'Detailed'],
-                ],
-                $request,
-            )
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['groups=Default,Detailed']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with([
+            'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+            'serialization_groups' => ['Default', 'Detailed'],
+        ], $requestMock)
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
-
-        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
+        $this->assertSame(['Default', 'Detailed'], $this->requestConfigurationFactory->create($metadataMock, $requestMock)->getSerializationGroups());
     }
 
-    function it_creates_configuration_for_serialization_group_from_multiple_headers(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $attributesBag->get('_sylius', [])->willReturn([
+    public function testCreatesConfigurationForSerializationGroupFromMultipleHeaders(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
         ]);
-        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
-
-        $parametersParser
-            ->parseRequestValues(
-                [
-                    'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
-                    'serialization_groups' => ['Default', 'Detailed'],
-                ],
-                $request,
-            )
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with([
+            'allowed_serialization_groups' => ['Default', 'Detailed', 'Other'],
+            'serialization_groups' => ['Default', 'Detailed'],
+        ], $requestMock)
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
-
-        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
+        $this->assertSame(['Default', 'Detailed'], $this->requestConfigurationFactory->create($metadataMock, $requestMock)->getSerializationGroups());
     }
 
-    function it_creates_configuration_using_only_those_serialization_groups_that_are_allowed(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $attributesBag->get('_sylius', [])->willReturn([
+    public function testCreatesConfigurationUsingOnlyThoseSerializationGroupsThatAreAllowed(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default'],
         ]);
-        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
-
-        $parametersParser
-            ->parseRequestValues(
-                [
-                    'allowed_serialization_groups' => ['Default'],
-                    'serialization_groups' => ['Default'],
-                ],
-                $request,
-            )
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['application/json', 'groups=Default,Detailed']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with([
+            'allowed_serialization_groups' => ['Default'],
+            'serialization_groups' => ['Default'],
+        ], $requestMock)
             ->willReturn(['serialization_groups' => ['Default']])
         ;
-
-        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default']);
+        $this->assertSame(['Default'], $this->requestConfigurationFactory->create($metadataMock, $requestMock)->getSerializationGroups());
     }
 
-    function it_creates_configuration_using_only_those_serialization_groups_that_are_allowed_or_defined_as_default(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $attributesBag->get('_sylius', [])->willReturn([
+    public function testCreatesConfigurationUsingOnlyThoseSerializationGroupsThatAreAllowedOrDefinedAsDefault(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([
             'allowed_serialization_groups' => ['Default'],
             'serialization_groups' => ['Detailed'],
         ]);
-        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
-
-        $parametersParser
-            ->parseRequestValues(
-                [
-                    'allowed_serialization_groups' => ['Default'],
-                    'serialization_groups' => ['Default', 'Detailed'],
-                ],
-                $request,
-            )
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with([
+            'allowed_serialization_groups' => ['Default'],
+            'serialization_groups' => ['Default', 'Detailed'],
+        ], $requestMock)
             ->willReturn(['serialization_groups' => ['Default', 'Detailed']])
         ;
-
-        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Default', 'Detailed']);
+        $this->assertSame(['Default', 'Detailed'], $this->requestConfigurationFactory->create($metadataMock, $requestMock)->getSerializationGroups());
     }
 
-    function it_creates_configuration_using_only_those_serialization_groups_that_are_defined_as_default(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $attributesBag->get('_sylius', [])->willReturn([
+    public function testCreatesConfigurationUsingOnlyThoseSerializationGroupsThatAreDefinedAsDefault(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([
             'serialization_groups' => ['Detailed'],
         ]);
-        $headersBag->all('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
-
-        $parametersParser
-            ->parseRequestValues(['serialization_groups' => ['Detailed']], $request)
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['application/json', 'groups=Default,Detailed,Other']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['serialization_groups' => ['Detailed']], $requestMock)
             ->willReturn(['serialization_groups' => ['Detailed']])
         ;
-
-        $this->create($metadata, $request)->getSerializationGroups()->shouldReturn(['Detailed']);
+        $this->assertSame(['Detailed'], $this->requestConfigurationFactory->create($metadataMock, $requestMock)->getSerializationGroups());
     }
 
-    function it_creates_configuration_for_serialization_version_from_single_header(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $headersBag->all('Accept')->willReturn(['version=1.0.0']);
-
-        $attributesBag->get('_sylius', [])->willReturn([]);
-
-        $parametersParser
-            ->parseRequestValues(['serialization_version' => '1.0.0'], $request)
+    public function testCreatesConfigurationForSerializationVersionFromSingleHeader(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['version=1.0.0']);
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([]);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['serialization_version' => '1.0.0'], $requestMock)
             ->willReturn(['template' => ':Product:list.html.twig'])
         ;
-
-        $this->create($metadata, $request)->isSortable()->shouldReturn(false);
+        $this->assertFalse($this->requestConfigurationFactory->create($metadataMock, $requestMock)->isSortable());
     }
 
-    function it_creates_configuration_for_serialization_version_from_multiple_headers(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $headersBag->all('Accept')->willReturn(['application/xml', 'version=1.0.0']);
-
-        $attributesBag->get('_sylius', [])->willReturn([]);
-
-        $parametersParser
-            ->parseRequestValues(['serialization_version' => '1.0.0'], $request)
+    public function testCreatesConfigurationForSerializationVersionFromMultipleHeaders(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn(['application/xml', 'version=1.0.0']);
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn([]);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['serialization_version' => '1.0.0'], $requestMock)
             ->willReturn(['template' => ':Product:list.html.twig'])
         ;
-
-        $this->create($metadata, $request)->isSortable()->shouldReturn(false);
+        $this->assertFalse($this->requestConfigurationFactory->create($metadataMock, $requestMock)->isSortable());
     }
 
-    function it_creates_configuration_with_default_settings(
-        ParametersParserInterface $parametersParser,
-        MetadataInterface $metadata,
-        Request $request,
-        HeaderBag $headersBag,
-        ParameterBag $attributesBag,
-    ): void {
-        $this->beConstructedWith($parametersParser, RequestConfiguration::class, ['sortable' => true]);
-
-        $request->headers = $headersBag;
-        $request->attributes = $attributesBag;
-
-        $headersBag->all('Accept')->willReturn([]);
-
-        $attributesBag->get('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
-
-        $parametersParser
-            ->parseRequestValues(['template' => ':Product:list.html.twig', 'sortable' => true], $request)
+    public function testCreatesConfigurationWithDefaultSettings(): void
+    {
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var HeaderBag|MockObject $headersBagMock */
+        $headersBagMock = $this->createMock(HeaderBag::class);
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $this->requestConfigurationFactory = new RequestConfigurationFactory($this->parametersParserMock, RequestConfiguration::class, ['sortable' => true]);
+        $requestMock->headers = $headersBagMock;
+        $requestMock->attributes = $attributesBagMock;
+        $headersBagMock->expects($this->any())->method('all')->with('Accept')->willReturn([]);
+        $attributesBagMock->expects($this->once())->method('get')->with('_sylius', [])->willReturn(['template' => ':Product:list.html.twig']);
+        $this->parametersParserMock->expects($this->once())->method('parseRequestValues')->with(['template' => ':Product:list.html.twig', 'sortable' => true], $requestMock)
             ->willReturn(['template' => ':Product:list.html.twig', 'sortable' => true])
         ;
-
-        $this->create($metadata, $request)->isSortable()->shouldReturn(true);
+        $this->assertTrue($this->requestConfigurationFactory->create($metadataMock, $requestMock)->isSortable());
     }
 }

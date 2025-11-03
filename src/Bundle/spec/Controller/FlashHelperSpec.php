@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\FlashHelper;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
@@ -27,247 +29,242 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class FlashHelperSpec extends ObjectBehavior
+final class FlashHelperTest extends TestCase
 {
-    function let(RequestStack $requestStack, SessionInterface $session, TranslatorInterface $translator): void
+    /** @var RequestStack|MockObject */
+    private MockObject $requestStackMock;
+
+    /** @var SessionInterface|MockObject */
+    private MockObject $sessionMock;
+
+    private MockObject $translatorMock;
+
+    private FlashHelper $flashHelper;
+
+    protected function setUp(): void
     {
+        $this->requestStackMock = $this->createMock(RequestStack::class);
+        $this->sessionMock = $this->createMock(SessionInterface::class);
+        $this->translatorMock = $this->createMock(TranslatorInterface::class);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $this->beConstructedWith($requestStack, $translator, 'en');
+            $this->flashHelper = new FlashHelper($this->requestStackMock, $this->translatorMock, 'en');
 
             return;
         }
-
-        $this->beConstructedWith($session, $translator, 'en');
+        $this->flashHelper = new FlashHelper($this->sessionMock, $this->translatorMock, 'en');
     }
 
-    function it_implements_flash_helper_interface(): void
+    public function testImplementsFlashHelperInterface(): void
     {
-        $this->shouldImplement(FlashHelperInterface::class);
+        $this->assertInstanceOf(FlashHelperInterface::class, $this->flashHelper);
     }
 
-    function it_adds_resource_message_by_default(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getHumanizedName()->willReturn('product');
+    public function testAddsResourceMessageByDefault(): void
+    {
+        /** @var MessageCatalogueInterface|MockObject $messageCatalogueMock */
+        $messageCatalogueMock = $this->createMock(MessageCatalogueInterface::class);
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
 
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $translator = $this->translatorMock;
+        assert($translator instanceof TranslatorInterface);
+        $this->flashHelper = new FlashHelper($this->requestStackMock, $translator, 'en');
 
-        $translator->getCatalogue('en')->willReturn($messageCatalogue);
-        $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
-
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock->expects($this->once())->method('getCatalogue')->with('en')->willReturn($messageCatalogueMock);
+        $messageCatalogueMock->expects($this->once())->method('has')->with('sylius.product.create', 'flashes')->willReturn(false);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add(
-            'success',
-            [
-                'message' => 'sylius.resource.create',
-                'parameters' => ['%resource%' => 'Product'],
-            ],
-        )->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', [
+            'message' => 'sylius.resource.create',
+            'parameters' => ['%resource%' => 'Product'],
+        ]);
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, ResourceActions::CREATE, $resourceMock);
     }
 
-    function it_adds_resource_message_when_catalogue_is_unavailable_and_given_message_cannot_be_translated(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorInterface $translator,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
+    public function testAddsResourceMessageWhenCatalogueIsUnavailableAndGivenMessageCannotBeTranslated(): void
+    {
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
         $parameters = ['%resource%' => 'Product'];
-
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getHumanizedName()->willReturn('product');
-
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $translator->trans('sylius.product.create', $parameters, 'flashes')->willReturn('sylius.product.create');
-
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock->expects($this->once())->method('trans')->with('sylius.product.create', $parameters, 'flashes')->willReturn('sylius.product.create');
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add(
-            'success',
-            [
-                'message' => 'sylius.resource.create',
-                'parameters' => $parameters,
-            ],
-        )->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', [
+            'message' => 'sylius.resource.create',
+            'parameters' => $parameters,
+        ]);
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, ResourceActions::CREATE, $resourceMock);
     }
 
-    function it_adds_resource_message_when_catalogue_is_unavailable_and_given_message_can_be_translated(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorInterface $translator,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
+    public function testAddsResourceMessageWhenCatalogueIsUnavailableAndGivenMessageCanBeTranslated(): void
+    {
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
         $parameters = ['%resource%' => 'Spoon'];
-
-        $metadata->getApplicationName()->willReturn('app');
-        $metadata->getHumanizedName()->willReturn('spoon');
-
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('spoon');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with(ResourceActions::CREATE)
             ->willReturn('%resource% is the best cutlery of them all!')
         ;
-
-        $translator->trans('%resource% is the best cutlery of them all!', $parameters, 'flashes')
+        $this->translatorMock->expects($this->once())->method('trans')->with('%resource% is the best cutlery of them all!', $parameters, 'flashes')
             ->willReturn('Spoon is the best cutlery of them all!')
         ;
-
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add(
-            'success',
-            [
-                'message' => '%resource% is the best cutlery of them all!',
-                'parameters' => $parameters,
-            ],
-        )->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', [
+            'message' => '%resource% is the best cutlery of them all!',
+            'parameters' => $parameters,
+        ]);
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, ResourceActions::CREATE, $resourceMock);
     }
 
-    function it_adds_resource_message_if_message_was_not_found_in_the_catalogue(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getHumanizedName()->willReturn('product');
+    public function testAddsResourceMessageIfMessageWasNotFoundInTheCatalogue(): void
+    {
+        /** @var MessageCatalogueInterface|MockObject $messageCatalogueMock */
+        $messageCatalogueMock = $this->createMock(MessageCatalogueInterface::class);
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
 
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $this->translatorMock = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $translator = $this->translatorMock;
+        assert($translator instanceof TranslatorInterface);
+        $this->flashHelper = new FlashHelper($this->requestStackMock, $translator, 'en');
 
-        $translator->getCatalogue('en')->willReturn($messageCatalogue);
-
-        $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(false);
-
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock->expects($this->once())->method('getCatalogue')->with('en')->willReturn($messageCatalogueMock);
+        $messageCatalogueMock->expects($this->once())->method('has')->with('sylius.product.create', 'flashes')->willReturn(false);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add(
-            'success',
-            [
-                'message' => 'sylius.resource.create',
-                'parameters' => ['%resource%' => 'Product'],
-            ],
-        )->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', [
+            'message' => 'sylius.resource.create',
+            'parameters' => ['%resource%' => 'Product'],
+        ]);
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, ResourceActions::CREATE, $resourceMock);
     }
 
-    function it_adds_overwritten_message(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getHumanizedName()->willReturn('product');
+    public function testAddsOverwrittenMessage(): void
+    {
+        /** @var MessageCatalogueInterface|MockObject $messageCatalogueMock */
+        $messageCatalogueMock = $this->createMock(MessageCatalogueInterface::class);
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
 
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $translator = $this->translatorMock;
+        assert($translator instanceof TranslatorInterface);
+        $this->flashHelper = new FlashHelper($this->requestStackMock, $translator, 'en');
 
-        $translator->getCatalogue('en')->willReturn($messageCatalogue);
-
-        $messageCatalogue->has('sylius.product.create', 'flashes')->willReturn(true);
-
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->translatorMock->expects($this->once())->method('getCatalogue')->with('en')->willReturn($messageCatalogueMock);
+        $messageCatalogueMock->expects($this->once())->method('has')->with('sylius.product.create', 'flashes')->willReturn(true);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add('success', 'sylius.product.create')->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, ResourceActions::CREATE, $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', 'sylius.product.create');
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, ResourceActions::CREATE, $resourceMock);
     }
 
-    function it_adds_custom_message(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        FlashBagInterface $flashBag,
-        MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-    ): void {
-        $metadata->getApplicationName()->willReturn('app');
-        $metadata->getHumanizedName()->willReturn('book');
+    public function testAddsCustomMessage(): void
+    {
+        /** @var MessageCatalogueInterface|MockObject $messageCatalogueMock */
+        $messageCatalogueMock = $this->createMock(MessageCatalogueInterface::class);
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var MetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
 
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $requestConfiguration->getFlashMessage('send')->willReturn('app.book.send');
+        $this->translatorMock = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $translator = $this->translatorMock;
+        assert($translator instanceof TranslatorInterface);
+        $this->flashHelper = new FlashHelper($this->requestStackMock, $translator, 'en');
 
-        $translator->getCatalogue('en')->willReturn($messageCatalogue);
-
-        $messageCatalogue->has('app.book.send', 'flashes')->willReturn(true);
-
+        $metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('book');
+        $requestConfigurationMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $requestConfigurationMock->expects($this->once())->method('getFlashMessage')->with('send')->willReturn('app.book.send');
+        $this->translatorMock->expects($this->once())->method('getCatalogue')->with('en')->willReturn($messageCatalogueMock);
+        $messageCatalogueMock->expects($this->once())->method('has')->with('app.book.send', 'flashes')->willReturn(true);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-        $flashBag->add('success', 'app.book.send')->shouldBeCalled();
-
-        $this->addSuccessFlash($requestConfiguration, 'send', $resource);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with('success', 'app.book.send');
+        $this->flashHelper->addSuccessFlash($requestConfigurationMock, 'send', $resourceMock);
     }
 
-    function it_adds_message_from_event(
-        RequestStack $requestStack,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        RequestConfiguration $requestConfiguration,
-        ResourceControllerEvent $event,
-    ): void {
-        $event->getMessage()->willReturn('sylius.channel.cannot_be_deleted');
-        $event->getMessageType()->willReturn(ResourceControllerEvent::TYPE_WARNING);
-        $event->getMessageParameters()->willReturn(['%name%' => 'Germany Sylius Webshop']);
-
+    public function testAddsMessageFromEvent(): void
+    {
+        /** @var FlashBagInterface|MockObject $flashBagMock */
+        $flashBagMock = $this->createMock(FlashBagInterface::class);
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        $eventMock->expects($this->once())->method('getMessage')->willReturn('sylius.channel.cannot_be_deleted');
+        $eventMock->expects($this->once())->method('getMessageType')->willReturn(ResourceControllerEvent::TYPE_WARNING);
+        $eventMock->expects($this->once())->method('getMessageParameters')->willReturn(['%name%' => 'Germany Sylius Webshop']);
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn($session)->shouldBeCalled();
+            $this->requestStackMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         }
-        $session->getBag('flashes')->willReturn($flashBag);
-
-        $flashBag->add(
-            ResourceControllerEvent::TYPE_WARNING,
-            [
-                'message' => 'sylius.channel.cannot_be_deleted',
-                'parameters' => ['%name%' => 'Germany Sylius Webshop'],
-            ],
-        )->shouldBeCalled();
-
-        $this->addFlashFromEvent($requestConfiguration, $event);
+        $this->sessionMock->expects($this->once())->method('getBag')->with('flashes')->willReturn($flashBagMock);
+        $flashBagMock->expects($this->once())->method('add')->with(ResourceControllerEvent::TYPE_WARNING, [
+            'message' => 'sylius.channel.cannot_be_deleted',
+            'parameters' => ['%name%' => 'Germany Sylius Webshop'],
+        ]);
+        $this->flashHelper->addFlashFromEvent($requestConfigurationMock, $eventMock);
     }
 }

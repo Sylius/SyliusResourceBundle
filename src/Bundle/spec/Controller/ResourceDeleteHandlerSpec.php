@@ -11,24 +11,36 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandler;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-final class ResourceDeleteHandlerSpec extends ObjectBehavior
+final class ResourceDeleteHandlerTest extends TestCase
 {
-    function it_implements_a_resource_delete_handler_interface(): void
+    private ResourceDeleteHandler $resourceDeleteHandler;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(ResourceDeleteHandlerInterface::class);
+        $this->resourceDeleteHandler = new ResourceDeleteHandler();
     }
 
-    function it_removes_resource_via_repository(RepositoryInterface $repository, ResourceInterface $resource): void
+    public function testImplementsAResourceDeleteHandlerInterface(): void
     {
-        $repository->remove($resource)->shouldBeCalled();
+        $this->assertInstanceOf(ResourceDeleteHandlerInterface::class, $this->resourceDeleteHandler);
+    }
 
-        $this->handle($resource, $repository);
+    public function testRemovesResourceViaRepository(): void
+    {
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $repositoryMock->expects($this->once())->method('remove')->with($resourceMock);
+        $this->resourceDeleteHandler->handle($resourceMock, $repositoryMock);
     }
 }

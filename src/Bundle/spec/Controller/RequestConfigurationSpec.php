@@ -11,626 +11,997 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\Parameters;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RequestConfigurationSpec extends ObjectBehavior
+final class RequestConfigurationTest extends TestCase
 {
-    function let(MetadataInterface $metadata, Request $request, Parameters $parameters): void
+    /** @var MetadataInterface|MockObject */
+    private MockObject $metadataMock;
+
+    /** @var Request|MockObject */
+    private MockObject $requestMock;
+
+    /** @var Parameters|MockObject */
+    private MockObject $parametersMock;
+
+    private RequestConfiguration $requestConfiguration;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($metadata, $request, $parameters);
+        $this->metadataMock = $this->createMock(MetadataInterface::class);
+        $this->requestMock = $this->createMock(Request::class);
+        $this->parametersMock = $this->createMock(Parameters::class);
+        $this->requestConfiguration = new RequestConfiguration($this->metadataMock, $this->requestMock, $this->parametersMock);
     }
 
-    function it_has_request(Request $request): void
+    public function testHasRequest(): void
     {
-        $this->getRequest()->shouldReturn($request);
+        $this->assertSame($this->requestMock, $this->requestConfiguration->getRequest());
     }
 
-    function it_has_metadata(MetadataInterface $metadata): void
+    public function testHasMetadata(): void
     {
-        $this->getMetadata()->shouldReturn($metadata);
+        $this->assertSame($this->metadataMock, $this->requestConfiguration->getMetadata());
     }
 
-    function it_has_parameters(Parameters $parameters): void
+    public function testHasParameters(): void
     {
-        $this->getParameters()->shouldReturn($parameters);
+        $this->assertSame($this->parametersMock, $this->requestConfiguration->getParameters());
     }
 
-    function it_checks_if_its_a_html_request(Request $request): void
+    public function testChecksIfItsAHtmlRequest(): void
     {
-        $request->getRequestFormat()->willReturn('html');
-        $this->isHtmlRequest()->shouldReturn(true);
-
-        $request->getRequestFormat()->willReturn('json');
-        $this->isHtmlRequest()->shouldReturn(false);
+        $this->requestMock->expects($this->once())->method('getRequestFormat')->willReturn('html');
+        $this->assertTrue($this->requestConfiguration->isHtmlRequest());
     }
 
-    function it_returns_default_template_names(MetadataInterface $metadata): void
+    public function testChecksIfItsNotAHtmlRequest(): void
     {
-        $metadata->getTemplatesNamespace()->willReturn('@SyliusAdmin/Product');
-
-        $this->getDefaultTemplate('index.html')->shouldReturn('@SyliusAdmin/Product/index.html.twig');
-        $this->getDefaultTemplate('show.html')->shouldReturn('@SyliusAdmin/Product/show.html.twig');
-        $this->getDefaultTemplate('create.html')->shouldReturn('@SyliusAdmin/Product/create.html.twig');
-        $this->getDefaultTemplate('update.html')->shouldReturn('@SyliusAdmin/Product/update.html.twig');
-        $this->getDefaultTemplate('custom.html')->shouldReturn('@SyliusAdmin/Product/custom.html.twig');
+        $this->requestMock->expects($this->once())->method('getRequestFormat')->willReturn('json');
+        $this->assertFalse($this->requestConfiguration->isHtmlRequest());
     }
 
-    function it_returns_default_template_names_for_a_directory_based_templates(MetadataInterface $metadata): void
+    public function testReturnsDefaultTemplateNames(): void
     {
-        $metadata->getTemplatesNamespace()->willReturn('book/Backend');
-
-        $this->getDefaultTemplate('index.html')->shouldReturn('book/Backend/index.html.twig');
-        $this->getDefaultTemplate('show.html')->shouldReturn('book/Backend/show.html.twig');
-        $this->getDefaultTemplate('create.html')->shouldReturn('book/Backend/create.html.twig');
-        $this->getDefaultTemplate('update.html')->shouldReturn('book/Backend/update.html.twig');
-        $this->getDefaultTemplate('custom.html')->shouldReturn('book/Backend/custom.html.twig');
+        $this->metadataMock->expects($this->exactly(5))->method('getTemplatesNamespace')->willReturn('@SyliusAdmin/Product');
+        $this->assertSame('@SyliusAdmin/Product/index.html.twig', $this->requestConfiguration->getDefaultTemplate('index.html'));
+        $this->assertSame('@SyliusAdmin/Product/show.html.twig', $this->requestConfiguration->getDefaultTemplate('show.html'));
+        $this->assertSame('@SyliusAdmin/Product/create.html.twig', $this->requestConfiguration->getDefaultTemplate('create.html'));
+        $this->assertSame('@SyliusAdmin/Product/update.html.twig', $this->requestConfiguration->getDefaultTemplate('update.html'));
+        $this->assertSame('@SyliusAdmin/Product/custom.html.twig', $this->requestConfiguration->getDefaultTemplate('custom.html'));
     }
 
-    function it_takes_the_custom_template_if_specified(MetadataInterface $metadata, Parameters $parameters): void
+    public function testReturnsDefaultTemplateNamesForADirectoryBasedTemplates(): void
     {
-        $metadata->getTemplatesNamespace()->willReturn('@SyliusAdmin/Product');
-        $parameters->get('template', '@SyliusAdmin/Product/foo.html.twig')->willReturn('Product/show.html.twig');
-
-        $this->getTemplate('foo.html')->shouldReturn('Product/show.html.twig');
+        $this->metadataMock->expects($this->exactly(5))->method('getTemplatesNamespace')->willReturn('book/Backend');
+        $this->assertSame('book/Backend/index.html.twig', $this->requestConfiguration->getDefaultTemplate('index.html'));
+        $this->assertSame('book/Backend/show.html.twig', $this->requestConfiguration->getDefaultTemplate('show.html'));
+        $this->assertSame('book/Backend/create.html.twig', $this->requestConfiguration->getDefaultTemplate('create.html'));
+        $this->assertSame('book/Backend/update.html.twig', $this->requestConfiguration->getDefaultTemplate('update.html'));
+        $this->assertSame('book/Backend/custom.html.twig', $this->requestConfiguration->getDefaultTemplate('custom.html'));
     }
 
-    function it_gets_form_type_and_its_options(MetadataInterface $metadata, Parameters $parameters): void
+    public function testTakesTheCustomTemplateIfSpecified(): void
     {
-        $parameters->get('form')->willReturn(['type' => 'sylius_custom_resource']);
-        $this->getFormType()->shouldReturn('sylius_custom_resource');
-        $this->getFormOptions()->shouldReturn([]);
-
-        $parameters->get('form')->willReturn('sylius_custom_resource');
-        $this->getFormType()->shouldReturn('sylius_custom_resource');
-        $this->getFormOptions()->shouldReturn([]);
-
-        $parameters->get('form')->willReturn(['type' => 'sylius_custom_resource', 'options' => ['key' => 'value']]);
-        $this->getFormType()->shouldReturn('sylius_custom_resource');
-        $this->getFormOptions()->shouldReturn(['key' => 'value']);
-
-        $metadata->getClass('form')->willReturn('\Fully\Qualified\ClassName');
-        $parameters->get('form')->willReturn([]);
-        $this->getFormType()->shouldReturn('\Fully\Qualified\ClassName');
-        $this->getFormOptions()->shouldReturn([]);
-
-        $metadata->getClass('form')->willReturn('\Fully\Qualified\ClassName');
-        $parameters->get('form')->willReturn(['options' => ['key' => 'value']]);
-        $this->getFormType()->shouldReturn('\Fully\Qualified\ClassName');
-        $this->getFormOptions()->shouldReturn(['key' => 'value']);
+        $this->metadataMock->expects($this->once())->method('getTemplatesNamespace')->willReturn('@SyliusAdmin/Product');
+        $this->parametersMock->expects($this->once())->method('get')->with('template', '@SyliusAdmin/Product/foo.html.twig')->willReturn('Product/show.html.twig');
+        $this->assertSame('Product/show.html.twig', $this->requestConfiguration->getTemplate('foo.html'));
     }
 
-    function it_generates_form_type_with_array_configuration(MetadataInterface $metadata, Parameters $parameters): void
+    public function testFormTypeAndOptionsArrayWithTypeOnly(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+        $this->parametersMock->method('get')->willReturn(['type' => 'sylius_custom_resource']);
 
-        $parameters->get('form')->willReturn(['type' => 'sylius_product', 'options' => ['validation_groups' => ['sylius']]]);
-        $this->getFormType()->shouldReturn('sylius_product');
-        $this->getFormOptions()->shouldReturn(['validation_groups' => ['sylius']]);
+        $this->assertSame('sylius_custom_resource', $this->requestConfiguration->getFormType());
+        $this->assertSame([], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_generates_route_names(MetadataInterface $metadata, Parameters $parameters): void
+    public function testFormTypeAndOptionsString(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-        $parameters->get('section')->willReturn(null);
+        $this->parametersMock->method('get')->willReturn('sylius_custom_resource');
 
-        $this->getRouteName('index')->shouldReturn('sylius_product_index');
-        $this->getRouteName('show')->shouldReturn('sylius_product_show');
-        $this->getRouteName('custom')->shouldReturn('sylius_product_custom');
-
-        $parameters->get('section')->willReturn('admin');
-        $this->getRouteName('index')->shouldReturn('sylius_admin_product_index');
-        $this->getRouteName('show')->shouldReturn('sylius_admin_product_show');
-        $this->getRouteName('custom')->shouldReturn('sylius_admin_product_custom');
+        $this->assertSame('sylius_custom_resource', $this->requestConfiguration->getFormType());
+        $this->assertSame([], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_generates_redirect_referer(Parameters $parameters, Request $request, HeaderBag $bag): void
+    public function testFormTypeAndOptionsArrayWithTypeAndOptions(): void
     {
-        $request->headers = $bag;
-        $bag->get('referer')->willReturn('http://myurl.com');
+        $this->parametersMock->method('get')->willReturn([
+            'type' => 'sylius_custom_resource',
+            'options' => ['key' => 'value'],
+        ]);
 
-        $parameters->get('redirect')->willReturn(['referer' => 'http://myurl.com']);
-
-        $this->getRedirectReferer()->shouldReturn('http://myurl.com');
+        $this->assertSame('sylius_custom_resource', $this->requestConfiguration->getFormType());
+        $this->assertSame(['key' => 'value'], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_generates_redirect_route(MetadataInterface $metadata, Parameters $parameters): void
+    public function testFormTypeAndOptionsFallbackToMetadataWhenEmpty(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-        $parameters->get('section')->willReturn(null);
+        $this->parametersMock->method('get')->willReturn([]);
+        $this->metadataMock->method('getClass')->with('form')->willReturn('\Fully\Qualified\ClassName');
 
-        $parameters->get('redirect')->willReturn(null);
-        $this->getRedirectRoute('index')->shouldReturn('sylius_product_index');
-
-        $parameters->get('redirect')->willReturn(['route' => 'myRoute']);
-        $this->getRedirectRoute('show')->shouldReturn('myRoute');
-
-        $parameters->get('redirect')->willReturn('myRoute');
-        $this->getRedirectRoute('custom')->shouldReturn('myRoute');
+        $this->assertSame('\Fully\Qualified\ClassName', $this->requestConfiguration->getFormType());
+        $this->assertSame([], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_takes_section_into_account_when_generating_redirect_route(MetadataInterface $metadata, Parameters $parameters): void
+    public function testFormTypeAndOptionsFallbackToMetadataWithOptionsOnly(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-        $parameters->get('section')->willReturn('admin');
+        $this->parametersMock->method('get')->willReturn(['options' => ['key' => 'value']]);
+        $this->metadataMock->method('getClass')->with('form')->willReturn('\Fully\Qualified\ClassName');
 
-        $parameters->get('redirect')->willReturn(null);
-        $this->getRedirectRoute('index')->shouldReturn('sylius_admin_product_index');
-
-        $parameters->get('redirect')->willReturn(['route' => 'myRoute']);
-        $this->getRedirectRoute('show')->shouldReturn('myRoute');
-
-        $parameters->get('redirect')->willReturn('myRoute');
-        $this->getRedirectRoute('custom')->shouldReturn('myRoute');
+        $this->assertSame('\Fully\Qualified\ClassName', $this->requestConfiguration->getFormType());
+        $this->assertSame(['key' => 'value'], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_returns_array_as_redirect_parameters(Parameters $parameters): void
+    public function testGeneratesFormTypeWithArrayConfiguration(): void
     {
-        $parameters->get('vars', [])->willReturn([]);
-        $this->getVars()->shouldReturn([]);
-
-        $parameters->get('redirect')->willReturn(null);
-        $this->getRedirectParameters()->shouldReturn([]);
-
-        $parameters->get('redirect')->willReturn('string');
-        $this->getRedirectParameters()->shouldReturn([]);
-
-        $parameters->get('redirect')->willReturn(['parameters' => []]);
-        $this->getRedirectParameters()->shouldReturn([]);
-
-        $parameters->get('redirect')->willReturn(['parameters' => ['myParameter']]);
-        $this->getRedirectParameters()->shouldReturn(['myParameter']);
-
-        $parameters->get('redirect')->willReturn(['parameters' => ['myParameter']]);
-        $this->getRedirectParameters('resource')->shouldReturn(['myParameter']);
-
-        $invalidExtraParameters = ['redirect' => ['parameters' => 'myValue']];
-        $parameters->get('vars', [])->willReturn($invalidExtraParameters);
-        $this->getVars()->shouldReturn($invalidExtraParameters);
-        $parameters->get('redirect')->willReturn(['parameters' => ['myParameter']]);
-        $this->getRedirectParameters('resource')->shouldReturn(['myParameter']);
-
-        $validExtraParameters = ['redirect' => ['parameters' => ['myExtraParameter']]];
-        $parameters->get('vars', [])->willReturn($validExtraParameters);
-        $this->getVars()->shouldReturn($validExtraParameters);
-        $parameters->get('redirect')->willReturn(['parameters' => ['myParameter']]);
-        $this->getRedirectParameters('resource')->shouldReturn(['myParameter', 'myExtraParameter']);
+        $this->parametersMock->expects($this->exactly(2))->method('get')->with('form')->willReturn(['type' => 'sylius_product', 'options' => ['validation_groups' => ['sylius']]]);
+        $this->assertSame('sylius_product', $this->requestConfiguration->getFormType());
+        $this->assertSame(['validation_groups' => ['sylius']], $this->requestConfiguration->getFormOptions());
     }
 
-    function it_checks_if_limit_is_enabled(Parameters $parameters): void
+    public function testGeneratesRouteNamesWithoutSection(): void
     {
-        $parameters->get('limit', Argument::any())->willReturn(10);
-        $this->isLimited()->shouldReturn(true);
-
-        $parameters->get('limit', Argument::any())->willReturn(null);
-        $this->isLimited()->shouldReturn(false);
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock->method('get')->with('section')->willReturn(null);
+        $this->assertSame('sylius_product_index', $this->requestConfiguration->getRouteName('index'));
+        $this->assertSame('sylius_product_show', $this->requestConfiguration->getRouteName('show'));
+        $this->assertSame('sylius_product_custom', $this->requestConfiguration->getRouteName('custom'));
     }
 
-    function it_gets_limit(Parameters $parameters): void
+    public function testGeneratesRouteNamesWithSection(): void
     {
-        $parameters->get('limit', false)->willReturn(true);
-        $parameters->get('limit', 10)->willReturn(10);
-        $this->getLimit()->shouldReturn(10);
-
-        $parameters->get('limit', false)->willReturn(false);
-        $parameters->get('limit', 10)->willReturn(null);
-        $this->getLimit()->shouldReturn(null);
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock->method('get')->with('section')->willReturn('admin');
+        $this->assertSame('sylius_admin_product_index', $this->requestConfiguration->getRouteName('index'));
+        $this->assertSame('sylius_admin_product_show', $this->requestConfiguration->getRouteName('show'));
+        $this->assertSame('sylius_admin_product_custom', $this->requestConfiguration->getRouteName('custom'));
     }
 
-    function it_checks_if_pagination_is_enabled(Parameters $parameters): void
+    public function testGeneratesRedirectReferer(): void
     {
-        $parameters->get('paginate', Argument::any())->willReturn(10);
-        $this->isPaginated()->shouldReturn(true);
-
-        $parameters->get('paginate', Argument::any())->willReturn(0);
-        $this->isPaginated()->shouldReturn(true);
-
-        $parameters->get('paginate', Argument::any())->willReturn(null);
-        $this->isPaginated()->shouldReturn(false);
-
-        $parameters->get('paginate', Argument::any())->willReturn(false);
-        $this->isPaginated()->shouldReturn(false);
+        /** @var HeaderBag|MockObject $bagMock */
+        $bagMock = $this->createMock(HeaderBag::class);
+        $this->requestMock->headers = $bagMock;
+        $bagMock->expects($this->once())->method('get')->with('referer')->willReturn('http://myurl.com');
+        $this->parametersMock->expects($this->once())->method('get')->with('redirect')->willReturn(['referer' => 'http://myurl.com']);
+        $this->assertSame('http://myurl.com', $this->requestConfiguration->getRedirectReferer());
     }
 
-    function it_gets_pagination_max_per_page(Parameters $parameters): void
+    public function testGeneratesRedirectRouteWithoutRedirect(): void
     {
-        $parameters->get('paginate', 10)->willReturn(20);
-        $this->getPaginationMaxPerPage()->shouldReturn(20);
-
-        $parameters->get('paginate', 10)->willReturn(10);
-        $this->getPaginationMaxPerPage()->shouldReturn(10);
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['section', null, null],
+                ['redirect', null, null],
+            ]);
+        $this->assertSame('sylius_product_index', $this->requestConfiguration->getRedirectRoute('index'));
     }
 
-    function it_checks_if_the_resource_is_filterable(Parameters $parameters): void
+    public function testGeneratesRedirectRouteWithRedirectAsArray(): void
     {
-        $parameters->get('filterable', Argument::any())->willReturn(true);
-        $this->isFilterable()->shouldReturn(true);
-
-        $parameters->get('filterable', Argument::any())->willReturn(null);
-        $this->isFilterable()->shouldReturn(false);
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['section', null, null],
+                ['redirect', null, ['route' => 'myRoute']],
+            ]);
+        $this->assertSame('myRoute', $this->requestConfiguration->getRedirectRoute('show'));
     }
 
-    function it_has_no_filterable_parameter(Parameters $parameters): void
+    public function testGeneratesRedirectRouteWithRedirectAsString(): void
+    {
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['section', null, null],
+                ['redirect', null, 'myRoute'],
+            ]);
+        $this->assertSame('myRoute', $this->requestConfiguration->getRedirectRoute('custom'));
+    }
+
+    public function testRedirectRouteUsesSection(): void
+    {
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock->method('get')->willReturnMap([
+            ['section', null, 'admin'],
+            ['redirect', null, null],
+        ]);
+
+        $this->assertSame('sylius_admin_product_index', $this->requestConfiguration->getRedirectRoute('index'));
+    }
+
+    public function testRedirectRouteOverriddenWithArray(): void
+    {
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock->method('get')->with('redirect')->willReturn(['route' => 'myRoute']);
+        $this->assertSame('myRoute', $this->requestConfiguration->getRedirectRoute('show'));
+    }
+
+    public function testRedirectRouteOverriddenWithString(): void
+    {
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
+        $this->parametersMock->method('get')->with('redirect')->willReturn('myRoute');
+        $this->assertSame('myRoute', $this->requestConfiguration->getRedirectRoute('custom'));
+    }
+
+    public function testReturnsEmptyRedirectParametersWhenRedirectIsNull(): void
+    {
+        $this->parametersMock->method('get')->willReturnMap([
+            ['vars', [], []],
+            ['redirect', null, null],
+        ]);
+
+        $this->assertSame([], $this->requestConfiguration->getVars());
+        $this->assertSame([], $this->requestConfiguration->getRedirectParameters());
+    }
+
+    public function testReturnsEmptyRedirectParametersWhenRedirectIsString(): void
+    {
+        $this->parametersMock->method('get')->willReturn(['redirect' => 'string']);
+
+        $this->assertSame([], $this->requestConfiguration->getRedirectParameters());
+    }
+
+    public function testReturnsEmptyRedirectParametersWhenRedirectHasEmptyArray(): void
+    {
+        $this->parametersMock->method('get')->willReturn(['redirect' => ['parameters' => []]]);
+
+        $this->assertSame([], $this->requestConfiguration->getRedirectParameters());
+    }
+
+    public function testReturnsRedirectParametersWhenPresent(): void
+    {
+        $this->parametersMock->method('get')->willReturn(['redirect' => ['parameters' => ['myParameter']]]);
+
+        $this->assertSame(['myParameter'], $this->requestConfiguration->getRedirectParameters());
+    }
+
+    public function testMergesExtraVarsWithRedirectParameters(): void
+    {
+        $extraVars = ['redirect' => ['parameters' => ['myExtraParameter']]];
+        $this->parametersMock->method('get')->willReturnMap([
+            ['vars', [], $extraVars],
+            ['redirect', null, ['parameters' => ['myParameter']]],
+        ]);
+
+        $this->assertSame($extraVars, $this->requestConfiguration->getVars());
+        $this->assertSame(['myParameter', 'myExtraParameter'], $this->requestConfiguration->getRedirectParameters(new \stdClass()));
+    }
+
+    public function testIsLimitedReturnsTrueWhenLimitIsSet(): void
+    {
+        $this->parametersMock->method('get')->willReturn(10);
+
+        $this->assertTrue($this->requestConfiguration->isLimited());
+    }
+
+    public function testIsLimitedReturnsFalseWhenLimitIsNotSet(): void
+    {
+        $this->parametersMock->method('get')->willReturn(null);
+
+        $this->assertFalse($this->requestConfiguration->isLimited());
+    }
+
+    public function testGetLimitReturnsValue(): void
+    {
+        $this->parametersMock->method('get')->willReturnMap([
+            ['limit', false, true],
+            ['limit', 10, 10],
+        ]);
+
+        $this->assertSame(10, $this->requestConfiguration->getLimit());
+    }
+
+    public function testGetLimitReturnsNullWhenNotSet(): void
+    {
+        $this->parametersMock->method('get')->willReturnMap([
+            ['limit', false, false],
+            ['limit', 10, null],
+        ]);
+
+        $this->assertNull($this->requestConfiguration->getLimit());
+    }
+
+    public function testIsPaginatedReturnsTrueWhenLimitIsPositive(): void
+    {
+        $this->parametersMock->method('get')->willReturn(10);
+
+        $this->assertTrue($this->requestConfiguration->isPaginated());
+    }
+
+    public function testIsPaginatedReturnsTrueWhenLimitIsZero(): void
+    {
+        $this->parametersMock->method('get')->willReturn(0);
+
+        $this->assertTrue($this->requestConfiguration->isPaginated());
+    }
+
+    public function testIsPaginatedReturnsFalseWhenLimitIsNull(): void
+    {
+        $this->parametersMock->method('get')->willReturn(null);
+
+        $this->assertFalse($this->requestConfiguration->isPaginated());
+    }
+
+    public function testIsPaginatedReturnsFalseWhenLimitIsFalse(): void
+    {
+        $this->parametersMock->method('get')->willReturn(false);
+
+        $this->assertFalse($this->requestConfiguration->isPaginated());
+    }
+
+    public function testGetPaginationMaxPerPageReturnsCustomValue(): void
+    {
+        $this->parametersMock->method('get')->with('paginate', 10)->willReturn(20);
+
+        $this->assertSame(20, $this->requestConfiguration->getPaginationMaxPerPage());
+    }
+
+    public function testGetPaginationMaxPerPageReturnsDefaultValue(): void
+    {
+        $this->parametersMock->method('get')->with('paginate', 10)->willReturn(10);
+
+        $this->assertSame(10, $this->requestConfiguration->getPaginationMaxPerPage());
+    }
+
+    public function testIsFilterableReturnsTrue(): void
+    {
+        $this->parametersMock->method('get')->willReturn(true);
+
+        $this->assertTrue($this->requestConfiguration->isFilterable());
+    }
+
+    public function testIsFilterableReturnsFalse(): void
+    {
+        $this->parametersMock->method('get')->willReturn(null);
+
+        $this->assertFalse($this->requestConfiguration->isFilterable());
+    }
+
+    public function testHasNoFilterableParameter(): void
     {
         $defaultCriteria = ['property' => 'myValue'];
-
-        $parameters->get('criteria', Argument::any())->willReturn([]);
-        $parameters->get('filterable', false)->willReturn(false);
-
-        $this->getCriteria($defaultCriteria)->shouldBeArray();
-        $this->getCriteria($defaultCriteria)->shouldHaveCount(1);
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['criteria', [], []],
+                ['filterable', false, false],
+            ]);
+        $this->assertIsIterable($this->requestConfiguration->getCriteria($defaultCriteria));
+        $this->assertCount(1, $this->requestConfiguration->getCriteria($defaultCriteria));
     }
 
-    function it_has_criteria_parameter(
-        Parameters $parameters,
-        Request $request,
-        ParameterBag $attributesBag,
-    ): void {
+    public function testHasCriteriaParameter(): void
+    {
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
         $queryBag = new InputBag();
         $requestBag = new InputBag();
-
         $criteria = ['property' => 'myNewValue'];
-        $request->attributes = $attributesBag;
-        $request->query = $queryBag;
-        $request->request = $requestBag;
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
 
-        $parameters->get('filterable', false)->willReturn(true);
-        $parameters->get('criteria', Argument::any())->willReturn([]);
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['criteria', [], []],
+                ['filterable', false, true],
+            ]);
 
-        $attributesBag->get('criteria', $request)->willReturn($request);
-
+        $attributesBagMock->expects($this->once())->method('get')->with('criteria', $this->requestMock)->willReturn($this->requestMock);
         $queryBag->set('criteria', $criteria);
-
         $requestBag->set('criteria', []);
-
-        $this->getCriteria()->shouldReturn($criteria);
+        $this->assertSame($criteria, $this->requestConfiguration->getCriteria());
     }
 
-    function it_has_criteria_parameter_in_request(
-        Parameters $parameters,
-        Request $request,
-        ParameterBag $attributesBag,
-    ): void {
+    public function testHasCriteriaParameterInRequest(): void
+    {
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
         $queryBag = new InputBag();
         $requestBag = new InputBag();
-
         $criteria = ['property' => 'myNewValue'];
-        $request->attributes = $attributesBag;
-        $request->query = $queryBag;
-        $request->request = $requestBag;
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
 
-        $parameters->get('filterable', false)->willReturn(true);
-        $parameters->get('criteria', Argument::any())->willReturn([]);
+        $this->parametersMock
+            ->method('get')
+            ->willReturnMap([
+                ['criteria', [], []],
+                ['filterable', false, true],
+            ]);
 
-        $attributesBag->get('criteria', $request)->willReturn($request);
-
+        $attributesBagMock->expects($this->once())->method('get')->with('criteria', $this->requestMock)->willReturn($this->requestMock);
         $requestBag->set('criteria', $criteria);
-
-        $this->getCriteria()->shouldReturn($criteria);
+        $this->assertSame($criteria, $this->requestConfiguration->getCriteria());
     }
 
-    function it_allows_to_override_criteria_parameter_in_route(
-        Parameters $parameters,
-        Request $request,
-        ParameterBag $attributesBag,
-    ): void {
+    public function testCriteriaIsOverriddenByQueryParameters(): void
+    {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
         $queryBag = new InputBag();
         $requestBag = new InputBag();
 
         $criteria = ['property' => 'myValue'];
         $overriddenCriteria = ['other_property' => 'myNewValue'];
-        $combinedCriteria = ['property' => 'myValue', 'other_property' => 'myNewValue'];
-        $request->attributes = $attributesBag;
-        $request->query = $queryBag;
-        $request->request = $requestBag;
+        $expected = ['property' => 'myValue', 'other_property' => 'myNewValue'];
 
-        $parameters->get('filterable', false)->willReturn(true);
-        $parameters->get('criteria', [])->willReturn($criteria);
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
 
-        $attributesBag->get('criteria', $request)->willReturn($request);
+        $this->parametersMock->method('get')->willReturnMap([
+            ['filterable', false, true],
+            ['criteria', [], $criteria],
+        ]);
+        $attributesBagMock->method('get')->with('criteria', $this->requestMock)->willReturn($this->requestMock);
 
-        $queryBag->set('criteria', $overriddenCriteria);
-
-        $requestBag->set('criteria', []);
-
-        $this->getCriteria()->shouldReturn($combinedCriteria);
-
-        $defaultCriteria = ['slug' => 'foo'];
-        $combinedDefaultCriteria = ['property' => 'myValue', 'slug' => 'foo', 'other_property' => 'myNewValue'];
-
-        $parameters->get('filterable', false)->willReturn(true);
-        $parameters->get('criteria', Argument::any())->willReturn($criteria);
-        $attributesBag->get('criteria', $request)->willReturn($request);
         $queryBag->set('criteria', $overriddenCriteria);
         $requestBag->set('criteria', []);
 
-        $this->getCriteria($defaultCriteria)->shouldReturn($combinedDefaultCriteria);
-
-        $parameters->get('filterable', false)->willReturn(true);
-        $parameters->get('criteria', [])->willReturn(['filter' => 'route']);
-        $attributesBag->get('criteria', $request)->willReturn($request);
-        $queryBag->set('criteria', ['filter' => 'request']);
-        $requestBag->set('criteria', []);
-
-        $this->getCriteria(['filter' => 'default'])->shouldReturn(['filter' => 'request']);
+        $this->assertSame($expected, $this->requestConfiguration->getCriteria());
     }
 
-    function it_checks_if_the_resource_is_sortable(Parameters $parameters): void
+    public function testCriteriaMergesWithDefaultCriteriaWhenOverridden(): void
     {
-        $parameters->get('sortable', Argument::any())->willReturn(true);
-        $this->isSortable()->shouldReturn(true);
-
-        $parameters->get('sortable', Argument::any())->willReturn(null);
-        $this->isSortable()->shouldReturn(false);
-    }
-
-    function it_has_sorting_parameter(
-        Parameters $parameters,
-        Request $request,
-        ParameterBag $attributesBag,
-    ): void {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
         $queryBag = new InputBag();
         $requestBag = new InputBag();
 
-        $sorting = ['property' => 'asc'];
-        $request->attributes = $attributesBag;
-        $request->query = $queryBag;
-        $request->request = $requestBag;
+        $criteria = ['property' => 'myValue'];
+        $overriddenCriteria = ['other_property' => 'myNewValue'];
+        $defaultCriteria = ['slug' => 'foo'];
+        $expected = ['property' => 'myValue', 'slug' => 'foo', 'other_property' => 'myNewValue'];
 
-        $parameters->get('sortable', false)->willReturn(true);
-        $parameters->get('sorting', Argument::any())->willReturn($sorting);
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
 
-        $attributesBag->get('sorting', $request)->willReturn($request);
+        $this->parametersMock->method('get')->willReturnMap([
+            ['filterable', false, true],
+            ['criteria', [], $criteria],
+        ]);
+        $attributesBagMock->method('get')->with('criteria', $this->requestMock)->willReturn($this->requestMock);
 
-        $queryBag->set('sorting', $sorting);
+        $queryBag->set('criteria', $overriddenCriteria);
+        $requestBag->set('criteria', []);
 
-        $requestBag->set('sorting', []);
-
-        $this->getSorting()->shouldReturn($sorting);
+        $this->assertSame($expected, $this->requestConfiguration->getCriteria($defaultCriteria));
     }
 
-    function it_has_no_sortable_parameter(Parameters $parameters): void
+    public function testQueryCriteriaTakesPrecedenceOverDefaultAndRouteCriteria(): void
+    {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
+        $criteria = ['filter' => 'route'];
+        $expected = ['filter' => 'request'];
+
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
+
+        $this->parametersMock->method('get')->willReturnMap([
+            ['filterable', false, true],
+            ['criteria', [], $criteria],
+        ]);
+        $attributesBagMock->method('get')->with('criteria', $this->requestMock)->willReturn($this->requestMock);
+
+        $queryBag->set('criteria', ['filter' => 'request']);
+        $requestBag->set('criteria', []);
+
+        $this->assertSame($expected, $this->requestConfiguration->getCriteria(['filter' => 'default']));
+    }
+
+    public function testResourceIsSortableWhenParameterIsTrue(): void
+    {
+        $this->parametersMock
+            ->method('get')
+            ->with('sortable', false)
+            ->willReturn(true);
+
+        $this->assertTrue($this->requestConfiguration->isSortable());
+    }
+
+    public function testResourceIsNotSortableWhenParameterIsNull(): void
+    {
+        $this->parametersMock
+            ->method('get')
+            ->with('sortable', false)
+            ->willReturn(null);
+
+        $this->assertFalse($this->requestConfiguration->isSortable());
+    }
+
+    public function testHasSortingParameter(): void
+    {
+        /** @var ParameterBag|MockObject $attributesBagMock */
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+        $sorting = ['property' => 'asc'];
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
+
+        $this->parametersMock->method('get')->willReturnMap([
+            ['sortable', false, true],
+            ['sorting', [], $sorting],
+        ]);
+
+        $attributesBagMock->expects($this->once())->method('get')->with('sorting', $this->requestMock)->willReturn($this->requestMock);
+        $queryBag->set('sorting', $sorting);
+        $requestBag->set('sorting', []);
+        $this->assertSame($sorting, $this->requestConfiguration->getSorting());
+    }
+
+    public function testHasNoSortableParameter(): void
     {
         $defaultSorting = ['property' => 'desc'];
 
-        $parameters->get('sorting', Argument::any())->willReturn([]);
-        $parameters->get('sortable', false)->willReturn(false);
+        $this->parametersMock->method('get')->willReturnMap([
+            ['sortable', false, false],
+            ['sorting', [], []],
+        ]);
 
-        $this->getSorting($defaultSorting)->shouldBeArray();
-        $this->getSorting($defaultSorting)->shouldHaveCount(1);
+        $this->assertIsIterable($this->requestConfiguration->getSorting($defaultSorting));
+        $this->assertCount(1, $this->requestConfiguration->getSorting($defaultSorting));
     }
 
-    function it_allows_to_override_sorting_parameter_in_route(
-        Parameters $parameters,
-        Request $request,
-        ParameterBag $attributesBag,
-    ): void {
+    public function testSortingIsOverriddenByQueryParameters(): void
+    {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
         $queryBag = new InputBag();
         $requestBag = new InputBag();
 
         $sorting = ['property' => 'desc'];
         $overriddenSorting = ['other_property' => 'asc'];
-        $combinedSorting = ['other_property' => 'asc', 'property' => 'desc'];
-        $request->attributes = $attributesBag;
-        $request->query = $queryBag;
-        $request->request = $requestBag;
+        $expected = ['other_property' => 'asc', 'property' => 'desc'];
 
-        $parameters->get('sortable', false)->willReturn(true);
-        $parameters->get('sorting', [])->willReturn($sorting);
-        $attributesBag->get('sorting', $request)->willReturn($request);
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
+
+        $this->parametersMock->method('get')->willReturnMap([
+            ['sortable', false, true],
+            ['sorting', [], $sorting],
+        ]);
+        $attributesBagMock->method('get')->with('sorting', $this->requestMock)->willReturn($this->requestMock);
+
         $queryBag->set('sorting', $overriddenSorting);
         $requestBag->set('sorting', []);
 
-        $this->getSorting()->shouldReturn($combinedSorting);
+        $this->assertSame($expected, $this->requestConfiguration->getSorting());
+    }
 
-        $defaultSorting = ['foo' => 'bar'];
-        $combinedDefaultSorting = ['other_property' => 'asc', 'property' => 'desc', 'foo' => 'bar'];
+    public function testSortingMergesWithDefaultSortingWhenOverridden(): void
+    {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
 
-        $parameters->get('sortable', false)->willReturn(true);
-        $parameters->get('sorting', Argument::any())->willReturn($sorting);
-        $attributesBag->get('sorting', $request)->willReturn($request);
+        $sorting = ['property' => 'desc'];
+        $overriddenSorting = ['other_property' => 'asc'];
+        $defaultSorting = ['slug' => 'foo'];
+        $expected = ['other_property' => 'asc', 'property' => 'desc', 'slug' => 'foo'];
+
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
+
+        $this->parametersMock->method('get')->willReturnMap([
+            ['sortable', false, true],
+            ['sorting', [], $sorting],
+        ]);
+        $attributesBagMock->method('get')->with('sorting', $this->requestMock)->willReturn($this->requestMock);
+
         $queryBag->set('sorting', $overriddenSorting);
         $requestBag->set('sorting', []);
 
-        $this->getSorting($defaultSorting)->shouldReturn($combinedDefaultSorting);
+        $this->assertSame($expected, $this->requestConfiguration->getSorting($defaultSorting));
+    }
 
-        $parameters->get('sortable', false)->willReturn(true);
-        $parameters->get('sorting', [])->willReturn(['sort' => 'route']);
-        $attributesBag->get('sorting', $request)->willReturn($request);
+    public function testQuerySortingTakesPrecedenceOverRouteAndDefaultSorting(): void
+    {
+        $attributesBagMock = $this->createMock(ParameterBag::class);
+        $queryBag = new InputBag();
+        $requestBag = new InputBag();
+
+        $this->requestMock->attributes = $attributesBagMock;
+        $this->requestMock->query = $queryBag;
+        $this->requestMock->request = $requestBag;
+
+        $this->parametersMock->method('get')->willReturnMap([
+            ['sortable', false, true],
+            ['sorting', [], ['sort' => 'route']],
+        ]);
+        $attributesBagMock->method('get')->with('sorting', $this->requestMock)->willReturn($this->requestMock);
+
         $queryBag->set('sorting', ['sort' => 'request']);
         $requestBag->set('sorting', []);
 
-        $this->getSorting(['sort' => 'default'])->shouldReturn(['sort' => 'request']);
+        $this->assertSame(['sort' => 'request'], $this->requestConfiguration->getSorting(['sort' => 'default']));
     }
 
-    function it_has_repository_method_parameter(Parameters $parameters): void
+    public function testGetRepositoryMethodReturnsNullIfRepositoryParamDoesNotExist(): void
     {
-        $parameters->has('repository')->willReturn(false);
-        $this->getRepositoryMethod()->shouldReturn(null);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('repository')
+            ->willReturn(false);
 
-        $parameters->has('repository')->willReturn(true);
-        $parameters->get('repository')->willReturn(['method' => 'findAllEnabled']);
-
-        $this->getRepositoryMethod()->shouldReturn('findAllEnabled');
+        $this->assertNull($this->requestConfiguration->getRepositoryMethod());
     }
 
-    function it_has_repository_arguments_parameter(Parameters $parameters): void
+    public function testGetRepositoryMethodReturnsConfiguredMethod(): void
     {
-        $parameters->has('repository')->willReturn(false);
-        $this->getRepositoryArguments()->shouldReturn([]);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('repository')
+            ->willReturn(true);
 
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('repository')
+            ->willReturn(['method' => 'findAllEnabled']);
+
+        $this->assertSame('findAllEnabled', $this->requestConfiguration->getRepositoryMethod());
+    }
+
+    public function testReturnsEmptyArrayWhenRepositoryConfigurationIsMissing(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('repository')
+            ->willReturn(false);
+
+        $this->assertSame([], $this->requestConfiguration->getRepositoryArguments());
+    }
+
+    public function testReturnsRepositoryArgumentsWhenScalarValueProvided(): void
+    {
         $repositoryConfiguration = ['arguments' => 'value'];
-        $parameters->has('repository')->willReturn(true);
-        $parameters->get('repository')->willReturn($repositoryConfiguration);
 
-        $this->getRepositoryArguments()->shouldReturn(['value']);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('repository')
+            ->willReturn(true);
 
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('repository')
+            ->willReturn($repositoryConfiguration);
+
+        $this->assertSame(['value'], $this->requestConfiguration->getRepositoryArguments());
+    }
+
+    public function testReturnsRepositoryArgumentsWhenArrayProvided(): void
+    {
         $repositoryConfiguration = ['arguments' => ['foo, bar']];
-        $parameters->has('repository')->willReturn(true);
-        $parameters->get('repository')->willReturn($repositoryConfiguration);
 
-        $this->getRepositoryArguments()->shouldReturn(['foo, bar']);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('repository')
+            ->willReturn(true);
+
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('repository')
+            ->willReturn($repositoryConfiguration);
+
+        $this->assertSame(['foo, bar'], $this->requestConfiguration->getRepositoryArguments());
     }
 
-    function it_has_factory_method_parameter(Parameters $parameters): void
+    public function testReturnsNullWhenFactoryConfigurationIsMissing(): void
     {
-        $parameters->has('factory')->willReturn(false);
-        $this->getFactoryMethod()->shouldReturn(null);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('factory')
+            ->willReturn(false);
 
-        $parameters->has('factory')->willReturn(true);
-        $parameters->get('factory')->willReturn(['method' => 'createForPromotion']);
-
-        $this->getFactoryMethod()->shouldReturn('createForPromotion');
+        $this->assertNull($this->requestConfiguration->getFactoryMethod());
     }
 
-    function it_has_factory_arguments_parameter(Parameters $parameters): void
+    public function testReturnsFactoryMethodWhenConfigured(): void
     {
-        $parameters->has('factory')->willReturn(false);
-        $this->getFactoryArguments()->shouldReturn([]);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('factory')
+            ->willReturn(true);
 
-        $factoryConfiguration = ['arguments' => 'value'];
-        $parameters->has('factory')->willReturn(true);
-        $parameters->get('factory')->willReturn($factoryConfiguration);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('factory')
+            ->willReturn(['method' => 'createForPromotion']);
 
-        $this->getFactoryArguments()->shouldReturn(['value']);
-
-        $factoryConfiguration = ['arguments' => ['foo, bar']];
-        $parameters->has('factory')->willReturn(true);
-        $parameters->get('factory')->willReturn($factoryConfiguration);
-
-        $this->getFactoryArguments()->shouldReturn(['foo, bar']);
+        $this->assertSame('createForPromotion', $this->requestConfiguration->getFactoryMethod());
     }
 
-    function it_has_flash_message_parameter(MetadataInterface $metadata, Parameters $parameters): void
+    public function testReturnsEmptyArrayWhenFactoryConfigurationIsMissing(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('factory')
+            ->willReturn(false);
 
-        $parameters->get('flash', 'sylius.product.message')->willReturn('sylius.product.message');
-        $this->getFlashMessage('message')->shouldReturn('sylius.product.message');
-
-        $parameters->get('flash', 'sylius.product.flash')->willReturn('sylius.product.myMessage');
-        $this->getFlashMessage('flash')->shouldReturn('sylius.product.myMessage');
+        $this->assertSame([], $this->requestConfiguration->getFactoryArguments());
     }
 
-    function it_has_sortable_position_parameter(Parameters $parameters): void
+    public function testReturnsFactoryArgumentsAsArrayWhenConfiguredWithScalar(): void
     {
-        $parameters->get('sortable_position', 'position')->willReturn('position');
-        $this->getSortablePosition()->shouldReturn('position');
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('factory')
+            ->willReturn(true);
 
-        $parameters->get('sortable_position', 'position')->willReturn('myPosition');
-        $this->getSortablePosition()->shouldReturn('myPosition');
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('factory')
+            ->willReturn(['arguments' => 'value']);
+
+        $this->assertSame(['value'], $this->requestConfiguration->getFactoryArguments());
     }
 
-    function it_has_permission_unless_defined_as_false_in_parameters(Parameters $parameters): void
+    public function testReturnsFactoryArgumentsAsArrayWhenConfiguredWithArray(): void
     {
-        $parameters->get('permission', false)->willReturn(false);
-        $this->shouldNotHavePermission();
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('factory')
+            ->willReturn(true);
 
-        $parameters->get('permission', false)->willReturn('custom_permission');
-        $this->shouldHavePermission();
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('factory')
+            ->willReturn(['arguments' => ['foo, bar']]);
 
-        $parameters->get('permission', false)->willReturn(false);
-        $this->shouldNotHavePermission();
+        $this->assertSame(['foo, bar'], $this->requestConfiguration->getFactoryArguments());
     }
 
-    function it_generates_permission_name(MetadataInterface $metadata, Parameters $parameters): void
+    public function testReturnsDefaultFlashMessageForMessageAction(): void
     {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
 
-        $parameters->get('permission')->willReturn(true);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('flash', 'sylius.product.message')
+            ->willReturn('sylius.product.message');
 
-        $this->getPermission('index')->shouldReturn('sylius.product.index');
+        $this->assertSame('sylius.product.message', $this->requestConfiguration->getFlashMessage('message'));
     }
 
-    function it_takes_permission_name_from_parameters_if_provided(Parameters $parameters): void
+    public function testReturnsCustomFlashMessageForFlashAction(): void
     {
-        $parameters->get('permission')->willReturn('app.sales_order.view_pricing');
+        $this->metadataMock->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->method('getName')->willReturn('product');
 
-        $this->getPermission('index')->shouldReturn('app.sales_order.view_pricing');
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('flash', 'sylius.product.flash')
+            ->willReturn('sylius.product.myMessage');
+
+        $this->assertSame('sylius.product.myMessage', $this->requestConfiguration->getFlashMessage('flash'));
     }
 
-    function it_throws_an_exception_when_permission_is_set_as_false_in_parameters_but_still_trying_to_get_it(Parameters $parameters): void
+    public function testReturnsDefaultSortablePosition(): void
     {
-        $parameters->get('permission')->willReturn(null);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('sortable_position', 'position')
+            ->willReturn('position');
 
-        $this
-            ->shouldThrow(\LogicException::class)
-            ->during('getPermission', ['index'])
-        ;
+        $this->assertSame('position', $this->requestConfiguration->getSortablePosition());
     }
 
-    function it_has_event_name(Parameters $parameters): void
+    public function testReturnsCustomSortablePosition(): void
     {
-        $parameters->get('event')->willReturn('foo');
-        $this->getEvent()->shouldReturn('foo');
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('sortable_position', 'position')
+            ->willReturn('myPosition');
+
+        $this->assertSame('myPosition', $this->requestConfiguration->getSortablePosition());
     }
 
-    function it_has_section(Parameters $parameters): void
+    public function testShouldNotHavePermissionWhenPermissionIsFalse(): void
     {
-        $parameters->get('section')->willReturn(null);
-        $this->getSection()->shouldReturn(null);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('permission', false)
+            ->willReturn(false);
 
-        $parameters->get('section')->willReturn('admin');
-        $this->getSection()->shouldReturn('admin');
+        $this->assertFalse($this->requestConfiguration->hasPermission());
     }
 
-    function it_has_vars(Parameters $parameters): void
+    public function testShouldHavePermissionWhenPermissionIsCustomString(): void
     {
-        $parameters->get('vars', [])->willReturn(['foo' => 'bar']);
-        $this->getVars()->shouldReturn(['foo' => 'bar']);
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('permission', false)
+            ->willReturn('custom_permission');
+
+        $this->assertTrue($this->requestConfiguration->hasPermission());
     }
 
-    function it_does_not_have_grid_unless_defined_as_in_parameters(Parameters $parameters): void
+    public function testGeneratesPermissionName(): void
     {
-        $parameters->has('grid')->willReturn(false);
-        $this->shouldNotHaveGrid();
-
-        $parameters->has('grid')->willReturn(true);
-        $this->shouldHaveGrid();
-
-        $parameters->has('grid')->willReturn(true);
-        $parameters->get('grid')->willReturn('sylius_admin_tax_category');
-
-        $this->getGrid()->shouldReturn('sylius_admin_tax_category');
+        $this->metadataMock->expects($this->once())->method('getApplicationName')->willReturn('sylius');
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->parametersMock->expects($this->once())->method('get')->with('permission')->willReturn(true);
+        $this->assertSame('sylius.product.index', $this->requestConfiguration->getPermission('index'));
     }
 
-    function it_throws_an_exception_when_trying_to_retrieve_undefined_grid(Parameters $parameters): void
+    public function testTakesPermissionNameFromParametersIfProvided(): void
     {
-        $parameters->has('grid')->willReturn(false);
-
-        $this
-            ->shouldThrow(\LogicException::class)
-            ->during('getGrid')
-        ;
+        $this->parametersMock->expects($this->once())->method('get')->with('permission')->willReturn('app.sales_order.view_pricing');
+        $this->assertSame('app.sales_order.view_pricing', $this->requestConfiguration->getPermission('index'));
     }
 
-    function it_can_have_state_machine_transition(Parameters $parameters): void
+    public function testThrowsAnExceptionWhenPermissionIsSetAsFalseInParametersButStillTryingToGetIt(): void
     {
-        $parameters->has('state_machine')->willReturn(false);
-        $this->hasStateMachine()->shouldReturn(false);
+        $this->parametersMock->expects($this->once())->method('get')->with('permission')->willReturn(null);
+        $this->expectException(\LogicException::class);
+        $this->requestConfiguration->getPermission('index');
+    }
 
-        $parameters->has('state_machine')->willReturn(true);
-        $parameters->get('state_machine')->willReturn([
+    public function testHasEventName(): void
+    {
+        $this->parametersMock->expects($this->once())->method('get')->with('event')->willReturn('foo');
+        $this->assertSame('foo', $this->requestConfiguration->getEvent());
+    }
+
+    public function testReturnsNullWhenSectionIsNotSet(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('section')
+            ->willReturn(null);
+
+        $this->assertNull($this->requestConfiguration->getSection());
+    }
+
+    public function testReturnsSectionWhenSet(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('section')
+            ->willReturn('admin');
+
+        $this->assertSame('admin', $this->requestConfiguration->getSection());
+    }
+
+    public function testHasVars(): void
+    {
+        $this->parametersMock->expects($this->once())->method('get')->with('vars', [])->willReturn(['foo' => 'bar']);
+        $this->assertSame(['foo' => 'bar'], $this->requestConfiguration->getVars());
+    }
+
+    public function testShouldNotHaveGridWhenGridNotDefined(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('grid')
+            ->willReturn(false);
+
+        $this->assertFalse($this->requestConfiguration->hasGrid());
+    }
+
+    public function testShouldHaveGridWhenGridDefined(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('grid')
+            ->willReturn(true);
+
+        $this->assertTrue($this->requestConfiguration->hasGrid());
+    }
+
+    public function testGetGridReturnsConfiguredValue(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('grid')
+            ->willReturn(true);
+
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('grid')
+            ->willReturn('sylius_admin_tax_category');
+
+        $this->assertSame('sylius_admin_tax_category', $this->requestConfiguration->getGrid());
+    }
+
+    public function testThrowsAnExceptionWhenTryingToRetrieveUndefinedGrid(): void
+    {
+        $this->parametersMock->expects($this->once())->method('has')->with('grid')->willReturn(false);
+        $this->expectException(\LogicException::class);
+        $this->requestConfiguration->getGrid();
+    }
+
+    public function testReturnsFalseWhenNoStateMachineConfigured(): void
+    {
+        $this->parametersMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('state_machine')
+            ->willReturn(false);
+
+        $this->assertFalse($this->requestConfiguration->hasStateMachine());
+    }
+
+    public function testReturnsStateMachineDetailsWhenConfigured(): void
+    {
+        $stateMachineConfig = [
             'graph' => 'sylius_product_review_state',
             'transition' => 'approve',
-        ]);
+        ];
 
-        $this->hasStateMachine()->shouldReturn(true);
-        $this->getStateMachineGraph()->shouldReturn('sylius_product_review_state');
-        $this->getStateMachineTransition()->shouldReturn('approve');
+        $this->parametersMock
+            ->method('has')
+            ->with('state_machine')
+            ->willReturn(true);
+
+        $this->parametersMock
+            ->method('get')
+            ->with('state_machine')
+            ->willReturn($stateMachineConfig);
+
+        $this->assertTrue($this->requestConfiguration->hasStateMachine());
+        $this->assertSame('sylius_product_review_state', $this->requestConfiguration->getStateMachineGraph());
+        $this->assertSame('approve', $this->requestConfiguration->getStateMachineTransition());
     }
 }

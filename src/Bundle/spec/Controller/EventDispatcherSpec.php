@@ -11,11 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use Doctrine\Common\Collections\Collection;
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\EventDispatcher;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface as ControllerEventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
@@ -24,127 +25,127 @@ use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\ResourceActions;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-final class EventDispatcherSpec extends ObjectBehavior
+final class EventDispatcherTest extends TestCase
 {
-    function let(EventDispatcherInterface $eventDispatcher): void
+    private MockObject $eventDispatcherMock;
+
+    private EventDispatcher $eventDispatcher;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($eventDispatcher);
+        $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $this->eventDispatcher = new EventDispatcher($this->eventDispatcherMock);
     }
 
-    function it_implements_event_dispatcher_interface(): void
+    public function testImplementsEventDispatcherInterface(): void
     {
-        $this->shouldImplement(ControllerEventDispatcherInterface::class);
+        $this->assertInstanceOf(ControllerEventDispatcherInterface::class, $this->eventDispatcher);
     }
 
-    function it_dispatches_appropriate_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn(null);
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriateEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.show')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.show');
 
-        $this->dispatch(ResourceActions::SHOW, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
+        $result = $this->eventDispatcher->dispatch(ResourceActions::SHOW, $requestConfiguration, $resource);
+
+        $this->assertInstanceOf(ResourceControllerEvent::class, $result);
     }
 
-    function it_dispatches_appropriate_custom_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn('register');
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriateCustomEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('register');
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.register')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.register');
 
-        $this->dispatch(ResourceActions::CREATE, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
+        $result = $this->eventDispatcher->dispatch(ResourceActions::CREATE, $requestConfiguration, $resource);
+
+        $this->assertInstanceOf(ResourceControllerEvent::class, $result);
     }
 
-    function it_dispatches_event_for_a_collection_of_resources(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        Collection $resources,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn('register');
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesEventForACollectionOfResources(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('register');
+        $resources = $this->createMock(Collection::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.register')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.register');
 
-        $this->dispatchMultiple(ResourceActions::CREATE, $requestConfiguration, $resources)->shouldHaveType(ResourceControllerEvent::class);
+        $result = $this->eventDispatcher->dispatchMultiple(ResourceActions::CREATE, $requestConfiguration, $resources);
+
+        $this->assertInstanceOf(ResourceControllerEvent::class, $result);
     }
 
-    function it_dispatches_appropriate_pre_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn(null);
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriatePreEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.pre_create')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.pre_create');
 
-        $this->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
+        $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
 
-    function it_dispatches_appropriate_custom_pre_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn('register');
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriateCustomPreEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('register');
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.pre_register')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.pre_register');
 
-        $this->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
+        $this->eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
 
-    function it_dispatches_appropriate_post_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn(null);
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriatePostEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.post_create')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.post_create');
 
-        $this->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
+        $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
     }
 
-    function it_dispatches_appropriate_custom_post_event_for_a_resource(
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getEvent()->willReturn('register');
-        $requestConfiguration->getMetadata()->willReturn($metadata);
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDispatchesAppropriateCustomPostEventForAResource(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('register');
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $eventDispatcher->dispatch(Argument::type(ResourceControllerEvent::class), 'sylius.product.post_register')->shouldBeCalled();
+        $this->expectEventDispatched('sylius.product.post_register');
 
-        $this->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource)->shouldHaveType(ResourceControllerEvent::class);
+        $result = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $requestConfiguration, $resource);
+
+        $this->assertInstanceOf(ResourceControllerEvent::class, $result);
+    }
+
+    /**
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfiguration(?string $customEvent): MockObject
+    {
+        /** @var MockObject&MetadataInterface $metadata */
+        $metadata = $this->createMock(MetadataInterface::class);
+        $metadata->method('getApplicationName')->willReturn('sylius');
+        $metadata->method('getName')->willReturn('product');
+
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('getEvent')->willReturn($customEvent);
+        $requestConfiguration->method('getMetadata')->willReturn($metadata);
+
+        return $requestConfiguration;
+    }
+
+    private function expectEventDispatched(string $eventName): void
+    {
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ResourceControllerEvent::class),
+                $eventName,
+            );
     }
 }

@@ -11,93 +11,151 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use SM\Factory\FactoryInterface;
 use SM\StateMachine\StateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface as ResourceStateMachineInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-final class StateMachineSpec extends ObjectBehavior
+final class StateMachineTest extends TestCase
 {
-    function let(FactoryInterface $stateMachineFactory): void
+    private MockObject $stateMachineFactoryMock;
+
+    private StateMachine $stateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($stateMachineFactory);
+        $this->stateMachineFactoryMock = $this->createMock(FactoryInterface::class);
+        $this->stateMachine = new StateMachine($this->stateMachineFactoryMock);
     }
 
-    function it_implements_state_machine_interface(): void
+    public function testImplementsStateMachineInterface(): void
     {
-        $this->shouldImplement(ResourceStateMachineInterface::class);
+        $this->assertInstanceOf(ResourceStateMachineInterface::class, $this->stateMachine);
     }
 
-    function it_throws_an_exception_if_transition_is_not_defined_during_can(RequestConfiguration $requestConfiguration, ResourceInterface $resource): void
+    public function testThrowsAnExceptionIfTransitionIsNotDefinedDuringCan(): void
     {
-        $requestConfiguration->hasStateMachine()->willReturn(false);
+        $requestConfiguration = $this->createRequestConfigurationWithoutStateMachine();
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $this
-            ->shouldThrow(new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.'))
-            ->during('can', [$requestConfiguration, $resource])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('State machine must be configured to apply transition, check your routing.');
+
+        $this->stateMachine->can($requestConfiguration, $resource);
     }
 
-    function it_throws_an_exception_if_transition_is_not_defined_during_apply(RequestConfiguration $requestConfiguration, ResourceInterface $resource): void
+    public function testThrowsAnExceptionIfTransitionIsNotDefinedDuringApply(): void
     {
-        $requestConfiguration->hasStateMachine()->willReturn(false);
+        $requestConfiguration = $this->createRequestConfigurationWithoutStateMachine();
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $this
-            ->shouldThrow(new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.'))
-            ->during('apply', [$requestConfiguration, $resource])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('State machine must be configured to apply transition, check your routing.');
+
+        $this->stateMachine->apply($requestConfiguration, $resource);
     }
 
-    function it_returns_if_configured_state_machine_can_transition(
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine,
-    ): void {
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+    public function testReturnsIfConfiguredStateMachineCanTransition(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('sylius_product_review_state', 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $stateMachineMock = $this->createStateMachineMock();
 
-        $stateMachineFactory->get($resource, 'sylius_product_review_state')->willReturn($stateMachine);
-        $stateMachine->can('reject')->willReturn(true);
+        $this->stateMachineFactoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, 'sylius_product_review_state')
+            ->willReturn($stateMachineMock);
 
-        $this->can($requestConfiguration, $resource)->shouldReturn(true);
+        $stateMachineMock
+            ->expects($this->once())
+            ->method('can')
+            ->with('reject')
+            ->willReturn(true);
+
+        $this->assertTrue($this->stateMachine->can($requestConfiguration, $resource));
     }
 
-    function it_applies_configured_state_machine_transition_without_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine,
-    ): void {
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineGraph()->willReturn(null);
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $stateMachineFactory->get($resource, 'default')->willReturn($stateMachine);
+    public function testAppliesConfiguredStateMachineTransitionWithoutGraphConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null, 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $stateMachineMock = $this->createStateMachineMock();
 
-        $stateMachineFactory->get($resource, 'default')->shouldBeCalled();
-        $stateMachine->apply('reject')->shouldBeCalled();
+        $this->stateMachineFactoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, 'default')
+            ->willReturn($stateMachineMock);
 
-        $this->apply($requestConfiguration, $resource);
+        $stateMachineMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with('reject');
+
+        $this->stateMachine->apply($requestConfiguration, $resource);
     }
 
-    function it_applies_configured_state_machine_transition_with_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        ResourceInterface $resource,
-        FactoryInterface $stateMachineFactory,
-        StateMachineInterface $stateMachine,
-    ): void {
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineGraph()->willReturn('sylius_product_review_state');
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
+    public function testAppliesConfiguredStateMachineTransitionWithGraphConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('sylius_product_review_state', 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $stateMachineMock = $this->createStateMachineMock();
 
-        $stateMachineFactory->get($resource, 'sylius_product_review_state')->willReturn($stateMachine);
-        $stateMachine->apply('reject')->shouldBeCalled();
+        $this->stateMachineFactoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, 'sylius_product_review_state')
+            ->willReturn($stateMachineMock);
 
-        $this->apply($requestConfiguration, $resource);
+        $stateMachineMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with('reject');
+
+        $this->stateMachine->apply($requestConfiguration, $resource);
+    }
+
+    /**
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfigurationWithoutStateMachine(): MockObject
+    {
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('hasStateMachine')->willReturn(false);
+
+        return $requestConfiguration;
+    }
+
+    /**
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfiguration(?string $graph, string $transition): MockObject
+    {
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('hasStateMachine')->willReturn(true);
+        $requestConfiguration->method('getStateMachineGraph')->willReturn($graph);
+        $requestConfiguration->method('getStateMachineTransition')->willReturn($transition);
+
+        return $requestConfiguration;
+    }
+
+    /**
+     * @return MockObject&StateMachineInterface
+     */
+    private function createStateMachineMock(): MockObject
+    {
+        /** @var MockObject&StateMachineInterface $stateMachine */
+        $stateMachine = $this->createMock(StateMachineInterface::class);
+
+        return $stateMachine;
     }
 }

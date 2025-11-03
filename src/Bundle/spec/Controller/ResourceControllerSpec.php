@@ -11,13 +11,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
-use PhpSpec\ObjectBehavior;
-use PhpSpec\Wrapper\Collaborator;
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
@@ -25,6 +24,7 @@ use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
@@ -54,2754 +54,2527 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Twig\Environment;
 
-final class ResourceControllerSpec extends ObjectBehavior
+final class ResourceControllerTest extends TestCase
 {
-    function let(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        ContainerInterface $container,
-    ): void {
-        $this->beConstructedWith(
-            $metadata,
-            $requestConfigurationFactory,
-            $viewHandler,
-            $repository,
-            $factory,
-            $newResourceFactory,
-            $manager,
-            $singleResourceProvider,
-            $resourcesCollectionProvider,
-            $resourceFormFactory,
-            $redirectHandler,
-            $flashHelper,
-            $authorizationChecker,
-            $eventDispatcher,
-            $stateMachine,
-            $resourceUpdateHandler,
-            $resourceDeleteHandler,
-        );
+    /** @var MetadataInterface|MockObject */
+    private MockObject $metadataMock;
 
-        $this->setContainer($container);
+    /** @var RequestConfigurationFactoryInterface|MockObject */
+    private MockObject $requestConfigurationFactoryMock;
+
+    /** @var ViewHandlerInterface|MockObject */
+    private MockObject $viewHandlerMock;
+
+    /** @var RepositoryInterface|MockObject */
+    private MockObject $repositoryMock;
+
+    /** @var FactoryInterface|MockObject */
+    private MockObject $factoryMock;
+
+    /** @var NewResourceFactoryInterface|MockObject */
+    private MockObject $newResourceFactoryMock;
+
+    /** @var ObjectManager|MockObject */
+    private MockObject $managerMock;
+
+    /** @var SingleResourceProviderInterface|MockObject */
+    private MockObject $singleResourceProviderMock;
+
+    /** @var ResourcesCollectionProviderInterface|MockObject */
+    private MockObject $resourcesCollectionProviderMock;
+
+    /** @var ResourceFormFactoryInterface|MockObject */
+    private MockObject $resourceFormFactoryMock;
+
+    /** @var RedirectHandlerInterface|MockObject */
+    private MockObject $redirectHandlerMock;
+
+    /** @var FlashHelperInterface|MockObject */
+    private MockObject $flashHelperMock;
+
+    /** @var AuthorizationCheckerInterface|MockObject */
+    private MockObject $authorizationCheckerMock;
+
+    /** @var EventDispatcherInterface|MockObject */
+    private MockObject $eventDispatcherMock;
+
+    /** @var StateMachineInterface|MockObject */
+    private MockObject $stateMachineMock;
+
+    /** @var ResourceUpdateHandlerInterface|MockObject */
+    private MockObject $resourceUpdateHandlerMock;
+
+    /** @var ResourceDeleteHandlerInterface|MockObject */
+    private MockObject $resourceDeleteHandlerMock;
+
+    /** @var ContainerInterface|MockObject */
+    private MockObject $containerMock;
+
+    private ResourceController $resourceController;
+
+    protected function setUp(): void
+    {
+        $this->metadataMock = $this->createMock(MetadataInterface::class);
+        $this->requestConfigurationFactoryMock = $this->createMock(RequestConfigurationFactoryInterface::class);
+        $this->viewHandlerMock = $this->createMock(ViewHandlerInterface::class);
+        $this->repositoryMock = $this->createMock(RepositoryInterface::class);
+        $this->factoryMock = $this->createMock(FactoryInterface::class);
+        $this->newResourceFactoryMock = $this->createMock(NewResourceFactoryInterface::class);
+        $this->managerMock = $this->createMock(ObjectManager::class);
+        $this->singleResourceProviderMock = $this->createMock(SingleResourceProviderInterface::class);
+        $this->resourcesCollectionProviderMock = $this->createMock(ResourcesCollectionProviderInterface::class);
+        $this->resourceFormFactoryMock = $this->createMock(ResourceFormFactoryInterface::class);
+        $this->redirectHandlerMock = $this->createMock(RedirectHandlerInterface::class);
+        $this->flashHelperMock = $this->createMock(FlashHelperInterface::class);
+        $this->authorizationCheckerMock = $this->createMock(AuthorizationCheckerInterface::class);
+        $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $this->stateMachineMock = $this->createMock(StateMachineInterface::class);
+        $this->resourceUpdateHandlerMock = $this->createMock(ResourceUpdateHandlerInterface::class);
+        $this->resourceDeleteHandlerMock = $this->createMock(ResourceDeleteHandlerInterface::class);
+        $this->containerMock = $this->createMock(ContainerInterface::class);
+        $this->resourceController = new ResourceController($this->metadataMock, $this->requestConfigurationFactoryMock, $this->viewHandlerMock, $this->repositoryMock, $this->factoryMock, $this->newResourceFactoryMock, $this->managerMock, $this->singleResourceProviderMock, $this->resourcesCollectionProviderMock, $this->resourceFormFactoryMock, $this->redirectHandlerMock, $this->flashHelperMock, $this->authorizationCheckerMock, $this->eventDispatcherMock, $this->stateMachineMock, $this->resourceUpdateHandlerMock, $this->resourceDeleteHandlerMock);
+        $this->resourceController->setContainer($this->containerMock);
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_view_a_single_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('showAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToViewASingleResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.show')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->showAction($requestMock);
     }
 
-    function it_throws_a_404_exception_if_resource_is_not_found_based_on_configuration(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-    ): void {
-        $metadata->getHumanizedName()->willReturn('product');
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn(null);
-
-        $this
-            ->shouldThrow(new NotFoundHttpException('The "product" has not been found'))
-            ->during('showAction', [$request])
-        ;
+    public function testThrowsA404ExceptionIfResourceIsNotFoundBasedOnConfiguration(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.show')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn(null);
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('The "product" has not been found');
+        $this->resourceController->showAction($requestMock);
     }
 
-    function it_returns_a_response_for_html_view_of_a_single_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        EventDispatcherInterface $eventDispatcher,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsAResponseForHtmlViewOfASingleResource(): void
+    {
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $twigMock = $this->createMock(Environment::class);
+        $requestMock = $this->createMock(Request::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::SHOW . '.html')->willReturn('@SyliusShop/Product/show.html.twig');
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())
+            ->method('getPermission')
+            ->with(ResourceActions::SHOW)
+            ->willReturn('sylius.product.show');
 
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.show')
+            ->willReturn(true);
+
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
+
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())
+            ->method('getTemplate')
+            ->with(ResourceActions::SHOW . '.html')
+            ->willReturn('@SyliusShop/Product/show.html.twig');
+
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->method('get')->with('twig')->willReturn($twigMock);
 
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $resource,
-            'product' => $resource,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $resourceMock,
+            'product' => $resourceMock,
         ];
 
-        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->willReturn('view');
+        $twigMock->expects($this->once())
+            ->method('render')
+            ->with('@SyliusShop/Product/show.html.twig', $expectedContext)
+            ->willReturn('rendered');
 
-        $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->shouldBeCalled();
+        $response = $this->resourceController->showAction($requestMock);
 
-        $twig->render('@SyliusShop/Product/show.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->showAction($request);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('rendered', $response->getContent());
     }
 
-    function it_returns_event_response_if_exists_during_show(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        EventDispatcherInterface $eventDispatcher,
-        ViewHandlerInterface $viewHandler,
-        ResourceControllerEvent $event,
-        ResourceInterface $resource,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->willReturn($event);
-
-        $event->getResponse()->willReturn($response);
-
-        $configuration->isHtmlRequest()->shouldNotBeCalled();
-        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
-
-        $this->showAction($request)->shouldReturn($response);
+    public function testReturnsEventResponseIfExistsDuringShow(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.show')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatch')->with(ResourceActions::SHOW, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $configurationMock->expects($this->never())->method('isHtmlRequest');
+        $this->viewHandlerMock->expects($this->never())->method('handle');
+        $this->assertSame($responseMock, $this->resourceController->showAction($requestMock));
     }
 
-    function it_returns_a_response_for_non_html_view_of_single_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ViewHandlerInterface $viewHandler,
-        EventDispatcherInterface $eventDispatcher,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsAResponseForNonHtmlViewOfSingleResource(): void
+    {
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestMock = $this->createMock(Request::class);
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.show')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::SHOW)->willReturn('sylius.product.show');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.show')->willReturn(true);
 
-        $configuration->isHtmlRequest()->willReturn(false);
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource)->shouldBeCalled();
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatch')->with(ResourceActions::SHOW, $configurationMock, $resourceMock);
 
-        $expectedView = View::create($resource);
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->willReturn($responseMock);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
-
-        $this->showAction($request)->shouldReturn($response);
+        $this->assertSame($responseMock, $this->resourceController->showAction($requestMock));
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_view_an_index_of_resources(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::INDEX)->willReturn('sylius.product.index');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.index')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('indexAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToViewAnIndexOfResources(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::INDEX)->willReturn('sylius.product.index');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.index')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->indexAction($requestMock);
     }
 
-    function it_returns_a_response_for_html_view_of_paginated_resources(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceInterface $resource1,
-        ResourceInterface $resource2,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-        $metadata->getPluralName()->willReturn('products');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::INDEX)->willReturn('sylius.product.index');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.index')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::INDEX . '.html')->willReturn('@SyliusShop/Product/index.html.twig');
-        $resourcesCollectionProvider->get($configuration, $repository)->willReturn([$resource1, $resource2]);
-
-        $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->shouldBeCalled();
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAResponseForHtmlViewOfPaginatedResources(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resource1Mock */
+        $resource1Mock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $resource2Mock */
+        $resource2Mock = $this->createMock(ResourceInterface::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getPluralName')->willReturn('products');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::INDEX)->willReturn('sylius.product.index');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.index')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::INDEX . '.html')->willReturn('@SyliusShop/Product/index.html.twig');
+        $this->resourcesCollectionProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn([$resource1Mock, $resource2Mock]);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchMultiple')->with(ResourceActions::INDEX, $configurationMock, [$resource1Mock, $resource2Mock]);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resources' => [$resource1, $resource2],
-            'products' => [$resource1, $resource2],
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resources' => [$resource1Mock, $resource2Mock],
+            'products' => [$resource1Mock, $resource2Mock],
         ];
-
-        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/index.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->indexAction($request);
+        $twigMock->expects($this->once())->method('render')->willReturnMap([['@SyliusShop/Product/index.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/index.html.twig', $expectedContext]]);
+        $this->resourceController->indexAction($requestMock);
     }
 
-    function it_returns_event_response_if_exists_during_index(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
-        EventDispatcherInterface $eventDispatcher,
-        ViewHandlerInterface $viewHandler,
-        ResourceControllerEvent $event,
-        ResourceInterface $resource1,
-        ResourceInterface $resource2,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::INDEX)->willReturn('sylius.product.index');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.index')->willReturn(true);
-
-        $configuration->getTemplate(ResourceActions::INDEX . '.html')->willReturn('@SyliusShop/Product/index.html.twig');
-        $resourcesCollectionProvider->get($configuration, $repository)->willReturn([$resource1, $resource2]);
-
-        $eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, [$resource1, $resource2])->willReturn($event);
-
-        $event->getResponse()->willReturn($response);
-
-        $configuration->isHtmlRequest()->shouldNotBeCalled();
-        $viewHandler->handle(Argument::any())->shouldNotBeCalled();
-
-        $this->indexAction($request)->shouldReturn($response);
+    public function testReturnsEventResponseIfExistsDuringIndex(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceInterface|MockObject $resource1Mock */
+        $resource1Mock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $resource2Mock */
+        $resource2Mock = $this->createMock(ResourceInterface::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::INDEX)->willReturn('sylius.product.index');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.index')->willReturn(true);
+        $this->resourcesCollectionProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn([$resource1Mock, $resource2Mock]);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchMultiple')->with(ResourceActions::INDEX, $configurationMock, [$resource1Mock, $resource2Mock])->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $configurationMock->expects($this->never())->method('isHtmlRequest');
+        $this->viewHandlerMock->expects($this->never())->method('handle');
+        $this->assertSame($responseMock, $this->resourceController->indexAction($requestMock));
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_create_a_new_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('createAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToCreateANewResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_creating_new_resource_form(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('POST')->willReturn(false);
-        $form->createView()->willReturn($formView);
-        $form->handleRequest($request)->willReturn($form);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForCreatingNewResourceForm(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('POST')->willReturn(false);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $formMock->method('handleRequest')->willReturnMap([[$requestMock, $formMock], [$requestMock]]);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $newResource,
-            'product' => $newResource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $newResourceMock,
+            'product' => $newResourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
-
-        $form->handleRequest($request)->shouldBeCalled();
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->createAction($request);
+        $twigMock->expects($this->once())->method('render')->with('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/create.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/create.html.twig', $expectedContext]]);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_invalid_form_during_resource_creation(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(false);
-        $form->createView()->willReturn($formView);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForInvalidFormDuringResourceCreation(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->method('isSubmitted')->willReturn(true);
+        $formMock->method('isValid')->willReturn(false);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $newResource,
-            'product' => $newResource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $newResourceMock,
+            'product' => $newResourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->createAction($request);
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/create.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/create.html.twig', $expectedContext]]);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_not_submitted_form_during_resource_creation(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(false);
-        $form->createView()->willReturn($formView);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForNotSubmittedFormDuringResourceCreation(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->method('isSubmitted')->willReturn(false);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $newResource,
-            'product' => $newResource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $newResourceMock,
+            'product' => $newResourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/create.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->createAction($request);
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/create.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/create.html.twig', $expectedContext]]);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_returns_a_non_html_response_for_invalid_form_during_resource_creation(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForInvalidFormDuringResourceCreation(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
 
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.create')
+            ->willReturn(true);
 
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
 
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(false);
+        $this->newResourceFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $this->factoryMock)
+            ->willReturn($newResourceMock);
 
-        $expectedView = View::create($form, 400);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $newResourceMock)
+            ->willReturn($formMock);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $requestMock->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->method('isSubmitted')->willReturn(true);
+        $formMock->method('isValid')->willReturn(false);
 
-        $this->createAction($request)->shouldReturn($response);
+        $expectedView = View::create($formMock, 400);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_returns_a_non_html_response_for_not_submitted_form_during_resource_creation(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForNotSubmittedFormDuringResourceCreation(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
 
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.create')
+            ->willReturn(true);
 
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
 
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(false);
+        $this->newResourceFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $this->factoryMock)
+            ->willReturn($newResourceMock);
 
-        $expectedView = View::create($form, 400);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $newResourceMock)
+            ->willReturn($formMock);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $requestMock->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->method('isSubmitted')->willReturn(false);
 
-        $this->createAction($request)->shouldReturn($response);
+        $expectedView = View::create($formMock, 400);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_does_not_create_the_resource_and_redirects_to_index_for_html_requests_stopped_via_events(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-
-        $event->getResponse()->willReturn(null);
-
-        $repository->add($newResource)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-
-        $redirectHandler->redirectToIndex($configuration, $newResource)->willReturn($redirectResponse);
-
-        $this->createAction($request)->shouldReturn($redirectResponse);
+    public function testDoesNotCreateTheResourceAndRedirectsToIndexForHtmlRequestsStoppedViaEvents(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->repositoryMock->expects($this->never())->method('add')->with($newResourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToIndex')->with($configurationMock, $newResourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_does_not_create_the_resource_and_return_response_for_html_requests_stopped_via_events(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-
-        $event->hasResponse()->willReturn(true);
-        $event->getResponse()->willReturn($response);
-
-        $repository->add($newResource)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-
-        $this->createAction($request)->shouldReturn($response);
+    public function testDoesNotCreateTheResourceAndReturnResponseForHtmlRequestsStoppedViaEvents(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $this->repositoryMock->expects($this->never())->method('add')->with($newResourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->assertSame($responseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_redirects_to_newly_created_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        StateMachineInterface $stateMachine,
-        Form $form,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-        $configuration->hasStateMachine()->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $stateMachine->apply($configuration, $newResource)->shouldBeCalled();
-
-        $repository->add($newResource)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($postEvent);
-
-        $postEvent->getResponse()->willReturn(null);
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource)->shouldBeCalled();
-        $redirectHandler->redirectToResource($configuration, $newResource)->willReturn($redirectResponse);
-
-        $this->createAction($request)->shouldReturn($redirectResponse);
+    public function testRedirectsToNewlyCreatedResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configurationMock->expects($this->once())->method('hasStateMachine')->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->stateMachineMock->expects($this->once())->method('apply')->with($configurationMock, $newResourceMock);
+        $this->repositoryMock->expects($this->once())->method('add')->with($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::CREATE, $newResourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $newResourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_uses_response_from_post_create_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        StateMachineInterface $stateMachine,
-        Form $form,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-        $configuration->hasStateMachine()->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $stateMachine->apply($configuration, $newResource)->shouldBeCalled();
-
-        $repository->add($newResource)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($postEvent);
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::CREATE, $newResource)->shouldBeCalled();
-
-        $postEvent->hasResponse()->willReturn(true);
-        $postEvent->getResponse()->willReturn($redirectResponse);
-
-        $this->createAction($request)->shouldReturn($redirectResponse);
+    public function testUsesResponseFromPostCreateEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configurationMock->expects($this->once())->method('hasStateMachine')->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->stateMachineMock->expects($this->once())->method('apply')->with($configurationMock, $newResourceMock);
+        $this->repositoryMock->expects($this->once())->method('add')->with($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($postEventMock);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::CREATE, $newResourceMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_returns_a_non_html_response_for_correctly_created_resources(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        StateMachineInterface $stateMachine,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForCorrectlyCreatedResources(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-        $configuration->hasStateMachine()->willReturn(true);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $configurationMock->expects($this->once())->method('hasStateMachine')->willReturn(true);
 
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.create')
+            ->willReturn(true);
 
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
+        $configurationMock->method('isHtmlRequest')->willReturn(false);
 
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
+        $this->newResourceFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $this->factoryMock)
+            ->willReturn($newResourceMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $newResourceMock)
+            ->willReturn($formMock);
 
-        $stateMachine->apply($configuration, $newResource)->shouldBeCalled();
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
 
-        $repository->add($newResource)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldBeCalled();
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)
+            ->willReturn($eventMock);
 
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
+        $eventMock->method('isStopped')->willReturn(false);
 
-        $expectedView = View::create($newResource, 201);
+        $this->stateMachineMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with($configurationMock, $newResourceMock);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('add')
+            ->with($newResourceMock);
 
-        $this->createAction($request)->shouldReturn($response);
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPostEvent')
+            ->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+
+        $expectedView = View::create($newResourceMock, 201);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->createAction($requestMock));
     }
 
-    function it_does_not_create_the_resource_and_throws_http_exception_for_non_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        RepositoryInterface $repository,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        Form $form,
-        Request $request,
-        ResourceControllerEvent $event,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(true);
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($newResource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getMessage()->willReturn('You cannot add a new product right now.');
-        $event->getErrorCode()->willReturn(500);
-
-        $repository->add($newResource)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new HttpException(500, 'You cannot add a new product right now.'))
-            ->during('createAction', [$request])
-        ;
+    public function testDoesNotCreateTheResourceAndThrowsHttpExceptionForNonHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('isMethod')->with('POST')->willReturn(true);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($newResourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getMessage')->willReturn('You cannot add a new product right now.');
+        $eventMock->expects($this->once())->method('getErrorCode')->willReturn(500);
+        $this->repositoryMock->expects($this->never())->method('add')->with($newResourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->expectException(HttpException::class);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_edit_a_single_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('updateAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToEditASingleResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_throws_a_404_exception_if_resource_to_update_is_not_found_based_on_configuration(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-    ): void {
-        $metadata->getHumanizedName()->willReturn('product');
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn(null);
-
-        $this
-            ->shouldThrow(new NotFoundHttpException('The "product" has not been found'))
-            ->during('updateAction', [$request])
-        ;
+    public function testThrowsA404ExceptionIfResourceToUpdateIsNotFoundBasedOnConfiguration(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn(null);
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('The "product" has not been found');
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_updating_resource_form(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->hasStateMachine()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('GET');
-
-        $form->handleRequest($request)->willReturn($form);
-        $form->createView()->willReturn($formView);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForUpdatingResourceForm(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('PATCH')->willReturn(false);
+        $requestMock->method('getMethod')->willReturn('GET');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $resource,
-            'product' => $resource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $resourceMock,
+            'product' => $resourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->updateAction($request);
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/update.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/update.html.twig', $expectedContext]]);
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_invalid_form_during_resource_update(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(false);
-        $form->createView()->willReturn($formView);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForInvalidFormDuringResourceUpdate(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('PATCH')->willReturn(false);
+        $requestMock->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->method('isSubmitted')->willReturn(true);
+        $formMock->method('isValid')->willReturn(false);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $resource,
-            'product' => $resource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $resourceMock,
+            'product' => $resourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->updateAction($request);
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/update.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/update.html.twig', $expectedContext]]);
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_returns_a_html_response_for_not_submitted_form_during_resource_update(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        FormView $formView,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-        $event->getResponse()->willReturn(null);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(false);
-        $form->createView()->willReturn($formView);
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
+    public function testReturnsAHtmlResponseForNotSubmittedFormDuringResourceUpdate(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var FormView|MockObject $formViewMock */
+        $formViewMock = $this->createMock(FormView::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getTemplate')->with(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $requestMock->method('isMethod')->with('PATCH')->willReturn(false);
+        $requestMock->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->method('isSubmitted')->willReturn(false);
+        $formMock->expects($this->once())->method('createView')->willReturn($formViewMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->containerMock->expects($this->once())->method('get')->with('twig')->willReturn($twigMock);
         $expectedContext = [
-            'configuration' => $configuration,
-            'metadata' => $metadata,
-            'resource' => $resource,
-            'product' => $resource,
-            'form' => $formView,
+            'configuration' => $configurationMock,
+            'metadata' => $this->metadataMock,
+            'resource' => $resourceMock,
+            'product' => $resourceMock,
+            'form' => $formViewMock,
         ];
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->willReturn('view');
-
-        $twig->render('@SyliusShop/Product/update.html.twig', $expectedContext)->shouldBeCalled();
-
-        $this->updateAction($request);
+        $twigMock->method('render')->willReturnMap([['@SyliusShop/Product/update.html.twig', $expectedContext, 'view'], ['@SyliusShop/Product/update.html.twig', $expectedContext]]);
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_returns_a_non_html_response_for_invalid_form_during_resource_update(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForInvalidFormDuringResourceUpdate(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isHtmlRequest()->willReturn(false);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
 
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.update')
+            ->willReturn(true);
 
-        $request->isMethod('PATCH')->willReturn(true);
-        $request->getMethod()->willReturn('PATCH');
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(false);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $resourceMock)
+            ->willReturn($formMock);
 
-        $expectedView = View::create($form, 400);
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $requestMock->method('isMethod')->with('PATCH')->willReturn(true);
+        $requestMock->method('getMethod')->willReturn('PATCH');
 
-        $this->updateAction($request)->shouldReturn($response);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->method('isSubmitted')->willReturn(true);
+        $formMock->method('isValid')->willReturn(false);
+
+        $expectedView = View::create($formMock, 400);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_returns_a_non_html_response_for_not_submitted_form_during_resource_update(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForNotSubmittedFormDuringResourceUpdate(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isHtmlRequest()->willReturn(false);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
 
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.update')
+            ->willReturn(true);
 
-        $request->isMethod('PATCH')->willReturn(true);
-        $request->getMethod()->willReturn('PATCH');
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(false);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $resourceMock)
+            ->willReturn($formMock);
 
-        $expectedView = View::create($form, 400);
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $requestMock->method('isMethod')->with('PATCH')->willReturn(true);
+        $requestMock->method('getMethod')->willReturn('PATCH');
 
-        $this->updateAction($request)->shouldReturn($response);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->method('isSubmitted')->willReturn(false);
+
+        $expectedView = View::create($formMock, 400);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_does_not_update_the_resource_and_redirects_to_resource_for_html_request_if_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ObjectManager $manager,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        Form $form,
-        EventDispatcherInterface $eventDispatcher,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getResponse()->willReturn(null);
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-
-        $manager->flush()->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-
-        $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->updateAction($request)->shouldReturn($redirectResponse);
+    public function testDoesNotUpdateTheResourceAndRedirectsToResourceForHtmlRequestIfStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $this->managerMock->expects($this->never())->method('flush');
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_redirects_to_updated_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        Form $form,
-        ResourceControllerEvent $preEvent,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testRedirectsToUpdatedResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $preEventMock */
+        $preEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->hasStateMachine()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($preEvent);
-        $preEvent->isStopped()->willReturn(false);
-
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->getResponse()->willReturn(null);
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
-        $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->updateAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($preEventMock);
+        $preEventMock->method('isStopped')->willReturn(false);
+        $this->resourceUpdateHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_uses_response_from_post_update_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        Form $form,
-        ResourceControllerEvent $preEvent,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testUsesResponseFromPostUpdateEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $preEventMock */
+        $preEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->hasStateMachine()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($preEvent);
-        $preEvent->isStopped()->willReturn(false);
-
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->hasResponse()->willReturn(true);
-        $postEvent->getResponse()->willReturn($redirectResponse);
-
-        $redirectHandler->redirectToResource($configuration, $resource)->shouldNotBeCalled();
-
-        $this->updateAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($preEventMock);
+        $preEventMock->method('isStopped')->willReturn(false);
+        $this->resourceUpdateHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn($redirectResponseMock);
+        $this->redirectHandlerMock->expects($this->never())->method('redirectToResource')->with($configurationMock, $resourceMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_uses_response_from_initialize_create_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RedirectHandlerInterface $redirectHandler,
-        FactoryInterface $factory,
-        NewResourceFactoryInterface $newResourceFactory,
-        ResourceInterface $newResource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $initializeEvent,
-        Form $form,
-        ContainerInterface $container,
-        Environment $twig,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testUsesResponseFromInitializeCreateEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $newResourceMock */
+        $newResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $initializeEventMock */
+        $initializeEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Environment|MockObject $twigMock */
+        $twigMock = $this->createMock(Environment::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::CREATE)->willReturn('sylius.product.create');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.create')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::CREATE . '.html')->willReturn('@SyliusShop/Product/create.html.twig');
-
-        $newResourceFactory->create($configuration, $factory)->willReturn($newResource);
-        $resourceFormFactory->create($configuration, $newResource)->willReturn($form);
-
-        $request->isMethod('POST')->willReturn(false);
-        $form->createView()->shouldNotBeCalled();
-        $form->handleRequest($request)->willReturn($form);
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource)->willReturn($initializeEvent);
-        $initializeEvent->hasResponse()->willReturn(true);
-        $initializeEvent->getResponse()->willReturn($response);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource)->shouldNotBeCalled();
-        $redirectHandler->redirectToResource($configuration, $newResource)->shouldNotBeCalled();
-
-        $container->has('templating')->willReturn(false);
-        $container->has('twig')->willReturn(true);
-        $container->get('twig')->willReturn($twig);
-
-        $twig->render(Argument::cetera())->willReturn('view');
-
-        $twig->render(Argument::cetera())->shouldNotBeCalled();
-        $form->handleRequest($request)->shouldBeCalled();
-
-        $this->createAction($request);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::CREATE)->willReturn('sylius.product.create');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.create')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->newResourceFactoryMock->expects($this->once())->method('create')->with($configurationMock, $this->factoryMock)->willReturn($newResourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $newResourceMock)->willReturn($formMock);
+        $requestMock->method('isMethod')->with('POST')->willReturn(false);
+        $formMock->expects($this->never())->method('createView');
+        $formMock->method('handleRequest')->willReturnMap([[$requestMock, $formMock], [$requestMock]]);
+        $initializeEventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock)->willReturn($initializeEventMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPreEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::CREATE, $configurationMock, $newResourceMock);
+        $this->redirectHandlerMock->expects($this->never())->method('redirectToResource')->with($configurationMock, $newResourceMock);
+        $this->containerMock->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->resourceController->createAction($requestMock);
     }
 
-    function it_uses_response_from_initialize_update_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        Form $form,
-        ResourceControllerEvent $initializeEvent,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testUsesResponseFromInitializeUpdateEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $initializeEventMock */
+        $initializeEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->hasStateMachine()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE . '.html')->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->getMethod()->willReturn('GET');
-
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(false);
-        $form->isValid()->willReturn(false);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldNotBeCalled();
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldNotBeCalled();
-        $redirectHandler->redirectToResource($configuration, $resource)->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($initializeEvent);
-        $initializeEvent->hasResponse()->willReturn(true);
-        $initializeEvent->getResponse()->willReturn($response);
-
-        $this->updateAction($request)->shouldReturn($response);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
+        $this->resourceUpdateHandlerMock->expects($this->never())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
+        $this->redirectHandlerMock->expects($this->never())->method('redirectToResource')->with($configurationMock, $resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchInitializeEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($initializeEventMock);
+        $initializeEventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $this->assertSame($responseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_returns_a_non_html_response_for_correctly_updated_resource(
-        MetadataInterface $metadata,
-        ParameterBagInterface $parameterBag,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        ResourceControllerEvent $event,
-        Form $form,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testReturnsANonHtmlResponseForCorrectlyUpdatedResource(): void
+    {
+        /** @var ParameterBagInterface|MockObject $parameterBagMock */
+        $parameterBagMock = $this->createMock(ParameterBagInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->hasStateMachine()->willReturn(false);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $configuration->getParameters()->willReturn($parameterBag);
-        $parameterBag->get('return_content', false)->willReturn(false);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->method('isHtmlRequest')->willReturn(false);
+        $configurationMock->expects($this->once())->method('getParameters')->willReturn($parameterBagMock);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
+        $parameterBagMock->expects($this->once())->method('get')->with('return_content', false)->willReturn(false);
 
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.update')
+            ->willReturn(true);
 
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
+        $this->resourceFormFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($configurationMock, $resourceMock)
+            ->willReturn($formMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
 
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldBeCalled();
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)
+            ->willReturn($eventMock);
+
+        $eventMock->method('isStopped')->willReturn(false);
+
+        $this->resourceUpdateHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with($resourceMock, $configurationMock, $this->managerMock);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPostEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
 
         $expectedView = View::create(null, 204);
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
 
-        $this->updateAction($request)->shouldReturn($response);
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_does_not_update_the_resource_throws_a_http_exception_for_non_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ObjectManager $manager,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Form $form,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotUpdateTheResourceThrowsAHttpExceptionForNonHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isHtmlRequest()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getMessage()->willReturn('Cannot update this channel.');
-        $event->getErrorCode()->willReturn(500);
-
-        $manager->flush()->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new HttpException(500, 'Cannot update this channel.'))
-            ->during('updateAction', [$request])
-        ;
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getMessage')->willReturn('Cannot update this channel.');
+        $eventMock->expects($this->once())->method('getErrorCode')->willReturn(500);
+        $this->managerMock->expects($this->never())->method('flush');
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->expectException(HttpException::class);
+        $this->resourceController->updateAction($requestMock);
     }
 
-    function it_applies_state_machine_transition_to_updated_resource_if_configured(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceFormFactoryInterface $resourceFormFactory,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        Form $form,
-        ResourceControllerEvent $preEvent,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testAppliesStateMachineTransitionToUpdatedResourceIfConfigured(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var Form|MockObject $formMock */
+        $formMock = $this->createMock(Form::class);
+        /** @var ResourceControllerEvent|MockObject $preEventMock */
+        $preEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->hasStateMachine()->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->getTemplate(ResourceActions::UPDATE)->willReturn('@SyliusShop/Product/update.html.twig');
-
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resourceFormFactory->create($configuration, $resource)->willReturn($form);
-
-        $request->isMethod('PATCH')->willReturn(false);
-        $request->getMethod()->willReturn('PUT');
-
-        $form->handleRequest($request)->willReturn($form);
-
-        $form->isSubmitted()->willReturn(true);
-        $form->isValid()->willReturn(true);
-        $form->getData()->willReturn($resource);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($preEvent);
-        $preEvent->isStopped()->willReturn(false);
-
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->getResponse()->willReturn(null);
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
-        $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->updateAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $this->resourceFormFactoryMock->expects($this->once())->method('create')->with($configurationMock, $resourceMock)->willReturn($formMock);
+        $requestMock->expects($this->once())->method('getMethod')->willReturn('PUT');
+        $formMock->expects($this->once())->method('handleRequest')->with($requestMock)->willReturn($formMock);
+        $formMock->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $formMock->expects($this->once())->method('isValid')->willReturn(true);
+        $formMock->expects($this->once())->method('getData')->willReturn($resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($preEventMock);
+        $preEventMock->method('isStopped')->willReturn(false);
+        $this->resourceUpdateHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->updateAction($requestMock));
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_delete_multiple_resources(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::BULK_DELETE)->willReturn('sylius.product.bulk_delete');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.bulk_delete')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('bulkDeleteAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToDeleteMultipleResources(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::BULK_DELETE)->willReturn('sylius.product.bulk_delete');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.bulk_delete')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->bulkDeleteAction($requestMock);
     }
 
-    function it_deletes_multiple_resources_and_redirects_to_index_for_html_request(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        ResourcesCollectionProviderInterface $resourcesCollectionProvider,
-        ResourceInterface $firstResource,
-        ResourceInterface $secondResource,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $firstPreEvent,
-        ResourceControllerEvent $secondPreEvent,
-        ResourceControllerEvent $firstPostEvent,
-        ResourceControllerEvent $secondPostEvent,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDeletesMultipleResourcesAndRedirectsToIndexForHtmlRequest(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $firstResourceMock */
+        $firstResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $secondResourceMock */
+        $secondResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $firstPreEventMock */
+        $firstPreEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $secondPreEventMock */
+        $secondPreEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $firstPostEventMock */
+        $firstPostEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $secondPostEventMock */
+        $secondPostEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::BULK_DELETE)->willReturn('sylius.product.bulk_delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('bulk_delete', 'xyz'))->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::BULK_DELETE)->willReturn('sylius.product.bulk_delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
 
-        $eventDispatcher
-            ->dispatchMultiple(ResourceActions::BULK_DELETE, $configuration, [$firstResource, $secondResource])
-            ->shouldBeCalled()
-        ;
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('bulk_delete', 'xyz'))->willReturn(true);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.bulk_delete')->willReturn(true);
-        $resourcesCollectionProvider->get($configuration, $repository)->willReturn([$firstResource, $secondResource]);
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchMultiple')
+            ->with(ResourceActions::BULK_DELETE, $configurationMock, [$firstResourceMock, $secondResourceMock]);
 
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.bulk_delete')
+            ->willReturn(true);
 
-        $eventDispatcher
-            ->dispatchPreEvent(ResourceActions::DELETE, $configuration, $firstResource)
-            ->willReturn($firstPreEvent)
-        ;
-        $firstPreEvent->isStopped()->willReturn(false);
+        $this->resourcesCollectionProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn([$firstResourceMock, $secondResourceMock]);
 
-        $resourceDeleteHandler->handle($firstResource, $repository)->shouldBeCalled();
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
 
-        $eventDispatcher
-            ->dispatchPostEvent(ResourceActions::DELETE, $configuration, $firstResource)
-            ->willReturn($firstPostEvent)
-        ;
-        $firstPostEvent->getResponse()->willReturn(null);
+        $this->eventDispatcherMock
+            ->expects($this->exactly(2))
+            ->method('dispatchPreEvent')
+            ->willReturnCallback(function ($action, $configuration, $resource) use ($firstResourceMock, $secondResourceMock, $firstPreEventMock, $secondPreEventMock) {
+                if ($resource === $firstResourceMock) {
+                    return $firstPreEventMock;
+                }
+                if ($resource === $secondResourceMock) {
+                    return $secondPreEventMock;
+                }
 
-        $eventDispatcher
-            ->dispatchPreEvent(ResourceActions::DELETE, $configuration, $secondResource)
-            ->willReturn($secondPreEvent)
-        ;
-        $secondPreEvent->isStopped()->willReturn(false);
+                return null;
+            });
 
-        $resourceDeleteHandler->handle($secondResource, $repository)->shouldBeCalled();
+        $firstPreEventMock->method('isStopped')->willReturn(false);
+        $secondPreEventMock->method('isStopped')->willReturn(false);
 
-        $eventDispatcher
-            ->dispatchPostEvent(ResourceActions::DELETE, $configuration, $secondResource)
-            ->willReturn($secondPostEvent)
-        ;
-        $secondPostEvent->getResponse()->willReturn(null);
+        $this->resourceDeleteHandlerMock
+            ->expects($this->exactly(2))
+            ->method('handle')
+            ->willReturnCallback(function ($resource, $repository) use ($firstResourceMock, $secondResourceMock) {
+                static $call = 0;
+                ++$call;
 
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::BULK_DELETE)->shouldBeCalled();
+                if ($call === 1) {
+                    $this->assertSame($firstResourceMock, $resource);
+                } elseif ($call === 2) {
+                    $this->assertSame($secondResourceMock, $resource);
+                }
 
-        $redirectHandler->redirectToIndex($configuration)->willReturn($redirectResponse);
+                $this->assertSame($this->repositoryMock, $repository);
+            });
 
-        $this->bulkDeleteAction($request)->shouldReturn($redirectResponse);
+        $this->eventDispatcherMock
+            ->expects($this->exactly(2))
+            ->method('dispatchPostEvent')
+            ->willReturnCallback(function ($action, $configuration, $resource) use ($firstResourceMock, $secondResourceMock, $firstPostEventMock, $secondPostEventMock) {
+                if ($resource === $firstResourceMock) {
+                    return $firstPostEventMock;
+                }
+                if ($resource === $secondResourceMock) {
+                    return $secondPostEventMock;
+                }
+
+                return null;
+            });
+
+        $secondPostEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+
+        $this->flashHelperMock
+            ->expects($this->once())
+            ->method('addSuccessFlash')
+            ->with($configurationMock, ResourceActions::BULK_DELETE);
+
+        $this->redirectHandlerMock
+            ->expects($this->once())
+            ->method('redirectToIndex')
+            ->with($configurationMock)
+            ->willReturn($redirectResponseMock);
+
+        $this->assertSame($redirectResponseMock, $this->resourceController->bulkDeleteAction($requestMock));
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_delete_a_single_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('deleteAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToDeleteASingleResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->deleteAction($requestMock);
     }
 
-    function it_throws_a_404_exception_if_resource_for_deletion_is_not_found_based_on_configuration(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-    ): void {
-        $metadata->getHumanizedName()->willReturn('product');
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn(null);
-
-        $this
-            ->shouldThrow(new NotFoundHttpException('The "product" has not been found'))
-            ->during('deleteAction', [$request])
-        ;
+    public function testThrowsA404ExceptionIfResourceForDeletionIsNotFoundBasedOnConfiguration(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn(null);
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('The "product" has not been found');
+        $this->resourceController->deleteAction($requestMock);
     }
 
-    function it_deletes_a_resource_and_redirects_to_index_by_for_html_request(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDeletesAResourceAndRedirectsToIndexByForHtmlRequest(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->getResponse()->willReturn(null);
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldBeCalled();
-        $redirectHandler->redirectToIndex($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->deleteAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->resourceDeleteHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToIndex')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_uses_response_from_post_delete_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testUsesResponseFromPostDeleteEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($postEvent);
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldBeCalled();
-
-        $postEvent->hasResponse()->willReturn(true);
-        $postEvent->getResponse()->willReturn($redirectResponse);
-
-        $this->deleteAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->resourceDeleteHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_does_not_delete_a_resource_and_redirects_to_index_for_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotDeleteAResourceAndRedirectsToIndexForHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getResponse()->willReturn(null);
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldNotBeCalled();
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-        $redirectHandler->redirectToIndex($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->deleteAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->resourceDeleteHandlerMock->expects($this->never())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToIndex')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_does_not_delete_a_resource_and_uses_response_from_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotDeleteAResourceAndUsesResponseFromEventIfDefined(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-
-        $event->hasResponse()->willReturn(true);
-        $event->getResponse()->willReturn($redirectResponse);
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldNotBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::DELETE, $resource)->shouldNotBeCalled();
-
-        $redirectHandler->redirectToIndex($configuration, $resource)->shouldNotBeCalled();
-
-        $this->deleteAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn($redirectResponseMock);
+        $this->resourceDeleteHandlerMock->expects($this->never())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->never())->method('redirectToIndex')->with($configurationMock, $resourceMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_does_not_correctly_delete_a_resource_and_returns_500_for_not_html_response(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotCorrectlyDeleteAResourceAndReturns500ForNotHtmlResponse(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
 
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $csrfTokenManagerMock
+            ->expects($this->once())
+            ->method('isTokenValid')
+            ->with(new CsrfToken('1', 'xyz'))
+            ->willReturn(true);
 
-        $resourceDeleteHandler->handle($resource, $repository)->willThrow(new DeleteHandlingException());
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.delete')
+            ->willReturn(true);
 
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->shouldNotBeCalled();
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
+
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::DELETE, $configurationMock, $resourceMock)
+            ->willReturn($eventMock);
+
+        $this->resourceDeleteHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with($resourceMock, $this->repositoryMock)
+            ->willThrowException(new DeleteHandlingException());
+
+        $this->eventDispatcherMock
+            ->expects($this->never())
+            ->method('dispatchPostEvent');
 
         $expectedView = View::create(null, 500);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
 
-        $this->deleteAction($request)->shouldReturn($response);
+        $this->assertSame($responseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_deletes_a_resource_and_returns_204_for_non_html_requests(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDeletesAResourceAndReturns204ForNonHtmlRequests(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
 
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $csrfTokenManagerMock
+            ->expects($this->once())
+            ->method('isTokenValid')
+            ->with(new CsrfToken('1', 'xyz'))
+            ->willReturn(true);
 
-        $resourceDeleteHandler->handle($resource, $repository)->shouldBeCalled();
-        $eventDispatcher->dispatchPostEvent(ResourceActions::DELETE, $configuration, $resource)->shouldBeCalled();
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.delete')
+            ->willReturn(true);
+
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
+
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::DELETE, $configurationMock, $resourceMock)
+            ->willReturn($eventMock);
+
+        $this->resourceDeleteHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with($resourceMock, $this->repositoryMock);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPostEvent')
+            ->with(ResourceActions::DELETE, $configurationMock, $resourceMock);
 
         $expectedView = View::create(null, 204);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
 
-        $this->deleteAction($request)->shouldReturn($response);
+        $this->assertSame($responseMock, $this->resourceController->deleteAction($requestMock));
     }
 
-    function it_does_not_delete_a_resource_and_throws_http_exception_for_non_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotDeleteAResourceAndThrowsHttpExceptionForNonHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(false);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getMessage()->willReturn('Cannot delete this product.');
-        $event->getErrorCode()->willReturn(500);
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addFlashFromEvent(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new HttpException(500, 'Cannot delete this product.'))
-            ->during('deleteAction', [$request])
-        ;
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getMessage')->willReturn('Cannot delete this product.');
+        $eventMock->expects($this->once())->method('getErrorCode')->willReturn(500);
+        $this->resourceDeleteHandlerMock->expects($this->never())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->flashHelperMock->expects($this->never())->method('addFlashFromEvent');
+        $this->expectException(HttpException::class);
+        $this->resourceController->deleteAction($requestMock);
     }
 
-    function it_throws_a_403_exception_if_csrf_token_is_invalid_during_delete_action(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testThrowsA403ExceptionIfCsrfTokenIsInvalidDuringDeleteAction(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::DELETE)->willReturn('sylius.product.delete');
-        $request->request = new InputBag(['_csrf_token' => 'xyz']);
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.delete')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-        $resource->getId()->willReturn(1);
-
-        $configuration->isHtmlRequest()->willReturn(true);
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::DELETE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->shouldNotBeCalled();
-
-        $resourceDeleteHandler->handle($resource, $repository)->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addFlashFromEvent(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new HttpException(403, 'Invalid csrf token.'))
-            ->during('deleteAction', [$request])
-        ;
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $requestMock->request = new InputBag(['_csrf_token' => 'xyz']);
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(false);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $eventMock->expects($this->never())->method('isStopped');
+        $this->resourceDeleteHandlerMock->expects($this->never())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->flashHelperMock->expects($this->never())->method('addFlashFromEvent');
+        $this->expectException(HttpException::class);
+        $this->resourceController->deleteAction($requestMock);
     }
 
-    function it_throws_a_403_exception_if_user_is_unauthorized_to_apply_state_machine_transition_on_resource(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-    ): void {
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(false);
-
-        $this
-            ->shouldThrow(new AccessDeniedException())
-            ->during('applyStateMachineTransitionAction', [$request])
-        ;
+    public function testThrowsA403ExceptionIfUserIsUnauthorizedToApplyStateMachineTransitionOnResource(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(false);
+        $this->expectException(AccessDeniedException::class);
+        $this->resourceController->applyStateMachineTransitionAction($requestMock);
     }
 
-    function it_throws_a_404_exception_if_resource_is_not_found_when_trying_to_apply_state_machine_transition(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        Request $request,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-    ): void {
-        $metadata->getHumanizedName()->willReturn('product');
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn(null);
-
-        $this
-            ->shouldThrow(new NotFoundHttpException('The "product" has not been found'))
-            ->during('applyStateMachineTransitionAction', [$request])
-        ;
+    public function testThrowsA404ExceptionIfResourceIsNotFoundWhenTryingToApplyStateMachineTransition(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        $this->metadataMock->expects($this->once())->method('getHumanizedName')->willReturn('product');
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn(null);
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('The "product" has not been found');
+        $this->resourceController->applyStateMachineTransitionAction($requestMock);
     }
 
-    function it_does_not_apply_state_machine_transition_on_resource_if_not_applicable_and_returns_400_bad_request(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        ObjectManager $objectManager,
-        StateMachineInterface $stateMachine,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotApplyStateMachineTransitionOnResourceIfNotApplicableAndReturns400BadRequest(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ObjectManager|MockObject $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $resource->getId()->willReturn('1');
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $stateMachine->can($configuration, $resource)->willReturn(false);
-
-        $stateMachine->apply($configuration, $resource)->shouldNotBeCalled();
-        $objectManager->flush()->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addFlashFromEvent(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new BadRequestHttpException())
-            ->during('applyStateMachineTransitionAction', [$request])
-        ;
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $requestMock->expects($this->once())->method('get')->with('_csrf_token')->willReturn('xyz');
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn('1');
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->stateMachineMock->expects($this->once())->method('can')->with($configurationMock, $resourceMock)->willReturn(false);
+        $this->stateMachineMock->expects($this->never())->method('apply')->with($configurationMock, $resourceMock);
+        $objectManagerMock->expects($this->never())->method('flush');
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->flashHelperMock->expects($this->never())->method('addFlashFromEvent');
+        $this->expectException(BadRequestHttpException::class);
+        $this->resourceController->applyStateMachineTransitionAction($requestMock);
     }
 
-    function it_applies_state_machine_transition_to_resource_and_redirects_for_html_request(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testAppliesStateMachineTransitionToResourceAndRedirectsForHtmlRequest(): void
+    {
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $resource->getId()->willReturn('1');
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $stateMachine->can($configuration, $resource)->willReturn(true);
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->getResponse()->willReturn(null);
-
-        $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $requestMock->expects($this->once())->method('get')->with('_csrf_token')->willReturn('xyz');
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn('1');
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->stateMachineMock->expects($this->once())->method('can')->with($configurationMock, $resourceMock)->willReturn(true);
+        $this->resourceUpdateHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_uses_response_from_post_apply_state_machine_transition_event_if_defined(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        FlashHelperInterface $flashHelper,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        ResourceControllerEvent $event,
-        ResourceControllerEvent $postEvent,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testUsesResponseFromPostApplyStateMachineTransitionEventIfDefined(): void
+    {
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $resource->getId()->willReturn('1');
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
-
-        $stateMachine->can($configuration, $resource)->willReturn(true);
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
-
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($postEvent);
-
-        $postEvent->hasResponse()->willReturn(true);
-        $postEvent->getResponse()->willReturn($redirectResponse);
-
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $requestMock->expects($this->once())->method('get')->with('_csrf_token')->willReturn('xyz');
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn('1');
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+        $this->stateMachineMock->expects($this->once())->method('can')->with($configurationMock, $resourceMock)->willReturn(true);
+        $this->resourceUpdateHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $configurationMock, $this->managerMock);
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_does_not_apply_state_machine_transition_on_resource_and_redirects_for_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        StateMachineInterface $stateMachine,
-        ObjectManager $manager,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $redirectResponse,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotApplyStateMachineTransitionOnResourceAndRedirectsForHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $resource->getId()->willReturn('1');
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-
-        $manager->flush()->shouldNotBeCalled();
-        $stateMachine->apply($resource)->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldNotBeCalled();
-
-        $event->getResponse()->willReturn(null);
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-        $redirectHandler->redirectToResource($configuration, $resource)->willReturn($redirectResponse);
-
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($redirectResponse);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $requestMock->expects($this->once())->method('get')->with('_csrf_token')->willReturn('xyz');
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn('1');
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $this->managerMock->expects($this->never())->method('flush');
+        $this->stateMachineMock->expects($this->never())->method('apply')->with($resourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn(null);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToResource')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+        $this->assertSame($redirectResponseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_does_not_apply_state_machine_transition_on_resource_and_return_event_response_for_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        StateMachineInterface $stateMachine,
-        ObjectManager $manager,
-        RepositoryInterface $repository,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ContainerInterface $container,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testDoesNotApplyStateMachineTransitionOnResourceAndReturnEventResponseForHtmlRequestsStoppedViaEvent(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(true);
-        $request->get('_csrf_token')->willReturn('xyz');
-
-        $container->has('security.csrf.token_manager')->willReturn(true);
-        $container->get('security.csrf.token_manager')->willReturn($csrfTokenManager);
-        $csrfTokenManager->isTokenValid(new CsrfToken('1', 'xyz'))->willReturn(true);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $resource->getId()->willReturn('1');
-
-        $configuration->isHtmlRequest()->willReturn(true);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-
-        $manager->flush()->shouldNotBeCalled();
-        $stateMachine->apply($resource)->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource)->shouldNotBeCalled();
-
-        $flashHelper->addFlashFromEvent($configuration, $event)->shouldBeCalled();
-
-        $event->hasResponse()->willReturn(true);
-        $event->getResponse()->willReturn($response);
-
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($response);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+        $requestMock->expects($this->once())->method('get')->with('_csrf_token')->willReturn('xyz');
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'xyz'))->willReturn(true);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $resourceMock->expects($this->once())->method('getId')->willReturn('1');
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(true);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(true);
+        $this->managerMock->expects($this->never())->method('flush');
+        $this->stateMachineMock->expects($this->never())->method('apply')->with($resourceMock);
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash')->with($configurationMock, ResourceActions::UPDATE, $resourceMock);
+        $this->flashHelperMock->expects($this->once())->method('addFlashFromEvent')->with($configurationMock, $eventMock);
+        $eventMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
+        $this->assertSame($responseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_applies_state_machine_transition_on_resource_and_returns_200_for_non_html_requests(
-        MetadataInterface $metadata,
-        ParameterBagInterface $parameterBag,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testAppliesStateMachineTransitionOnResourceAndReturns200ForNonHtmlRequests(): void
+    {
+        /** @var ParameterBagInterface|MockObject $parameterBagMock */
+        $parameterBagMock = $this->createMock(ParameterBagInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->getParameters()->willReturn($parameterBag);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(false);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $parameterBag->get('return_content', true)->willReturn(true);
+        $configurationMock->expects($this->once())->method('getParameters')->willReturn($parameterBagMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(false);
+        $parameterBagMock->expects($this->once())->method('get')->with('return_content', true)->willReturn(true);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.update')
+            ->willReturn(true);
 
-        $configuration->isHtmlRequest()->willReturn(false);
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)
+            ->willReturn($eventMock);
 
-        $stateMachine->can($configuration, $resource)->willReturn(true);
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
+        $eventMock->method('isStopped')->willReturn(false);
 
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldBeCalled();
+        $this->stateMachineMock
+            ->expects($this->once())
+            ->method('can')
+            ->with($configurationMock, $resourceMock)
+            ->willReturn(true);
 
-        $expectedView = View::create($resource, 200);
+        $this->resourceUpdateHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with($resourceMock, $configurationMock, $this->managerMock);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPostEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
 
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($response);
+        $expectedView = View::create($resourceMock, 200);
+
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
+
+        $this->assertSame($responseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_applies_state_machine_transition_on_resource_and_returns_204_for_non_html_requests_if_additional_option_added(
-        MetadataInterface $metadata,
-        ParameterBagInterface $parameterBag,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        ViewHandlerInterface $viewHandler,
-        RepositoryInterface $repository,
-        ObjectManager $manager,
-        SingleResourceProviderInterface $singleResourceProvider,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        StateMachineInterface $stateMachine,
-        ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-        ResourceControllerEvent $event,
-        Request $request,
-        Response $response,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
+    public function testAppliesStateMachineTransitionOnResourceAndReturns204ForNonHtmlRequestsIfAdditionalOptionAdded(): void
+    {
+        /** @var ParameterBagInterface|MockObject $parameterBagMock */
+        $parameterBagMock = $this->createMock(ParameterBagInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->createMock(Response::class);
 
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->getParameters()->willReturn($parameterBag);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(false);
+        $this->requestConfigurationFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->metadataMock, $requestMock)
+            ->willReturn($configurationMock);
 
-        $parameterBag->get('return_content', true)->willReturn(false);
+        $configurationMock->expects($this->once())->method('getParameters')->willReturn($parameterBagMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(false);
+        $parameterBagMock->expects($this->once())->method('get')->with('return_content', true)->willReturn(false);
 
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
+        $this->authorizationCheckerMock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($configurationMock, 'sylius.product.update')
+            ->willReturn(true);
 
-        $configuration->isHtmlRequest()->willReturn(false);
+        $this->singleResourceProviderMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($configurationMock, $this->repositoryMock)
+            ->willReturn($resourceMock);
 
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(false);
+        $configurationMock->method('isHtmlRequest')->willReturn(false);
 
-        $stateMachine->can($configuration, $resource)->willReturn(true);
-        $resourceUpdateHandler->handle($resource, $configuration, $manager)->shouldBeCalled();
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPreEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)
+            ->willReturn($eventMock);
 
-        $eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource)->shouldBeCalled();
+        $eventMock->method('isStopped')->willReturn(false);
+
+        $this->stateMachineMock
+            ->expects($this->once())
+            ->method('can')
+            ->with($configurationMock, $resourceMock)
+            ->willReturn(true);
+
+        $this->resourceUpdateHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with($resourceMock, $configurationMock, $this->managerMock);
+
+        $this->eventDispatcherMock
+            ->expects($this->once())
+            ->method('dispatchPostEvent')
+            ->with(ResourceActions::UPDATE, $configurationMock, $resourceMock);
 
         $expectedView = View::create(null, 204);
 
-        $viewHandler->handle($configuration, Argument::that($this->getViewComparingCallback($expectedView)))->willReturn($response);
+        $this->viewHandlerMock
+            ->expects($this->once())
+            ->method('handle')
+            ->with(
+                $this->anything(),
+                $this->callback(function ($view) use ($expectedView) {
+                    return $view instanceof View &&
+                        $view->getData() === $expectedView->getData() &&
+                        $view->getStatusCode() === $expectedView->getStatusCode();
+                }),
+            )
+            ->willReturn($responseMock);
 
-        $this->applyStateMachineTransitionAction($request)->shouldReturn($response);
+        $this->assertSame($responseMock, $this->resourceController->applyStateMachineTransitionAction($requestMock));
     }
 
-    function it_does_not_apply_state_machine_transition_resource_and_throws_http_exception_for_non_html_requests_stopped_via_event(
-        MetadataInterface $metadata,
-        RequestConfigurationFactoryInterface $requestConfigurationFactory,
-        RequestConfiguration $configuration,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $repository,
-        ObjectManager $objectManager,
-        StateMachineInterface $stateMachine,
-        SingleResourceProviderInterface $singleResourceProvider,
-        ResourceInterface $resource,
-        FlashHelperInterface $flashHelper,
-        EventDispatcherInterface $eventDispatcher,
-        ResourceControllerEvent $event,
-        Request $request,
-    ): void {
-        $metadata->getApplicationName()->willReturn('sylius');
-        $metadata->getName()->willReturn('product');
-
-        $requestConfigurationFactory->create($metadata, $request)->willReturn($configuration);
-        $configuration->hasPermission()->willReturn(true);
-        $configuration->getPermission(ResourceActions::UPDATE)->willReturn('sylius.product.update');
-        $configuration->isCsrfProtectionEnabled()->willReturn(false);
-
-        $authorizationChecker->isGranted($configuration, 'sylius.product.update')->willReturn(true);
-        $singleResourceProvider->get($configuration, $repository)->willReturn($resource);
-
-        $configuration->isHtmlRequest()->willReturn(false);
-
-        $eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource)->willReturn($event);
-        $event->isStopped()->willReturn(true);
-        $event->getMessage()->willReturn('Cannot approve this product.');
-        $event->getErrorCode()->willReturn(500);
-
-        $stateMachine->apply($configuration, $resource)->shouldNotBeCalled();
-        $objectManager->flush()->shouldNotBeCalled();
-
-        $eventDispatcher->dispatchPostEvent(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addSuccessFlash(Argument::any())->shouldNotBeCalled();
-        $flashHelper->addFlashFromEvent(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->shouldThrow(new HttpException(500, 'Cannot approve this product.'))
-            ->during('applyStateMachineTransitionAction', [$request])
-        ;
-    }
-
-    private function getViewComparingCallback(View $expectedView)
+    public function testDoesNotApplyStateMachineTransitionResourceAndThrowsHttpExceptionForNonHtmlRequestsStoppedViaEvent(): void
     {
-        return function ($value) use ($expectedView) {
-            if (!$value instanceof View) {
-                return false;
-            }
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ObjectManager|MockObject $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
 
-            // Need to unwrap phpspec's Collaborators to ensure proper comparison.
-            $this->unwrapViewData($expectedView);
-            $this->nullifyDates($value);
-            $this->nullifyDates($expectedView);
-
-            return
-                $expectedView->getStatusCode() === $value->getStatusCode() &&
-                $expectedView->getHeaders() === $value->getHeaders() &&
-                $expectedView->getFormat() === $value->getFormat() &&
-                $expectedView->getData() === $value->getData()
-            ;
-        };
-    }
-
-    private function unwrapViewData(View $view)
-    {
-        $view->setData($this->unwrapIfCollaborator($view->getData()));
-    }
-
-    private function unwrapIfCollaborator($value)
-    {
-        if (null === $value) {
-            return null;
-        }
-
-        if ($value instanceof Collaborator) {
-            return $value->getWrappedObject();
-        }
-
-        if (is_array($value)) {
-            foreach ($value as $key => $childValue) {
-                $value[$key] = $this->unwrapIfCollaborator($childValue);
-            }
-        }
-
-        return $value;
-    }
-
-    private function nullifyDates(View $view)
-    {
-        $headers = $view->getHeaders();
-        unset($headers['date']);
-        $view->setHeaders($headers);
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $requestMock)->willReturn($configurationMock);
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::UPDATE)->willReturn('sylius.product.update');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(false);
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.update')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+        $configurationMock->expects($this->once())->method('isHtmlRequest')->willReturn(false);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::UPDATE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('isStopped')->willReturn(true);
+        $eventMock->expects($this->once())->method('getMessage')->willReturn('Cannot approve this product.');
+        $eventMock->expects($this->once())->method('getErrorCode')->willReturn(500);
+        $this->stateMachineMock->expects($this->never())->method('apply')->with($configurationMock, $resourceMock);
+        $objectManagerMock->expects($this->never())->method('flush');
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+        $this->flashHelperMock->expects($this->never())->method('addFlashFromEvent');
+        $this->expectException(HttpException::class);
+        $this->resourceController->applyStateMachineTransitionAction($requestMock);
     }
 }

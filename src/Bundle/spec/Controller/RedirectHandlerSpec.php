@@ -11,118 +11,151 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
-use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\RedirectHandler;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Resource\Model\ResourceInterface;
-use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 
-final class RedirectHandlerSpec extends ObjectBehavior
+final class RedirectHandlerTest extends TestCase
 {
-    function let(RouterInterface $router): void
+    private RouterInterface&MockObject $router;
+
+    private RedirectHandler $redirectHandler;
+
+    private RequestConfiguration&MockObject $configuration;
+
+    private ResourceInterface&MockObject $resource;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($router);
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->redirectHandler = new RedirectHandler($this->router);
+        $this->configuration = $this->createMock(RequestConfiguration::class);
+        $this->resource = $this->createMock(ResourceInterface::class);
     }
 
-    function it_implements_redirect_handler_interface(): void
+    public function test_it_redirects_to_show_route(): void
     {
-        $this->shouldImplement(RedirectHandlerInterface::class);
+        $this->configuration
+            ->method('getRedirectRoute')
+            ->with('show')
+            ->willReturn('app_resource_show');
+
+        $this->configuration
+            ->method('getRedirectParameters')
+            ->willReturn(['id' => 1]);
+
+        $this->router
+            ->method('generate')
+            ->with('app_resource_show', ['id' => 1])
+            ->willReturn('/resource/1');
+
+        $response = $this->redirectHandler->redirectToResource($this->configuration, $this->resource);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('/resource/1', $response->getTargetUrl());
     }
 
-    function it_redirects_to_resource(
-        RouterInterface $router,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-    ): void {
-        $configuration->getRedirectParameters($resource)->willReturn([]);
-        $configuration->getRedirectRoute('show')->willReturn('my_route');
-
-        $router->generate('my_route', [])->shouldBeCalled()->willReturn('http://test.com');
-
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->isHeaderRedirection()->willReturn(false);
-
-        $this->redirectToResource($configuration, $resource)->shouldHaveType(RedirectResponse::class);
-    }
-
-    function it_fallbacks_to_index_route_if_show_does_not_exist(
-        RouterInterface $router,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-    ): void {
-        $configuration->getRedirectParameters($resource)->willReturn([]);
-        $configuration->getRedirectRoute('show')->willReturn('app_resource_show');
-        $configuration->getRedirectRoute('index')->willReturn('app_resource_index');
-
-        $router->generate('app_resource_show', [])->shouldBeCalled()->willThrow(RouteNotFoundException::class);
-        $router->generate('app_resource_index', [])->shouldBeCalled()->willReturn('http://test.com');
-
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->isHeaderRedirection()->willReturn(false);
-
-        $this->redirectToResource($configuration, $resource)->shouldHaveType(RedirectResponse::class);
-    }
-
-    function it_redirects_to_index(
-        RouterInterface $router,
-        RequestConfiguration $configuration,
-        ResourceInterface $resource,
-    ): void {
-        $configuration->getRedirectRoute('index')->willReturn('my_route');
-        $configuration->getRedirectParameters($resource)->willReturn([]);
-
-        $router->generate('my_route', [])->willReturn('http://myurl.com');
-
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->isHeaderRedirection()->willReturn(false);
-
-        $this->redirectToIndex($configuration, $resource)->shouldHaveType(RedirectResponse::class);
-    }
-
-    function it_redirects_to_route(RouterInterface $router, RequestConfiguration $configuration): void
+    public function test_it_falls_back_to_index_if_show_route_is_not_found(): void
     {
-        $router->generate('route', ['parameter' => 'value'])->willReturn('http://myurl.com');
+        $this->configuration
+            ->method('getRedirectRoute')
+            ->willReturnMap([
+                ['show', 'app_resource_show'],
+                ['index', 'app_resource_index'],
+            ]);
 
-        $this
-            ->redirectToRoute($configuration, 'route', ['parameter' => 'value'])
-            ->shouldHaveType(RedirectResponse::class)
-        ;
+        $this->configuration
+            ->method('getRedirectParameters')
+            ->willReturn([]);
+
+        $this->router
+            ->method('generate')
+            ->willReturnCallback(function (string $route) {
+                if ($route === 'app_resource_show') {
+                    throw new RouteNotFoundException();
+                }
+
+                return '/resource/';
+            });
+
+        $response = $this->redirectHandler->redirectToResource($this->configuration, $this->resource);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('/resource/', $response->getTargetUrl());
     }
 
-    function it_redirects(RequestConfiguration $configuration): void
+    public function test_it_redirects_to_index(): void
     {
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->isHeaderRedirection()->willReturn(false);
+        $this->configuration
+            ->method('getRedirectRoute')
+            ->with('index')
+            ->willReturn('app_resource_index');
 
-        $this->redirect($configuration, 'http://myurl.com')->shouldHaveType(RedirectResponse::class);
+        $this->configuration
+            ->method('getRedirectParameters')
+            ->willReturn([]);
+
+        $this->router
+            ->method('generate')
+            ->with('app_resource_index', [])
+            ->willReturn('/resource/');
+
+        $response = $this->redirectHandler->redirectToIndex($this->configuration);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('/resource/', $response->getTargetUrl());
     }
 
-    function it_redirect_to_referer(RequestConfiguration $configuration, Request $request, HeaderBag $bag): void
+    public function test_it_redirects_to_referer(): void
     {
-        $request->headers = $bag;
+        $this->configuration
+            ->method('getRedirectReferer')
+            ->willReturn('/previous-page');
 
-        $bag->get('referer')->willReturn('http://myurl.com');
+        $response = $this->redirectHandler->redirectToRoute($this->configuration, 'referer');
 
-        $configuration->getRequest()->willReturn($request);
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->getRedirectReferer()->willReturn('http://myurl.com');
-        $configuration->isHeaderRedirection()->willReturn(false);
-
-        $this->redirectToReferer($configuration)->shouldHaveType(RedirectResponse::class);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('/previous-page', $response->getTargetUrl());
     }
 
-    function it_redirects_with_header(RequestConfiguration $configuration): void
+    public function test_it_returns_header_redirection(): void
     {
-        $configuration->getRedirectHash()->willReturn(null);
-        $configuration->isHeaderRedirection()->willReturn(true);
+        $this->configuration
+            ->method('isHeaderRedirection')
+            ->willReturn(true);
 
-        $this->redirect($configuration, 'http://myurl.com')->shouldHaveType(Response::class);
+        $this->configuration
+            ->method('getRedirectHash')
+            ->willReturn('#hash');
+
+        $response = $this->redirectHandler->redirect($this->configuration, '/resource/1');
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals('', $response->getContent());
+        $this->assertEquals('/resource/1#hash', $response->headers->get('X-SYLIUS-LOCATION'));
+    }
+
+    public function test_it_returns_standard_redirect_response(): void
+    {
+        $this->configuration
+            ->method('isHeaderRedirection')
+            ->willReturn(false);
+
+        $this->configuration
+            ->method('getRedirectHash')
+            ->willReturn('#hash');
+
+        $response = $this->redirectHandler->redirect($this->configuration, '/resource/1');
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('/resource/1#hash', $response->getTargetUrl());
     }
 }

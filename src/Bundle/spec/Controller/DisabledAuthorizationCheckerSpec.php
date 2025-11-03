@@ -11,23 +11,34 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\DisabledAuthorizationChecker;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 
-final class DisabledAuthorizationCheckerSpec extends ObjectBehavior
+final class DisabledAuthorizationCheckerTest extends TestCase
 {
-    function it_implements_resource_controller_authorization_checker_interface(): void
+    private DisabledAuthorizationChecker $disabledAuthorizationChecker;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(AuthorizationCheckerInterface::class);
+        $this->disabledAuthorizationChecker = new DisabledAuthorizationChecker();
     }
 
-    function it_always_returns_true(RequestConfiguration $requestConfiguration): void
+    public function testImplementsResourceControllerAuthorizationCheckerInterface(): void
     {
-        $this->isGranted($requestConfiguration, 'create')->shouldReturn(true);
-        $this->isGranted($requestConfiguration, 'update')->shouldReturn(true);
-        $this->isGranted($requestConfiguration, 'custom')->shouldReturn(true);
+        $this->assertInstanceOf(AuthorizationCheckerInterface::class, $this->disabledAuthorizationChecker);
+    }
+
+    public function testAlwaysReturnsTrue(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        $this->assertTrue($this->disabledAuthorizationChecker->isGranted($requestConfigurationMock, 'create'));
+        $this->assertTrue($this->disabledAuthorizationChecker->isGranted($requestConfigurationMock, 'update'));
+        $this->assertTrue($this->disabledAuthorizationChecker->isGranted($requestConfigurationMock, 'custom'));
     }
 }

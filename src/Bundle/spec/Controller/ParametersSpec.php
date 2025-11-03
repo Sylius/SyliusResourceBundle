@@ -11,39 +11,48 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 
-final class ParametersSpec extends ObjectBehavior
+final class ParametersTest extends TestCase
 {
-    function it_has_mutable_parameters(): void
+    private Parameters $parameters;
+
+    protected function setUp(): void
     {
-        $this->replace([]);
+        $this->parameters = new Parameters();
     }
 
-    function it_has_parameters(): void
+    public function testHasMutableParameters(): void
     {
-        $this->replace([
-            'criteria' => 'criteria',
-            'paginate' => 'paginate',
-        ]);
-
-        $this->all()->shouldReturn([
-            'criteria' => 'criteria',
-            'paginate' => 'paginate',
-        ]);
+        $this->parameters->replace();
+        $this->assertSame([], $this->parameters->all());
     }
 
-    function it_gets_a_single_parameter_and_supports_default_value(): void
+    public function testHasParameters(): void
     {
-        $this->replace([
+        $this->parameters->replace([
             'criteria' => 'criteria',
             'paginate' => 'paginate',
         ]);
 
-        $this->get('criteria')->shouldReturn('criteria');
-        $this->get('sorting')->shouldReturn(null);
-        $this->get('sorting', 'default')->shouldReturn('default');
+        $this->assertSame([
+            'criteria' => 'criteria',
+            'paginate' => 'paginate',
+        ], $this->parameters->all());
+    }
+
+    public function testGetsASingleParameterAndSupportsDefaultValue(): void
+    {
+        $this->parameters->replace([
+            'criteria' => 'criteria',
+            'paginate' => 'paginate',
+        ]);
+
+        $this->assertSame('criteria', $this->parameters->get('criteria'));
+        $this->assertNull($this->parameters->get('sorting'));
+        $this->assertSame('default', $this->parameters->get('sorting', 'default'));
     }
 }

@@ -11,118 +11,116 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use Pagerfanta\Pagerfanta;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolver;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-final class ResourcesResolverSpec extends ObjectBehavior
+final class ResourcesResolverTest extends TestCase
 {
-    function it_implements_resources_resolver_interface(): void
+    private ResourcesResolver $resourcesResolver;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(ResourcesResolverInterface::class);
+        $this->resourcesResolver = new ResourcesResolver();
     }
 
-    function it_gets_all_resources_if_has_no_criteria(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        ResourceInterface $firstResource,
-        ResourceInterface $secondResource,
-    ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(true);
-        $requestConfiguration->getRepositoryMethod(null)->willReturn(null);
-
-        $requestConfiguration->isPaginated()->willReturn(false);
-        $requestConfiguration->isFilterable()->willReturn(false);
-        $requestConfiguration->isSortable()->willReturn(false);
-        $requestConfiguration->getLimit()->willReturn(null);
-
-        $repository->findBy([], [], null)->willReturn([$firstResource, $secondResource]);
-
-        $this->getResources($requestConfiguration, $repository)->shouldReturn([$firstResource, $secondResource]);
+    public function testImplementsResourcesResolverInterface(): void
+    {
+        $this->assertInstanceOf(ResourcesResolverInterface::class, $this->resourcesResolver);
     }
 
-    function it_finds_resources_by_criteria_if_not_paginated(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        ResourceInterface $firstResource,
-        ResourceInterface $secondResource,
-        ResourceInterface $thirdResource,
-    ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(true);
-        $requestConfiguration->getRepositoryMethod(null)->willReturn(null);
-
-        $requestConfiguration->isPaginated()->willReturn(false);
-        $requestConfiguration->isFilterable()->willReturn(true);
-        $requestConfiguration->isSortable()->willReturn(true);
-        $requestConfiguration->isLimited()->willReturn(true);
-        $requestConfiguration->getLimit()->willReturn(15);
-
-        $requestConfiguration->getCriteria()->willReturn(['custom' => 'criteria']);
-        $requestConfiguration->getSorting()->willReturn(['name' => 'desc']);
-
-        $repository->findBy(['custom' => 'criteria'], ['name' => 'desc'], 15)->willReturn([$firstResource, $secondResource, $thirdResource]);
-
-        $this->getResources($requestConfiguration, $repository)->shouldReturn([$firstResource, $secondResource, $thirdResource]);
+    public function testGetsAllResourcesIfHasNoCriteria(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $firstResourceMock */
+        $firstResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $secondResourceMock */
+        $secondResourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('isPaginated')->willReturn(false);
+        $requestConfigurationMock->expects($this->once())->method('isFilterable')->willReturn(false);
+        $requestConfigurationMock->expects($this->once())->method('isSortable')->willReturn(false);
+        $requestConfigurationMock->expects($this->once())->method('getLimit')->willReturn(null);
+        $repositoryMock->expects($this->once())->method('findBy')->with([], [], null)->willReturn([$firstResourceMock, $secondResourceMock]);
+        $this->assertSame([$firstResourceMock, $secondResourceMock], $this->resourcesResolver->getResources($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_uses_custom_method_and_arguments_if_specified(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        ResourceInterface $firstResource,
-    ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(true);
-        $requestConfiguration->getRepositoryMethod()->willReturn('findAll');
-        $requestConfiguration->getRepositoryArguments()->willReturn(['foo']);
-
-        $requestConfiguration->isPaginated()->willReturn(false);
-        $requestConfiguration->isLimited()->willReturn(true);
-        $requestConfiguration->getLimit()->willReturn(15);
-
-        $repository->findAll('foo')->willReturn([$firstResource]);
-
-        $this->getResources($requestConfiguration, $repository)->shouldReturn([$firstResource]);
+    public function testFindsResourcesByCriteriaIfNotPaginated(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $firstResourceMock */
+        $firstResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $secondResourceMock */
+        $secondResourceMock = $this->createMock(ResourceInterface::class);
+        /** @var ResourceInterface|MockObject $thirdResourceMock */
+        $thirdResourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('isPaginated')->willReturn(false);
+        $requestConfigurationMock->expects($this->once())->method('isFilterable')->willReturn(true);
+        $requestConfigurationMock->expects($this->once())->method('isSortable')->willReturn(true);
+        $requestConfigurationMock->expects($this->once())->method('getLimit')->willReturn(15);
+        $requestConfigurationMock->expects($this->once())->method('getCriteria')->willReturn(['custom' => 'criteria']);
+        $requestConfigurationMock->expects($this->once())->method('getSorting')->willReturn(['name' => 'desc']);
+        $repositoryMock->expects($this->once())->method('findBy')->with(['custom' => 'criteria'], ['name' => 'desc'], 15)->willReturn([$firstResourceMock, $secondResourceMock, $thirdResourceMock]);
+        $this->assertSame([$firstResourceMock, $secondResourceMock, $thirdResourceMock], $this->resourcesResolver->getResources($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_uses_custom_repository_if_specified(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        RepositoryInterface $customRepository,
-        ResourceInterface $firstResource,
-    ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(true);
-        $requestConfiguration->getRepositoryMethod()->willReturn([$customRepository, 'findBy']);
-        $requestConfiguration->getRepositoryArguments()->willReturn([['foo' => true]]);
-
-        $requestConfiguration->isPaginated()->willReturn(false);
-        $requestConfiguration->isLimited()->willReturn(true);
-        $requestConfiguration->getLimit()->willReturn(15);
-
-        $customRepository->findBy(['foo' => true])->willReturn([$firstResource]);
-
-        $this->getResources($requestConfiguration, $repository)->shouldReturn([$firstResource]);
+    public function testUsesCustomMethodAndArgumentsIfSpecified(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $firstResourceMock */
+        $firstResourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn('findAll');
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn(['foo']);
+        $repositoryMock->expects($this->once())->method('findAll')->with('foo')->willReturn([$firstResourceMock]);
+        $this->assertSame([$firstResourceMock], $this->resourcesResolver->getResources($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_creates_paginator_by_default(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        Pagerfanta $paginator,
-    ): void {
-        $requestConfiguration->isHtmlRequest()->willReturn(true);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
+    public function testUsesCustomRepositoryIfSpecified(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var RepositoryInterface|MockObject $customRepositoryMock */
+        $customRepositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $firstResourceMock */
+        $firstResourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn([$customRepositoryMock, 'findBy']);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn([['foo' => true]]);
+        $customRepositoryMock->expects($this->once())->method('findBy')->with(['foo' => true])->willReturn([$firstResourceMock]);
+        $this->assertSame([$firstResourceMock], $this->resourcesResolver->getResources($requestConfigurationMock, $repositoryMock));
+    }
 
-        $requestConfiguration->isPaginated()->willReturn(true);
-        $requestConfiguration->getPaginationMaxPerPage()->willReturn(5);
-        $requestConfiguration->isLimited()->willReturn(false);
-        $requestConfiguration->isFilterable()->willReturn(false);
-        $requestConfiguration->isSortable()->willReturn(false);
-
-        $repository->createPaginator([], [])->willReturn($paginator);
-
-        $this->getResources($requestConfiguration, $repository)->shouldReturn($paginator);
+    public function testCreatesPaginatorByDefault(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var \Pagerfanta\Pagerfanta|MockObject $paginatorMock */
+        $paginatorMock = $this->createMock(Pagerfanta::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('isPaginated')->willReturn(true);
+        $requestConfigurationMock->expects($this->once())->method('isFilterable')->willReturn(false);
+        $requestConfigurationMock->expects($this->once())->method('isSortable')->willReturn(false);
+        $repositoryMock->expects($this->once())->method('createPaginator')->with([], [])->willReturn($paginatorMock);
+        $this->assertSame($paginatorMock, $this->resourcesResolver->getResources($requestConfigurationMock, $repositoryMock));
     }
 }

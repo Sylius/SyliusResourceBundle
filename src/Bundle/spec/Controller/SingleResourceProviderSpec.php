@@ -11,164 +11,185 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProvider;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class SingleResourceProviderSpec extends ObjectBehavior
+final class SingleResourceProviderTest extends TestCase
 {
-    function it_implements_single_resource_provider_interface(): void
+    private SingleResourceProvider $singleResourceProvider;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(SingleResourceProviderInterface::class);
+        $this->singleResourceProvider = new SingleResourceProvider();
     }
 
-    function it_looks_for_specific_resource_with_id_by_default(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn([]);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(true);
-        $requestAttributes->has('slug')->willReturn(false);
-        $requestAttributes->get('id')->willReturn(5);
-
-        $repository->find(5)->willReturn(null);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn(null);
+    public function testImplementsSingleResourceProviderInterface(): void
+    {
+        $this->assertInstanceOf(SingleResourceProviderInterface::class, $this->singleResourceProvider);
     }
 
-    function it_can_find_specific_resource_with_id_by_default(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn([]);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(true);
-        $requestAttributes->has('slug')->willReturn(false);
-        $requestAttributes->get('id')->willReturn(3);
-
-        $repository->find(3)->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testLooksForSpecificResourceWithIdByDefault(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->method('has')->with('id')->willReturn(true);
+        $requestAttributesMock->expects($this->once())->method('get')->with('id')->willReturn(5);
+        $repositoryMock->expects($this->once())->method('find')->with(5)->willReturn(null);
+        $this->assertNull($this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_can_find_specific_resource_with_slug_by_default(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn([]);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(false);
-        $requestAttributes->has('slug')->willReturn(true);
-        $requestAttributes->get('slug')->willReturn('the-most-awesome-hat');
-
-        $repository->findOneBy(['slug' => 'the-most-awesome-hat'])->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testCanFindSpecificResourceWithIdByDefault(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->method('has')->with('id')->willReturn(true);
+        $requestAttributesMock->expects($this->once())->method('get')->with('id')->willReturn(3);
+        $repositoryMock->expects($this->once())->method('find')->with(3)->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_can_find_specific_resource_with_custom_criteria(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn(['request-configuration-criteria' => '1']);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(false);
-        $requestAttributes->has('slug')->willReturn(false);
-
-        $repository->findOneBy(['request-configuration-criteria' => '1'])->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testCanFindSpecificResourceWithSlugByDefault(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getCriteria')->willReturn([]);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->expects($this->exactly(2))->method('has')->willReturnMap([['id', false], ['slug', true]]);
+        $requestAttributesMock->expects($this->once())->method('get')->with('slug')->willReturn('the-most-awesome-hat');
+        $repositoryMock->expects($this->once())->method('findOneBy')->with(['slug' => 'the-most-awesome-hat'])->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_can_find_specific_resource_with_merged_custom_criteria(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn(['request-configuration-criteria' => '1']);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(false);
-        $requestAttributes->has('slug')->willReturn(true);
-        $requestAttributes->get('slug')->willReturn('banana');
-
-        $repository->findOneBy(['slug' => 'banana', 'request-configuration-criteria' => '1'])->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testCanFindSpecificResourceWithCustomCriteria(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getCriteria')->willReturn(['request-configuration-criteria' => '1']);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->expects($this->exactly(2))->method('has')->willReturnMap([['id', false], ['slug', false]]);
+        $repositoryMock->expects($this->once())->method('findOneBy')->with(['request-configuration-criteria' => '1'])->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_can_find_specific_resource_with_merged_custom_criteria_overwriting_the_attributes(
-        RequestConfiguration $requestConfiguration,
-        Request $request,
-        ParameterBag $requestAttributes,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getCriteria()->willReturn(['id' => 5]);
-        $requestConfiguration->getRepositoryMethod()->willReturn(null);
-        $requestConfiguration->getRequest()->willReturn($request);
-        $request->attributes = $requestAttributes;
-        $requestAttributes->has('id')->willReturn(false);
-        $requestAttributes->has('slug')->willReturn(false);
-
-        $repository->findOneBy(['id' => 5])->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testCanFindSpecificResourceWithMergedCustomCriteria(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getCriteria')->willReturn(['request-configuration-criteria' => '1']);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->expects($this->exactly(2))->method('has')->willReturnMap([['id', false], ['slug', true]]);
+        $requestAttributesMock->expects($this->once())->method('get')->with('slug')->willReturn('banana');
+        $repositoryMock->expects($this->once())->method('findOneBy')->with(['slug' => 'banana', 'request-configuration-criteria' => '1'])->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_uses_a_custom_method_if_configured(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getRepositoryMethod()->willReturn('findAll');
-        $requestConfiguration->getRepositoryArguments()->willReturn(['foo']);
-
-        $repository->findAll('foo')->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testCanFindSpecificResourceWithMergedCustomCriteriaOverwritingTheAttributes(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->createMock(Request::class);
+        /** @var ParameterBag|MockObject $requestAttributesMock */
+        $requestAttributesMock = $this->createMock(ParameterBag::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getCriteria')->willReturn(['id' => 5]);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn(null);
+        $requestConfigurationMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $requestMock->attributes = $requestAttributesMock;
+        $requestAttributesMock->expects($this->exactly(2))->method('has')->willReturnMap([['id', false], ['slug', false]]);
+        $repositoryMock->expects($this->once())->method('findOneBy')->with(['id' => 5])->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
-    function it_uses_a_custom_repository_if_configured(
-        RequestConfiguration $requestConfiguration,
-        RepositoryInterface $repository,
-        RepositoryInterface $customRepository,
-        ResourceInterface $resource,
-    ): void {
-        $requestConfiguration->getRepositoryMethod()->willReturn([$customRepository, 'findAll']);
-        $requestConfiguration->getRepositoryArguments()->willReturn(['foo']);
+    public function testUsesACustomMethodIfConfigured(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn('findAll');
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn(['foo']);
+        $repositoryMock->expects($this->once())->method('findAll')->with('foo')->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
+    }
 
-        $customRepository->findAll('foo')->willReturn($resource);
-
-        $this->get($requestConfiguration, $repository)->shouldReturn($resource);
+    public function testUsesACustomRepositoryIfConfigured(): void
+    {
+        /** @var RequestConfiguration|MockObject $requestConfigurationMock */
+        $requestConfigurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var RepositoryInterface|MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var RepositoryInterface|MockObject $customRepositoryMock */
+        $customRepositoryMock = $this->createMock(RepositoryInterface::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn([$customRepositoryMock, 'findAll']);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn(['foo']);
+        $customRepositoryMock->expects($this->once())->method('findAll')->with('foo')->willReturn($resourceMock);
+        $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 }

@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface as ResourceStateMachineInterface;
 use Sylius\Bundle\ResourceBundle\Controller\Workflow;
@@ -22,107 +23,165 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow as SymfonyWorkflow;
 
-final class WorkflowSpec extends ObjectBehavior
+final class WorkflowTest extends TestCase
 {
-    function let(Registry $registry): void
+    private MockObject $registryMock;
+
+    private Workflow $workflow;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($registry);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->workflow = new Workflow($this->registryMock);
     }
 
-    function it_is_initializable(): void
+    public function testImplementsStateMachineInterface(): void
     {
-        $this->shouldHaveType(Workflow::class);
+        $this->assertInstanceOf(ResourceStateMachineInterface::class, $this->workflow);
     }
 
-    function it_implements_state_machine_interface(): void
+    public function testThrowsAnExceptionIfTransitionIsNotDefinedDuringCan(): void
     {
-        $this->shouldImplement(ResourceStateMachineInterface::class);
+        $requestConfiguration = $this->createRequestConfigurationWithoutStateMachine();
+        $resource = $this->createMock(ResourceInterface::class);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('State machine must be configured to apply transition, check your routing.');
+
+        $this->workflow->can($requestConfiguration, $resource);
     }
 
-    function it_throws_an_exception_if_transition_is_not_defined_during_can(RequestConfiguration $requestConfiguration, ResourceInterface $resource): void
+    public function testThrowsAnExceptionIfTransitionIsNotDefinedDuringApply(): void
     {
-        $requestConfiguration->hasStateMachine()->willReturn(false);
+        $requestConfiguration = $this->createRequestConfigurationWithoutStateMachine();
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $this
-            ->shouldThrow(new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.'))
-            ->during('can', [$requestConfiguration, $resource])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('State machine must be configured to apply transition, check your routing.');
+
+        $this->workflow->apply($requestConfiguration, $resource);
     }
 
-    function it_throws_an_exception_if_transition_is_not_defined_during_apply(RequestConfiguration $requestConfiguration, ResourceInterface $resource): void
+    public function testReturnsIfConfiguredStateMachineCanTransitionWithoutGraphConfiguration(): void
     {
-        $requestConfiguration->hasStateMachine()->willReturn(false);
+        $requestConfiguration = $this->createRequestConfiguration(null, 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $workflowMock = $this->createWorkflowMock();
 
-        $this
-            ->shouldThrow(new \InvalidArgumentException('State machine must be configured to apply transition, check your routing.'))
-            ->during('apply', [$requestConfiguration, $resource])
-        ;
+        $this->registryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, null)
+            ->willReturn($workflowMock);
+
+        $workflowMock
+            ->expects($this->once())
+            ->method('can')
+            ->with($resource, 'reject')
+            ->willReturn(true);
+
+        $this->assertTrue($this->workflow->can($requestConfiguration, $resource));
     }
 
-    function it_returns_if_configured_state_machine_can_transition_without_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        Registry $registry,
-        ResourceInterface $resource,
-        SymfonyWorkflow $workflow,
-    ): void {
-        $requestConfiguration->getStateMachineGraph()->willReturn(null);
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource, null)->willReturn($workflow);
-        $workflow->can($resource, 'reject')->willReturn(true);
+    public function testReturnsIfConfiguredStateMachineCanTransitionWithGraphConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('pull_request', 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $workflowMock = $this->createWorkflowMock();
 
-        $this->can($requestConfiguration, $resource)->shouldReturn(true);
+        $this->registryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, 'pull_request')
+            ->willReturn($workflowMock);
+
+        $workflowMock
+            ->expects($this->once())
+            ->method('can')
+            ->with($resource, 'reject')
+            ->willReturn(true);
+
+        $this->assertTrue($this->workflow->can($requestConfiguration, $resource));
     }
 
-    function it_returns_if_configured_state_machine_can_transition_with_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        Registry $registry,
-        ResourceInterface $resource,
-        SymfonyWorkflow $workflow,
-    ): void {
-        $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource, 'pull_request')->willReturn($workflow);
-        $workflow->can($resource, 'reject')->willReturn(true);
+    public function testAppliesConfiguredStateMachineTransitionWithoutGraphConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration(null, 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $workflowMock = $this->createWorkflowMock();
+        $marking = $this->createMock(Marking::class);
 
-        $this->can($requestConfiguration, $resource)->shouldReturn(true);
+        $this->registryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, null)
+            ->willReturn($workflowMock);
+
+        $workflowMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with($resource, 'reject')
+            ->willReturn($marking);
+
+        $this->workflow->apply($requestConfiguration, $resource);
     }
 
-    function it_applies_configured_state_machine_transition_without_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        Registry $registry,
-        ResourceInterface $resource,
-        SymfonyWorkflow $workflow,
-        Marking $marking,
-    ): void {
-        $requestConfiguration->getStateMachineGraph()->willReturn(null);
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource, null)->willReturn($workflow);
-        $workflow->apply($resource, 'reject')->willReturn($marking);
+    public function testAppliesConfiguredStateMachineTransitionWithGraphConfiguration(): void
+    {
+        $requestConfiguration = $this->createRequestConfiguration('pull_request', 'reject');
+        $resource = $this->createMock(ResourceInterface::class);
+        $workflowMock = $this->createWorkflowMock();
+        $marking = $this->createMock(Marking::class);
 
-        $workflow->apply($resource, 'reject')->shouldBeCalled();
+        $this->registryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resource, 'pull_request')
+            ->willReturn($workflowMock);
 
-        $this->apply($requestConfiguration, $resource);
+        $workflowMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with($resource, 'reject')
+            ->willReturn($marking);
+
+        $this->workflow->apply($requestConfiguration, $resource);
     }
 
-    function it_applies_configured_state_machine_transition_with_graph_configuration(
-        RequestConfiguration $requestConfiguration,
-        Registry $registry,
-        ResourceInterface $resource,
-        SymfonyWorkflow $workflow,
-        Marking $marking,
-    ): void {
-        $requestConfiguration->getStateMachineGraph()->willReturn('pull_request');
-        $requestConfiguration->hasStateMachine()->willReturn(true);
-        $requestConfiguration->getStateMachineTransition()->willReturn('reject');
-        $registry->get($resource, 'pull_request')->willReturn($workflow);
-        $workflow->apply($resource, 'reject')->willReturn($marking);
+    /**
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfigurationWithoutStateMachine(): MockObject
+    {
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('hasStateMachine')->willReturn(false);
 
-        $registry->get($resource, 'pull_request')->shouldBeCalled();
-        $workflow->apply($resource, 'reject')->shouldBeCalled();
+        return $requestConfiguration;
+    }
 
-        $this->apply($requestConfiguration, $resource);
+    /**
+     * @return MockObject&RequestConfiguration
+     */
+    private function createRequestConfiguration(?string $graph, string $transition): MockObject
+    {
+        /** @var MockObject&RequestConfiguration $requestConfiguration */
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $requestConfiguration->method('hasStateMachine')->willReturn(true);
+        $requestConfiguration->method('getStateMachineGraph')->willReturn($graph);
+        $requestConfiguration->method('getStateMachineTransition')->willReturn($transition);
+
+        return $requestConfiguration;
+    }
+
+    /**
+     * @return MockObject&SymfonyWorkflow
+     */
+    private function createWorkflowMock(): MockObject
+    {
+        /** @var MockObject&SymfonyWorkflow $workflow */
+        $workflow = $this->createMock(SymfonyWorkflow::class);
+
+        return $workflow;
     }
 }

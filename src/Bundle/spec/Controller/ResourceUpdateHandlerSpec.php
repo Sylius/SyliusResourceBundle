@@ -11,52 +11,60 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use Doctrine\Persistence\ObjectManager;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandler;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
 use Sylius\Resource\Model\ResourceInterface;
 
-final class ResourceUpdateHandlerSpec extends ObjectBehavior
+final class ResourceUpdateHandlerTest extends TestCase
 {
-    function let(StateMachineInterface $stateMachine): void
+    /** @var StateMachineInterface|MockObject */
+    private MockObject $stateMachineMock;
+
+    private ResourceUpdateHandler $resourceUpdateHandler;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($stateMachine);
+        $this->stateMachineMock = $this->createMock(StateMachineInterface::class);
+        $this->resourceUpdateHandler = new ResourceUpdateHandler($this->stateMachineMock);
     }
 
-    function it_implements_a_resource_update_handler_interface(): void
+    public function testImplementsAResourceUpdateHandlerInterface(): void
     {
-        $this->shouldImplement(ResourceUpdateHandlerInterface::class);
+        $this->assertInstanceOf(ResourceUpdateHandlerInterface::class, $this->resourceUpdateHandler);
     }
 
-    function it_applies_a_state_machine_transition(
-        StateMachineInterface $stateMachine,
-        ResourceInterface $resource,
-        RequestConfiguration $configuration,
-        ObjectManager $manager,
-    ): void {
-        $configuration->hasStateMachine()->willReturn(true);
-        $stateMachine->apply($configuration, $resource)->shouldBeCalled();
-
-        $manager->flush()->shouldBeCalled();
-
-        $this->handle($resource, $configuration, $manager);
+    public function testAppliesAStateMachineTransition(): void
+    {
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ObjectManager|MockObject $managerMock */
+        $managerMock = $this->createMock(ObjectManager::class);
+        $configurationMock->expects($this->once())->method('hasStateMachine')->willReturn(true);
+        $this->stateMachineMock->expects($this->once())->method('apply')->with($configurationMock, $resourceMock);
+        $managerMock->expects($this->once())->method('flush');
+        $this->resourceUpdateHandler->handle($resourceMock, $configurationMock, $managerMock);
     }
 
-    function it_does_not_apply_a_state_machine_transition(
-        StateMachineInterface $stateMachine,
-        ResourceInterface $resource,
-        RequestConfiguration $configuration,
-        ObjectManager $manager,
-    ): void {
-        $configuration->hasStateMachine()->willReturn(false);
-        $stateMachine->apply($configuration, $resource)->shouldNotBeCalled();
-
-        $manager->flush()->shouldBeCalled();
-
-        $this->handle($resource, $configuration, $manager);
+    public function testDoesNotApplyAStateMachineTransition(): void
+    {
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ObjectManager|MockObject $managerMock */
+        $managerMock = $this->createMock(ObjectManager::class);
+        $configurationMock->expects($this->once())->method('hasStateMachine')->willReturn(false);
+        $this->stateMachineMock->expects($this->never())->method('apply')->with($configurationMock, $resourceMock);
+        $managerMock->expects($this->once())->method('flush');
+        $this->resourceUpdateHandler->handle($resourceMock, $configurationMock, $managerMock);
     }
 }

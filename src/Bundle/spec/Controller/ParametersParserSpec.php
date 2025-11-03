@@ -11,196 +11,174 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Controller;
+namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\ParametersParser;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ParametersParserSpec extends ObjectBehavior
+final class ParametersParserTest extends TestCase
 {
-    function let(): void
+    private ParametersParser $parametersParser;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new Container(), new ExpressionLanguage());
+        $this->parametersParser = new ParametersParser(new Container(), new ExpressionLanguage());
     }
 
-    function it_implements_parameters_parser_interface(): void
+    public function testImplementsParametersParserInterface(): void
     {
-        $this->shouldImplement(ParametersParserInterface::class);
+        $this->assertInstanceOf(ParametersParserInterface::class, $this->parametersParser);
     }
 
-    function it_parses_string_parameters(): void
+    public function testParsesStringParameters(): void
     {
         $request = new Request();
         $request->request->set('string', 'Lorem ipsum');
 
-        $this
-            ->parseRequestValues(['nested' => ['string' => '$string']], $request)
-            ->shouldReturn(['nested' => ['string' => 'Lorem ipsum']])
+        $this->assertSame(['nested' => ['string' => 'Lorem ipsum']], $this->parametersParser
+            ->parseRequestValues(['nested' => ['string' => '$string']], $request))
         ;
     }
 
-    function it_parses_boolean_parameters(): void
+    public function testParsesBooleanParameters(): void
     {
         $request = new Request();
         $request->request->set('boolean', true);
 
-        $this
-            ->parseRequestValues(['nested' => ['boolean' => '$boolean']], $request)
-            ->shouldReturn(['nested' => ['boolean' => true]])
+        $this->assertSame(['nested' => ['boolean' => true]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['boolean' => '$boolean']], $request))
         ;
     }
 
-    function it_parses_array_parameters(): void
+    public function testParsesArrayParameters(): void
     {
         $request = new Request();
         $request->request->set('array', ['foo' => 'bar']);
 
-        $this
-            ->parseRequestValues(['nested' => ['array' => '$array']], $request)
-            ->shouldReturn(['nested' => ['array' => ['foo' => 'bar']]])
+        $this->assertSame(['nested' => ['array' => ['foo' => 'bar']]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['array' => '$array']], $request))
         ;
     }
 
-    function it_parses_string_parameter_and_casts_it_into_int(): void
+    public function testParsesStringParameterAndCastsItIntoInt(): void
     {
         $request = new Request();
         $request->request->set('int', '5');
 
-        $this
-            ->parseRequestValues(['nested' => ['int' => '!!int $int']], $request)
-            ->shouldReturn(['nested' => ['int' => 5]])
+        $this->assertSame(['nested' => ['int' => 5]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['int' => '!!int $int']], $request))
         ;
     }
 
-    function it_parses_string_parameter_and_casts_it_into_float(): void
+    public function testParsesStringParameterAndCastsItIntoFloat(): void
     {
         $request = new Request();
         $request->request->set('float', '5.4');
 
-        $this
-            ->parseRequestValues(['nested' => ['float' => '!!float $float']], $request)
-            ->shouldReturn(['nested' => ['float' => 5.4]])
+        $this->assertSame(['nested' => ['float' => 5.4]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['float' => '!!float $float']], $request))
         ;
     }
 
-    function it_throws_exception_if_string_parameter_is_going_to_be_casted_into_invalid_type()
+    public function testThrowsExceptionIfStringParameterIsGoingToBeCastedIntoInvalidType(): void
+    {
+        $request = new Request();
+        $request->request->set('int', 5);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->parametersParser->parseRequestValues(['nested' => ['int' => '!!invalid $int']], $request);
+    }
+
+    public function testThrowsExceptionIfInvalidTypecastIsProvided(): void
     {
         $request = new Request();
         $request->request->set('int', 5);
 
-        $this
-            ->shouldThrow(\InvalidArgumentException::class)
-            ->during('parseRequestValues', [['nested' => ['int' => '!!invalid $int']], $request])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->parametersParser->parseRequestValues(['nested' => ['int' => '!!int!! $int']], $request);
     }
 
-    function it_throws_exception_if_invalid_typecast_is_provided()
-    {
-        $request = new Request();
-        $request->request->set('int', 5);
-
-        $this
-            ->shouldThrow(\InvalidArgumentException::class)
-            ->during('parseRequestValues', [['nested' => ['int' => '!!!int $int']], $request])
-        ;
-
-        $this
-            ->shouldThrow(\InvalidArgumentException::class)
-            ->during('parseRequestValues', [['nested' => ['int' => '!!int!! $int']], $request])
-        ;
-    }
-
-    function it_parses_string_parameter_and_casts_it_into_bool(): void
+    public function testParsesStringParameterAndCastsItIntoBool(): void
     {
         $request = new Request();
         $request->request->set('bool0', '0');
         $request->request->set('bool1', '1');
 
-        $this
-            ->parseRequestValues(['nested' => ['bool' => '!!bool $bool0']], $request)
-            ->shouldReturn(['nested' => ['bool' => false]])
+        $this->assertSame(['nested' => ['bool' => false]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['bool' => '!!bool $bool0']], $request))
         ;
 
-        $this
-            ->parseRequestValues(['nested' => ['bool' => '!!bool $bool1']], $request)
-            ->shouldReturn(['nested' => ['bool' => true]])
+        $this->assertSame(['nested' => ['bool' => true]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['bool' => '!!bool $bool1']], $request))
         ;
     }
 
-    function it_parses_an_expression_and_casts_it_into_a_given_type(): void
+    public function testParsesAnExpressionAndCastsItIntoAGivenType(): void
     {
         $request = new Request();
 
-        $this
-            ->parseRequestValues(['nested' => ['cast' => '!!int expr:"5"']], $request)
-            ->shouldReturn(['nested' => ['cast' => 5]])
+        $this->assertSame(['nested' => ['cast' => 5]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['cast' => '!!int expr:"5"']], $request))
         ;
     }
 
-    function it_parses_an_expression_with_spaces_and_casts_it_into_a_given_type(): void
+    public function testParsesAnExpressionWithSpacesAndCastsItIntoAGivenType(): void
     {
         $request = new Request();
 
-        $this
-            ->parseRequestValues(['nested' => ['cast' => '!!int expr:"5" + "5"']], $request)
-            ->shouldReturn(['nested' => ['cast' => 10]])
+        $this->assertSame(['nested' => ['cast' => 10]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['cast' => '!!int expr:"5" + "5"']], $request))
         ;
     }
 
-    function it_parses_expressions(): void
+    public function testParsesExpressions(): void
     {
         $request = new Request();
 
-        $this
-            ->parseRequestValues(['nested' => ['boolean' => 'expr:"foo" in ["foo", "bar"]']], $request)
-            ->shouldReturn(['nested' => ['boolean' => true]])
+        $this->assertSame(['nested' => ['boolean' => true]], $this->parametersParser
+            ->parseRequestValues(['nested' => ['boolean' => 'expr:"foo" in ["foo", "bar"]']], $request))
         ;
     }
 
-    function it_parses_expressions_with_string_parameters(): void
+    public function testParsesExpressionsWithStringParameters(): void
     {
         $request = new Request();
         $request->request->set('string', 'lorem ipsum');
 
-        $this
-            ->parseRequestValues(['expression' => 'expr:$string === "lorem ipsum"'], $request)
-            ->shouldReturn(['expression' => true])
+        $this->assertSame(['expression' => true], $this->parametersParser
+            ->parseRequestValues(['expression' => 'expr:$string === "lorem ipsum"'], $request))
         ;
     }
 
-    function it_parses_expressions_with_scalar_parameters(): void
+    public function testParsesExpressionsWithScalarParameters(): void
     {
         $request = new Request();
         $request->request->set('number', 6);
 
-        $this
-            ->parseRequestValues(['expression' => 'expr:$number === 6'], $request)
-            ->shouldReturn(['expression' => true])
+        $this->assertSame(['expression' => true], $this->parametersParser
+            ->parseRequestValues(['expression' => 'expr:$number === 6'], $request))
         ;
     }
 
-    function it_throws_an_exception_if_array_parameter_is_injected_into_expression(): void
+    public function testThrowsAnExceptionIfArrayParameterIsInjectedIntoExpression(): void
     {
         $request = new Request();
         $request->request->set('array', ['foo', 'bar']);
-
-        $this
-            ->shouldThrow(\InvalidArgumentException::class)
-            ->during('parseRequestValues', [['expression' => 'expr:"foo" in $array'], $request])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->parametersParser->parseRequestValues(['expression' => 'expr:"foo" in $array'], $request);
     }
 
-    function it_throws_an_exception_if_object_parameter_is_injected_into_expression(\Stringable $object): void
+    public function testThrowsAnExceptionIfObjectParameterIsInjectedIntoExpression(): void
     {
+        /** @var array|bool|float|int|string|null $objectMock */
+        $objectMock = $this->createMock(\Stringable::class);
         $request = new Request();
-        $request->request->set('object', $object->getWrappedObject());
-
-        $this
-            ->shouldThrow(\InvalidArgumentException::class)
-            ->during('parseRequestValues', [['expression' => 'expr:$object.callMethod()'], $request])
-        ;
+        $request->request->set('object', $objectMock);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->parametersParser->parseRequestValues(['expression' => 'expr:$object.callMethod()'], $request);
     }
 }
