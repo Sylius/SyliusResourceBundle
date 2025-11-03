@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener;
+namespace Sylius\Bundle\ResourceBundle\Tests\Doctrine\ODM\PHPCR\EventListener;
 
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
@@ -23,7 +23,7 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 /**
  * @require Doctrine\ODM\PHPCR\DocumentManagerInterface
  */
-final class NameFilterListenerSpec extends TestCase
+final class NameFilterListenerTest extends TestCase
 {
     private DocumentManagerInterface|MockObject $documentManagerMock;
 
@@ -48,7 +48,7 @@ final class NameFilterListenerSpec extends TestCase
         $this->document = new \stdClass();
     }
 
-    function testThrowsAnExceptionIfNodenameIsNotMapped(): void
+    public function testThrowsAnExceptionIfNodenameIsNotMapped(): void
     {
         $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
@@ -62,7 +62,7 @@ final class NameFilterListenerSpec extends TestCase
         $this->nameFilterListener->onEvent($this->eventMock);
     }
 
-    function testCleanTheName(): void
+    public function testCleanTheName(): void
     {
         $this->eventMock->expects($this->once())->method('getSubject')->willReturn($this->document);
 
@@ -75,7 +75,7 @@ final class NameFilterListenerSpec extends TestCase
         $this->nameFilterListener->onEvent($this->eventMock);
     }
 
-    function testUseTheGivenReplacementChar(): void
+    public function testUseTheGivenReplacementChar(): void
     {
         $this->nameFilterListener = new NameFilterListener($this->documentManagerMock, '_');
 

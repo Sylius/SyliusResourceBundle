@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder;
+namespace Sylius\Bundle\ResourceBundle\Tests\Doctrine\ORM\Form\Builder;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +24,7 @@ use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class DefaultFormBuilderSpec extends TestCase
+final class DefaultFormBuilderTest extends TestCase
 {
     private EntityManagerInterface|MockObject $entityManagerMock;
 
@@ -45,12 +45,12 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->classMetadataMock = $this->createMock(ClassMetadata::class);
     }
 
-    function testADefaultFormBuilder(): void
+    public function testADefaultFormBuilder(): void
     {
         $this->assertInstanceOf(DefaultFormBuilderInterface::class, $this->defaultFormBuilder);
     }
 
-    function testDoesNotSupportEntitiesWithMultiplePrimaryKeys(): void
+    public function testDoesNotSupportEntitiesWithMultiplePrimaryKeys(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -63,7 +63,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testExcludesNonNaturalIdentifierFromTheFieldList(): void
+    public function testExcludesNonNaturalIdentifierFromTheFieldList(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -100,7 +100,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testDoesNotExcludeNaturalIdentifierFromTheFieldList(): void
+    public function testDoesNotExcludeNaturalIdentifierFromTheFieldList(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -139,7 +139,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testUsesMetadataToCreateAppropriateFields(): void
+    public function testUsesMetadataToCreateAppropriateFields(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -174,7 +174,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testUsesSingleTextWidgetForDatetimeField(): void
+    public function testUsesSingleTextWidgetForDatetimeField(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -212,7 +212,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testAlsoCreatesFieldsForRelationsOtherThanOneToMany(): void
+    public function testAlsoCreatesFieldsForRelationsOtherThanOneToMany(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 
@@ -257,7 +257,7 @@ final class DefaultFormBuilderSpec extends TestCase
         $this->defaultFormBuilder->build($this->metadataMock, $this->formBuilderMock, []);
     }
 
-    function testExcludesCommonFieldsLikeCreatedAtAndUpdatedAt(): void
+    public function testExcludesCommonFieldsLikeCreatedAtAndUpdatedAt(): void
     {
         $this->metadataMock->expects($this->once())->method('getClass')->with('model')->willReturn('AppBundle\Entity\Book');
 

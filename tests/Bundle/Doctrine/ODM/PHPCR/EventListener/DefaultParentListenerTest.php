@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\EventListener;
+namespace Sylius\Bundle\ResourceBundle\Tests\Doctrine\ODM\PHPCR\EventListener;
 
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
@@ -25,7 +25,7 @@ use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 /**
  * @require Doctrine\ODM\PHPCR\DocumentManagerInterface
  */
-final class DefaultParentListenerSpec extends TestCase
+final class DefaultParentListenerTest extends TestCase
 {
     private DocumentManagerInterface|MockObject $documentManagerMock;
 
