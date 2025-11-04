@@ -75,8 +75,8 @@ jobs:
                     (cd tests/Application && bin/console doctrine:schema:create)
 
             -
-                name: Run Psalm
-                run: vendor/bin/psalm --php-version=${{ matrix.php }}
+                name: Run PHPStan
+                run: vendor/bin/phpstan analyse --ansi --memory-limit=-1 -c phpstan.neon src
 
             -
                 name: Run analysis
