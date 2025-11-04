@@ -61,7 +61,9 @@ final class MutatorResourceMetadataCollectionFactory implements ResourceMetadata
 
     /**
      * @template T of Operation
+     *
      * @param Operations<T> $operations
+     *
      * @return Operations<T>
      */
     private function mutateOperations(Operations $operations): Operations
