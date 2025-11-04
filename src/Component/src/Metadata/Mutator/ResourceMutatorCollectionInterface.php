@@ -18,6 +18,8 @@ use Sylius\Resource\Metadata\ResourceMutatorInterface;
 
 /**
  * Collection of Resource mutators to mutate ResourceMetadata.
+ *
+ * @experimental
  */
 interface ResourceMutatorCollectionInterface extends ContainerInterface
 {

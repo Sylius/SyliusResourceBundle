@@ -18,6 +18,8 @@ use Sylius\Resource\Metadata\OperationMutatorInterface;
 
 /**
  * Collection of Operation mutators to mutate Operation metadata.
+ *
+ * @experimental
  */
 interface OperationMutatorCollectionInterface extends ContainerInterface
 {
