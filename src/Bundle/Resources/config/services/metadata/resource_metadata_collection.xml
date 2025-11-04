@@ -17,16 +17,28 @@
             <tag name="cache.pool" />
         </service>
 
+        <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
+        <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
+
         <service id="sylius.resource_metadata_collection.factory.attributes" class="Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
         </service>
-        <service id="Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface" alias="sylius.resource_metadata_collection.factory.attributes" />
-        <service id="sylius.resource_metadata_collection.factory" alias="sylius.resource_metadata_collection.factory.attributes" />
+
+        <service id="sylius.resource_metadata_collection.factory.php_file"
+                 class="Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="400"
+        >
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id="sylius.metadata.resource_extractor.php_file" />
+            <argument type="service" id=".inner" />
+        </service>
 
         <service id="sylius.resource_metadata_collection.factory.state_machine"
                  class="Sylius\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"
-                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decorates="sylius.resource_metadata_collection.factory"
                  decoration-priority="300"
         >
             <argument type="service" id="sylius.resource_registry" />
@@ -83,7 +95,7 @@
 
         <service id="sylius.resource_metadata_collection.factory.templates_dir"
                  class="Sylius\Resource\Metadata\Resource\Factory\TemplatesDirResourceMetadataCollectionFactory"
-                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decorates="sylius.resource_metadata_collection.factory"
         >
             <argument type="service" id=".inner" />
             <argument>%sylius.resource.settings%</argument>
@@ -91,7 +103,7 @@
 
         <service id="sylius.resource_metadata_collection.factory.cached"
                  class="Sylius\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory"
-                 decorates="sylius.resource_metadata_collection.factory.attributes"
+                 decorates="sylius.resource_metadata_collection.factory"
                  decoration-priority="-10"
         >
             <argument type="service" id="sylius.cache.metadata.resource_collection" />

@@ -5,7 +5,6 @@ parameters:
     database_driver: pdo_sqlite
     database_path: "%kernel.project_dir%/config/db.sql"
 
-    locale: en_US
     secret: "Three can keep a secret, if two of them are dead."
 
 services:
@@ -95,6 +94,9 @@ services:
 
     App\BoardGameBlog\:
         resource: '../src/BoardGameBlog'
+
+    App\Conference\:
+        resource: '../src/Conference'
 
     App\Subscription\:
         resource: '../src/Subscription'

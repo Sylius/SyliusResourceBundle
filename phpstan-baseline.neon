@@ -1,0 +1,2711 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\AbstractResourceBundle\\:\\:getMappingCompilerPassInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/AbstractResourceBundle.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:addResourceOperationsRows\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:addResourceOperationsRows\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:configurationToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:objectToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:operationToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Command\\\\DebugResourceCommand\\:\\:resourceToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Command/DebugResourceCommand.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Context\\\\Initiator\\\\LegacyRequestContextInitiator\\:\\:resolveVars\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Context/Initiator/LegacyRequestContextInitiator.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Context\\\\Initiator\\\\LegacyRequestContextInitiator\\:\\:resolveVars\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Context/Initiator/LegacyRequestContextInitiator.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelper\\:\\:addFlash\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelper\\:\\:getParametersWithName\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelper\\:\\:isTranslationDefined\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelper\\:\\:prepareMessage\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelper\\:\\:prepareMessage\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\NewResourceFactory\\:\\:create\\(\\) has parameter \\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/NewResourceFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\NewResourceFactoryInterface\\:\\:create\\(\\) has parameter \\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/NewResourceFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ParametersParser\\:\\:parseRequestValues\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ParametersParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ParametersParser\\:\\:parseRequestValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ParametersParser.php
+
+		-
+			message: "#^Parameter \\#2 \\$callback of function preg_replace_callback expects callable\\(array\\<int\\|string, string\\>\\)\\: string, Closure\\(array\\)\\: mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ParametersParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ParametersParserInterface\\:\\:parseRequestValues\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ParametersParserInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ParametersParserInterface\\:\\:parseRequestValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ParametersParserInterface.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 3
+			path: src/Bundle/Controller/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RedirectHandler\\:\\:redirectToRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RedirectHandlerInterface\\:\\:redirectToRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RedirectHandlerInterface.php
+
+		-
+			message: "#^Cannot access offset 'arguments' on mixed\\.$#"
+			count: 2
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'graph' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'options' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'parameters' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'transition' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'type' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:addExtraRedirectParameters\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:addExtraRedirectParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getCriteria\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getCriteria\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getEvent\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getFactoryArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getFactoryMethod\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getFormOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getFormOptions\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getFormType\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getGrid\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getPermission\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getRedirectParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getRepositoryArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getRepositoryMethod\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getRequestParameter\\(\\) has parameter \\$defaults with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getRequestParameter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getSection\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getSerializationGroups\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getSerializationGroups\\(\\) should return array\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getSorting\\(\\) has parameter \\$sorting with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getSorting\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getStateMachineGraph\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getStateMachineTransition\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getVars\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:getVars\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:isCsrfProtectionEnabled\\(\\) should return bool but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:parseResourceValues\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfiguration\\:\\:parseResourceValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$redirect has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 2
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$replacements of function array_replace_recursive expects array, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfiguration.php
+
+		-
+			message: "#^Cannot access offset 'allowed…' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Cannot access offset 'serialization_groups' on mixed\\.$#"
+			count: 2
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Cannot access offset 'serialization…' on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfigurationFactory\\:\\:__construct\\(\\) has parameter \\$defaultParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfigurationFactory\\:\\:parseApiParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfigurationFactory\\:\\:parseApiParameters\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RequestConfigurationFactory\\:\\:\\$defaultParameters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/RequestConfigurationFactory.php
+
+		-
+			message: "#^Cannot call method create\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method createBuilder\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method dispatch\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method display\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method generate\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method getCurrentRequest\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method getSession\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method getToken\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method handle\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method isGranted\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method isTokenValid\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method render\\(\\) on mixed\\.$#"
+			count: 4
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method serialize\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method stream\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Cannot call method withLink\\(\\) on mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:__construct\\(\\) has parameter \\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:__construct\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:addFlash\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:addFlash\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:addLink\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:createForm\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:createForm\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:createFormBuilder\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:createFormBuilder\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:denyAccessUnlessGranted\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:denyAccessUnlessGranted\\(\\) has parameter \\$attributes with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:denyAccessUnlessGranted\\(\\) has parameter \\$subject with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:forward\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:forward\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:generateUrl\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:get\\(\\) should return object but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:getDoctrine\\(\\) should return Doctrine\\\\Persistence\\\\ManagerRegistry but returns mixed\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:isGranted\\(\\) has parameter \\$attributes with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:isGranted\\(\\) has parameter \\$subject with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:json\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:json\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:json\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:redirectToRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:render\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:renderView\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:stream\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#1 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceUpdateHandlerInterface\\:\\:handle\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#1 \\$resource of method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface\\<Sylius\\\\Resource\\\\Model\\\\ResourceInterface\\>\\:\\:add\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#1 \\$view of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:render\\(\\) expects string, mixed given\\.$#"
+			count: 4
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#2 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RedirectHandlerInterface\\:\\:redirectToIndex\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#2 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\RedirectHandlerInterface\\:\\:redirectToResource\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 3
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#2 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\StateMachineInterface\\:\\:apply\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#2 \\$token of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:isCsrfTokenValid\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#3 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\EventDispatcherInterface\\:\\:dispatchPostEvent\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 2
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#3 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\EventDispatcherInterface\\:\\:dispatchPreEvent\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface, mixed given\\.$#"
+			count: 2
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Parameter \\#3 \\$resource of method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\FlashHelperInterface\\:\\:addSuccessFlash\\(\\) expects Sylius\\\\Resource\\\\Model\\\\ResourceInterface\\|null, mixed given\\.$#"
+			count: 2
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:\\$container \\(Psr\\\\Container\\\\ContainerInterface\\) does not accept Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:\\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceController\\:\\:\\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceController.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceDeleteHandler\\:\\:handle\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceDeleteHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourceDeleteHandlerInterface\\:\\:handle\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourceDeleteHandlerInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesCollectionProvider\\:\\:get\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesCollectionProvider\\:\\:get\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Hateoas\\\\Configuration\\\\Route constructor expects JMS\\\\Serializer\\\\Expression\\\\Expression\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesCollectionProviderInterface\\:\\:get\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProviderInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesCollectionProviderInterface\\:\\:get\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesCollectionProviderInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesResolver\\:\\:getResources\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesResolver\\:\\:getResources\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesResolverInterface\\:\\:getResources\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\ResourcesResolverInterface\\:\\:getResources\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/ResourcesResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\SingleResourceProvider\\:\\:get\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/SingleResourceProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Controller\\\\SingleResourceProviderInterface\\:\\:get\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Controller/SingleResourceProviderInterface.php
+
+		-
+			message: "#^Parameter \\#1 \\$version of method FOS\\\\RestBundle\\\\View\\\\ConfigurableViewHandlerInterface\\:\\:setExclusionStrategyVersion\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Controller/ViewHandler.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/DoctrineTargetEntitiesResolverPass.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\Helper\\\\TargetEntitiesResolver\\:\\:getModel\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\Helper\\\\TargetEntitiesResolver\\:\\:resolve\\(\\) has parameter \\$resourcesConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\Helper\\\\TargetEntitiesResolver\\:\\:resolve\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\Helper\\\\TargetEntitiesResolverInterface\\:\\:resolve\\(\\) has parameter \\$resourcesConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\Helper\\\\TargetEntitiesResolverInterface\\:\\:resolve\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\PrioritizedCompositeServicePass\\:\\:addMethodCall\\(\\) has parameter \\$attributes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/PrioritizedCompositeServicePass.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Compiler\\\\PrioritizedCompositeServicePass\\:\\:addMethodCalls\\(\\) has parameter \\$tags with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/PrioritizedCompositeServicePass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterFqcnControllersPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceRepositoryPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$interfaces has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$bundles has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$settings has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$bundles has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/UnregisterFosRestDefinitionsPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$bundles has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/UnregisterHateoasDefinitionsPass.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$bundles has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Compiler/WinzouStateMachinePass.php
+
+		-
+			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 3
+			path: src/Bundle/DependencyInjection/Configuration.php
+
+		-
+			message: "#^Cannot call method variableNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 2
+			path: src/Bundle/DependencyInjection/Configuration.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$factoryInterfaces has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$factoryParents has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$repositoryInterfaces has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$repositoryParents has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_keys expects array, array\\|string given\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
+
+		-
+			message: "#^Parameter \\#1 \\$class of class Symfony\\\\Component\\\\DependencyInjection\\\\Definition constructor expects string\\|null, class\\-string\\|Symfony\\\\Component\\\\DependencyInjection\\\\Parameter given\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, array\\|string given\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\Extension\\\\AbstractResourceExtension\\:\\:registerResources\\(\\) has parameter \\$registeredResources with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
+
+		-
+			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
+
+		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\PagerfantaExtension\\:\\:getConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:autoRegisterResources\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:getAvailableDrivers\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:getConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:getResourceFilesToWatch\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:getResourceFilesToWatch\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:loadPersistence\\(\\) has parameter \\$drivers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:loadResources\\(\\) has parameter \\$loadedResources with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\DependencyInjection\\\\SyliusResourceExtension\\:\\:registerMetadataConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$mapping has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$resources has no value type specified in iterable type array\\.$#"
+			count: 2
+			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:getOrCreateRepository\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:getOrCreateRepository\\(\\) return type with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:getRepository\\(\\) return type with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$repository contains generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\ContainerRepositoryFactory\\:\\:\\$managedRepositories with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/ContainerRepositoryFactory.php
+
+		-
+			message: "#^Class Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository extends generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Class Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository implements generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository\\:\\:applyCriteria\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository\\:\\:applySorting\\(\\) has parameter \\$sorting with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository\\:\\:getArrayPaginator\\(\\) has parameter \\$objects with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository\\:\\:getArrayPaginator\\(\\) return type with generic interface Pagerfanta\\\\PagerfantaInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\EntityRepository\\:\\:getPaginator\\(\\) return type with generic interface Pagerfanta\\\\PagerfantaInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/EntityRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\Form\\\\Builder\\\\DefaultFormBuilder\\:\\:build\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/Form/Builder/DefaultFormBuilder.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ORM\\\\Form\\\\Builder\\\\DefaultFormBuilder\\:\\:doBuild\\(\\) has parameter \\$classMetadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ORM/Form/Builder/DefaultFormBuilder.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Doctrine\\\\ResourceMappingDriverChain\\:\\:convertResourceMappedSuperclass\\(\\) has parameter \\$metadata with generic interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Doctrine/ResourceMappingDriverChain.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\AbstractDoctrineListener\\:\\:isResource\\(\\) has parameter \\$metadata with generic interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/AbstractDoctrineListener.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMMappedSuperClassSubscriber\\:\\:setAssociationMappings\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMMappedSuperClassSubscriber\\:\\:unsetAssociationMappings\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMRepositoryClassSubscriber\\:\\:setCustomRepositoryClass\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMRepositoryClassSubscriber.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$repository contains generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMRepositoryClassSubscriber.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMTranslatableListener\\:\\:hasUniqueConstraint\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMTranslatableListener\\:\\:hasUniqueConstraint\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMTranslatableListener\\:\\:mapTranslatable\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\EventListener\\\\ORMTranslatableListener\\:\\:mapTranslation\\(\\) has parameter \\$metadata with generic class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/EventListener/ORMTranslatableListener.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\ExpressionLanguage\\\\ExpressionLanguage\\:\\:__construct\\(\\) has parameter \\$providers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/ExpressionLanguage/ExpressionLanguage.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\Builder\\\\DefaultFormBuilderInterface\\:\\:build\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Form/Builder/DefaultFormBuilderInterface.php
+
+		-
+			message: "#^Class Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\CollectionToStringTransformer implements generic interface Symfony\\\\Component\\\\Form\\\\DataTransformerInterface but does not specify its types\\: TValue, TTransformedValue$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\CollectionToStringTransformer\\:\\:reverseTransform\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php
+
+		-
+			message: "#^Class Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer implements generic interface Symfony\\\\Component\\\\Form\\\\DataTransformerInterface but does not specify its types\\: TValue, TTransformedValue$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:__construct\\(\\) has parameter \\$decoratedTransformer with generic interface Symfony\\\\Component\\\\Form\\\\DataTransformerInterface but does not specify its types\\: TValue, TTransformedValue$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:reverseTransform\\(\\) has parameter \\$value with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:reverseTransform\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\ReadableCollection does not specify its types\\: TKey, T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:transform\\(\\) has parameter \\$value with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:transform\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\ReadableCollection does not specify its types\\: TKey, T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\RecursiveTransformer\\:\\:\\$decoratedTransformer with generic interface Symfony\\\\Component\\\\Form\\\\DataTransformerInterface does not specify its types\\: TValue, TTransformedValue$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/RecursiveTransformer.php
+
+		-
+			message: "#^Class Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\ResourceToIdentifierTransformer implements generic interface Symfony\\\\Component\\\\Form\\\\DataTransformerInterface but does not specify its types\\: TValue, TTransformedValue$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\ResourceToIdentifierTransformer\\:\\:__construct\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php
+
+		-
+			message: "#^Parameter \\#4 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\DataTransformer\\\\ResourceToIdentifierTransformer\\:\\:\\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Form/DataTransformer/ResourceToIdentifierTransformer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\EventSubscriber\\\\AddCodeFormSubscriber\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Form/EventSubscriber/AddCodeFormSubscriber.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\EventSubscriber\\\\AddCodeFormSubscriber\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Form/EventSubscriber/AddCodeFormSubscriber.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$default has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\Registry\\\\FormTypeRegistry\\:\\:\\$formTypes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Form/Registry/FormTypeRegistry.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\Type\\\\ResourceToIdentifierType\\:\\:__construct\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Form/Type/ResourceToIdentifierType.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Form\\\\Type\\\\ResourceToIdentifierType\\:\\:\\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Form/Type/ResourceToIdentifierType.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Controller\\\\ResourcesResolver\\:\\:getResources\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Controller/ResourcesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Controller\\\\ResourcesResolver\\:\\:getResources\\(\\) has parameter \\$repository with generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Bundle/Grid/Controller/ResourcesResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParser\\:\\:parseOption\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParser\\:\\:parseOptionResourceField\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParser\\:\\:parseOptions\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParser\\:\\:parseOptions\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParser\\:\\:parseOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Parameter \\#1 \\$objectOrArray of method Symfony\\\\Component\\\\PropertyAccess\\\\PropertyAccessorInterface\\:\\:getValue\\(\\) expects array\\|object, array\\|object\\|null given\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Parameter \\#2 \\$callback of function preg_replace_callback expects callable\\(array\\<int\\|string, string\\>\\)\\: string, Closure\\(array\\)\\: mixed given\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParser.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParserInterface\\:\\:parseOptions\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParserInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Parser\\\\OptionsParserInterface\\:\\:parseOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Parser/OptionsParserInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Renderer\\\\TwigBulkActionGridRenderer\\:\\:__construct\\(\\) has parameter \\$bulkActionTemplates with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigBulkActionGridRenderer.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Renderer\\\\TwigBulkActionGridRenderer\\:\\:\\$bulkActionTemplates type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigBulkActionGridRenderer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Renderer\\\\TwigGridRenderer\\:\\:__construct\\(\\) has parameter \\$actionTemplates with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigGridRenderer.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\Renderer\\\\TwigGridRenderer\\:\\:\\$actionTemplates type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/Renderer/TwigGridRenderer.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Grid\\\\View\\\\LegacyGridViewFactory\\:\\:create\\(\\) has parameter \\$driverConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Grid/View/LegacyGridViewFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\ResourceBundleInterface\\:\\:getSupportedDrivers\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/ResourceBundleInterface.php
+
+		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: src/Bundle/Routing/Configuration.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\CrudRoutesAttributesLoader\\:\\:__construct\\(\\) has parameter \\$mapping with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
+
+		-
+			message: "#^Property Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\CrudRoutesAttributesLoader\\:\\:\\$mapping type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:createRoute\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:createRoute\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:getRouteName\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:load\\(\\) has parameter \\$resource with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:load\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\ResourceLoader\\:\\:supports\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Bundle/Routing/ResourceLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactory\\:\\:createRoute\\(\\) has parameter \\$defaults with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactory\\:\\:createRoute\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactory\\:\\:createRoute\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactory\\:\\:createRoute\\(\\) has parameter \\$requirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactory\\:\\:createRoute\\(\\) has parameter \\$schemes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactoryInterface\\:\\:createRoute\\(\\) has parameter \\$defaults with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactoryInterface\\:\\:createRoute\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactoryInterface\\:\\:createRoute\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactoryInterface\\:\\:createRoute\\(\\) has parameter \\$requirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RouteFactoryInterface\\:\\:createRoute\\(\\) has parameter \\$schemes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RouteFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Routing\\\\RoutesAttributesLoader\\:\\:__construct\\(\\) has parameter \\$mapping with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Routing/RoutesAttributesLoader.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Storage\\\\CookieStorage\\:\\:all\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Storage/CookieStorage.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Storage\\\\SessionStorage\\:\\:all\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Storage/SessionStorage.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Twig\\\\Context\\\\LegacyContextFactory\\:\\:create\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Twig/Context/LegacyContextFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Validator\\\\Constraints\\\\Disabled\\:\\:getTargets\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Validator/Constraints/Disabled.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Validator\\\\Constraints\\\\Enabled\\:\\:getTargets\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Bundle/Validator/Constraints/Enabled.php
+
+		-
+			message: "#^Method Sylius\\\\Bundle\\\\ResourceBundle\\\\Validator\\\\UniqueWithinCollectionConstraintValidator\\:\\:validate\\(\\) has parameter \\$value with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:__construct\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:__construct\\(\\) has parameter \\$except with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:__construct\\(\\) has parameter \\$only with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:\\$criteria type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:\\$except type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:\\$only type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Annotation\\\\SyliusCrudRoutes\\:\\:\\$vars type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusCrudRoutes.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$form with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$redirect with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$repository with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$requirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$schemes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$serializationGroups with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$stateMachine with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Annotation\\\\SyliusRoute\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Annotation/SyliusRoute.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository implements generic interface Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\RepositoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:applyCriteria\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:applyOrder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:createPaginator\\(\\) return type with generic interface Pagerfanta\\\\PagerfantaInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:findBy\\(\\) has parameter \\$limit with no type specified\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:findBy\\(\\) has parameter \\$offset with no type specified\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$interfaceInterfaces has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$object has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_multisort expects array, array\\|int given\\.$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Doctrine\\\\Persistence\\\\InMemoryRepository\\:\\:\\$arrayObject with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Factory\\\\Factory implements generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Factory/Factory.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Factory\\\\TranslatableFactory implements generic interface Sylius\\\\Resource\\\\Factory\\\\TranslatableFactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Factory/TranslatableFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Factory\\\\TranslatableFactory\\:\\:__construct\\(\\) has parameter \\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Factory/TranslatableFactory.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Factory\\\\TranslatableFactory\\:\\:\\$factory with generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Factory/TranslatableFactory.php
+
+		-
+			message: "#^Interface Sylius\\\\Resource\\\\Factory\\\\TranslatableFactoryInterface extends generic interface Sylius\\\\Resource\\\\Factory\\\\FactoryInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Factory/TranslatableFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Grid\\\\State\\\\RequestGridProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Grid/State/RequestGridProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Grid\\\\State\\\\RequestGridProvider\\:\\:resolveMaxPerPage\\(\\) has parameter \\$gridLimits with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Grid/State/RequestGridProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Grid\\\\View\\\\Factory\\\\GridViewFactory\\:\\:create\\(\\) has parameter \\$driverConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Grid/View/Factory/GridViewFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Grid\\\\View\\\\Factory\\\\GridViewFactoryInterface\\:\\:create\\(\\) has parameter \\$driverConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Grid/View/Factory/GridViewFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Delete\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Get\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Get.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\GetCollection\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/GetCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Patch\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Patch.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Post\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Post.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Api\\\\Put\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Api/Put.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ApplyStateMachineTransition\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ApplyStateMachineTransition.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ApplyStateMachineTransition\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ApplyStateMachineTransition.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ApplyStateMachineTransition\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ApplyStateMachineTransition.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ApplyStateMachineTransition\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ApplyStateMachineTransition.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\AsResource\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/AsResource.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\AsResource\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/AsResource.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\AsResource\\:\\:__construct\\(\\) has parameter \\$operations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/AsResource.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\AsResource\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/AsResource.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\AsResource\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/AsResource.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkDelete\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkDelete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\BulkUpdate\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/BulkUpdate.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$factoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:getFactoryArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Create\\:\\:withFactoryArguments\\(\\) has parameter \\$factoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Create.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Delete\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Delete.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Extractor\\\\AbstractResourceExtractor\\:\\:getResources\\(\\) should return array\\<Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\> but returns array\\<Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\>\\|null\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Extractor/AbstractResourceExtractor.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Metadata\\\\Extractor\\\\AbstractResourceExtractor\\:\\:\\$collectedParameters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Extractor/AbstractResourceExtractor.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\FactoryAwareOperationInterface\\:\\:getFactoryArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/FactoryAwareOperationInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\FactoryAwareOperationInterface\\:\\:withFactoryArguments\\(\\) has parameter \\$factoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/FactoryAwareOperationInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:getMethods\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:getRedirectArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:getRouteRequirements\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:getVars\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:withMethods\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:withRedirectArguments\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:withRouteRequirements\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\HttpOperation\\:\\:withVars\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/HttpOperation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Index\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Index.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:__construct\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:fromAliasAndConfiguration\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:getParameter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:getParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:parseAlias\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Metadata\\\\Metadata\\:\\:\\$parameters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Metadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\MetadataInterface\\:\\:getParameter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/MetadataInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\MetadataInterface\\:\\:getParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/MetadataInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:getDenormalizationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:getFormOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:getNormalizationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:getRepositoryArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:getValidationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:withDenormalizationContext\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:withFormOptions\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:withNormalizationContext\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:withRepositoryArguments\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\:\\:withValidationContext\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\\\HttpOperationInitiator\\:\\:resolveVars\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation/HttpOperationInitiator.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Operation\\\\HttpOperationInitiator\\:\\:resolveVars\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operation/HttpOperationInitiator.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\OperationAccessCheckerInterface\\:\\:isGranted\\(\\) has parameter \\$extraVariables with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/OperationAccessCheckerInterface.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Metadata\\\\Operations implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Component/src/Metadata/Operations.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Metadata\\\\Operations\\:\\:\\$operations type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Operations.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Registry\\:\\:addFromAliasAndConfiguration\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Registry.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\RegistryInterface\\:\\:addFromAliasAndConfiguration\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/RegistryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\AttributesResourceMetadataCollectionFactory\\:\\:buildFormOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\AttributesResourceMetadataCollectionFactory\\:\\:buildResourceOperations\\(\\) has parameter \\$attributes with generic class ReflectionAttribute but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\AttributesResourceMetadataCollectionFactory\\:\\:getOperationWithDefaults\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\CachedResourceMetadataCollectionFactory\\:\\:\\$localCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/CachedResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\PhpFileResourceMetadataCollectionFactory\\:\\:buildFormOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/PhpFileResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\PhpFileResourceMetadataCollectionFactory\\:\\:getOperationWithDefaults\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/PhpFileResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\Factory\\\\TemplatesDirResourceMetadataCollectionFactory\\:\\:__construct\\(\\) has parameter \\$settings with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/Factory/TemplatesDirResourceMetadataCollectionFactory.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\ResourceClassList implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/ResourceClassList.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Metadata\\\\Resource\\\\ResourceMetadataCollection extends generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Component/src/Metadata/Resource/ResourceMetadataCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:__construct\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:__construct\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:__construct\\(\\) has parameter \\$operations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:getDenormalizationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:getNormalizationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:getValidationContext\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:getVars\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:withDenormalizationContext\\(\\) has parameter \\$denormalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:withNormalizationContext\\(\\) has parameter \\$normalizationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:withValidationContext\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\ResourceMetadata\\:\\:withVars\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/ResourceMetadata.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Show\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Show.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$formOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$methods with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$redirectArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$repositoryArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$routeRequirements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$validationContext with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Metadata\\\\Update\\:\\:__construct\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Metadata/Update.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Model\\\\ResourceInterface\\:\\:getId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Component/src/Model/ResourceInterface.php
+
+		-
+			message: "#^Class Sylius\\\\Resource\\\\Model\\\\ResourceLogEntry extends generic class Gedmo\\\\Loggable\\\\Entity\\\\MappedSuperclass\\\\AbstractLogEntry but does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Model/ResourceLogEntry.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Model\\\\TimestampableInterface\\:\\:setCreatedAt\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Component/src/Model/TimestampableInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Model\\\\TimestampableInterface\\:\\:setUpdatedAt\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Component/src/Model/TimestampableInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\ClassReflection\\:\\:getClassAttributes\\(\\) return type with generic class ReflectionAttribute does not specify its types\\: T$#"
+			count: 1
+			path: src/Component/src/Reflection/ClassReflection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\ClassReflection\\:\\:getResourcesByPath\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Component/src/Reflection/ClassReflection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\ClassReflection\\:\\:getResourcesByPaths\\(\\) has parameter \\$paths with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Reflection/ClassReflection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\Filter\\\\FunctionArgumentsFilter\\:\\:filter\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Reflection/Filter/FunctionArgumentsFilter.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\Filter\\\\FunctionArgumentsFilter\\:\\:filter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Reflection/Filter/FunctionArgumentsFilter.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Reflection\\\\Filter\\\\FunctionArgumentsFilter\\:\\:getFunctionArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Reflection/Filter/FunctionArgumentsFilter.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Factory\\:\\:parseArgumentValues\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Factory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Factory\\:\\:parseArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Factory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Provider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Provider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Provider\\\\FactoryProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Provider/FactoryProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Provider\\\\ReadProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Provider/ReadProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\Provider\\\\SecurityProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/Provider/SecurityProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\State\\\\ProviderInterface\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/State/ProviderInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Storage\\\\StorageInterface\\:\\:all\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Storage/StorageInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Controller\\\\MainController\\:\\:__invoke\\(\\) should return Symfony\\\\Component\\\\HttpFoundation\\\\Response but returns mixed\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Controller/MainController.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\GenericEvent\\:\\:getMessageParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/GenericEvent.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\GenericEvent\\:\\:setMessageParameters\\(\\) has parameter \\$messageParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/GenericEvent.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\GenericEvent\\:\\:stop\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/GenericEvent.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\GenericEvent\\:\\:stop\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/GenericEvent.php
+
+		-
+			message: "#^Property Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\GenericEvent\\:\\:\\$messageParameters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/GenericEvent.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventDispatcher\\\\State\\\\DispatchPostReadEventProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventDispatcher/State/DispatchPostReadEventProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\EventListener\\\\AddFormatListener\\:\\:getNotAcceptableHttpException\\(\\) has parameter \\$mimeTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/EventListener/AddFormatListener.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\ArgumentParser\\:\\:__construct\\(\\) has parameter \\$providers with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/ArgumentParser.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\ArgumentParser\\:\\:parseExpression\\(\\) has parameter \\$variables with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/ArgumentParser.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\ArgumentParserInterface\\:\\:parseExpression\\(\\) has parameter \\$variables with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/ArgumentParserInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\RequestVariables\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/RequestVariables.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\SyliusRepositoriesVariables\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/SyliusRepositoriesVariables.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\TokenVariables\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/TokenVariables.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VariablesCollection\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VariablesCollection.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VariablesCollectionInterface\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VariablesCollectionInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VariablesInterface\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VariablesInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VarsResolver\\:\\:resolve\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VarsResolver\\:\\:resolve\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VarsResolverInterface\\:\\:resolve\\(\\) has parameter \\$vars with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\ExpressionLanguage\\\\VarsResolverInterface\\:\\:resolve\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolverInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Form\\\\State\\\\FormProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Form/State/FormProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Request\\\\RepositoryArgumentResolver\\:\\:filterPrivateArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Request\\\\RepositoryArgumentResolver\\:\\:getArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Request\\\\State\\\\Provider\\:\\:parseArgumentValues\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Request/State/Provider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Request\\\\State\\\\Provider\\:\\:parseArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Request/State/Provider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Request\\\\State\\\\Provider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Request/State/Provider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Response\\\\ApiHeadersInitiator\\:\\:initializeHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Response/ApiHeadersInitiator.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Response\\\\HeadersInitiatorInterface\\:\\:initializeHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Response/HeadersInitiatorInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\Factory\\\\OperationRouteFactory\\:\\:getSyliusOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\RedirectHandler\\:\\:getRouteArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\RedirectHandler\\:\\:parseResourceValues\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\RedirectHandler\\:\\:parseResourceValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\RedirectHandler\\:\\:redirectToRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandler.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Routing\\\\RedirectHandlerInterface\\:\\:redirectToRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Routing/RedirectHandlerInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Security\\\\OperationAccessChecker\\:\\:getVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Security/OperationAccessChecker.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Security\\\\OperationAccessChecker\\:\\:isGranted\\(\\) has parameter \\$extraVariables with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Security/OperationAccessChecker.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Serializer\\\\State\\\\DeserializeProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Serializer/State/DeserializeProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Serializer\\\\State\\\\DeserializeProvider\\:\\:provide\\(\\) should return array\\|object\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Serializer/State/DeserializeProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Session\\\\Flash\\\\FlashHelper\\:\\:getTranslationParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Session/Flash/FlashHelper.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Symfony\\\\Validator\\\\State\\\\ValidateProvider\\:\\:provide\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Validator/State/ValidateProvider.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$data has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Symfony/Validator/State/ValidateProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Translation\\\\Provider\\\\ImmutableTranslationLocaleProvider\\:\\:__construct\\(\\) has parameter \\$definedLocalesCodes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Translation/Provider/ImmutableTranslationLocaleProvider.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Twig\\\\Context\\\\Factory\\\\ContextFactory\\:\\:create\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/ContextFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Twig\\\\Context\\\\Factory\\\\ContextFactoryInterface\\:\\:create\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/ContextFactoryInterface.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Twig\\\\Context\\\\Factory\\\\DefaultContextFactory\\:\\:create\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/DefaultContextFactory.php
+
+		-
+			message: "#^Method Sylius\\\\Resource\\\\Twig\\\\Context\\\\Factory\\\\RequestContextFactory\\:\\:create\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Component/src/Twig/Context/Factory/RequestContextFactory.php

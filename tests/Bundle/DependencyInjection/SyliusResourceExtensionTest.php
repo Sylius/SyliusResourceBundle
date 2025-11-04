@@ -123,6 +123,7 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasParameter('sylius.resource.mapping', [
+            'imports' => [],
             'paths' => [
                 __DIR__ . '/Dummy',
             ],
@@ -179,6 +180,36 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService(ResourceMappingDriverChain::class);
         $this->assertContainerBuilderHasService(PersistProcessor::class);
         $this->assertContainerBuilderHasService(RemoveProcessor::class);
+    }
+
+    public function testItRegistersMetadataConfigurationWithADirectoryAsImportPath(): void
+    {
+        $this->load([
+            'mapping' => [
+                'imports' => [
+                    __DIR__ . '/php',
+                ],
+            ],
+        ]);
+
+        $emptyPhpFile = realpath(__DIR__ . '/php/empty_file.php');
+        $this->assertContainerBuilderHasService('sylius.metadata.resource_extractor.php_file');
+        $this->assertSame([$emptyPhpFile], $this->container->getDefinition('sylius.metadata.resource_extractor.php_file')->getArgument(0));
+    }
+
+    public function testItRegistersMetadataConfigurationWithAFileAsImportPath(): void
+    {
+        $this->load([
+            'mapping' => [
+                'imports' => [
+                    __DIR__ . '/php/empty_file.php',
+                ],
+            ],
+        ]);
+
+        $emptyPhpFile = realpath(__DIR__ . '/php/empty_file.php');
+        $this->assertContainerBuilderHasService('sylius.metadata.resource_extractor.php_file');
+        $this->assertSame([$emptyPhpFile], $this->container->getDefinition('sylius.metadata.resource_extractor.php_file')->getArgument(0));
     }
 
     protected function getContainerExtensions(): array

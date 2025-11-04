@@ -95,7 +95,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -107,7 +107,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -119,7 +119,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -131,7 +131,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -148,7 +148,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -160,12 +160,214 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
 
         $this->load($configuration, 'sylius.resource')->shouldReturn($routeCollection);
+    }
+
+    function it_generates_new_routing_paths_if_bc_layer_is_disabled(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+        RouteFactoryInterface $routeFactory,
+        RouteCollection $routeCollection,
+        Route $showRoute,
+        Route $indexRoute,
+        Route $createRoute,
+        Route $updateRoute,
+        Route $bulkDeleteRoute,
+        Route $deleteRoute,
+    ): void {
+        $this->beConstructedWith($resourceRegistry, $routeFactory, null, false);
+
+        $resourceRegistry->get('sylius.product')->willReturn($metadata);
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+        $metadata->getPluralName()->willReturn('products');
+        $metadata->getServiceId('controller')->willReturn('sylius.controller.product');
+
+        $routeFactory->createRouteCollection()->willReturn($routeCollection);
+
+        $configuration =
+            <<<EOT
+alias: sylius.product
+EOT;
+
+        $showDefaults = [
+            '_controller' => 'sylius.controller.product::showAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
+            ->willReturn($showRoute)
+        ;
+        $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
+
+        $indexDefaults = [
+            '_controller' => 'sylius.controller.product::indexAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products', $indexDefaults, [], [], '', [], ['GET'], '')
+            ->willReturn($indexRoute)
+        ;
+        $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
+
+        $createDefaults = [
+            '_controller' => 'sylius.controller.product::createAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
+            ->willReturn($createRoute)
+        ;
+        $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
+
+        $updateDefaults = [
+            '_controller' => 'sylius.controller.product::updateAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH', 'POST'], '')
+            ->willReturn($updateRoute)
+        ;
+        $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
+
+        $bulkDeleteDefaults = [
+            '_controller' => 'sylius.controller.product::bulkDeleteAction',
+            '_sylius' => [
+                'permission' => false,
+                'paginate' => false,
+                'repository' => [
+                    'method' => 'findById',
+                    'arguments' => ['$ids'],
+                ],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/bulk_delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE', 'POST'], '')
+            ->willReturn($bulkDeleteRoute)
+        ;
+        $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
+
+        $deleteDefaults = [
+            '_controller' => 'sylius.controller.product::deleteAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}/delete', $deleteDefaults, [], [], '', [], ['DELETE', 'POST'], '')
+            ->willReturn($deleteRoute)
+        ;
+        $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
+
+        $this->load($configuration, 'sylius.resource')->shouldReturn($routeCollection);
+    }
+
+    function it_generates_new_api_routing_paths_if_bc_layer_is_disabled(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+        RouteFactoryInterface $routeFactory,
+        RouteCollection $routeCollection,
+        Route $showRoute,
+        Route $indexRoute,
+        Route $createRoute,
+        Route $updateRoute,
+        Route $bulkDeleteRoute,
+        Route $deleteRoute,
+    ): void {
+        $this->beConstructedWith($resourceRegistry, $routeFactory, null, false);
+
+        $resourceRegistry->get('sylius.product')->willReturn($metadata);
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+        $metadata->getPluralName()->willReturn('products');
+        $metadata->getServiceId('controller')->willReturn('sylius.controller.product');
+
+        $routeFactory->createRouteCollection()->willReturn($routeCollection);
+
+        $configuration =
+            <<<EOT
+alias: sylius.product
+EOT;
+
+        $showDefaults = [
+            '_controller' => 'sylius.controller.product::showAction',
+            '_sylius' => [
+                'permission' => false,
+                'serialization_groups' => ['Default', 'Detailed'],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
+            ->willReturn($showRoute)
+        ;
+        $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
+
+        $indexDefaults = [
+            '_controller' => 'sylius.controller.product::indexAction',
+            '_sylius' => [
+                'permission' => false,
+                'serialization_groups' => ['Default'],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products', $indexDefaults, [], [], '', [], ['GET'], '')
+            ->willReturn($indexRoute)
+        ;
+        $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
+
+        $createDefaults = [
+            '_controller' => 'sylius.controller.product::createAction',
+            '_sylius' => [
+                'permission' => false,
+                'serialization_groups' => ['Default', 'Detailed'],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products', $createDefaults, [], [], '', [], ['POST'], '')
+            ->willReturn($createRoute)
+        ;
+        $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
+
+        $updateDefaults = [
+            '_controller' => 'sylius.controller.product::updateAction',
+            '_sylius' => [
+                'permission' => false,
+                'serialization_groups' => ['Default', 'Detailed'],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $updateDefaults, [], [], '', [], ['PUT', 'PATCH'], '')
+            ->willReturn($updateRoute)
+        ;
+        $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
+
+        $deleteDefaults = [
+            '_controller' => 'sylius.controller.product::deleteAction',
+            '_sylius' => [
+                'permission' => false,
+                'csrf_protection' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
+            ->willReturn($deleteRoute)
+        ;
+        $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
+
+        $this->load($configuration, 'sylius.resource_api')->shouldReturn($routeCollection);
     }
 
     function it_generates_urlized_paths_for_resources_with_multiple_words_in_name(
@@ -200,7 +402,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/product-options/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_option_show', $showRoute)->shouldBeCalled();
@@ -212,7 +414,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/product-options/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_option_index', $indexRoute)->shouldBeCalled();
@@ -224,7 +426,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/product-options/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_option_create', $createRoute)->shouldBeCalled();
@@ -236,7 +438,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/product-options/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_option_update', $updateRoute)->shouldBeCalled();
@@ -253,7 +455,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/product-options/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_option_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -265,7 +467,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/product-options/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_option_delete', $deleteRoute)->shouldBeCalled();
@@ -313,7 +515,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{code}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/product-options/{code}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_option_show', $showRoute)->shouldBeCalled();
@@ -329,7 +531,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/product-options/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_option_index', $indexRoute)->shouldBeCalled();
@@ -345,7 +547,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/product-options/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_option_create', $createRoute)->shouldBeCalled();
@@ -361,7 +563,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{code}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/product-options/{code}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_option_update', $updateRoute)->shouldBeCalled();
@@ -382,7 +584,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/product-options/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_option_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -398,7 +600,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/product-options/{code}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/product-options/{code}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_option_delete', $deleteRoute)->shouldBeCalled();
@@ -439,7 +641,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/super-duper-products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -451,7 +653,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/super-duper-products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -463,7 +665,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/super-duper-products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -475,7 +677,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/super-duper-products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -492,7 +694,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/super-duper-products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -504,7 +706,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/super-duper-products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/super-duper-products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -545,7 +747,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -557,7 +759,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -570,7 +772,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -583,7 +785,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -600,7 +802,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -612,7 +814,113 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
+            ->willReturn($deleteRoute)
+        ;
+        $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
+
+        $this->load($configuration, 'sylius.resource')->shouldReturn($routeCollection);
+    }
+
+    function it_generates_routing_with_condition_if_specified(
+        RegistryInterface $resourceRegistry,
+        MetadataInterface $metadata,
+        RouteFactoryInterface $routeFactory,
+        RouteCollection $routeCollection,
+        Route $showRoute,
+        Route $indexRoute,
+        Route $createRoute,
+        Route $updateRoute,
+        Route $bulkDeleteRoute,
+        Route $deleteRoute,
+    ): void {
+        $resourceRegistry->get('sylius.product')->willReturn($metadata);
+        $metadata->getApplicationName()->willReturn('sylius');
+        $metadata->getName()->willReturn('product');
+        $metadata->getPluralName()->willReturn('products');
+        $metadata->getServiceId('controller')->willReturn('sylius.controller.product');
+
+        $routeFactory->createRouteCollection()->willReturn($routeCollection);
+
+        $configuration =
+            <<<EOT
+alias: sylius.product
+condition: context.getHost() == env("APP_MAIN_HOST")
+EOT;
+
+        $showDefaults = [
+            '_controller' => 'sylius.controller.product::showAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], 'context.getHost() == env("APP_MAIN_HOST")')
+            ->willReturn($showRoute)
+        ;
+        $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
+
+        $indexDefaults = [
+            '_controller' => 'sylius.controller.product::indexAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], 'context.getHost() == env("APP_MAIN_HOST")')
+            ->willReturn($indexRoute)
+        ;
+        $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
+
+        $createDefaults = [
+            '_controller' => 'sylius.controller.product::createAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], 'context.getHost() == env("APP_MAIN_HOST")')
+            ->willReturn($createRoute)
+        ;
+        $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
+
+        $updateDefaults = [
+            '_controller' => 'sylius.controller.product::updateAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], 'context.getHost() == env("APP_MAIN_HOST")')
+            ->willReturn($updateRoute)
+        ;
+        $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
+
+        $bulkDeleteDefaults = [
+            '_controller' => 'sylius.controller.product::bulkDeleteAction',
+            '_sylius' => [
+                'permission' => false,
+                'paginate' => false,
+                'repository' => [
+                    'method' => 'findById',
+                    'arguments' => ['$ids'],
+                ],
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], 'context.getHost() == env("APP_MAIN_HOST")')
+            ->willReturn($bulkDeleteRoute)
+        ;
+        $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
+
+        $deleteDefaults = [
+            '_controller' => 'sylius.controller.product::deleteAction',
+            '_sylius' => [
+                'permission' => false,
+            ],
+        ];
+        $routeFactory
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], 'context.getHost() == env("APP_MAIN_HOST")')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -654,7 +962,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_admin_product_show', $showRoute)->shouldBeCalled();
@@ -667,7 +975,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_admin_product_index', $indexRoute)->shouldBeCalled();
@@ -680,7 +988,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_admin_product_create', $createRoute)->shouldBeCalled();
@@ -693,7 +1001,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_admin_product_update', $updateRoute)->shouldBeCalled();
@@ -711,7 +1019,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_admin_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -724,7 +1032,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_admin_product_delete', $deleteRoute)->shouldBeCalled();
@@ -766,7 +1074,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -779,7 +1087,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -792,7 +1100,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -805,7 +1113,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -822,7 +1130,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -834,7 +1142,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -876,7 +1184,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -889,7 +1197,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -902,7 +1210,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -915,7 +1223,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -932,7 +1240,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -944,7 +1252,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -982,7 +1290,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -994,7 +1302,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1006,7 +1314,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -1043,7 +1351,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1055,7 +1363,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1111,7 +1419,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -1123,7 +1431,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1136,7 +1444,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1149,7 +1457,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -1166,7 +1474,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -1178,7 +1486,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -1218,7 +1526,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -1231,7 +1539,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1244,7 +1552,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $createDefaults, [], [], '', [], ['POST'])
+            ->createRoute('/products/', $createDefaults, [], [], '', [], ['POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1257,7 +1565,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $updateDefaults, [], [], '', [], ['PUT', 'PATCH'])
+            ->createRoute('/products/{id}', $updateDefaults, [], [], '', [], ['PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -1270,7 +1578,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -1309,7 +1617,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1321,7 +1629,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1371,7 +1679,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -1386,7 +1694,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1402,7 +1710,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1418,7 +1726,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -1438,7 +1746,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -1453,7 +1761,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();
@@ -1494,7 +1802,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/{id}', $showDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($showRoute)
         ;
         $routeCollection->add('sylius_product_show', $showRoute)->shouldBeCalled();
@@ -1506,7 +1814,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'])
+            ->createRoute('/products/', $indexDefaults, [], [], '', [], ['GET'], '')
             ->willReturn($indexRoute)
         ;
         $routeCollection->add('sylius_product_index', $indexRoute)->shouldBeCalled();
@@ -1518,7 +1826,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'])
+            ->createRoute('/products/new', $createDefaults, [], [], '', [], ['GET', 'POST'], '')
             ->willReturn($createRoute)
         ;
         $routeCollection->add('sylius_product_create', $createRoute)->shouldBeCalled();
@@ -1530,7 +1838,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'])
+            ->createRoute('/products/{id}/edit', $updateDefaults, [], [], '', [], ['GET', 'PUT', 'PATCH'], '')
             ->willReturn($updateRoute)
         ;
         $routeCollection->add('sylius_product_update', $updateRoute)->shouldBeCalled();
@@ -1547,7 +1855,7 @@ EOT;
             ],
         ];
         $routeFactory
-            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'])
+            ->createRoute('/products/bulk-delete', $bulkDeleteDefaults, [], [], '', [], ['DELETE'], '')
             ->willReturn($bulkDeleteRoute)
         ;
         $routeCollection->add('sylius_product_bulk_delete', $bulkDeleteRoute)->shouldBeCalled();
@@ -1558,7 +1866,7 @@ EOT;
                 'permission' => true,
             ],
         ];
-        $routeFactory->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'])
+        $routeFactory->createRoute('/products/{id}', $deleteDefaults, [], [], '', [], ['DELETE'], '')
                      ->willReturn($deleteRoute)
         ;
         $routeCollection->add('sylius_product_delete', $deleteRoute)->shouldBeCalled();

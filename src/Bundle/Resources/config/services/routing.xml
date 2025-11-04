@@ -25,6 +25,7 @@
                 <service class="Sylius\Bundle\ResourceBundle\Routing\RouteFactory" />
             </argument>
             <argument>%kernel.environment%</argument>
+            <argument>%sylius.routing_path_bc_layer%</argument>
             <tag name="routing.loader" />
             <deprecated package="sylius/resource" version="1.13">The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.symfony.routing.loader.resource" instead.</deprecated>
         </service>
@@ -128,6 +129,7 @@
             <argument type="service" id="router" />
             <argument type="service" id="sylius.expression_language.argument_parser.routing" />
             <argument type="service" id="sylius.routing.factory.operation_route_name_factory" />
+            <argument type="service" id="sylius.grid.filter_storage" on-invalid="null" />
         </service>
         <service id="Sylius\Resource\Symfony\Routing\RedirectHandlerInterface" alias="sylius.routing.redirect_handler" />
     </services>

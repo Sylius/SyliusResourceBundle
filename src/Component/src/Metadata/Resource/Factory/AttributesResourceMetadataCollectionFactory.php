@@ -20,15 +20,15 @@ use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Reflection\ClassReflection;
-use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
 
 final class AttributesResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
     use OperationDefaultsTrait;
 
     public function __construct(
-        private RegistryInterface $resourceRegistry,
-        private OperationRouteNameFactory $operationRouteNameFactory,
+        private readonly RegistryInterface $resourceRegistry,
+        private readonly OperationRouteNameFactoryInterface $operationRouteNameFactory,
     ) {
     }
 

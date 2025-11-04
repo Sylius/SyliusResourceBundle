@@ -18,6 +18,7 @@ use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
 use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @experimental
@@ -37,6 +38,10 @@ final class DispatchPostWriteEventProcessor implements ProcessorInterface
     public function process(mixed $data, Operation $operation, Context $context): mixed
     {
         $data = $this->processor->process($data, $operation, $context);
+
+        if ($data instanceof Response) {
+            return $data;
+        }
 
         $operationEvent = $this->operationEventDispatcher->dispatchPostEvent($data, $operation, $context);
 
