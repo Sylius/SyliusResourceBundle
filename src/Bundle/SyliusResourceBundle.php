@@ -31,6 +31,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Compiler\WinzouStateMachine
 use Sylius\Bundle\ResourceBundle\DependencyInjection\PagerfantaExtension;
 use Sylius\Resource\Symfony\DependencyInjection\Compiler\DisableMetadataCachePass;
 use Sylius\Resource\Symfony\DependencyInjection\Compiler\FallbackToKernelDefaultLocalePass;
+use Sylius\Resource\Symfony\DependencyInjection\Compiler\MetadataMutatorPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -54,6 +55,7 @@ final class SyliusResourceBundle extends Bundle
         $container->addCompilerPass(new FallbackToKernelDefaultLocalePass());
         $container->addCompilerPass(new DoctrineContainerRepositoryFactoryPass());
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(new TargetEntitiesResolver()), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
+        $container->addCompilerPass(new MetadataMutatorPass());
         $container->addCompilerPass(new RegisterFormBuilderPass());
         $container->addCompilerPass(new RegisterFqcnControllersPass());
         $container->addCompilerPass(new RegisterResourceRepositoryPass());

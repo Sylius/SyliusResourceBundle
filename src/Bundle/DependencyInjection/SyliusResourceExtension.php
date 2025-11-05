@@ -23,9 +23,13 @@ use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\FactoryInterface as LegacyFactoryInterface;
 use Sylius\Resource\Factory\Factory;
 use Sylius\Resource\Factory\FactoryInterface;
+use Sylius\Resource\Metadata\AsOperationMutator;
 use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\AsResourceMutator;
 use Sylius\Resource\Metadata\Metadata;
+use Sylius\Resource\Metadata\OperationMutatorInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\ResourceMutatorInterface;
 use Sylius\Resource\Reflection\ClassReflection;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\State\ProviderInterface;
@@ -34,6 +38,7 @@ use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\DirectoryResource;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -75,6 +80,32 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $this->loadPersistence($config['drivers'], $config['resources'], $loader, $container);
         $this->loadResources($config['resources'], $container);
+
+        $container->registerAttributeForAutoconfiguration(
+            AsResourceMutator::class,
+            static function (ChildDefinition $definition, AsResourceMutator $attribute, \ReflectionClass $reflector): void {
+                if (!is_a($reflector->name, ResourceMutatorInterface::class, true)) {
+                    throw new RuntimeException(\sprintf('Resource mutator "%s" should implement %s', $reflector->name, ResourceMutatorInterface::class));
+                }
+
+                $definition->addTag('sylius.resource_mutator', [
+                    'resourceClass' => $attribute->resourceClass,
+                ]);
+            },
+        );
+
+        $container->registerAttributeForAutoconfiguration(
+            AsOperationMutator::class,
+            static function (ChildDefinition $definition, AsOperationMutator $attribute, \ReflectionClass $reflector): void {
+                if (!is_a($reflector->name, OperationMutatorInterface::class, true)) {
+                    throw new RuntimeException(\sprintf('Operation mutator "%s" should implement %s', $reflector->name, OperationMutatorInterface::class));
+                }
+
+                $definition->addTag('sylius.operation_mutator', [
+                    'operationName' => $attribute->operationName,
+                ]);
+            },
+        );
 
         $container->registerForAutoconfiguration(ProviderInterface::class)
             ->addTag('sylius.state_provider')

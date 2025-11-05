@@ -39,6 +39,7 @@
                 <referencedFunction name="Doctrine\Persistence\ObjectManager::getClassMetadata" />
                 <referencedFunction name="ReflectionClass::getAttributes" />
                 <file name="src/Bundle/Form/DataTransformer/CollectionToStringTransformer.php" />
+                <file name="src/Bundle/DependencyInjection/SyliusResourceExtension.php" />
                 <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
                 <file name="src/Component/src/Symfony/Request/State/Provider.php" />
             </errorLevel>
@@ -152,6 +153,12 @@
                 <directory name="src/Component" />
             </errorLevel>
         </MissingClassConstType>
+
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Mutator/ResourceMutatorCollection.php" />
+            </errorLevel>
+        </MissingConstructor>
 
         <MissingParamType>
             <errorLevel type="suppress">

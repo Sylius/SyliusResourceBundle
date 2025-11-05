@@ -36,6 +36,15 @@
             <argument type="service" id=".inner" />
         </service>
 
+        <service id="sylius.metadata.resource.metadata_collection_factory.mutator"
+                 class="Sylius\Resource\Metadata\Resource\Factory\MutatorResourceMetadataCollectionFactory"
+                 decorates="sylius.resource_metadata_collection.factory"
+                 decoration-priority="400">
+            <argument type="service" id="sylius.metadata.mutator_collection.resource" />
+            <argument type="service" id="sylius.metadata.mutator_collection.operation" />
+            <argument type="service" id=".inner" />
+        </service>
+
         <service id="sylius.resource_metadata_collection.factory.state_machine"
                  class="Sylius\Resource\Metadata\Resource\Factory\StateMachineResourceMetadataCollectionFactory"
                  decorates="sylius.resource_metadata_collection.factory"
