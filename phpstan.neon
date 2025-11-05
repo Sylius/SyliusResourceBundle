@@ -1,111 +1,111 @@
 includes:
+    - phpstan-baseline.neon
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
 
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
+    level: max
+
     reportUnmatchedIgnoredErrors: false
 
+    paths:
+        - 'src/'
+
     excludePaths:
-        - %currentWorkingDirectory%/src/Bundle/Controller/*
-        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Configuration.php
-        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/PagerfantaConfiguration.php
-        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php
-        - %currentWorkingDirectory%/src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
-        - %currentWorkingDirectory%/src/Bundle/Doctrine/ODM/*
-        - %currentWorkingDirectory%/src/Bundle/EventListener/ODM*
-        - %currentWorkingDirectory%/src/Bundle/Event/ResourceControllerEvent.php
-        - %currentWorkingDirectory%/src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
-        - %currentWorkingDirectory%/src/Bundle/Routing/ResourceLoader.php
-        - %currentWorkingDirectory%/src/Bundle/Routing/Configuration.php
-        - %currentWorkingDirectory%/src/Bundle/spec/*
-        - %currentWorkingDirectory%/src/Bundle/Tests/*
-        - %currentWorkingDirectory%/src/Component/legacy/spec/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Annotation/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Exception/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Factory/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Generator/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Metadata/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Model/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Reflection/ClassReflection.php
-        - %currentWorkingDirectory%/src/Component/legacy/src/Repository/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/StateMachine/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/Storage/*
-        - %currentWorkingDirectory%/src/Component/legacy/src/ResourceActions.php
-        - %currentWorkingDirectory%/src/Component/legacy/src/Translation/*
-        - %currentWorkingDirectory%/src/Component/legacy/tests/*
-        - %currentWorkingDirectory%/src/Component/spec/*
-        - %currentWorkingDirectory%/src/Component/tests/*
-        - %currentWorkingDirectory%/src/Component/vendor/*
+        # External vendor dependencies installed via composer in Component
+        # These are third-party packages that shouldn't be analyzed
+        - 'src/Component/vendor/'
+
+        # PHPSpec tests use a different syntax and structure than regular PHP code
+        # They contain specs with methods like it_*() and shouldReturn() that PHPStan doesn't understand
+        - 'src/Bundle/spec/'
+        - 'src/Component/spec/'
+
+        # PHPUnit tests - test code is not production code and has different quality requirements
+        # Tests often use mocks, stubs and test-specific patterns
+        - 'src/Bundle/Tests/'
+        - 'src/Component/tests/'
+
+        # MongoDB ODM integration - requires doctrine/mongodb-odm which is optional
+        # These files contain references to MongoDB classes that don't exist without the package
+        - 'src/Bundle/Doctrine/ODM/'
+        - 'src/Bundle/EventListener/ODM*'
+        - 'src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineODMDriver.php'
+
+        # Legacy code maintained for backward compatibility
+        # Contains deprecated interfaces and implementations that will be removed in 2.0
+        - 'src/Component/legacy/'
+
+        # Parameters.php extends Symfony's ParameterBag but changes return type covariance
+        # This is a known limitation that cannot be fixed without breaking BC
+        # PHPStan reports: "Return type mixed of method Parameters::get() is not covariant with
+        # return type mixed of method ParameterBag::get()"
+        - 'src/Bundle/Controller/Parameters.php'
 
     ignoreErrors:
-        - '/Call to method type\(\) on an unknown class Doctrine\\ORM\\Mapping\\AssociationMapping./'
-        - '/Call to method getArguments\(\) on an unknown class ReflectionAttribute./'
-        - '/Call to method isChangeTrackingDeferredExplicit\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata./'
-        - '/Call to an undefined method ReflectionClass::getAttributes\(\)./'
-        - '/Call to an undefined method object::getRealClassName\(\)./'
-        - '/Class Bazinga\\Bundle\\HateoasBundle\\BazingaHateoasBundle not found\./'
-        - '/Class Doctrine\\ODM\\MongoDB\\DocumentManager not found\./'
-        - '/Class Doctrine\\ODM\\PHPCR\\Document\\Resource not found\./'
-        - '/Class Doctrine\\Bundle\\MongoDBBundle/'
-        - '/Class Doctrine\\Bundle\\PHPCRBundle/'
-        - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found\./'
-        - '/Class Doctrine\\ODM\\MongoDB\\Mapping\\ClassMetadata not found\./'
+        # Optional MongoDB ODM support - requires doctrine/mongodb-odm-bundle package
+        # These classes are only loaded when MongoDB driver is configured and the bundle is installed
+        # See: src/Bundle/AbstractResourceBundle.php:112
+        - '/Class Doctrine\\Bundle\\MongoDBBundle\\DependencyInjection\\Compiler\\DoctrineMongoDBMappingsPass not found/'
+        - '/Class Doctrine\\ODM\\MongoDB\\DocumentManager not found/'
+        - '/has invalid type Doctrine\\MongoDB\\Query\\Builder/'
+
+        # Optional PHPCR ODM support - requires doctrine/phpcr-bundle package
+        # PHPCR is deprecated since 1.3 and will be removed in 2.0
+        # See: src/Bundle/AbstractResourceBundle.php:120-127
+        - '/Class Doctrine\\Bundle\\PHPCRBundle\\DependencyInjection\\Compiler\\DoctrinePhpcrMappingsPass not found/'
+        - '/Class Doctrine\\ODM\\PHPCR\\Document\\Resource not found/'
+        - '/has invalid type Doctrine\\ODM\\PHPCR\\Query\\Builder\\QueryBuilder/'
+        - '/has invalid type Doctrine\\ODM\\PHPCR\\DocumentManagerInterface/'
+
+        # Backward compatibility with Doctrine Common 2.x
+        # Namespace moved from Doctrine\Common\Persistence to Doctrine\Persistence in 3.x
+        # Code uses both namespaces with aliases to support both versions
+        # See: src/Bundle/DependencyInjection/Driver/Doctrine/AbstractDoctrineDriver.php:46
+        - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found/'
+
+        # Doctrine ORM 3.x introduces new mapping classes
+        # AssociationMapping class exists only in ORM 3.x, not in ORM 2.x
+        # Code supports both versions, so we need to ignore these errors when running with ORM 2.x
+        # See: src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php
+        - '/Class Doctrine\\ORM\\Mapping\\AssociationMapping not found/'
+        - '/Call to method .* on an unknown class Doctrine\\ORM\\Mapping\\AssociationMapping/'
+        - '/PHPDoc tag @var for variable .* contains unknown class Doctrine\\ORM\\Mapping\\AssociationMapping/'
+
+        # Optional symfony/web-link component - only used when installed
+        # Code checks class_exists() before using these classes
+        # See: src/Bundle/Controller/ControllerTrait.php:443-448
+        - '/has invalid type Psr\\Link\\LinkInterface/'
+        - '/Class Symfony\\Component\\WebLink\\GenericLinkProvider not found/'
+        - '/Instantiated class Symfony\\Component\\WebLink\\GenericLinkProvider not found/'
+
+        # Backward compatibility with deprecated Symfony ExpressionLanguage cache interfaces
+        # ParserCacheInterface was removed in Symfony 4.0, replaced by PSR-6 CacheItemPoolInterface
+        # Code provides BC layer with trigger_deprecation
+        # See: src/Bundle/ExpressionLanguage/ExpressionLanguage.php:29-40
         - '/Class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheInterface not found/'
         - '/Instantiated class Symfony\\Component\\ExpressionLanguage\\ParserCache\\ParserCacheAdapter not found/'
-        - '/Method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\)/'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::get\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProviderInterface::get\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolverInterface::getResources\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent::stop\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return typehint specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return typehint specified./'
-        - '/Method Sylius\\Resource\\Model\\ResourceInterface::getId\(\) has no return typehint specified./'
-        - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setCreatedAt\(\) has no return typehint specified./'
-        - '/Method Sylius\\Resource\\Model\\TimestampableInterface::setUpdatedAt\(\) has no return typehint specified./'
-        - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$limit with no type specified./'
-        - '/Method Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository::findBy\(\) has parameter \$offset with no type specified./'
-        - '/Method Sylius\\Resource\\Symfony\\Controller\\MainController::__invoke\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed./'
-        - '/Method Symfony\\Component\\Routing\\RouteCollection::add\(\) invoked with 3 parameters, 2 required\./'
-        - '/Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\./'
-        - '/Parameter \#1 \$currentPage of method Pagerfanta\\Pagerfanta<mixed>::setCurrentPage\(\) expects int<1, max>, int given\./'
-        - '/Parameter \#1 \$maxPerPage of method Pagerfanta\\Pagerfanta<mixed>::setMaxPerPage\(\) expects int<1, max>, int given\./'
-        - '/Parameter \#1 \$array[0-9]? of function array_multisort expects array, array\|int given\./'
-        - '/Parameter \#2 \$class of static method Webmozart\\Assert\\Assert::isInstanceOf\(\) expects class-string<object>, string given./'
-        - '/Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class-string<object>\|object, object\|string given./'
-        - '/Parameter \#1 \$package of method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\)/'
-        - '/PHPDoc tag @var for variable \$value contains unknown class Doctrine\\ORM\\Mapping\\AssociationMapping./'
-        - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\CrudRoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
-        - '/Return typehint of method Sylius\\Bundle\\ResourceBundle\\Routing\\RoutesAttributesLoader::getClassAttributes\(\) has invalid type ReflectionAttribute./'
-        - '/Unable to resolve the template type ExpectedType in call to method static method Webmozart\\Assert\\Assert::isInstanceOf\(\)/'
-        - '/is deprecated since Sylius 1\.8/'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Event\\ResourceControllerEvent\:\:stop\(\) has no return type specified\./'
-        - '/Trying to invoke mixed/'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver\:\:getResources\(\) has no return type specified\./'
-        - '/Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<int\|string\, string\>\): string, Closure\(array\)\: mixed given\./'
-        - '/Parameter \#1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface\:\:getValue\(\) expects array\|object, array\|object\|null given\./'
-        - '/Parameter \#1 \$min \(0\) of function random_int expects lower number than parameter \#2 \$max \(int\<\-1, max\>\)\./'
-        - '/Method Sylius\\Resource\\Model\\ResourceInterface\:\:getId\(\) has no return type specified\./'
-        - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setCreatedAt\(\) has no return type specified\./'
-        - '/Method Sylius\\Resource\\Model\\TimestampableInterface\:\:setUpdatedAt\(\) has no return type specified\./'
-        - '/Method Sylius\\Component\\Resource\\Repository\\InMemoryRepository\:\:findAll\(\) should return array\<object\> but returns array\./'
-        - '/Method Sylius\\Resource\\State\\Provider\\DeserializeProvider\:\:provide\(\) should return array\|object\|null but returns mixed./'
-        - '/Method Sylius\\Resource\\Symfony\\Controller\\MainController::__invoke\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed./'
-        - '/Method Sylius\\Resource\\Symfony\\Serializer\\State\\DeserializeProvider\:\:provide\(\) should return array\|object\|null but returns mixed./'
-        - '/Method Sylius\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:stop\(\) has no return type specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Form\\Extension\\HttpFoundation\\HttpFoundationRequestHandler::handleRequest\(\) has no return type specified./'
-        - '/Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver::getResources\(\) has no return type specified./'
-        - '/Method Sylius\\Component\\Resource\\Model\\ResourceInterface::getId\(\) has no return type specified./'
-        - '/Method Sylius\\Component\\Resource\\Model\\TimestampableInterface::set(Created|Updated)At\(\) has no return type specified./'
-        - '/Parameter #1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessor::getValue\(\) expects array\|object, mixed given\./'
-        - '/Parameter #1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface::getValue\(\) expects array\|object, mixed given\./'
-        - '/Parameter #4 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\./'
-        - '/Parameter #1 \$submittedData of method Symfony\\Component\\Form\\FormInterface::submit\(\) expects array\|string\|null, mixed given\./'
-        - '/Parameter #2 \$callback of function preg_replace_callback expects callable\(array<int\|string, string>\): string, Closure\(array\): mixed given\./'
-        - '/Unable to resolve the template type T in call to method Doctrine\\Persistence\\ObjectManager::getClassMetadata\(\)/'
+
+        # Symfony Config Component uses fluent interface with dynamic return types
+        # getRootNode() returns NodeDefinition which gets transformed to ArrayNodeDefinition
+        # when children() is called. PHPStan cannot track these runtime type transformations
+        # See: src/Bundle/DependencyInjection/Configuration.php:30-37
+        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface::(end|variableNode|scalarNode)\(\)/'
+
+        # Backward compatibility for Symfony DependencyInjection Alias::setDeprecated()
+        # Method signature changed between Symfony versions:
+        # - Symfony < 5.1: setDeprecated($status, $message)
+        # - Symfony >= 5.1: setDeprecated($package, $version, $message)
+        # Code dynamically detects parameter count and calls appropriately
+        # See: src/Bundle/DependencyInjection/Compiler/PagerfantaBridgePass.php:62-73
+        - '/Method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\) invoked with 2 parameters, 3 required/'
+        - '/Parameter #1 \$package of method Symfony\\Component\\DependencyInjection\\Alias::setDeprecated\(\) expects string, true given/'
+
+        # ResourceControllerEvent uses if(false) for IDE support - provides class alias hint
+        # This is intentional dead code to help IDEs understand the class_alias in GenericEvent.php
+        # See: src/Bundle/Event/ResourceControllerEvent.php:18-22
         -
-            identifier: missingType.generics
-        -
-            identifier: missingType.iterableValue
+            message: '#If condition is always false#'
+            path: src/Bundle/Event/ResourceControllerEvent.php

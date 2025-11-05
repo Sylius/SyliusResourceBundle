@@ -23,6 +23,7 @@ use Sylius\Resource\Metadata\Resource\Factory\VarsResourceMetadataCollectionFact
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 
 final class VarsResourceMetadataCollectionFactoryTest extends TestCase
 {
@@ -32,10 +33,13 @@ final class VarsResourceMetadataCollectionFactoryTest extends TestCase
 
     private VarsResourceMetadataCollectionFactory $factory;
 
+    private ArgumentParserInterface|ObjectProphecy $argumentParser;
+
     protected function setUp(): void
     {
         $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
-        $this->factory = new VarsResourceMetadataCollectionFactory($this->decorated->reveal());
+        $this->argumentParser = $this->prophesize(ArgumentParserInterface::class);
+        $this->factory = new VarsResourceMetadataCollectionFactory($this->decorated->reveal(), $this->argumentParser->reveal());
     }
 
     public function testItIsInitializable(): void
@@ -43,7 +47,7 @@ final class VarsResourceMetadataCollectionFactoryTest extends TestCase
         $this->assertInstanceOf(VarsResourceMetadataCollectionFactory::class, $this->factory);
     }
 
-    public function testItMergeResourceVarsWithOperationVars(): void
+    public function testItMergesResourceVarsWithOperationVars(): void
     {
         $resource = new ResourceMetadata(
             alias: 'app.book',

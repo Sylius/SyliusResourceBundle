@@ -91,4 +91,25 @@ final class DispatchPostWriteEventProcessorTest extends TestCase
         $result = $this->dispatchPostWriteEventProcessor->process($data, $operation, $context);
         $this->assertEquals($response, $result);
     }
+
+    /** @test */
+    public function it_does_nothing_if_the_decorated_processor_returns_a_response(): void
+    {
+        $data = new \stdClass();
+
+        $operation = new Create(processor: '\App\Processor');
+        $context = new Context();
+
+        $response = new Response();
+
+        $this->processor->process($data, $operation, $context)->willReturn($response)->shouldBeCalled();
+
+        $postEvent = new OperationEvent();
+
+        $this->operationEventDispatcher->dispatchPostEvent($response, $operation, $context)->willReturn($postEvent)->shouldNotBeCalled();
+
+        $this->eventHandler->handlePostProcessEvent($postEvent, $context)->willReturn(null)->shouldNotBeCalled();
+
+        $this->dispatchPostWriteEventProcessor->process($data, $operation, $context);
+    }
 }

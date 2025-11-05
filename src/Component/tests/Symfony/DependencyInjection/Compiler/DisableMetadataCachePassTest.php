@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\Component\Resource\tests\Symfony\DependencyInjection\Compiler;
+namespace Sylius\Resource\Tests\Symfony\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sylius\Resource\Symfony\DependencyInjection\Compiler\DisableMetadataCachePass;

@@ -35,16 +35,17 @@
                 <tr>
                     {% for field in definition.enabledFields %}
                         <td>{{ sylius_grid_render_field(grid, field, resource) }}</td>
-                        <td>
-                            {% for action in definition.getEnabledActions('item') %}
-                                {{ sylius_grid_render_action(grid, action, resource) }}
-                            {% endfor %}
-                        </td>
+                        {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
+                            <td>
+                                {% for action in definition.getEnabledActions('item') %}
+                                    {{ sylius_grid_render_action(grid, action, resource) }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
             </tbody>
-
         </table>
     {% endif %}
 {% endblock %}

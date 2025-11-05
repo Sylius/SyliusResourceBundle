@@ -83,7 +83,7 @@ class RequestConfiguration
         $templatesNamespace = (string) $this->metadata->getTemplatesNamespace();
 
         if (false !== strpos($templatesNamespace, ':')) {
-            return sprintf('%s:%s.%s', $templatesNamespace ?: ':', $name, 'twig');
+            return sprintf('%s:%s.%s', $templatesNamespace, $name, 'twig');
         }
 
         return sprintf('%s/%s.%s', $templatesNamespace, $name, 'twig');

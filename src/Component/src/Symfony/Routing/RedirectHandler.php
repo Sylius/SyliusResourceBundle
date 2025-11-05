@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Symfony\Routing;
 
+use Sylius\Bundle\GridBundle\Storage\FilterStorageInterface;
+use Sylius\Resource\Exception\InvalidArgumentException;
 use Sylius\Resource\Metadata\BulkOperationInterface;
 use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
@@ -33,6 +35,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         private RouterInterface $router,
         private ArgumentParserInterface $argumentParser,
         private OperationRouteNameFactoryInterface $operationRouteNameFactory,
+        private ?FilterStorageInterface $filterStorage = null,
     ) {
     }
 
@@ -44,7 +47,7 @@ final class RedirectHandler implements RedirectHandlerInterface
             throw new \RuntimeException(sprintf('Operation "%s" has no redirection route, but it should.', $operation->getName() ?? ''));
         }
 
-        $parameters = $this->getRouteArguments($data, $operation, $request);
+        $parameters = $this->getRouteArguments($data, $operation);
 
         return $this->redirectToRoute($data, $route, $parameters);
     }
@@ -53,17 +56,21 @@ final class RedirectHandler implements RedirectHandlerInterface
     {
         $route = $this->operationRouteNameFactory->createRouteName($operation, $newOperation);
 
-        $parameters = $this->getRouteArguments($data, $operation, $request);
+        $parameters = $this->getRouteArguments($data, $operation);
 
         return $this->redirectToRoute($data, $route, $parameters);
     }
 
     public function redirectToRoute(mixed $data, string $route, array $parameters = []): RedirectResponse
     {
+        if (\str_ends_with($route, '_index') && [] === $parameters) {
+            $parameters = $this->filterStorage?->all() ?? [];
+        }
+
         return new RedirectResponse($this->router->generate($route, $parameters));
     }
 
-    private function getRouteArguments(mixed $data, HttpOperation $operation, Request $request): array
+    private function getRouteArguments(mixed $data, HttpOperation $operation): array
     {
         $resource = $operation->getResource();
 
@@ -91,7 +98,17 @@ final class RedirectHandler implements RedirectHandlerInterface
         $accessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($parameters as $key => $value) {
-            if (str_contains($value, 'resource.')) {
+            if (\is_array($value)) {
+                $parameters[$key] = $this->parseResourceValues($resource, $value, $data);
+
+                continue;
+            }
+
+            if (!\is_scalar($value)) {
+                throw new InvalidArgumentException(sprintf('Parameter "%s" should be a scalar or an array.', $key));
+            }
+
+            if (\is_string($value) && str_contains($value, 'resource.')) {
                 $propertyPath = substr($value, 9);
 
                 if (\is_object($data) && $accessor->isReadable($data, $propertyPath)) {
@@ -108,7 +125,8 @@ final class RedirectHandler implements RedirectHandlerInterface
                 $variables[$resourceName] = $data;
             }
 
-            $parameters[$key] = $this->argumentParser->parseExpression($value, $variables);
+            // TODO, the best way to detect if we need to parse an expression will need to add "@=" syntax.
+            $parameters[$key] = \is_string($value) ? $this->argumentParser->parseExpression($value, $variables) : $value;
         }
 
         return $parameters;

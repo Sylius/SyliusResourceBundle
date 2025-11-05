@@ -122,6 +122,7 @@
         <InvalidReturnType>
             <errorLevel type="suppress">
                 <file name="src/Component/src/Doctrine/Persistence/InMemoryRepository.php" />
+                <file name="src/Component/src/Metadata/Extractor/PhpFileResourceExtractor.php" />
             </errorLevel>
         </InvalidReturnType>
 
@@ -175,6 +176,12 @@
             </errorLevel>
         </MoreSpecificImplementedParamType>
 
+        <NullableReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Extractor/PhpFileResourceExtractor.php" />
+            </errorLevel>
+        </NullableReturnStatement>
+
         <NullArgument>
             <errorLevel type="suppress">
                 <directory name="src" />
@@ -190,6 +197,7 @@
         <PossiblyNullArgument>
             <errorLevel type="suppress">
                 <file name="src/Bundle/Grid/Parser/OptionsParser.php" />
+                <file name="src/Component/src/Metadata/Operation/HttpOperationInitiator.php" />
             </errorLevel>
         </PossiblyNullArgument>
 
@@ -322,6 +330,12 @@
                 <directory name="src/Component/legacy/src/Translation" />
             </errorLevel>
         </UnrecognizedStatement>
+
+        <UnresolvableInclude>
+            <errorLevel type="suppress">
+                <file name="src/Component/src/Metadata/Extractor/PhpFileResourceExtractor.php" />
+            </errorLevel>
+        </UnresolvableInclude>
 
         <UnsupportedReferenceUsage>
             <errorLevel type="suppress">

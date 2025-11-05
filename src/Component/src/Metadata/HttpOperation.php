@@ -27,6 +27,7 @@ class HttpOperation extends Operation
         protected ?string $routeName = null,
         protected ?string $routePrefix = null,
         protected ?array $routeRequirements = null,
+        protected ?string $routeCondition = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -145,6 +146,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->routeRequirements = $routeRequirements;
+
+        return $self;
+    }
+
+    public function getRouteCondition(): ?string
+    {
+        return $this->routeCondition;
+    }
+
+    public function withRouteCondition(?string $routeCondition): self
+    {
+        $self = clone $this;
+        $self->routeCondition = $routeCondition;
 
         return $self;
     }

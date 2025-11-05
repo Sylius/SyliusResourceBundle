@@ -49,7 +49,10 @@ final class LegacyRequestContextInitiatorSpec extends ObjectBehavior
         MetadataInterface $metadata,
         RequestConfiguration $requestConfiguration,
     ): void {
-        $request->attributes = new ParameterBag(['_sylius' => ['resource' => 'app.dummy']]);
+        $parameterBag = new ParameterBag(['_sylius' => ['resource' => 'app.dummy']]);
+        $requestConfiguration->getParameters()->willReturn($parameterBag);
+        $requestConfiguration->getVars()->willReturn([]);
+        $request->attributes = $parameterBag;
 
         $decorated->initializeContext($request)->willReturn(new Context());
 

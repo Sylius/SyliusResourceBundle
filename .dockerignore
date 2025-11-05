@@ -5,6 +5,7 @@
 !/ecs.php
 !/phpspec.yml.dist
 !/phpstan.neon
+!/phpstan-baseline.neon
 !/phpunit.xml.dist
 !/psalm.xml
 !/rector.php

@@ -16,6 +16,7 @@
         <service id="sylius.resource_metadata_operation.initiator.http_operation" class="Sylius\Resource\Metadata\Operation\HttpOperationInitiator">
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius.resource_metadata_collection.factory" />
+            <argument type="service" id="sylius.expression_language.vars_resolver.metadata" />
         </service>
         <service id="Sylius\Resource\Metadata\Operation\HttpOperationInitiatorInterface" alias="sylius.resource_metadata_operation.initiator.http_operation" />
     </services>
