@@ -11,64 +11,134 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\EventListener;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 
-final class ORMRepositoryClassSubscriberSpec extends ObjectBehavior
+final class ORMRepositoryClassSubscriberTest extends TestCase
 {
-    function let(RegistryInterface $registry, LoadClassMetadataEventArgs $event, ClassMetadata $classMetadata): void
-    {
-        $classMetadata->getName()->willReturn('Foo');
-        $event->getClassMetadata()->willReturn($classMetadata);
+    private RegistryInterface $registry;
 
-        $this->beConstructedWith($registry);
+    private ORMRepositoryClassSubscriber $subscriber;
+
+    protected function setUp(): void
+    {
+        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->subscriber = new ORMRepositoryClassSubscriber($this->registry);
     }
 
-    function it_implements_event_subscriber_interface(): void
+    public function testItImplementsEventSubscriberInterface(): void
     {
-        $this->shouldImplement(EventSubscriber::class);
+        $this->assertInstanceOf(EventSubscriber::class, $this->subscriber);
     }
 
-    function it_is_subscribed_to_load_class_metadata_doctrine_orm_event(): void
+    public function testItSubscribesToLoadClassMetadataEvent(): void
     {
-        $this->getSubscribedEvents()->shouldReturn([Events::loadClassMetadata]);
+        $this->assertSame([Events::loadClassMetadata], $this->subscriber->getSubscribedEvents());
     }
 
-    function it_sets_custom_repository_class(LoadClassMetadataEventArgs $event, RegistryInterface $registry, ClassMetadata $classMetadata, MetadataInterface $metadata): void
+    public function testItSetsCustomRepositoryClassWhenConfigured(): void
     {
-        $registry->getByClass('Foo')->willReturn($metadata);
-        $metadata->hasClass('repository')->willReturn(true);
-        $metadata->getClass('repository')->willReturn('FooRepository');
+        $metadata = $this->createMock(MetadataInterface::class);
+        $metadata
+            ->expects($this->once())
+            ->method('hasClass')
+            ->with('repository')
+            ->willReturn(true);
+        $metadata
+            ->expects($this->once())
+            ->method('getClass')
+            ->with('repository')
+            ->willReturn('FooRepository');
 
-        $classMetadata->setCustomRepositoryClass('FooRepository')->shouldBeCalled();
+        $this->registry
+            ->expects($this->once())
+            ->method('getByClass')
+            ->with('Foo')
+            ->willReturn($metadata);
 
-        $this->loadClassMetadata($event);
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn('Foo');
+        $classMetadata
+            ->expects($this->once())
+            ->method('setCustomRepositoryClass')
+            ->with('FooRepository');
+
+        $event = $this->createMock(LoadClassMetadataEventArgs::class);
+        $event
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
+
+        $this->subscriber->loadClassMetadata($event);
     }
 
-    function it_does_not_set_custom_repository_class_if_not_configured(LoadClassMetadataEventArgs $event, RegistryInterface $registry, ClassMetadata $classMetadata, MetadataInterface $metadata): void
+    public function testItDoesNotSetCustomRepositoryClassWhenNotConfigured(): void
     {
-        $registry->getByClass('Foo')->willReturn($metadata);
-        $metadata->hasClass('repository')->willReturn(false);
+        $metadata = $this->createMock(MetadataInterface::class);
+        $metadata
+            ->expects($this->once())
+            ->method('hasClass')
+            ->with('repository')
+            ->willReturn(false);
 
-        $classMetadata->setCustomRepositoryClass(Argument::any())->shouldNotBeCalled();
+        $this->registry
+            ->expects($this->once())
+            ->method('getByClass')
+            ->with('Foo')
+            ->willReturn($metadata);
 
-        $this->loadClassMetadata($event);
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn('Foo');
+        $classMetadata
+            ->expects($this->never())
+            ->method('setCustomRepositoryClass');
+
+        $event = $this->createMock(LoadClassMetadataEventArgs::class);
+        $event
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
+
+        $this->subscriber->loadClassMetadata($event);
     }
 
-    function it_does_not_set_custom_repository_class_if_registry_does_not_have_class(LoadClassMetadataEventArgs $event, RegistryInterface $registry, ClassMetadata $classMetadata): void
+    public function testItDoesNotSetCustomRepositoryClassWhenClassNotInRegistry(): void
     {
-        $registry->getByClass('Foo')->willThrow(\InvalidArgumentException::class);
+        $this->registry
+            ->expects($this->once())
+            ->method('getByClass')
+            ->with('Foo')
+            ->willThrowException(new \InvalidArgumentException());
 
-        $classMetadata->setCustomRepositoryClass(Argument::any())->shouldNotBeCalled();
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn('Foo');
+        $classMetadata
+            ->expects($this->never())
+            ->method('setCustomRepositoryClass');
 
-        $this->loadClassMetadata($event);
+        $event = $this->createMock(LoadClassMetadataEventArgs::class);
+        $event
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
+
+        $this->subscriber->loadClassMetadata($event);
     }
 }

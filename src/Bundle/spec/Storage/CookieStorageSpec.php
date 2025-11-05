@@ -11,54 +11,63 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Storage;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\Storage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Storage\CookieStorage;
 use Sylius\Resource\Storage\StorageInterface;
 
-final class CookieStorageSpec extends ObjectBehavior
+final class CookieStorageTest extends TestCase
 {
-    function it_is_a_storage(): void
+    private CookieStorage $storage;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(StorageInterface::class);
+        $this->storage = new CookieStorage();
     }
 
-    function it_does_not_have_a_named_value_if_it_was_not_set_previously(): void
+    public function testItImplementsStorageInterface(): void
     {
-        $this->get('name')->shouldReturn(null);
-        $this->has('name')->shouldReturn(false);
+        $this->assertInstanceOf(StorageInterface::class, $this->storage);
     }
 
-    function it_stores_a_named_value(): void
+    public function testItDoesNotHaveValueWhenNotSetPreviously(): void
     {
-        $this->set('name', 'value');
-
-        $this->get('name')->shouldReturn('value');
-        $this->has('name')->shouldReturn(true);
+        $this->assertFalse($this->storage->has('name'));
+        $this->assertNull($this->storage->get('name'));
     }
 
-    function it_removes_a_stored_named_value(): void
+    public function testItCanSetAndGetValue(): void
     {
-        $this->set('name', 'value');
-        $this->remove('name');
+        $this->storage->set('name', 'value');
 
-        $this->get('name')->shouldReturn(null);
-        $this->has('name')->shouldReturn(false);
+        $this->assertTrue($this->storage->has('name'));
+        $this->assertSame('value', $this->storage->get('name'));
     }
 
-    function it_returns_default_value_if_none_found(): void
+    public function testItCanRemoveValue(): void
     {
-        $this->get('name', 'default')->shouldReturn('default');
+        $this->storage->set('name', 'value');
+
+        $this->storage->remove('name');
+
+        $this->assertFalse($this->storage->has('name'));
+        $this->assertNull($this->storage->get('name'));
     }
 
-    function it_returns_all_values(): void
+    public function testItReturnsDefaultValueWhenKeyNotFound(): void
     {
-        $this->set('foo', 'bar');
-        $this->set('buzz', 'lightyear');
+        $this->assertSame('default', $this->storage->get('name', 'default'));
+    }
 
-        $this->all()->shouldReturn([
-            'foo' => 'bar',
+    public function testItReturnsAllStoredValues(): void
+    {
+        $this->storage->set('foo', 'bar');
+        $this->storage->set('buzz', 'lightyear');
+
+        $this->assertSame([
             'buzz' => 'lightyear',
-        ]);
+            'foo' => 'bar',
+        ], $this->storage->all());
     }
 }

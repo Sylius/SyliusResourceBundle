@@ -11,87 +11,98 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Event;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\Event;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ResourceControllerEventSpec extends ObjectBehavior
+final class ResourceControllerEventTest extends TestCase
 {
-    function let(): void
+    private ResourceControllerEvent $event;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith('message');
+        $this->event = new ResourceControllerEvent('message');
     }
 
-    function it_stops_event_propagation(): void
+    public function testItHasEmptyMessageByDefault(): void
     {
-        $this->stop('message', ResourceControllerEvent::TYPE_SUCCESS, ['parameter']);
-        $this->getMessageType()->shouldReturn(ResourceControllerEvent::TYPE_SUCCESS);
-        $this->getMessageParameters()->shouldReturn(['parameter']);
-        $this->getMessage()->shouldReturn('message');
-        $this->isPropagationStopped()->shouldReturn(true);
+        $event = new ResourceControllerEvent();
+
+        $this->assertSame('', $event->getMessage());
     }
 
-    function it_check_if_an_error_has_been_detected(): void
+    public function testItCanBeInstantiatedWithMessage(): void
     {
-        $this->isStopped()->shouldReturn(false);
-        $this->stop('message');
-        $this->isStopped()->shouldReturn(true);
+        $this->assertSame('message', $this->event->getMessage());
     }
 
-    function it_has_no_message_type_by_default(): void
+    public function testItCanSetAndGetMessage(): void
     {
-        $this->getMessageType()->shouldReturn('');
+        $this->event->setMessage('custom_message');
+
+        $this->assertSame('custom_message', $this->event->getMessage());
     }
 
-    function its_message_type_is_mutable(): void
+    public function testItHasEmptyMessageTypeByDefault(): void
     {
-        $this->setMessageType(ResourceControllerEvent::TYPE_SUCCESS);
-        $this->getMessageType()->shouldReturn(ResourceControllerEvent::TYPE_SUCCESS);
+        $this->assertSame('', $this->event->getMessageType());
     }
 
-    function it_has_not_message_by_default(): void
+    public function testItCanSetAndGetMessageType(): void
     {
-        $this->getMessage()->shouldReturn('');
+        $this->event->setMessageType(ResourceControllerEvent::TYPE_SUCCESS);
+
+        $this->assertSame(ResourceControllerEvent::TYPE_SUCCESS, $this->event->getMessageType());
     }
 
-    function its_message_is_mutable(): void
+    public function testItHasEmptyMessageParametersByDefault(): void
     {
-        $this->setMessage('message');
-        $this->getMessage()->shouldReturn('message');
+        $this->assertSame([], $this->event->getMessageParameters());
     }
 
-    function it_has_empty_message_parameters_by_default(): void
+    public function testItCanSetAndGetMessageParameters(): void
     {
-        $this->getMessageParameters()->shouldReturn([]);
+        $this->event->setMessageParameters(['parameter_1', 'parameter_2']);
+
+        $this->assertSame(['parameter_1', 'parameter_2'], $this->event->getMessageParameters());
     }
 
-    function its_message_parameter_is_mutable(): void
+    public function testItIsNotStoppedByDefault(): void
     {
-        $this->setMessageParameters(['parameters']);
-        $this->getMessageParameters()->shouldReturn(['parameters']);
+        $this->assertFalse($this->event->isStopped());
     }
 
-    function it_has_response(): void
+    public function testItCanBeStopped(): void
+    {
+        $this->event->stop('error_message');
+
+        $this->assertTrue($this->event->isStopped());
+    }
+
+    public function testItStopsPropagationWhenStopped(): void
+    {
+        $this->event->stop('error_message', ResourceControllerEvent::TYPE_SUCCESS, ['parameter']);
+
+        $this->assertTrue($this->event->isPropagationStopped());
+        $this->assertSame('error_message', $this->event->getMessage());
+        $this->assertSame(ResourceControllerEvent::TYPE_SUCCESS, $this->event->getMessageType());
+        $this->assertSame(['parameter'], $this->event->getMessageParameters());
+    }
+
+    public function testItDoesNotHaveResponseByDefault(): void
+    {
+        $this->assertFalse($this->event->hasResponse());
+    }
+
+    public function testItCanSetAndGetResponse(): void
     {
         $response = new Response();
 
-        $this->setResponse($response);
+        $this->event->setResponse($response);
 
-        $this->getResponse()->shouldReturn($response);
-    }
-
-    function it_has_response_if_it_was_set_before(): void
-    {
-        $response = new Response();
-        $this->setResponse($response);
-
-        $this->hasResponse()->shouldReturn(true);
-    }
-
-    function it_has_not_response_if_it_was_not_set_before(): void
-    {
-        $this->hasResponse()->shouldReturn(false);
+        $this->assertSame($response, $this->event->getResponse());
+        $this->assertTrue($this->event->hasResponse());
     }
 }

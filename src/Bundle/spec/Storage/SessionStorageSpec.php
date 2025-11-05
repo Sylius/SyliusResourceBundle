@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Storage;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\Storage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Storage\SessionStorage;
 use Sylius\Resource\Exception\StorageUnavailableException;
 use Sylius\Resource\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
@@ -21,73 +22,97 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-final class SessionStorageSpec extends ObjectBehavior
+final class SessionStorageTest extends TestCase
 {
-    function let(RequestStack $requestStack): void
+    private SessionStorage $storage;
+
+    protected function setUp(): void
     {
         if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->getSession()->willReturn(new Session(new MockArraySessionStorage()));
-            $this->beConstructedWith($requestStack);
+            $requestStack = $this->createMock(RequestStack::class);
+            $requestStack
+                ->method('getSession')
+                ->willReturn(new Session(new MockArraySessionStorage()));
+
+            $this->storage = new SessionStorage($requestStack);
 
             return;
         }
 
-        $this->beConstructedWith(new Session(new MockArraySessionStorage()));
+        $this->storage = new SessionStorage(new Session(new MockArraySessionStorage()));
     }
 
-    function it_is_a_storage(): void
+    public function testItImplementsStorageInterface(): void
     {
-        $this->shouldImplement(StorageInterface::class);
+        $this->assertInstanceOf(StorageInterface::class, $this->storage);
     }
 
-    function it_throws_storage_unavailable_exception_when_there_is_no_session(RequestStack $requestStack): void
+    /**
+     * @dataProvider storageMethodsDataProvider
+     */
+    public function testItThrowsStorageUnavailableExceptionWhenSessionNotAvailable(callable $method): void
     {
-        $requestStack->getSession()->willThrow(SessionNotFoundException::class);
+        if (!method_exists(RequestStack::class, 'getSession')) {
+            $this->markTestSkipped('RequestStack::getSession() method does not exist in this Symfony version.');
+        }
 
-        $call = $this->shouldThrow(StorageUnavailableException::class);
-        $call->during('has', ['name']);
-        $call->during('get', ['name']);
-        $call->during('set', ['name', 'value']);
-        $call->during('remove', ['name']);
-        $call->during('all');
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack
+            ->method('getSession')
+            ->willThrowException(new SessionNotFoundException());
+
+        $storage = new SessionStorage($requestStack);
+
+        $this->expectException(StorageUnavailableException::class);
+        $method($storage);
     }
 
-    function it_does_not_have_a_named_value_if_it_was_not_set_previously(): void
+    public static function storageMethodsDataProvider(): iterable
     {
-        $this->get('name')->shouldReturn(null);
-        $this->has('name')->shouldReturn(false);
+        yield 'has' => [fn (SessionStorage $storage) => $storage->has('name')];
+        yield 'get' => [fn (SessionStorage $storage) => $storage->get('name')];
+        yield 'set' => [fn (SessionStorage $storage) => $storage->set('name', 'value')];
+        yield 'remove' => [fn (SessionStorage $storage) => $storage->remove('name')];
+        yield 'all' => [fn (SessionStorage $storage) => $storage->all()];
     }
 
-    function it_stores_a_named_value(): void
+    public function testItDoesNotHaveValueWhenNotSetPreviously(): void
     {
-        $this->set('name', 'value');
-
-        $this->get('name')->shouldReturn('value');
-        $this->has('name')->shouldReturn(true);
+        $this->assertFalse($this->storage->has('name'));
+        $this->assertNull($this->storage->get('name'));
     }
 
-    function it_removes_a_stored_named_value(): void
+    public function testItCanSetAndGetValue(): void
     {
-        $this->set('name', 'value');
-        $this->remove('name');
+        $this->storage->set('name', 'value');
 
-        $this->get('name')->shouldReturn(null);
-        $this->has('name')->shouldReturn(false);
+        $this->assertTrue($this->storage->has('name'));
+        $this->assertSame('value', $this->storage->get('name'));
     }
 
-    function it_returns_default_value_if_none_found(): void
+    public function testItCanRemoveValue(): void
     {
-        $this->get('name', 'default')->shouldReturn('default');
+        $this->storage->set('name', 'value');
+
+        $this->storage->remove('name');
+
+        $this->assertFalse($this->storage->has('name'));
+        $this->assertNull($this->storage->get('name'));
     }
 
-    function it_returns_all_values(): void
+    public function testItReturnsDefaultValueWhenKeyNotFound(): void
     {
-        $this->set('foo', 'bar');
-        $this->set('buzz', 'lightyear');
+        $this->assertSame('default', $this->storage->get('name', 'default'));
+    }
 
-        $this->all()->shouldReturn([
-            'foo' => 'bar',
+    public function testItReturnsAllStoredValues(): void
+    {
+        $this->storage->set('foo', 'bar');
+        $this->storage->set('buzz', 'lightyear');
+
+        $this->assertSame([
             'buzz' => 'lightyear',
-        ]);
+            'foo' => 'bar',
+        ], $this->storage->all());
     }
 }

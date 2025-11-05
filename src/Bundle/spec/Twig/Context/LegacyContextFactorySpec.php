@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Twig\Context;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\Twig\Context;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Twig\Context\LegacyContextFactory;
@@ -23,52 +23,64 @@ use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
-final class LegacyContextFactorySpec extends ObjectBehavior
+final class LegacyContextFactoryTest extends TestCase
 {
-    function let(ContextFactoryInterface $decorated): void
+    private ContextFactoryInterface $decorated;
+
+    private LegacyContextFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($decorated);
+        $this->decorated = $this->createMock(ContextFactoryInterface::class);
+        $this->factory = new LegacyContextFactory($this->decorated);
     }
 
-    function it_is_initializable(): void
+    public function testItImplementsContextFactoryInterface(): void
     {
-        $this->shouldHaveType(LegacyContextFactory::class);
+        $this->assertInstanceOf(ContextFactoryInterface::class, $this->factory);
     }
 
-    function it_adds_twig_vars(
-        ContextFactoryInterface $decorated,
-        \stdClass $data,
-        Operation $operation,
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-    ): void {
+    public function testItAddsLegacyTwigVariablesWhenContextContainsOptions(): void
+    {
+        $data = new \stdClass();
+        $operation = $this->createMock(Operation::class);
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $metadata = $this->createMock(MetadataInterface::class);
+
         $context = new Context(
-            new RequestConfigurationOption($requestConfiguration->getWrappedObject()),
-            new MetadataOption($metadata->getWrappedObject()),
+            new RequestConfigurationOption($requestConfiguration),
+            new MetadataOption($metadata),
         );
 
-        $decorated->create($data, $operation, $context)->willReturn(['resource' => $data]);
+        $this->decorated
+            ->expects($this->once())
+            ->method('create')
+            ->with($data, $operation, $context)
+            ->willReturn(['resource' => $data]);
 
-        $this->create($data, $operation, $context)->shouldReturn([
-            'resource' => $data,
+        $result = $this->factory->create($data, $operation, $context);
+
+        $this->assertSame([
             'configuration' => $requestConfiguration,
             'metadata' => $metadata,
-        ]);
+            'resource' => $data,
+        ], $result);
     }
 
-    function it_does_not_add_twig_vars_if_is_not_necessary(
-        ContextFactoryInterface $decorated,
-        \stdClass $data,
-        Operation $operation,
-        RequestConfiguration $requestConfiguration,
-        MetadataInterface $metadata,
-    ): void {
+    public function testItDoesNotAddLegacyTwigVariablesWhenContextIsEmpty(): void
+    {
+        $data = new \stdClass();
+        $operation = $this->createMock(Operation::class);
         $context = new Context();
 
-        $decorated->create($data, $operation, $context)->willReturn(['resource' => $data]);
+        $this->decorated
+            ->expects($this->once())
+            ->method('create')
+            ->with($data, $operation, $context)
+            ->willReturn(['resource' => $data]);
 
-        $this->create($data, $operation, $context)->shouldReturn([
-            'resource' => $data,
-        ]);
+        $result = $this->factory->create($data, $operation, $context);
+
+        $this->assertSame(['resource' => $data], $result);
     }
 }
