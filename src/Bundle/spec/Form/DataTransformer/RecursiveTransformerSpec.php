@@ -11,61 +11,90 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Form\DataTransformer;
+namespace Sylius\Bundle\ResourceBundle\Tests\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Form\DataTransformer\RecursiveTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-final class RecursiveTransformerSpec extends ObjectBehavior
+final class RecursiveTransformerTest extends TestCase
 {
-    function let(DataTransformerInterface $decoratedTransformer): void
+    private DataTransformerInterface $decoratedTransformer;
+
+    private RecursiveTransformer $transformer;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($decoratedTransformer);
+        $this->decoratedTransformer = $this->createMock(DataTransformerInterface::class);
+        $this->transformer = new RecursiveTransformer($this->decoratedTransformer);
     }
 
-    function it_is_data_transformer(): void
+    public function testImplementsDataTransformerInterface(): void
     {
-        $this->shouldImplement(DataTransformerInterface::class);
+        self::assertInstanceOf(DataTransformerInterface::class, $this->transformer);
     }
 
-    function it_returns_an_empty_array_collection_when_transforming_a_null(
-        DataTransformerInterface $decoratedTransformer,
-    ): void {
-        $this->transform(null)->shouldBeLike(new ArrayCollection());
-        $decoratedTransformer->transform(Argument::any())->shouldNotBeCalled();
-    }
-
-    function it_returns_an_empty_array_collection_when_reverse_transforming_a_null(
-        DataTransformerInterface $decoratedTransformer,
-    ): void {
-        $this->reverseTransform(null)->shouldBeLike(new ArrayCollection());
-        $decoratedTransformer->reverseTransform(Argument::any())->shouldNotBeCalled();
-    }
-
-    function it_transforms_recursively_using_configured_transformer(DataTransformerInterface $decoratedTransformer): void
+    public function testReturnsEmptyCollectionWhenTransformingNull(): void
     {
-        $decoratedTransformer->transform('ABC')->willReturn('abc');
-        $decoratedTransformer->transform('CDE')->willReturn('cde');
-        $decoratedTransformer->transform('FGH')->willReturn('fgh');
+        $this->decoratedTransformer
+            ->expects(self::never())
+            ->method('transform');
 
-        $this->transform(new ArrayCollection(['ABC', 'CDE', 'FGH']))->shouldBeLike(new ArrayCollection(['abc', 'cde', 'fgh']));
+        $result = $this->transformer->transform(null);
+
+        self::assertEquals(new ArrayCollection(), $result);
     }
 
-    function it_reverse_transforms_using_configured_transformer(DataTransformerInterface $decoratedTransformer): void
+    public function testReturnsEmptyCollectionWhenReverseTransformingNull(): void
     {
-        $decoratedTransformer->reverseTransform('abc')->willReturn('ABC');
-        $decoratedTransformer->reverseTransform('cde')->willReturn('CDE');
-        $decoratedTransformer->reverseTransform('fgh')->willReturn('FGH');
+        $this->decoratedTransformer
+            ->expects(self::never())
+            ->method('reverseTransform');
 
-        $this->reverseTransform(new ArrayCollection(['abc', 'cde', 'fgh']))->shouldBeLike(new ArrayCollection(['ABC', 'CDE', 'FGH']));
+        $result = $this->transformer->reverseTransform(null);
+
+        self::assertEquals(new ArrayCollection(), $result);
     }
 
-    function it_throws_transformation_failed_exception_if_transform_argument_is_not_collection_or_null(): void
+    public function testTransformsCollectionRecursively(): void
     {
-        $this->shouldThrow(TransformationFailedException::class)->during('transform', [new \stdClass()]);
-        $this->shouldThrow(TransformationFailedException::class)->during('reverseTransform', [new \stdClass()]);
+        $this->decoratedTransformer
+            ->expects(self::exactly(3))
+            ->method('transform')
+            ->willReturnCallback(fn (string $value): string => strtolower($value));
+
+        $result = $this->transformer->transform(new ArrayCollection(['ABC', 'CDE', 'FGH']));
+
+        self::assertEquals(new ArrayCollection(['abc', 'cde', 'fgh']), $result);
+    }
+
+    public function testReverseTransformsCollectionRecursively(): void
+    {
+        $this->decoratedTransformer
+            ->expects(self::exactly(3))
+            ->method('reverseTransform')
+            ->willReturnCallback(fn (string $value): string => strtoupper($value));
+
+        $result = $this->transformer->reverseTransform(new ArrayCollection(['abc', 'cde', 'fgh']));
+
+        self::assertEquals(new ArrayCollection(['ABC', 'CDE', 'FGH']), $result);
+    }
+
+    public function testThrowsExceptionWhenTransformingNonCollection(): void
+    {
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Expected "Doctrine\Common\Collections\Collection", but got "stdClass"');
+
+        $this->transformer->transform(new \stdClass());
+    }
+
+    public function testThrowsExceptionWhenReverseTransformingNonCollection(): void
+    {
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Expected "Doctrine\Common\Collections\Collection", but got "stdClass"');
+
+        $this->transformer->reverseTransform(new \stdClass());
     }
 }

@@ -11,52 +11,85 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Form\DataTransformer;
+namespace Sylius\Bundle\ResourceBundle\Tests\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Form\DataTransformer\CollectionToStringTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-final class CollectionToStringTransformerSpec extends ObjectBehavior
+final class CollectionToStringTransformerTest extends TestCase
 {
-    function let(): void
+    private CollectionToStringTransformer $transformer;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(',');
+        $this->transformer = new CollectionToStringTransformer(',');
     }
 
-    function it_is_data_transformer(): void
+    public function testImplementsDataTransformerInterface(): void
     {
-        $this->shouldImplement(DataTransformerInterface::class);
+        self::assertInstanceOf(DataTransformerInterface::class, $this->transformer);
     }
 
-    function it_transforms_collection_to_string(): void
+    public function testTransformsCollectionToString(): void
     {
-        $this->transform(new ArrayCollection(['abc', 'def', 'ghi', 'jkl']))->shouldReturn('abc,def,ghi,jkl');
+        $collection = new ArrayCollection(['abc', 'def', 'ghi', 'jkl']);
+
+        $result = $this->transformer->transform($collection);
+
+        self::assertSame('abc,def,ghi,jkl', $result);
     }
 
-    function it_transforms_string_to_collection(): void
+    public function testTransformsEmptyCollectionToEmptyString(): void
     {
-        $this->reverseTransform('abc,def,ghi,jkl')->shouldBeLike(new ArrayCollection(['abc', 'def', 'ghi', 'jkl']));
+        $result = $this->transformer->transform(new ArrayCollection());
+
+        self::assertSame('', $result);
     }
 
-    function it_throws_transformation_failed_exception_if_transform_argument_is_not_a_collection(): void
+    public function testTransformsStringToCollection(): void
     {
-        $this->shouldThrow(TransformationFailedException::class)->during('transform', [new \stdClass()]);
+        $result = $this->transformer->reverseTransform('abc,def,ghi,jkl');
+
+        self::assertEquals(new ArrayCollection(['abc', 'def', 'ghi', 'jkl']), $result);
     }
 
-    function it_throws_transformation_failed_exception_if_transform_argument_is_not_a_string(): void
+    public function testTransformsEmptyStringToEmptyCollection(): void
     {
-        $this->shouldThrow(TransformationFailedException::class)->during('reverseTransform', [new \stdClass()]);
+        $result = $this->transformer->reverseTransform('');
+
+        self::assertEquals(new ArrayCollection(), $result);
     }
 
-    function it_returns_empty_string_if_empty_collection_given(): void
+    public function testTransformsCollectionWithSingleElement(): void
     {
-        $this->transform(new ArrayCollection())->shouldReturn('');
+        $result = $this->transformer->transform(new ArrayCollection(['single']));
+
+        self::assertSame('single', $result);
     }
 
-    function it_returns_empty_collection_if_empty_string_given(): void
+    public function testReverseTransformsSingleValue(): void
     {
-        $this->reverseTransform('')->shouldBeLike(new ArrayCollection());
+        $result = $this->transformer->reverseTransform('single');
+
+        self::assertEquals(new ArrayCollection(['single']), $result);
+    }
+
+    public function testThrowsExceptionWhenTransformingNonCollection(): void
+    {
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Expected "Doctrine\Common\Collections\Collection", but got "stdClass"');
+
+        $this->transformer->transform(new \stdClass());
+    }
+
+    public function testThrowsExceptionWhenReverseTransformingNonString(): void
+    {
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Expected string, but got "stdClass"');
+
+        $this->transformer->reverseTransform(new \stdClass());
     }
 }

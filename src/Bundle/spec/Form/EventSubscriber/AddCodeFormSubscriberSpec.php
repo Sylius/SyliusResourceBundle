@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Form\EventSubscriber;
+namespace Sylius\Bundle\ResourceBundle\Tests\Form\EventSubscriber;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Form\EventSubscriber\AddCodeFormSubscriber;
 use Sylius\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Model\CodeAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,146 +24,119 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
-final class AddCodeFormSubscriberSpec extends ObjectBehavior
+final class AddCodeFormSubscriberTest extends TestCase
 {
-    function it_implements_event_subscriber_interface(): void
+    public function testImplementsEventSubscriberInterface(): void
     {
-        $this->shouldImplement(EventSubscriberInterface::class);
+        $subscriber = new AddCodeFormSubscriber();
+
+        self::assertInstanceOf(EventSubscriberInterface::class, $subscriber);
     }
 
-    function it_subscribes_to_event(): void
+    public function testSubscribesToPreSetDataEvent(): void
     {
-        $this::getSubscribedEvents()->shouldReturn([FormEvents::PRE_SET_DATA => 'preSetData']);
+        $events = AddCodeFormSubscriber::getSubscribedEvents();
+
+        self::assertSame([FormEvents::PRE_SET_DATA => 'preSetData'], $events);
     }
 
-    function it_sets_code_as_enabled_when_resource_is_new(FormEvent $event, FormInterface $form, CodeAwareInterface $resource): void
+    private function createFormEvent(mixed $data, FormInterface $form): FormEvent
     {
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
+        $event = $this->createMock(FormEvent::class);
+        $event->method('getData')->willReturn($data);
+        $event->method('getForm')->willReturn($form);
 
-        $resource->getCode()->willReturn(null);
-
-        $form
-            ->add('code', TextType::class, Argument::withEntry('disabled', false))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
-
-        $this->preSetData($event);
+        return $event;
     }
 
-    function it_sets_code_as_disabled_when_resource_is_not_new(
-        FormEvent $event,
-        FormInterface $form,
-        CodeAwareInterface $resource,
-    ): void {
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
-
-        $resource->getCode()->willReturn('Code12');
-
-        $form
-            ->add('code', TextType::class, Argument::withEntry('disabled', true))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
-
-        $this->preSetData($event);
-    }
-
-    function it_throws_exception_when_resource_does_not_implement_code_aware_interface(FormEvent $event, $object): void
+    public function testAddsEnabledCodeFieldWhenResourceIsNew(): void
     {
-        $event->getData()->willReturn($object);
-        $this->shouldThrow(UnexpectedTypeException::class)->during('preSetData', [$event]);
-    }
+        $subscriber = new AddCodeFormSubscriber();
+        $resource = $this->createMock(CodeAwareInterface::class);
+        $resource->method('getCode')->willReturn(null);
 
-    function it_sets_code_as_enabled_when_there_is_no_resource(
-        FormEvent $event,
-        FormInterface $form,
-    ): void {
-        $event->getData()->willReturn(null);
-        $event->getForm()->willReturn($form);
-
+        $form = $this->createMock(FormInterface::class);
         $form
-            ->add('code', TextType::class, Argument::withEntry('disabled', false))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+            ->expects(self::once())
+            ->method('add')
+            ->with(
+                'code',
+                TextType::class,
+                self::callback(fn (array $options): bool => $options['disabled'] === false),
+            )
+            ->willReturn($form);
 
-        $this->preSetData($event);
+        $subscriber->preSetData($this->createFormEvent($resource, $form));
     }
 
-    function it_adds_code_with_specified_type(FormEvent $event, FormInterface $form, CodeAwareInterface $resource): void
+    public function testAddsDisabledCodeFieldWhenResourceHasCode(): void
     {
-        $this->beConstructedWith(FormType::class);
+        $subscriber = new AddCodeFormSubscriber();
+        $resource = $this->createMock(CodeAwareInterface::class);
+        $resource->method('getCode')->willReturn('existing_code');
 
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
-
-        $resource->getCode()->willReturn('Code12');
-
+        $form = $this->createMock(FormInterface::class);
         $form
-            ->add('code', FormType::class, Argument::withEntry('disabled', true))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+            ->expects(self::once())
+            ->method('add')
+            ->with(
+                'code',
+                TextType::class,
+                self::callback(fn (array $options): bool => $options['disabled'] === true),
+            )
+            ->willReturn($form);
 
-        $this->preSetData($event);
+        $subscriber->preSetData($this->createFormEvent($resource, $form));
     }
 
-    function it_adds_code_with_type_text_by_default(FormEvent $event, FormInterface $form, CodeAwareInterface $resource): void
+    public function testAddsEnabledCodeFieldWhenResourceIsNull(): void
     {
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
-
-        $resource->getCode()->willReturn('Code12');
-
+        $subscriber = new AddCodeFormSubscriber();
+        $form = $this->createMock(FormInterface::class);
         $form
-            ->add('code', TextType::class, Argument::withEntry('disabled', true))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+            ->expects(self::once())
+            ->method('add')
+            ->with(
+                'code',
+                TextType::class,
+                self::callback(fn (array $options): bool => $options['disabled'] === false),
+            )
+            ->willReturn($form);
 
-        $this->preSetData($event);
+        $subscriber->preSetData($this->createFormEvent(null, $form));
     }
 
-    function it_adds_code_with_label_sylius_ui_code_by_default(
-        FormEvent $event,
-        FormInterface $form,
-        CodeAwareInterface $resource,
-    ): void {
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
+    public function testThrowsExceptionWhenResourceDoesNotImplementCodeAwareInterface(): void
+    {
+        $subscriber = new AddCodeFormSubscriber();
+        $event = $this->createMock(FormEvent::class);
+        $event->method('getData')->willReturn(new \stdClass());
 
-        $resource->getCode()->willReturn('banana_resource');
+        self::expectException(UnexpectedTypeException::class);
 
-        $form
-            ->add('code', TextType::class, Argument::withEntry('label', 'sylius.ui.code'))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
-
-        $this->preSetData($event);
+        $subscriber->preSetData($event);
     }
 
-    function it_adds_code_with_specified_type_and_label(
-        FormEvent $event,
-        FormInterface $form,
-        CodeAwareInterface $resource,
-    ): void {
-        $this->beConstructedWith(FormType::class, ['label' => 'sylius.ui.name']);
+    public function testUsesCustomTypeAndOptions(): void
+    {
+        $subscriber = new AddCodeFormSubscriber(FormType::class, ['label' => 'custom.label']);
+        $resource = $this->createMock(CodeAwareInterface::class);
+        $resource->method('getCode')->willReturn('code');
 
-        $event->getData()->willReturn($resource);
-        $event->getForm()->willReturn($form);
-
-        $resource->getCode()->willReturn('Code12');
-
+        $form = $this->createMock(FormInterface::class);
         $form
-            ->add('code', FormType::class, Argument::withEntry('label', 'sylius.ui.name'))
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+            ->expects(self::once())
+            ->method('add')
+            ->with(
+                'code',
+                FormType::class,
+                self::callback(function (array $options): bool {
+                    return $options['label'] === 'custom.label'
+                        && $options['disabled'] === true;
+                }),
+            )
+            ->willReturn($form);
 
-        $this->preSetData($event);
+        $subscriber->preSetData($this->createFormEvent($resource, $form));
     }
 }

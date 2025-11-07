@@ -11,56 +11,95 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Form\DataTransformer;
+namespace Sylius\Bundle\ResourceBundle\Tests\Form\DataTransformer;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Model\ResourceInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-final class ResourceToIdentifierTransformerSpec extends ObjectBehavior
+final class ResourceToIdentifierTransformerTest extends TestCase
 {
-    function let(RepositoryInterface $repository): void
+    private RepositoryInterface $repository;
+
+    private ResourceToIdentifierTransformer $transformer;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($repository, 'id');
+        $this->repository = $this->createMock(RepositoryInterface::class);
+        $this->transformer = new ResourceToIdentifierTransformer($this->repository, 'id');
     }
 
-    function it_does_not_reverses_null_value(RepositoryInterface $repository): void
+    public function testImplementsDataTransformerInterface(): void
     {
-        $repository->findOneBy(Argument::any())->shouldNotBeCalled();
-
-        $this->reverseTransform(null)->shouldReturn(null);
+        self::assertInstanceOf(DataTransformerInterface::class, $this->transformer);
     }
 
-    function it_throws_an_exception_on_non_existing_resource(RepositoryInterface $repository): void
+    public function testTransformsNullValueToNull(): void
     {
-        $repository->getClassName()->willReturn(ResourceInterface::class);
-        $repository->findOneBy(['id' => 6])->willReturn(null);
+        $result = $this->transformer->transform(null);
 
-        $this->shouldThrow(TransformationFailedException::class)->during('reverseTransform', [6]);
+        self::assertNull($result);
     }
 
-    function it_reverse_transform_identifier_to_resource(RepositoryInterface $repository, ResourceInterface $resource): void
+    public function testTransformsResourceToIdentifier(): void
     {
-        $repository->findOneBy(['id' => 5])->willReturn($resource);
+        $resource = $this->createMock(ResourceInterface::class);
+        $resource
+            ->expects(self::once())
+            ->method('getId')
+            ->willReturn(6);
 
-        $this->reverseTransform(5)->shouldReturn($resource);
+        $this->repository
+            ->expects(self::once())
+            ->method('getClassName')
+            ->willReturn(ResourceInterface::class);
+
+        $result = $this->transformer->transform($resource);
+
+        self::assertSame(6, $result);
     }
 
-    function it_transforms_null_value_to_empty_string(RepositoryInterface $repository): void
+    public function testReverseTransformsNullToNull(): void
     {
-        $repository->getClassName()->willReturn(ResourceInterface::class);
+        $result = $this->transformer->reverseTransform(null);
 
-        $this->transform(null)->shouldReturn(null);
+        self::assertNull($result);
     }
 
-    function it_transforms_resource_in_identifier(RepositoryInterface $repository, ResourceInterface $resource): void
+    public function testReverseTransformsIdentifierToResource(): void
     {
-        $repository->getClassName()->willReturn(ResourceInterface::class);
+        $resource = $this->createMock(ResourceInterface::class);
 
-        $resource->getId()->willReturn(6);
+        $this->repository
+            ->expects(self::once())
+            ->method('findOneBy')
+            ->with(['id' => 5])
+            ->willReturn($resource);
 
-        $this->transform($resource)->shouldReturn(6);
+        $result = $this->transformer->reverseTransform(5);
+
+        self::assertSame($resource, $result);
+    }
+
+    public function testThrowsExceptionWhenResourceDoesNotExist(): void
+    {
+        $this->repository
+            ->expects(self::once())
+            ->method('findOneBy')
+            ->with(['id' => 6])
+            ->willReturn(null);
+
+        $this->repository
+            ->expects(self::once())
+            ->method('getClassName')
+            ->willReturn(ResourceInterface::class);
+
+        self::expectException(TransformationFailedException::class);
+        self::expectExceptionMessage('Object "Sylius\Resource\Model\ResourceInterface" with identifier "id"="6" does not exist.');
+
+        $this->transformer->reverseTransform(6);
     }
 }
