@@ -67,6 +67,9 @@ final class SessionStorageTest extends TestCase
         $method($storage);
     }
 
+    /**
+     * @return iterable<string, array{callable(SessionStorage): mixed}>
+     */
     public static function storageMethodsDataProvider(): iterable
     {
         yield 'has' => [fn (SessionStorage $storage) => $storage->has('name')];
@@ -111,8 +114,8 @@ final class SessionStorageTest extends TestCase
         $this->storage->set('buzz', 'lightyear');
 
         $this->assertSame([
-            'buzz' => 'lightyear',
             'foo' => 'bar',
+            'buzz' => 'lightyear',
         ], $this->storage->all());
     }
 }

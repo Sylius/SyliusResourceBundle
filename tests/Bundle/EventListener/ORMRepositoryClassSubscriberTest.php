@@ -24,6 +24,7 @@ use Sylius\Resource\Metadata\RegistryInterface;
 
 final class ORMRepositoryClassSubscriberTest extends TestCase
 {
+    /** @var RegistryInterface&\PHPUnit\Framework\MockObject\MockObject */
     private RegistryInterface $registry;
 
     private ORMRepositoryClassSubscriber $subscriber;

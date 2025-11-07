@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\Event;
 
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResourceControllerEventTest extends TestCase
@@ -23,7 +24,8 @@ final class ResourceControllerEventTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->event = new ResourceControllerEvent('message');
+        $this->event = new ResourceControllerEvent();
+        $this->event->setMessage('message');
     }
 
     public function testItHasEmptyMessageByDefault(): void
@@ -31,11 +33,6 @@ final class ResourceControllerEventTest extends TestCase
         $event = new ResourceControllerEvent();
 
         $this->assertSame('', $event->getMessage());
-    }
-
-    public function testItCanBeInstantiatedWithMessage(): void
-    {
-        $this->assertSame('message', $this->event->getMessage());
     }
 
     public function testItCanSetAndGetMessage(): void
@@ -52,9 +49,9 @@ final class ResourceControllerEventTest extends TestCase
 
     public function testItCanSetAndGetMessageType(): void
     {
-        $this->event->setMessageType(ResourceControllerEvent::TYPE_SUCCESS);
+        $this->event->setMessageType(GenericEvent::TYPE_SUCCESS);
 
-        $this->assertSame(ResourceControllerEvent::TYPE_SUCCESS, $this->event->getMessageType());
+        $this->assertSame(GenericEvent::TYPE_SUCCESS, $this->event->getMessageType());
     }
 
     public function testItHasEmptyMessageParametersByDefault(): void
@@ -83,11 +80,11 @@ final class ResourceControllerEventTest extends TestCase
 
     public function testItStopsPropagationWhenStopped(): void
     {
-        $this->event->stop('error_message', ResourceControllerEvent::TYPE_SUCCESS, ['parameter']);
+        $this->event->stop('error_message', GenericEvent::TYPE_SUCCESS, ['parameter']);
 
         $this->assertTrue($this->event->isPropagationStopped());
         $this->assertSame('error_message', $this->event->getMessage());
-        $this->assertSame(ResourceControllerEvent::TYPE_SUCCESS, $this->event->getMessageType());
+        $this->assertSame(GenericEvent::TYPE_SUCCESS, $this->event->getMessageType());
         $this->assertSame(['parameter'], $this->event->getMessageParameters());
     }
 

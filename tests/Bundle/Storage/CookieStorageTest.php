@@ -66,8 +66,8 @@ final class CookieStorageTest extends TestCase
         $this->storage->set('buzz', 'lightyear');
 
         $this->assertSame([
-            'buzz' => 'lightyear',
             'foo' => 'bar',
+            'buzz' => 'lightyear',
         ], $this->storage->all());
     }
 }

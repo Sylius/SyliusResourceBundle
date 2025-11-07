@@ -25,6 +25,7 @@ use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 
 final class LegacyContextFactoryTest extends TestCase
 {
+    /** @var ContextFactoryInterface&\PHPUnit\Framework\MockObject\MockObject */
     private ContextFactoryInterface $decorated;
 
     private LegacyContextFactory $factory;
@@ -61,9 +62,9 @@ final class LegacyContextFactoryTest extends TestCase
         $result = $this->factory->create($data, $operation, $context);
 
         $this->assertSame([
+            'resource' => $data,
             'configuration' => $requestConfiguration,
             'metadata' => $metadata,
-            'resource' => $data,
         ], $result);
     }
 

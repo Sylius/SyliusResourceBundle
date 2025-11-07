@@ -14,25 +14,29 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Event\LoadClassMetadataEventArgs;
 use Doctrine\ODM\MongoDB\Events;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\EventListener\ODMRepositoryClassSubscriber;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 
-/**
- * @requires extension mongodb
- */
 final class ODMRepositoryClassSubscriberTest extends TestCase
 {
+    /** @var RegistryInterface&MockObject */
     private RegistryInterface $registry;
 
     private ODMRepositoryClassSubscriber $subscriber;
 
     protected function setUp(): void
     {
+        if (!class_exists(Events::class)) {
+            $this->markTestSkipped('Doctrine MongoDB ODM is not installed.');
+        }
+
         $this->registry = $this->createMock(RegistryInterface::class);
         $this->subscriber = new ODMRepositoryClassSubscriber($this->registry);
     }
@@ -77,11 +81,8 @@ final class ODMRepositoryClassSubscriberTest extends TestCase
             ->method('setCustomRepositoryClass')
             ->with('FooRepository');
 
-        $event = $this->createMock(LoadClassMetadataEventArgs::class);
-        $event
-            ->expects($this->once())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
+        $documentManager = $this->createMock(DocumentManager::class);
+        $event = new LoadClassMetadataEventArgs($classMetadata, $documentManager);
 
         $this->subscriber->loadClassMetadata($event);
     }
@@ -110,11 +111,8 @@ final class ODMRepositoryClassSubscriberTest extends TestCase
             ->expects($this->never())
             ->method('setCustomRepositoryClass');
 
-        $event = $this->createMock(LoadClassMetadataEventArgs::class);
-        $event
-            ->expects($this->once())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
+        $documentManager = $this->createMock(DocumentManager::class);
+        $event = new LoadClassMetadataEventArgs($classMetadata, $documentManager);
 
         $this->subscriber->loadClassMetadata($event);
     }
@@ -136,11 +134,8 @@ final class ODMRepositoryClassSubscriberTest extends TestCase
             ->expects($this->never())
             ->method('setCustomRepositoryClass');
 
-        $event = $this->createMock(LoadClassMetadataEventArgs::class);
-        $event
-            ->expects($this->once())
-            ->method('getClassMetadata')
-            ->willReturn($classMetadata);
+        $documentManager = $this->createMock(DocumentManager::class);
+        $event = new LoadClassMetadataEventArgs($classMetadata, $documentManager);
 
         $this->subscriber->loadClassMetadata($event);
     }

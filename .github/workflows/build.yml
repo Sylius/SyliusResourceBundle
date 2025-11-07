@@ -64,6 +64,12 @@ jobs:
                 run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
 
             -
+              name: Install MongoDB ODM package
+              run: |
+                composer require --dev doctrine/mongodb-odm-bundle "^5.0" --no-update --no-scripts
+                (cd src/Component && composer require --dev doctrine/mongodb-odm "^2.8" --no-update --no-scripts)
+
+            -
                 name: Install dependencies
                 run: |
                     composer update ${{ matrix.composer-flags }}
