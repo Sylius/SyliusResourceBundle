@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\RecursiveTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -21,6 +22,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class RecursiveTransformerTest extends TestCase
 {
+    /** @var DataTransformerInterface<string, string>&MockObject */
     private DataTransformerInterface $decoratedTransformer;
 
     private RecursiveTransformer $transformer;
@@ -87,6 +89,7 @@ final class RecursiveTransformerTest extends TestCase
         self::expectException(TransformationFailedException::class);
         self::expectExceptionMessage('Expected "Doctrine\Common\Collections\Collection", but got "stdClass"');
 
+        /** @phpstan-ignore argument.type */
         $this->transformer->transform(new \stdClass());
     }
 
@@ -95,6 +98,7 @@ final class RecursiveTransformerTest extends TestCase
         self::expectException(TransformationFailedException::class);
         self::expectExceptionMessage('Expected "Doctrine\Common\Collections\Collection", but got "stdClass"');
 
+        /** @phpstan-ignore argument.type */
         $this->transformer->reverseTransform(new \stdClass());
     }
 }

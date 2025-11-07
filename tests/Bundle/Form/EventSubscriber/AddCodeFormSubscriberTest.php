@@ -131,8 +131,8 @@ final class AddCodeFormSubscriberTest extends TestCase
                 'code',
                 FormType::class,
                 self::callback(function (array $options): bool {
-                    return $options['label'] === 'custom.label'
-                        && $options['disabled'] === true;
+                    return $options['label'] === 'custom.label' &&
+                        $options['disabled'] === true;
                 }),
             )
             ->willReturn($form);

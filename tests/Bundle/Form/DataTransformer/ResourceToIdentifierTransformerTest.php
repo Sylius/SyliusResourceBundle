@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Form\DataTransformer;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class ResourceToIdentifierTransformerTest extends TestCase
 {
+    /** @var RepositoryInterface<ResourceInterface>&MockObject */
     private RepositoryInterface $repository;
 
     private ResourceToIdentifierTransformer $transformer;
