@@ -13,23 +13,28 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Twig\Context\LegacyContextFactory;
+use Sylius\Resource\Twig\Context\Factory\ContextFactory;
+use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
+use Sylius\Resource\Twig\Context\Factory\DefaultContextFactory;
+use Sylius\Resource\Twig\Context\Factory\RequestContextFactory;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.twig.context.factory', 'Sylius\Resource\Twig\Context\Factory\ContextFactory')
+    $services->set('sylius.twig.context.factory', ContextFactory::class)
         ->args([tagged_locator('sylius.twig_context_factory')]);
 
-    $services->set('sylius.twig.context.factory.default', 'Sylius\Resource\Twig\Context\Factory\DefaultContextFactory')
+    $services->set('sylius.twig.context.factory.default', DefaultContextFactory::class)
         ->tag('sylius.twig_context_factory');
 
-    $services->alias('Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface', 'sylius.twig.context.factory.default');
+    $services->alias(ContextFactoryInterface::class, 'sylius.twig.context.factory.default');
 
-    $services->set('sylius.twig.context.factory.request', 'Sylius\Resource\Twig\Context\Factory\RequestContextFactory')
+    $services->set('sylius.twig.context.factory.request', RequestContextFactory::class)
         ->decorate('sylius.twig.context.factory')
         ->args([service('.inner')]);
 
-    $services->set('sylius.twig.context.factory.legacy', 'Sylius\Bundle\ResourceBundle\Twig\Context\LegacyContextFactory')
+    $services->set('sylius.twig.context.factory.legacy', LegacyContextFactory::class)
         ->decorate('sylius.twig.context.factory')
         ->args([service('.inner')]);
 };

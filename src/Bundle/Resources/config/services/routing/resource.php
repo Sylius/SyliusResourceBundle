@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactory;
+use Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.routing.resource.route_collection_factory', 'Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactory')
+    $services->set('sylius.routing.resource.route_collection_factory', ResourceRouteCollectionFactory::class)
         ->args([
             service('sylius.routing.factory.operation_route'),
             service('sylius.resource_metadata_collection.factory'),
             service('sylius.resource_registry'),
         ]);
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Factory\Resource\ResourceRouteCollectionFactoryInterface', 'sylius.routing.resource.route_collection_factory');
+    $services->alias(ResourceRouteCollectionFactoryInterface::class, 'sylius.routing.resource.route_collection_factory');
 };

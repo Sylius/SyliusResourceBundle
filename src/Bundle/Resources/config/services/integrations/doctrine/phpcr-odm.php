@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\DocumentRepository;
+
 return static function (ContainerConfigurator $container) {
-    $services = $container->services();
     $parameters = $container->parameters();
-    $parameters->set('sylius.phpcr_odm.repository.class', 'Sylius\Bundle\ResourceBundle\Doctrine\ODM\PHPCR\DocumentRepository');
+    $parameters->set('sylius.phpcr_odm.repository.class', DocumentRepository::class);
 };

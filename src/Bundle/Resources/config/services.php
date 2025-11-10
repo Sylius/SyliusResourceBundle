@@ -13,6 +13,19 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage as BundleExpressionLanguage;
+use Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage as BundleExpressionLanguageInterface;
+use Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension;
+use Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension as CollectionTypeExtensionInterface;
+use Sylius\Bundle\ResourceBundle\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
+use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType as DefaultResourceTypeInterface;
+use Sylius\Component\Registry\ServiceRegistry;
+use Sylius\Resource\Generator\RandomnessGenerator;
+use Sylius\Resource\Generator\RandomnessGeneratorInterface;
+use Sylius\Resource\Metadata\Registry;
+use Sylius\Resource\Metadata\RegistryInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $parameters = $container->parameters();
@@ -37,55 +50,55 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()
         ->public();
 
-    $services->set('sylius.random_generator', 'Sylius\Resource\Generator\RandomnessGenerator');
+    $services->set('sylius.random_generator', RandomnessGenerator::class);
 
-    $services->alias('Sylius\Resource\Generator\RandomnessGeneratorInterface', 'sylius.random_generator');
+    $services->alias(RandomnessGeneratorInterface::class, 'sylius.random_generator');
 
-    $services->alias('Sylius\Component\Resource\Generator\RandomnessGeneratorInterface', 'sylius.random_generator')
+    $services->alias(\Sylius\Component\Resource\Generator\RandomnessGeneratorInterface::class, 'sylius.random_generator')
         ->deprecate('sylius/resource-bundle', '1.11', 'The "%alias_id%" service alias is deprecated since sylius/resource-bundle 1.11 and will be removed in sylius/resource-bundle 2.0. Use Sylius\Resource\Generator\RandomnessGeneratorInterface instead.');
 
-    $services->set('sylius.form.type_extension.form.request_handler', 'Sylius\Bundle\ResourceBundle\Form\Extension\HttpFoundation\HttpFoundationRequestHandler')
+    $services->set('sylius.form.type_extension.form.request_handler', HttpFoundationRequestHandler::class)
         ->private()
         ->decorate('form.type_extension.form.request_handler', null, 256);
 
-    $services->set('sylius.resource_registry', 'Sylius\Resource\Metadata\Registry')
+    $services->set('sylius.resource_registry', Registry::class)
         ->private();
 
-    $services->alias('Sylius\Resource\Metadata\RegistryInterface', 'sylius.resource_registry')
+    $services->alias(RegistryInterface::class, 'sylius.resource_registry')
         ->private();
 
-    $services->alias('Sylius\Component\Resource\Metadata\RegistryInterface', 'sylius.resource_registry')
+    $services->alias(\Sylius\Component\Resource\Metadata\RegistryInterface::class, 'sylius.resource_registry')
         ->private()
         ->deprecate('sylius/resource-bundle', '1.11', 'The "%alias_id%" service alias is deprecated since sylius/resource-bundle 1.11 and will be removed in sylius/resource-bundle 2.0. Use Sylius\Resource\Metadata\RegistryInterface instead.');
 
-    $services->set('sylius.expression_language', 'Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage')
+    $services->set('sylius.expression_language', BundleExpressionLanguage::class)
         ->private();
 
-    $services->alias('Sylius\Bundle\ResourceBundle\ExpressionLanguage\ExpressionLanguage', 'sylius.expression_language')
+    $services->alias(BundleExpressionLanguageInterface::class, 'sylius.expression_language')
         ->private();
 
-    $services->set('sylius.form.extension.type.collection', 'Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension')
+    $services->set('sylius.form.extension.type.collection', CollectionTypeExtension::class)
         ->tag('form.type_extension', ['extended_type' => 'Symfony\Component\Form\Extension\Core\Type\CollectionType']);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Form\Extension\CollectionTypeExtension', 'sylius.form.extension.type.collection');
+    $services->alias(CollectionTypeExtensionInterface::class, 'sylius.form.extension.type.collection');
 
-    $services->set('sylius.form.type.default', 'Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType')
+    $services->set('sylius.form.type.default', DefaultResourceType::class)
         ->args([
             service('sylius.resource_registry'),
             service('sylius.registry.form_builder'),
         ])
         ->tag('form.type');
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType', 'sylius.form.type.default');
+    $services->alias(DefaultResourceTypeInterface::class, 'sylius.form.type.default');
 
-    $services->set('sylius.registry.resource_repository', 'Sylius\Component\Registry\ServiceRegistry')
+    $services->set('sylius.registry.resource_repository', ServiceRegistry::class)
         ->private()
         ->args([
             'Doctrine\Persistence\ObjectRepository',
             'resource repository',
         ]);
 
-    $services->set('sylius.registry.form_builder', 'Sylius\Component\Registry\ServiceRegistry')
+    $services->set('sylius.registry.form_builder', ServiceRegistry::class)
         ->private()
         ->args([
             'Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface',

@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Symfony\Session\Flash\FlashHelper;
+use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.helper.flash', 'Sylius\Resource\Symfony\Session\Flash\FlashHelper')
+    $services->set('sylius.helper.flash', FlashHelper::class)
         ->args([service('translator')]);
 
-    $services->alias('Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface', 'sylius.helper.flash');
+    $services->alias(FlashHelperInterface::class, 'sylius.helper.flash');
 };

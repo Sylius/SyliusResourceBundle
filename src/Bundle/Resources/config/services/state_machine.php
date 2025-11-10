@@ -13,22 +13,26 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\StateMachine\OperationStateMachine;
+use Sylius\Resource\StateMachine\OperationStateMachineInterface;
+use Sylius\Resource\Symfony\Workflow\OperationStateMachine as SymfonyOperationStateMachine;
+use Sylius\Resource\Winzou\StateMachine\OperationStateMachine as WinzouOperationStateMachine;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.state_machine.operation', 'Sylius\Resource\StateMachine\OperationStateMachine')
+    $services->set('sylius.state_machine.operation', OperationStateMachine::class)
         ->args([tagged_locator('sylius_resource.state_machine', indexAttribute: 'key')]);
 
-    $services->alias('Sylius\Resource\StateMachine\OperationStateMachineInterface', 'sylius.state_machine.operation');
+    $services->alias(OperationStateMachineInterface::class, 'sylius.state_machine.operation');
 
     $services->alias('sylius.state_machine.operation.default', 'sylius.state_machine.operation.winzou');
 
-    $services->set('sylius.state_machine.operation.symfony', 'Sylius\Resource\Symfony\Workflow\OperationStateMachine')
+    $services->set('sylius.state_machine.operation.symfony', SymfonyOperationStateMachine::class)
         ->args([service('workflow.registry')->nullOnInvalid()])
         ->tag('sylius_resource.state_machine', ['key' => 'symfony']);
 
-    $services->set('sylius.state_machine.operation.winzou', 'Sylius\Resource\Winzou\StateMachine\OperationStateMachine')
+    $services->set('sylius.state_machine.operation.winzou', WinzouOperationStateMachine::class)
         ->args([service('sm.factory')->nullOnInvalid()])
         ->tag('sylius_resource.state_machine', ['key' => 'winzou']);
 };

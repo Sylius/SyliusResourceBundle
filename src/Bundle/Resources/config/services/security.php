@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Metadata\OperationAccessCheckerInterface;
+use Sylius\Resource\Symfony\Security\OperationAccessChecker;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.security.operation_access_checker', 'Sylius\Resource\Symfony\Security\OperationAccessChecker')
+    $services->set('sylius.security.operation_access_checker', OperationAccessChecker::class)
         ->args([
             service('sylius.expression_language')->nullOnInvalid(),
             service('security.authentication.trust_resolver')->nullOnInvalid(),
@@ -26,5 +28,5 @@ return static function (ContainerConfigurator $container) {
             service('security.authorization_checker')->nullOnInvalid(),
         ]);
 
-    $services->alias('Sylius\Resource\Metadata\OperationAccessCheckerInterface', 'sylius.security.operation_access_checker');
+    $services->alias(OperationAccessCheckerInterface::class, 'sylius.security.operation_access_checker');
 };

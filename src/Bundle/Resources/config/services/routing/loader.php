@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Symfony\Routing\Loader\ResourceLoader;
+use Sylius\Resource\Symfony\Routing\Loader\ResourceLoader as ResourceLoaderInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.symfony.routing.loader.resource', 'Sylius\Resource\Symfony\Routing\Loader\ResourceLoader')
+    $services->set('sylius.symfony.routing.loader.resource', ResourceLoader::class)
         ->args([
             service('sylius.metadata.resource_class_list.factory'),
             service('sylius.routing.resource.route_collection_factory'),
         ])
         ->tag('routing.route_loader');
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Loader\ResourceLoader', 'sylius.symfony.routing.loader.resource');
+    $services->alias(ResourceLoaderInterface::class, 'sylius.symfony.routing.loader.resource');
 };

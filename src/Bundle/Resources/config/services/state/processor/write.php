@@ -13,14 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\State\Processor;
+use Sylius\Resource\State\Processor\BulkAwareProcessor;
+use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostWriteEventProcessor;
+use Sylius\Resource\Symfony\EventDispatcher\State\DispatchPreWriteEventProcessor;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.state_processor.locator', 'Sylius\Resource\State\Processor')
+    $services->set('sylius.state_processor.locator', Processor::class)
         ->args([tagged_locator('sylius.state_processor')]);
 
-    $services->set('sylius.state_processor.dispatch_pre_write_event', 'Sylius\Resource\Symfony\EventDispatcher\State\DispatchPreWriteEventProcessor')
+    $services->set('sylius.state_processor.dispatch_pre_write_event', DispatchPreWriteEventProcessor::class)
         ->decorate('sylius.state_processor.locator', null, 200)
         ->args([
             service('.inner'),
@@ -28,7 +32,7 @@ return static function (ContainerConfigurator $container) {
             service('sylius.event_handler.operation'),
         ]);
 
-    $services->set('sylius.state_processor.dispatch_post_write_event', 'Sylius\Resource\Symfony\EventDispatcher\State\DispatchPostWriteEventProcessor')
+    $services->set('sylius.state_processor.dispatch_post_write_event', DispatchPostWriteEventProcessor::class)
         ->decorate('sylius.state_processor.locator', null, 200)
         ->args([
             service('.inner'),
@@ -36,7 +40,7 @@ return static function (ContainerConfigurator $container) {
             service('sylius.event_handler.operation'),
         ]);
 
-    $services->set('sylius.state_processor.bulk_aware', 'Sylius\Resource\State\Processor\BulkAwareProcessor')
+    $services->set('sylius.state_processor.bulk_aware', BulkAwareProcessor::class)
         ->decorate('sylius.state_processor.locator', null, 100)
         ->args([service('.inner')]);
 };

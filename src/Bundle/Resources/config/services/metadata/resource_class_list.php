@@ -13,25 +13,30 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory;
+use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory as AttributesResourceClassListFactoryInterface;
+use Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory;
+use Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory as PhpFileResourceClassListFactoryInterface;
+use Sylius\Resource\Metadata\Resource\Factory\ResourceClassListFactoryInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
     $services->alias('sylius.metadata.resource_class_list.factory', 'sylius.metadata.resource_class_list.factory.attributes');
 
-    $services->alias('Sylius\Resource\Metadata\Resource\Factory\ResourceClassListFactoryInterface', 'sylius.metadata.resource_class_list.factory');
+    $services->alias(ResourceClassListFactoryInterface::class, 'sylius.metadata.resource_class_list.factory');
 
-    $services->set('sylius.metadata.resource_class_list.factory.attributes', 'Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory')
+    $services->set('sylius.metadata.resource_class_list.factory.attributes', AttributesResourceClassListFactory::class)
         ->args(['%sylius.resource.mapping%']);
 
-    $services->alias('Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory', 'sylius.metadata.resource_class_list.factory.attributes');
+    $services->alias(AttributesResourceClassListFactoryInterface::class, 'sylius.metadata.resource_class_list.factory.attributes');
 
-    $services->set('sylius.metadata.resource_class_list.factory.php_file', 'Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory')
+    $services->set('sylius.metadata.resource_class_list.factory.php_file', PhpFileResourceClassListFactory::class)
         ->decorate('sylius.metadata.resource_class_list.factory', null, 100)
         ->args([
             service('sylius.metadata.resource_extractor.php_file'),
             service('.inner'),
         ]);
 
-    $services->alias('Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory', 'sylius.metadata.resource_class_list.factory.php_file');
+    $services->alias(PhpFileResourceClassListFactoryInterface::class, 'sylius.metadata.resource_class_list.factory.php_file');
 };

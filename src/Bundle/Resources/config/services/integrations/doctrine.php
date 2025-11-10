@@ -13,25 +13,28 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain;
+use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
+use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain')
+    $services->set(ResourceMappingDriverChain::class)
         ->public()
         ->decorate('doctrine.orm.default_metadata_driver')
         ->args([
-            service('Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain.inner'),
+            service(ResourceMappingDriverChain::class . '.inner'),
             service('sylius.resource_registry'),
         ]);
 
-    $services->alias('sylius_resource.doctrine.mapping_driver_chain', 'Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain');
+    $services->alias('sylius_resource.doctrine.mapping_driver_chain', ResourceMappingDriverChain::class);
 
-    $services->set('Sylius\Resource\Doctrine\Common\State\PersistProcessor')
+    $services->set(PersistProcessor::class)
         ->args([service('doctrine')])
         ->tag('sylius.state_processor');
 
-    $services->set('Sylius\Resource\Doctrine\Common\State\RemoveProcessor')
+    $services->set(RemoveProcessor::class)
         ->args([service('doctrine')])
         ->tag('sylius.state_processor');
 };

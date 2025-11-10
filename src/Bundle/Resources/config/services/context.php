@@ -13,15 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Context\Initiator\LegacyRequestContextInitiator;
+use Sylius\Resource\Context\Initiator\RequestContextInitiator;
+use Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.context.initiator.request_context', 'Sylius\Resource\Context\Initiator\RequestContextInitiator');
+    $services->set('sylius.context.initiator.request_context', RequestContextInitiator::class);
 
-    $services->alias('Sylius\Resource\Context\Initiator\RequestContextInitiatorInterface', 'sylius.context.initiator.request_context');
+    $services->alias(RequestContextInitiatorInterface::class, 'sylius.context.initiator.request_context');
 
-    $services->set('sylius.context.initiator.legacy_request_context', 'Sylius\Bundle\ResourceBundle\Context\Initiator\LegacyRequestContextInitiator')
+    $services->set('sylius.context.initiator.legacy_request_context', LegacyRequestContextInitiator::class)
         ->decorate('sylius.context.initiator.request_context')
         ->args([
             service('sylius.resource_registry'),

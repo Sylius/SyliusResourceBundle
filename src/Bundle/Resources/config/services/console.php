@@ -13,19 +13,20 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
     $services->defaults()
         ->public();
 
-    $services->set('sylius.console.command.resource_debug', 'Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand')
+    $services->set('sylius.console.command.resource_debug', DebugResourceCommand::class)
         ->args([
             service('sylius.resource_registry'),
             service('sylius.resource_metadata_collection.factory'),
         ])
         ->tag('console.command');
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand', 'sylius.console.command.resource_debug');
+    $services->alias(DebugResourceCommand::class, 'sylius.console.command.resource_debug');
 };

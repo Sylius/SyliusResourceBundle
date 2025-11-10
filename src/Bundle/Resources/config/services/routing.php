@@ -13,29 +13,51 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader;
+use Sylius\Bundle\ResourceBundle\Routing\ResourceLoader;
+use Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory;
+use Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Routing\RouteFactory;
+use Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader;
+use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory;
+use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
+use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\CollectionOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\CreateOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\DeleteOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\ShowOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\Factory\RoutePath\UpdateOperationRoutePathFactory;
+use Sylius\Resource\Symfony\Routing\RedirectHandler;
+use Sylius\Resource\Symfony\Routing\RedirectHandlerInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
     $container->import('routing/**/**.php');
 
     $services->defaults()
         ->public();
 
-    $services->set('sylius.routing.loader.resource', 'Sylius\Bundle\ResourceBundle\Routing\ResourceLoader')
+    $services->set('sylius.routing.loader.resource', ResourceLoader::class)
         ->private()
         ->args([
             service('sylius.resource_registry'),
-            inline_service('Sylius\Bundle\ResourceBundle\Routing\RouteFactory'),
+            inline_service(RouteFactory::class),
             '%kernel.environment%',
             '%sylius.routing_path_bc_layer%',
         ])
         ->tag('routing.loader')
         ->deprecate('sylius/resource', '1.13', 'The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.symfony.routing.loader.resource" instead.');
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Routing\ResourceLoader', 'sylius.routing.loader.resource')
+    $services->alias(ResourceLoader::class, 'sylius.routing.loader.resource')
         ->private();
 
-    $services->set('sylius.routing.loader.crud_routes_attributes', 'Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader')
+    $services->set('sylius.routing.loader.crud_routes_attributes', CrudRoutesAttributesLoader::class)
         ->private()
         ->args([
             '%sylius.resource.mapping%',
@@ -43,10 +65,10 @@ return static function (ContainerConfigurator $container) {
         ])
         ->tag('routing.route_loader');
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Routing\CrudRoutesAttributesLoader', 'sylius.routing.loader.crud_routes_attributes')
+    $services->alias(CrudRoutesAttributesLoader::class, 'sylius.routing.loader.crud_routes_attributes')
         ->private();
 
-    $services->set('sylius.routing.loader.routes_attributes', 'Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader')
+    $services->set('sylius.routing.loader.routes_attributes', RoutesAttributesLoader::class)
         ->private()
         ->args([
             '%sylius.resource.mapping%',
@@ -56,51 +78,51 @@ return static function (ContainerConfigurator $container) {
         ->tag('routing.route_loader')
         ->deprecate('sylius/resource', '1.13', 'The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.symfony.routing.loader.resource" instead.');
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Routing\RoutesAttributesLoader', 'sylius.routing.loader.routes_attributes')
+    $services->alias(RoutesAttributesLoader::class, 'sylius.routing.loader.routes_attributes')
         ->private();
 
-    $services->set('sylius.routing.factory.operation_route_name_factory', 'Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory')
+    $services->set('sylius.routing.factory.operation_route_name_factory', OperationRouteNameFactory::class)
         ->private();
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactoryInterface', 'sylius.routing.factory.operation_route_name_factory');
+    $services->alias(OperationRouteNameFactoryInterface::class, 'sylius.routing.factory.operation_route_name_factory');
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.default', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.default', OperationRoutePathFactory::class)
         ->private();
 
     $services->alias('sylius.routing.factory.operation_route_path_factory', 'sylius.routing.factory.operation_route_path_factory.default');
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface', 'sylius.routing.factory.operation_route_path_factory');
+    $services->alias(OperationRoutePathFactoryInterface::class, 'sylius.routing.factory.operation_route_path_factory');
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.collection', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\CollectionOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.collection', CollectionOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, 60)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.create', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\CreateOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.create', CreateOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -50)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.bulk_operation', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.bulk_operation', BulkOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -40)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.update', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\UpdateOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.update', UpdateOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -30)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.delete', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\DeleteOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.delete', DeleteOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -20)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.operation_route_path_factory.show', 'Sylius\Resource\Symfony\Routing\Factory\RoutePath\ShowOperationRoutePathFactory')
+    $services->set('sylius.routing.factory.operation_route_path_factory.show', ShowOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -10)
         ->args([service('.inner')]);
 
-    $services->set('sylius.routing.factory.route_attributes', 'Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactory')
+    $services->set('sylius.routing.factory.route_attributes', RouteAttributesFactory::class)
         ->private();
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Routing\RouteAttributesFactoryInterface', 'sylius.routing.factory.route_attributes');
+    $services->alias(RouteAttributesFactoryInterface::class, 'sylius.routing.factory.route_attributes');
 
-    $services->set('sylius.routing.factory.attributes_operation_route', 'Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory')
+    $services->set('sylius.routing.factory.attributes_operation_route', AttributesOperationRouteFactory::class)
         ->private()
         ->args([
             service('sylius.resource_registry'),
@@ -109,16 +131,16 @@ return static function (ContainerConfigurator $container) {
         ])
         ->deprecate('sylius/resource-bundle', '1.13', 'The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.routing.resource.route_collection_factory" instead.');
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface', 'sylius.routing.factory.attributes_operation_route')
+    $services->alias(AttributesOperationRouteFactoryInterface::class, 'sylius.routing.factory.attributes_operation_route')
         ->deprecate('sylius/resource-bundle', '1.13', 'The "%alias_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.routing.resource.route_collection_factory" instead.');
 
-    $services->set('sylius.routing.factory.operation_route', 'Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory')
+    $services->set('sylius.routing.factory.operation_route', OperationRouteFactory::class)
         ->private()
         ->args([service('sylius.routing.factory.operation_route_path_factory')]);
 
-    $services->alias('Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactoryInterface', 'sylius.routing.factory.operation_route');
+    $services->alias(OperationRouteFactoryInterface::class, 'sylius.routing.factory.operation_route');
 
-    $services->set('sylius.routing.redirect_handler', 'Sylius\Resource\Symfony\Routing\RedirectHandler')
+    $services->set('sylius.routing.redirect_handler', RedirectHandler::class)
         ->args([
             service('router'),
             service('sylius.expression_language.argument_parser.routing'),
@@ -126,5 +148,5 @@ return static function (ContainerConfigurator $container) {
             service('sylius.grid.filter_storage')->nullOnInvalid(),
         ]);
 
-    $services->alias('Sylius\Resource\Symfony\Routing\RedirectHandlerInterface', 'sylius.routing.redirect_handler');
+    $services->alias(RedirectHandlerInterface::class, 'sylius.routing.redirect_handler');
 };

@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Metadata\Mutator\OperationMutatorCollection;
+use Sylius\Resource\Metadata\Mutator\ResourceMutatorCollection;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.metadata.mutator_collection.resource', 'Sylius\Resource\Metadata\Mutator\ResourceMutatorCollection')
+    $services->set('sylius.metadata.mutator_collection.resource', ResourceMutatorCollection::class)
         ->private();
 
-    $services->set('sylius.metadata.mutator_collection.operation', 'Sylius\Resource\Metadata\Mutator\OperationMutatorCollection')
+    $services->set('sylius.metadata.mutator_collection.operation', OperationMutatorCollection::class)
         ->private();
 };

@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.repository_argument_resolver.request', 'Sylius\Resource\Symfony\Request\RepositoryArgumentResolver');
+    $services->set('sylius.repository_argument_resolver.request', RepositoryArgumentResolver::class);
 };

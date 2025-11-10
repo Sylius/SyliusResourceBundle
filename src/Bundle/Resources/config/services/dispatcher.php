@@ -13,20 +13,24 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandler;
+use Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('sylius.dispatcher.operation', 'Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcher')
+    $services->set('sylius.dispatcher.operation', OperationEventDispatcher::class)
         ->args([service('event_dispatcher')]);
 
-    $services->alias('Sylius\Resource\Symfony\EventDispatcher\OperationEventDispatcherInterface', 'sylius.dispatcher.operation');
+    $services->alias(OperationEventDispatcherInterface::class, 'sylius.dispatcher.operation');
 
-    $services->set('sylius.event_handler.operation', 'Sylius\Resource\Symfony\EventDispatcher\OperationEventHandler')
+    $services->set('sylius.event_handler.operation', OperationEventHandler::class)
         ->args([
             service('sylius.routing.redirect_handler'),
             service('sylius.helper.flash'),
         ]);
 
-    $services->alias('Sylius\Resource\Symfony\EventDispatcher\OperationEventHandlerInterface', 'sylius.event_handler.operation');
+    $services->alias(OperationEventHandlerInterface::class, 'sylius.event_handler.operation');
 };

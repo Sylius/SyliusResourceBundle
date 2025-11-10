@@ -13,22 +13,35 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Controller\ResourcesResolver;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer;
+use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer as TwigBulkActionGridRendererInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
+use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer as TwigGridRendererInterface;
+use Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory;
+use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
+use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
+use Sylius\Resource\Grid\View\Factory\GridViewFactory;
+use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
+
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
     $services->defaults()
         ->public();
 
-    $services->set('sylius.grid.resource_view_factory', 'Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory')
+    $services->set('sylius.grid.resource_view_factory', ResourceGridViewFactory::class)
         ->args([
             service('sylius.grid.data_provider'),
             service('sylius.resource_controller.parameters_parser'),
         ]);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface', 'sylius.grid.resource_view_factory');
+    $services->alias(ResourceGridViewFactoryInterface::class, 'sylius.grid.resource_view_factory');
 
-    $services->set('sylius.resource_controller.resources_resolver.grid_aware', 'Sylius\Bundle\ResourceBundle\Grid\Controller\ResourcesResolver')
+    $services->set('sylius.resource_controller.resources_resolver.grid_aware', ResourcesResolver::class)
         ->decorate('sylius.resource_controller.resources_resolver', null, 256)
         ->args([
             service('sylius.resource_controller.resources_resolver.grid_aware.inner'),
@@ -36,9 +49,9 @@ return static function (ContainerConfigurator $container) {
             service('sylius.grid.resource_view_factory'),
         ]);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface', 'sylius.resource_controller.resources_resolver.grid_aware');
+    $services->alias(ResourcesResolverInterface::class, 'sylius.resource_controller.resources_resolver.grid_aware');
 
-    $services->set('sylius.custom_grid_renderer.twig', 'Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer')
+    $services->set('sylius.custom_grid_renderer.twig', TwigGridRenderer::class)
         ->decorate('sylius.grid.renderer.twig', null, 256)
         ->args([
             service('sylius.custom_grid_renderer.twig.inner'),
@@ -47,9 +60,9 @@ return static function (ContainerConfigurator $container) {
             '%sylius.grid.templates.action%',
         ]);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer', 'sylius.custom_grid_renderer.twig');
+    $services->alias(TwigGridRendererInterface::class, 'sylius.custom_grid_renderer.twig');
 
-    $services->set('sylius.custom_bulk_action_grid_renderer.twig', 'Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer')
+    $services->set('sylius.custom_bulk_action_grid_renderer.twig', TwigBulkActionGridRenderer::class)
         ->decorate('sylius.grid.bulk_action_renderer.twig', null, 256)
         ->args([
             service('twig'),
@@ -57,9 +70,9 @@ return static function (ContainerConfigurator $container) {
             '%sylius.grid.templates.bulk_action%',
         ]);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer', 'sylius.custom_bulk_action_grid_renderer.twig');
+    $services->alias(TwigBulkActionGridRendererInterface::class, 'sylius.custom_bulk_action_grid_renderer.twig');
 
-    $services->set('sylius.grid_options_parser', 'Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser')
+    $services->set('sylius.grid_options_parser', OptionsParser::class)
         ->private()
         ->args([
             service('service_container'),
@@ -67,10 +80,10 @@ return static function (ContainerConfigurator $container) {
             service('property_accessor'),
         ]);
 
-    $services->alias('Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface', 'sylius.grid_options_parser')
+    $services->alias(OptionsParserInterface::class, 'sylius.grid_options_parser')
         ->private();
 
-    $services->set('sylius.grid.view_factory.legacy', 'Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory')
+    $services->set('sylius.grid.view_factory.legacy', LegacyGridViewFactory::class)
         ->private()
         ->decorate('sylius.grid.view_factory.resource')
         ->args([
@@ -78,8 +91,8 @@ return static function (ContainerConfigurator $container) {
             service('.inner'),
         ]);
 
-    $services->set('sylius.grid.view_factory.resource', 'Sylius\Resource\Grid\View\Factory\GridViewFactory')
+    $services->set('sylius.grid.view_factory.resource', GridViewFactory::class)
         ->args([service('sylius.grid.data_provider')]);
 
-    $services->alias('Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface', 'sylius.grid.view_factory.resource');
+    $services->alias(GridViewFactoryInterface::class, 'sylius.grid.view_factory.resource');
 };
