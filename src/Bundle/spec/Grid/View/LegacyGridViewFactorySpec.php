@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Grid\View;
+namespace Sylius\Bundle\ResourceBundle\Tests\Grid\View;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory;
@@ -27,58 +28,95 @@ use Sylius\Resource\Context\Option\MetadataOption;
 use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
-final class LegacyGridViewFactorySpec extends ObjectBehavior
+final class LegacyGridViewFactoryTest extends TestCase
 {
-    function let(
-        ResourceGridViewFactoryInterface $resourceGridViewFactory,
-        GridViewFactoryInterface $decorated,
-    ): void {
-        $this->beConstructedWith($resourceGridViewFactory, $decorated);
-    }
+    /** @var ResourceGridViewFactoryInterface&MockObject */
+    private ResourceGridViewFactoryInterface $resourceGridViewFactory;
 
-    function it_is_initializable(): void
+    /** @var GridViewFactoryInterface&MockObject */
+    private GridViewFactoryInterface $decorated;
+
+    private LegacyGridViewFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(LegacyGridViewFactory::class);
+        $this->resourceGridViewFactory = $this->createMock(ResourceGridViewFactoryInterface::class);
+        $this->decorated = $this->createMock(GridViewFactoryInterface::class);
+        $this->factory = new LegacyGridViewFactory($this->resourceGridViewFactory, $this->decorated);
     }
 
-    function it_creates_a_legacy_resource_grid_view(
-        Grid $grid,
+    public function testItCreatesALegacyResourceGridView(): void
+    {
+        $grid = $this->createMock(Grid::class);
+        $requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $metadata = $this->createMock(MetadataInterface::class);
+        $resourceGridView = $this->createMock(ResourceGridView::class);
+        $parameters = new Parameters();
+
+        $context = $this->createContextWithRequestConfiguration($requestConfiguration, $metadata);
+
+        $this->configureResourceGridViewFactory($grid, $parameters, $metadata, $requestConfiguration, $resourceGridView);
+
+        $result = $this->factory->create($grid, $context, $parameters, []);
+
+        $this->assertSame($resourceGridView, $result);
+    }
+
+    public function testItCreatesAGridViewWhenContextHasNoRequestConfiguration(): void
+    {
+        $grid = $this->createMock(Grid::class);
+        $metadata = $this->createMock(MetadataInterface::class);
+        $gridView = $this->createMock(GridView::class);
+        $parameters = new Parameters();
+
+        $context = $this->createContextWithoutRequestConfiguration($metadata);
+
+        $this->configureDecoratedFactory($grid, $context, $parameters, $gridView);
+
+        $result = $this->factory->create($grid, $context, $parameters, []);
+
+        $this->assertSame($gridView, $result);
+    }
+
+    private function createContextWithRequestConfiguration(
         RequestConfiguration $requestConfiguration,
         MetadataInterface $metadata,
-        ResourceGridViewFactoryInterface $resourceGridViewFactory,
-        ResourceGridView $resourceGridView,
-    ): void {
-        $context = new Context(
-            new RequestConfigurationOption($requestConfiguration->getWrappedObject()),
-            new MetadataOption($metadata->getWrappedObject()),
+    ): Context {
+        return new Context(
+            new RequestConfigurationOption($requestConfiguration),
+            new MetadataOption($metadata),
         );
-
-        $parameters = new Parameters();
-
-        $resourceGridViewFactory->create(
-            $grid,
-            $parameters,
-            $metadata,
-            $requestConfiguration,
-        )->willReturn($resourceGridView)->shouldBeCalled();
-
-        $this->create($grid, $context, $parameters, [])->shouldReturn($resourceGridView);
     }
 
-    function it_creates_a_grid_view_when_context_has_no_request_configuration(
+    private function createContextWithoutRequestConfiguration(MetadataInterface $metadata): Context
+    {
+        return new Context(
+            new MetadataOption($metadata),
+        );
+    }
+
+    private function configureResourceGridViewFactory(
         Grid $grid,
-        GridViewFactoryInterface $decorated,
+        Parameters $parameters,
         MetadataInterface $metadata,
+        RequestConfiguration $requestConfiguration,
+        ResourceGridView $resourceGridView,
+    ): void {
+        $this->resourceGridViewFactory->expects($this->once())
+            ->method('create')
+            ->with($grid, $parameters, $metadata, $requestConfiguration)
+            ->willReturn($resourceGridView);
+    }
+
+    private function configureDecoratedFactory(
+        Grid $grid,
+        Context $context,
+        Parameters $parameters,
         GridView $gridView,
     ): void {
-        $context = new Context(
-            new MetadataOption($metadata->getWrappedObject()),
-        );
-
-        $parameters = new Parameters();
-
-        $decorated->create($grid, $context, $parameters, [])->willReturn($gridView)->shouldBeCalled();
-
-        $this->create($grid, $context, $parameters, [])->shouldReturn($gridView);
+        $this->decorated->expects($this->once())
+            ->method('create')
+            ->with($grid, $context, $parameters, [])
+            ->willReturn($gridView);
     }
 }

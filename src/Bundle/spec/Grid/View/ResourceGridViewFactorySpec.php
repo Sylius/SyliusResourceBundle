@@ -11,12 +11,14 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Grid\View;
+namespace Sylius\Bundle\ResourceBundle\Tests\Grid\View;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
+use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
@@ -24,47 +26,103 @@ use Sylius\Component\Grid\Parameters;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ResourceGridViewFactorySpec extends ObjectBehavior
+final class ResourceGridViewFactoryTest extends TestCase
 {
-    function let(DataProviderInterface $dataProvider, ParametersParserInterface $parametersParser): void
+    private const DRIVER_CONFIG_BEFORE = [
+        'repository' => [
+            'method' => 'createByCustomerQueryBuilder',
+            'arguments' => ['$customerId'],
+        ],
+    ];
+
+    private const DRIVER_CONFIG_AFTER = [
+        'repository' => [
+            'method' => 'createByCustomerQueryBuilder',
+            'arguments' => [5],
+        ],
+    ];
+
+    private const GRID_DATA = ['foo', 'bar'];
+
+    /** @var DataProviderInterface&MockObject */
+    private DataProviderInterface $dataProvider;
+
+    /** @var ParametersParserInterface&MockObject */
+    private ParametersParserInterface $parametersParser;
+
+    private ResourceGridViewFactory $factory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($dataProvider, $parametersParser);
+        $this->dataProvider = $this->createMock(DataProviderInterface::class);
+        $this->parametersParser = $this->createMock(ParametersParserInterface::class);
+        $this->factory = new ResourceGridViewFactory($this->dataProvider, $this->parametersParser);
     }
 
-    function it_implements_resource_grid_view_factory_interface(): void
+    public function testItImplementsResourceGridViewFactoryInterface(): void
     {
-        $this->shouldImplement(ResourceGridViewFactoryInterface::class);
+        $this->assertInstanceOf(ResourceGridViewFactoryInterface::class, $this->factory);
     }
 
-    function it_uses_data_provider_to_create_a_view_with_data_and_definition(
-        DataProviderInterface $dataProvider,
-        ParametersParserInterface $parametersParser,
+    public function testItUsesDataProviderToCreateAViewWithDataAndDefinition(): void
+    {
+        $parameters = new Parameters();
+        $resourceMetadata = $this->createMock(MetadataInterface::class);
+        $request = $this->createMock(Request::class);
+        $requestConfiguration = $this->createConfiguredMock(RequestConfiguration::class, [
+            'getRequest' => $request,
+        ]);
+        $grid = $this->createGridMock();
+
+        $this->configureParametersParser($request);
+        $this->configureDataProvider($grid, $parameters);
+
+        $result = $this->factory->create($grid, $parameters, $resourceMetadata, $requestConfiguration);
+
+        $this->assertResourceGridView($result, $grid, $parameters, $resourceMetadata, $requestConfiguration);
+    }
+
+    private function createGridMock(): Grid&MockObject
+    {
+        return $this->createConfiguredMock(Grid::class, [
+            'getDriverConfiguration' => self::DRIVER_CONFIG_BEFORE,
+        ]);
+    }
+
+    private function configureParametersParser(Request $request): void
+    {
+        $this->parametersParser->expects($this->once())
+            ->method('parseRequestValues')
+            ->with(self::DRIVER_CONFIG_BEFORE, $request)
+            ->willReturn(self::DRIVER_CONFIG_AFTER);
+    }
+
+    private function configureDataProvider(Grid&MockObject $grid, Parameters $parameters): void
+    {
+        /** @var MockObject $gridMock */
+        $gridMock = $grid;
+        $gridMock->expects($this->once())
+            ->method('setDriverConfiguration')
+            ->with(self::DRIVER_CONFIG_AFTER);
+
+        $this->dataProvider->expects($this->once())
+            ->method('getData')
+            ->with($grid, $parameters)
+            ->willReturn(self::GRID_DATA);
+    }
+
+    private function assertResourceGridView(
+        ResourceGridView $result,
         Grid $grid,
+        Parameters $parameters,
         MetadataInterface $resourceMetadata,
-        Request $request,
         RequestConfiguration $requestConfiguration,
     ): void {
-        $parameters = new Parameters();
-
-        $expectedResourceGridView = new ResourceGridView(
-            ['foo', 'bar'],
-            $grid->getWrappedObject(),
-            $parameters,
-            $resourceMetadata->getWrappedObject(),
-            $requestConfiguration->getWrappedObject(),
-        );
-
-        $requestConfiguration->getRequest()->willReturn($request);
-        $parametersParser
-            ->parseRequestValues(['repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => ['$customerId']]], $request)
-            ->willReturn(['repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => [5]]])
-        ;
-
-        $grid->getDriverConfiguration()->willReturn(['repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => ['$customerId']]]);
-        $grid->setDriverConfiguration(['repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => [5]]])->shouldBeCalled();
-
-        $dataProvider->getData($grid, $parameters)->willReturn(['foo', 'bar']);
-
-        $this->create($grid, $parameters, $resourceMetadata, $requestConfiguration)->shouldBeLike($expectedResourceGridView);
+        $this->assertInstanceOf(ResourceGridView::class, $result);
+        $this->assertSame(self::GRID_DATA, $result->getData());
+        $this->assertSame($grid, $result->getDefinition());
+        $this->assertSame($parameters, $result->getParameters());
+        $this->assertSame($resourceMetadata, $result->getMetadata());
+        $this->assertSame($requestConfiguration, $result->getRequestConfiguration());
     }
 }

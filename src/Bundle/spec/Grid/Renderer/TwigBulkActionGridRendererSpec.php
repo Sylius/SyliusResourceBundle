@@ -11,71 +11,115 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Grid\Renderer;
+namespace Sylius\Bundle\ResourceBundle\Tests\Grid\Renderer;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-final class TwigBulkActionGridRendererSpec extends ObjectBehavior
+final class TwigBulkActionGridRendererTest extends TestCase
 {
-    function let(Environment $twig, OptionsParserInterface $optionsParser): void
+    /** @var Environment&MockObject */
+    private Environment $twig;
+
+    /** @var OptionsParserInterface&MockObject */
+    private OptionsParserInterface $optionsParser;
+
+    private TwigBulkActionGridRenderer $renderer;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(
-            $twig,
-            $optionsParser,
+        $this->twig = $this->createMock(Environment::class);
+        $this->optionsParser = $this->createMock(OptionsParserInterface::class);
+        $this->renderer = new TwigBulkActionGridRenderer(
+            $this->twig,
+            $this->optionsParser,
             ['delete' => '@SyliusGrid/BulkAction/_delete.html.twig'],
         );
     }
 
-    function it_is_a_bulk_action_grid_renderer(): void
+    public function testItImplementsBulkActionGridRendererInterface(): void
     {
-        $this->shouldImplement(BulkActionGridRendererInterface::class);
+        $this->assertInstanceOf(BulkActionGridRendererInterface::class, $this->renderer);
     }
 
-    function it_uses_twig_to_render_the_bulk_action(
-        Environment $twig,
-        OptionsParserInterface $optionsParser,
+    public function testItUsesTwigToRenderTheBulkAction(): void
+    {
+        $request = $this->createMock(Request::class);
+        $requestConfiguration = $this->createConfiguredMock(RequestConfiguration::class, [
+            'getRequest' => $request,
+        ]);
+        $gridView = $this->createConfiguredMock(ResourceGridView::class, [
+            'getRequestConfiguration' => $requestConfiguration,
+        ]);
+        $bulkAction = $this->createBulkActionMock('delete', []);
+
+        $this->configureOptionsParser([], $request);
+        $this->configureTwigRenderer(
+            '@SyliusGrid/BulkAction/_delete.html.twig',
+            $gridView,
+            $bulkAction,
+            '<a href="#">Delete</a>',
+        );
+
+        $result = $this->renderer->renderBulkAction($gridView, $bulkAction);
+
+        $this->assertSame('<a href="#">Delete</a>', $result);
+    }
+
+    public function testItThrowsAnExceptionIfTemplateIsNotConfiguredForGivenBulkActionType(): void
+    {
+        $gridView = $this->createMock(ResourceGridView::class);
+        $bulkAction = $this->createBulkActionMock('foo');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing template for bulk action type "foo".');
+
+        $this->renderer->renderBulkAction($gridView, $bulkAction);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function createBulkActionMock(string $type, array $options = []): Action&MockObject
+    {
+        return $this->createConfiguredMock(Action::class, [
+            'getType' => $type,
+            'getOptions' => $options,
+        ]);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function configureOptionsParser(array $options, Request $request): void
+    {
+        $this->optionsParser->expects($this->once())
+            ->method('parseOptions')
+            ->with($options, $request, null);
+    }
+
+    private function configureTwigRenderer(
+        string $template,
         ResourceGridView $gridView,
         Action $bulkAction,
-        RequestConfiguration $requestConfiguration,
-        Request $request,
+        string $renderedContent,
     ): void {
-        $bulkAction->getType()->willReturn('delete');
-        $bulkAction->getOptions()->willReturn([]);
-
-        $gridView->getRequestConfiguration()->willReturn($requestConfiguration);
-        $requestConfiguration->getRequest()->willReturn($request);
-
-        $optionsParser->parseOptions([], $request, null)->shouldBeCalled();
-
-        $twig
-            ->render('@SyliusGrid/BulkAction/_delete.html.twig', [
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with($template, [
                 'grid' => $gridView,
                 'action' => $bulkAction,
                 'data' => null,
                 'options' => [],
             ])
-            ->willReturn('<a href="#">Delete</a>')
-        ;
-
-        $this->renderBulkAction($gridView, $bulkAction)->shouldReturn('<a href="#">Delete</a>');
-    }
-
-    function it_throws_an_exception_if_template_is_not_configured_for_given_bulk_action_type(
-        ResourceGridView $gridView,
-        Action $bulkAction,
-    ): void {
-        $bulkAction->getType()->willReturn('foo');
-
-        $this
-            ->shouldThrow(new \InvalidArgumentException('Missing template for bulk action type "foo".'))
-            ->during('renderBulkAction', [$gridView, $bulkAction])
-        ;
+            ->willReturn($renderedContent);
     }
 }

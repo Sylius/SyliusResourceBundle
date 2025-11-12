@@ -11,37 +11,56 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Grid\View;
+namespace Sylius\Bundle\ResourceBundle\Tests\Grid\View;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
 use Sylius\Resource\Metadata\MetadataInterface;
 
-final class ResourceGridViewSpec extends ObjectBehavior
+final class ResourceGridViewTest extends TestCase
 {
-    function let(
-        Grid $gridDefinition,
-        MetadataInterface $resourceMetadata,
-        RequestConfiguration $requestConfiguration,
-    ): void {
-        $this->beConstructedWith(['foo', 'bar'], $gridDefinition, new Parameters(), $resourceMetadata, $requestConfiguration);
+    private const GRID_DATA = ['foo', 'bar'];
+
+    private ResourceGridView $gridView;
+
+    private MetadataInterface $resourceMetadata;
+
+    private RequestConfiguration $requestConfiguration;
+
+    protected function setUp(): void
+    {
+        $this->resourceMetadata = $this->createMock(MetadataInterface::class);
+        $this->requestConfiguration = $this->createMock(RequestConfiguration::class);
+        $this->gridView = $this->createResourceGridView();
     }
 
-    function it_extends_default_GridView(): void
+    public function testItExtendsDefaultGridView(): void
     {
-        $this->shouldHaveType(GridView::class);
+        $this->assertInstanceOf(GridView::class, $this->gridView);
     }
 
-    function it_has_resource_metadata(MetadataInterface $resourceMetadata): void
+    public function testItHasResourceMetadata(): void
     {
-        $this->getMetadata()->shouldReturn($resourceMetadata);
+        $this->assertSame($this->resourceMetadata, $this->gridView->getMetadata());
     }
 
-    function it_has_request_configuration(RequestConfiguration $requestConfiguration): void
+    public function testItHasRequestConfiguration(): void
     {
-        $this->getRequestConfiguration()->shouldReturn($requestConfiguration);
+        $this->assertSame($this->requestConfiguration, $this->gridView->getRequestConfiguration());
+    }
+
+    private function createResourceGridView(): ResourceGridView
+    {
+        return new ResourceGridView(
+            self::GRID_DATA,
+            $this->createMock(Grid::class),
+            new Parameters(),
+            $this->resourceMetadata,
+            $this->requestConfiguration,
+        );
     }
 }
