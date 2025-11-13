@@ -11,21 +11,21 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Validator\Constraints;
+namespace Sylius\Bundle\ResourceBundle\Tests\Validator\Constraints;
 
-use PhpSpec\ObjectBehavior;
+use Sylius\Bundle\ResourceBundle\Validator\Constraints\UniqueWithinCollectionConstraint;
 use Sylius\Bundle\ResourceBundle\Validator\UniqueWithinCollectionConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 
-final class UniqueWithinCollectionConstraintSpec extends ObjectBehavior
+final class UniqueWithinCollectionConstraintTest extends ConstraintTestCase
 {
-    function it_extends_symfony_constraint_class(): void
+    protected function createConstraint(): Constraint
     {
-        $this->shouldHaveType(Constraint::class);
+        return new UniqueWithinCollectionConstraint();
     }
 
-    function it_is_validate_by_unique_field_during_creation_validator(): void
+    protected function getExpectedValidatorClass(): string
     {
-        $this->validatedBy()->shouldReturn(UniqueWithinCollectionConstraintValidator::class);
+        return UniqueWithinCollectionConstraintValidator::class;
     }
 }

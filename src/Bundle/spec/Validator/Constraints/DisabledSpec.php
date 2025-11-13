@@ -11,31 +11,21 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Bundle\ResourceBundle\Validator\Constraints;
+namespace Sylius\Bundle\ResourceBundle\Tests\Validator\Constraints;
 
-use PhpSpec\ObjectBehavior;
+use Sylius\Bundle\ResourceBundle\Validator\Constraints\Disabled;
 use Sylius\Bundle\ResourceBundle\Validator\DisabledValidator;
 use Symfony\Component\Validator\Constraint;
 
-final class DisabledSpec extends ObjectBehavior
+final class DisabledTest extends ToggleableConstraintTestCase
 {
-    function it_is_constraint(): void
+    protected function createConstraint(): Constraint
     {
-        $this->shouldHaveType(Constraint::class);
+        return new Disabled();
     }
 
-    function it_is_a_property_constraint(): void
+    protected function getExpectedValidatorClass(): string
     {
-        $this->getTargets()->shouldContain(Constraint::PROPERTY_CONSTRAINT);
-    }
-
-    function it_is_a_class_constraint(): void
-    {
-        $this->getTargets()->shouldContain(Constraint::CLASS_CONSTRAINT);
-    }
-
-    function it_is_validated_by_disabled_validator(): void
-    {
-        $this->validatedBy()->shouldReturn(DisabledValidator::class);
+        return DisabledValidator::class;
     }
 }
