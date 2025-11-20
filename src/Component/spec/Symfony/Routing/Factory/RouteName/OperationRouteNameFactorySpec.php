@@ -11,42 +11,87 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RouteName;
+namespace Sylius\Resource\Tests\Symfony\Routing\Factory\RouteName;
 
-use PhpSpec\ObjectBehavior;
-use Sylius\Resource\Metadata\Create;
+use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 
-final class OperationRouteNameFactorySpec extends ObjectBehavior
+final class OperationRouteNameFactoryTest extends TestCase
 {
-    function it_is_initializable(): void
+    private OperationRouteNameFactory $operationRouteNameFactory;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(OperationRouteNameFactory::class);
+        $this->operationRouteNameFactory = new OperationRouteNameFactory();
     }
 
-    function it_create_a_route_name(): void
+    public function testItCreatesRouteNameForOperationWithResource(): void
     {
-        $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
-        $operation = (new Create())->withResource($resource);
+        $resource = new ResourceMetadata(
+            alias: 'app.dummy',
+            name: 'dummy',
+            applicationName: 'app',
+        );
 
-        $this->createRouteName($operation)->shouldReturn('app_book_create');
+        $operation = (new Index())->withResource($resource);
+
+        $result = $this->operationRouteNameFactory->createRouteName($operation);
+
+        $this->assertSame('app_dummy_index', $result);
     }
 
-    function it_create_a_route_name_with_a_section(): void
+    public function testItCreatesRouteNameForOperationWithSection(): void
     {
-        $resource = new ResourceMetadata(alias: 'app.book', section: 'admin', name: 'book', applicationName: 'app');
-        $operation = (new Create())->withResource($resource);
+        $resource = new ResourceMetadata(
+            alias: 'app.dummy',
+            section: 'admin',
+            name: 'dummy',
+            applicationName: 'app',
+        );
 
-        $this->createRouteName($operation)->shouldReturn('app_admin_book_create');
+        $operation = (new Index())->withResource($resource);
+
+        $result = $this->operationRouteNameFactory->createRouteName($operation);
+
+        $this->assertSame('app_admin_dummy_index', $result);
     }
 
-    function it_throws_an_exception_when_operation_has_no_resource(): void
+    public function testItCreatesRouteNameWithCustomShortName(): void
     {
-        $operation = new Create();
+        $resource = new ResourceMetadata(
+            alias: 'app.dummy',
+            name: 'dummy',
+            applicationName: 'app',
+        );
 
-        $this->shouldThrow(new \RuntimeException('No resource was found on the operation "create"'))
-            ->during('createRouteName', [$operation])
-        ;
+        $operation = (new Show())->withResource($resource);
+
+        $result = $this->operationRouteNameFactory->createRouteName($operation, 'details');
+
+        $this->assertSame('app_dummy_details', $result);
+    }
+
+    public function testItThrowsExceptionWhenOperationHasNoResourceWithShortName(): void
+    {
+        $operation = new Show(shortName: 'custom_show');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No resource was found on the operation "custom_show"');
+
+        $this->operationRouteNameFactory->createRouteName($operation);
+    }
+
+    public function testItThrowsExceptionWhenOperationHasNoResourceWithDefaultShortName(): void
+    {
+        // Show operation has default shortName "show"
+        $operation = new Show();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No resource was found on the operation "show"');
+
+        $this->operationRouteNameFactory->createRouteName($operation);
     }
 }

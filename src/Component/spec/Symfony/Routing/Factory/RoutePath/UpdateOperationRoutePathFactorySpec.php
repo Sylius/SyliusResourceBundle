@@ -11,59 +11,85 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory\RoutePath;
+namespace Sylius\Resource\Tests\Symfony\Routing\Factory\RoutePath;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\UpdateOperationRoutePathFactory;
 
-final class UpdateOperationRoutePathFactorySpec extends ObjectBehavior
+final class UpdateOperationRoutePathFactoryTest extends TestCase
 {
-    function let(OperationRoutePathFactoryInterface $routePathFactory): void
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private UpdateOperationRoutePathFactory $updateOperationRoutePathFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($routePathFactory);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+        $this->updateOperationRoutePathFactory = new UpdateOperationRoutePathFactory($this->routePathFactory);
     }
 
-    function it_is_initializable(): void
-    {
-        $this->shouldHaveType(UpdateOperationRoutePathFactory::class);
-    }
-
-    function it_generates_route_path_for_update_operations(): void
+    public function testItGeneratesRoutePathForUpdateOperations(): void
     {
         $operation = new Update();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/edit');
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}/edit', $result);
     }
 
-    function it_generates_route_path_for_update_operations_with_custom_identifier(): void
+    public function testItGeneratesRoutePathForUpdateOperationsWithCustomIdentifier(): void
     {
         $operation = (new Update())->withResource(new ResourceMetadata(identifier: 'code'));
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{code}/edit');
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{code}/edit', $result);
     }
 
-    function it_generates_route_path_for_update_operations_with_custom_short_name(): void
+    public function testItGeneratesRoutePathForUpdateOperationsWithCustomShortName(): void
     {
         $operation = new Update(shortName: 'edition');
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}/edition');
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}/edition', $result);
     }
 
-    function it_generates_route_path_for_api_put_operations(): void
+    public function testItGeneratesRoutePathForApiPutOperations(): void
     {
         $operation = new Api\Put();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}', $result);
     }
 
-    function it_generates_route_path_for_api_patch_operations(): void
+    public function testItGeneratesRoutePathForApiPatchOperations(): void
     {
         $operation = new Api\Patch();
 
-        $this->createRoutePath($operation, '/dummies')->shouldReturn('/dummies/{id}');
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}', $result);
+    }
+
+    public function testItDelegatesToDecoratedFactoryForNonUpdateOperations(): void
+    {
+        $operation = new Show();
+
+        $this->routePathFactory
+            ->expects($this->once())
+            ->method('createRoutePath')
+            ->with($operation, '/dummies')
+            ->willReturn('/dummies/{id}');
+
+        $result = $this->updateOperationRoutePathFactory->createRoutePath($operation, '/dummies');
+
+        $this->assertSame('/dummies/{id}', $result);
     }
 }

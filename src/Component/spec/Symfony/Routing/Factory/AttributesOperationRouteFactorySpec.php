@@ -11,16 +11,20 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Routing\Factory;
+namespace Sylius\Resource\Tests\Symfony\Routing\Factory;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
+use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
+use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactory;
@@ -28,59 +32,139 @@ use Sylius\Resource\Symfony\Routing\Factory\OperationRouteFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
-use Webmozart\Assert\Assert;
 
-final class AttributesOperationRouteFactorySpec extends ObjectBehavior
+final class AttributesOperationRouteFactoryTest extends TestCase
 {
-    function let(
-        RegistryInterface $resourceRegistry,
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
-        $this->beConstructedWith(
-            $resourceRegistry,
-            new OperationRouteFactory($routePathFactory->getWrappedObject()),
+    private RegistryInterface $resourceRegistry;
+
+    private OperationRoutePathFactoryInterface $routePathFactory;
+
+    private AttributesOperationRouteFactory $attributesOperationRouteFactory;
+
+    protected function setUp(): void
+    {
+        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
+
+        $this->attributesOperationRouteFactory = new AttributesOperationRouteFactory(
+            $this->resourceRegistry,
+            new OperationRouteFactory($this->routePathFactory),
             new AttributesResourceMetadataCollectionFactory(
-                $resourceRegistry->getWrappedObject(),
+                $this->resourceRegistry,
                 new OperationRouteNameFactory(),
                 'symfony',
             ),
         );
     }
 
-    function it_is_initializable(): void
+    private function createDummyMetadataMock(): MetadataInterface
     {
-        $this->shouldHaveType(AttributesOperationRouteFactory::class);
+        $metadata = $this->createMock(MetadataInterface::class);
+        $metadata->method('getServiceId')->with('repository')->willReturn('app.repository.dummy');
+        $metadata->method('hasClass')->with('form')->willReturn(true);
+        $metadata->method('getClass')->willReturnMap([
+            ['form', 'App\Form'],
+            ['model', 'App\Dummy'],
+        ]);
+        $metadata->method('getApplicationName')->willReturn('app');
+        $metadata->method('getName')->willReturn('dummy');
+        $metadata->method('getPluralName')->willReturn('dummies');
+
+        return $metadata;
     }
 
-    function it_creates_routes_with_operations(
-        RegistryInterface $resourceRegistry,
-        MetadataInterface $metadata,
-        OperationRoutePathFactoryInterface $routePathFactory,
-    ): void {
+    public function testItCreatesRoutesWithOperations(): void
+    {
+        $routeCollection = new RouteCollection();
+        $metadata = $this->createDummyMetadataMock();
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+
+        $this->routePathFactory
+            ->expects($this->exactly(4))
+            ->method('createRoutePath')
+            ->willReturnCallback(function ($operation, $path) {
+                if ($operation instanceof Index) {
+                    return '/dummies';
+                }
+                if ($operation instanceof Create) {
+                    return '/dummies/new';
+                }
+                if ($operation instanceof Update) {
+                    return '/dummies/{id}/edit';
+                }
+                if ($operation instanceof Show) {
+                    return '/dummies/{id}';
+                }
+
+                return $path;
+            });
+
+        $this->attributesOperationRouteFactory->createRouteForClass($routeCollection, DummyResourceWithOperations::class);
+
+        $this->assertCount(4, $routeCollection);
+        $this->assertNotNull($routeCollection->get('app_dummy_index'), 'Route "app_dummy_index" not found but it should.');
+        $this->assertNotNull($routeCollection->get('app_dummy_create'), 'Route "app_dummy_create" not found but it should.');
+        $this->assertNotNull($routeCollection->get('app_dummy_update'), 'Route "app_dummy_update" not found but it should.');
+        $this->assertNotNull($routeCollection->get('app_dummy_show'), 'Route "app_dummy_show" not found but it should.');
+    }
+
+    public function testItSkipsNonHttpOperations(): void
+    {
         $routeCollection = new RouteCollection();
 
-        $metadata->getServiceId('repository')->willReturn('app.repository.dummy');
-        $metadata->hasClass('form')->willReturn(true);
-        $metadata->getClass('form')->willReturn('App\Form');
-        $metadata->getClass('model')->willReturn('App\Dummy');
-        $metadata->getStateMachineComponent()->willReturn('symfony');
-        $resourceRegistry->get('app.dummy')->willReturn($metadata);
+        // Create a non-HTTP operation (directly extends Operation, not HttpOperation)
+        $nonHttpOperation = new class() extends Operation {
+            public function getShortName(): ?string
+            {
+                return 'custom';
+            }
+        };
 
-        $metadata->getApplicationName()->willReturn('app');
-        $metadata->getName()->willReturn('dummy');
-        $metadata->getPluralName()->willReturn('dummies');
+        // Create an HTTP operation
+        $httpOperation = (new Index(name: 'app_dummy_index'))->withRouteName('app_dummy_index');
 
-        $routePathFactory->createRoutePath(Argument::type(Index::class), 'dummies')->willReturn('/dummies')->shouldBeCalled();
-        $routePathFactory->createRoutePath(Argument::type(Create::class), 'dummies')->willReturn('/dummies/new')->shouldBeCalled();
-        $routePathFactory->createRoutePath(Argument::type(Update::class), 'dummies')->willReturn('/dummies/{id}/edit')->shouldBeCalled();
-        $routePathFactory->createRoutePath(Argument::type(Show::class), 'dummies')->willReturn('/dummies/{id}')->shouldBeCalled();
+        // Create resource with mixed operations
+        $resource = new ResourceMetadata(
+            alias: 'app.dummy',
+            name: 'dummy',
+            operations: [
+                'app_dummy_custom' => $nonHttpOperation,
+                'app_dummy_index' => $httpOperation,
+            ],
+        );
 
-        $this->createRouteForClass($routeCollection, DummyResourceWithOperations::class);
+        $resourceCollection = new ResourceMetadataCollection();
+        $resourceCollection[] = $resource;
 
-        Assert::count($routeCollection, 4);
-        Assert::notNull($routeCollection->get('app_dummy_index'), 'Route "app_dummy_index" not found but it should.');
-        Assert::notNull($routeCollection->get('app_dummy_create'), 'Route "app_dummy_create" not found but it should.');
-        Assert::notNull($routeCollection->get('app_dummy_update'), 'Route "app_dummy_update" not found but it should.');
-        Assert::notNull($routeCollection->get('app_dummy_show'), 'Route "app_dummy_show" not found but it should.');
+        // Mock resource metadata factory to return our custom collection
+        $resourceMetadataFactory = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
+        $resourceMetadataFactory
+            ->method('create')
+            ->with(\stdClass::class)
+            ->willReturn($resourceCollection);
+
+        // Mock metadata for registry
+        $metadata = $this->createDummyMetadataMock();
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+
+        $this->routePathFactory
+            ->expects($this->once())
+            ->method('createRoutePath')
+            ->with($httpOperation, 'dummies')
+            ->willReturn('/dummies');
+
+        // Create factory with mocked dependencies
+        $factory = new AttributesOperationRouteFactory(
+            $this->resourceRegistry,
+            new OperationRouteFactory($this->routePathFactory),
+            $resourceMetadataFactory,
+        );
+
+        $factory->createRouteForClass($routeCollection, \stdClass::class);
+
+        // Only the HTTP operation should create a route
+        $this->assertCount(1, $routeCollection);
+        $this->assertNotNull($routeCollection->get('app_dummy_index'), 'Route "app_dummy_index" not found but it should.');
+        $this->assertNull($routeCollection->get('app_dummy_custom'), 'Non-HTTP operation should not create a route.');
     }
 }
