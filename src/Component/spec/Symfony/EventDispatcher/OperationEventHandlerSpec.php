@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\EventDispatcher;
+namespace Sylius\Resource\Tests\Symfony\EventDispatcher;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
@@ -27,174 +27,222 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class OperationEventHandlerSpec extends ObjectBehavior
+final class OperationEventHandlerTest extends TestCase
 {
-    function let(
-        RedirectHandlerInterface $redirectHandler,
-        FlashHelperInterface $flashHelper,
-    ): void {
-        $this->beConstructedWith($redirectHandler, $flashHelper);
-    }
+    private RedirectHandlerInterface $redirectHandler;
 
-    function it_is_initializable(): void
+    private FlashHelperInterface $flashHelper;
+
+    private OperationEventHandler $operationEventHandler;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(OperationEventHandler::class);
+        $this->redirectHandler = $this->createMock(RedirectHandlerInterface::class);
+        $this->flashHelper = $this->createMock(FlashHelperInterface::class);
+        $this->operationEventHandler = new OperationEventHandler($this->redirectHandler, $this->flashHelper);
     }
 
-    function it_throws_an_http_exception_when_pre_process_event_is_stopped_and_request_format_is_not_html(): void
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(OperationEventHandler::class, $this->operationEventHandler);
+    }
+
+    public function testItReturnsNullWhenPreProcessEventIsNotStopped(): void
+    {
+        $event = new OperationEvent();
+        $context = new Context();
+
+        $this->flashHelper->expects($this->never())->method('addFlashFromEvent');
+        $this->redirectHandler->expects($this->never())->method('redirectToResource');
+        $this->redirectHandler->expects($this->never())->method('redirectToOperation');
+
+        $result = $this->operationEventHandler->handlePreProcessEvent($event, $context);
+
+        $this->assertNull($result);
+    }
+
+    public function testItThrowsAnHttpExceptionWhenPreProcessEventIsStoppedAndRequestFormatIsNotHtml(): void
     {
         $event = new OperationEvent();
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
 
         $context = new Context();
 
-        $this->shouldThrow(new HttpException(666, 'What the hell is going on?'))
-            ->during('handlePreProcessEvent', [$event, $context])
-        ;
+        try {
+            $this->operationEventHandler->handlePreProcessEvent($event, $context);
+            $this->fail('Expected HttpException to be thrown');
+        } catch (HttpException $e) {
+            $this->assertSame('What the hell is going on?', $e->getMessage());
+            $this->assertSame(666, $e->getStatusCode());
+        }
     }
 
-    function it_returns_response_from_pre_process_event_when_it_has_one_and_request_format_is_html(
-        Request $request,
-        Response $response,
-        FlashHelperInterface $flashHelper,
-    ): void {
+    public function testItReturnsResponseFromPreProcessEventWhenItHasOneAndRequestFormatIsHtml(): void
+    {
+        $response = $this->createMock(Response::class);
+        $request = $this->createMock(Request::class);
+
         $event = new OperationEvent();
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
-        $event->setResponse($response->getWrappedObject());
+        $event->setResponse($response);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
+        $this->flashHelper->expects($this->once())->method('addFlashFromEvent')->with($event, $context);
 
-        $this->handlePreProcessEvent($event, $context)->shouldReturn($response);
+        $result = $this->operationEventHandler->handlePreProcessEvent($event, $context);
+
+        $this->assertSame($response, $result);
     }
 
-    function it_does_not_returns_response_from_pre_process_event_when_request_format_is_not_html(
-        Request $request,
-        Response $response,
-    ): void {
+    public function testItDoesNotReturnsResponseFromPreProcessEventWhenRequestFormatIsNotHtml(): void
+    {
+        $response = $this->createMock(Response::class);
+        $request = $this->createMock(Request::class);
+
         $event = new OperationEvent();
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
-        $event->setResponse($response->getWrappedObject());
+        $event->setResponse($response);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('json');
+        $request->method('getRequestFormat')->willReturn('json');
 
-        $this->shouldThrow(new HttpException(666, 'What the hell is going on?'))
-            ->during('handlePreProcessEvent', [$event, $context])
-        ;
+        try {
+            $this->operationEventHandler->handlePreProcessEvent($event, $context);
+            $this->fail('Expected HttpException to be thrown');
+        } catch (HttpException $e) {
+            $this->assertSame('What the hell is going on?', $e->getMessage());
+            $this->assertSame(666, $e->getStatusCode());
+        }
     }
 
-    function it_can_redirect_to_resource_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
-        Request $request,
-        \stdClass $data,
-        RedirectHandlerInterface $redirectHandler,
-        RedirectResponse $response,
-        FlashHelperInterface $flashHelper,
-    ): void {
+    public function testItCanRedirectToResourceWhenPreProcessEventIsStoppedAndHasNoResponseAndOperationIsAnHttpOperation(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $redirectResponse = $this->createMock(RedirectResponse::class);
+
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
 
         $operation = new Update();
-
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
         $event->setArgument('operation', $operation);
 
-        $request->getRequestFormat()->willReturn('html');
+        $context = new Context(new RequestOption($request));
 
-        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response)->shouldBeCalled();
+        $this->flashHelper->expects($this->once())->method('addFlashFromEvent')->with($event, $context);
+        $this->redirectHandler
+            ->expects($this->once())
+            ->method('redirectToResource')
+            ->with($data, $operation, $request)
+            ->willReturn($redirectResponse);
 
-        $this->handlePreProcessEvent($event, $context)->shouldHaveType(RedirectResponse::class);
+        $result = $this->operationEventHandler->handlePreProcessEvent($event, $context);
+
+        $this->assertInstanceOf(RedirectResponse::class, $result);
     }
 
-    function it_can_redirect_to_operation_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_an_http_operation(
-        Request $request,
-        \stdClass $data,
-        RedirectHandlerInterface $redirectHandler,
-        RedirectResponse $response,
-        FlashHelperInterface $flashHelper,
-    ): void {
+    public function testItCanRedirectToOperationWhenPreProcessEventIsStoppedAndHasNoResponseAndOperationIsAnHttpOperation(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $redirectResponse = $this->createMock(RedirectResponse::class);
+
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
 
         $operation = new Update();
-
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
         $event->setArgument('operation', $operation);
 
-        $request->getRequestFormat()->willReturn('html');
+        $context = new Context(new RequestOption($request));
 
-        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $redirectHandler->redirectToOperation($data, $operation, $request, 'index')->willReturn($response)->shouldBeCalled();
+        $this->flashHelper->expects($this->once())->method('addFlashFromEvent')->with($event, $context);
+        $this->redirectHandler
+            ->expects($this->once())
+            ->method('redirectToOperation')
+            ->with($data, $operation, $request, 'index')
+            ->willReturn($redirectResponse);
 
-        $this->handlePreProcessEvent($event, $context, 'index')->shouldHaveType(RedirectResponse::class);
+        $result = $this->operationEventHandler->handlePreProcessEvent($event, $context, 'index');
+
+        $this->assertInstanceOf(RedirectResponse::class, $result);
     }
 
-    function it_returns_null_when_pre_process_event_is_stopped_and_has_no_response_and_operation_is_not_an_http_operation(
-        Request $request,
-        \stdClass $data,
-        Operation $operation,
-        FlashHelperInterface $flashHelper,
-    ): void {
+    public function testItReturnsNullWhenPreProcessEventIsStoppedAndHasNoResponseAndOperationIsNotAnHttpOperation(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $operation = $this->createMock(Operation::class);
+
         $event = new OperationEvent($data);
         $event->stop(message: 'What the hell is going on?', errorCode: 666);
-        $event->setArgument('operation', $operation->getWrappedObject());
+        $event->setArgument('operation', $operation);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $flashHelper->addFlashFromEvent($event, $context)->shouldBeCalled();
+        $this->flashHelper->expects($this->once())->method('addFlashFromEvent')->with($event, $context);
 
-        $this->handlePreProcessEvent($event, $context)->shouldReturn(null);
+        $result = $this->operationEventHandler->handlePreProcessEvent($event, $context);
+
+        $this->assertNull($result);
     }
 
-    function it_returns_post_process_event_response_when_request_format_is_html(
-        Request $request,
-        \stdClass $data,
-        Response $response,
-    ): void {
+    public function testItReturnsPostProcessEventResponseWhenRequestFormatIsHtml(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+
         $event = new OperationEvent($data);
-        $event->setResponse($response->getWrappedObject());
+        $event->setResponse($response);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $this->handlePostProcessEvent($event, $context)->shouldReturn($response);
+        $result = $this->operationEventHandler->handlePostProcessEvent($event, $context);
+
+        $this->assertSame($response, $result);
     }
 
-    function it_returns_null_for_post_process_event_when_request_format_is_html_but_event_has_no_response(
-        Request $request,
-        \stdClass $data,
-    ): void {
+    public function testItReturnsNullForPostProcessEventWhenRequestFormatIsHtmlButEventHasNoResponse(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+
         $event = new OperationEvent($data);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $this->handlePostProcessEvent($event, $context)->shouldReturn(null);
+        $result = $this->operationEventHandler->handlePostProcessEvent($event, $context);
+
+        $this->assertNull($result);
     }
 
-    function it_returns_null_for_post_process_event_when_request_format_is_not_html(
-        Request $request,
-        \stdClass $data,
-    ): void {
+    public function testItReturnsNullForPostProcessEventWhenRequestFormatIsNotHtml(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+
         $event = new OperationEvent($data);
 
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getRequestFormat()->willReturn('json');
+        $request->method('getRequestFormat')->willReturn('json');
 
-        $this->handlePostProcessEvent($event, $context)->shouldReturn(null);
+        $result = $this->operationEventHandler->handlePostProcessEvent($event, $context);
+
+        $this->assertNull($result);
     }
 }
