@@ -11,37 +11,40 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
 use Sylius\Resource\Symfony\ExpressionLanguage\VariablesInterface;
 
-final class VariablesCollectionSpec extends ObjectBehavior
+final class VariablesCollectionTest extends TestCase
 {
-    function let(
-        VariablesInterface $firstVariables,
-        VariablesInterface $secondVariables,
-    ): void {
-        $this->beConstructedWith([$firstVariables->getWrappedObject(), $secondVariables->getWrappedObject()]);
-    }
-
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(VariablesCollection::class);
+        $firstVariables = $this->createMock(VariablesInterface::class);
+        $secondVariables = $this->createMock(VariablesInterface::class);
+
+        $variablesCollection = new VariablesCollection([$firstVariables, $secondVariables]);
+
+        $this->assertInstanceOf(VariablesCollection::class, $variablesCollection);
     }
 
-    function it_merges_variables(
-        VariablesInterface $firstVariables,
-        VariablesInterface $secondVariables,
-    ): void {
-        $firstVariables->getVariables()->willReturn(['foo' => 'bar', 'user' => '123']);
-        $secondVariables->getVariables()->willReturn(['foo' => 'fighters', 'value' => 'xyz']);
+    public function testItMergesVariables(): void
+    {
+        $firstVariables = $this->createMock(VariablesInterface::class);
+        $secondVariables = $this->createMock(VariablesInterface::class);
 
-        $this->getVariables()->shouldReturn([
+        $firstVariables->method('getVariables')->willReturn(['foo' => 'bar', 'user' => '123']);
+        $secondVariables->method('getVariables')->willReturn(['foo' => 'fighters', 'value' => 'xyz']);
+
+        $variablesCollection = new VariablesCollection([$firstVariables, $secondVariables]);
+
+        $result = $variablesCollection->getVariables();
+
+        $this->assertSame([
             'foo' => 'fighters',
             'user' => '123',
             'value' => 'xyz',
-        ]);
+        ], $result);
     }
 }

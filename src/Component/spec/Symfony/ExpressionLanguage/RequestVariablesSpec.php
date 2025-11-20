@@ -11,33 +11,37 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\ExpressionLanguage;
+namespace Sylius\Resource\Tests\Symfony\ExpressionLanguage;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Symfony\ExpressionLanguage\RequestVariables;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class RequestVariablesSpec extends ObjectBehavior
+final class RequestVariablesTest extends TestCase
 {
-    function let(RequestStack $requestStack): void
+    private RequestStack $requestStack;
+
+    private RequestVariables $requestVariables;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($requestStack);
+        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestVariables = new RequestVariables($this->requestStack);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(RequestVariables::class);
+        $this->assertInstanceOf(RequestVariables::class, $this->requestVariables);
     }
 
-    function it_returns_request_vars(
-        RequestStack $requestStack,
-        Request $request,
-    ): void {
-        $requestStack->getCurrentRequest()->willReturn($request);
+    public function testItReturnsRequestVars(): void
+    {
+        $request = $this->createMock(Request::class);
+        $this->requestStack->method('getCurrentRequest')->willReturn($request);
 
-        $this->getVariables()->shouldReturn([
-            'request' => $request,
-        ]);
+        $result = $this->requestVariables->getVariables();
+
+        $this->assertSame(['request' => $request], $result);
     }
 }
