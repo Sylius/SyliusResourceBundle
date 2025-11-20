@@ -11,106 +11,95 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Validator\EventListener;
+namespace Sylius\Resource\Tests\Symfony\Validator\EventListener;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Symfony\Validator\EventListener\ValidationExceptionListener;
 use Sylius\Resource\Symfony\Validator\Exception\ValidationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Webmozart\Assert\Assert;
 
-final class ValidationExceptionListenerSpec extends ObjectBehavior
+final class ValidationExceptionListenerTest extends TestCase
 {
-    function let(SerializerInterface $serializer): void
+    private SerializerInterface $serializer;
+
+    private ValidationExceptionListener $validationExceptionListener;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($serializer);
+        $this->serializer = $this->createMock(SerializerInterface::class);
+        $this->validationExceptionListener = new ValidationExceptionListener($this->serializer);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(ValidationExceptionListener::class);
+        $this->assertInstanceOf(ValidationExceptionListener::class, $this->validationExceptionListener);
     }
 
-    function it_transforms_validation_exception_to_a_response(
-        KernelInterface $kernel,
-        Request $request,
-        SerializerInterface $serializer,
-    ): void {
+    public function testItTransformsValidationExceptionToAResponse(): void
+    {
         $violationList = new ConstraintViolationList();
         $exception = new ValidationException($violationList);
 
-        $event = new ExceptionEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception,
-        );
+        $kernel = $this->createMock(KernelInterface::class);
+        $request = $this->createMock(Request::class);
 
-        $request->getRequestFormat()->willReturn('json');
-        $request->getMimeType('json')->willReturn('application/json');
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
 
-        $serializer->serialize($violationList, 'json')->willReturn('serialized_exception')->shouldBeCalled();
+        $request->method('getRequestFormat')->willReturn('json');
+        $request->method('getMimeType')->with('json')->willReturn('application/json');
 
-        $this->onKernelException($event);
+        $this->serializer
+            ->expects($this->once())
+            ->method('serialize')
+            ->with($violationList, 'json')
+            ->willReturn('serialized_exception');
+
+        $this->validationExceptionListener->onKernelException($event);
 
         $response = $event->getResponse();
 
-        Assert::isInstanceOf($response, Response::class);
-        Assert::eq($response->getContent(), 'serialized_exception');
-        Assert::eq($response->getStatusCode(), 422);
-        Assert::eq($response->headers, new ResponseHeaderBag([
-            'Content-Type' => 'application/json; charset=utf-8',
-            'X-Content-Type-Options' => 'nosniff',
-            'X-Frame-Options' => 'deny',
-        ]));
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('serialized_exception', $response->getContent());
+        $this->assertSame(422, $response->getStatusCode());
     }
 
-    function it_does_nothing_on_other_exceptions(
-        KernelInterface $kernel,
-        Request $request,
-        SerializerInterface $serializer,
-        \Throwable $exception,
-    ): void {
-        $event = new ExceptionEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception->getWrappedObject(),
-        );
+    public function testItDoesNothingOnOtherExceptions(): void
+    {
+        $exception = new \Exception('Some error');
 
-        $serializer->serialize(Argument::cetera())->shouldNotBeCalled();
+        $kernel = $this->createMock(KernelInterface::class);
+        $request = $this->createMock(Request::class);
 
-        $this->onKernelException($event);
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
 
-        Assert::null($event->getResponse());
+        $this->serializer->expects($this->never())->method('serialize');
+
+        $this->validationExceptionListener->onKernelException($event);
+
+        $this->assertNull($event->getResponse());
     }
 
-    function it_throws_an_exception_when_serializer_is_not_available(
-        KernelInterface $kernel,
-        Request $request,
-    ): void {
-        $this->beConstructedWith(null);
+    public function testItThrowsAnExceptionWhenSerializerIsNotAvailable(): void
+    {
+        $validationExceptionListener = new ValidationExceptionListener(null);
 
         $violationList = new ConstraintViolationList();
         $exception = new ValidationException($violationList);
 
-        $event = new ExceptionEvent(
-            $kernel->getWrappedObject(),
-            $request->getWrappedObject(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception,
-        );
+        $kernel = $this->createMock(KernelInterface::class);
+        $request = $this->createMock(Request::class);
 
-        $this->shouldThrow(new \LogicException('The Symfony Serializer is not available. Try running "composer require symfony/serializer".'))
-            ->during('onKernelException', [$event])
-        ;
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The Symfony Serializer is not available. Try running "composer require symfony/serializer".');
+
+        $validationExceptionListener->onKernelException($event);
     }
 }

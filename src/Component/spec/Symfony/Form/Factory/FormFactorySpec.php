@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Form\Factory;
+namespace Sylius\Resource\Tests\Symfony\Form\Factory;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
@@ -22,65 +22,74 @@ use Symfony\Component\Form\FormFactoryInterface as SymfonyFormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class FormFactorySpec extends ObjectBehavior
+final class FormFactoryTest extends TestCase
 {
-    function let(SymfonyFormFactoryInterface $formFactory): void
+    private SymfonyFormFactoryInterface $symfonyFormFactory;
+
+    private FormFactory $formFactory;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($formFactory);
+        $this->symfonyFormFactory = $this->createMock(SymfonyFormFactoryInterface::class);
+        $this->formFactory = new FormFactory($this->symfonyFormFactory);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(FormFactory::class);
+        $this->assertInstanceOf(FormFactory::class, $this->formFactory);
     }
 
-    function it_creates_a_form(
-        Operation $operation,
-        SymfonyFormFactoryInterface $formFactory,
-        FormInterface $form,
-    ): void {
-        $operation->getFormType()->willReturn('App\Form\DummyType');
-        $operation->getFormOptions()->willReturn(['foo' => 'fighters']);
+    public function testItCreatesAForm(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $form = $this->createMock(FormInterface::class);
 
-        $formFactory->createNamed('', 'App\Form\DummyType', null, ['foo' => 'fighters', 'csrf_protection' => false])
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+        $operation->method('getFormType')->willReturn('App\Form\DummyType');
+        $operation->method('getFormOptions')->willReturn(['foo' => 'fighters']);
 
-        $this->create($operation, new Context())->shouldReturn($form);
+        $this->symfonyFormFactory
+            ->expects($this->once())
+            ->method('createNamed')
+            ->with('', 'App\Form\DummyType', null, ['foo' => 'fighters', 'csrf_protection' => false])
+            ->willReturn($form);
+
+        $result = $this->formFactory->create($operation, new Context());
+
+        $this->assertSame($form, $result);
     }
 
-    function it_creates_a_form_form_html_request(
-        Operation $operation,
-        SymfonyFormFactoryInterface $formFactory,
-        FormInterface $form,
-        Request $request,
-    ): void {
-        $operation->getFormType()->willReturn('App\Form\DummyType');
-        $operation->getFormOptions()->willReturn(['foo' => 'fighters']);
+    public function testItCreatesAFormFormHtmlRequest(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $form = $this->createMock(FormInterface::class);
+        $request = $this->createMock(Request::class);
 
-        $request->getRequestFormat()->willReturn('html');
+        $operation->method('getFormType')->willReturn('App\Form\DummyType');
+        $operation->method('getFormOptions')->willReturn(['foo' => 'fighters']);
+        $request->method('getRequestFormat')->willReturn('html');
 
-        $formFactory->create('App\Form\DummyType', null, ['foo' => 'fighters'])
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
+        $this->symfonyFormFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with('App\Form\DummyType', null, ['foo' => 'fighters'])
+            ->willReturn($form);
 
-        $this->create($operation, new Context(new RequestOption($request->getWrappedObject())))->shouldReturn($form);
+        $result = $this->formFactory->create($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($form, $result);
     }
 
-    function it_throws_an_exception_when_operation_has_no_form_type(
-        Operation $operation,
-        SymfonyFormFactoryInterface $formFactory,
-        FormInterface $form,
-    ): void {
-        $operation->getFormType()->willReturn(null);
-        $operation->getFormOptions()->willReturn([]);
+    public function testItThrowsAnExceptionWhenOperationHasNoFormType(): void
+    {
+        $operation = $this->createMock(Operation::class);
 
-        $operation->getName()->willReturn('app_dummy_create');
+        $operation->method('getFormType')->willReturn(null);
+        $operation->method('getFormOptions')->willReturn([]);
+        $operation->method('getName')->willReturn('app_dummy_create');
 
-        $this->shouldThrow(new \RuntimeException('Operation "app_dummy_create" has no configured form type.'))
-            ->during('create', [$operation, new Context()])
-        ;
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Operation "app_dummy_create" has no configured form type.');
+
+        $this->formFactory->create($operation, new Context());
     }
 }
