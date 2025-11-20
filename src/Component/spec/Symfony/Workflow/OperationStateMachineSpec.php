@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Workflow;
+namespace Sylius\Resource\Tests\Symfony\Workflow;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
@@ -23,85 +23,85 @@ use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow;
 
-final class OperationStateMachineSpec extends ObjectBehavior
+final class OperationStateMachineTest extends TestCase
 {
-    function let(Registry $registry): void
+    private Registry $registry;
+
+    private OperationStateMachine $operationStateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($registry);
+        $this->registry = $this->createMock(Registry::class);
+        $this->operationStateMachine = new OperationStateMachine($this->registry);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(OperationStateMachine::class);
+        $this->assertInstanceOf(OperationStateMachine::class, $this->operationStateMachine);
     }
 
-    function it_returns_if_transition_is_possible(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-    ): void {
+    public function testItReturnsIfTransitionIsPossible(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
+        $workflow = $this->createMock(Workflow::class);
 
-        $registry->get($data, null)->willReturn($workflow);
+        $this->registry->method('get')->with($data, null)->willReturn($workflow);
+        $workflow->method('can')->with($data, 'publish')->willReturn(true);
 
-        $workflow->can($data, 'publish')->willReturn(true);
+        $result = $this->operationStateMachine->can($data, $operation, new Context());
 
-        $this->can($data, $operation, new Context())->shouldReturn(true);
+        $this->assertTrue($result);
     }
 
-    function it_applies_transition(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-        Marking $marking,
-    ): void {
+    public function testItAppliesTransition(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
+        $workflow = $this->createMock(Workflow::class);
+        $marking = $this->createMock(Marking::class);
 
-        $registry->get($data, null)->willReturn($workflow);
+        $this->registry->method('get')->with($data, null)->willReturn($workflow);
+        $workflow->expects($this->once())->method('apply')->with($data, 'publish')->willReturn($marking);
 
-        $workflow->apply($data, 'publish')->willReturn($marking)->shouldBeCalled();
-
-        $this->apply($data, $operation, new Context());
+        $this->operationStateMachine->apply($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_operation_has_no_defined_transition(
-        \stdClass $data,
-        Registry $registry,
-        Workflow $workflow,
-        Marking $marking,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationHasNoDefinedTransition(): void
+    {
+        $data = new \stdClass();
         $operation = new Create(name: 'app_dummy_create');
+        $workflow = $this->createMock(Workflow::class);
 
-        $registry->get($data, null)->willReturn($workflow);
+        $this->registry->method('get')->with($data, null)->willReturn($workflow);
 
-        $this->shouldThrow(new \InvalidArgumentException('No State machine transition was found on operation "app_dummy_create".'))
-            ->during('can', [$data, $operation, new Context()])
-        ;
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No State machine transition was found on operation "app_dummy_create".');
 
-        $this->shouldThrow(new \InvalidArgumentException('No State machine transition was found on operation "app_dummy_create".'))
-            ->during('apply', [$data, $operation, new Context()])
-        ;
+        $this->operationStateMachine->can($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_symfony_workflow_is_not_available(
-        \stdClass $data,
-    ): void {
-        $this->beConstructedWith(null);
+    public function testItThrowsAnExceptionWhenSymfonyWorkflowIsNotAvailable(): void
+    {
+        $operationStateMachine = new OperationStateMachine(null);
 
+        $data = new \stdClass();
         $operation = new Create(stateMachineTransition: 'publish');
 
-        $this->shouldThrow(
-            new \LogicException('You can not use the "state-machine" if Symfony workflow is not available. Try running "composer require symfony/workflow".'),
-        )->during('can', [$data, $operation, new Context()]);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('You can not use the "state-machine" if Symfony workflow is not available. Try running "composer require symfony/workflow".');
+
+        $operationStateMachine->can($data, $operation, new Context());
     }
 
-    function it_throws_an_exception_when_operation_does_not_implement_a_state_machine(
-        \stdClass $data,
-    ): void {
+    public function testItThrowsAnExceptionWhenOperationDoesNotImplementAStateMachine(): void
+    {
+        $data = new \stdClass();
         $operation = new Index();
 
-        $this->shouldThrow(
-            new \LogicException(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class)),
-        )->during('can', [$data, $operation, new Context()]);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class));
+
+        $this->operationStateMachine->can($data, $operation, new Context());
     }
 }
