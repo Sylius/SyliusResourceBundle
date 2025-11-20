@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Tests\Symfony\Request\State;
 
 use Pagerfanta\Pagerfanta;
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
@@ -31,181 +31,201 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ProviderSpec extends ObjectBehavior
+final class ProviderTest extends TestCase
 {
-    function let(ContainerInterface $locator, ArgumentParserInterface $argumentParser): void
+    private ContainerInterface $locator;
+
+    private ArgumentParserInterface $argumentParser;
+
+    private Provider $provider;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($locator, new RepositoryArgumentResolver(), $argumentParser);
+        $this->locator = $this->createMock(ContainerInterface::class);
+        $this->argumentParser = $this->createMock(ArgumentParserInterface::class);
+        $this->provider = new Provider($this->locator, new RepositoryArgumentResolver(), $this->argumentParser);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(Provider::class);
+        $this->assertInstanceOf(Provider::class, $this->provider);
     }
 
-    function it_calls_repository_as_callable(
-        Operation $operation,
-        Request $request,
-    ): void {
-        $operation->getRepository()->willReturn([RepositoryWithCallables::class, 'find']);
-        $operation->getRepositoryArguments()->willReturn(null);
+    public function testItCallsRepositoryAsCallable(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createRequest(['id' => 'my_id'], [], []);
 
-        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id']]);
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
+        $operation->method('getRepository')->willReturn([RepositoryWithCallables::class, 'find']);
+        $operation->method('getRepositoryArguments')->willReturn(null);
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldHaveType(\stdClass::class);
-        $response->id->shouldReturn('my_id');
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
+
+        $this->assertInstanceOf(\stdClass::class, $response);
+        $this->assertSame('my_id', $response->id);
     }
 
-    function it_calls_repository_as_string(
-        Operation $operation,
-        Request $request,
-        ContainerInterface $locator,
-        RepositoryInterface $repository,
-        \stdClass $stdClass,
-    ): void {
-        $operation->getRepository()->willReturn('App\Repository');
-        $operation->getRepositoryMethod()->willReturn(null);
-        $operation->getRepositoryArguments()->willReturn(null);
+    public function testItCallsRepositoryAsString(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createRequest(['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']], [], []);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $stdClass = new \stdClass();
 
-        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn(null);
+        $operation->method('getRepositoryArguments')->willReturn(null);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn($repository);
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
 
-        $repository->findOneBy(['id' => 'my_id'])->willReturn($stdClass);
+        $repository->method('findOneBy')->with(['id' => 'my_id'])->willReturn($stdClass);
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldReturn($stdClass);
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($stdClass, $response);
     }
 
-    function it_calls_create_paginator_by_default_on_collection_operations(
-        Request $request,
-        ContainerInterface $locator,
-        RepositoryInterface $repository,
-        Pagerfanta $pagerfanta,
-    ): void {
+    public function testItCallsCreatePaginatorByDefaultOnCollectionOperations(): void
+    {
         $operation = new Index(repository: 'App\Repository');
+        $request = $this->createRequest(['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']], [], []);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $pagerfanta = $this->createMock(Pagerfanta::class);
 
-        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn($repository);
+        $repository->expects($this->once())->method('createPaginator')->willReturn($pagerfanta);
+        $pagerfanta->expects($this->once())->method('setCurrentPage')->with(1)->willReturnSelf();
 
-        $repository->createPaginator()->willReturn($pagerfanta)->shouldBeCalled();
-        $pagerfanta->setCurrentPage(1)->willReturn($pagerfanta)->shouldBeCalled();
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldReturn($pagerfanta);
+        $this->assertSame($pagerfanta, $response);
     }
 
-    function it_sets_current_page_from_request_when_data_is_a_paginator(
-        Request $request,
-        ContainerInterface $locator,
-        RepositoryInterface $repository,
-        Pagerfanta $pagerfanta,
-    ): void {
+    public function testItSetsCurrentPageFromRequestWhenDataIsAPaginator(): void
+    {
         $operation = new Index(repository: 'App\Repository');
+        $request = $this->createRequest(['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']], ['page' => 42], []);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $pagerfanta = $this->createMock(Pagerfanta::class);
 
-        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
-        $request->query = new InputBag(['page' => 42]);
-        $request->request = new InputBag();
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn($repository);
+        $repository->expects($this->once())->method('createPaginator')->willReturn($pagerfanta);
+        $pagerfanta->expects($this->once())->method('setCurrentPage')->with(42)->willReturnSelf();
+        $pagerfanta->method('getCurrentPage')->willReturn(42);
 
-        $repository->createPaginator()->willReturn($pagerfanta)->shouldBeCalled();
-        $pagerfanta->setCurrentPage(42)->willReturn($pagerfanta)->shouldBeCalled();
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldReturn($pagerfanta);
-        $pagerfanta->getCurrentPage()->willReturn(42);
+        $this->assertSame($pagerfanta, $response);
+        $this->assertSame(42, $pagerfanta->getCurrentPage());
     }
 
-    function it_calls_repository_as_string_with_specific_repository_method(
-        Operation $operation,
-        Request $request,
-        ContainerInterface $locator,
-        RepositoryInterface $repository,
-        \stdClass $stdClass,
-    ): void {
-        $operation->getRepository()->willReturn('App\Repository');
-        $operation->getRepositoryMethod()->willReturn('find');
-        $operation->getRepositoryArguments()->willReturn(null);
+    public function testItCallsRepositoryAsStringWithSpecificRepositoryMethod(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createRequest(['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']], [], []);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $stdClass = new \stdClass();
 
-        $request->attributes = new ParameterBag(['_route_params' => ['id' => 'my_id', '_sylius' => ['resource' => 'app.dummy']]]);
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('find');
+        $operation->method('getRepositoryArguments')->willReturn(null);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn($repository);
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
 
-        $repository->find('my_id')->willReturn($stdClass);
+        $repository->method('find')->with('my_id')->willReturn($stdClass);
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldReturn($stdClass);
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($stdClass, $response);
     }
 
-    function it_calls_repository_as_string_with_specific_repository_method_an_arguments(
-        Operation $operation,
-        Request $request,
-        ContainerInterface $locator,
-        RepositoryInterface $repository,
-        ArgumentParserInterface $argumentParser,
-        \stdClass $stdClass,
-    ): void {
-        $operation->getRepository()->willReturn('App\Repository');
-        $operation->getRepositoryMethod()->willReturn('find');
-        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+    public function testItCallsRepositoryAsStringWithSpecificRepositoryMethodAnArguments(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createMock(Request::class);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $stdClass = new \stdClass();
 
-        $argumentParser->parseExpression("request.attributes.get('id')")->willReturn('my_id');
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('find');
+        $operation->method('getRepositoryArguments')->willReturn(['id' => "request.attributes.get('id')"]);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn($repository);
+        $this->argumentParser
+            ->expects($this->once())
+            ->method('parseExpression')
+            ->with("request.attributes.get('id')")
+            ->willReturn('my_id');
 
-        $repository->find('my_id')->willReturn($stdClass);
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
 
-        $response = $this->provide($operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->shouldReturn($stdClass);
+        $repository->method('find')->with('my_id')->willReturn($stdClass);
+
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($stdClass, $response);
     }
 
-    function it_throws_an_exception_when_repository_method_does_not_exist(
-        Operation $operation,
-        Request $request,
-        ContainerInterface $locator,
-    ): void {
-        $operation->getRepository()->willReturn('App\Repository');
-        $operation->getRepositoryMethod()->willReturn('notFoundMethod');
-        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+    public function testItThrowsAnExceptionWhenRepositoryMethodDoesNotExist(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createMock(Request::class);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn(new \stdClass());
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('notFoundMethod');
+        $operation->method('getRepositoryArguments')->willReturn(['id' => "request.attributes.get('id')"]);
 
-        $errorMessage = sprintf('Method "notFoundMethod" not found on repository "%s". You can either add it or configure another one in the repositoryMethod option for your operation.', \stdClass::class);
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn(new \stdClass());
 
-        $this->shouldThrow(new RuntimeException($errorMessage))->during('provide', [$operation, new Context(new RequestOption($request->getWrappedObject()))]);
+        $errorMessage = sprintf(
+            'Method "notFoundMethod" not found on repository "%s". You can either add it or configure another one in the repositoryMethod option for your operation.',
+            \stdClass::class,
+        );
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage($errorMessage);
+
+        $this->provider->provide($operation, new Context(new RequestOption($request)));
     }
 
-    function it_throws_an_exception_when_repository_method_does_not_exist_and_suggest_to_use_create_paginator_if_it_is_appropriated(
-        Operation $operation,
-        Request $request,
-        ContainerInterface $locator,
-    ): void {
-        $operation->getRepository()->willReturn('App\Repository');
-        $operation->getRepositoryMethod()->willReturn('createPaginator');
-        $operation->getRepositoryArguments()->willReturn(['id' => "request.attributes.get('id')"]);
+    public function testItThrowsAnExceptionWhenRepositoryMethodDoesNotExistAndSuggestToUseCreatePaginatorIfItIsAppropriated(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createMock(Request::class);
 
-        $locator->has('App\Repository')->willReturn(true);
-        $locator->get('App\Repository')->willReturn(new \stdClass());
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('createPaginator');
+        $operation->method('getRepositoryArguments')->willReturn(['id' => "request.attributes.get('id')"]);
 
-        $errorMessage = sprintf('Method "createPaginator" not found on repository "%s". You can use the "%s" trait on this repository class.', \stdClass::class, CreatePaginatorTrait::class);
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn(new \stdClass());
 
-        $this->shouldThrow(new RuntimeException($errorMessage))->during('provide', [$operation, new Context(new RequestOption($request->getWrappedObject()))]);
+        $errorMessage = sprintf(
+            'Method "createPaginator" not found on repository "%s". You can use the "%s" trait on this repository class.',
+            \stdClass::class,
+            CreatePaginatorTrait::class,
+        );
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage($errorMessage);
+
+        $this->provider->provide($operation, new Context(new RequestOption($request)));
+    }
+
+    private function createRequest(array $routeParams, array $queryParams, array $requestParams): Request
+    {
+        $request = new Request();
+        $request->attributes = new ParameterBag(['_route_params' => $routeParams]);
+        $request->query = new InputBag($queryParams);
+        $request->request = new InputBag($requestParams);
+
+        return $request;
     }
 }

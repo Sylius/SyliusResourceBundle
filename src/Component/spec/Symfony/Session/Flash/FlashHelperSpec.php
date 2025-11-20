@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Session\Flash;
+namespace Sylius\Resource\Tests\Symfony\Session\Flash;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\BulkDelete;
@@ -29,326 +28,330 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class FlashHelperSpec extends ObjectBehavior
+final class FlashHelperTest extends TestCase
 {
-    function let(TranslatorInterface $translator): void
+    private TranslatorInterface $translator;
+
+    private FlashHelper $flashHelper;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($translator);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->flashHelper = new FlashHelper($this->translator);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(FlashHelper::class);
+        $this->assertInstanceOf(FlashHelper::class, $this->flashHelper);
     }
 
-    function it_adds_success_flashes_with_custom_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-    ): void {
+    public function testItAddsSuccessFlashesWithCustomMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Custom message.');
 
-        $flashBag->add('success', 'Custom message.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context, 'Custom message.');
+        $this->flashHelper->addSuccessFlash($operation, $context, 'Custom message.');
     }
 
-    function it_adds_success_flashes_with_specific_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsSuccessFlashesWithSpecificMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.dummy.create', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.dummy.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Dummy was created successfully.');
 
-        $messageCatalogue->has('app.dummy.create', 'flashes')->willReturn(true)->shouldBeCalled();
-
-        $translator->trans('app.dummy.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.')->shouldBeCalled();
-
-        $flashBag->add('success', 'Dummy was created successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_fallback_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsSuccessFlashesWithFallbackMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.dummy.create', 'flashes')->willReturn(false);
+        $translator->expects($this->once())->method('trans')->with('sylius.resource.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Dummy was created successfully.');
 
-        $messageCatalogue->has('app.dummy.create', 'flashes')->willReturn(false)->shouldBeCalled();
-
-        $translator->trans('sylius.resource.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.')->shouldBeCalled();
-
-        $flashBag->add('success', 'Dummy was created successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_custom_message_on_its_operation(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsSuccessFlashesWithCustomMessageOnItsOperation(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create(notificationMessage: 'app.dummy.shipped'))->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.dummy.shipped', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.dummy.shipped', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was shipped successfully.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Dummy was shipped successfully.');
 
-        $messageCatalogue->has('app.dummy.shipped', 'flashes')->willReturn(true)->shouldBeCalled();
-
-        $translator->trans('app.dummy.shipped', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was shipped successfully.')->shouldBeCalled();
-
-        $flashBag->add('success', 'Dummy was shipped successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_default_message_when_translator_is_not_a_bag(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorInterface $translator,
-    ): void {
+    public function testItAddsSuccessFlashesWithDefaultMessageWhenTranslatorIsNotABag(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $this->translator->expects($this->once())->method('trans')->with('sylius.resource.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.');
 
-        $translator->trans('sylius.resource.create', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Dummy was created successfully.')->shouldBeCalled();
+        $flashBag->expects($this->once())->method('add')->with('success', 'Dummy was created successfully.');
 
-        $flashBag->add('success', 'Dummy was created successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $this->flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_humanized_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsSuccessFlashesWithHumanizedMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'admin_user', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.admin_user.create', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.admin_user.create', ['%resource%' => 'Admin user'], 'flashes')->willReturn('Admin user was created successfully.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Admin user was created successfully.');
 
-        $messageCatalogue->has('app.admin_user.create', 'flashes')->willReturn(true)->shouldBeCalled();
-
-        $translator->trans('app.admin_user.create', ['%resource%' => 'Admin user'], 'flashes')->willReturn('Admin user was created successfully.')->shouldBeCalled();
-
-        $flashBag->add('success', 'Admin user was created successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_success_flashes_with_humanized_message_and_plural_name_on_bulk_operation(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsSuccessFlashesWithHumanizedMessageAndPluralNameOnBulkOperation(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new BulkDelete())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'admin_user', pluralName: 'admin_users', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.admin_user.bulk_delete', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.admin_user.bulk_delete', ['%resources%' => 'Admin users'], 'flashes')->willReturn('Admin users was removed successfully.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('success', 'Admin users was removed successfully.');
 
-        $messageCatalogue->has('app.admin_user.bulk_delete', 'flashes')->willReturn(true)->shouldBeCalled();
-
-        $translator->trans('app.admin_user.bulk_delete', ['%resources%' => 'Admin users'], 'flashes')->willReturn('Admin users was removed successfully.')->shouldBeCalled();
-
-        $flashBag->add('success', 'Admin users was removed successfully.')->shouldBeCalled();
-
-        $this->addSuccessFlash($operation, $context);
+        $flashHelper->addSuccessFlash($operation, $context);
     }
 
-    function it_adds_error_flashes_with_custom_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-    ): void {
+    public function testItAddsErrorFlashesWithCustomMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $flashBag->expects($this->once())->method('add')->with('error', 'Custom error message.');
 
-        $flashBag->add('error', 'Custom error message.')->shouldBeCalled();
-
-        $this->addErrorFlash($operation, $context, 'Custom error message.');
+        $this->flashHelper->addErrorFlash($operation, $context, 'Custom error message.');
     }
 
-    function it_adds_error_flashes_with_specific_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsErrorFlashesWithSpecificMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.dummy.create_error', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.dummy.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('error', 'Cannot create Dummy resource.');
 
-        $messageCatalogue->has('app.dummy.create_error', 'flashes')->willReturn(true)->shouldBeCalled();
-
-        $translator->trans('app.dummy.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.')->shouldBeCalled();
-
-        $flashBag->add('error', 'Cannot create Dummy resource.')->shouldBeCalled();
-
-        $this->addErrorFlash($operation, $context);
+        $flashHelper->addErrorFlash($operation, $context);
     }
 
-    function it_adds_error_flashes_with_fallback_message(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-    ): void {
+    public function testItAddsErrorFlashesWithFallbackMessage(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+
+        $flashHelper = new FlashHelper($translator);
+
         $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+        $context = new Context(new RequestOption($request));
 
-        $request->getSession()->willReturn($session);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.dummy.create_error', 'flashes')->willReturn(false);
+        $translator->expects($this->once())->method('trans')->with('sylius.resource.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.');
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $flashBag->expects($this->once())->method('add')->with('error', 'Cannot create Dummy resource.');
 
-        $messageCatalogue->has('app.dummy.create_error', 'flashes')->willReturn(false)->shouldBeCalled();
-
-        $translator->trans('sylius.resource.create_error', ['%resource%' => 'Dummy'], 'flashes')->willReturn('Cannot create Dummy resource.')->shouldBeCalled();
-
-        $flashBag->add('error', 'Cannot create Dummy resource.')->shouldBeCalled();
-
-        $this->addErrorFlash($operation, $context);
+        $flashHelper->addErrorFlash($operation, $context);
     }
 
-    function it_translates_flashes_from_event_when_translator_is_not_a_bag(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorInterface $translator,
-        GenericEvent $event,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItTranslatesFlashesFromEventWhenTranslatorIsNotABag(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $event = $this->createMock(GenericEvent::class);
 
-        $request->getSession()->willReturn($session);
+        $context = new Context(new RequestOption($request));
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $event->getMessage()->willReturn('app.admin_user.banned');
-        $event->getMessageType()->willReturn('success');
-        $event->getMessageParameters()->willReturn(['%admin_user%' => 'Darth Vader']);
+        $event->method('getMessage')->willReturn('app.admin_user.banned');
+        $event->method('getMessageType')->willReturn('success');
+        $event->method('getMessageParameters')->willReturn(['%admin_user%' => 'Darth Vader']);
 
-        $translator->trans('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.')->shouldBeCalled();
+        $this->translator->expects($this->once())->method('trans')->with('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.');
 
-        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
+        $flashBag->expects($this->once())->method('add')->with('success', 'Darth Vader was banned successfully.');
 
-        $this->addFlashFromEvent($event, $context);
+        $this->flashHelper->addFlashFromEvent($event, $context);
     }
 
-    function it_translates_flashes_from_event_when_translator_is_a_bag(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        GenericEvent $event,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItTranslatesFlashesFromEventWhenTranslatorIsABag(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+        $event = $this->createMock(GenericEvent::class);
 
-        $request->getSession()->willReturn($session);
+        $flashHelper = new FlashHelper($translator);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $context = new Context(new RequestOption($request));
 
-        $event->getMessage()->willReturn('app.admin_user.banned');
-        $event->getMessageType()->willReturn('success');
-        $event->getMessageParameters()->willReturn(['%admin_user%' => 'Darth Vader']);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $event->method('getMessage')->willReturn('app.admin_user.banned');
+        $event->method('getMessageType')->willReturn('success');
+        $event->method('getMessageParameters')->willReturn(['%admin_user%' => 'Darth Vader']);
 
-        $messageCatalogue->has('app.admin_user.banned', 'flashes')->willReturn(true)->shouldBeCalled();
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('app.admin_user.banned', 'flashes')->willReturn(true);
+        $translator->expects($this->once())->method('trans')->with('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.');
 
-        $translator->trans('app.admin_user.banned', ['%admin_user%' => 'Darth Vader'], 'flashes')->willReturn('Darth Vader was banned successfully.')->shouldBeCalled();
+        $flashBag->expects($this->once())->method('add')->with('success', 'Darth Vader was banned successfully.');
 
-        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
-
-        $this->addFlashFromEvent($event, $context);
+        $flashHelper->addFlashFromEvent($event, $context);
     }
 
-    function it_does_not_translate_event_message_when_translator_is_a_bag_and_does_not_contains_the_key(
-        Request $request,
-        SessionInterface $session,
-        FlashBagInterface $flashBag,
-        TranslatorBagInterface $translator,
-        MessageCatalogueInterface $messageCatalogue,
-        GenericEvent $event,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItDoesNotTranslateEventMessageWhenTranslatorIsABagAndDoesNotContainsTheKey(): void
+    {
+        $request = $this->createMock(Request::class);
+        $session = $this->createMock(SessionInterface::class);
+        $flashBag = $this->createMock(FlashBagInterface::class);
+        $translator = $this->createMockForIntersectionOfInterfaces([TranslatorInterface::class, TranslatorBagInterface::class]);
+        $messageCatalogue = $this->createMock(MessageCatalogueInterface::class);
+        $event = $this->createMock(GenericEvent::class);
 
-        $request->getSession()->willReturn($session);
+        $flashHelper = new FlashHelper($translator);
 
-        $session->getBag('flashes')->willReturn($flashBag);
+        $context = new Context(new RequestOption($request));
 
-        $event->getMessage()->willReturn('Darth Vader was banned successfully.');
-        $event->getMessageType()->willReturn('success');
-        $event->getMessageParameters()->willReturn([]);
+        $request->method('getSession')->willReturn($session);
+        $session->method('getBag')->with('flashes')->willReturn($flashBag);
 
-        $translator->getCatalogue()->willReturn($messageCatalogue);
+        $event->method('getMessage')->willReturn('Darth Vader was banned successfully.');
+        $event->method('getMessageType')->willReturn('success');
+        $event->method('getMessageParameters')->willReturn([]);
 
-        $messageCatalogue->has('Darth Vader was banned successfully.', 'flashes')->willReturn(false)->shouldBeCalled();
+        $translator->method('getCatalogue')->willReturn($messageCatalogue);
+        $messageCatalogue->expects($this->once())->method('has')->with('Darth Vader was banned successfully.', 'flashes')->willReturn(false);
 
-        $translator->trans(Argument::cetera())->shouldNotBeCalled();
+        $translator->expects($this->never())->method('trans');
 
-        $flashBag->add('success', 'Darth Vader was banned successfully.')->shouldBeCalled();
+        $flashBag->expects($this->once())->method('add')->with('success', 'Darth Vader was banned successfully.');
 
-        $this->addFlashFromEvent($event, $context);
+        $flashHelper->addFlashFromEvent($event, $context);
     }
 }

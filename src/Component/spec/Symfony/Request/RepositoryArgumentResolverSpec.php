@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Request;
+namespace Sylius\Resource\Tests\Symfony\Request;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Reflection\CallableReflection;
 use Sylius\Resource\Symfony\Request\RepositoryArgumentResolver;
@@ -21,101 +21,108 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-final class RepositoryArgumentResolverSpec extends ObjectBehavior
+final class RepositoryArgumentResolverTest extends TestCase
 {
-    function it_is_initializable(): void
+    private RepositoryArgumentResolver $repositoryArgumentResolver;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(RepositoryArgumentResolver::class);
+        $this->repositoryArgumentResolver = new RepositoryArgumentResolver();
     }
 
-    function it_gets_arguments_to_sent_to_the_repository(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $request->attributes = $attributes;
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(RepositoryArgumentResolver::class, $this->repositoryArgumentResolver);
+    }
 
-        $attributes->all('_route_params')->willReturn(['id' => 'my_id']);
+    public function testItGetsArgumentsToSentToTheRepository(): void
+    {
+        $request = $this->createRequest(['id' => 'my_id'], [], []);
 
         $callable = [RepositoryWithCallables::class, 'find'];
         $reflector = CallableReflection::from($callable);
 
-        $this->getArguments($request, $reflector)->shouldReturn([
-            'id' => 'my_id',
-        ]);
+        $result = $this->repositoryArgumentResolver->getArguments($request, $reflector);
+
+        $this->assertSame(['id' => 'my_id'], $result);
     }
 
-    function it_uses_query_params_when_route_params_are_not_matching(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $request->attributes = $attributes;
-        $request->query = new InputBag(['id' => 'my_id']);
-        $request->request = new InputBag();
-
-        $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
+    public function testItUsesQueryParamsWhenRouteParamsAreNotMatching(): void
+    {
+        $request = $this->createRequest(
+            ['_sylius' => ['resource' => 'app.dummy']],
+            ['id' => 'my_id'],
+            [],
+        );
 
         $callable = [RepositoryWithCallables::class, 'find'];
         $reflector = CallableReflection::from($callable);
 
-        $this->getArguments($request, $reflector)->shouldReturn([
-            'id' => 'my_id',
-        ]);
+        $result = $this->repositoryArgumentResolver->getArguments($request, $reflector);
+
+        $this->assertSame(['id' => 'my_id'], $result);
     }
 
-    function it_uses_request_params_when_route_params_are_not_matching(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $request->attributes = $attributes;
-        $request->query = new InputBag();
-        $request->request = new InputBag(['id' => 'my_id']);
-
-        $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
+    public function testItUsesRequestParamsWhenRouteParamsAreNotMatching(): void
+    {
+        $request = $this->createRequest(
+            ['_sylius' => ['resource' => 'app.dummy']],
+            [],
+            ['id' => 'my_id'],
+        );
 
         $callable = [RepositoryWithCallables::class, 'find'];
         $reflector = CallableReflection::from($callable);
 
-        $this->getArguments($request, $reflector)->shouldReturn([
-            'id' => 'my_id',
-        ]);
+        $result = $this->repositoryArgumentResolver->getArguments($request, $reflector);
+
+        $this->assertSame(['id' => 'my_id'], $result);
     }
 
-    function it_encapsulates_arguments_when_the_method_has_only_one_required_array_argument(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $request->attributes = $attributes;
-        $request->query = new InputBag([]);
-        $request->request = new InputBag();
-
-        $attributes->all('_route_params')->willReturn(['enabled' => 'true', 'author' => 'author@example.com']);
+    public function testItEncapsulatesArgumentsWhenTheMethodHasOnlyOneRequiredArrayArgument(): void
+    {
+        $request = $this->createRequest(
+            ['enabled' => 'true', 'author' => 'author@example.com'],
+            [],
+            [],
+        );
 
         $callable = [RepositoryWithCallables::class, 'findOneBy'];
         $reflector = CallableReflection::from($callable);
 
-        $this->getArguments($request, $reflector)->shouldReturn([
-            [
-                'enabled' => 'true',
-                'author' => 'author@example.com',
-            ],
-        ]);
+        $result = $this->repositoryArgumentResolver->getArguments($request, $reflector);
+
+        $this->assertSame([['enabled' => 'true', 'author' => 'author@example.com']], $result);
     }
 
-    function it_return_array_values_when_method_is_magic(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $request->attributes = $attributes;
-        $request->query = new InputBag();
-        $request->request = new InputBag(['ids' => ['first_id', 'second_id']]);
-
-        $attributes->all('_route_params')->willReturn(['_sylius' => ['resource' => 'app.dummy']]);
+    public function testItReturnArrayValuesWhenMethodIsMagic(): void
+    {
+        $request = $this->createRequest(
+            ['_sylius' => ['resource' => 'app.dummy']],
+            [],
+            ['ids' => ['first_id', 'second_id']],
+        );
 
         $callable = [new RepositoryWithCallables(), '__call'];
         $reflector = CallableReflection::from($callable);
 
-        $this->getArguments($request, $reflector)->shouldReturn([['first_id', 'second_id']]);
+        $result = $this->repositoryArgumentResolver->getArguments($request, $reflector);
+
+        $this->assertSame([['first_id', 'second_id']], $result);
+    }
+
+    private function createRequest(array $routeParams, array $queryParams, array $requestParams): Request
+    {
+        $request = new Request();
+        $request->attributes = new ParameterBag();
+        $request->query = new InputBag($queryParams);
+        $request->request = new InputBag($requestParams);
+
+        $attributesMock = $this->createMock(ParameterBag::class);
+        $attributesMock->method('all')->with('_route_params')->willReturn($routeParams);
+
+        $request->attributes = $attributesMock;
+
+        return $request;
     }
 }

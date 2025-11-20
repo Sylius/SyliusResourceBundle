@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Tests\Symfony\Request\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -28,121 +28,156 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-final class TwigResponderSpec extends ObjectBehavior
+final class TwigResponderTest extends TestCase
 {
-    function let(
-        Environment $twig,
-        RedirectHandlerInterface $redirectHandler,
-        ContextFactoryInterface $contextFactory,
-    ): void {
-        $this->beConstructedWith($redirectHandler, $contextFactory, $twig);
-    }
+    private Environment $twig;
 
-    function it_is_initializable(): void
+    private RedirectHandlerInterface $redirectHandler;
+
+    private ContextFactoryInterface $contextFactory;
+
+    private TwigResponder $twigResponder;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(TwigResponder::class);
+        $this->twig = $this->createMock(Environment::class);
+        $this->redirectHandler = $this->createMock(RedirectHandlerInterface::class);
+        $this->contextFactory = $this->createMock(ContextFactoryInterface::class);
+        $this->twigResponder = new TwigResponder($this->redirectHandler, $this->contextFactory, $this->twig);
     }
 
-    function it_returns_a_response_for_resource_show(
-        \stdClass $data,
-        Request $request,
-        ParameterBag $attributes,
-        ContextFactoryInterface $contextFactory,
-        Environment $twig,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(TwigResponder::class, $this->twigResponder);
+    }
+
+    public function testItReturnsAResponseForResourceShow(): void
+    {
+        $data = new \stdClass();
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
+        $request->method('isMethodSafe')->willReturn(true);
 
-        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+        $attributes->expects($this->once())->method('getBoolean')->with('is_valid', true)->willReturn(false);
+        $attributes->method('get')->with('form')->willReturn(null);
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Show(template: 'book/show.html.twig'))->withResource($resource);
 
-        $contextFactory->create($data, $operation, $context)->willReturn(['book' => $data]);
+        $this->contextFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($data, $operation, $context)
+            ->willReturn(['book' => $data]);
 
-        $twig->render('book/show.html.twig', [
-            'book' => $data->getWrappedObject(),
-        ])->willReturn('result')->shouldBeCalled();
+        $this->twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('book/show.html.twig', ['book' => $data])
+            ->willReturn('result');
 
-        $response = $this->respond($data, $operation, $context);
-        $response->getStatusCode()->shouldReturn(200);
+        $response = $this->twigResponder->respond($data, $operation, $context);
+
+        $this->assertSame(200, $response->getStatusCode());
     }
 
-    function it_returns_a_response_for_resource_index(
-        \ArrayObject $data,
-        Request $request,
-        ParameterBag $attributes,
-        ContextFactoryInterface $contextFactory,
-        Environment $twig,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItReturnsAResponseForResourceIndex(): void
+    {
+        $data = new \ArrayObject();
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
+        $request->method('isMethodSafe')->willReturn(true);
 
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+        $attributes->expects($this->once())->method('getBoolean')->with('is_valid', true)->willReturn(true);
+        $attributes->method('get')->with('form')->willReturn(null);
 
         $resource = new ResourceMetadata(alias: 'app.book', pluralName: 'books');
         $operation = (new Index(template: 'book/index.html.twig'))->withResource($resource);
 
-        $contextFactory->create($data, $operation, $context)->willReturn(['books' => $data]);
+        $this->contextFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($data, $operation, $context)
+            ->willReturn(['books' => $data]);
 
-        $twig->render('book/index.html.twig', [
-            'books' => $data->getWrappedObject(),
-        ])->willReturn('result')->shouldBeCalled();
+        $this->twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('book/index.html.twig', ['books' => $data])
+            ->willReturn('result');
 
-        $this->respond($data, $operation, $context);
+        $this->twigResponder->respond($data, $operation, $context);
     }
 
-    function it_redirect_to_route_after_creation(
-        \ArrayObject $data,
-        Request $request,
-        ParameterBag $attributes,
-        RedirectHandlerInterface $redirectHandler,
-        RedirectResponse $response,
-    ): void {
-        $data->offsetSet('id', 'xyz');
+    public function testItRedirectToRouteAfterCreation(): void
+    {
+        $data = new \ArrayObject();
+        $data['id'] = 'xyz';
+
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $redirectResponse = $this->createMock(RedirectResponse::class);
+
         $request->attributes = $attributes;
 
-        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
+        $request->method('isMethodSafe')->willReturn(false);
+        $attributes->expects($this->once())->method('getBoolean')->with('is_valid', true)->willReturn(true);
 
         $operation = new Create();
 
-        $redirectHandler->redirectToResource($data, $operation, $request)->willReturn($response);
+        $this->redirectHandler
+            ->expects($this->once())
+            ->method('redirectToResource')
+            ->with($data, $operation, $request)
+            ->willReturn($redirectResponse);
 
-        $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())))->shouldReturn($response);
+        $result = $this->twigResponder->respond($data, $operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($redirectResponse, $result);
     }
 
-    function it_response_is_unprocessable_when_validation_has_failed(
-        \ArrayObject $data,
-        Request $request,
-        ParameterBag $attributes,
-        ContextFactoryInterface $contextFactory,
-        Environment $twig,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
+    public function testItResponseIsUnprocessableWhenValidationHasFailed(): void
+    {
+        $data = new \ArrayObject();
+        $data['id'] = 'xyz';
 
-        $data->offsetSet('id', 'xyz');
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+
+        $context = new Context(new RequestOption($request));
+
         $request->attributes = $attributes;
 
-        $request->isMethodSafe()->willReturn(false)->shouldBeCalled();
+        $request->method('isMethodSafe')->willReturn(false);
 
-        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
+        $attributes->expects($this->once())->method('getBoolean')->with('is_valid', true)->willReturn(false);
 
         $operation = new Create();
 
-        $contextFactory->create($data, $operation, $context)->willReturn(['books' => $data]);
+        $this->contextFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($data, $operation, $context)
+            ->willReturn(['books' => $data]);
 
-        $twig->render('', ['books' => $data])->willReturn('twig_content');
+        $this->twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('', ['books' => $data])
+            ->willReturn('twig_content');
 
-        $response = $this->respond($data, $operation, new Context(new RequestOption($request->getWrappedObject())));
-        $response->getStatusCode()->shouldReturn(422);
+        $response = $this->twigResponder->respond($data, $operation, new Context(new RequestOption($request)));
+
+        $this->assertSame(422, $response->getStatusCode());
     }
 }

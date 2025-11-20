@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Resource\Symfony\Request\State;
+namespace Sylius\Resource\Tests\Symfony\Request\State;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -26,103 +26,89 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ApiResponderSpec extends ObjectBehavior
+final class ApiResponderTest extends TestCase
 {
-    function let(): void
+    private ApiResponder $apiResponder;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new ApiHeadersInitiator());
+        $this->apiResponder = new ApiResponder(new ApiHeadersInitiator());
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(ApiResponder::class);
+        $this->assertInstanceOf(ApiResponder::class, $this->apiResponder);
     }
 
-    function it_returns_a_response_with_http_created_for_resource_create(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
-        $request->attributes = $attributes;
-
-        $request->getRequestFormat()->willReturn('json');
-        $request->getMimeType('json')->willReturn('application/json');
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+    public function testItReturnsAResponseWithHttpCreatedForResourceCreate(): void
+    {
+        $request = $this->createRequest();
+        $context = new Context(new RequestOption($request));
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Create())->withResource($resource);
 
-        $response = $this->respond('serialized_data', $operation, $context);
-        $response->shouldHaveType(Response::class);
-        $response->getStatusCode()->shouldReturn(Response::HTTP_CREATED);
+        $response = $this->apiResponder->respond('serialized_data', $operation, $context);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
     }
 
-    function it_returns_a_response_with_http_no_content_for_resource_update(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
-        $request->attributes = $attributes;
-
-        $request->getRequestFormat()->willReturn('json');
-        $request->getMimeType('json')->willReturn('application/json');
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+    public function testItReturnsAResponseWithHttpNoContentForResourceUpdate(): void
+    {
+        $request = $this->createRequest();
+        $context = new Context(new RequestOption($request));
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Update())->withResource($resource);
 
-        $response = $this->respond('serialized_data', $operation, $context);
-        $response->shouldHaveType(Response::class);
-        $response->getStatusCode()->shouldReturn(Response::HTTP_NO_CONTENT);
+        $response = $this->apiResponder->respond('serialized_data', $operation, $context);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    function it_returns_a_response_with_http_no_content_for_resource_delete(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
-        $request->attributes = $attributes;
-
-        $request->getRequestFormat()->willReturn('json');
-        $request->getMimeType('json')->willReturn('application/json');
-
-        $attributes->getBoolean('is_valid', true)->willReturn(true)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+    public function testItReturnsAResponseWithHttpNoContentForResourceDelete(): void
+    {
+        $request = $this->createRequest();
+        $context = new Context(new RequestOption($request));
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Delete())->withResource($resource);
 
-        $response = $this->respond('serialized_data', $operation, $context);
-        $response->shouldHaveType(Response::class);
-        $response->getStatusCode()->shouldReturn(Response::HTTP_NO_CONTENT);
+        $response = $this->apiResponder->respond('serialized_data', $operation, $context);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    function it_returns_a_response_with_http_unprocessable_entity_for_invalid_resource(
-        Request $request,
-        ParameterBag $attributes,
-    ): void {
-        $context = new Context(new RequestOption($request->getWrappedObject()));
-
-        $request->attributes = $attributes;
-
-        $request->getRequestFormat()->willReturn('json');
-        $request->getMimeType('json')->willReturn('application/json');
-
-        $attributes->getBoolean('is_valid', true)->willReturn(false)->shouldBeCalled();
-        $attributes->get('form')->willReturn(null);
+    public function testItReturnsAResponseWithHttpUnprocessableEntityForInvalidResource(): void
+    {
+        $request = $this->createRequest(false);
+        $context = new Context(new RequestOption($request));
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
         $operation = (new Create())->withResource($resource);
 
-        $response = $this->respond('serialized_data', $operation, $context);
-        $response->shouldHaveType(Response::class);
-        $response->getStatusCode()->shouldReturn(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response = $this->apiResponder->respond('serialized_data', $operation, $context);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+    }
+
+    private function createRequest(bool $isValid = true): Request
+    {
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+
+        $request->attributes = $attributes;
+
+        $request->method('getRequestFormat')->willReturn('json');
+        $request->method('getMimeType')->with('json')->willReturn('application/json');
+
+        $attributes->method('getBoolean')->with('is_valid', true)->willReturn($isValid);
+        $attributes->method('get')->with('form')->willReturn(null);
+
+        return $request;
     }
 }
