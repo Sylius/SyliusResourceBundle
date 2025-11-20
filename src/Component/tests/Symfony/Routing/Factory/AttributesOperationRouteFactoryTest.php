@@ -19,7 +19,6 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
-use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -112,7 +111,6 @@ final class AttributesOperationRouteFactoryTest extends TestCase
     {
         $routeCollection = new RouteCollection();
 
-        // Create a non-HTTP operation (directly extends Operation, not HttpOperation)
         $nonHttpOperation = new class() extends Operation {
             public function getShortName(): ?string
             {
@@ -120,10 +118,8 @@ final class AttributesOperationRouteFactoryTest extends TestCase
             }
         };
 
-        // Create an HTTP operation
         $httpOperation = (new Index(name: 'app_dummy_index'))->withRouteName('app_dummy_index');
 
-        // Create resource with mixed operations
         $resource = new ResourceMetadata(
             alias: 'app.dummy',
             name: 'dummy',
@@ -136,14 +132,12 @@ final class AttributesOperationRouteFactoryTest extends TestCase
         $resourceCollection = new ResourceMetadataCollection();
         $resourceCollection[] = $resource;
 
-        // Mock resource metadata factory to return our custom collection
         $resourceMetadataFactory = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
         $resourceMetadataFactory
             ->method('create')
             ->with(\stdClass::class)
             ->willReturn($resourceCollection);
 
-        // Mock metadata for registry
         $metadata = $this->createDummyMetadataMock();
         $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
 
@@ -153,7 +147,6 @@ final class AttributesOperationRouteFactoryTest extends TestCase
             ->with($httpOperation, 'dummies')
             ->willReturn('/dummies');
 
-        // Create factory with mocked dependencies
         $factory = new AttributesOperationRouteFactory(
             $this->resourceRegistry,
             new OperationRouteFactory($this->routePathFactory),
@@ -162,7 +155,6 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
         $factory->createRouteForClass($routeCollection, \stdClass::class);
 
-        // Only the HTTP operation should create a route
         $this->assertCount(1, $routeCollection);
         $this->assertNotNull($routeCollection->get('app_dummy_index'), 'Route "app_dummy_index" not found but it should.');
         $this->assertNull($routeCollection->get('app_dummy_custom'), 'Non-HTTP operation should not create a route.');

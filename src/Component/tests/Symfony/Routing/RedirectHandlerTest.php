@@ -383,7 +383,6 @@ final class RedirectHandlerTest extends TestCase
         ))->withResource(new ResourceMetadata(alias: 'app.book'));
         $request = $this->createMock(Request::class);
 
-        // parseExpression should not be called for non-string values
         $this->argumentParser
             ->expects($this->never())
             ->method('parseExpression');
@@ -403,7 +402,6 @@ final class RedirectHandlerTest extends TestCase
         ))->withResource(new ResourceMetadata(alias: 'app.book', name: 'book'));
         $request = $this->createMock(Request::class);
 
-        // When property is not readable, should fall back to expression parser
         $this->argumentParser
             ->expects($this->once())
             ->method('parseExpression')
@@ -425,7 +423,6 @@ final class RedirectHandlerTest extends TestCase
         ))->withResource(new ResourceMetadata(alias: 'app.book', name: 'book'));
         $request = $this->createMock(Request::class);
 
-        // Should include both 'resource' and resource name ('book') in variables
         $this->argumentParser
             ->expects($this->once())
             ->method('parseExpression')
@@ -449,7 +446,6 @@ final class RedirectHandlerTest extends TestCase
         ))->withResource(new ResourceMetadata(alias: 'app.book')); // name is null
         $request = $this->createMock(Request::class);
 
-        // Should include only 'resource' in variables (no resource name)
         $this->argumentParser
             ->expects($this->once())
             ->method('parseExpression')
@@ -473,8 +469,6 @@ final class RedirectHandlerTest extends TestCase
         ))->withResource(new ResourceMetadata(alias: 'app.book'));
         $request = $this->createMock(Request::class);
 
-        // When data is not an object, property accessor cannot read it
-        // Should fall back to expression parser
         $this->argumentParser
             ->expects($this->exactly(2))
             ->method('parseExpression')

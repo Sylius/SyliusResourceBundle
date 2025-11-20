@@ -62,7 +62,6 @@ final class OperationRouteFactoryTest extends TestCase
         $resource = new ResourceMetadata(alias: 'app.book');
         $operation = new Index(path: '/custom/books/list');
 
-        // routePathFactory should not be called when path is explicitly set
         $this->routePathFactory
             ->expects($this->never())
             ->method('createRoutePath');
@@ -246,7 +245,6 @@ final class OperationRouteFactoryTest extends TestCase
 
         $route = $this->operationRouteFactory->create($metadata, $resource, $operation);
 
-        // Symfony Route returns empty string when condition is null
         $this->assertSame('', $route->getCondition());
     }
 

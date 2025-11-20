@@ -86,7 +86,6 @@ final class OperationRouteNameFactoryTest extends TestCase
 
     public function testItThrowsExceptionWhenOperationHasNoResourceWithDefaultShortName(): void
     {
-        // Show operation has default shortName "show"
         $operation = new Show();
 
         $this->expectException(\RuntimeException::class);
