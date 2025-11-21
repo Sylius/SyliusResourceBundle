@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bundle\EventListener;
+namespace Sylius\Bundle\ResourceBundle\Tests\Bundle\EventListener;
 
 use App\Entity\Book;
 use App\Entity\User;
