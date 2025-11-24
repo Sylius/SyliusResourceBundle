@@ -18,7 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder;
 use Sylius\Bundle\ResourceBundle\Form\Builder\DefaultFormBuilderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
@@ -90,10 +89,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['name', null, [], $this->formBuilderMock],
                 ['description', null, [], $this->formBuilderMock],
                 ['enabled', null, [], $this->formBuilderMock],
-                ['id', Argument::cetera()],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
             ])
         ;
 
@@ -129,10 +124,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['name', null, [], $this->formBuilderMock],
                 ['description', null, [], $this->formBuilderMock],
                 ['enabled', null, [], $this->formBuilderMock],
-                ['id', null, []],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
             ])
         ;
 
@@ -165,9 +156,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['name', null, [], $this->formBuilderMock],
                 ['description', null, [], $this->formBuilderMock],
                 ['enabled', null, [], $this->formBuilderMock],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
             ])
         ;
 
@@ -202,10 +190,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['description', null, [], $this->formBuilderMock],
                 ['enabled', null, [], $this->formBuilderMock],
                 ['publishedAt', null, ['widget' => 'single_text'], $this->formBuilderMock],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
-                ['publishedAt', null, ['widget' => 'single_text']],
             ])
         ;
 
@@ -244,13 +228,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['enabled', null, [], $this->formBuilderMock],
                 ['publishedAt', null, ['widget' => 'single_text'], $this->formBuilderMock],
                 ['category', null, ['choice_label' => 'id'], $this->formBuilderMock],
-                ['users', Argument::cetera(), $this->formBuilderMock],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
-                ['publishedAt', null, ['widget' => 'single_text']],
-                ['category', null, ['choice_label' => 'id']],
-                ['users', Argument::cetera()],
             ])
         ;
 
@@ -285,13 +262,6 @@ final class DefaultFormBuilderTest extends TestCase
                 ['name', null, [], $this->formBuilderMock],
                 ['description', null, [], $this->formBuilderMock],
                 ['enabled', null, [], $this->formBuilderMock],
-                ['createdAt', Argument::cetera(), $this->formBuilderMock],
-                ['updatedAt', Argument::cetera(), $this->formBuilderMock],
-                ['name', null, []],
-                ['description', null, []],
-                ['enabled', null, []],
-                ['createdAt', Argument::cetera()],
-                ['updatedAt', Argument::cetera()],
             ])
         ;
 

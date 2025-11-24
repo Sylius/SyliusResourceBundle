@@ -191,7 +191,12 @@ final class DefaultParentListenerTest extends TestCase
             ->willReturn($nodeMock)
         ;
 
-        $this->documentMetadataMock->setFieldValue($subjectDocument, 'parent', $parentDocument);
+        $this->documentMetadataMock
+            ->expects($this->once())
+            ->method('setFieldValue')
+            ->with($subjectDocument, 'parent', $parentDocument)
+        ;
+
         $this->defaultParentListener->onPreCreate($this->eventMock);
     }
 
