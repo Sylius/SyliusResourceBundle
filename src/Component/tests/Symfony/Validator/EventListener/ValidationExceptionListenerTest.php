@@ -67,6 +67,9 @@ final class ValidationExceptionListenerTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('serialized_exception', $response->getContent());
         $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame('application/json; charset=utf-8', $response->headers->get('Content-Type'));
+        $this->assertSame('nosniff', $response->headers->get('X-Content-Type-Options'));
+        $this->assertSame('deny', $response->headers->get('X-Frame-Options'));
     }
 
     public function testItDoesNothingOnOtherExceptions(): void

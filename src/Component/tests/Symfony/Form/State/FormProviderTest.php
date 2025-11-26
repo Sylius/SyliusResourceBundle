@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Component\Resource\tests\Symfony\Form\State;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Create;
-use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\Symfony\Form\Factory\FormFactoryInterface;
 use Sylius\Resource\Symfony\Form\State\FormProvider;
@@ -33,159 +30,323 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class FormProviderTest extends TestCase
 {
-    use ProphecyTrait;
+    private ProviderInterface $decorated;
 
-    private ProviderInterface|ObjectProphecy $decorated;
-
-    private FormFactoryInterface|ObjectProphecy $formFactory;
+    private FormFactoryInterface $formFactory;
 
     private FormProvider $formProvider;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProviderInterface::class);
-        $this->formFactory = $this->prophesize(FormFactoryInterface::class);
+        $this->decorated = $this->createMock(ProviderInterface::class);
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
 
         $this->formProvider = new FormProvider(
-            $this->decorated->reveal(),
-            $this->formFactory->reveal(),
+            $this->decorated,
+            $this->formFactory,
         );
     }
 
-    /** @test */
-    public function it_handles_forms(): void
+    public function testItIsInitializable(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $form = $this->prophesize(FormInterface::class);
-
-        $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
-
-        $operation = new Create(formType: 'App\Type\DummyType');
-
-        $context = new Context(new RequestOption($request->reveal()));
-
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
-
-        $this->formFactory->create($operation, $context, ['foo' => 'fighters'])
-            ->willReturn($form)
-            ->shouldBeCalled()
-        ;
-
-        $form->handleRequest($request)->willReturn($form)->shouldBeCalled();
-
-        $attributes->set('form', $form)->shouldBeCalled();
-
-        $this->formProvider->provide($operation, $context);
+        $this->assertInstanceOf(FormProvider::class, $this->formProvider);
     }
 
-    /** @test */
-    public function it_does_nothing_when_data_is_a_response(): void
+    public function testItHandlesFormsForCreateOperation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $form = $this->prophesize(FormInterface::class);
-        $response = $this->prophesize(Response::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $form = $this->createMock(FormInterface::class);
+        $data = ['foo' => 'fighters'];
 
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html');
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
 
         $operation = new Create(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
 
-        $context = new Context(new RequestOption($request->reveal()));
-        $this->decorated->provide($operation, $context)->willReturn($response)->shouldBeCalled();
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
 
-        $this->formFactory->create(Argument::cetera())
-            ->willReturn($form)
-            ->shouldNotBeCalled()
-        ;
+        $this->formFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($operation, $context, $data)
+            ->willReturn($form);
 
-        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+        $form
+            ->expects($this->once())
+            ->method('handleRequest')
+            ->with($request)
+            ->willReturn($form);
 
-        $attributes->set('form', $form)->shouldNotBeCalled();
+        $attributes
+            ->expects($this->once())
+            ->method('set')
+            ->with('form', $form);
 
-        $this->formProvider->provide($operation, $context);
+        $result = $this->formProvider->provide($operation, $context);
+
+        $this->assertSame($data, $result);
     }
 
-    /** @test */
-    public function it_does_nothing_when_operation_has_no_form_type(): void
+    public function testItHandlesFormsForUpdateOperation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $form = $this->prophesize(FormInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $form = $this->createMock(FormInterface::class);
+        $data = new \stdClass();
 
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
+
+        $operation = new Update(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
+
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
+
+        $this->formFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($operation, $context, $data)
+            ->willReturn($form);
+
+        $form
+            ->expects($this->once())
+            ->method('handleRequest')
+            ->with($request)
+            ->willReturn($form);
+
+        $attributes
+            ->expects($this->once())
+            ->method('set')
+            ->with('form', $form);
+
+        $result = $this->formProvider->provide($operation, $context);
+
+        $this->assertSame($data, $result);
+    }
+
+    public function testItDoesNothingWhenDataIsAResponse(): void
+    {
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $response = $this->createMock(Response::class);
+
+        $request->attributes = $attributes;
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
+
+        $operation = new Create(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
+
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($response);
+
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
+
+        $attributes
+            ->expects($this->never())
+            ->method('set');
+
+        $result = $this->formProvider->provide($operation, $context);
+
+        $this->assertSame($response, $result);
+    }
+
+    public function testItDoesNothingWhenOperationHasNoFormType(): void
+    {
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = ['foo' => 'bar'];
+
+        $request->attributes = $attributes;
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
 
         $operation = new Create(formType: null);
+        $context = new Context(new RequestOption($request));
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
 
-        $this->formFactory->create(Argument::cetera())
-            ->willReturn($form)
-            ->shouldNotBeCalled()
-        ;
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
 
-        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+        $attributes
+            ->expects($this->never())
+            ->method('set');
 
-        $attributes->set('form', $form)->shouldNotBeCalled();
+        $result = $this->formProvider->provide($operation, $context);
 
-        $this->formProvider->provide($operation, $context);
+        $this->assertSame($data, $result);
     }
 
-    /** @test */
-    public function it_does_nothing_when_operation_is_not_a_create_or_update(): void
+    public function testItDoesNothingWhenOperationIsNotACreateOrUpdate(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $form = $this->prophesize(FormInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = ['foo' => 'bar'];
 
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html');
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
 
         $operation = new Show(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
 
-        $this->formFactory->create(Argument::cetera())
-            ->willReturn($form)
-            ->shouldNotBeCalled()
-        ;
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
 
-        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+        $attributes
+            ->expects($this->never())
+            ->method('set');
 
-        $attributes->set('form', $form)->shouldNotBeCalled();
+        $result = $this->formProvider->provide($operation, $context);
 
-        $this->formProvider->provide($operation, $context);
+        $this->assertSame($data, $result);
     }
 
-    /** @test */
-    public function it_does_nothing_when_operation_is_a_bulk_update(): void
+    public function testItDoesNothingWhenOperationIsABulkUpdate(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $form = $this->prophesize(FormInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = ['foo' => 'bar'];
 
         $request->attributes = $attributes;
-        $request->getRequestFormat()->willReturn('html');
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn('html');
 
         $operation = new BulkUpdate(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
 
-        $operations = new Operations();
-        $operations->add('app_dummy_show', $operation);
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
 
-        $this->formFactory->create(Argument::cetera())
-            ->willReturn($form)
-            ->shouldNotBeCalled()
-        ;
+        $attributes
+            ->expects($this->never())
+            ->method('set');
 
-        $form->handleRequest($request)->willReturn($form)->shouldNotBeCalled();
+        $result = $this->formProvider->provide($operation, $context);
 
-        $attributes->set('form', $form)->shouldNotBeCalled();
+        $this->assertSame($data, $result);
+    }
 
-        $this->formProvider->provide($operation, $context);
+    public function testItReturnsDataWhenRequestIsNull(): void
+    {
+        $data = ['foo' => 'bar'];
+        $operation = new Create(formType: 'App\Type\DummyType');
+        $context = new Context();
+
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
+
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
+
+        $result = $this->formProvider->provide($operation, $context);
+
+        $this->assertSame($data, $result);
+    }
+
+    /**
+     * @dataProvider nonHtmlRequestFormatProvider
+     */
+    public function testItDoesNothingWhenRequestFormatIsNotHtml(string $requestFormat): void
+    {
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = ['foo' => 'bar'];
+
+        $request->attributes = $attributes;
+
+        $request
+            ->expects($this->once())
+            ->method('getRequestFormat')
+            ->willReturn($requestFormat);
+
+        $operation = new Create(formType: 'App\Type\DummyType');
+        $context = new Context(new RequestOption($request));
+
+        $this->decorated
+            ->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data);
+
+        $this->formFactory
+            ->expects($this->never())
+            ->method('create');
+
+        $attributes
+            ->expects($this->never())
+            ->method('set');
+
+        $result = $this->formProvider->provide($operation, $context);
+
+        $this->assertSame($data, $result);
+    }
+
+    /**
+     * @return iterable<string, array<string>>
+     */
+    public static function nonHtmlRequestFormatProvider(): iterable
+    {
+        yield 'json' => ['json'];
+        yield 'xml' => ['xml'];
     }
 }
