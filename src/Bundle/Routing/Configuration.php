@@ -19,10 +19,13 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
+    /**
+     * @return TreeBuilder<'array'>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('routing');
-        /** @var ArrayNodeDefinition $rootNode */
+        /** @var ArrayNodeDefinition<TreeBuilder<'array'>> $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode

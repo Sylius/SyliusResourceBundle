@@ -26,11 +26,14 @@ final class PagerfantaConfiguration implements ConfigurationInterface
 {
     public const EXCEPTION_STRATEGY_TO_HTTP_NOT_FOUND = 'to_http_not_found';
 
+    /**
+     * @return TreeBuilder<'array'>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('white_october_pagerfanta');
 
-        /** @var ArrayNodeDefinition $rootNode */
+        /** @var ArrayNodeDefinition<TreeBuilder<'array'>> $rootNode */
         $rootNode = $treeBuilder->getRootNode();
         $rootNode->setDeprecated('sylius/resource-bundle', '1.7', 'The "%node%" configuration node is deprecated, migrate your configuration to the "babdev_pagerfanta" configuration node.');
 
@@ -47,6 +50,9 @@ final class PagerfantaConfiguration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+    /**
+     * @param ArrayNodeDefinition<TreeBuilder<'array'>> $node
+     */
     private function addExceptionsStrategySection(ArrayNodeDefinition $node): void
     {
         $node

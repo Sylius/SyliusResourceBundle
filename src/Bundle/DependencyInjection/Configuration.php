@@ -23,10 +23,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
+    /**
+     * @return TreeBuilder<'array'>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sylius_resource');
-        /** @var ArrayNodeDefinition $rootNode */
+
+        /** @var ArrayNodeDefinition<TreeBuilder<'array'>> $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addResourcesSection($rootNode);
@@ -60,6 +64,9 @@ final class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+    /**
+     * @param ArrayNodeDefinition<TreeBuilder<'array'>> $node
+     */
     private function addResourcesSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -112,6 +119,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @param ArrayNodeDefinition<TreeBuilder<'array'>> $node
+     */
     private function addSettingsSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -138,6 +148,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @param ArrayNodeDefinition<TreeBuilder<'array'>> $node
+     */
     private function addTranslationsSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -151,6 +164,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @param ArrayNodeDefinition<TreeBuilder<'array'>> $node
+     */
     private function addDriversSection(ArrayNodeDefinition $node): void
     {
         $node
