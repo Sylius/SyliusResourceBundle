@@ -13,19 +13,29 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\Subscription\Entity\Subscription;
 use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use App\Tests\Trait\UiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SubscriptionUiTest extends ApiTestCase
+final class SubscriptionUiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use UiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_showing_a_subscription(): void
@@ -36,10 +46,10 @@ final class SubscriptionUiTest extends ApiTestCase
         ;
 
         $this->client->request('GET', '/admin/subscriptions/' . $subscription->getId());
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString(sprintf('ID: %s', $subscription->getId()), $content);
         $this->assertStringContainsString('Email: marty.mcfly@bttf.com', $content);
         $this->assertStringContainsString('Foo: bar', $content);
@@ -54,15 +64,12 @@ final class SubscriptionUiTest extends ApiTestCase
         $biffTannenSubscription = SubscriptionFactory::find(['email' => 'biff.tannen@bttf.com']);
 
         $this->client->request('GET', '/admin/subscriptions');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        // only 5 subscriptions
-        if (method_exists($this, 'assertSelectorCount')) {
-            $this->assertSelectorCount(5, 'tbody tr');
-        }
+        $content = $this->client->getResponse()->getContent();
+
+        $this->assertSelectorCount(5, 'tbody tr');
 
         $this->assertStringContainsString('<td>doc.brown@bttf.com</td>', $content);
         $this->assertStringContainsString(sprintf('<a href="/admin/subscriptions/%s">Show</a>', $docBrownSubscription->getId()), $content);
@@ -81,14 +88,10 @@ final class SubscriptionUiTest extends ApiTestCase
         DefaultSubscriptionsStory::load();
 
         $this->client->request('GET', '/admin/subscriptions?limit=3');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        // only 2 subscriptions
-        if (method_exists($this, 'assertSelectorCount')) {
-            $this->assertSelectorCount(3, 'tbody tr');
-        }
+        $this->assertSelectorCount(3, 'tbody tr');
     }
 
     #[Test]
@@ -97,34 +100,28 @@ final class SubscriptionUiTest extends ApiTestCase
         DefaultSubscriptionsStory::load();
 
         $this->client->request('GET', '/admin/subscriptions');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        // only 5 subscriptions
-        if (method_exists($this, 'assertSelectorCount')) {
-            $this->assertSelectorCount(5, 'tbody tr');
-        }
+        $this->assertSelectorCount(5, 'tbody tr');
     }
 
     #[Test]
     public function it_allows_creating_a_subscription(): void
     {
         $this->client->request('GET', '/admin/subscriptions/new');
-        $response = $this->client->getResponse();
 
-        $content = $response->getContent();
-
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('value="new@example.com"', $content);
 
-        $this->client->submitForm('Create', [
+        $this->submitForm('Create', [
             'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var Subscription $subscription */
-        $subscription = static::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'biff.tannen@bttf.com']);
+        $subscription = self::getContainer()->get('app.repository.subscription')->findOneBy(['email' => 'biff.tannen@bttf.com']);
 
         $this->assertNotNull($subscription);
         $this->assertSame('biff.tannen@bttf.com', (string) $subscription->email);
@@ -134,11 +131,12 @@ final class SubscriptionUiTest extends ApiTestCase
     public function it_does_not_allow_to_create_a_subscription_if_there_is_a_validation_error(): void
     {
         $this->client->request('GET', '/admin/subscriptions/new');
-        $this->client->submitForm('Create', [
+
+        $this->submitForm('Create', [
             'subscription[email]' => null,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     #[Test]
@@ -147,11 +145,12 @@ final class SubscriptionUiTest extends ApiTestCase
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('GET', '/admin/subscriptions/' . $subscription->getId() . '/edit');
-        $this->client->submitForm('Save changes', [
+
+        $this->submitForm('Save changes', [
             'subscription[email]' => 'biff.tannen@bttf.com',
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         $subscription->_refresh();
         $this->assertSame('biff.tannen@bttf.com', (string) $subscription->email);
@@ -163,11 +162,12 @@ final class SubscriptionUiTest extends ApiTestCase
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('GET', '/admin/subscriptions/' . $subscription->getId() . '/edit');
-        $this->client->submitForm('Save changes', [
+
+        $this->submitForm('Save changes', [
             'subscription[email]' => null,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     #[Test]
@@ -176,12 +176,13 @@ final class SubscriptionUiTest extends ApiTestCase
         SubscriptionFactory::createOne();
 
         $this->client->request('GET', '/admin/subscriptions');
-        $this->client->submitForm('Delete');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var Subscription[] $subscriptions */
-        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+        $subscriptions = self::getContainer()->get('app.repository.subscription')->findAll();
 
         $this->assertEmpty($subscriptions);
     }
@@ -192,12 +193,13 @@ final class SubscriptionUiTest extends ApiTestCase
         DefaultSubscriptionsStory::load();
 
         $this->client->request('GET', '/admin/subscriptions?limit=10');
-        $this->client->submitForm('Bulk delete');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Bulk delete');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var Subscription[] $subscriptions */
-        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+        $subscriptions = self::getContainer()->get('app.repository.subscription')->findAll();
 
         $this->assertEmpty($subscriptions);
     }
@@ -208,9 +210,10 @@ final class SubscriptionUiTest extends ApiTestCase
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('GET', '/admin/subscriptions');
-        $this->client->submitForm('Accept');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Accept');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         $subscription->_refresh();
 
@@ -225,19 +228,15 @@ final class SubscriptionUiTest extends ApiTestCase
         $docBrown = SubscriptionFactory::find(['email' => 'doc.brown@bttf.com']);
 
         $this->client->request('GET', '/admin/subscriptions?limit=10');
-        $this->client->submitForm('Bulk accept');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Bulk accept');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         $martyMcFly->_refresh();
         $this->assertSame('accepted', $martyMcFly->getState());
 
         $docBrown->_refresh();
         $this->assertSame('accepted', $docBrown->getState());
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }

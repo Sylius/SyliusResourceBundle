@@ -13,19 +13,29 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Kernel;
 use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use App\Tests\Trait\JsonApiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SubscriptionJsonApiTest extends JsonApiTestCase
+final class SubscriptionJsonApiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use JsonApiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_showing_a_subscription(): void
@@ -64,6 +74,7 @@ EOT;
 
         $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
     }
 
@@ -98,7 +109,8 @@ EOT;
 
         $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     #[Test]
@@ -127,11 +139,7 @@ EOT;
 
         $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
-    }
 
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 }

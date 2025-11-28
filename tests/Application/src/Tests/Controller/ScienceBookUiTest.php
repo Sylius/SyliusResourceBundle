@@ -13,21 +13,29 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\Entity\ScienceBook;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ScienceBookFactory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use App\Tests\Trait\UiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class ScienceBookUiTest extends ApiTestCase
+final class ScienceBookUiTest extends WebTestCase
 {
     use Factories;
     use ResetDatabase;
+    use UiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_showing_a_book(): void
@@ -43,10 +51,10 @@ final class ScienceBookUiTest extends ApiTestCase
         ;
 
         $this->client->request('GET', '/science-books/' . $scienceBook->getId());
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString(sprintf('ID: %d', $scienceBook->getId()), $content);
         $this->assertStringContainsString('Title: A Brief History of Time', $content);
         $this->assertStringContainsString('Author: Stephen Hawking', $content);
@@ -76,10 +84,10 @@ final class ScienceBookUiTest extends ApiTestCase
         ;
 
         $this->client->request('GET', '/science-books/');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
             sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
@@ -99,16 +107,17 @@ final class ScienceBookUiTest extends ApiTestCase
         $newBookAuthorLastName = 'Pearl';
 
         $this->client->request('GET', '/science-books/new');
-        $this->client->submitForm('Create', [
+
+        $this->submitForm('Create', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][firstName]' => $newBookAuthorFirstName,
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var ScienceBook $book */
-        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+        $book = self::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
 
         $this->assertNotNull($book);
         $this->assertSame($newBookTitle, $book->getTitle());
@@ -123,15 +132,16 @@ final class ScienceBookUiTest extends ApiTestCase
         $newBookAuthorLastName = 'Pearl';
 
         $this->client->request('GET', '/science-books/new');
-        $this->client->submitForm('Create', [
+
+        $this->submitForm('Create', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         /** @var ScienceBook $book */
-        $book = static::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
+        $book = self::getContainer()->get('app.repository.science_book')->findOneBy(['title' => $newBookTitle]);
 
         $this->assertNull($book);
     }
@@ -146,13 +156,14 @@ final class ScienceBookUiTest extends ApiTestCase
         $newBookAuthorLastName = 'Pearl';
 
         $this->client->request('GET', '/science-books/' . $scienceBook->getId() . '/edit');
-        $this->client->submitForm('Save changes', [
+
+        $this->submitForm('Save changes', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][firstName]' => $newBookAuthorFirstName,
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         $scienceBook->_refresh();
         $this->assertSame($newBookTitle, $scienceBook->getTitle());
@@ -164,21 +175,26 @@ final class ScienceBookUiTest extends ApiTestCase
     public function it_does_not_allow_to_update_a_book_if_there_is_a_validation_error(): void
     {
         $scienceBook = ScienceBookFactory::createOne();
+        $originalTitle = $scienceBook->getTitle();
 
         $newBookTitle = 'The Book of Why';
         $newBookAuthorLastName = 'Pearl';
 
         $this->client->request('GET', '/science-books/' . $scienceBook->getId() . '/edit');
-        $this->client->submitForm('Save changes', [
+
+        $this->submitForm('Save changes', [
             'science_book[title]' => $newBookTitle,
             'science_book[author][firstName]' => null,
             'science_book[author][lastName]' => $newBookAuthorLastName,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        self::getContainer()->get('doctrine')->getManager()->clear();
 
         $scienceBook->_refresh();
-        $this->assertNotEquals($newBookTitle, $scienceBook->getTitle());
+
+        $this->assertSame($originalTitle, $scienceBook->getTitle());
     }
 
     #[Test]
@@ -187,12 +203,13 @@ final class ScienceBookUiTest extends ApiTestCase
         ScienceBookFactory::createOne();
 
         $this->client->request('GET', '/science-books/');
-        $this->client->submitForm('Delete');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var ScienceBook[] $books */
-        $books = static::getContainer()->get('app.repository.science_book')->findAll();
+        $books = self::getContainer()->get('app.repository.science_book')->findAll();
 
         $this->assertEmpty($books);
     }
@@ -221,10 +238,10 @@ final class ScienceBookUiTest extends ApiTestCase
         ;
 
         $this->client->request('GET', '/science-books/?criteria[search][value]=history of time');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('<h1>Books</h1>', $content);
         $this->assertStringContainsString(
             sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
@@ -234,10 +251,5 @@ final class ScienceBookUiTest extends ApiTestCase
             sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }

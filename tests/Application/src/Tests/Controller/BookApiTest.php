@@ -13,18 +13,30 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\BookFactory;
 use App\Foundry\Factory\BookTranslationFactory;
 use App\Foundry\Story\DefaultBooksStory;
 use App\Foundry\Story\MoreBooksStory;
+use App\Tests\Trait\JsonApiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-class BookApiTest extends JsonApiTestCase
+final class BookApiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use JsonApiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_creating_a_book(): void
@@ -32,7 +44,7 @@ class BookApiTest extends JsonApiTestCase
         $this->markAsSkippedIfNecessary();
 
         $data =
-<<<EOT
+            <<<EOT
         {
             "translations": {
                 "en_US": {
@@ -45,6 +57,7 @@ EOT;
 
         $this->client->request('POST', '/books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'books/create_response', Response::HTTP_CREATED);
     }
 
@@ -54,7 +67,7 @@ EOT;
         $book = BookFactory::createOne();
 
         $data =
-<<<EOT
+            <<<EOT
         {
              "translations": {
                 "en_US": {
@@ -70,7 +83,8 @@ EOT;
 
         $this->client->request('PUT', '/books/' . $book->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     #[Test]
@@ -79,7 +93,7 @@ EOT;
         $book = BookFactory::createOne();
 
         $data =
- <<<EOT
+            <<<EOT
         {
             "author": "Christie Golden"
         }
@@ -87,7 +101,8 @@ EOT;
 
         $this->client->request('PATCH', '/books/' . $book->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     #[Test]
@@ -97,7 +112,8 @@ EOT;
 
         $this->client->request('DELETE', '/books/' . $book->getId());
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     #[Test]
@@ -120,7 +136,8 @@ EOT;
 
         $this->client->request('GET', '/books/' . $book->getId());
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/show_response');
+
+        $this->assertResponse($response, 'books/show_response', Response::HTTP_OK);
     }
 
     #[Test]
@@ -132,7 +149,8 @@ EOT;
 
         $this->client->request('GET', '/books/');
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/index_response');
+
+        $this->assertResponse($response, 'books/index_response', Response::HTTP_OK);
     }
 
     #[Test]
@@ -144,7 +162,8 @@ EOT;
 
         $this->client->request('GET', '/books/', ['page' => 2]);
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/paginated_index_response');
+
+        $this->assertResponse($response, 'books/paginated_index_response', Response::HTTP_OK);
     }
 
     #[Test]
@@ -156,7 +175,8 @@ EOT;
 
         $this->client->request('GET', '/books/3');
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NOT_FOUND);
+
+        $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     #[Test]
@@ -169,7 +189,7 @@ EOT;
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['name' => 'DESC']]);
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     #[Test]
@@ -182,7 +202,7 @@ EOT;
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['name' => 'John']]);
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     #[Test]
@@ -195,7 +215,7 @@ EOT;
         $this->client->request('GET', '/sortable-books/', ['sorting' => ['id' => 'DESC']]);
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     #[Test]
@@ -208,7 +228,7 @@ EOT;
         $this->client->request('GET', '/filterable-books/', ['criteria' => ['author' => 'J.R.R. Tolkien']]);
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     #[Test]
@@ -230,6 +250,7 @@ EOT;
 
         $this->client->request('POST', '/create-custom-book', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'books/create_response', Response::HTTP_CREATED);
     }
 
@@ -242,7 +263,8 @@ EOT;
 
         $this->client->request('GET', '/find-custom-books');
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/index_response');
+
+        $this->assertResponse($response, 'books/index_response', Response::HTTP_OK);
     }
 
     #[Test]
@@ -254,13 +276,7 @@ EOT;
 
         $this->client->request('GET', '/find-custom-book');
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'books/show_response');
-    }
 
-    private function markAsSkippedIfNecessary(): void
-    {
-        if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
-            $this->markTestSkipped();
-        }
+        $this->assertResponse($response, 'books/show_response', Response::HTTP_OK);
     }
 }

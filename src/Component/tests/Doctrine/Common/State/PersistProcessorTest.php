@@ -64,9 +64,17 @@ final class PersistProcessorTest extends TestCase
         $operation = $this->prophesize(Operation::class);
         $data = new \stdClass();
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager);
+        $metadata = $this->prophesize(ClassMetadata::class);
+
+        $metadata->isChangeTrackingDeferredExplicit()->willReturn(false);
+
+        $this->managerRegistry
+            ->getManagerForClass(\stdClass::class)
+            ->willReturn($manager->reveal())
+        ;
+
         $manager->contains($data)->willReturn(true);
-        $manager->getClassMetadata(\stdClass::class)->willReturn($data);
+        $manager->getClassMetadata(\stdClass::class)->willReturn($metadata->reveal());
 
         $manager->persist($data)->shouldNotBeCalled();
         $manager->flush()->shouldBeCalled();

@@ -13,16 +13,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\BlogPostFactory;
+use App\Tests\Trait\JsonApiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
-use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class BlogPostApiTest extends JsonApiTestCase
+final class BlogPostApiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use JsonApiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_creating_a_blog_post(): void
@@ -31,6 +42,7 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('POST', '/blog-posts/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'blog-posts/create_response', Response::HTTP_CREATED);
     }
 
@@ -46,6 +58,7 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/to_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'blog-posts/to_review_response', Response::HTTP_OK);
     }
 
@@ -61,6 +74,7 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'blog-posts/publish_response', Response::HTTP_OK);
     }
 
@@ -76,6 +90,7 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'blog-posts/reject_response', Response::HTTP_OK);
     }
 
@@ -91,7 +106,8 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
     #[Test]
@@ -106,17 +122,7 @@ final class BlogPostApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
-    }
 
-    private function markAsSkippedIfNecessary(): void
-    {
-        $container = self::getContainer();
-
-        $stateMachine = $container->getParameter('sylius.resource.settings')['state_machine_component'];
-
-        if (ResourceBundleInterface::STATE_MACHINE_SYMFONY !== $stateMachine) {
-            $this->markTestSkipped();
-        }
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 }

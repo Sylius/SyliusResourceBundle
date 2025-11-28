@@ -13,21 +13,34 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\PullRequestFactory;
+use App\Tests\Trait\JsonApiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class PullRequestApiTest extends JsonApiTestCase
+final class PullRequestApiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use JsonApiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_creating_a_pull_request(): void
     {
         $this->client->request('POST', '/pull-requests/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'pull-requests/create_response', Response::HTTP_CREATED);
     }
 
@@ -41,6 +54,7 @@ final class PullRequestApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/submit', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'pull-requests/submit_response', Response::HTTP_OK);
     }
 
@@ -54,6 +68,7 @@ final class PullRequestApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'pull-requests/wait_for_review_response', Response::HTTP_OK);
     }
 
@@ -67,6 +82,7 @@ final class PullRequestApiTest extends JsonApiTestCase
 
         $this->client->request('PUT', '/pull-requests/' . $pullRequest->getId() . '/wait_for_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 }

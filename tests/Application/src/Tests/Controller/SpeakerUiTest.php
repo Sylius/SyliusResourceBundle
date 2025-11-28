@@ -13,22 +13,31 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\Conference\Entity\Speaker;
 use App\Conference\Factory\SpeakerFactory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use App\Tests\Trait\UiTestTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SpeakerUiTest extends ApiTestCase
+final class SpeakerUiTest extends WebTestCase
 {
     use Factories;
     use ResetDatabase;
+    use UiTestTrait;
 
-    /** @test */
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    #[Test]
     public function it_allows_browsing_speakers(): void
     {
         SpeakerFactory::new()
@@ -44,76 +53,73 @@ final class SpeakerUiTest extends ApiTestCase
         ;
 
         $this->client->request('GET', '/admin/speakers');
-        $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
-        $content = $response->getContent();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
+        $content = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('<td>Francis Hilaire</td>', $content);
         $this->assertStringContainsString('<td>Gregor Šink</td>', $content);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_accessing_speaker_creation_page(): void
     {
         $this->client->request('GET', '/admin/speakers/new');
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_creating_a_speaker(): void
     {
         $this->client->request('GET', '/admin/speakers/new');
-        $this->client->submitForm('Create', [
+
+        $this->submitForm('Create', [
             'speaker[firstName]' => 'Francis',
             'speaker[lastName]' => 'Hilaire',
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var Speaker|null $speaker */
-        $speaker = static::getContainer()->get(EntityManagerInterface::class)->getRepository(Speaker::class)->findOneBy(['firstName' => 'Francis']);
+        $speaker = self::getContainer()->get(EntityManagerInterface::class)->getRepository(Speaker::class)->findOneBy(['firstName' => 'Francis']);
 
         $this->assertNotNull($speaker);
         $this->assertSame('Francis Hilaire', $speaker->getFullName());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_updating_a_speaker(): void
     {
         $speaker = SpeakerFactory::createOne();
 
         $this->client->request('GET', '/admin/speakers/' . $speaker->getId() . '/edit');
-        $this->client->submitForm('Save changes', [
+
+        $this->submitForm('Save changes', [
             'speaker[firstName]' => 'Francis',
             'speaker[lastName]' => 'Hilaire',
         ]);
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         $speaker->_refresh();
         $this->assertSame('Francis Hilaire', $speaker->getFullName());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_deleting_a_speaker(): void
     {
         SpeakerFactory::createOne();
 
         $this->client->request('GET', '/admin/speakers');
-        $this->client->submitForm('Delete');
 
-        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+        $this->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, Response::HTTP_FOUND);
 
         /** @var Speaker[] $speakers */
-        $speakers = static::getContainer()->get(EntityManagerInterface::class)->getRepository(Speaker::class)->findAll();
+        $speakers = self::getContainer()->get(EntityManagerInterface::class)->getRepository(Speaker::class)->findAll();
 
         $this->assertEmpty($speakers);
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }

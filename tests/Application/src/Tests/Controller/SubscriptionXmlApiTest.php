@@ -16,15 +16,26 @@ namespace App\Tests\Controller;
 use App\Kernel;
 use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use App\Tests\Trait\XmlApiTestTrait;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SubscriptionXmlApiTest extends XmlApiTestCase
+final class SubscriptionXmlApiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
+    use XmlApiTestTrait;
+
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     #[Test]
     public function it_allows_showing_a_subscription(): void
@@ -34,7 +45,7 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId());
+        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId(), [], [], $this->getXmlHeaders());
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'subscriptions/show_response', Response::HTTP_OK);
@@ -45,7 +56,7 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
     {
         DefaultSubscriptionsStory::load();
 
-        $this->client->request('GET', '/ajax/subscriptions');
+        $this->client->request('GET', '/ajax/subscriptions', [], [], $this->getXmlHeaders());
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'subscriptions/index_response', Response::HTTP_OK);
@@ -57,12 +68,13 @@ final class SubscriptionXmlApiTest extends XmlApiTestCase
         $data = <<<EOT
 <?xml version="1.0"?>
 <root>
-	<email>marty.mcfly@bttf.com</email>
+    <email>marty.mcfly@bttf.com</email>
 </root>
 EOT;
 
-        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
+        $this->client->request('POST', '/ajax/subscriptions', [], [], $this->getXmlHeaders(), $data);
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
     }
 
@@ -72,11 +84,11 @@ EOT;
         $data = <<<EOT
 <?xml version="1.0"?>
 <root>
-	<email></email>
+    <email></email>
 </root>
 EOT;
 
-        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
+        $this->client->request('POST', '/ajax/subscriptions', [], [], $this->getXmlHeaders(), $data);
 
         $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/create_validation' : 'subscriptions/create_validation_legacy';
 
@@ -91,13 +103,14 @@ EOT;
         $data = <<<EOT
 <?xml version="1.0"?>
 <root>
-	<email>calvin.klein@bttf.com</email>
+    <email>calvin.klein@bttf.com</email>
 </root>
 EOT;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], $this->getXmlHeaders(), $data);
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     #[Test]
@@ -108,11 +121,11 @@ EOT;
         $data = <<<EOT
 <?xml version="1.0"?>
 <root>
-	<email></email>
+    <email></email>
 </root>
 EOT;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], $this->getXmlHeaders(), $data);
 
         $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/update_validation' : 'subscriptions/update_validation_legacy';
 
@@ -124,13 +137,9 @@ EOT;
     {
         $subscription = SubscriptionFactory::createOne();
 
-        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
+        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId(), [], [], $this->getXmlHeaders());
         $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
-    }
 
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 }
