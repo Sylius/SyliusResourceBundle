@@ -89,7 +89,7 @@
         "symfony/uid": "^6.4 || ^7.1",
         "symfony/workflow": "^6.4 || ^7.1",
         "twig/twig": "^3.14",
-        "vimeo/psalm": "^5.26",
+        "vimeo/psalm": "^6.13",
         "willdurand/hateoas-bundle": "^2.5",
         "winzou/state-machine-bundle": "^0.6.2",
         "zenstruck/foundry": "^2.3 <2.7"
