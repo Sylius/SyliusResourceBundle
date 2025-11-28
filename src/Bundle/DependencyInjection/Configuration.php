@@ -18,15 +18,22 @@ use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
+    /**
+     * @phpstan-return TreeBuilder<'array'>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sylius_resource');
-        /** @var ArrayNodeDefinition $rootNode */
+        /**
+         * @var ArrayNodeDefinition $rootNode
+         * @phpstan-var ArrayNodeDefinition<NodeParentInterface|null> $rootNode
+         */
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addResourcesSection($rootNode);
@@ -60,6 +67,9 @@ final class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+    /**
+     * @phpstan-param ArrayNodeDefinition<NodeParentInterface|null> $node
+     */
     private function addResourcesSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -112,6 +122,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @phpstan-param ArrayNodeDefinition<NodeParentInterface|null> $node
+     */
     private function addSettingsSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -138,6 +151,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @phpstan-param ArrayNodeDefinition<NodeParentInterface|null> $node
+     */
     private function addTranslationsSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -151,6 +167,9 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
+    /**
+     * @phpstan-param ArrayNodeDefinition<NodeParentInterface|null> $node
+     */
     private function addDriversSection(ArrayNodeDefinition $node): void
     {
         $node

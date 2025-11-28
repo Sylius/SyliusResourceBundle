@@ -115,3 +115,27 @@ parameters:
         -
             message: '#If condition is always false#'
             path: src/Bundle/Event/ResourceControllerEvent.php
+
+        # Symfony 7.4 introduced generics on NodeBuilder which phpstan-symfony does not handle correctly yet
+        # See: https://github.com/phpstan/phpstan-symfony/issues/431
+        -
+            message: '#Call to method \w+Node\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder<.*>#'
+            identifier: class.notFound
+
+        # Symfony 7.4 introduced generics for TreeBuilder and ArrayNodeDefinition.
+        # These classes are not generic in Symfony 6.4, causing PHPStan errors when analyzing against the older version.
+        # This rule allows us to keep generic type hints for Symfony 7 while ignoring errors on Symfony 6.
+        -
+            message: '#PHPDoc tag @(return|param|var) .* contains generic type .* but class .* is not generic\.#'
+            paths:
+                - 'src/Bundle/DependencyInjection/'
+                - 'src/Bundle/Routing/'
+
+        # Specific ignore for TreeBuilder return type on Symfony 6.4.
+        # Required to allow "TreeBuilder<mixed>" or "TreeBuilder<'array'>" return types.
+        -
+            message: '#PHPDoc tag @return contains generic type .*TreeBuilder.* but class .*TreeBuilder is not generic#'
+            paths:
+                - 'src/Bundle/DependencyInjection/Configuration.php'
+                - 'src/Bundle/DependencyInjection/PagerfantaConfiguration.php'
+                - 'src/Bundle/Routing/Configuration.php'
