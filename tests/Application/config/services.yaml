@@ -92,18 +92,6 @@ services:
     App\Shared\:
         resource: '../src/Shared'
 
-    App\BoardGameBlog\:
-        resource: '../src/BoardGameBlog'
-
-    App\Conference\:
-        resource: '../src/Conference'
-
-    App\Subscription\:
-        resource: '../src/Subscription'
-
-    App\Subscription\Factory\SubscriptionFactory:
-        decorates: 'app.factory.subscription'
-
     app.service.legacy_autowired_repository:
         class: App\Service\LegacyAutowiredRepositoryService
         autowire: true
@@ -115,3 +103,24 @@ services:
     app.service.legacy_autowired_translatable_factory:
         class: App\Service\LegacyAutowiredTranslatableFactoryService
         autowire: true
+
+# Grid-dependent namespaces are loaded differently depending on environment
+when@test:
+    services:
+        App\BoardGameBlog\:
+            resource: '../src/BoardGameBlog'
+            autowire: true
+            autoconfigure: true
+
+        App\Conference\:
+            resource: '../src/Conference'
+            autowire: true
+            autoconfigure: true
+
+        App\Subscription\:
+            resource: '../src/Subscription'
+            autowire: true
+            autoconfigure: true
+
+        App\Subscription\Factory\SubscriptionFactory:
+            decorates: 'app.factory.subscription'

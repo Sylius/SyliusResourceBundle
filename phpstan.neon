@@ -115,3 +115,17 @@ parameters:
         -
             message: '#If condition is always false#'
             path: src/Bundle/Event/ResourceControllerEvent.php
+        # Symfony <7.4 - TreeBuilder and ArrayNodeDefinition are not generic in Symfony < 7.4
+        # but are generic in Symfony 7.4+. We use generics for better type safety in newer versions.
+        - message: '#^PHPDoc tag .+ is not generic\.$#'
+          identifier: generics.notGeneric
+          count: 11
+          path: src/Bundle/DependencyInjection/Configuration.php
+        - message: '#^PHPDoc tag .+ is not generic\.$#'
+          identifier: generics.notGeneric
+          count: 5
+          path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
+        - message: '#^PHPDoc tag .+ is not generic\.$#'
+          identifier: generics.notGeneric
+          count: 3
+          path: src/Bundle/Routing/Configuration.php
