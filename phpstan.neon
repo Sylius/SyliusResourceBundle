@@ -115,3 +115,13 @@ parameters:
         -
             message: '#If condition is always false#'
             path: src/Bundle/Event/ResourceControllerEvent.php
+
+        # Symfony Config Component generics compatibility
+        # Symfony 7.4+ introduced generic types for TreeBuilder and ArrayNodeDefinition
+        # Symfony 6.4 doesn't have these generic types yet
+        # We ignore the "missing generic type specification" errors from Symfony 7.4+
+        # and don't use generic type annotations to maintain compatibility with Symfony 6.4
+        # See: src/Bundle/DependencyInjection/Configuration.php
+        - '/Method .+::getConfigTreeBuilder\(\) return type with generic class Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder does not specify its types: T/'
+        - '/PHPDoc tag @var for variable \$rootNode contains generic class Symfony\\Component\\Config\\Definition\\Builder\\ArrayNodeDefinition but does not specify its types: TParent/'
+        - '/Method .+::.+\(\) has parameter \$node with generic class Symfony\\Component\\Config\\Definition\\Builder\\ArrayNodeDefinition but does not specify its types: TParent/'
