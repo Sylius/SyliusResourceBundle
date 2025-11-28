@@ -56,6 +56,7 @@
         "sylius/resource": "self.version"
     },
     "require-dev": {
+        "coduo/php-matcher": "^6.0",
         "doctrine/doctrine-bundle": "^2.13 || ^3.0",
         "doctrine/orm": "^2.18 || ^3.3",
         "doctrine/phpcr-odm": "^2.1",
