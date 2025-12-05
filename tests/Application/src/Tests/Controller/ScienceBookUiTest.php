@@ -83,7 +83,7 @@ final class ScienceBookUiTest extends WebTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/science-books/');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/science-books/' : '/science-books');
         $response = $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
@@ -201,7 +201,7 @@ final class ScienceBookUiTest extends WebTestCase
     {
         ScienceBookFactory::createOne();
 
-        $this->client->request('GET', '/science-books/');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/science-books/' : '/science-books');
         $this->client->submitForm('Delete');
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
@@ -235,7 +235,7 @@ final class ScienceBookUiTest extends WebTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/science-books/?criteria[search][value]=history of time');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/science-books/?criteria[search][value]=history of time' : '/science-books?criteria[search][value]=history of time');
         $response = $this->client->getResponse();
 
         $this->assertResponseStatusCodeSame(expectedCode: Response::HTTP_OK);
@@ -249,5 +249,10 @@ final class ScienceBookUiTest extends WebTestCase
             sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
     }
 }

@@ -31,7 +31,7 @@ final class BlogPostApiTest extends ApiTestCase
     {
         $this->markAsSkippedIfNecessary();
 
-        $this->client->request('POST', '/blog-posts/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/blog-posts/' : 'blog-posts', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -174,5 +174,10 @@ final class BlogPostApiTest extends ApiTestCase
         if (ResourceBundleInterface::STATE_MACHINE_SYMFONY !== $stateMachine) {
             $this->markTestSkipped();
         }
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
     }
 }

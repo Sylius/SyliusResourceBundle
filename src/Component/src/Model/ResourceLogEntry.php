@@ -14,6 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\Model;
 
 use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
+use Sylius\Resource\Exception\RuntimeException;
+
+if (!class_exists(AbstractLogEntry::class)) {
+    throw new RuntimeException(sprintf('Cannot use the "%s" class when the "gedmo/doctrine-extensions" package is not installed.', ResourceLogEntry::class));
+}
 
 abstract class ResourceLogEntry extends AbstractLogEntry implements ResourceInterface
 {

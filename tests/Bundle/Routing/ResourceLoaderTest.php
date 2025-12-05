@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Routing;
 
+use Behat\Transliterator\Transliterator;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Routing\ResourceLoader;
 use Sylius\Bundle\ResourceBundle\Routing\RouteFactoryInterface;
@@ -225,6 +226,8 @@ YAML;
 
     public function testItGeneratesRoutingWithBcLayerEnabled(): void
     {
+        $this->markAsSkippedIfBcLayerCannotBeEnabled();
+
         $loader = $this->createLoaderWithMockedDependencies(true);
 
         $resource = <<<YAML
@@ -261,6 +264,8 @@ YAML;
 
     public function testItGeneratesBulkDeleteRoutingWithBcLayerEnabled(): void
     {
+        $this->markAsSkippedIfBcLayerCannotBeEnabled();
+
         $loader = $this->createLoaderWithMockedDependencies(true);
 
         $resource = <<<YAML
@@ -331,5 +336,12 @@ YAML;
         $this->assertArrayHasKey('_sylius', $route->getDefaults());
         $this->assertArrayHasKey($key, $route->getDefaults()['_sylius']);
         $this->assertEquals($expectedValue, $route->getDefaults()['_sylius'][$key]);
+    }
+
+    private function markAsSkippedIfBcLayerCannotBeEnabled(): void
+    {
+        if (!class_exists(Transliterator::class)) {
+            $this->markTestSkipped('This test requires The Behat Transliterator.');
+        }
     }
 }

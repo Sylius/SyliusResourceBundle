@@ -42,7 +42,7 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
 
         $this->factory = new ResourceRouteCollectionFactory(
-            new OperationRouteFactory($this->routePathFactory),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(), false),
             new AttributesResourceMetadataCollectionFactory(
                 $this->resourceRegistry,
                 new OperationRouteNameFactory(),
@@ -94,6 +94,7 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
         $resource = new ResourceMetadata(
             alias: 'app.dummy',
             name: 'dummy',
+            pluralName: 'dummies',
             operations: [
                 'app_dummy_custom' => $nonHttpOperation,
                 'app_dummy_index' => $httpOperation,
@@ -113,7 +114,7 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
         $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
 
         $factory = new ResourceRouteCollectionFactory(
-            new OperationRouteFactory($this->routePathFactory),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(), false),
             $resourceMetadataFactory,
             $this->resourceRegistry,
         );

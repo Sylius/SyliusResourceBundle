@@ -33,7 +33,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         // Test index
         $bookIndex = $routesCollection->get('app_book_index');
         $this->assertNotNull($bookIndex);
-        $this->assertEquals('/books/', $bookIndex->getPath());
+        $this->assertEquals($this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books', $bookIndex->getPath());
         $this->assertEquals(['GET'], $bookIndex->getMethods());
         $this->assertEquals([
             '_controller' => 'app.controller.book::indexAction',
@@ -69,7 +69,7 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         // Test update
         $bookUpdate = $routesCollection->get('app_book_update');
         $this->assertNotNull($bookUpdate);
-        $this->assertEquals(['GET', 'PUT', 'PATCH'], $bookUpdate->getMethods());
+        $this->assertEquals($this->isRoutingPathBcLayerEnabled() ? ['GET', 'PUT', 'PATCH'] : ['GET', 'PUT', 'PATCH', 'POST'], $bookUpdate->getMethods());
         $this->assertEquals('/books/{id}/edit', $bookUpdate->getPath());
         $this->assertEquals([
             '_controller' => 'app.controller.book::updateAction',
@@ -81,8 +81,8 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         // Test delete
         $bookDelete = $routesCollection->get('app_book_delete');
         $this->assertNotNull($bookDelete);
-        $this->assertEquals('/books/{id}', $bookDelete->getPath());
-        $this->assertEquals(['DELETE'], $bookDelete->getMethods());
+        $this->assertEquals($this->isRoutingPathBcLayerEnabled() ? '/books/{id}' : '/books/{id}/delete', $bookDelete->getPath());
+        $this->assertEquals($this->isRoutingPathBcLayerEnabled() ? ['DELETE'] : ['DELETE', 'POST'], $bookDelete->getMethods());
         $this->assertEquals([
             '_controller' => 'app.controller.book::deleteAction',
             '_sylius' => [
@@ -605,5 +605,10 @@ final class CrudRoutesAttributesLoaderTest extends KernelTestCase
         // Test create
         $bookCreate = $routesCollection->get(sprintf('app_%s_book_create', $section));
         $this->assertNotNull($bookCreate);
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
     }
 }

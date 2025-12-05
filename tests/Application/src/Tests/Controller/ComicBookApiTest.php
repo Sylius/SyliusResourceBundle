@@ -42,7 +42,7 @@ final class ComicBookApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', '/v1/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/v1/comic-books/' : '/v1/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -79,7 +79,7 @@ final class ComicBookApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', '/v1.2/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/v1.2/comic-books/' : '/v1.2/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -214,14 +214,16 @@ EOT;
 
         DefaultComicBooksStory::load();
 
-        $this->client->request('GET', '/v1/comic-books/');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/v1/comic-books/' : '/v1/comic-books');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
+        $selfHref = $this->isRoutingPathBcLayerEnabled() ? "\/v1\/comic-books\/?page=1&limit=10" : "\/v1\/comic-books?page=1&limit=10";
+
         $this->assertResponseMatchesPattern(
-            <<<'JSON'
+            <<<JSON
             {
                 "page": 1,
                 "limit": 10,
@@ -229,13 +231,13 @@ EOT;
                 "total": 2,
                 "_links": {
                     "self": {
-                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     },
                     "first": {
-                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     },
                     "last": {
-                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     }
                 },
                 "_embedded": {
@@ -270,14 +272,16 @@ EOT;
 
         DefaultComicBooksStory::load();
 
-        $this->client->request('GET', '/v1.2/comic-books/');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/v1.2/comic-books/' : 'v1.2/comic-books');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
+        $selfHref = $this->isRoutingPathBcLayerEnabled() ? "\/v1.2\/comic-books\/?page=1&limit=10" : "\/v1.2\/comic-books?page=1&limit=10";
+
         $this->assertResponseMatchesPattern(
-            <<<'JSON'
+            <<<JSON
             {
                 "page": 1,
                 "limit": 10,
@@ -285,13 +289,13 @@ EOT;
                 "total": 2,
                 "_links": {
                     "self": {
-                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     },
                     "first": {
-                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     },
                     "last": {
-                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                        "href": "{$selfHref}"
                     }
                 },
                 "_embedded": {
@@ -340,5 +344,10 @@ EOT;
                 ->withLastName('Sorrentino'),
             )
         ;
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
     }
 }

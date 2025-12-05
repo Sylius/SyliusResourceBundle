@@ -25,6 +25,8 @@ final class GedmoApiTest extends ApiTestCase
     #[Test]
     public function it_allows_creating_a_comic_book(): void
     {
+        $this->markAsSkippedIfGedmoDoctrineExtensionsIsNotAvailable();
+
         $data =
 <<<EOT
         {
@@ -32,7 +34,7 @@ final class GedmoApiTest extends ApiTestCase
         }
 EOT;
 
-        $this->client->request('POST', '/gedmos/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/gedmos/' : '/gedmos', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -47,5 +49,17 @@ EOT;
             }
             JSON
         );
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfGedmoDoctrineExtensionsIsNotAvailable(): void
+    {
+        if (!class_exists(SortableListener::class)) {
+            $this->markTestSkipped('Gedmo Doctrine Extension is not available.');
+        }
     }
 }

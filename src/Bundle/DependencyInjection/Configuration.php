@@ -55,8 +55,10 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue('sylius.resource_controller.authorization_checker.disabled')
                     ->cannotBeEmpty()
                 ->end()
-                ->booleanNode('routing_path_bc_layer')
-                    ->defaultTrue()
+                ->booleanNode('routing_path_bc_layer')->end()
+                ->scalarNode('path_segment_name_generator')
+                    ->defaultValue('sylius.metadata.path_segment_name_generator.dash')
+                    ->info('Specify a path name generator to use.')
                 ->end()
             ->end()
         ;

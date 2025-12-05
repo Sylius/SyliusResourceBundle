@@ -46,7 +46,7 @@ class BookApiTest extends ApiTestCase
         }
 EOT;
 
-        $this->client->request('POST', '/books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -177,7 +177,7 @@ EOT;
 
         DefaultBooksStory::load();
 
-        $this->client->request('GET', '/books/');
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -193,7 +193,7 @@ EOT;
 
         MoreBooksStory::load();
 
-        $this->client->request('GET', '/books/', ['page' => 2]);
+        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books', ['page' => 2]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -671,5 +671,10 @@ EOT;
     public function assert()
     {
         return $this->assertEquals();
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
     }
 }
