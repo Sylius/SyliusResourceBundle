@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class ScienceBookType extends AbstractResourceType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('title', TextType::class)
