@@ -1,3 +1,9 @@
+## UPGRADE FOR `1.14.x`
+
+### FROM `1.13.x` to `1.14.x`
+
+The minimum required PHP version is now 8.2.
+
 ## UPGRADE FOR `1.13.x`
 
 ### FROM `1.12.x` to `1.13.x`
