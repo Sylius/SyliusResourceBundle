@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Kernel;
 use App\Subscription\Foundry\Factory\SubscriptionFactory;
 use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class SubscriptionJsonApiTest extends JsonApiTestCase
+final class SubscriptionJsonApiTest extends ApiTestCase
 {
     use Factories;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_showing_a_subscription(): void
@@ -36,9 +36,19 @@ final class SubscriptionJsonApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId());
-        $response = $this->client->getResponse();
 
-        $this->assertResponse($response, 'subscriptions/show_response', Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "state": "new",
+                "email": "marty.mcfly@bttf.com"
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -47,41 +57,140 @@ final class SubscriptionJsonApiTest extends JsonApiTestCase
         DefaultSubscriptionsStory::load();
 
         $this->client->request('GET', '/ajax/subscriptions');
-        $response = $this->client->getResponse();
 
-        $this->assertResponse($response, 'subscriptions/index_response', Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "items": [
+                    {
+                        "state": "new",
+                        "email": "marty.mcfly@bttf.com"
+                    },
+                    {
+                        "state": "new",
+                        "email": "doc.brown@bttf.com"
+                    },
+                    {
+                        "state": "accepted",
+                        "email": "biff.tannen@bttf.com"
+                    },
+                    {
+                        "state": "new",
+                        "email": "lorraine.baines@bttf.com"
+                    },
+                    {
+                        "state": "new",
+                        "email": "george.mcfly@bttf.com"
+                    },
+                    {
+                        "state": "new",
+                        "email": "jennifer.parker@bttf.com"
+                    }
+                ],
+                "pagination": {
+                    "current_page": 1,
+                    "has_previous_page": false,
+                    "has_next_page": false,
+                    "per_page": 10,
+                    "total_items": 6,
+                    "total_pages": 1
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
     public function it_allows_creating_a_subscription(): void
     {
         $data =
-            <<<EOT
-        {
-            "email": "marty.mcfly@bttf.com"
-        }
-EOT;
+            <<<'JSON'
+            {
+                "email": "marty.mcfly@bttf.com"
+            }
+            JSON
+        ;
 
         $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'subscriptions/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "state": "new",
+                "email": "marty.mcfly@bttf.com"
+            }
+            JSON
+        );
     }
 
     #[Test]
     public function it_does_not_allow_to_create_a_subscription_if_there_is_a_validation_error(): void
     {
         $data =
-            <<<EOT
-        {
-            "email": ""
-        }
-EOT;
+            <<<'JSON'
+            {
+                "email": ""
+            }
+            JSON
+        ;
 
         $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
-        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/create_validation' : 'subscriptions/create_validation_legacy';
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
 
-        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (Kernel::VERSION_ID < 60400) {
+            $this->assertResponseMatchesPattern(
+                <<<'JSON'
+                {
+                    "type": "https://symfony.com/errors/validation",
+                    "title": "Validation Failed",
+                    "detail": "email: This value should not be blank.",
+                    "violations": [
+                        {
+                            "propertyPath": "email",
+                            "title": "This value should not be blank.",
+                            "parameters": {
+                                "{{ value }}": "\"\""
+                            },
+                            "type": "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
+                        }
+                    ]
+                }
+                JSON
+            );
+
+            return;
+        }
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "type": "https://symfony.com/errors/validation",
+                "title": "Validation Failed",
+                "detail": "email: This value should not be blank.",
+                "violations": [
+                    {
+                        "propertyPath": "email",
+                        "title": "This value should not be blank.",
+                        "template": "This value should not be blank.",
+                        "parameters": {
+                            "{{ value }}": "\"\""
+                        },
+                        "type": "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
+                    }
+                ]
+            }
+        JSON
+        );
     }
 
     #[Test]
@@ -90,15 +199,17 @@ EOT;
         $subscription = SubscriptionFactory::createOne();
 
         $data =
-            <<<EOT
-        {
-            "email": "calvin.klein@bttf.com"
-        }
-EOT;
+            <<<'JSON'
+            {
+                "email": "calvin.klein@bttf.com"
+            }
+            JSON
+        ;
 
         $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     #[Test]
@@ -115,9 +226,53 @@ EOT;
 
         $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
-        $file = Kernel::VERSION_ID >= 60400 ? 'subscriptions/update_validation' : 'subscriptions/update_validation_legacy';
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
 
-        $this->assertResponse($this->client->getResponse(), $file, Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (Kernel::VERSION_ID < 60400) {
+            $this->assertResponseMatchesPattern(
+                <<<'JSON'
+                {
+                    "type": "https://symfony.com/errors/validation",
+                    "title": "Validation Failed",
+                    "detail": "email: This value should not be blank.",
+                    "violations": [
+                        {
+                            "propertyPath": "email",
+                            "title": "This value should not be blank.",
+                            "parameters": {
+                                "{{ value }}": "\"\""
+                            },
+                            "type": "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
+                        }
+                    ]
+                }
+                JSON
+            );
+
+            return;
+        }
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "type": "https://symfony.com/errors/validation",
+                "title": "Validation Failed",
+                "detail": "email: This value should not be blank.",
+                "violations": [
+                    {
+                        "propertyPath": "email",
+                        "title": "This value should not be blank.",
+                        "template": "This value should not be blank.",
+                        "parameters": {
+                            "{{ value }}": "\"\""
+                        },
+                        "type": "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
+                    }
+                ]
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -126,12 +281,8 @@ EOT;
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
-    }
 
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 }

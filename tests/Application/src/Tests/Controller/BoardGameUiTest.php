@@ -13,21 +13,30 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\ApiTestCase;
 use App\BoardGameBlog\Domain\Model\BoardGame;
 use App\BoardGameBlog\Domain\Repository\BoardGameRepositoryInterface;
 use App\BoardGameBlog\Domain\ValueObject\BoardGameName;
 use App\BoardGameBlog\Infrastructure\Foundry\Factory\BoardGameFactory;
-use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
-use Coduo\PHPMatcher\Matcher;
+use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class BoardGameUiTest extends ApiTestCase
+final class BoardGameUiTest extends WebTestCase
 {
     use Factories;
+    use ResetDatabase;
 
-    /** @test */
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = self::createClient();
+    }
+
+    #[Test]
     public function it_allows_showing_a_board_game(): void
     {
         $boardGame = BoardGameFactory::new()
@@ -38,13 +47,14 @@ final class BoardGameUiTest extends ApiTestCase
         $this->client->request('GET', '/admin/board-games/' . $boardGame->id());
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $content = $response->getContent();
         $this->assertStringContainsString(sprintf('ID: %s', $boardGame->id()), $content);
         $this->assertStringContainsString('Name: Ticket to Ride', $content);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_browsing_board_games(): void
     {
         $stoneAgeBoardGame = BoardGameFactory::new()
@@ -60,7 +70,8 @@ final class BoardGameUiTest extends ApiTestCase
         $this->client->request('GET', '/admin/board-games');
         $response = $this->client->getResponse();
 
-        $this->assertResponseCode($response, Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $content = $response->getContent();
 
         $this->assertStringContainsString('<td>Stone Age</td>', $content);
@@ -74,15 +85,16 @@ final class BoardGameUiTest extends ApiTestCase
         $this->assertStringContainsString(sprintf('<form action="/admin/board-games/%s/delete" method="post">', $ticketToRideBoardGame->id()), $content);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_accessing_board_game_creation_page(): void
     {
         $this->client->request('GET', '/admin/board-games/new');
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_OK);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_creating_a_board_game(): void
     {
         $this->client->request('GET', '/admin/board-games/new');
@@ -99,7 +111,7 @@ final class BoardGameUiTest extends ApiTestCase
         $this->assertSame('Puerto Rico', (string) $boardGame->name());
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_create_a_board_game_if_there_is_a_validation_error(): void
     {
         $this->client->request('GET', '/admin/board-games/new');
@@ -107,10 +119,10 @@ final class BoardGameUiTest extends ApiTestCase
             'board_game[name]' => null,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_updating_a_board_game(): void
     {
         $boardGame = BoardGameFactory::createOne();
@@ -126,7 +138,7 @@ final class BoardGameUiTest extends ApiTestCase
         $this->assertSame('Puerto Rico', (string) $boardGame->name());
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_to_update_a_board_game_if_there_is_a_validation_error(): void
     {
         $boardGame = BoardGameFactory::createOne();
@@ -136,10 +148,10 @@ final class BoardGameUiTest extends ApiTestCase
             'board_game[name]' => null,
         ]);
 
-        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_deleting_a_board_game(): void
     {
         BoardGameFactory::createOne();
@@ -153,10 +165,5 @@ final class BoardGameUiTest extends ApiTestCase
         $boardGames = static::getContainer()->get(BoardGameRepositoryInterface::class)->findAll();
 
         $this->assertEmpty($boardGames);
-    }
-
-    protected function buildMatcher(): Matcher
-    {
-        return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 }

@@ -13,64 +13,91 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ComicBookFactory;
 use App\Foundry\Story\DefaultComicBooksStory;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class ComicBookApiTest extends JsonApiTestCase
+final class ComicBookApiTest extends ApiTestCase
 {
     use Factories;
+    use ResetDatabase;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_creating_a_comic_book(): void
     {
         $data =
-<<<EOT
-        {
-            "title": "Deadpool #1-69",
-            "author": {
-                "firstName": "Joe",
-                "lastName": "Kelly"
+            <<<'JSON'
+            {
+                "title": "Deadpool #1-69",
+                "author": {
+                    "firstName": "Joe",
+                    "lastName": "Kelly"
+                }
             }
-        }
-EOT;
+            JSON
+        ;
 
         $this->client->request('POST', '/v1/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author": {
+                    "first_name": "Joe",
+                    "last_name": "Kelly"
+                },
+                "title": "Deadpool #1-69"
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_versioned_creating_a_comic_book(): void
     {
         $this->markAsSkippedIfNecessary();
 
         $data =
-<<<EOT
-        {
-            "title": "Deadpool #1-69",
-            "author": {
-                "firstName": "Joe",
-                "lastName": "Kelly"
+            <<<'JSON'
+            {
+                "title": "Deadpool #1-69",
+                "author": {
+                    "firstName": "Joe",
+                    "lastName": "Kelly"
+                }
             }
-        }
-EOT;
+            JSON
+        ;
 
         $this->client->request('POST', '/v1.2/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/versioned_create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author_first_name": "Joe",
+                "author_last_name": "Kelly",
+                "title": "Deadpool #1-69"
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_updating_a_comic_book(): void
     {
         $comicBook = self::someComicBook()->create();
@@ -87,13 +114,12 @@ EOT;
 EOT;
 
         $this->client->request('PUT', '/v1/comic-books/' . $comicBook->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_updating_partial_information_about_a_comic_book(): void
     {
         $comicBook = self::someComicBook()->create();
@@ -109,37 +135,54 @@ EOT;
 EOT;
 
         $this->client->request('PATCH', '/v1/comic-books/' . $comicBook->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $book = $this->getContainer()->get('app.repository.comic_book')->find($comicBook->getId());
+        $this->getContainer()->get('doctrine.orm.entity_manager')->refresh($book);
+
+        $this->assertEquals('Joe', $book->getAuthor()->getFirstName());
+        $this->assertEquals('Kelly', $book->getAuthor()->getLastName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_removing_a_comic_book(): void
     {
         $comicBook = self::someComicBook()->create();
 
         $this->client->request('DELETE', '/v1/comic-books/' . $comicBook->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NO_CONTENT);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_showing_a_comic_book(): void
     {
         $comicBook = self::someComicBook()->create();
 
         $this->client->request('GET', '/v1/comic-books/' . $comicBook->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/show_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author": {
+                    "first_name": "Andrea",
+                    "last_name": "Sorrentino"
+                },
+                "title": "Old Man Logan"
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_versioning_of_a_showing_comic_book_serialization(): void
     {
         $this->markAsSkippedIfNecessary();
@@ -147,13 +190,24 @@ EOT;
         $comicBook = self::someComicBook()->create();
 
         $this->client->request('GET', '/v1.2/comic-books/' . $comicBook->getId());
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/versioned_show_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author_first_name": "Andrea",
+                "author_last_name": "Sorrentino",
+                "title": "Old Man Logan"
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_indexing_of_comic_books(): void
     {
         $this->markAsSkippedIfNecessary();
@@ -161,13 +215,55 @@ EOT;
         DefaultComicBooksStory::load();
 
         $this->client->request('GET', '/v1/comic-books/');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/index_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 2,
+                "_links": {
+                    "self": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                    },
+                    "first": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "author": {
+                                "first_name": "Andrea",
+                                "last_name": "Sorrentino"
+                            },
+                            "title": "Old Man Logan"
+                        },
+                        {
+                            "id": @integer@,
+                            "author": {
+                                "first_name": "Brian Michael",
+                                "last_name": "Bendis"
+                            },
+                            "title": "Civil War II"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_allows_versioned_indexing_of_comic_books(): void
     {
         $this->markAsSkippedIfNecessary();
@@ -175,23 +271,61 @@ EOT;
         DefaultComicBooksStory::load();
 
         $this->client->request('GET', '/v1.2/comic-books/');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'comic-books/versioned_index_response');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 2,
+                "_links": {
+                    "self": {
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                    },
+                    "first": {
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                  "items": [
+                    {
+                      "id": @integer@,
+                      "author_first_name": "Andrea",
+                      "author_last_name": "Sorrentino",
+                      "title": "Old Man Logan"
+                    },
+                    {
+                      "id": @integer@,
+                      "author_first_name": "Brian Michael",
+                      "author_last_name": "Bendis",
+                      "title": "Civil War II"
+                    }
+                  ]
+                }
+            }
+            JSON
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_allow_showing_resource_if_it_does_not_exist(): void
     {
         $this->client->request('GET', '/v1/comic-books/3');
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_NOT_FOUND);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     private function markAsSkippedIfNecessary(): void
     {
-        if ('test_without_hateoas' === self::$sharedKernel->getEnvironment()) {
+        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
         }
     }

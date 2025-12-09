@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Foundry\Factory\BlogPostFactory;
 use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class BlogPostApiTest extends JsonApiTestCase
+final class BlogPostApiTest extends ApiTestCase
 {
     use Factories;
+    use ResetDatabase;
 
     #[Test]
     public function it_allows_creating_a_blog_post(): void
@@ -30,8 +32,21 @@ final class BlogPostApiTest extends JsonApiTestCase
         $this->markAsSkippedIfNecessary();
 
         $this->client->request('POST', '/blog-posts/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'blog-posts/create_response', Response::HTTP_CREATED);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": {
+                    "draft": 1
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -45,8 +60,21 @@ final class BlogPostApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/to_review', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'blog-posts/to_review_response', Response::HTTP_OK);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": {
+                    "reviewed": 1
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -60,8 +88,21 @@ final class BlogPostApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'blog-posts/publish_response', Response::HTTP_OK);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": {
+                    "published": 1
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -75,8 +116,21 @@ final class BlogPostApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponse($response, 'blog-posts/reject_response', Response::HTTP_OK);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": {
+                    "rejected": 1
+                }
+            }
+            JSON
+        );
     }
 
     #[Test]
@@ -90,8 +144,9 @@ final class BlogPostApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/publish', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
     }
 
     #[Test]
@@ -105,8 +160,9 @@ final class BlogPostApiTest extends JsonApiTestCase
         ;
 
         $this->client->request('PUT', '/blog-posts/' . $blogPost->getId() . '/reject', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
-        $response = $this->client->getResponse();
-        $this->assertResponseCode($response, Response::HTTP_BAD_REQUEST);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
     }
 
     private function markAsSkippedIfNecessary(): void
