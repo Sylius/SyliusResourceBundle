@@ -22,13 +22,30 @@ final class ThrowNotFoundOnNullExpressionFunctionProviderTest extends TestCase
 {
     private ExpressionLanguage $expressionLanguage;
 
+    private ThrowNotFoundOnNullExpressionFunctionProvider $provider;
+
     protected function setUp(): void
     {
+        $this->provider = new ThrowNotFoundOnNullExpressionFunctionProvider();
         $this->expressionLanguage = new ExpressionLanguage();
-        $this->expressionLanguage->registerProvider(new ThrowNotFoundOnNullExpressionFunctionProvider());
+        $this->expressionLanguage->registerProvider($this->provider);
     }
 
-    public function test_it_returns_the_value_when_not_null(): void
+    public function testItIsInitializable(): void
+    {
+        $this->assertInstanceOf(ThrowNotFoundOnNullExpressionFunctionProvider::class, $this->provider);
+    }
+
+    public function testItProvidesFunctions(): void
+    {
+        $functions = $this->provider->getFunctions();
+
+        $this->assertIsArray($functions);
+        $this->assertCount(1, $functions);
+        $this->assertContainsOnlyInstancesOf(\Symfony\Component\ExpressionLanguage\ExpressionFunction::class, $functions);
+    }
+
+    public function testItReturnsTheValueWhenNotNull(): void
     {
         $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
             'value' => 'foo',
@@ -37,7 +54,65 @@ final class ThrowNotFoundOnNullExpressionFunctionProviderTest extends TestCase
         $this->assertSame('foo', $result);
     }
 
-    public function test_it_throws_not_found_exception_when_null_with_empty_message(): void
+    public function testItReturnsNumericValue(): void
+    {
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => 123,
+        ]);
+
+        $this->assertSame(123, $result);
+    }
+
+    public function testItReturnsArrayValue(): void
+    {
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => ['key' => 'value'],
+        ]);
+
+        $this->assertSame(['key' => 'value'], $result);
+    }
+
+    public function testItReturnsObjectValue(): void
+    {
+        $object = new \stdClass();
+        $object->property = 'value';
+
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => $object,
+        ]);
+
+        $this->assertSame($object, $result);
+        $this->assertSame('value', $result->property);
+    }
+
+    public function testItReturnsFalseValue(): void
+    {
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => false,
+        ]);
+
+        $this->assertFalse($result);
+    }
+
+    public function testItReturnsZeroValue(): void
+    {
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => 0,
+        ]);
+
+        $this->assertSame(0, $result);
+    }
+
+    public function testItReturnsEmptyStringValue(): void
+    {
+        $result = $this->expressionLanguage->evaluate('throw_not_found_on_null(value)', [
+            'value' => '',
+        ]);
+
+        $this->assertSame('', $result);
+    }
+
+    public function testItThrowsNotFoundExceptionWhenNullWithEmptyMessage(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('');
@@ -47,7 +122,7 @@ final class ThrowNotFoundOnNullExpressionFunctionProviderTest extends TestCase
         ]);
     }
 
-    public function test_it_throws_not_found_exception_when_null_with_custom_message(): void
+    public function testItThrowsNotFoundExceptionWhenNullWithCustomMessage(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Custom message.');
@@ -55,5 +130,52 @@ final class ThrowNotFoundOnNullExpressionFunctionProviderTest extends TestCase
         $this->expressionLanguage->evaluate('throw_not_found_on_null(value, "Custom message.")', [
             'value' => null,
         ]);
+    }
+
+    public function testItThrowsNotFoundExceptionWithDetailedMessage(): void
+    {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Resource with ID 123 was not found.');
+
+        $this->expressionLanguage->evaluate('throw_not_found_on_null(value, "Resource with ID 123 was not found.")', [
+            'value' => null,
+        ]);
+    }
+
+    public function testItCompilesExpressionWithoutMessage(): void
+    {
+        $compiled = $this->expressionLanguage->compile('throw_not_found_on_null(value)', ['value']);
+
+        $this->assertIsString($compiled);
+        $this->assertStringContainsString('null !== $value', $compiled);
+        $this->assertStringContainsString('NotFoundHttpException()', $compiled);
+        $this->assertSame(
+            '(null !== $value) ? $value : throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException()',
+            $compiled,
+        );
+    }
+
+    public function testItCompilesExpressionWithMessage(): void
+    {
+        $compiled = $this->expressionLanguage->compile('throw_not_found_on_null(value, "Not found")', ['value']);
+
+        $this->assertIsString($compiled);
+        $this->assertStringContainsString('null !== $value', $compiled);
+        $this->assertStringContainsString('NotFoundHttpException("Not found")', $compiled);
+        $this->assertSame(
+            '(null !== $value) ? $value : throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("Not found")',
+            $compiled,
+        );
+    }
+
+    public function testItCompilesExpressionWithComplexMessage(): void
+    {
+        $compiled = $this->expressionLanguage->compile(
+            'throw_not_found_on_null(value, "Resource not found with the given parameters")',
+            ['value'],
+        );
+
+        $this->assertIsString($compiled);
+        $this->assertStringContainsString('NotFoundHttpException("Resource not found with the given parameters")', $compiled);
     }
 }
