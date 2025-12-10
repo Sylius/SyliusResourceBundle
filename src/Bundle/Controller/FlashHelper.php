@@ -24,6 +24,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelper implements FlashHelperInterface
 {
+    private const UI_TRANSLATION_PREFIX = 'sylius.ui.';
+
     /** @var RequestStack|SessionInterface */
     private $requestStack;
 
@@ -148,9 +150,29 @@ final class FlashHelper implements FlashHelperInterface
     private function getParametersWithName(MetadataInterface $metadata, string $actionName): array
     {
         if (stripos($actionName, 'bulk') !== false) {
-            return ['%resources%' => ucfirst($metadata->getPluralName())];
+            $resourceName = $metadata->getPluralName();
+            $fallback = ucfirst($resourceName);
+
+            return ['%resources%' => $this->translateResourceName($resourceName, $fallback)];
         }
 
-        return ['%resource%' => ucfirst($metadata->getHumanizedName())];
+        $resourceName = $metadata->getName();
+        $fallback = ucfirst($metadata->getHumanizedName());
+
+        return ['%resource%' => $this->translateResourceName($resourceName, $fallback)];
+    }
+
+    private function translateResourceName(string $resourceName, string $fallback): string
+    {
+        $snakeCaseName = $this->convertToSnakeCase($resourceName);
+        $translationKey = sprintf('%s%s', self::UI_TRANSLATION_PREFIX, $snakeCaseName);
+        $translated = $this->translator->trans($translationKey, [], 'messages');
+
+        return $translated === $translationKey ? $fallback : $translated;
+    }
+
+    private function convertToSnakeCase(string $input): string
+    {
+        return strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1_$2', $input));
     }
 }
