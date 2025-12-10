@@ -44,7 +44,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Finder\Finder;
 use function Symfony\Component\String\u;
 
@@ -54,18 +54,18 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $loader->load('services.xml');
+        $loader->load('services.php');
 
         /** @var array<string, string> $bundles */
         $bundles = $container->getParameter('kernel.bundles');
         if (array_key_exists('SyliusGridBundle', $bundles)) {
-            $loader->load('services/integrations/grid.xml');
+            $loader->load('services/integrations/grid.php');
         }
 
         if ($config['translation']['enabled']) {
-            $loader->load('services/integrations/translation.xml');
+            $loader->load('services/integrations/translation.php');
 
             $container->setAlias('sylius.translation_locale_provider', $config['translation']['locale_provider'])->setPublic(true);
         }
@@ -230,7 +230,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         }, false);
 
         if ($integrateDoctrine) {
-            $loader->load('services/integrations/doctrine.xml');
+            $loader->load('services/integrations/doctrine.php');
         }
 
         foreach ($drivers as $driver) {
@@ -248,7 +248,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
                 continue;
             }
 
-            $loader->load(sprintf('services/integrations/%s.xml', $driver));
+            $loader->load(sprintf('services/integrations/%s.php', $driver));
         }
     }
 
