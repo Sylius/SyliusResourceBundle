@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use Doctrine\Persistence\ObjectManager;
+use FOS\RestBundle\FOSRestBundle;
 use FOS\RestBundle\View\View;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -257,6 +258,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsAResponseForNonHtmlViewOfSingleResource(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         $configurationMock = $this->createMock(RequestConfiguration::class);
         $resourceMock = $this->createMock(ResourceInterface::class);
         $requestMock = $this->createMock(Request::class);
@@ -527,6 +530,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForInvalidFormDuringResourceCreation(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $newResourceMock */
@@ -592,6 +597,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForNotSubmittedFormDuringResourceCreation(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $newResourceMock */
@@ -808,6 +815,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForCorrectlyCreatedResources(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $newResourceMock */
@@ -1115,6 +1124,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForInvalidFormDuringResourceUpdate(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $resourceMock */
@@ -1181,6 +1192,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForNotSubmittedFormDuringResourceUpdate(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $resourceMock */
@@ -1434,6 +1447,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testReturnsANonHtmlResponseForCorrectlyUpdatedResource(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var ParameterBagInterface|MockObject $parameterBagMock */
         $parameterBagMock = $this->createMock(ParameterBagInterface::class);
         /** @var RequestConfiguration|MockObject $configurationMock */
@@ -1917,6 +1932,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testDoesNotCorrectlyDeleteAResourceAndReturns500ForNotHtmlResponse(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $resourceMock */
@@ -2003,6 +2020,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testDeletesAResourceAndReturns204ForNonHtmlRequests(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var RequestConfiguration|MockObject $configurationMock */
         $configurationMock = $this->createMock(RequestConfiguration::class);
         /** @var ResourceInterface|MockObject $resourceMock */
@@ -2383,6 +2402,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testAppliesStateMachineTransitionOnResourceAndReturns200ForNonHtmlRequests(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var ParameterBagInterface|MockObject $parameterBagMock */
         $parameterBagMock = $this->createMock(ParameterBagInterface::class);
         /** @var RequestConfiguration|MockObject $configurationMock */
@@ -2464,6 +2485,8 @@ final class ResourceControllerTest extends TestCase
 
     public function testAppliesStateMachineTransitionOnResourceAndReturns204ForNonHtmlRequestsIfAdditionalOptionAdded(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         /** @var ParameterBagInterface|MockObject $parameterBagMock */
         $parameterBagMock = $this->createMock(ParameterBagInterface::class);
         /** @var RequestConfiguration|MockObject $configurationMock */
@@ -2576,5 +2599,12 @@ final class ResourceControllerTest extends TestCase
         $this->flashHelperMock->expects($this->never())->method('addFlashFromEvent');
         $this->expectException(HttpException::class);
         $this->resourceController->applyStateMachineTransitionAction($requestMock);
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
+        }
     }
 }

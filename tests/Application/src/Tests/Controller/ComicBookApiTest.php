@@ -16,6 +16,7 @@ namespace App\Tests\Controller;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ComicBookFactory;
 use App\Foundry\Story\DefaultComicBooksStory;
+use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
@@ -26,6 +27,11 @@ final class ComicBookApiTest extends ApiTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    protected function setUp(): void
+    {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+    }
 
     #[Test]
     public function it_allows_creating_a_comic_book(): void
@@ -511,13 +517,6 @@ EOT;
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
-    private function markAsSkippedIfHateoasIsNotAvailable(): void
-    {
-        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
-            $this->markTestSkipped();
-        }
-    }
-
     private static function someComicBook(): ComicBookFactory
     {
         return ComicBookFactory::new()
@@ -546,6 +545,20 @@ EOT;
     {
         if (!$this->isRoutingPathBcLayerEnabled()) {
             $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
+    }
+
+    private function markAsSkippedIfHateoasIsNotAvailable(): void
+    {
+        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
+            $this->markTestSkipped();
+        }
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
         }
     }
 }

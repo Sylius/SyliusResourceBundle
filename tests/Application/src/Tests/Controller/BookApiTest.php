@@ -18,6 +18,7 @@ use App\Foundry\Factory\BookFactory;
 use App\Foundry\Factory\BookTranslationFactory;
 use App\Foundry\Story\DefaultBooksStory;
 use App\Foundry\Story\MoreBooksStory;
+use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
@@ -28,6 +29,11 @@ class BookApiTest extends ApiTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    protected function setUp(): void
+    {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+    }
 
     #[Test]
     public function it_allows_creating_a_book(): void
@@ -737,6 +743,13 @@ EOT;
     {
         if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
+        }
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
         }
     }
 

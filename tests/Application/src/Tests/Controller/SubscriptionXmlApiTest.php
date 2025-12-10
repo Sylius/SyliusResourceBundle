@@ -27,8 +27,8 @@ final class SubscriptionXmlApiTest extends ApiTestCase
     use Factories;
     use ResetDatabase;
 
-    private static array $headersWithContentType = [
-        'CONTENT_TYPE' => 'application/xml',
+    private static array $headers = [
+        'HTTP_CONTENT_TYPE' => 'application/xml',
         'HTTP_ACCEPT' => 'application/xml',
     ];
 
@@ -40,7 +40,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType);
+        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -61,7 +61,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
     {
         DefaultSubscriptionsStory::load();
 
-        $this->client->request('GET', '/ajax/subscriptions', server: self::$headersWithContentType);
+        $this->client->request('GET', '/ajax/subscriptions', server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -118,7 +118,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
             XML
         ;
 
-        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headers, content: $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -145,7 +145,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
             XML
         ;
 
-        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headers, content: $data);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
@@ -205,7 +205,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
             XML
         ;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers, content: $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
@@ -224,7 +224,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
             XML
         ;
 
-        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headersWithContentType, content: $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers, content: $data);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertResponseHeaderSame('content-type', 'text/xml; charset=utf-8');
@@ -276,7 +276,7 @@ final class SubscriptionXmlApiTest extends ApiTestCase
     {
         $subscription = SubscriptionFactory::createOne();
 
-        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
+        $this->client->request(method: 'DELETE', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);

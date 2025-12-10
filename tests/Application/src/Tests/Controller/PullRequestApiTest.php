@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Foundry\Factory\PullRequestFactory;
+use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
@@ -24,6 +25,11 @@ final class PullRequestApiTest extends ApiTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    protected function setUp(): void
+    {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+    }
 
     #[Test]
     public function it_allows_creating_a_pull_request(): void
@@ -143,6 +149,13 @@ final class PullRequestApiTest extends ApiTestCase
     {
         if (!$this->isRoutingPathBcLayerEnabled()) {
             $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
         }
     }
 }

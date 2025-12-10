@@ -27,6 +27,11 @@ final class SubscriptionJsonApiTest extends ApiTestCase
     use Factories;
     use ResetDatabase;
 
+    private static array $headers = [
+        'HTTP_CONTENT_TYPE' => 'application/json',
+        'HTTP_ACCEPT' => 'application/json',
+    ];
+
     #[Test]
     public function it_allows_showing_a_subscription(): void
     {
@@ -35,7 +40,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
             ->create()
         ;
 
-        $this->client->request('GET', '/ajax/subscriptions/' . $subscription->getId());
+        $this->client->request(method: 'GET', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -56,7 +61,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
     {
         DefaultSubscriptionsStory::load();
 
-        $this->client->request('GET', '/ajax/subscriptions');
+        $this->client->request(method: 'GET', uri: '/ajax/subscriptions', server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -115,7 +120,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headers, content: $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -142,7 +147,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', '/ajax/subscriptions', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request(method: 'POST', uri: '/ajax/subscriptions', server: self::$headers, content: $data);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -206,7 +211,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers, content: $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
@@ -224,7 +229,7 @@ final class SubscriptionJsonApiTest extends ApiTestCase
         }
 EOT;
 
-        $this->client->request('PUT', '/ajax/subscriptions/' . $subscription->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request(method: 'PUT', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers, content: $data);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertResponseHeaderSame('content-type', 'application/json; charset=utf-8');
@@ -280,7 +285,7 @@ EOT;
     {
         $subscription = SubscriptionFactory::createOne();
 
-        $this->client->request('DELETE', '/ajax/subscriptions/' . $subscription->getId());
+        $this->client->request(method: 'DELETE', uri: '/ajax/subscriptions/' . $subscription->getId(), server: self::$headers);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);

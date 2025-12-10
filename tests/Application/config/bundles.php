@@ -23,17 +23,22 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
-return [
+$bundles = [
     FrameworkBundle::class => ['all' => true],
     SecurityBundle::class => ['all' => true],
     DoctrineBundle::class => ['all' => true],
     SyliusResourceBundle::class => ['all' => true],
     BabDevPagerfantaBundle::class => ['all' => true],
     TwigBundle::class => ['all' => true, 'test_without_twig' => false],
-    FOSRestBundle::class => ['all' => true, 'test_without_fosrest' => false],
     JMSSerializerBundle::class => ['all' => true, 'test_without_fosrest' => false],
     BazingaHateoasBundle::class => ['all' => true, 'test_without_hateoas' => false, 'test_without_fosrest' => false, 'test_with_attributes' => false],
     winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
     SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
 ];
+
+if (class_exists(FOSRestBundle::class)) {
+    $bundles[FOSRestBundle::class] = ['all' => true, 'test_without_fosrest' => false];
+}
+
+return $bundles;

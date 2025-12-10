@@ -34,6 +34,8 @@ final class UnregisterFosRestDefinitionsPassTest extends AbstractCompilerPassTes
     /** @test */
     public function it_keeps_the_view_handler_if_fos_rest_is_available(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         $this->setParameter('kernel.bundles', [FOSRestBundle::class]);
 
         $this->compile();
@@ -47,5 +49,12 @@ final class UnregisterFosRestDefinitionsPassTest extends AbstractCompilerPassTes
         $this->setParameter('kernel.bundles', []);
 
         $container->addCompilerPass(new UnregisterFosRestDefinitionsPass());
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
+        }
     }
 }

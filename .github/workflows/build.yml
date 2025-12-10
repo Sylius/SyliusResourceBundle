@@ -23,6 +23,9 @@ jobs:
             ${{ matrix['behat-transliterator'] != '' && matrix['gedmo-doctrine-extensions'] != ''
                 && format('(with Behat transliterator {0} & Gedmo {1})', matrix['behat-transliterator'], matrix['gedmo-doctrine-extensions'])
                 || '' }}
+            ${{ matrix['fos-rest-bundle'] != ''
+                && format('(with FriendsOfSymfony Rest Bundle {0})', matrix['fos-rest-bundle'])
+                || '' }}
         strategy:
             fail-fast: false
             matrix:
@@ -31,11 +34,18 @@ jobs:
                 behat-transliterator: [""]
                 composer-flags: ['--no-scripts --prefer-stable --prefer-dist']
                 gedmo-doctrine-extensions: [""]
+                fos-rest-bundle: [""]
                 symfony: ["6.4.*", "7.4.*"]
                 include:
                     # with Behat transliterator and Gedmo Doctrine extensions optional packages
                     -   behat-transliterator: '^1.2'
                         gedmo-doctrine-extensions: '^3.17.1'
+                        fos-rest-bundle: '^3.7'
+                        php: "8.3"
+                        orm: "3.*"
+                        symfony: "7.4.*"
+                    # with FriendsOfSymfony Rest Bundle optional package
+                    -   fos-rest-bundle: '^3.7'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
@@ -77,6 +87,12 @@ jobs:
                 if: matrix.behat-transliterator != ''
                 run: |
                     composer require --dev behat/transliterator "${{ matrix.behat-transliterator }}" --no-update --no-scripts
+
+            -
+                name: Install FriendsOfSymfony Rest Bundle
+                if: matrix.fos-rest-bundle != ''
+                run: |
+                    composer require --dev friendsofsymfony/rest-bundle "${{ matrix.fos-rest-bundle }}" --no-update --no-scripts
 
             -
                 name: Install Gedmo Doctrine Extension
@@ -136,7 +152,7 @@ jobs:
                     sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
 
             -
-                name: Run lint container without friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle packages
+                name: Run lint container without friendsofsymfony/rest-bundle, willdurand/hateoas-bundle & jms/serializer-bundle packages
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)

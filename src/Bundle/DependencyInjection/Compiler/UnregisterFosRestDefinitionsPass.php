@@ -24,7 +24,7 @@ final class UnregisterFosRestDefinitionsPass implements CompilerPassInterface
         /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (in_array(FOSRestBundle::class, $bundles, true)) {
+        if (class_exists(FOSRestBundle::class) && in_array(FOSRestBundle::class, $bundles, true)) {
             return;
         }
 
