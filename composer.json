@@ -94,7 +94,7 @@
         "twig/twig": "^3.14",
         "willdurand/hateoas-bundle": "^2.5",
         "winzou/state-machine-bundle": "^0.6.2",
-        "zenstruck/foundry": "^2.3 <2.7"
+        "zenstruck/foundry": "^2.8.2"
     },
     "conflict": {
         "doctrine/orm": "<2.18",
