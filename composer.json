@@ -68,9 +68,7 @@
         "matthiasnoback/symfony-dependency-injection-test": "^6.1.0",
         "openlss/lib-array2xml": "^1.0",
         "pagerfanta/pagerfanta": "^4.4",
-        "pamil/phpspec-skip-example-extension": "^4.2",
         "phpcr/phpcr": "^2.1",
-        "phpspec/phpspec": "^7.5",
         "phpspec/prophecy-phpunit": "^2.2",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-phpunit": "^1.4",
@@ -131,8 +129,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\Sylius\\Bundle\\ResourceBundle\\": "src/Bundle/spec/",
-            "spec\\Sylius\\Resource\\": "src/Component/spec/",
             "Sylius\\Bundle\\ResourceBundle\\Tests\\": "tests/Bundle/",
             "Sylius\\Component\\Resource\\spec\\": "src/Component/legacy/spec/",
             "Sylius\\Component\\Resource\\Tests\\": "src/Component/legacy/tests/",
@@ -151,7 +147,6 @@
             "vendor/bin/ecs check --fix"
         ],
         "test": [
-            "vendor/bin/phpspec run --ansi --no-interaction",
             "vendor/bin/phpunit --colors=always"
         ]
     }
