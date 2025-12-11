@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
@@ -26,21 +25,24 @@ use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\StateMachine\State\ApplyStateMachineTransitionProcessor;
 
+interface MetadataWithStateMachineInterface extends MetadataInterface
+{
+    public function getStateMachineComponent(): ?string;
+}
+
 final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private RegistryInterface|MockObject $resourceRegistry;
 
-    private RegistryInterface|ObjectProphecy $resourceRegistry;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     private StateMachineResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->resourceRegistry = $this->prophesize(RegistryInterface::class);
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
-        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry->reveal(), $this->decorated->reveal(), null);
+        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry, $this->decorated, null);
     }
 
     public function testItIsInitializable(): void
@@ -50,7 +52,7 @@ final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItSetsTheDefaultStateMachineComponentFromSettings(): void
     {
-        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry->reveal(), $this->decorated->reveal(), 'symfony');
+        $this->factory = new StateMachineResourceMetadataCollectionFactory($this->resourceRegistry, $this->decorated, 'symfony');
 
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book', applicationName: 'app');
         $create = (new Create(name: 'app_book_create'))->withResource($resource);
@@ -61,11 +63,11 @@ final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
-        $resourceConfiguration->getStateMachineComponent()->willReturn(null);
-        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
+        $resourceConfiguration = $this->createMock(MetadataWithStateMachineInterface::class);
+        $resourceConfiguration->method('getStateMachineComponent')->willReturn(null);
+        $this->resourceRegistry->method('get')->with('app.book')->willReturn($resourceConfiguration);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 
@@ -84,11 +86,11 @@ final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
-        $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
-        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
+        $resourceConfiguration = $this->createMock(MetadataWithStateMachineInterface::class);
+        $resourceConfiguration->method('getStateMachineComponent')->willReturn('symfony');
+        $this->resourceRegistry->method('get')->with('app.book')->willReturn($resourceConfiguration);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 
@@ -107,11 +109,11 @@ final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
-        $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
-        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
+        $resourceConfiguration = $this->createMock(MetadataWithStateMachineInterface::class);
+        $resourceConfiguration->method('getStateMachineComponent')->willReturn('symfony');
+        $this->resourceRegistry->method('get')->with('app.book')->willReturn($resourceConfiguration);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 
@@ -130,11 +132,11 @@ final class StateMachineResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
-        $resourceConfiguration->getStateMachineComponent()->willReturn('symfony');
-        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
+        $resourceConfiguration = $this->createMock(MetadataWithStateMachineInterface::class);
+        $resourceConfiguration->method('getStateMachineComponent')->willReturn('symfony');
+        $this->resourceRegistry->method('get')->with('app.book')->willReturn($resourceConfiguration);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 

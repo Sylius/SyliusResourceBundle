@@ -14,16 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Model;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Model\AbstractTranslation;
 use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Model\TranslationInterface;
 
 final class AbstractTranslationTest extends TestCase
 {
-    use ProphecyTrait;
-
     private AbstractTranslation $translation;
 
     protected function setUp(): void
@@ -38,23 +34,23 @@ final class AbstractTranslationTest extends TestCase
 
     public function testItsTranslatableIsMutable(): void
     {
-        $translatable = $this->prophesize(TranslatableInterface::class);
+        $translatable = $this->createMock(TranslatableInterface::class);
 
-        $this->translation->setTranslatable($translatable->reveal());
-        $this->assertSame($translatable->reveal(), $this->translation->getTranslatable());
+        $this->translation->setTranslatable($translatable);
+        $this->assertSame($translatable, $this->translation->getTranslatable());
     }
 
     public function testItsDetachesFromItsTranslatableCorrectly(): void
     {
-        $translatable1 = $this->prophesize(TranslatableInterface::class);
-        $translatable2 = $this->prophesize(TranslatableInterface::class);
+        $translatable1 = $this->createMock(TranslatableInterface::class);
+        $translatable2 = $this->createMock(TranslatableInterface::class);
 
-        $translatable1->addTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
-        $this->translation->setTranslatable($translatable1->reveal());
+        $translatable1->expects($this->once())->method('addTranslation')->with($this->isInstanceOf(AbstractTranslation::class));
+        $this->translation->setTranslatable($translatable1);
 
-        $translatable1->removeTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
-        $translatable2->addTranslation(Argument::type(AbstractTranslation::class))->shouldBeCalled();
-        $this->translation->setTranslatable($translatable2->reveal());
+        $translatable1->expects($this->once())->method('removeTranslation')->with($this->isInstanceOf(AbstractTranslation::class));
+        $translatable2->expects($this->once())->method('addTranslation')->with($this->isInstanceOf(AbstractTranslation::class));
+        $this->translation->setTranslatable($translatable2);
     }
 
     public function testItsLocaleIsMutable(): void

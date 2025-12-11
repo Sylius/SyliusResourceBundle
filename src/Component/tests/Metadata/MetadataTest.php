@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class MetadataTest extends TestCase
 {
-    use ProphecyTrait;
-
     private Metadata $metadata;
 
     protected function setUp(): void

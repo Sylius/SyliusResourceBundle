@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operations;
@@ -27,16 +26,14 @@ use Sylius\Resource\Symfony\Request\State\Provider;
 
 final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     private ProviderResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
-        $this->factory = new ProviderResourceMetadataCollectionFactory($this->decorated->reveal());
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new ProviderResourceMetadataCollectionFactory($this->decorated);
     }
 
     public function testItIsInitializable(): void
@@ -57,7 +54,7 @@ final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 
@@ -78,7 +75,7 @@ final class ProviderResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 

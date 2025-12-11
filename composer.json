@@ -69,7 +69,6 @@
         "openlss/lib-array2xml": "^1.0",
         "pagerfanta/pagerfanta": "^4.4",
         "phpcr/phpcr": "^2.1",
-        "phpspec/prophecy-phpunit": "^2.2",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-phpunit": "^1.4",
         "phpstan/phpstan-webmozart-assert": "^1.2",

@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Registry;
 use Sylius\Resource\Metadata\RegistryInterface;
 
 final class RegistryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private Registry $registry;
 
     protected function setUp(): void
@@ -37,18 +34,18 @@ final class RegistryTest extends TestCase
 
     public function testItReturnsAllResourcesMetadata(): void
     {
-        $metadata1 = $this->prophesize(MetadataInterface::class);
-        $metadata2 = $this->prophesize(MetadataInterface::class);
+        $metadata1 = $this->createMock(MetadataInterface::class);
+        $metadata2 = $this->createMock(MetadataInterface::class);
 
-        $metadata1->getAlias()->willReturn('app.product');
-        $metadata2->getAlias()->willReturn('app.order');
+        $metadata1->method('getAlias')->willReturn('app.product');
+        $metadata2->method('getAlias')->willReturn('app.order');
 
-        $this->registry->add($metadata1->reveal());
-        $this->registry->add($metadata2->reveal());
+        $this->registry->add($metadata1);
+        $this->registry->add($metadata2);
 
         $this->assertSame([
-            'app.product' => $metadata1->reveal(),
-            'app.order' => $metadata2->reveal(),
+            'app.product' => $metadata1,
+            'app.order' => $metadata2,
         ], $this->registry->getAll());
     }
 
@@ -60,12 +57,12 @@ final class RegistryTest extends TestCase
 
     public function testItReturnsSpecificMetadata(): void
     {
-        $metadata = $this->prophesize(MetadataInterface::class);
-        $metadata->getAlias()->willReturn('app.shipping_method');
+        $metadata = $this->createMock(MetadataInterface::class);
+        $metadata->method('getAlias')->willReturn('app.shipping_method');
 
-        $this->registry->add($metadata->reveal());
+        $this->registry->add($metadata);
 
-        $this->assertSame($metadata->reveal(), $this->registry->get('app.shipping_method'));
+        $this->assertSame($metadata, $this->registry->get('app.shipping_method'));
     }
 
     public function testItThrowsAnExceptionIfResourceIsNotRegisteredWithClass(): void
@@ -76,19 +73,19 @@ final class RegistryTest extends TestCase
 
     public function testItReturnsSpecificMetadataByModelClass(): void
     {
-        $metadata1 = $this->prophesize(MetadataInterface::class);
-        $metadata2 = $this->prophesize(MetadataInterface::class);
+        $metadata1 = $this->createMock(MetadataInterface::class);
+        $metadata2 = $this->createMock(MetadataInterface::class);
 
-        $metadata1->getAlias()->willReturn('app.product');
-        $metadata1->getClass('model')->willReturn('App\Model\Product');
+        $metadata1->method('getAlias')->willReturn('app.product');
+        $metadata1->method('getClass')->with('model')->willReturn('App\Model\Product');
 
-        $metadata2->getAlias()->willReturn('app.order');
-        $metadata2->getClass('model')->willReturn('App\Model\Order');
+        $metadata2->method('getAlias')->willReturn('app.order');
+        $metadata2->method('getClass')->with('model')->willReturn('App\Model\Order');
 
-        $this->registry->add($metadata1->reveal());
-        $this->registry->add($metadata2->reveal());
+        $this->registry->add($metadata1);
+        $this->registry->add($metadata2);
 
-        $this->assertSame($metadata2->reveal(), $this->registry->getByClass('App\Model\Order'));
+        $this->assertSame($metadata2, $this->registry->getByClass('App\Model\Order'));
     }
 
     public function testItAddsMetadataFromConfigurationArray(): void

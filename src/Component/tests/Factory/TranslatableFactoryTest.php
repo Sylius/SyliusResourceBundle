@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Factory\TranslatableFactory;
@@ -25,20 +24,18 @@ use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private FactoryInterface|MockObject $factory;
 
-    private FactoryInterface|ObjectProphecy $factory;
-
-    private TranslationLocaleProviderInterface|ObjectProphecy $localeProvider;
+    private TranslationLocaleProviderInterface|MockObject $localeProvider;
 
     private TranslatableFactory $translatableFactory;
 
     protected function setUp(): void
     {
-        $this->factory = $this->prophesize(FactoryInterface::class);
-        $this->localeProvider = $this->prophesize(TranslationLocaleProviderInterface::class);
+        $this->factory = $this->createMock(FactoryInterface::class);
+        $this->localeProvider = $this->createMock(TranslationLocaleProviderInterface::class);
 
-        $this->translatableFactory = new TranslatableFactory($this->factory->reveal(), $this->localeProvider->reveal());
+        $this->translatableFactory = new TranslatableFactory($this->factory, $this->localeProvider);
     }
 
     /** @test */
@@ -50,7 +47,7 @@ final class TranslatableFactoryTest extends TestCase
     /** @test */
     public function it_throws_an_exception_if_resource_is_not_translatable(): void
     {
-        $this->factory->createNew()->willReturn(new \stdClass());
+        $this->factory->method('createNew')->willReturn(new \stdClass());
 
         $this->expectException(UnexpectedTypeException::class);
 
@@ -60,15 +57,15 @@ final class TranslatableFactoryTest extends TestCase
     /** @test */
     public function it_creates_translatable_and_sets_locales(): void
     {
-        $resource = $this->prophesize(TranslatableInterface::class);
+        $resource = $this->createMock(TranslatableInterface::class);
 
-        $this->localeProvider->getDefaultLocaleCode()->willReturn('pl_PL');
+        $this->localeProvider->method('getDefaultLocaleCode')->willReturn('pl_PL');
 
-        $this->factory->createNew()->willReturn($resource);
+        $this->factory->method('createNew')->willReturn($resource);
 
-        $resource->setCurrentLocale('pl_PL')->shouldBeCalled();
-        $resource->setFallbackLocale('pl_PL')->shouldBeCalled();
+        $resource->expects($this->once())->method('setCurrentLocale')->with('pl_PL');
+        $resource->expects($this->once())->method('setFallbackLocale')->with('pl_PL');
 
-        $this->assertEquals($resource->reveal(), $this->translatableFactory->createNew());
+        $this->assertEquals($resource, $this->translatableFactory->createNew());
     }
 }

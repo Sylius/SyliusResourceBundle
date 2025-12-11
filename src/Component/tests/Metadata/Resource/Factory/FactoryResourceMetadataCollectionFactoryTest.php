@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operations;
@@ -27,19 +26,17 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class FactoryResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private RegistryInterface|MockObject $resourceRegistry;
 
-    private RegistryInterface|ObjectProphecy $resourceRegistry;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     private FactoryResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->resourceRegistry = $this->prophesize(RegistryInterface::class);
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
-        $this->factory = new FactoryResourceMetadataCollectionFactory($this->resourceRegistry->reveal(), $this->decorated->reveal());
+        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new FactoryResourceMetadataCollectionFactory($this->resourceRegistry, $this->decorated);
     }
 
     public function testItIsInitializable(): void
@@ -60,14 +57,13 @@ final class FactoryResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
-        $this->resourceRegistry->get('app.book')->willReturn($this->prophesize(MetadataInterface::class)->reveal());
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $resourceConfiguration = $this->prophesize(MetadataInterface::class);
-        $resourceConfiguration->getDriver()->willReturn('doctrine/orm');
-        $resourceConfiguration->getServiceId('factory')->willReturn('app.factory.book');
+        $resourceConfiguration = $this->createMock(MetadataInterface::class);
+        $resourceConfiguration->method('getDriver')->willReturn('doctrine/orm');
+        $resourceConfiguration->method('getServiceId')->with('factory')->willReturn('app.factory.book');
 
-        $this->resourceRegistry->get('app.book')->willReturn($resourceConfiguration->reveal());
+        $this->resourceRegistry->method('get')->with('app.book')->willReturn($resourceConfiguration);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 

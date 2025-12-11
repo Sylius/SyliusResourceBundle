@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\tests\State\Processor;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Processor\WriteProcessor;
@@ -25,22 +23,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class WriteProcessorTest extends TestCase
 {
-    use ProphecyTrait;
+    private MockObject|ProcessorInterface $processor;
 
-    private ObjectProphecy|ProcessorInterface $processor;
-
-    private ObjectProphecy|ProcessorInterface $locatorProcessor;
+    private MockObject|ProcessorInterface $locatorProcessor;
 
     private WriteProcessor $writeProcessor;
 
     protected function setUp(): void
     {
-        $this->processor = $this->prophesize(ProcessorInterface::class);
-        $this->locatorProcessor = $this->prophesize(ProcessorInterface::class);
+        $this->processor = $this->createMock(ProcessorInterface::class);
+        $this->locatorProcessor = $this->createMock(ProcessorInterface::class);
 
         $this->writeProcessor = new WriteProcessor(
-            $this->processor->reveal(),
-            $this->locatorProcessor->reveal(),
+            $this->processor,
+            $this->locatorProcessor,
         );
     }
 
@@ -53,9 +49,9 @@ final class WriteProcessorTest extends TestCase
         $processedData = new \stdClass();
         $response = new Response();
 
-        $this->locatorProcessor->process($data, $operation, $context)->willReturn($processedData)->shouldBeCalled();
+        $this->locatorProcessor->expects($this->once())->method('process')->with($data, $operation, $context)->willReturn($processedData);
 
-        $this->processor->process($processedData, $operation, $context)->willReturn($response)->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->with($processedData, $operation, $context)->willReturn($response);
 
         $result = $this->writeProcessor->process($data, $operation, $context);
         $this->assertEquals($response, $result);
@@ -68,9 +64,9 @@ final class WriteProcessorTest extends TestCase
         $operation = new Create(processor: 'App\Processor');
         $context = new Context();
 
-        $this->locatorProcessor->process(Argument::cetera())->willReturn($data)->shouldNotBeCalled();
+        $this->locatorProcessor->expects($this->never())->method('process');
 
-        $this->processor->process(Argument::cetera())->willReturn($data)->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->willReturn($data);
 
         $this->writeProcessor->process($data, $operation, $context);
     }
@@ -82,9 +78,9 @@ final class WriteProcessorTest extends TestCase
         $operation = new Create(processor: 'App\Processor', write: false);
         $context = new Context();
 
-        $this->locatorProcessor->process(Argument::cetera())->willReturn($data)->shouldNotBeCalled();
+        $this->locatorProcessor->expects($this->never())->method('process');
 
-        $this->processor->process(Argument::cetera())->willReturn($data)->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->willReturn($data);
 
         $this->writeProcessor->process($data, $operation, $context);
     }
@@ -96,9 +92,9 @@ final class WriteProcessorTest extends TestCase
         $operation = new Create(processor: null);
         $context = new Context();
 
-        $this->locatorProcessor->process(Argument::cetera())->willReturn($data)->shouldNotBeCalled();
+        $this->locatorProcessor->expects($this->never())->method('process');
 
-        $this->processor->process(Argument::cetera())->willReturn($data)->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->willReturn($data);
 
         $this->writeProcessor->process($data, $operation, $context);
     }

@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\tests\Symfony\Serializer\State;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\HttpOperation;
@@ -24,100 +22,97 @@ use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Serializer\State\SerializeProcessor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
-use Webmozart\Assert\Assert;
 
 final class SerializeProcessorTest extends TestCase
 {
-    use ProphecyTrait;
+    private ProcessorInterface|MockObject $processor;
 
-    private ProcessorInterface|ObjectProphecy $processor;
-
-    private SerializerInterface|ObjectProphecy $serializer;
+    private SerializerInterface|MockObject $serializer;
 
     private SerializeProcessor $serializeProcessor;
 
     protected function setUp(): void
     {
-        $this->processor = $this->prophesize(ProcessorInterface::class);
-        $this->serializer = $this->prophesize(SerializerInterface::class);
+        $this->processor = $this->createMock(ProcessorInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         $this->serializeProcessor = new SerializeProcessor(
-            $this->processor->reveal(),
-            $this->serializer->reveal(),
+            $this->processor,
+            $this->serializer,
         );
     }
 
     private function createRequestMock(string $format = 'json'): Request
     {
-        $request = $this->prophesize(Request::class);
-        $request->getRequestFormat()->willReturn($format);
+        $request = $this->createMock(Request::class);
+        $request->method('getRequestFormat')->willReturn($format);
 
-        return $request->reveal();
+        return $request;
     }
 
     private function createOperationMock(?bool $canSerialize = null, array $normalizationContext = []): HttpOperation
     {
-        $operation = $this->prophesize(HttpOperation::class);
-        $operation->canSerialize()->willReturn($canSerialize);
-        $operation->getNormalizationContext()->willReturn($normalizationContext);
+        $operation = $this->createMock(HttpOperation::class);
+        $operation->method('canSerialize')->willReturn($canSerialize);
+        $operation->method('getNormalizationContext')->willReturn($normalizationContext);
 
-        return $operation->reveal();
+        return $operation;
     }
 
     public function testItSerializesDataToTheRequestedFormat(): void
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock();
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->processor->process('serialized_data', $operation, $context)->willReturn('serialized_data')->shouldBeCalled();
-        $this->serializer->serialize($data, 'json', [])->willReturn('serialized_data')->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->with('serialized_data', $operation, $context)->willReturn('serialized_data');
+        $this->serializer->expects($this->once())->method('serialize')->with($data, 'json', [])->willReturn('serialized_data');
 
         $result = $this->serializeProcessor->process($data, $operation, $context);
 
-        Assert::eq($result, 'serialized_data');
+        $this->assertSame('serialized_data', $result);
     }
 
     public function testItSerializesDataToTheRequestedFormatWithNormalizationContext(): void
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock(normalizationContext: ['groups' => ['dummy:read']]);
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->processor->process('serialized_data', $operation, $context)->willReturn('serialized_data');
-        $this->serializer->serialize($data, 'json', ['groups' => ['dummy:read']])->willReturn('serialized_data')->shouldBeCalled();
+        $this->processor->expects($this->once())->method('process')->with('serialized_data', $operation, $context)->willReturn('serialized_data');
+        $this->serializer->expects($this->once())->method('serialize')->with($data, 'json', ['groups' => ['dummy:read']])->willReturn('serialized_data');
 
         $result = $this->serializeProcessor->process($data, $operation, $context);
 
-        Assert::eq($result, 'serialized_data');
+        $this->assertSame('serialized_data', $result);
     }
 
     public function testItDoesNothingWhenFormatIsHtml(): void
     {
         $request = $this->createRequestMock('html');
         $operation = $this->createOperationMock();
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->processor->process($data, $operation, $context)->willReturn($data);
-        $this->serializer->serialize(Argument::cetera())->shouldNotBeCalled();
+        $this->processor->expects($this->once())->method('process')->with($data, $operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('serialize');
 
         $result = $this->serializeProcessor->process($data, $operation, $context);
 
-        Assert::eq($result, $data->reveal());
+        $this->assertSame($data, $result);
     }
 
     public function testItThrowsAnExceptionWhenSerializerIsNotAvailable(): void
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock();
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $serializeProcessor = new SerializeProcessor($this->processor->reveal(), null);
-        $this->processor->process($data, $operation, $context)->willReturn($data);
+        $serializeProcessor = new SerializeProcessor($this->processor, null);
+        $this->processor->expects($this->never())->method('process');
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('You can not use the "json" format if the Serializer is not available. Try running "composer require symfony/serializer".');
@@ -129,28 +124,28 @@ final class SerializeProcessorTest extends TestCase
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock(canSerialize: false);
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->processor->process($data, $operation, $context)->willReturn($data);
-        $this->serializer->serialize(Argument::cetera())->shouldNotBeCalled();
+        $this->processor->expects($this->once())->method('process')->with($data, $operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('serialize');
 
         $result = $this->serializeProcessor->process($data, $operation, $context);
 
-        Assert::eq($result, $data->reveal());
+        $this->assertSame($data, $result);
     }
 
     public function testItProcessesDataWithoutSerializationWhenRequestIsNull(): void
     {
         $operation = $this->createOperationMock();
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context();
 
-        $this->processor->process($data, $operation, $context)->willReturn($data)->shouldBeCalled();
-        $this->serializer->serialize(Argument::cetera())->shouldNotBeCalled();
+        $this->processor->expects($this->once())->method('process')->with($data, $operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('serialize');
 
         $result = $this->serializeProcessor->process($data, $operation, $context);
 
-        Assert::eq($result, $data->reveal());
+        $this->assertSame($data, $result);
     }
 }

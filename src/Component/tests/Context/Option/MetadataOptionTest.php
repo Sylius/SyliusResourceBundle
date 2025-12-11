@@ -13,30 +13,27 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Context\Option;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Option\MetadataOption;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class MetadataOptionTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private MetadataInterface|ObjectProphecy $metadata;
+    private MetadataInterface|MockObject $metadata;
 
     private MetadataOption $metadataOption;
 
     protected function setUp(): void
     {
-        $this->metadata = $this->prophesize(MetadataInterface::class);
+        $this->metadata = $this->createMock(MetadataInterface::class);
 
-        $this->metadataOption = new MetadataOption($this->metadata->reveal());
+        $this->metadataOption = new MetadataOption($this->metadata);
     }
 
     /** @test */
     public function it_returns_request_configuration(): void
     {
-        $this->assertEquals($this->metadata->reveal(), $this->metadataOption->metadata());
+        $this->assertEquals($this->metadata, $this->metadataOption->metadata());
     }
 }
