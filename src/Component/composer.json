@@ -51,7 +51,6 @@
         "behat/transliterator": "^1.3",
         "doctrine/orm": "^2.18 || ^3.3",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2.1 || ^5.1",
-        "phpspec/phpspec": "^7.3",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
         "sylius/grid": "^1.13",
@@ -77,8 +76,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\Sylius\\Component\\Resource\\": "legacy/spec/",
-            "spec\\Sylius\\Resource\\": "spec/",
             "Sylius\\Component\\Resource\\Tests\\": "legacy/tests/",
             "Sylius\\Resource\\Tests\\": "tests/"
         }
