@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Operations;
 use Sylius\Resource\Metadata\Update;
 
 final class OperationsTest extends TestCase
 {
-    use ProphecyTrait;
-
     private Operations $operations;
 
     protected function setUp(): void

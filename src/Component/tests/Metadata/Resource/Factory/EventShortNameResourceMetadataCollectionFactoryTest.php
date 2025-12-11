@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Metadata\ApplyStateMachineTransition;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\Create;
@@ -28,16 +27,14 @@ use Sylius\Resource\Metadata\Show;
 
 final class EventShortNameResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     private EventShortNameResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
-        $this->factory = new EventShortNameResourceMetadataCollectionFactory($this->decorated->reveal());
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
+        $this->factory = new EventShortNameResourceMetadataCollectionFactory($this->decorated);
     }
 
     public function testItIsInitializable(): void
@@ -64,7 +61,7 @@ final class EventShortNameResourceMetadataCollectionFactoryTest extends TestCase
         $resourceMetadataCollection = new ResourceMetadataCollection();
         $resourceMetadataCollection[] = $resource;
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
         $resourceMetadataCollection = $this->factory->create('App\Resource');
 

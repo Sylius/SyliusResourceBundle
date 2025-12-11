@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Doctrine\Persistence;
 
 use Pagerfanta\Pagerfanta;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 use Sylius\Resource\Doctrine\Persistence\InMemoryRepository;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
@@ -25,8 +24,6 @@ use Sylius\Resource\Model\ResourceInterface;
 
 final class InMemoryRepositoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private InMemoryRepository $repository;
 
     protected function setUp(): void
@@ -47,53 +44,53 @@ final class InMemoryRepositoryTest extends TestCase
 
     public function testItThrowsInvalidArgumentExceptionWhenAddingWrongResourceType(): void
     {
-        /** @var ObjectProphecy<ResourceInterface> $resource */
-        $resource = $this->prophesize(ResourceInterface::class);
+        /** @var MockObject<ResourceInterface> $resource */
+        $resource = $this->createMock(ResourceInterface::class);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->repository->add($resource->reveal());
+        $this->repository->add($resource);
     }
 
     public function testItAddsAnObject(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $monocle */
-        $monocle = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $monocle */
+        $monocle = $this->createMock(SampleBookResourceInterface::class);
 
-        $monocle->getId()->willReturn(2);
-        $this->repository->add($monocle->reveal());
-        $this->assertSame($monocle->reveal(), $this->repository->findOneBy(['id' => 2]));
+        $monocle->method('getId')->willReturn(2);
+        $this->repository->add($monocle);
+        $this->assertSame($monocle, $this->repository->findOneBy(['id' => 2]));
     }
 
     public function testItThrowsExistingResourceExceptionOnAddingAResourceWhichIsAlreadyInRepository(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $bike */
-        $bike = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $bike */
+        $bike = $this->createMock(SampleBookResourceInterface::class);
 
-        $this->repository->add($bike->reveal());
+        $this->repository->add($bike);
         $this->expectException(ResourceExistsException::class);
-        $this->repository->add($bike->reveal());
+        $this->repository->add($bike);
     }
 
     public function testItRemovesAResource(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $shirt */
-        $shirt = $this->prophesize(SampleBookResourceInterface::class);
-        $shirt->getId()->willReturn(5);
+        /** @var MockObject<SampleBookResourceInterface> $shirt */
+        $shirt = $this->createMock(SampleBookResourceInterface::class);
+        $shirt->method('getId')->willReturn(5);
 
-        $this->repository->add($shirt->reveal());
-        $this->repository->remove($shirt->reveal());
+        $this->repository->add($shirt);
+        $this->repository->remove($shirt);
 
         $this->assertNull($this->repository->findOneBy(['id' => 5]));
     }
 
     public function testItFindsObjectById(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $monocle */
-        $monocle = $this->prophesize(SampleBookResourceInterface::class);
-        $monocle->getId()->willReturn(2);
+        /** @var MockObject<SampleBookResourceInterface> $monocle */
+        $monocle = $this->createMock(SampleBookResourceInterface::class);
+        $monocle->method('getId')->willReturn(2);
 
-        $this->repository->add($monocle->reveal());
-        $this->assertSame($monocle->reveal(), $this->repository->find(2));
+        $this->repository->add($monocle);
+        $this->assertSame($monocle, $this->repository->find(2));
     }
 
     public function testItReturnsNullIfCannotFindObjectById(): void
@@ -103,80 +100,80 @@ final class InMemoryRepositoryTest extends TestCase
 
     public function testItReturnsAllObjectsWhenFindingByAnEmptyParameterArray(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $book */
-        $book = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $book */
+        $book = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $shirt */
-        $shirt = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $shirt */
+        $shirt = $this->createMock(SampleBookResourceInterface::class);
 
-        $book->getId()->willReturn(10);
-        $book->getName()->willReturn('Book');
+        $book->method('getId')->willReturn(10);
+        $book->method('getName')->willReturn('Book');
 
-        $shirt->getId()->willReturn(5);
-        $shirt->getName()->willReturn('Shirt');
+        $shirt->method('getId')->willReturn(5);
+        $shirt->method('getName')->willReturn('Shirt');
 
-        $this->repository->add($book->reveal());
-        $this->repository->add($shirt->reveal());
+        $this->repository->add($book);
+        $this->repository->add($shirt);
 
-        $this->assertSame([$book->reveal(), $shirt->reveal()], $this->repository->findBy([]));
+        $this->assertSame([$book, $shirt], $this->repository->findBy([]));
     }
 
     public function testItFindsManyObjectsByMultipleCriteriaOrdersALimitAndAnOffset(): void
     {
-        /** @var ObjectProphecy<SampleBookResourceInterface> $firstBook */
-        $firstBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $firstBook */
+        $firstBook = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $secondBook */
-        $secondBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $secondBook */
+        $secondBook = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $thirdBook */
-        $thirdBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $thirdBook */
+        $thirdBook = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $fourthBook */
-        $fourthBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $fourthBook */
+        $fourthBook = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $wrongIdBook */
-        $wrongIdBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $wrongIdBook */
+        $wrongIdBook = $this->createMock(SampleBookResourceInterface::class);
 
-        /** @var ObjectProphecy<SampleBookResourceInterface> $wrongNameBook */
-        $wrongNameBook = $this->prophesize(SampleBookResourceInterface::class);
+        /** @var MockObject<SampleBookResourceInterface> $wrongNameBook */
+        $wrongNameBook = $this->createMock(SampleBookResourceInterface::class);
 
         $id = 80;
         $name = 'Book';
 
-        $firstBook->getId()->willReturn($id);
-        $secondBook->getId()->willReturn($id);
-        $thirdBook->getId()->willReturn($id);
-        $fourthBook->getId()->willReturn($id);
-        $wrongNameBook->getId()->willReturn($id);
-        $wrongIdBook->getId()->willReturn(100);
+        $firstBook->method('getId')->willReturn($id);
+        $secondBook->method('getId')->willReturn($id);
+        $thirdBook->method('getId')->willReturn($id);
+        $fourthBook->method('getId')->willReturn($id);
+        $wrongNameBook->method('getId')->willReturn($id);
+        $wrongIdBook->method('getId')->willReturn(100);
 
-        $firstBook->getName()->willReturn($name);
-        $secondBook->getName()->willReturn($name);
-        $thirdBook->getName()->willReturn($name);
-        $fourthBook->getName()->willReturn($name);
-        $wrongIdBook->getName()->willReturn($name);
-        $wrongNameBook->getName()->willReturn('Tome');
+        $firstBook->method('getName')->willReturn($name);
+        $secondBook->method('getName')->willReturn($name);
+        $thirdBook->method('getName')->willReturn($name);
+        $fourthBook->method('getName')->willReturn($name);
+        $wrongIdBook->method('getName')->willReturn($name);
+        $wrongNameBook->method('getName')->willReturn('Tome');
 
-        $firstBook->getRating()->willReturn(3);
-        $secondBook->getRating()->willReturn(2);
-        $thirdBook->getRating()->willReturn(2);
-        $fourthBook->getRating()->willReturn(4);
+        $firstBook->method('getRating')->willReturn(3);
+        $secondBook->method('getRating')->willReturn(2);
+        $thirdBook->method('getRating')->willReturn(2);
+        $fourthBook->method('getRating')->willReturn(4);
 
-        $firstBook->getTitle()->willReturn('World War Z');
-        $secondBook->getTitle()->willReturn('World War Z');
-        $thirdBook->getTitle()->willReturn('Call of Cthulhu');
-        $fourthBook->getTitle()->willReturn('Art of War');
+        $firstBook->method('getTitle')->willReturn('World War Z');
+        $secondBook->method('getTitle')->willReturn('World War Z');
+        $thirdBook->method('getTitle')->willReturn('Call of Cthulhu');
+        $fourthBook->method('getTitle')->willReturn('Art of War');
 
-        $this->repository->add($firstBook->reveal());
-        $this->repository->add($secondBook->reveal());
-        $this->repository->add($thirdBook->reveal());
-        $this->repository->add($fourthBook->reveal());
-        $this->repository->add($wrongIdBook->reveal());
-        $this->repository->add($wrongNameBook->reveal());
+        $this->repository->add($firstBook);
+        $this->repository->add($secondBook);
+        $this->repository->add($thirdBook);
+        $this->repository->add($fourthBook);
+        $this->repository->add($wrongIdBook);
+        $this->repository->add($wrongNameBook);
 
         $this->assertSame(
-            [$thirdBook->reveal(), $firstBook->reveal()],
+            [$thirdBook, $firstBook],
             $this->repository->findBy(
                 ['name' => $name, 'id' => $id],
                 ['rating' => RepositoryInterface::ORDER_ASCENDING, 'title' => RepositoryInterface::ORDER_DESCENDING],
@@ -194,41 +191,41 @@ final class InMemoryRepositoryTest extends TestCase
 
     public function testItFindsOneObjectByParameter(): void
     {
-        $book = $this->prophesize(SampleBookResourceInterface::class);
-        $shirt = $this->prophesize(SampleBookResourceInterface::class);
+        $book = new SampleBookResource();
+        $book->name = 'Book';
 
-        $book->getName()->willReturn('Book');
-        $shirt->getName()->willReturn('Shirt');
+        $shirt = new SampleBookResource();
+        $shirt->name = 'Shirt';
 
-        $this->repository->add($book->reveal());
-        $this->repository->add($shirt->reveal());
+        $this->repository->add($book);
+        $this->repository->add($shirt);
 
-        $this->assertSame($book->reveal(), $this->repository->findOneBy(['name' => 'Book']));
+        $this->assertSame($book, $this->repository->findOneBy(['name' => 'Book']));
     }
 
     public function testItReturnsFirstResultWhileFindingOneByParameters(): void
     {
-        $book = $this->prophesize(SampleBookResourceInterface::class);
-        $secondBook = $this->prophesize(SampleBookResourceInterface::class);
+        $book = new SampleBookResource();
+        $book->name = 'Book';
 
-        $book->getName()->willReturn('Book');
-        $secondBook->getName()->willReturn('Book');
+        $secondBook = new SampleBookResource();
+        $secondBook->name = 'Book';
 
-        $this->repository->add($book->reveal());
-        $this->repository->add($secondBook->reveal());
+        $this->repository->add($book);
+        $this->repository->add($secondBook);
 
-        $this->assertSame($book->reveal(), $this->repository->findOneBy(['name' => 'Book']));
+        $this->assertSame($book, $this->repository->findOneBy(['name' => 'Book']));
     }
 
     public function testItFindsAllObjectsInMemory(): void
     {
-        $book = $this->prophesize(SampleBookResourceInterface::class);
-        $shirt = $this->prophesize(SampleBookResourceInterface::class);
+        $book = $this->createMock(SampleBookResourceInterface::class);
+        $shirt = $this->createMock(SampleBookResourceInterface::class);
 
-        $this->repository->add($book->reveal());
-        $this->repository->add($shirt->reveal());
+        $this->repository->add($book);
+        $this->repository->add($shirt);
 
-        $this->assertSame([$book->reveal(), $shirt->reveal()], $this->repository->findAll());
+        $this->assertSame([$book, $shirt], $this->repository->findAll());
     }
 
     public function testItReturnsEmptyArrayWhenMemoryIsEmpty(): void
@@ -254,4 +251,35 @@ interface SampleBookResourceInterface extends ResourceInterface
     public function getRating(): int;
 
     public function getTitle(): string;
+}
+
+class SampleBookResource implements SampleBookResourceInterface
+{
+    public $id;
+
+    public $name;
+
+    public $rating;
+
+    public $title;
+
+    public function getId(): mixed
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getRating(): int
+    {
+        return $this->rating;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 }

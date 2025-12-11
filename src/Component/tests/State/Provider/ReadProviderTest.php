@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\State\Provider;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -29,71 +27,69 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ReadProviderTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ProviderInterface|ObjectProphecy $provider;
+    private ProviderInterface|MockObject $provider;
 
     private ReadProvider $readProvider;
 
     protected function setUp(): void
     {
-        $this->provider = $this->prophesize(ProviderInterface::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
 
         $this->readProvider = new ReadProvider(
-            $this->provider->reveal(),
+            $this->provider,
         );
     }
 
     /** @test */
     public function it_retrieves_data(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $operation = $this->prophesize(HttpOperation::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $operation = $this->createMock(HttpOperation::class);
 
         $context = new Context();
 
         $request->attributes = $attributes;
 
-        $this->provider->provide($operation, Argument::type(Context::class))->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->provider->expects($this->once())->method('provide')->with($operation, $this->isInstanceOf(Context::class))->willReturn(['foo' => 'fighters']);
 
-        $attributes->set('data', Argument::any())->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set');
 
-        $this->readProvider->provide($operation->reveal(), $context);
+        $this->readProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_retrieves_data_and_store_them_to_request(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $operation = $this->prophesize(HttpOperation::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $operation = $this->createMock(HttpOperation::class);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $this->provider->provide($operation, Argument::type(Context::class))->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->provider->expects($this->once())->method('provide')->with($operation, $this->isInstanceOf(Context::class))->willReturn(['foo' => 'fighters']);
 
-        $attributes->set('data', ['foo' => 'fighters'])->shouldBeCalled();
+        $attributes->expects($this->once())->method('set')->with('data', ['foo' => 'fighters']);
 
-        $this->readProvider->provide($operation->reveal(), $context);
+        $this->readProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_does_nothing_when_operation_is_a_create_operation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $this->provider->provide($operation, Argument::type(Context::class))->shouldNotBeCalled();
+        $this->provider->expects($this->never())->method('provide');
 
-        $attributes->set('data', Argument::any())->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set');
 
         $this->readProvider->provide($operation, $context);
     }
@@ -101,46 +97,43 @@ final class ReadProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_when_operation_cannot_be_read(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $operation = $this->prophesize(HttpOperation::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $operation = $this->createMock(HttpOperation::class);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $attributes->get('_route')->willReturn('app_dummy_show');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+        $operation->method('canRead')->willReturn(false);
 
-        $operation->canRead()->willReturn(false);
+        $this->provider->expects($this->never())->method('provide');
 
-        $this->provider->provide($operation, Argument::type(Context::class))->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set');
 
-        $attributes->set('data', Argument::any())->shouldNotBeCalled();
-
-        $this->readProvider->provide($operation->reveal(), $context);
+        $this->readProvider->provide($operation, $context);
     }
 
     /** @test */
     public function it_throws_an_exception_when_no_data_was_found(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $operation = $this->prophesize(HttpOperation::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $operation = $this->createMock(HttpOperation::class);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
         $request->attributes = $attributes;
 
-        $operation->canRead()->willReturn(true);
+        $operation->method('canRead')->willReturn(true);
 
-        $this->provider->provide($operation, Argument::type(Context::class))->willReturn(null);
+        $this->provider->expects($this->once())->method('provide')->with($operation, $this->isInstanceOf(Context::class))->willReturn(null);
 
-        $attributes->set('data', Argument::any())->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set');
 
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Resource has not been found.');
 
-        $this->readProvider->provide($operation->reveal(), $context);
+        $this->readProvider->provide($operation, $context);
     }
 }

@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Sylius\Resource\Metadata\Resource\Factory\CachedResourceMetadataCollectionFactory;
@@ -26,23 +24,21 @@ use Symfony\Component\Cache\Exception\CacheException;
 
 final class CachedResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private CacheItemPoolInterface|MockObject $cacheItemPool;
 
-    private CacheItemPoolInterface|ObjectProphecy $cacheItemPool;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     protected function setUp(): void
     {
-        $this->cacheItemPool = $this->prophesize(CacheItemPoolInterface::class);
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
     }
 
     public function testItIsInitializable(): void
     {
         $factory = new CachedResourceMetadataCollectionFactory(
-            $this->cacheItemPool->reveal(),
-            $this->decorated->reveal(),
+            $this->cacheItemPool,
+            $this->decorated,
         );
 
         $this->assertInstanceOf(CachedResourceMetadataCollectionFactory::class, $factory);
@@ -50,20 +46,20 @@ final class CachedResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItUsesDecoratedFactoryWhenCacheIsNotAvailable(): void
     {
-        $cacheItem = $this->prophesize(CacheItemInterface::class);
+        $cacheItem = $this->createMock(CacheItemInterface::class);
         $resourceMetadataCollection = new ResourceMetadataCollection();
 
-        $this->cacheItemPool->getItem(Argument::cetera())->willReturn($cacheItem);
+        $this->cacheItemPool->method('getItem')->willReturn($cacheItem);
 
-        $cacheItem->isHit()->willReturn(false);
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
+        $cacheItem->method('isHit')->willReturn(false);
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
-        $cacheItem->set((array) $resourceMetadataCollection)->willReturn($cacheItem)->shouldBeCalled();
-        $this->cacheItemPool->save($cacheItem)->willReturn(true)->shouldBeCalled();
+        $cacheItem->expects($this->once())->method('set')->with((array) $resourceMetadataCollection)->willReturn($cacheItem);
+        $this->cacheItemPool->expects($this->once())->method('save')->with($cacheItem)->willReturn(true);
 
         $factory = new CachedResourceMetadataCollectionFactory(
-            $this->cacheItemPool->reveal(),
-            $this->decorated->reveal(),
+            $this->cacheItemPool,
+            $this->decorated,
         );
 
         $this->assertSame($resourceMetadataCollection, $factory->create('App\Resource'));
@@ -71,16 +67,16 @@ final class CachedResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItRetrievesCacheWhenItIsAvailable(): void
     {
-        $cacheItem = $this->prophesize(CacheItemInterface::class);
+        $cacheItem = $this->createMock(CacheItemInterface::class);
         $resourceMetadataCollection = new ResourceMetadataCollection();
 
-        $this->cacheItemPool->getItem(Argument::cetera())->willReturn($cacheItem);
-        $cacheItem->isHit()->willReturn(true);
-        $cacheItem->get()->willReturn($resourceMetadataCollection);
+        $this->cacheItemPool->method('getItem')->willReturn($cacheItem);
+        $cacheItem->method('isHit')->willReturn(true);
+        $cacheItem->method('get')->willReturn($resourceMetadataCollection);
 
         $factory = new CachedResourceMetadataCollectionFactory(
-            $this->cacheItemPool->reveal(),
-            $this->decorated->reveal(),
+            $this->cacheItemPool,
+            $this->decorated,
         );
 
         $result = $factory->create('App\Resource');
@@ -91,12 +87,12 @@ final class CachedResourceMetadataCollectionFactoryTest extends TestCase
     {
         $resourceMetadataCollection = new ResourceMetadataCollection();
 
-        $this->cacheItemPool->getItem(Argument::cetera())->willThrow(new CacheException());
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection)->shouldBeCalled();
+        $this->cacheItemPool->method('getItem')->willThrowException(new CacheException());
+        $this->decorated->expects($this->once())->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
 
         $factory = new CachedResourceMetadataCollectionFactory(
-            $this->cacheItemPool->reveal(),
-            $this->decorated->reveal(),
+            $this->cacheItemPool,
+            $this->decorated,
         );
 
         $this->assertSame($resourceMetadataCollection, $factory->create('App\Resource'));

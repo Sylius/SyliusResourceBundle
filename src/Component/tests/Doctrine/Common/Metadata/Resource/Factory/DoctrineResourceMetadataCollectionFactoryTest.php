@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Doctrine\Common\Metadata\Resource\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Doctrine\Common\Metadata\Resource\Factory\DoctrineResourceMetadataCollectionFactory;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
@@ -30,22 +29,20 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private RegistryInterface|MockObject $resourceRegistry;
 
-    private RegistryInterface|ObjectProphecy $resourceRegistry;
-
-    private ResourceMetadataCollectionFactoryInterface|ObjectProphecy $decorated;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $decorated;
 
     private DoctrineResourceMetadataCollectionFactory $factory;
 
     protected function setUp(): void
     {
-        $this->resourceRegistry = $this->prophesize(RegistryInterface::class);
-        $this->decorated = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->decorated = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
 
         $this->factory = new DoctrineResourceMetadataCollectionFactory(
-            $this->resourceRegistry->reveal(),
-            $this->decorated->reveal(),
+            $this->resourceRegistry,
+            $this->decorated,
         );
     }
 
@@ -56,16 +53,16 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItAddsPersistProcessorToOperationsForResourceWithDoctrineOrmDriver(): void
     {
-        $metadata = $this->prophesize(MetadataInterface::class);
+        $metadata = $this->createMock(MetadataInterface::class);
         $operation = new Create(name: 'app_dummy_create');
         $resource = (new ResourceMetadata(alias: 'app.dummy'))
             ->withOperations(new Operations([$operation]));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resource]);
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
-        $this->resourceRegistry->get('app.dummy')->willReturn($metadata->reveal());
-        $metadata->getDriver()->willReturn('doctrine/orm');
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $metadata->method('getDriver')->willReturn('doctrine/orm');
 
         $result = $this->factory->create('App\Resource');
 
@@ -77,16 +74,16 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItAddsPersistProcessorToOperationsForResourceWithDoctrineDbalDriver(): void
     {
-        $metadata = $this->prophesize(MetadataInterface::class);
+        $metadata = $this->createMock(MetadataInterface::class);
         $operation = new Create(name: 'app_dummy_create');
         $resource = (new ResourceMetadata(alias: 'app.dummy'))
             ->withOperations(new Operations([$operation]));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resource]);
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
-        $this->resourceRegistry->get('app.dummy')->willReturn($metadata->reveal());
-        $metadata->getDriver()->willReturn('doctrine/dbal');
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $metadata->method('getDriver')->willReturn('doctrine/dbal');
 
         $result = $this->factory->create('App\Resource');
 
@@ -98,16 +95,16 @@ final class DoctrineResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItAddsRemoveProcessorToDeleteOperationsForResourceWithDoctrineDriver(): void
     {
-        $metadata = $this->prophesize(MetadataInterface::class);
+        $metadata = $this->createMock(MetadataInterface::class);
         $operation = new Delete(name: 'app_dummy_delete');
         $resource = (new ResourceMetadata(alias: 'app.dummy'))
             ->withOperations(new Operations([$operation]));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resource]);
 
-        $this->decorated->create('App\Resource')->willReturn($resourceMetadataCollection);
-        $this->resourceRegistry->get('app.dummy')->willReturn($metadata->reveal());
-        $metadata->getDriver()->willReturn('doctrine/orm');
+        $this->decorated->method('create')->with('App\Resource')->willReturn($resourceMetadataCollection);
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $metadata->method('getDriver')->willReturn('doctrine/orm');
 
         $result = $this->factory->create('App\Resource');
 

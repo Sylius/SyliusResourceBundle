@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Command;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Bundle\ResourceBundle\Command\DebugResourceCommand;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
@@ -31,20 +30,18 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class DebugResourceCommandTest extends TestCase
 {
-    use ProphecyTrait;
+    private RegistryInterface|MockObject $registry;
 
-    private ObjectProphecy $registry;
-
-    private ObjectProphecy $resourceCollectionMetadataFactory;
+    private ResourceMetadataCollectionFactoryInterface|MockObject $resourceCollectionMetadataFactory;
 
     private CommandTester $tester;
 
     public function setUp(): void
     {
-        $this->registry = $this->prophesize(RegistryInterface::class);
-        $this->resourceCollectionMetadataFactory = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
+        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->resourceCollectionMetadataFactory = $this->createMock(ResourceMetadataCollectionFactoryInterface::class);
 
-        $command = new DebugResourceCommand($this->registry->reveal(), $this->resourceCollectionMetadataFactory->reveal());
+        $command = new DebugResourceCommand($this->registry, $this->resourceCollectionMetadataFactory);
         $this->tester = new CommandTester($command);
     }
 
@@ -53,7 +50,7 @@ final class DebugResourceCommandTest extends TestCase
      */
     public function it_lists_all_resources_if_no_argument_is_given(): void
     {
-        $this->registry->getAll()->willReturn([$this->createMetadata('one'), $this->createMetadata('two')]);
+        $this->registry->method('getAll')->willReturn([$this->createMetadata('one'), $this->createMetadata('two')]);
 
         $this->tester->execute([]);
         $display = $this->tester->getDisplay();
@@ -79,11 +76,11 @@ final class DebugResourceCommandTest extends TestCase
      */
     public function it_displays_the_metadata_for_given_resource_alias_without_operations(): void
     {
-        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+        $this->registry->method('get')->with('metadata.one')->willReturn($this->createMetadata('one'));
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
 
-        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+        $this->resourceCollectionMetadataFactory->method('create')->with('App\One')->willReturn($resourceMetadataCollection);
 
         $this->tester->execute([
             'resource' => 'metadata.one',
@@ -99,7 +96,7 @@ final class DebugResourceCommandTest extends TestCase
      */
     public function it_displays_the_metadata_for_given_resource_alias_with_operations(): void
     {
-        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+        $this->registry->method('get')->with('metadata.one')->willReturn($this->createMetadata('one'));
 
         $resourceMetadata = (new ResourceMetadata())->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
@@ -108,7 +105,7 @@ final class DebugResourceCommandTest extends TestCase
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
 
-        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+        $this->resourceCollectionMetadataFactory->method('create')->with('App\One')->willReturn($resourceMetadataCollection);
 
         $this->tester->execute([
             'resource' => 'metadata.one',
@@ -165,7 +162,7 @@ final class DebugResourceCommandTest extends TestCase
      */
     public function it_displays_the_metadata_for_given_resource_as_fully_qualified_class_name(): void
     {
-        $this->registry->getByClass('App\Resource')->willReturn($this->createMetadata('one'));
+        $this->registry->method('getByClass')->with('App\Resource')->willReturn($this->createMetadata('one'));
 
         $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'))->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
@@ -174,7 +171,7 @@ final class DebugResourceCommandTest extends TestCase
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
 
-        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+        $this->resourceCollectionMetadataFactory->method('create')->with('App\One')->willReturn($resourceMetadataCollection);
 
         $this->tester->execute([
             'resource' => 'App\Resource',
@@ -231,7 +228,7 @@ final class DebugResourceCommandTest extends TestCase
      */
     public function it_displays_the_metadata_for_given_resource_operation(): void
     {
-        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+        $this->registry->method('get')->with('metadata.one')->willReturn($this->createMetadata('one'));
 
         $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'))->withOperations(new Operations([
             'app_one_index' => new Index(name: 'app_one_index', provider: 'App\GetOneItemProvider'),
@@ -251,7 +248,7 @@ final class DebugResourceCommandTest extends TestCase
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
 
-        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+        $this->resourceCollectionMetadataFactory->method('create')->with('App\One')->willReturn($resourceMetadataCollection);
 
         $this->tester->execute([
             'resource' => 'metadata.one',
@@ -327,13 +324,13 @@ final class DebugResourceCommandTest extends TestCase
     #[Test]
     public function it_displays_the_legacy_resource_metadata_for_given_resource_alias(): void
     {
-        $this->registry->get('metadata.one')->willReturn($this->createMetadata('one'));
+        $this->registry->method('get')->with('metadata.one')->willReturn($this->createMetadata('one'));
 
         $resourceMetadata = (new ResourceMetadata(alias: 'sylius.one'));
 
         $resourceMetadataCollection = new ResourceMetadataCollection([$resourceMetadata]);
 
-        $this->resourceCollectionMetadataFactory->create('App\One')->willReturn($resourceMetadataCollection);
+        $this->resourceCollectionMetadataFactory->method('create')->with('App\One')->willReturn($resourceMetadataCollection);
 
         $this->tester->execute([
             'resource' => 'metadata.one',

@@ -13,30 +13,27 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Context\Option;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Option\RequestOption;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RequestOptionTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private Request|ObjectProphecy $request;
+    private Request|MockObject $request;
 
     private RequestOption $requestOption;
 
     protected function setUp(): void
     {
-        $this->request = $this->prophesize(Request::class);
+        $this->request = $this->createMock(Request::class);
 
-        $this->requestOption = new RequestOption($this->request->reveal());
+        $this->requestOption = new RequestOption($this->request);
     }
 
     /** @test */
     public function it_contains_request(): void
     {
-        $this->assertEquals($this->request->reveal(), $this->requestOption->request());
+        $this->assertEquals($this->request, $this->requestOption->request());
     }
 }

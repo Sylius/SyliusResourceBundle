@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Factory\Factory;
 use Sylius\Resource\Factory\FactoryInterface;
 
 final class FactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private Factory $factory;
 
     protected function setUp(): void

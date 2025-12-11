@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Component\Resource\Factory\TranslatableFactory;
 use Sylius\Component\Resource\Factory\TranslatableFactoryInterface as LegacyTranslatableFactoryInterface;
 use Sylius\Resource\Factory\FactoryInterface;
@@ -25,20 +24,18 @@ use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
 final class TranslatableFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    private FactoryInterface|MockObject $factory;
 
-    private FactoryInterface|ObjectProphecy $factory;
-
-    private TranslationLocaleProviderInterface|ObjectProphecy $localeProvider;
+    private TranslationLocaleProviderInterface|MockObject $localeProvider;
 
     private TranslatableFactory $translatableFactory;
 
     protected function setUp(): void
     {
-        $this->factory = $this->prophesize(FactoryInterface::class);
-        $this->localeProvider = $this->prophesize(TranslationLocaleProviderInterface::class);
+        $this->factory = $this->createMock(FactoryInterface::class);
+        $this->localeProvider = $this->createMock(TranslationLocaleProviderInterface::class);
 
-        $this->translatableFactory = new TranslatableFactory($this->factory->reveal(), $this->localeProvider->reveal());
+        $this->translatableFactory = new TranslatableFactory($this->factory, $this->localeProvider);
     }
 
     /** @test */

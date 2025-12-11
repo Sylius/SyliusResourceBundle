@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Metadata\CollectionOperationInterface;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operation;
@@ -22,8 +21,6 @@ use Sylius\Resource\Metadata\ResourceMetadata;
 
 final class IndexTest extends TestCase
 {
-    use ProphecyTrait;
-
     private Index $index;
 
     protected function setUp(): void

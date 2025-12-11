@@ -15,8 +15,6 @@ namespace Sylius\Resource\Tests\Symfony\Security;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Metadata\HttpOperation;
 use Sylius\Resource\Metadata\Operation;
@@ -30,8 +28,6 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 class OperationAccessCheckerTest extends TestCase
 {
-    use ProphecyTrait;
-
     public static function getGranted(): iterable
     {
         yield [true];
@@ -40,41 +36,40 @@ class OperationAccessCheckerTest extends TestCase
 
     private function createTokenMock(array $roleNames = []): TokenInterface
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy->getUser()->shouldBeCalled();
-        $tokenProphecy->getRoleNames()->willReturn($roleNames)->shouldBeCalled();
+        $token = $this->createMock(TokenInterface::class);
+        $token->method('getRoleNames')->willReturn($roleNames);
 
-        return $tokenProphecy->reveal();
+        return $token;
     }
 
     private function createOperationMock(?string $securityExpression = 'is_granted("ROLE_ADMIN")'): Operation
     {
-        $operation = $this->prophesize(Operation::class);
-        $operation->getSecurity()->willReturn($securityExpression)->shouldBeCalled();
+        $operation = $this->createMock(Operation::class);
+        $operation->method('getSecurity')->willReturn($securityExpression);
 
-        return $operation->reveal();
+        return $operation;
     }
 
     private function createExpressionLanguageMock(string $expression, bool $result): ExpressionLanguage
     {
-        $expressionLanguageProphecy = $this->prophesize(ExpressionLanguage::class);
-        $expressionLanguageProphecy
-            ->evaluate($expression, Argument::type('array'))
-            ->willReturn($result)
-            ->shouldBeCalled();
+        $expressionLanguage = $this->createMock(ExpressionLanguage::class);
+        $expressionLanguage
+            ->method('evaluate')
+            ->with($expression, $this->isType('array'))
+            ->willReturn($result);
 
-        return $expressionLanguageProphecy->reveal();
+        return $expressionLanguage;
     }
 
     #[DataProvider('getGranted')]
     public function testIsGranted(bool $granted): void
     {
         $expressionLanguage = $this->createExpressionLanguageMock('is_granted("ROLE_ADMIN")', $granted);
-        $authenticationTrustResolver = $this->prophesize(AuthenticationTrustResolverInterface::class)->reveal();
+        $authenticationTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
         $token = $this->createTokenMock([]);
 
-        $tokenStorageProphecy = $this->prophesize(TokenStorageInterface::class);
-        $tokenStorageProphecy->getToken()->willReturn($token);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $tokenStorage->method('getToken')->willReturn($token);
 
         $operation = $this->createOperationMock();
 
@@ -82,7 +77,7 @@ class OperationAccessCheckerTest extends TestCase
             $expressionLanguage,
             $authenticationTrustResolver,
             null,
-            $tokenStorageProphecy->reveal(),
+            $tokenStorage,
         );
 
         $this->assertSame($granted, $checker->isGranted($operation, new Context()));
@@ -94,7 +89,7 @@ class OperationAccessCheckerTest extends TestCase
         $this->expectExceptionMessage('The "symfony/security" library must be installed to use the "security" attribute.');
 
         $checker = new OperationAccessChecker(
-            $this->prophesize(ExpressionLanguage::class)->reveal(),
+            $this->createMock(ExpressionLanguage::class),
         );
         $checker->isGranted(new HttpOperation(), new Context());
     }
@@ -104,15 +99,15 @@ class OperationAccessCheckerTest extends TestCase
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The "symfony/expression-language" library must be installed to use the "security" attribute.');
 
-        $authenticationTrustResolverProphecy = $this->prophesize(AuthenticationTrustResolverInterface::class);
-        $tokenStorageProphecy = $this->prophesize(TokenStorageInterface::class);
-        $tokenStorageProphecy->getToken()->willReturn($this->prophesize(TokenInterface::class)->reveal());
+        $authenticationTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $tokenStorage->method('getToken')->willReturn($this->createMock(TokenInterface::class));
 
         $checker = new OperationAccessChecker(
             null,
-            $authenticationTrustResolverProphecy->reveal(),
+            $authenticationTrustResolver,
             null,
-            $tokenStorageProphecy->reveal(),
+            $tokenStorage,
         );
         $checker->isGranted(new HttpOperation(), new Context());
     }
@@ -120,11 +115,11 @@ class OperationAccessCheckerTest extends TestCase
     public function testWithoutAuthenticationToken(): void
     {
         $expressionLanguage = $this->createExpressionLanguageMock('is_granted("ROLE_ADMIN")', true);
-        $authenticationTrustResolver = $this->prophesize(AuthenticationTrustResolverInterface::class)->reveal();
-        $authorizationChecker = $this->prophesize(AuthorizationCheckerInterface::class)->reveal();
+        $authenticationTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
-        $tokenStorageProphecy = $this->prophesize(TokenStorageInterface::class);
-        $tokenStorageProphecy->getToken()->willReturn(null);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $tokenStorage->method('getToken')->willReturn(null);
 
         $operation = $this->createOperationMock();
 
@@ -132,7 +127,7 @@ class OperationAccessCheckerTest extends TestCase
             $expressionLanguage,
             $authenticationTrustResolver,
             null,
-            $tokenStorageProphecy->reveal(),
+            $tokenStorage,
             $authorizationChecker,
         );
 
@@ -141,16 +136,16 @@ class OperationAccessCheckerTest extends TestCase
 
     public function testItGrantsAccessWhenOperationHasNoSecurityExpression(): void
     {
-        $expressionLanguageProphecy = $this->prophesize(ExpressionLanguage::class);
+        $expressionLanguage = $this->createMock(ExpressionLanguage::class);
         // Expression language should not be called when security is null
-        $expressionLanguageProphecy->evaluate(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $expressionLanguage->expects($this->never())->method('evaluate');
 
-        $authenticationTrustResolver = $this->prophesize(AuthenticationTrustResolverInterface::class)->reveal();
-        $tokenStorage = $this->prophesize(TokenStorageInterface::class)->reveal();
+        $authenticationTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $operation = $this->createOperationMock(null);
 
         $checker = new OperationAccessChecker(
-            $expressionLanguageProphecy->reveal(),
+            $expressionLanguage,
             $authenticationTrustResolver,
             null,
             $tokenStorage,
@@ -164,25 +159,26 @@ class OperationAccessCheckerTest extends TestCase
     public function testIsGrantedWithRoleHierarchy(bool $granted): void
     {
         $expressionLanguage = $this->createExpressionLanguageMock('is_granted("ROLE_ADMIN")', $granted);
-        $authenticationTrustResolver = $this->prophesize(AuthenticationTrustResolverInterface::class)->reveal();
+        $authenticationTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
         $token = $this->createTokenMock(['ROLE_USER']);
 
-        $tokenStorageProphecy = $this->prophesize(TokenStorageInterface::class);
-        $tokenStorageProphecy->getToken()->willReturn($token);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $tokenStorage->method('getToken')->willReturn($token);
 
-        $roleHierarchyProphecy = $this->prophesize(RoleHierarchyInterface::class);
-        $roleHierarchyProphecy
-            ->getReachableRoleNames(['ROLE_USER'])
-            ->willReturn(['ROLE_USER', 'ROLE_ADMIN'])
-            ->shouldBeCalled();
+        $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
+        $roleHierarchy
+            ->expects($this->once())
+            ->method('getReachableRoleNames')
+            ->with(['ROLE_USER'])
+            ->willReturn(['ROLE_USER', 'ROLE_ADMIN']);
 
         $operation = $this->createOperationMock();
 
         $checker = new OperationAccessChecker(
             $expressionLanguage,
             $authenticationTrustResolver,
-            $roleHierarchyProphecy->reveal(),
-            $tokenStorageProphecy->reveal(),
+            $roleHierarchy,
+            $tokenStorage,
         );
 
         $this->assertSame($granted, $checker->isGranted($operation, new Context()));

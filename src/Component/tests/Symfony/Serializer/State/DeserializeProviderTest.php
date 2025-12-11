@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\tests\Symfony\Serializer\State;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Delete;
@@ -29,35 +28,33 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class DeserializeProviderTest extends TestCase
 {
-    use ProphecyTrait;
+    private ProviderInterface|MockObject $decorated;
 
-    private ProviderInterface|ObjectProphecy $decorated;
-
-    private SerializerInterface|ObjectProphecy $serializer;
+    private SerializerInterface|MockObject $serializer;
 
     private DeserializeProvider $deserializableProvider;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProviderInterface::class);
-        $this->serializer = $this->prophesize(SerializerInterface::class);
+        $this->decorated = $this->createMock(ProviderInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         $this->deserializableProvider = new DeserializeProvider(
-            $this->decorated->reveal(),
-            $this->serializer->reveal(),
+            $this->decorated,
+            $this->serializer,
         );
     }
 
     private function createRequestMock(bool $isMethodSafe = false, string $format = 'json', mixed $content = ['food' => 'fighters'], string $method = 'POST'): Request
     {
-        $request = $this->prophesize(Request::class);
+        $request = $this->createMock(Request::class);
         $request->attributes = new ParameterBag();
-        $request->isMethodSafe()->willReturn($isMethodSafe);
-        $request->getRequestFormat()->willReturn($format);
-        $request->getContent()->willReturn($content);
-        $request->getMethod()->willReturn($method);
+        $request->method('isMethodSafe')->willReturn($isMethodSafe);
+        $request->method('getRequestFormat')->willReturn($format);
+        $request->method('getContent')->willReturn($content);
+        $request->method('getMethod')->willReturn($method);
 
-        return $request->reveal();
+        return $request;
     }
 
     private function createOperationMock(
@@ -65,29 +62,29 @@ final class DeserializeProviderTest extends TestCase
         ?bool $canDeserialize = null,
         ?array $denormalizationContext = [],
     ): HttpOperation {
-        $operation = $this->prophesize(HttpOperation::class);
+        $operation = $this->createMock(HttpOperation::class);
 
         if ($resource === false) {
-            $operation->getResource()->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
+            $operation->method('getResource')->willReturn(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         } else {
-            $operation->getResource()->willReturn($resource);
+            $operation->method('getResource')->willReturn($resource);
         }
 
-        $operation->canDeserialize()->willReturn($canDeserialize);
-        $operation->getDenormalizationContext()->willReturn($denormalizationContext);
+        $operation->method('canDeserialize')->willReturn($canDeserialize);
+        $operation->method('getDenormalizationContext')->willReturn($denormalizationContext);
 
-        return $operation->reveal();
+        return $operation;
     }
 
     public function testItDeserializesData(): void
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock();
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn($data)->shouldBeCalled();
-        $this->serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', ['object_to_populate' => $data])->willReturn($data)->shouldBeCalled();
+        $this->decorated->expects($this->once())->method('provide')->with($operation, $context)->willReturn($data);
+        $this->serializer->expects($this->once())->method('deserialize')->with(['food' => 'fighters'], 'App\Resource', 'json', ['object_to_populate' => $data])->willReturn($data);
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -96,10 +93,10 @@ final class DeserializeProviderTest extends TestCase
     {
         $request = $this->createRequestMock();
         $operation = $this->createOperationMock(denormalizationContext: ['groups' => ['dummy:write']]);
-        $data = $this->prophesize(\stdClass::class);
+        $data = new \stdClass();
         $context = new Context(new RequestOption($request));
 
-        $this->serializer->deserialize(['food' => 'fighters'], 'App\Resource', 'json', ['groups' => ['dummy:write']])->willReturn($data)->shouldBeCalled();
+        $this->serializer->expects($this->once())->method('deserialize')->with(['food' => 'fighters'], 'App\Resource', 'json', ['groups' => ['dummy:write']])->willReturn($data);
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -110,7 +107,7 @@ final class DeserializeProviderTest extends TestCase
         $operation = $this->createOperationMock(canDeserialize: false);
         $context = new Context(new RequestOption($request));
 
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->serializer->expects($this->never())->method('deserialize');
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -122,8 +119,8 @@ final class DeserializeProviderTest extends TestCase
         $context = new Context(new RequestOption($request));
         $data = new \stdClass();
 
-        $this->decorated->provide($operation, $context)->willReturn($data);
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->decorated->method('provide')->with($operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('deserialize');
 
         $result = $this->deserializableProvider->provide($operation, $context);
 
@@ -136,7 +133,7 @@ final class DeserializeProviderTest extends TestCase
         $operation = $this->createOperationMock(canDeserialize: true);
         $context = new Context(new RequestOption($request));
 
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->serializer->expects($this->never())->method('deserialize');
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -147,7 +144,7 @@ final class DeserializeProviderTest extends TestCase
         $operation = $this->createOperationMock(canDeserialize: true);
         $context = new Context(new RequestOption($request));
 
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->serializer->expects($this->never())->method('deserialize');
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -158,7 +155,7 @@ final class DeserializeProviderTest extends TestCase
         $operation = (new Delete())->withResource(new ResourceMetadata(alias: 'app.dummy', class: 'App\Resource'));
         $context = new Context(new RequestOption($request));
 
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->serializer->expects($this->never())->method('deserialize');
 
         $this->deserializableProvider->provide($operation, $context);
     }
@@ -172,34 +169,34 @@ final class DeserializeProviderTest extends TestCase
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('You can not use the "json" format if the Serializer is not available. Try running "composer require symfony/serializer".');
 
-        $deserializableProvider = new DeserializeProvider($this->decorated->reveal(), null);
+        $deserializableProvider = new DeserializeProvider($this->decorated, null);
         $deserializableProvider->provide($operation, $context);
     }
 
     public function testItReturnsDataWhenOperationIsNotHttpOperation(): void
     {
-        $operation = $this->prophesize(\Sylius\Resource\Metadata\Operation::class);
+        $operation = $this->createMock(\Sylius\Resource\Metadata\Operation::class);
         $data = new \stdClass();
         $context = new Context();
 
-        $this->decorated->provide($operation->reveal(), $context)->willReturn($data)->shouldBeCalled();
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->decorated->expects($this->once())->method('provide')->with($operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('deserialize');
 
-        $result = $this->deserializableProvider->provide($operation->reveal(), $context);
+        $result = $this->deserializableProvider->provide($operation, $context);
 
         $this->assertSame($data, $result);
     }
 
     public function testItReturnsDataWhenRequestIsNull(): void
     {
-        $operation = $this->prophesize(HttpOperation::class);
+        $operation = $this->createMock(HttpOperation::class);
         $data = new \stdClass();
         $context = new Context();
 
-        $this->decorated->provide($operation->reveal(), $context)->willReturn($data)->shouldBeCalled();
-        $this->serializer->deserialize(\Prophecy\Argument::cetera())->shouldNotBeCalled();
+        $this->decorated->expects($this->once())->method('provide')->with($operation, $context)->willReturn($data);
+        $this->serializer->expects($this->never())->method('deserialize');
 
-        $result = $this->deserializableProvider->provide($operation->reveal(), $context);
+        $result = $this->deserializableProvider->provide($operation, $context);
 
         $this->assertSame($data, $result);
     }

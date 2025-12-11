@@ -17,10 +17,8 @@ use Hateoas\Representation\Factory\PagerfantaFactory;
 use Hateoas\Representation\PaginatedRepresentation;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use PhpSpec\Exception\Example\SkippingException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProvider;
@@ -42,8 +40,6 @@ final class ResourcesCollectionProviderTest extends TestCase
     private MockObject $resourcesResolverMock;
 
     private ResourcesCollectionProvider $resourcesCollectionProvider;
-
-    use ProphecyTrait;
 
     protected function setUp(): void
     {
@@ -136,7 +132,7 @@ final class ResourcesCollectionProviderTest extends TestCase
         /** @var MetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->createMock(MetadataInterface::class);
         if (!class_exists(PagerfantaFactory::class)) {
-            throw new SkippingException('PagerfantaFactory is not installed.');
+            $this->markTestSkipped('PagerfantaFactory is not installed.');
         }
         $this->resourcesCollectionProvider = new ResourcesCollectionProvider(new ResourcesResolver(), new PagerfantaFactory());
         $paginator = new Pagerfanta(new ArrayAdapter([]));

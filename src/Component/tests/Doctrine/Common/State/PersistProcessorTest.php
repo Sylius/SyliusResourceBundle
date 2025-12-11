@@ -16,25 +16,22 @@ namespace Sylius\Resource\Tests\Doctrine\Common\State;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Metadata\Operation;
 
 final class PersistProcessorTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ManagerRegistry|ObjectProphecy $managerRegistry;
+    private ManagerRegistry|MockObject $managerRegistry;
 
     private PersistProcessor $persistProcessor;
 
     protected function setUp(): void
     {
-        $this->managerRegistry = $this->prophesize(ManagerRegistry::class);
-        $this->persistProcessor = new PersistProcessor($this->managerRegistry->reveal());
+        $this->managerRegistry = $this->createMock(ManagerRegistry::class);
+        $this->persistProcessor = new PersistProcessor($this->managerRegistry);
     }
 
     public function testItIsInitializable(): void
@@ -44,71 +41,71 @@ final class PersistProcessorTest extends TestCase
 
     public function testItPersistsDataWhenManagerDoesNotContainTheResourceYet(): void
     {
-        $manager = $this->prophesize(ObjectManager::class);
-        $operation = $this->prophesize(Operation::class);
+        $manager = $this->createMock(ObjectManager::class);
+        $operation = $this->createMock(Operation::class);
         $data = new \stdClass();
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager);
-        $manager->contains($data)->willReturn(false);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn($manager);
+        $manager->method('contains')->with($data)->willReturn(false);
 
-        $manager->persist($data)->shouldBeCalled();
-        $manager->flush()->shouldBeCalled();
-        $manager->refresh($data)->shouldBeCalled();
+        $manager->expects($this->once())->method('persist')->with($data);
+        $manager->expects($this->once())->method('flush');
+        $manager->expects($this->once())->method('refresh')->with($data);
 
-        $this->persistProcessor->process($data, $operation->reveal(), new Context());
+        $this->persistProcessor->process($data, $operation, new Context());
     }
 
     public function testItOnlyFlushesWhenManagerContainsTheResource(): void
     {
-        $manager = $this->prophesize(ObjectManager::class);
-        $operation = $this->prophesize(Operation::class);
+        $manager = $this->createMock(ObjectManager::class);
+        $operation = $this->createMock(Operation::class);
         $data = new \stdClass();
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager);
-        $manager->contains($data)->willReturn(true);
-        $manager->getClassMetadata(\stdClass::class)->willReturn($data);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn($manager);
+        $manager->method('contains')->with($data)->willReturn(true);
+        $manager->method('getClassMetadata')->with(\stdClass::class)->willReturn($data);
 
-        $manager->persist($data)->shouldNotBeCalled();
-        $manager->flush()->shouldBeCalled();
-        $manager->refresh($data)->shouldBeCalled();
+        $manager->expects($this->never())->method('persist')->with($data);
+        $manager->expects($this->once())->method('flush');
+        $manager->expects($this->once())->method('refresh')->with($data);
 
-        $this->persistProcessor->process($data, $operation->reveal(), new Context());
+        $this->persistProcessor->process($data, $operation, new Context());
     }
 
     public function testItPersistsWhenDeferredExplicitly(): void
     {
-        $manager = $this->prophesize(ObjectManager::class);
-        $operation = $this->prophesize(Operation::class);
-        $classMetadataInfo = $this->prophesize(ClassMetadata::class);
+        $manager = $this->createMock(ObjectManager::class);
+        $operation = $this->createMock(Operation::class);
+        $classMetadataInfo = $this->createMock(ClassMetadata::class);
         $data = new \stdClass();
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager);
-        $manager->contains($data)->willReturn(true);
-        $manager->getClassMetadata(\stdClass::class)->willReturn($classMetadataInfo);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn($manager);
+        $manager->method('contains')->with($data)->willReturn(true);
+        $manager->method('getClassMetadata')->with(\stdClass::class)->willReturn($classMetadataInfo);
 
-        $classMetadataInfo->isChangeTrackingDeferredExplicit()->willReturn(true)->shouldBeCalled();
+        $classMetadataInfo->expects($this->once())->method('isChangeTrackingDeferredExplicit')->willReturn(true);
 
-        $manager->persist($data)->shouldBeCalled();
-        $manager->flush()->shouldBeCalled();
-        $manager->refresh($data)->shouldBeCalled();
+        $manager->expects($this->once())->method('persist')->with($data);
+        $manager->expects($this->once())->method('flush');
+        $manager->expects($this->once())->method('refresh')->with($data);
 
-        $this->persistProcessor->process($data, $operation->reveal(), new Context());
+        $this->persistProcessor->process($data, $operation, new Context());
     }
 
     public function testItDoesNothingWhenDataIsNotManagedByDoctrine(): void
     {
-        $operation = $this->prophesize(Operation::class);
+        $operation = $this->createMock(Operation::class);
         $data = new \stdClass();
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn(null);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn(null);
 
-        $this->assertSame($data, $this->persistProcessor->process($data, $operation->reveal(), new Context()));
+        $this->assertSame($data, $this->persistProcessor->process($data, $operation, new Context()));
     }
 
     public function testItDoesNothingWhenDataIsNotAnObject(): void
     {
-        $operation = $this->prophesize(Operation::class);
+        $operation = $this->createMock(Operation::class);
 
-        $this->assertSame(1, $this->persistProcessor->process(1, $operation->reveal(), new Context()));
+        $this->assertSame(1, $this->persistProcessor->process(1, $operation, new Context()));
     }
 }

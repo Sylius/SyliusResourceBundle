@@ -15,25 +15,22 @@ namespace Sylius\Resource\Tests\Doctrine\Common\State;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Resource\Metadata\Operation;
 
 final class RemoveProcessorTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ManagerRegistry|ObjectProphecy $managerRegistry;
+    private ManagerRegistry|MockObject $managerRegistry;
 
     private RemoveProcessor $removeProcessor;
 
     protected function setUp(): void
     {
-        $this->managerRegistry = $this->prophesize(ManagerRegistry::class);
-        $this->removeProcessor = new RemoveProcessor($this->managerRegistry->reveal());
+        $this->managerRegistry = $this->createMock(ManagerRegistry::class);
+        $this->removeProcessor = new RemoveProcessor($this->managerRegistry);
     }
 
     public function testItIsInitializable(): void
@@ -44,14 +41,14 @@ final class RemoveProcessorTest extends TestCase
     public function testItRemovesData(): void
     {
         $data = new \stdClass();
-        $operation = $this->prophesize(Operation::class)->reveal();
-        $manager = $this->prophesize(ObjectManager::class);
+        $operation = $this->createMock(Operation::class);
+        $manager = $this->createMock(ObjectManager::class);
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn($manager->reveal());
-        $manager->contains($data)->willReturn(false);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn($manager);
+        $manager->method('contains')->with($data)->willReturn(false);
 
-        $manager->remove($data)->shouldBeCalled();
-        $manager->flush()->shouldBeCalled();
+        $manager->expects($this->once())->method('remove')->with($data);
+        $manager->expects($this->once())->method('flush');
 
         $this->removeProcessor->process($data, $operation, new Context());
     }
@@ -59,16 +56,16 @@ final class RemoveProcessorTest extends TestCase
     public function testItDoesNothingWhenDataIsNotManagedByDoctrine(): void
     {
         $data = new \stdClass();
-        $operation = $this->prophesize(Operation::class)->reveal();
+        $operation = $this->createMock(Operation::class);
 
-        $this->managerRegistry->getManagerForClass(\stdClass::class)->willReturn(null);
+        $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn(null);
 
         $this->assertNull($this->removeProcessor->process($data, $operation, new Context()));
     }
 
     public function testItDoesNothingWhenDataIsNotAnObject(): void
     {
-        $operation = $this->prophesize(Operation::class)->reveal();
+        $operation = $this->createMock(Operation::class);
 
         $this->assertNull($this->removeProcessor->process(1, $operation, new Context()));
     }

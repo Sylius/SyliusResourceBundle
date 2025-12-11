@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\State\Provider;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -28,43 +27,52 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class FactoryProviderTest extends TestCase
 {
-    use ProphecyTrait;
+    private ProviderInterface|MockObject $decorated;
 
-    private ProviderInterface|ObjectProphecy $decorated;
-
-    private FactoryInterface|ObjectProphecy $factory;
+    private FactoryInterface|MockObject $factory;
 
     private FactoryProvider $factoryProvider;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProviderInterface::class);
-        $this->factory = $this->prophesize(FactoryInterface::class);
+        $this->decorated = $this->createMock(ProviderInterface::class);
+        $this->factory = $this->createMock(FactoryInterface::class);
 
         $this->factoryProvider = new FactoryProvider(
-            $this->decorated->reveal(),
-            $this->factory->reveal(),
+            $this->decorated,
+            $this->factory,
         );
     }
 
     /** @test */
     public function it_uses_factory_from_operation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
         $request->attributes = $attributes;
 
-        $this->factory->create($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
-        $attributes->set('data', $data)->shouldBeCalled();
+        $attributes->expects($this->once())
+            ->method('set')
+            ->with('data', $data)
+        ;
 
         $this->factoryProvider->provide($operation, $context);
     }
@@ -72,18 +80,26 @@ final class FactoryProviderTest extends TestCase
     /** @test */
     public function it_does_not_store_data_on_request_when_it_does_not_exist(): void
     {
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create();
 
         $context = new Context();
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
-        $this->factory->create($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
-        $attributes->set('data', $data)->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set');
 
         $this->factoryProvider->provide($operation, $context);
     }
@@ -91,21 +107,24 @@ final class FactoryProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_when_operation_is_not_a_factory_aware_operation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Update();
 
         $context = new Context();
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
         $request->attributes = $attributes;
 
-        $this->factory->create($operation, $context)->willReturn($data)->shouldNotBeCalled();
-
-        $attributes->set('data', $data)->shouldNotBeCalled();
+        $this->factory->expects($this->never())->method('create');
+        $attributes->expects($this->never())->method('set');
 
         $this->factoryProvider->provide($operation, $context);
     }
@@ -113,21 +132,24 @@ final class FactoryProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_when_factory_is_disabled(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create(factory: false);
 
         $context = new Context();
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
         $request->attributes = $attributes;
 
-        $this->factory->create($operation, $context)->willReturn($data)->shouldNotBeCalled();
-
-        $attributes->set('data', $data)->shouldNotBeCalled();
+        $this->factory->expects($this->never())->method('create');
+        $attributes->expects($this->never())->method('set');
 
         $this->factoryProvider->provide($operation, $context);
     }

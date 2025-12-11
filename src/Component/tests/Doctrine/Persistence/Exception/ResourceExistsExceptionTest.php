@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\Tests\Doctrine\Persistence\Exception;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Resource\Doctrine\Persistence\Exception\ExceptionInterface;
 use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 
 final class ResourceExistsExceptionTest extends TestCase
 {
-    use ProphecyTrait;
-
     public function testItExtendsException(): void
     {
         $exception = new ResourceExistsException();

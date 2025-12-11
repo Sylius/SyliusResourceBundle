@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Symfony\Validator\State;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Create;
@@ -36,51 +34,56 @@ use Webmozart\Assert\Assert;
 
 final class ValidateProviderTest extends TestCase
 {
-    use ProphecyTrait;
+    private ProviderInterface|MockObject $decorated;
 
-    private ProviderInterface|ObjectProphecy $decorated;
-
-    private ValidatorInterface|ObjectProphecy $validator;
+    private ValidatorInterface|MockObject $validator;
 
     private ValidateProvider $validateProvider;
 
     protected function setUp(): void
     {
-        $this->decorated = $this->prophesize(ProviderInterface::class);
-        $this->validator = $this->prophesize(ValidatorInterface::class);
+        $this->decorated = $this->createMock(ProviderInterface::class);
+        $this->validator = $this->createMock(ValidatorInterface::class);
 
         $this->validateProvider = new ValidateProvider(
-            $this->decorated->reveal(),
-            $this->validator->reveal(),
+            $this->decorated,
+            $this->validator,
         );
     }
 
     /** @test */
     public function it_validates_form_data(): void
     {
-        $request = $this->prophesize(Request::class);
-        $form = $this->prophesize(FormInterface::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $form = $this->createMock(FormInterface::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
-        $request->isMethodSafe()->willReturn(false);
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('isMethodSafe')->willReturn(false);
+        $request->method('getRequestFormat')->willReturn('html');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn($form);
+        $attributes->method('get')->with('form')->willReturn($form);
 
-        $form->isSubmitted()->willReturn(true)->shouldBeCalled();
-        $form->isValid()->willReturn(true)->shouldBeCalled();
-        $form->getData()->willReturn($data)->shouldBeCalled();
+        $form->expects($this->once())->method('isSubmitted')->willReturn(true);
+        $form->expects($this->once())->method('isValid')->willReturn(true);
+        $form->expects($this->once())->method('getData')->willReturn($data);
 
-        $attributes->set('is_valid', true)->shouldBeCalled();
+        $attributes->expects($this->once())
+            ->method('set')
+            ->with('is_valid', true)
+        ;
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -88,29 +91,33 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_if_controller_result_is_a_response(): void
     {
-        $request = $this->prophesize(Request::class);
-        $form = $this->prophesize(FormInterface::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $form = $this->createMock(FormInterface::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(new Response())->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(new Response())
+        ;
 
-        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
-        $request->isMethodSafe()->willReturn(false)->shouldNotBeCalled();
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('html');
+        $request->expects($this->never())->method('isMethodSafe');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn($form);
+        $attributes->method('get')->with('form')->willReturn($form);
 
-        $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
-        $form->isValid()->willReturn(true)->shouldNotBeCalled();
-        $form->getData()->willReturn($data)->shouldNotBeCalled();
+        $form->expects($this->never())->method('isSubmitted');
+        $form->expects($this->never())->method('isValid');
+        $form->expects($this->never())->method('getData');
 
-        $attributes->set('is_valid', true)->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set')->with('is_valid', true);
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -118,31 +125,43 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_if_operation_is_not_a_create_or_update_operation(): void
     {
-        $request = $this->prophesize(Request::class);
-        $form = $this->prophesize(FormInterface::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $form = $this->createMock(FormInterface::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Index();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
-        $request->isMethodSafe()->willReturn(false);
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('isMethodSafe')->willReturn(false);
+        $request->method('getRequestFormat')->willReturn('html');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn($form);
-        $attributes->get('_route')->willReturn('app_dummy_create');
-        $attributes->all('_sylius')->willReturn(['resource' => 'app.dummy']);
+        $attributes->method('get')->willReturnCallback(function (string $key) use ($form) {
+            if ($key === 'form') {
+                return $form;
+            }
+            if ($key === '_route') {
+                return 'app_dummy_create';
+            }
 
-        $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
-        $form->isValid()->willReturn(true)->shouldNotBeCalled();
-        $form->getData()->willReturn($data)->shouldNotBeCalled();
+            return null;
+        });
+        $attributes->method('all')->with('_sylius')->willReturn(['resource' => 'app.dummy']);
 
-        $attributes->set('is_valid', true)->shouldNotBeCalled();
+        $form->expects($this->never())->method('isSubmitted');
+        $form->expects($this->never())->method('isValid');
+        $form->expects($this->never())->method('getData');
+
+        $attributes->expects($this->never())->method('set')->with('is_valid', true);
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -150,29 +169,36 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_sets_is_valid_to_false_if_method_is_safe(): void
     {
-        $request = $this->prophesize(Request::class);
-        $form = $this->prophesize(FormInterface::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $form = $this->createMock(FormInterface::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
-        $request->isMethodSafe()->willReturn(true)->shouldBeCalled();
-        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
+        $request->expects($this->once())->method('isMethodSafe')->willReturn(true);
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('html');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn($form);
+        $attributes->method('get')->with('form')->willReturn($form);
 
-        $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
-        $form->isValid()->willReturn(true)->shouldNotBeCalled();
-        $form->getData()->willReturn($data)->shouldNotBeCalled();
+        $form->expects($this->never())->method('isSubmitted');
+        $form->expects($this->never())->method('isValid');
+        $form->expects($this->never())->method('getData');
 
-        $attributes->set('is_valid', false)->shouldBeCalled();
+        $attributes->expects($this->once())
+            ->method('set')
+            ->with('is_valid', false)
+        ;
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -180,23 +206,27 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_if_there_is_no_form(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn(['foo' => 'fighters'])->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
 
-        $request->isMethodSafe()->willReturn(false);
-        $request->getRequestFormat()->willReturn('html');
+        $request->method('isMethodSafe')->willReturn(false);
+        $request->method('getRequestFormat')->willReturn('html');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn(null);
+        $attributes->method('get')->with('form')->willReturn(null);
 
-        $attributes->set('is_valid', Argument::any())->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set')->with('is_valid', $this->anything());
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -204,26 +234,34 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_validates_resource_on_non_html_format(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
-        $constraintViolationList = $this->prophesize(ConstraintViolationListInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
+        $constraintViolationList = $this->createMock(ConstraintViolationListInterface::class);
 
-        $request->getRequestFormat()->willReturn('json')->shouldBeCalled();
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('json');
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn(null);
+        $attributes->method('get')->with('form')->willReturn(null);
 
-        $this->validator->validate($data, null, null)->willReturn($constraintViolationList)->shouldBeCalled();
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($data, null, null)
+            ->willReturn($constraintViolationList)
+        ;
 
-        $constraintViolationList->count()->willReturn(0)->shouldBeCalled();
+        $constraintViolationList->expects($this->once())->method('count')->willReturn(0);
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -231,26 +269,34 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_validates_resource_with_validation_context_on_non_html_format(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
-        $constraintViolationList = $this->prophesize(ConstraintViolationListInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
+        $constraintViolationList = $this->createMock(ConstraintViolationListInterface::class);
 
-        $request->getRequestFormat()->willReturn('json')->shouldBeCalled();
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('json');
 
         $operation = new Create(validationContext: ['groups' => ['sylius']]);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn(null);
+        $attributes->method('get')->with('form')->willReturn(null);
 
-        $this->validator->validate($data, null, ['sylius'])->willReturn($constraintViolationList)->shouldBeCalled();
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($data, null, ['sylius'])
+            ->willReturn($constraintViolationList)
+        ;
 
-        $constraintViolationList->count()->willReturn(0)->shouldBeCalled();
+        $constraintViolationList->expects($this->once())->method('count')->willReturn(0);
 
         $this->validateProvider->provide($operation, $context);
     }
@@ -258,28 +304,36 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_validating_resource_on_non_html_format(): void
     {
-        $request = $this->prophesize(Request::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
-        $constraintViolation = $this->prophesize(ConstraintViolationInterface::class);
+        $request = $this->createMock(Request::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
+        $constraintViolation = $this->createMock(ConstraintViolationInterface::class);
 
         $operation = new Create();
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
-        $request->getRequestFormat()->willReturn('json')->shouldBeCalled();
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('json');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn(null)->shouldBeCalled();
+        $attributes->expects($this->once())->method('get')->with('form')->willReturn(null);
 
-        $constraintViolation->getPropertyPath()->willReturn('property');
-        $constraintViolation->getMessage()->willReturn('Error message');
-        $constraintViolationList = new ConstraintViolationList([$constraintViolation->reveal()]);
+        $constraintViolation->method('getPropertyPath')->willReturn('property');
+        $constraintViolation->method('getMessage')->willReturn('Error message');
+        $constraintViolationList = new ConstraintViolationList([$constraintViolation]);
 
-        $this->validator->validate($data, null, null)->willReturn($constraintViolationList)->shouldBeCalled();
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($data, null, null)
+            ->willReturn($constraintViolationList)
+        ;
 
         $this->expectException(ValidationException::class);
 
@@ -289,32 +343,36 @@ final class ValidateProviderTest extends TestCase
     /** @test */
     public function it_does_nothing_if_operation_cannot_be_validated(): void
     {
-        $request = $this->prophesize(Request::class);
-        $form = $this->prophesize(FormInterface::class);
-        $attributes = $this->prophesize(ParameterBag::class);
-        $data = $this->prophesize(\stdClass::class);
+        $request = $this->createMock(Request::class);
+        $form = $this->createMock(FormInterface::class);
+        $attributes = $this->createMock(ParameterBag::class);
+        $data = $this->createMock(\stdClass::class);
 
         $operation = new Create(validate: false);
 
-        $context = new Context(new RequestOption($request->reveal()));
+        $context = new Context(new RequestOption($request));
 
-        $this->decorated->provide($operation, $context)->willReturn($data)->shouldBeCalled();
+        $this->decorated->expects($this->once())
+            ->method('provide')
+            ->with($operation, $context)
+            ->willReturn($data)
+        ;
 
-        $request->getRequestFormat()->willReturn('html')->shouldBeCalled();
-        $request->isMethodSafe()->willReturn(false)->shouldNotBeCalled();
+        $request->expects($this->once())->method('getRequestFormat')->willReturn('html');
+        $request->expects($this->never())->method('isMethodSafe');
 
         $request->attributes = $attributes;
 
-        $attributes->get('form')->willReturn($form)->shouldBeCalled();
+        $attributes->expects($this->once())->method('get')->with('form')->willReturn($form);
 
-        $form->isSubmitted()->willReturn(true)->shouldNotBeCalled();
-        $form->isValid()->willReturn(true)->shouldNotBeCalled();
-        $form->getData()->willReturn($data)->shouldNotBeCalled();
+        $form->expects($this->never())->method('isSubmitted');
+        $form->expects($this->never())->method('isValid');
+        $form->expects($this->never())->method('getData');
 
-        $attributes->set('is_valid', true)->shouldNotBeCalled();
+        $attributes->expects($this->never())->method('set')->with('is_valid', true);
 
         $result = $this->validateProvider->provide($operation, $context);
 
-        Assert::eq($result, $data->reveal());
+        Assert::eq($result, $data);
     }
 }
