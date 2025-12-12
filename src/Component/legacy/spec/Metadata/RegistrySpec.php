@@ -11,27 +11,35 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Metadata;
+namespace Sylius\Component\Resource\Tests\Metadata;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Metadata\Registry;
 use Sylius\Component\Resource\Metadata\RegistryInterface as LegacyRegistryInterface;
 use Sylius\Resource\Metadata\Registry as NewRegistry;
 use Sylius\Resource\Metadata\RegistryInterface;
 
-final class RegistrySpec extends ObjectBehavior
+final class RegistryTest extends TestCase
 {
-    function it_implements_registry_interface(): void
+    private Registry $registry;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(RegistryInterface::class);
+        $this->registry = new Registry();
     }
 
-    function it_implements_legacy_registry_interface(): void
+    public function testItImplementsRegistryInterface(): void
     {
-        $this->shouldImplement(LegacyRegistryInterface::class);
+        $this->assertInstanceOf(RegistryInterface::class, $this->registry);
     }
 
-    function it_should_be_an_alias_of_registry(): void
+    public function testItImplementsLegacyRegistryInterface(): void
     {
-        $this->shouldBeAnInstanceOf(NewRegistry::class);
+        $this->assertInstanceOf(LegacyRegistryInterface::class, $this->registry);
+    }
+
+    public function testItShouldBeAnAliasOfRegistry(): void
+    {
+        $this->assertInstanceOf(NewRegistry::class, $this->registry);
     }
 }

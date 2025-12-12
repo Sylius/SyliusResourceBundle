@@ -11,20 +11,28 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Repository\Exception;
+namespace Sylius\Component\Resource\Tests\Repository\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Repository\Exception\ExistingResourceException;
 use Sylius\Resource\Doctrine\Persistence\Exception\ResourceExistsException;
 
-final class ExistingResourceExceptionSpec extends ObjectBehavior
+final class ExistingResourceExceptionTest extends TestCase
 {
-    function it_extends_exception(): void
+    private ExistingResourceException $exception;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(\Exception::class);
+        $this->exception = new ExistingResourceException();
     }
 
-    function it_should_be_an_alias_of_resource_exists_exception(): void
+    public function testItExtendsException(): void
     {
-        $this->shouldHaveType(ResourceExistsException::class);
+        $this->assertInstanceOf(\Exception::class, $this->exception);
+    }
+
+    public function testItShouldBeAnAliasOfResourceExistsException(): void
+    {
+        $this->assertInstanceOf(ResourceExistsException::class, $this->exception);
     }
 }

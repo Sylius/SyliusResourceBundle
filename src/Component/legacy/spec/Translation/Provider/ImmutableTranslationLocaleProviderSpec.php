@@ -11,32 +11,35 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation\Provider;
+namespace Sylius\Component\Resource\Tests\Translation\Provider;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Translation\Provider\ImmutableTranslationLocaleProvider;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface as LegacyTranslationLocaleProviderInterface;
 use Sylius\Resource\Translation\Provider\ImmutableTranslationLocaleProvider as NewImmutableTranslationLocaleProvider;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 
-final class ImmutableTranslationLocaleProviderSpec extends ObjectBehavior
+final class ImmutableTranslationLocaleProviderTest extends TestCase
 {
-    function let(): void
+    private ImmutableTranslationLocaleProvider $provider;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(['pl_PL', 'en_US'], 'pl_PL');
+        $this->provider = new ImmutableTranslationLocaleProvider(['pl_PL', 'en_US'], 'pl_PL');
     }
 
-    function it_implements_translation_locale_provider_interface(): void
+    public function testItImplementsTranslationLocaleProviderInterface(): void
     {
-        $this->shouldImplement(TranslationLocaleProviderInterface::class);
+        $this->assertInstanceOf(TranslationLocaleProviderInterface::class, $this->provider);
     }
 
-    function it_implements_legacy_translation_locale_provider_interface(): void
+    public function testItImplementsLegacyTranslationLocaleProviderInterface(): void
     {
-        $this->shouldImplement(LegacyTranslationLocaleProviderInterface::class);
+        $this->assertInstanceOf(LegacyTranslationLocaleProviderInterface::class, $this->provider);
     }
 
-    function it_is_an_alias_of_immutable_translation_locale_provider(): void
+    public function testItIsAnAliasOfImmutableTranslationLocaleProvider(): void
     {
-        $this->shouldHaveType(NewImmutableTranslationLocaleProvider::class);
+        $this->assertInstanceOf(NewImmutableTranslationLocaleProvider::class, $this->provider);
     }
 }

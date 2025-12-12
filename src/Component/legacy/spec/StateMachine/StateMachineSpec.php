@@ -11,20 +11,22 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\StateMachine;
+namespace Sylius\Component\Resource\Tests\StateMachine;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\StateMachine\StateMachine;
 use Sylius\Component\Resource\StateMachine\StateMachineInterface as LegacyStateMachineInterface;
 use Sylius\Resource\StateMachine\StateMachine as NewStateMachine;
 use Sylius\Resource\StateMachine\StateMachineInterface;
 use Sylius\Resource\Tests\Dummy\PullRequest;
 
-final class StateMachineSpec extends ObjectBehavior
+final class StateMachineTest extends TestCase
 {
-    function let(): void
+    private StateMachine $stateMachine;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(new PullRequest(), [
+        $this->stateMachine = new StateMachine(new PullRequest(), [
             'graph' => 'pull_request',
             'property_path' => 'currentPlace',
             'places' => [
@@ -40,23 +42,23 @@ final class StateMachineSpec extends ObjectBehavior
         ]);
     }
 
-    function it_is_initializable(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(StateMachine::class);
+        $this->assertInstanceOf(StateMachine::class, $this->stateMachine);
     }
 
-    function it_implements_state_machine_interface(): void
+    public function testItImplementsStateMachineInterface(): void
     {
-        $this->shouldImplement(StateMachineInterface::class);
+        $this->assertInstanceOf(StateMachineInterface::class, $this->stateMachine);
     }
 
-    function it_implements_legacy_state_machine_interface(): void
+    public function testItImplementsLegacyStateMachineInterface(): void
     {
-        $this->shouldImplement(LegacyStateMachineInterface::class);
+        $this->assertInstanceOf(LegacyStateMachineInterface::class, $this->stateMachine);
     }
 
-    function it_should_be_an_alias_of_state_machine(): void
+    public function testItShouldBeAnAliasOfStateMachine(): void
     {
-        $this->shouldImplement(NewStateMachine::class);
+        $this->assertInstanceOf(NewStateMachine::class, $this->stateMachine);
     }
 }

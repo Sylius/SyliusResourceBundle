@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Reflection;
+namespace Sylius\Component\Resource\Tests\Reflection;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Reflection\ClassReflection;
 use Sylius\Resource\Reflection\ClassReflection as NewClassReflection;
 
-final class ClassReflectionSpec extends ObjectBehavior
+final class ClassReflectionTest extends TestCase
 {
-    function it_is_an_alias_of_the_class_reflection(): void
+    public function testItIsAnAliasOfTheClassReflection(): void
     {
-        $this->shouldBeAnInstanceOf(NewClassReflection::class);
+        $this->assertInstanceOf(NewClassReflection::class, new ClassReflection());
     }
 }

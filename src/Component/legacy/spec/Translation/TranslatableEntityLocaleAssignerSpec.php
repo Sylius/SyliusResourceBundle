@@ -11,33 +11,37 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Translation;
+namespace Sylius\Component\Resource\Tests\Translation;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssigner;
 use Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface as LegacyTranslatableEntityLocaleAssignerInterface;
 use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Sylius\Resource\Translation\TranslatableEntityLocaleAssigner as NewTranslatableEntityLocaleAssigner;
 use Sylius\Resource\Translation\TranslatableEntityLocaleAssignerInterface;
 
-final class TranslatableEntityLocaleAssignerSpec extends ObjectBehavior
+final class TranslatableEntityLocaleAssignerTest extends TestCase
 {
-    function let(TranslationLocaleProviderInterface $translationLocaleProvider): void
+    private TranslatableEntityLocaleAssigner $assigner;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith($translationLocaleProvider);
+        $translationLocaleProvider = $this->createMock(TranslationLocaleProviderInterface::class);
+        $this->assigner = new TranslatableEntityLocaleAssigner($translationLocaleProvider);
     }
 
-    function it_implements_translatable_entity_locale_assigner_interface(): void
+    public function testItImplementsTranslatableEntityLocaleAssignerInterface(): void
     {
-        $this->shouldImplement(TranslatableEntityLocaleAssignerInterface::class);
+        $this->assertInstanceOf(TranslatableEntityLocaleAssignerInterface::class, $this->assigner);
     }
 
-    function it_implements_legacy_translatable_entity_locale_assigner_interface(): void
+    public function testItImplementsLegacyTranslatableEntityLocaleAssignerInterface(): void
     {
-        $this->shouldImplement(LegacyTranslatableEntityLocaleAssignerInterface::class);
+        $this->assertInstanceOf(LegacyTranslatableEntityLocaleAssignerInterface::class, $this->assigner);
     }
 
-    function it_is_an_alias_of_translatable_entity_local_assigner(): void
+    public function testItIsAnAliasOfTranslatableEntityLocalAssigner(): void
     {
-        $this->shouldHaveType(NewTranslatableEntityLocaleAssigner::class);
+        $this->assertInstanceOf(NewTranslatableEntityLocaleAssigner::class, $this->assigner);
     }
 }

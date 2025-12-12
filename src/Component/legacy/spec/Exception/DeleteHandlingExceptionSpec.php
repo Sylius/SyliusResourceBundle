@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace Sylius\Component\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Exception\DeleteHandlingException;
 use Sylius\Resource\Exception\DeleteHandlingException as NewDeleteHandlingException;
 
-final class DeleteHandlingExceptionSpec extends ObjectBehavior
+final class DeleteHandlingExceptionTest extends TestCase
 {
-    function it_should_be_an_alias_of_delete_handling_exception(): void
+    public function testItShouldBeAnAliasOfDeleteHandlingException(): void
     {
-        $this->shouldBeAnInstanceOf(NewDeleteHandlingException::class);
+        $this->assertInstanceOf(NewDeleteHandlingException::class, new DeleteHandlingException());
     }
 }

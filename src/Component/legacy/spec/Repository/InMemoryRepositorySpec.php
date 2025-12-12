@@ -11,23 +11,26 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Repository;
+namespace Sylius\Component\Resource\Tests\Repository;
 
-use PhpSpec\ObjectBehavior;
-use spec\Sylius\Component\Resource\Fixtures\SampleBookResourceInterface;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Repository\InMemoryRepository;
+use Sylius\Component\Resource\Tests\Fixtures\SampleBookResourceInterface;
 use Sylius\Resource\Doctrine\Persistence\InMemoryRepository as NewInMemoryRepository;
 
 require_once dirname(__DIR__) . '/Fixtures/SampleBookResourceInterface.php';
 
-final class InMemoryRepositorySpec extends ObjectBehavior
+final class InMemoryRepositoryTest extends TestCase
 {
-    function let(): void
+    private InMemoryRepository $repository;
+
+    protected function setUp(): void
     {
-        $this->beConstructedWith(SampleBookResourceInterface::class);
+        $this->repository = new InMemoryRepository(SampleBookResourceInterface::class);
     }
 
-    function it_should_be_an_alias_of_in_memory_repository(): void
+    public function testItShouldBeAnAliasOfInMemoryRepository(): void
     {
-        $this->shouldImplement(NewInMemoryRepository::class);
+        $this->assertInstanceOf(NewInMemoryRepository::class, $this->repository);
     }
 }

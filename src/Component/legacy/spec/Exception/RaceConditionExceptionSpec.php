@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace Sylius\Component\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Exception\RaceConditionException;
 use Sylius\Resource\Exception\RaceConditionException as NewRaceConditionException;
 
-final class RaceConditionExceptionSpec extends ObjectBehavior
+final class RaceConditionExceptionTest extends TestCase
 {
-    function it_should_be_an_alias_of_race_condition_exception(): void
+    public function testItShouldBeAnAliasOfRaceConditionException(): void
     {
-        $this->shouldBeAnInstanceOf(NewRaceConditionException::class);
+        $this->assertInstanceOf(NewRaceConditionException::class, new RaceConditionException());
     }
 }

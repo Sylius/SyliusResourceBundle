@@ -11,21 +11,28 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource;
+namespace Sylius\Component\Resource\Tests;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\ResourceActions;
 use Sylius\Resource\ResourceActions as NewResourceActions;
 
-final class ResourceActionsSpec extends ObjectBehavior
+final class ResourceActionsTest extends TestCase
 {
-    function it_is_initializable(): void
+    private ResourceActions $actions;
+
+    protected function setUp(): void
     {
-        $this->shouldHaveType(ResourceActions::class);
+        $this->actions = new ResourceActions();
     }
 
-    function it_is_an_alias_of_resource_actions(): void
+    public function testItIsInitializable(): void
     {
-        $this->shouldHaveType(NewResourceActions::class);
+        $this->assertInstanceOf(ResourceActions::class, $this->actions);
+    }
+
+    public function testItIsAnAliasOfResourceActions(): void
+    {
+        $this->assertInstanceOf(NewResourceActions::class, $this->actions);
     }
 }

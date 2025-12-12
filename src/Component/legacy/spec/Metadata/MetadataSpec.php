@@ -11,27 +11,35 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Metadata;
+namespace Sylius\Component\Resource\Tests\Metadata;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Metadata\Metadata;
 use Sylius\Component\Resource\Metadata\MetadataInterface as LegacyMetadataInterface;
 use Sylius\Resource\Metadata\Metadata as NewMetadata;
 use Sylius\Resource\Metadata\MetadataInterface;
 
-final class MetadataSpec extends ObjectBehavior
+final class MetadataTest extends TestCase
 {
-    function it_implements_metadata_interface(): void
+    private Metadata $metadata;
+
+    protected function setUp(): void
     {
-        $this->shouldImplement(MetadataInterface::class);
+        $this->metadata = new Metadata('sylius_product', 'app', 'product', 'App\Entity\Product');
     }
 
-    function it_implements_legacy_metadata_interface(): void
+    public function testItImplementsMetadataInterface(): void
     {
-        $this->shouldImplement(LegacyMetadataInterface::class);
+        $this->assertInstanceOf(MetadataInterface::class, $this->metadata);
     }
 
-    function it_should_be_an_alias_of_metadata(): void
+    public function testItImplementsLegacyMetadataInterface(): void
     {
-        $this->shouldBeAnInstanceOf(NewMetadata::class);
+        $this->assertInstanceOf(LegacyMetadataInterface::class, $this->metadata);
+    }
+
+    public function testItShouldBeAnAliasOfMetadata(): void
+    {
+        $this->assertInstanceOf(NewMetadata::class, $this->metadata);
     }
 }

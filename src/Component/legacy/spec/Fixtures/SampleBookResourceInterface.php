@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Fixtures;
+namespace Sylius\Component\Resource\Tests\Fixtures;
 
 use Sylius\Resource\Model\ResourceInterface;
 

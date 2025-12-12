@@ -11,20 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace Sylius\Component\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Resource\Exception\UnexpectedTypeException as NewUnexpectedTypeException;
 
-final class UnexpectedTypeExceptionSpec extends ObjectBehavior
+final class UnexpectedTypeExceptionTest extends TestCase
 {
-    function let(): void
+    public function testItShouldBeAnAliasOfUnexpectedTypeException(): void
     {
-        $this->beConstructedWith('stringValue', '\ExpectedType');
-    }
-
-    function it_should_be_an_alias_of_unexpected_type_exception(): void
-    {
-        $this->shouldBeAnInstanceOf(NewUnexpectedTypeException::class);
+        $this->assertInstanceOf(NewUnexpectedTypeException::class, new UnexpectedTypeException('stringValue', '\ExpectedType'));
     }
 }

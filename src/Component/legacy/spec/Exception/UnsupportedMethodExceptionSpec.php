@@ -11,20 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace Sylius\Component\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Exception\UnsupportedMethodException;
 use Sylius\Resource\Exception\UnsupportedMethodException as NewUnsupportedMethodException;
 
-final class UnsupportedMethodExceptionSpec extends ObjectBehavior
+final class UnsupportedMethodExceptionTest extends TestCase
 {
-    function let(): void
+    public function testItShouldBeAnAliasOfUnsupportedMethodException(): void
     {
-        $this->beConstructedWith('methodName');
-    }
-
-    function it_should_be_an_alias_of_unsupported_method_exception(): void
-    {
-        $this->shouldBeAnInstanceOf(NewUnsupportedMethodException::class);
+        $this->assertInstanceOf(NewUnsupportedMethodException::class, new UnsupportedMethodException('methodName'));
     }
 }

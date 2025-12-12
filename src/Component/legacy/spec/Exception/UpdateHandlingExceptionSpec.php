@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Exception;
+namespace Sylius\Component\Resource\Tests\Exception;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Resource\Exception\UpdateHandlingException as NewUpdateHandlingException;
 
-final class UpdateHandlingExceptionSpec extends ObjectBehavior
+final class UpdateHandlingExceptionTest extends TestCase
 {
-    function it_should_be_an_alias_of_unsupported_method_exception(): void
+    public function testItShouldBeAnAliasOfUpdateHandlingException(): void
     {
-        $this->shouldBeAnInstanceOf(NewUpdateHandlingException::class);
+        $this->assertInstanceOf(NewUpdateHandlingException::class, new UpdateHandlingException());
     }
 }

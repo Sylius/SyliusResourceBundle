@@ -11,28 +11,30 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\Component\Resource\Model;
+namespace Sylius\Component\Resource\Tests\Model;
 
-use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Model\AbstractTranslation;
 use Sylius\Resource\Model\AbstractTranslation as NewAbstractTranslation;
 use Sylius\Resource\Model\TranslationInterface;
 
-final class AbstractTranslationSpec extends ObjectBehavior
+final class AbstractTranslationTest extends TestCase
 {
-    function let(): void
+    private ConcreteTranslation $translation;
+
+    protected function setUp(): void
     {
-        $this->beAnInstanceOf('spec\Sylius\Component\Resource\Model\ConcreteTranslation');
+        $this->translation = new ConcreteTranslation();
     }
 
-    function it_is_a_translation(): void
+    public function testItIsATranslation(): void
     {
-        $this->shouldImplement(TranslationInterface::class);
+        $this->assertInstanceOf(TranslationInterface::class, $this->translation);
     }
 
-    function it_should_be_an_alias_of_abstract_translation(): void
+    public function testItShouldBeAnAliasOfAbstractTranslation(): void
     {
-        $this->shouldHaveType(NewAbstractTranslation::class);
+        $this->assertInstanceOf(NewAbstractTranslation::class, $this->translation);
     }
 }
 
