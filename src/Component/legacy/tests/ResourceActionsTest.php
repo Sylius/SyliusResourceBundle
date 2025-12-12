@@ -19,20 +19,13 @@ use Sylius\Resource\ResourceActions as NewResourceActions;
 
 final class ResourceActionsTest extends TestCase
 {
-    private ResourceActions $actions;
-
-    protected function setUp(): void
-    {
-        $this->actions = new ResourceActions();
-    }
-
     public function testItIsInitializable(): void
     {
-        $this->assertInstanceOf(ResourceActions::class, $this->actions);
+        $this->assertTrue(class_exists(ResourceActions::class));
     }
 
     public function testItIsAnAliasOfResourceActions(): void
     {
-        $this->assertInstanceOf(NewResourceActions::class, $this->actions);
+        $this->assertTrue(is_a(ResourceActions::class, NewResourceActions::class, true));
     }
 }
