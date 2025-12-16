@@ -28,7 +28,28 @@ final class PullRequestApiTest extends ApiTestCase
     #[Test]
     public function it_allows_creating_a_pull_request(): void
     {
-        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/pull-requests/' : '/pull-requests', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->client->request('POST', '/pull-requests', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": "start"
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_creating_a_pull_request_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->client->request('POST', '/pull-requests/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -109,5 +130,19 @@ final class PullRequestApiTest extends ApiTestCase
     private function isRoutingPathBcLayerEnabled(): bool
     {
         return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfBcLayerIsEnabled(): void
+    {
+        if ($this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be disabled.');
+        }
+    }
+
+    private function markAsSkippedIfBcLayerIsNotEnabled(): void
+    {
+        if (!$this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
     }
 }

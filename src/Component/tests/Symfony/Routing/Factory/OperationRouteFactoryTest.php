@@ -33,13 +33,13 @@ final class OperationRouteFactoryTest extends TestCase
 
     private OperationRouteFactory $operationRouteFactory;
 
-    private OperationRouteFactory $legacyOperationRouteFactory;
+    private OperationRouteFactory $bcOperationRouteFactory;
 
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
         $this->operationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(), false);
-        $this->legacyOperationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(), true);
+        $this->bcOperationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(), true);
     }
 
     public function testItCreatesRouteWithDefaultPathWithBcLayer(): void
@@ -58,7 +58,7 @@ final class OperationRouteFactoryTest extends TestCase
             ->with($operation, 'books')
             ->willReturn('/books');
 
-        $route = $this->legacyOperationRouteFactory->create($metadata, $resource, $operation);
+        $route = $this->bcOperationRouteFactory->create($metadata, $resource, $operation);
 
         $this->assertInstanceOf(Route::class, $route);
         $this->assertSame('/books', $route->getPath());
@@ -117,7 +117,7 @@ final class OperationRouteFactoryTest extends TestCase
             ->with($operation, 'books')
             ->willReturn('/books');
 
-        $route = $this->legacyOperationRouteFactory->create($metadata, $resource, $operation);
+        $route = $this->bcOperationRouteFactory->create($metadata, $resource, $operation);
 
         $this->assertSame('/admin//books', $route->getPath());
     }
@@ -325,7 +325,7 @@ final class OperationRouteFactoryTest extends TestCase
             ->with($operation, 'book-categories')
             ->willReturn('/book-categories');
 
-        $route = $this->legacyOperationRouteFactory->create($metadata, $resource, $operation);
+        $route = $this->bcOperationRouteFactory->create($metadata, $resource, $operation);
 
         $this->assertSame('/book-categories', $route->getPath());
     }

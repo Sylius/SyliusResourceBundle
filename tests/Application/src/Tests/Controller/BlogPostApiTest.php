@@ -29,9 +29,34 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_allows_creating_a_blog_post(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
-        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/blog-posts/' : 'blog-posts', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+        $this->client->request('POST', 'blog-posts', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "current_place": {
+                    "draft": 1
+                }
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_creating_a_blog_post_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
+
+        $this->client->request('POST', '/blog-posts/', [], [], ['CONTENT_TYPE' => 'application/json'], '{}');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -52,7 +77,7 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_allows_reviewing_a_blog_post(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
         $blogPost = BlogPostFactory::new()
             ->onDraft()
@@ -80,7 +105,7 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_allows_publishing_a_blog_post(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
         $blogPost = BlogPostFactory::new()
             ->reviewed()
@@ -108,7 +133,7 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_allows_rejecting_a_blog_post(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
         $blogPost = BlogPostFactory::new()
             ->reviewed()
@@ -136,7 +161,7 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_does_not_allow_to_publish_a_blog_post_with_draft_status(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
         $blogPost = BlogPostFactory::new()
             ->onDraft()
@@ -152,7 +177,7 @@ final class BlogPostApiTest extends ApiTestCase
     #[Test]
     public function it_does_not_allow_to_reject_a_blog_post_with_draft_status(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne();
 
         $blogPost = BlogPostFactory::new()
             ->onDraft()
@@ -165,7 +190,7 @@ final class BlogPostApiTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json');
     }
 
-    private function markAsSkippedIfNecessary(): void
+    private function markAsSkippedIfCurrentStateMachineIsNotTheSymfonyOne(): void
     {
         $container = self::getContainer();
 
@@ -179,5 +204,19 @@ final class BlogPostApiTest extends ApiTestCase
     private function isRoutingPathBcLayerEnabled(): bool
     {
         return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfBcLayerIsEnabled(): void
+    {
+        if ($this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be disabled.');
+        }
+    }
+
+    private function markAsSkippedIfBcLayerIsNotEnabled(): void
+    {
+        if (!$this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
     }
 }

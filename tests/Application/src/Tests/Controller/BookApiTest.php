@@ -32,7 +32,8 @@ class BookApiTest extends ApiTestCase
     #[Test]
     public function it_allows_creating_a_book(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $data =
 <<<EOT
@@ -46,7 +47,42 @@ class BookApiTest extends ApiTestCase
         }
 EOT;
 
-        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', '/books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "title":"Star Wars: Dark Disciple", 
+                "author":"Christie Golden"
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_creating_a_book_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        $data =
+            <<<EOT
+        {
+            "translations": {
+                "en_US": {
+                    "title": "Star Wars: Dark Disciple"
+                }
+            },
+            "author": "Christie Golden"
+        }
+EOT;
+
+        $this->client->request('POST', '/books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -138,7 +174,7 @@ EOT;
     #[Test]
     public function it_allows_showing_a_book(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $book = BookFactory::new()
             ->withTranslations([
@@ -173,11 +209,29 @@ EOT;
     #[Test]
     public function it_allows_indexing_books(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         DefaultBooksStory::load();
 
-        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books');
+        $this->client->request('GET', '/books');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesDefaultBooksIndex();
+    }
+
+    #[Test]
+    public function it_allows_indexing_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        DefaultBooksStory::load();
+
+        $this->client->request('GET', '/books/');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -189,11 +243,29 @@ EOT;
     #[Test]
     public function it_allows_paginating_the_index_of_books(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         MoreBooksStory::load();
 
-        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/books/' : '/books', ['page' => 2]);
+        $this->client->request('GET', '/books', ['page' => 2]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesMoreBooksIndexPage2();
+    }
+
+    #[Test]
+    public function it_allows_paginating_the_index_of_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        MoreBooksStory::load();
+
+        $this->client->request('GET', '/books/', ['page' => 2]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -205,7 +277,7 @@ EOT;
     #[Test]
     public function it_does_not_allow_showing_resource_if_it_not_exists(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $this->client->request('GET', '/books/3');
 
@@ -215,7 +287,7 @@ EOT;
     #[Test]
     public function it_does_not_apply_sorting_for_non_existing_field(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         MoreBooksStory::load();
 
@@ -231,7 +303,7 @@ EOT;
     #[Test]
     public function it_does_not_apply_filtering_for_non_existing_field(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         MoreBooksStory::load();
 
@@ -247,7 +319,7 @@ EOT;
     #[Test]
     public function it_applies_sorting_for_existing_field(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         MoreBooksStory::load();
 
@@ -339,7 +411,7 @@ EOT;
     #[Test]
     public function it_applies_filtering_for_existing_field(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         MoreBooksStory::load();
         BookFactory::new()->withAuthor('J.R.R. Tolkien')->create();
@@ -383,7 +455,7 @@ EOT;
     #[Test]
     public function it_allows_creating_a_book_via_custom_factory(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $data =
             <<<'JSON'
@@ -418,7 +490,7 @@ EOT;
     #[Test]
     public function it_allows_indexing_books_via_custom_repository(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         DefaultBooksStory::load();
 
@@ -434,7 +506,7 @@ EOT;
     #[Test]
     public function it_allows_showing_a_book_via_custom_repository(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         DefaultBooksStory::load();
 
@@ -661,20 +733,29 @@ EOT;
         );
     }
 
-    private function markAsSkippedIfNecessary(): void
+    private function markAsSkippedIfHateoasIsNotAvailable(): void
     {
         if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
         }
     }
 
-    public function assert()
-    {
-        return $this->assertEquals();
-    }
-
     private function isRoutingPathBcLayerEnabled(): bool
     {
         return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfBcLayerIsEnabled(): void
+    {
+        if ($this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be disabled.');
+        }
+    }
+
+    private function markAsSkippedIfBcLayerIsNotEnabled(): void
+    {
+        if (!$this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
     }
 }

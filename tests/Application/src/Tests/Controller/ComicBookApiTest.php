@@ -30,6 +30,8 @@ final class ComicBookApiTest extends ApiTestCase
     #[Test]
     public function it_allows_creating_a_comic_book(): void
     {
+        $this->markAsSkippedIfBcLayerIsEnabled();
+
         $data =
             <<<'JSON'
             {
@@ -42,7 +44,44 @@ final class ComicBookApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/v1/comic-books/' : '/v1/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', '/v1/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author": {
+                    "first_name": "Joe",
+                    "last_name": "Kelly"
+                },
+                "title": "Deadpool #1-69"
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_creating_a_comic_book_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+
+        $data =
+            <<<'JSON'
+            {
+                "title": "Deadpool #1-69",
+                "author": {
+                    "firstName": "Joe",
+                    "lastName": "Kelly"
+                }
+            }
+            JSON
+        ;
+
+        $this->client->request('POST', '/v1/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -65,7 +104,8 @@ final class ComicBookApiTest extends ApiTestCase
     #[Test]
     public function it_allows_versioned_creating_a_comic_book(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $data =
             <<<'JSON'
@@ -79,7 +119,43 @@ final class ComicBookApiTest extends ApiTestCase
             JSON
         ;
 
-        $this->client->request('POST', $this->isRoutingPathBcLayerEnabled() ? '/v1.2/comic-books/' : '/v1.2/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        $this->client->request('POST', '/v1.2/comic-books', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "id": @integer@,
+                "author_first_name": "Joe",
+                "author_last_name": "Kelly",
+                "title": "Deadpool #1-69"
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_versioned_creating_a_comic_book_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        $data =
+            <<<'JSON'
+            {
+                "title": "Deadpool #1-69",
+                "author": {
+                    "firstName": "Joe",
+                    "lastName": "Kelly"
+                }
+            }
+            JSON
+        ;
+
+        $this->client->request('POST', '/v1.2/comic-books/', [], [], ['CONTENT_TYPE' => 'application/json'], $data);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -185,7 +261,7 @@ EOT;
     #[Test]
     public function it_allows_versioning_of_a_showing_comic_book_serialization(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         $comicBook = self::someComicBook()->create();
 
@@ -210,20 +286,19 @@ EOT;
     #[Test]
     public function it_allows_indexing_of_comic_books(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         DefaultComicBooksStory::load();
 
-        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/v1/comic-books/' : '/v1/comic-books');
+        $this->client->request('GET', '/v1/comic-books');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $selfHref = $this->isRoutingPathBcLayerEnabled() ? "\/v1\/comic-books\/?page=1&limit=10" : "\/v1\/comic-books?page=1&limit=10";
-
         $this->assertResponseMatchesPattern(
-            <<<JSON
+            <<<'JSON'
             {
                 "page": 1,
                 "limit": 10,
@@ -231,13 +306,70 @@ EOT;
                 "total": 2,
                 "_links": {
                     "self": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1\/comic-books?page=1&limit=10"
                     },
                     "first": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1\/comic-books?page=1&limit=10"
                     },
                     "last": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1\/comic-books?page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                    "items": [
+                        {
+                            "id": @integer@,
+                            "author": {
+                                "first_name": "Andrea",
+                                "last_name": "Sorrentino"
+                            },
+                            "title": "Old Man Logan"
+                        },
+                        {
+                            "id": @integer@,
+                            "author": {
+                                "first_name": "Brian Michael",
+                                "last_name": "Bendis"
+                            },
+                            "title": "Civil War II"
+                        }
+                    ]
+                }
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_indexing_of_comic_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        DefaultComicBooksStory::load();
+
+        $this->client->request('GET', '/v1/comic-books/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 2,
+                "_links": {
+                    "self": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                    },
+                    "first": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "\/v1\/comic-books\/?page=1&limit=10"
                     }
                 },
                 "_embedded": {
@@ -268,17 +400,69 @@ EOT;
     #[Test]
     public function it_allows_versioned_indexing_of_comic_books(): void
     {
-        $this->markAsSkippedIfNecessary();
+        $this->markAsSkippedIfBcLayerIsEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
 
         DefaultComicBooksStory::load();
 
-        $this->client->request('GET', $this->isRoutingPathBcLayerEnabled() ? '/v1.2/comic-books/' : 'v1.2/comic-books');
+        $this->client->request('GET', 'v1.2/comic-books');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $selfHref = $this->isRoutingPathBcLayerEnabled() ? "\/v1.2\/comic-books\/?page=1&limit=10" : "\/v1.2\/comic-books?page=1&limit=10";
+        $this->assertResponseMatchesPattern(
+            <<<'JSON'
+            {
+                "page": 1,
+                "limit": 10,
+                "pages": 1,
+                "total": 2,
+                "_links": {
+                    "self": {
+                        "href": "\/v1.2\/comic-books?page=1&limit=10"
+                    },
+                    "first": {
+                        "href": "\/v1.2\/comic-books?page=1&limit=10"
+                    },
+                    "last": {
+                        "href": "\/v1.2\/comic-books?page=1&limit=10"
+                    }
+                },
+                "_embedded": {
+                  "items": [
+                    {
+                      "id": @integer@,
+                      "author_first_name": "Andrea",
+                      "author_last_name": "Sorrentino",
+                      "title": "Old Man Logan"
+                    },
+                    {
+                      "id": @integer@,
+                      "author_first_name": "Brian Michael",
+                      "author_last_name": "Bendis",
+                      "title": "Civil War II"
+                    }
+                  ]
+                }
+            }
+            JSON
+        );
+    }
+
+    #[Test]
+    public function it_allows_versioned_indexing_of_comic_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
+        DefaultComicBooksStory::load();
+
+        $this->client->request('GET', '/v1.2/comic-books/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
 
         $this->assertResponseMatchesPattern(
             <<<JSON
@@ -289,13 +473,13 @@ EOT;
                 "total": 2,
                 "_links": {
                     "self": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
                     },
                     "first": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
                     },
                     "last": {
-                        "href": "{$selfHref}"
+                        "href": "\/v1.2\/comic-books\/?page=1&limit=10"
                     }
                 },
                 "_embedded": {
@@ -327,7 +511,7 @@ EOT;
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
-    private function markAsSkippedIfNecessary(): void
+    private function markAsSkippedIfHateoasIsNotAvailable(): void
     {
         if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
             $this->markTestSkipped();
@@ -349,5 +533,19 @@ EOT;
     private function isRoutingPathBcLayerEnabled(): bool
     {
         return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfBcLayerIsEnabled(): void
+    {
+        if ($this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be disabled.');
+        }
+    }
+
+    private function markAsSkippedIfBcLayerIsNotEnabled(): void
+    {
+        if (!$this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
     }
 }
