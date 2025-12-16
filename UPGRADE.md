@@ -17,7 +17,7 @@ Routing paths may have been changed depending on your configuration.
 
 If you want to keep the previous paths, please follow these following steps:
 
-1/ Make sure to have Behat transliterator installed.
+1. Make sure to have Behat transliterator installed.
 
 ```shell
 composer require behat/transliterator
@@ -31,9 +31,9 @@ sylius_resource:
     routing_path_bc_layer: true
 ```
 
-When using the `ResourceController` for your routes and when the routing bath bc layer is enabled, the routing path
+When using the `ResourceController` for your routes and when the BC-layer is enabled, the routing path
 contains a trailing slash by default. In 2.x, it will be removed.
-You can disable the bc-layer to remove these trailing slashes on all your routes and be prepared for 2.x area.
+You can disable the BC-layer to remove these trailing slashes on all your routes and be prepared for the 2.x release.
 
 If you are using the new Routing system with `AsResource` attribute and operations, this change has no effect, there is
 no trailing slash in both configuration.
@@ -52,7 +52,7 @@ sylius_resource:
 | Using AsResource attribute   | ❌ Disabled            | ❌              |
 
 The routing path uses dashes to separate words by default. Eg: `/shipping-categories`.
-On the new routing system only, you can use configure the bundle to use underscores instead. Eg: `/shipping_categories`
+On the new routing system only, you can configure using underscores instead. Eg: `/shipping_categories`
 
 ```yaml
 # config/packages/
