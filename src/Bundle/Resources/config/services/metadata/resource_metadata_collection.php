@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $container) {
         ->decorate('sylius.resource_metadata_collection.factory', null, 300)
         ->args([
             service('.inner'),
-            service('sylius.metadata.inflector')->nullOnInvalid(),
+            service('sylius.metadata.inflector'),
             param('sylius.routing_path_bc_layer'),
             service('sylius.resource_registry'),
         ]);

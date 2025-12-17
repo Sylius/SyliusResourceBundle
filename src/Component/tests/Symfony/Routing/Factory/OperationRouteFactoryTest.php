@@ -17,6 +17,7 @@ use Behat\Transliterator\Transliterator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation\DashPathSegmentNameGenerator;
 use Sylius\Resource\Metadata\Operation\UnderscorePathSegmentNameGenerator;
@@ -38,8 +39,8 @@ final class OperationRouteFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
-        $this->operationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(), false);
-        $this->bcOperationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(), true);
+        $this->operationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(new Inflector()), false);
+        $this->bcOperationRouteFactory = new OperationRouteFactory($this->routePathFactory, new DashPathSegmentNameGenerator(new Inflector()), true);
     }
 
     public function testItCreatesRouteWithDefaultPathWithBcLayer(): void
@@ -332,7 +333,7 @@ final class OperationRouteFactoryTest extends TestCase
 
     public function testItUrlizesPluralNameUsingUnderscoreAsSeparator(): void
     {
-        $operationRouteFactory = new OperationRouteFactory($this->routePathFactory, new UnderscorePathSegmentNameGenerator(), false);
+        $operationRouteFactory = new OperationRouteFactory($this->routePathFactory, new UnderscorePathSegmentNameGenerator(new Inflector()), false);
 
         $metadata = $this->createMock(MetadataInterface::class);
 

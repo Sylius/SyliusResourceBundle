@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Resource\Metadata\Resource\Factory;
 
 use Sylius\Resource\Exception\LogicException;
-use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\Inflector\InflectorInterface;
-use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 use Sylius\Resource\Metadata\ResourceMetadata;
@@ -26,15 +24,12 @@ use Sylius\Resource\Metadata\ResourceMetadata;
  */
 final class PluralNameResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
-    private InflectorInterface $inflector;
-
     public function __construct(
         private readonly ResourceMetadataCollectionFactoryInterface $decorated,
-        ?InflectorInterface $inflector = null,
+        private readonly InflectorInterface $inflector,
         private readonly bool $routingBcLayerEnabled = true,
         private readonly ?RegistryInterface $resourceRegistry = null,
     ) {
-        $this->inflector = $inflector ?? new Inflector();
     }
 
     public function create(string $resourceClass): ResourceMetadataCollection
@@ -43,29 +38,29 @@ final class PluralNameResourceMetadataCollectionFactory implements ResourceMetad
 
         /** @var ResourceMetadata $resource */
         foreach ($resourceCollectionMetadata->getIterator() as $i => $resource) {
-            $resourceConfiguration = $this->resourceRegistry?->get($resource->getAlias() ?? '');
-
-            $resourceCollectionMetadata[$i] = $this->addDefaults($resource, $resourceConfiguration);
+            $resourceCollectionMetadata[$i] = $this->addDefaults($resource);
         }
 
         return $resourceCollectionMetadata;
     }
 
-    private function addDefaults(ResourceMetadata $resource, ?MetadataInterface $resourceConfiguration = null): ResourceMetadata
+    private function addDefaults(ResourceMetadata $resource): ResourceMetadata
     {
         if (null !== $resource->getPluralName()) {
             return $resource;
         }
 
         if ($this->routingBcLayerEnabled) {
-            $pluralName = $resourceConfiguration?->getPluralName()
-                ?? throw new LogicException(sprintf(
+            if (null === $this->resourceRegistry) {
+                throw new LogicException(sprintf(
                     'Routing Bc-Layer is enabled, but the resource registry is not passed as constructor arguments of "%s" class.',
                     self::class,
-                ))
-            ;
+                ));
+            }
 
-            return $resource->withPluralName($pluralName);
+            $resourceConfiguration = $this->resourceRegistry->get($resource->getAlias() ?? '');
+
+            return $resource->withPluralName($resourceConfiguration->getPluralName());
         }
 
         /**

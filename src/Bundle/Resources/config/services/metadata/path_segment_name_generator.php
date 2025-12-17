@@ -21,13 +21,13 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.metadata.path_segment_name_generator.underscore', UnderscorePathSegmentNameGenerator::class)
         ->args([
-            service('sylius.metadata.inflector')->nullOnInvalid(),
+            service('sylius.metadata.inflector'),
         ])
     ;
 
     $services->set('sylius.metadata.path_segment_name_generator.dash', DashPathSegmentNameGenerator::class)
         ->args([
-            service('sylius.metadata.inflector')->nullOnInvalid(),
+            service('sylius.metadata.inflector'),
         ])
     ;
 };

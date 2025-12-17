@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Exception\LogicException;
+use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\PluralNameResourceMetadataCollectionFactory;
@@ -39,7 +40,7 @@ final class PluralNameResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItConfiguresDefaultPluralNameOnResourcesWithRoutingBcLayerEnabled(): void
     {
-        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, routingBcLayerEnabled: true, resourceRegistry: $this->registry);
+        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, inflector: new Inflector(), resourceRegistry: $this->registry, routingBcLayerEnabled: true);
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
@@ -57,7 +58,7 @@ final class PluralNameResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItConfiguresDefaultPluralNameOnResourcesWithRoutingBcLayerDisabled(): void
     {
-        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, routingBcLayerEnabled: false);
+        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, inflector: new Inflector(), routingBcLayerEnabled: false);
         $resource = new ResourceMetadata(name: 'book');
 
         $resourceMetadataCollection = new ResourceMetadataCollection();
@@ -74,7 +75,7 @@ final class PluralNameResourceMetadataCollectionFactoryTest extends TestCase
 
     public function testItThrowAnExceptionWithRoutingBcLayerEnabledWhenResourceRegistryIsNotPassedAsConstructorArguments(): void
     {
-        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, routingBcLayerEnabled: true);
+        $factory = new PluralNameResourceMetadataCollectionFactory(decorated: $this->decorated, inflector: new Inflector(), routingBcLayerEnabled: true);
         $resource = new ResourceMetadata(alias: 'app.book', name: 'book');
 
         $resourceMetadataCollection = new ResourceMetadataCollection();

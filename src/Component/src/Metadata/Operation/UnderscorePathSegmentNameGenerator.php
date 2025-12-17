@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Metadata\Operation;
 
-use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\Inflector\InflectorInterface;
 
 /**
@@ -21,12 +20,9 @@ use Sylius\Resource\Metadata\Inflector\InflectorInterface;
  */
 final class UnderscorePathSegmentNameGenerator implements PathSegmentNameGeneratorInterface
 {
-    private readonly InflectorInterface $inflector;
-
     public function __construct(
-        ?InflectorInterface $inflector = null,
+        private readonly InflectorInterface $inflector,
     ) {
-        $this->inflector = $inflector ?? new Inflector();
     }
 
     /**

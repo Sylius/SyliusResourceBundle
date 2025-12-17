@@ -16,6 +16,7 @@ namespace Sylius\Resource\Tests\Metadata\Operation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\Operation\UnderscorePathSegmentNameGenerator;
 
 #[CoversClass(UnderscorePathSegmentNameGenerator::class)]
@@ -24,7 +25,7 @@ final class UnderscorePathSegmentNameGeneratorTest extends TestCase
     #[DataProvider('segmentNameProvider')]
     public function testGettingSegmentName(string $expected, string $name, bool $pluralize): void
     {
-        $this->assertSame($expected, (new UnderscorePathSegmentNameGenerator())->getSegmentName($name, $pluralize));
+        $this->assertSame($expected, (new UnderscorePathSegmentNameGenerator(new Inflector()))->getSegmentName($name, $pluralize));
     }
 
     public static function segmentNameProvider(): iterable

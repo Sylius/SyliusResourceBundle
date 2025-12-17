@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\RegistryInterface;
@@ -49,7 +50,7 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
         $this->attributesOperationRouteFactory = new AttributesOperationRouteFactory(
             $this->resourceRegistry,
-            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(), false),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(new Inflector()), false),
             new AttributesResourceMetadataCollectionFactory(
                 $this->resourceRegistry,
                 new OperationRouteNameFactory(),
@@ -148,7 +149,7 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
         $factory = new AttributesOperationRouteFactory(
             $this->resourceRegistry,
-            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(), false),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(new Inflector()), false),
             $resourceMetadataFactory,
         );
 
