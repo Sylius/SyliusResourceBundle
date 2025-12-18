@@ -15,12 +15,18 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceClassListFactory as AttributesResourceClassListFactoryInterface;
+use Sylius\Resource\Metadata\Resource\Factory\CachedResourceClassListFactory;
 use Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory;
 use Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceClassListFactory as PhpFileResourceClassListFactoryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceClassListFactoryInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
+
+    $services->set('sylius.cache.metadata.resource_class_list')
+        ->private()
+        ->parent('cache.system')
+        ->tag('cache.pool');
 
     $services->alias('sylius.metadata.resource_class_list.factory', 'sylius.metadata.resource_class_list.factory.attributes');
 
@@ -30,6 +36,13 @@ return static function (ContainerConfigurator $container) {
         ->args(['%sylius.resource.mapping%']);
 
     $services->alias(AttributesResourceClassListFactoryInterface::class, 'sylius.metadata.resource_class_list.factory.attributes');
+
+    $services->set('sylius.metadata.resource_class_list.cached', CachedResourceClassListFactory::class)
+        ->decorate('sylius.metadata.resource_class_list.factory', null, -10)
+        ->args([
+            service('sylius.cache.metadata.resource_class_list'),
+            service('.inner'),
+        ]);
 
     $services->set('sylius.metadata.resource_class_list.factory.php_file', PhpFileResourceClassListFactory::class)
         ->decorate('sylius.metadata.resource_class_list.factory', null, 100)

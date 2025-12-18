@@ -28,5 +28,6 @@ final class DisableMetadataCachePass implements CompilerPassInterface
         }
 
         $container->removeDefinition('sylius.resource_metadata_collection.factory.cached');
+        $container->removeDefinition('sylius.metadata.resource_class_list.cached');
     }
 }

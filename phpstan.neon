@@ -168,3 +168,9 @@ parameters:
           identifier: generics.notGeneric
           count: 3
           path: src/Bundle/Routing/Configuration.php
+
+        # CachedTrait returns a mixed type
+        - message: '/Method Sylius\\Resource\\Metadata\\Resource\\Factory\\CachedResourceClassListFactory::create\(\) should return Sylius\\Resource\\Metadata\\Resource\\ResourceClassList but returns mixed/'
+          identifier: return.type
+          count: 1
+          path: src/Component/src/Metadata/Resource/Factory/CachedResourceClassListFactory.php
