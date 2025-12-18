@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
-use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Reflection\ReflectionClassRecursiveIterator;
 use Sylius\Resource\Symfony\Routing\Factory\AttributesOperationRouteFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
@@ -35,7 +35,8 @@ final class RoutesAttributesLoader implements RouteLoaderInterface
         $routeCollection = new RouteCollection();
         $paths = $this->mapping['paths'] ?? [];
 
-        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($paths) as $reflectionClass) {
+            $className = $reflectionClass->getName();
             $this->routesAttributesFactory->createRouteForClass($routeCollection, $className);
             $this->attributesOperationRouteFactory->createRouteForClass($routeCollection, $className);
         }

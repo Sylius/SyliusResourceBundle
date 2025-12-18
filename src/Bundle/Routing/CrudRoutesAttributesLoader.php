@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Routing;
 use Sylius\Component\Resource\Annotation\SyliusCrudRoutes as LegacySyliusCrudRoutes;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Reflection\ReflectionClassRecursiveIterator;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
@@ -39,7 +40,8 @@ final class CrudRoutesAttributesLoader implements RouteLoaderInterface
         $routeCollection = new RouteCollection();
         $paths = $this->mapping['paths'] ?? [];
 
-        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($paths) as $reflectionClass) {
+            $className = $reflectionClass->getName();
             $this->addRoutesForSyliusCrudRoutesAttributes($routeCollection, $className);
         }
 
