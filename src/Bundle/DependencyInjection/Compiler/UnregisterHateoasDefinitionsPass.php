@@ -24,7 +24,7 @@ final class UnregisterHateoasDefinitionsPass implements CompilerPassInterface
         /** @var array $bundles */
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (in_array(BazingaHateoasBundle::class, $bundles, true)) {
+        if (class_exists(BazingaHateoasBundle::class) && in_array(BazingaHateoasBundle::class, $bundles, true)) {
             return;
         }
 

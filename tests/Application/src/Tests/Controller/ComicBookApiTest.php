@@ -16,6 +16,7 @@ namespace App\Tests\Controller;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ComicBookFactory;
 use App\Foundry\Story\DefaultComicBooksStory;
+use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
@@ -550,8 +551,8 @@ EOT;
 
     private function markAsSkippedIfHateoasIsNotAvailable(): void
     {
-        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
-            $this->markTestSkipped();
+        if (!class_exists(BazingaHateoasBundle::class)) {
+            $this->markTestSkipped('HateoasBundle is not installed.');
         }
     }
 

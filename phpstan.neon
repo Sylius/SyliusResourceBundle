@@ -63,6 +63,13 @@ parameters:
         - '/has invalid type Doctrine\\ODM\\PHPCR\\Query\\Builder\\QueryBuilder/'
         - '/has invalid type Doctrine\\ODM\\PHPCR\\DocumentManagerInterface/'
 
+        # Optional HateoasBundle support - requires willdurand/hateoas-bundle
+        - '/Call to method createRepresentation\(\) on an unknown class Hateoas\\Representation\\Factory\\PagerfantaFactory/'
+        - '/Class Hateoas\\Representation\\Factory\\PagerfantaFactory not found/'
+        - '/Instantiated class Hateoas\\Configuration\\Route not found/'
+        - '/Parameter \$pagerfantaRepresentationFactory of method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::__construct\(\) has invalid type Hateoas\\Representation\\Factory\\PagerfantaFactory/'
+        - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesCollectionProvider::\$pagerfantaRepresentationFactory has unknown class Hateoas\\Representation\\Factory\\PagerfantaFactory as its type/'
+
         # Optional FOS RestBundle support - requires friendsofsymfony/rest-bundle
         - '/Call to method getContext\(\) on an unknown class FOS\\RestBundle\\View\\View/'
         - '/Call to method handle\(\) on an unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface/'

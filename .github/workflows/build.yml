@@ -38,6 +38,7 @@ jobs:
                 composer-flags: ['--no-scripts --prefer-stable --prefer-dist']
                 gedmo-doctrine-extensions: [""]
                 fos-rest-bundle: [""]
+                hateoas-bundle: [""]
                 symfony: ["6.4.*", "7.4.*"]
                 symfony-workflow: [""]
                 winzou-state-machine-bundle: [""]
@@ -51,6 +52,12 @@ jobs:
                         symfony: "7.4.*"
                     # with FriendsOfSymfony Rest Bundle optional package
                     -   fos-rest-bundle: '^3.7'
+                        php: "8.3"
+                        orm: "3.*"
+                        symfony: "7.4.*"
+                    # with FriendsOfSymfony Rest Bundle and HateoasBundle optional packages
+                    -   fos-rest-bundle: '^3.7'
+                        hateoas-bundle: '^2.5'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
@@ -93,11 +100,6 @@ jobs:
                     (cd src/Component && composer require --dev doctrine/orm "${{ matrix.orm }}" --no-update --no-scripts)
 
             -
-                name: Remove hateoas on Symfony 7
-                if: matrix.symfony == '^7.0'
-                run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
-
-            -
                 name: Install Behat transliterator
                 if: matrix.behat-transliterator != ''
                 run: |
@@ -114,6 +116,11 @@ jobs:
                 if: matrix.gedmo-doctrine-extensions != ''
                 run: |
                     composer require --dev gedmo/doctrine-extensions "${{ matrix.gedmo-doctrine-extensions }}" --no-update --no-scripts
+
+            -
+                name: Install Hateoas bundle
+                if: matrix.hateoas-bundle != ''
+                run: composer require --dev willdurand/hateoas-bundle "${{ matrix.hateoas-bundle }}" --no-update --no-scripts
 
             -
                 name: Install winzou State Machine Bundle

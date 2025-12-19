@@ -34,6 +34,8 @@ final class UnregisterHateoasDefinitionsPassTest extends AbstractCompilerPassTes
     /** @test */
     public function it_keeps_the_view_handler_if_fos_rest_is_available(): void
     {
+        $this->markAsSkippedIfHateoasIsNotAvailable();
+
         $this->setParameter('kernel.bundles', [BazingaHateoasBundle::class]);
 
         $this->compile();
@@ -47,5 +49,12 @@ final class UnregisterHateoasDefinitionsPassTest extends AbstractCompilerPassTes
         $this->setParameter('kernel.bundles', []);
 
         $container->addCompilerPass(new UnregisterHateoasDefinitionsPass());
+    }
+
+    private function markAsSkippedIfHateoasIsNotAvailable(): void
+    {
+        if (!class_exists(BazingaHateoasBundle::class)) {
+            $this->markTestSkipped('HateoasBundle is not installed.');
+        }
     }
 }
