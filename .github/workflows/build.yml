@@ -26,6 +26,9 @@ jobs:
             ${{ matrix['fos-rest-bundle'] != ''
                 && format('(with FriendsOfSymfony Rest Bundle {0})', matrix['fos-rest-bundle'])
                 || '' }}
+            ${{ matrix['symfony-workflow'] != ''
+                && format('(with Symfony Workflow {0})', matrix['symfony-workflow'])
+                || '' }}
         strategy:
             fail-fast: false
             matrix:
@@ -36,6 +39,7 @@ jobs:
                 gedmo-doctrine-extensions: [""]
                 fos-rest-bundle: [""]
                 symfony: ["6.4.*", "7.4.*"]
+                symfony-workflow: [""]
                 winzou-state-machine-bundle: [""]
                 include:
                     # with Behat transliterator and Gedmo Doctrine extensions optional packages
@@ -52,6 +56,11 @@ jobs:
                         symfony: "7.4.*"
                     # with winzou State Machine Bundle optional package
                     -   winzou-state-machine-bundle: '^0.6.2'
+                        php: "8.3"
+                        orm: "3.*"
+                        symfony: "7.4.*"
+                    # with Symfony workflow optional package
+                    -   symfony-workflow: '7.4.*'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
@@ -111,6 +120,12 @@ jobs:
                 if: matrix.winzou-state-machine-bundle != ''
                 run: |
                     composer require --dev winzou/state-machine-bundle "${{ matrix.winzou-state-machine-bundle }}" --no-update --no-scripts
+
+            -
+                name: Install Symfony workflow
+                if: matrix.symfony-workflow != ''
+                run: |
+                    composer require --dev symfony/workflow "${{ matrix.symfony-workflow }}" --no-update --no-scripts
 
             -
                 name: Install MongoDB ODM package

@@ -31,6 +31,8 @@ final class OperationStateMachineTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfSymfonyWorkflowIsNotAvailable();
+
         $this->registry = $this->createMock(Registry::class);
         $this->operationStateMachine = new OperationStateMachine($this->registry);
     }
@@ -103,5 +105,12 @@ final class OperationStateMachineTest extends TestCase
         $this->expectExceptionMessage(sprintf('Expected an instance of %s. Got: %s', StateMachineAwareOperationInterface::class, Index::class));
 
         $this->operationStateMachine->can($data, $operation, new Context());
+    }
+
+    private function markAsSkippedIfSymfonyWorkflowIsNotAvailable(): void
+    {
+        if (!class_exists(Registry::class)) {
+            $this->markTestSkipped('Symfony Workflow is not available.');
+        }
     }
 }

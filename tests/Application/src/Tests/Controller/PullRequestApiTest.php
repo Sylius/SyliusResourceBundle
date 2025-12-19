@@ -17,7 +17,9 @@ use App\Foundry\Factory\PullRequestFactory;
 use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Workflow\Registry;
 use Tests\ApiTestCase;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -28,6 +30,7 @@ final class PullRequestApiTest extends ApiTestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfNoStateMachineIsAvailable();
         $this->markAsSkippedIfFosRestBundleIsNotAvailable();
     }
 
@@ -156,6 +159,13 @@ final class PullRequestApiTest extends ApiTestCase
     {
         if (!class_exists(FOSRestBundle::class)) {
             $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
+        }
+    }
+
+    private function markAsSkippedIfNoStateMachineIsAvailable(): void
+    {
+        if (!class_exists(Registry::class) || !class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('No state machine available.');
         }
     }
 }

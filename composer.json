@@ -84,7 +84,6 @@
         "symfony/serializer": "^6.4 || ^7.4",
         "symfony/stopwatch": "^6.4 || ^7.4",
         "symfony/uid": "^6.4 || ^7.4",
-        "symfony/workflow": "^6.4 || ^7.4",
         "twig/twig": "^3.14",
         "willdurand/hateoas-bundle": "^2.5",
         "zenstruck/foundry": "^2.3 <2.7"
@@ -100,6 +99,7 @@
         "pagerfanta/pagerfanta" : "<4.4",
         "willdurand/hateoas-bundle": "<2.0 || ^3.0",
         "winzou/state-machine-bundle": "<0.6.2",
+        "symfony/workflow": "<6.4 || >=7.0,<7.4",
         "twig/twig": "<3.0"
     },
     "suggest": {

@@ -87,6 +87,14 @@ parameters:
         - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\StateMachine::\$stateMachineFactory has unknown class SM\\Factory\\FactoryInterface as its type/'
         - '/Property Sylius\\Resource\\Winzou\\StateMachine\\OperationStateMachine::\$factory has unknown class SM\\Factory\\Factory as its type/'
 
+        # Optional Symfony Workflow support - requires symfony/workflow
+        - '/Call to method get\(\) on an unknown class \Symfony\\Component\\Workflow\\Registry/'
+        - '/Method Sylius\\Resource\\Symfony\\Workflow\\OperationStateMachine::getRegistry\(\) has invalid return type Symfony\\Component\\Workflow\\Registry/'
+        - '/Parameter \$registry of method Sylius\\Bundle\\ResourceBundle\\Controller\\Workflow::__construct\(\) has invalid type Symfony\\Component\\Workflow\\Registry/'
+        - '/Parameter \$registry of method Sylius\\Resource\\Symfony\\Workflow\\OperationStateMachine::__construct\(\) has invalid type Symfony\\Component\\Workflow\\Registry/'
+        - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\Workflow::\$registry has unknown class Symfony\\Component\\Workflow\\Registry as its type/'
+        - '/Property Sylius\\Resource\\Symfony\\Workflow\\OperationStateMachine::\$registry has unknown class Symfony\\Component\\Workflow\\Registry as its type/'
+
         # Backward compatibility with Doctrine Common 2.x
         # Namespace moved from Doctrine\Common\Persistence to Doctrine\Persistence in 3.x
         # Code uses both namespaces with aliases to support both versions

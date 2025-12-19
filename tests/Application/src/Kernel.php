@@ -22,6 +22,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+use Symfony\Component\Workflow\Registry;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 class Kernel extends BaseKernel
@@ -57,6 +58,10 @@ class Kernel extends BaseKernel
         if (class_exists(winzouStateMachineBundle::class)) {
             $this->configureAppWithWinzouStateMachine($loader, $container);
         }
+
+        if (class_exists(Registry::class)) {
+            $this->configureAppWithSymfonyWorkflow($loader, $container);
+        }
     }
 
     private function configureAppWithGedmoDoctrineExtensions(YamlFileLoader $loader): void
@@ -78,5 +83,16 @@ class Kernel extends BaseKernel
         ]);
 
         $loader->load('integration/winzou_state_machine.yaml');
+    }
+
+    private function configureAppWithSymfonyWorkflow(YamlFileLoader $loader, ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('sylius_resource', [
+            'settings' => [
+                'state_machine_component' => 'symfony',
+            ],
+        ]);
+
+        $loader->load('integration/symfony_workflow.yaml');
     }
 }
