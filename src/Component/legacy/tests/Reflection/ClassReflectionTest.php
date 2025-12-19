@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Reflection;
+namespace Sylius\Component\Resource\Tests\Reflection;
 
 use App\Entity\CrudRoutes\BookWithCriteria;
 use App\Entity\Route\ShowBook;
@@ -23,9 +23,16 @@ use Sylius\Component\Resource\Tests\Dummy\TraitPass;
 use Sylius\Resource\Annotation\SyliusCrudRoutes;
 use Sylius\Resource\Annotation\SyliusRoute;
 use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Reflection\ClassReflection as NewClassReflection;
 
 final class ClassReflectionTest extends TestCase
 {
+    /** @test */
+    public function it_is_an_alias_of_the_class_reflection(): void
+    {
+        $this->assertInstanceOf(NewClassReflection::class, new \Sylius\Component\Resource\Reflection\ClassReflection());
+    }
+
     /** @test */
     public function it_returns_resource_classes_from_paths(): void
     {

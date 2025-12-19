@@ -22,13 +22,41 @@ use Doctrine\Inflector\Rules\Transformations;
 use Doctrine\Inflector\Rules\Word;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Sylius\Component\Resource\Metadata\Metadata as ComponentMetadata;
+use Sylius\Component\Resource\Metadata\MetadataInterface as LegacyMetadataInterface;
 use Sylius\Resource\Metadata\Metadata;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor Having some issues with custom PHPUnit annotations
  */
 final class MetadataTest extends TestCase
 {
+    private ComponentMetadata $legacyMetadata;
+
+    protected function setUp(): void
+    {
+        $this->legacyMetadata = ComponentMetadata::fromAliasAndConfiguration('sylius.product', ['driver' => 'doctrine/orm']);
+    }
+
+    /** @test */
+    public function it_implements_metadata_interface(): void
+    {
+        $this->assertInstanceOf(MetadataInterface::class, $this->legacyMetadata);
+    }
+
+    /** @test */
+    public function it_implements_legacy_metadata_interface(): void
+    {
+        $this->assertInstanceOf(LegacyMetadataInterface::class, $this->legacyMetadata);
+    }
+
+    /** @test */
+    public function it_should_be_an_alias_of_metadata(): void
+    {
+        $this->assertInstanceOf(Metadata::class, $this->legacyMetadata);
+    }
+
     /**
      * @test
      *
