@@ -108,7 +108,7 @@ final class RedirectHandler implements RedirectHandlerInterface
                 throw new InvalidArgumentException(sprintf('Parameter "%s" should be a scalar or an array.', $key));
             }
 
-            if (\is_string($value) && str_contains($value, 'resource.')) {
+            if (\is_string($value) && str_starts_with($value, 'resource.')) {
                 $propertyPath = substr($value, 9);
 
                 if (\is_object($data) && $accessor->isReadable($data, $propertyPath)) {
@@ -125,10 +125,28 @@ final class RedirectHandler implements RedirectHandlerInterface
                 $variables[$resourceName] = $data;
             }
 
-            // TODO, the best way to detect if we need to parse an expression will need to add "@=" syntax.
-            $parameters[$key] = \is_string($value) ? $this->argumentParser->parseExpression($value, $variables) : $value;
+            $parameters[$key] = \is_string($value) ? $this->parseStringValue($value, $variables) : $value;
         }
 
         return $parameters;
+    }
+
+    /**
+     * @param array<string, mixed> $variables
+     */
+    private function parseStringValue(string $value, array $variables): mixed
+    {
+        if (!str_starts_with($value, '@=')) {
+            $value = '@=' . $value;
+            trigger_deprecation('sylius/resource-bundle', '1.14', 'You passed "%s" as a string value in your redirect arguments. If this is a value that needs to be parsed using the expression language, please prefix your string with "@=". In your case, use "@=%s"."', $value, $value);
+        }
+
+        if (!str_starts_with($value, '@=')) {
+            return $value;
+        }
+
+        $value = substr($value, 2);
+
+        return $this->argumentParser->parseExpression($value, $variables);
     }
 }
