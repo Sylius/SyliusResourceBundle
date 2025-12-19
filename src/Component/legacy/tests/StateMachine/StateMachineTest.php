@@ -19,6 +19,7 @@ use Sylius\Component\Resource\StateMachine\StateMachineInterface as LegacyStateM
 use Sylius\Resource\StateMachine\StateMachine as NewStateMachine;
 use Sylius\Resource\StateMachine\StateMachineInterface;
 use Sylius\Resource\Tests\Dummy\PullRequest;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class StateMachineTest extends TestCase
 {
@@ -26,6 +27,8 @@ final class StateMachineTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfWinzouStateMachineIsNotAvailable();
+
         $this->stateMachine = new StateMachine(new PullRequest(), [
             'graph' => 'pull_request',
             'property_path' => 'currentPlace',
@@ -60,5 +63,12 @@ final class StateMachineTest extends TestCase
     public function testItShouldBeAnAliasOfStateMachine(): void
     {
         $this->assertInstanceOf(NewStateMachine::class, $this->stateMachine);
+    }
+
+    private function markAsSkippedIfWinzouStateMachineIsNotAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('Winzou State machine is not available.');
+        }
     }
 }

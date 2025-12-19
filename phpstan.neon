@@ -73,6 +73,20 @@ parameters:
         - '/Parameter \$view of method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandlerInterface::handle\(\) has invalid type FOS\\RestBundle\\View\\View/'
         - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandler::\$restViewHandler has unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface as its type/'
 
+        # Optional Winzou StateMachine support - requires winzou/state-machine package
+        - '/Access to an undefined property Sylius\\Resource\\StateMachine\\StateMachine::\$config/'
+        - '/Call to an undefined method Sylius\\Resource\\StateMachine\\StateMachine::getPossibleTransitions\(\)/'
+        - '/Call to method get\(\) on an unknown class SM\\Factory\\Factory/'
+        - '/Class SM\\Callback\\CallbackFactoryInterface not found/'
+        - '/Class SM\\Callback\\CascadeTransitionCallback not found/'
+        - '/Class SM\\Factory\\FactoryInterface not found/'
+        - '/Class winzou\\Bundle\\StateMachineBundle\\winzouStateMachineBundle not found/'
+        - '/Method Sylius\\Resource\\Winzou\\StateMachine\\OperationStateMachine::getFactory\(\) has invalid return type SM\\Factory\\Factory/'
+        - '/Parameter \$factory of method Sylius\\Resource\\Winzou\\StateMachine\\OperationStateMachine::__construct\(\) has invalid type SM\\Factory\\Factory/'
+        - '/Parameter \$stateMachineFactory of method Sylius\\Bundle\\ResourceBundle\\Controller\\StateMachine::__construct\(\) has invalid type SM\\Factory\\FactoryInterface/'
+        - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\StateMachine::\$stateMachineFactory has unknown class SM\\Factory\\FactoryInterface as its type/'
+        - '/Property Sylius\\Resource\\Winzou\\StateMachine\\OperationStateMachine::\$factory has unknown class SM\\Factory\\Factory as its type/'
+
         # Backward compatibility with Doctrine Common 2.x
         # Namespace moved from Doctrine\Common\Persistence to Doctrine\Persistence in 3.x
         # Code uses both namespaces with aliases to support both versions

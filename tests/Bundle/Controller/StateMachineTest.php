@@ -21,6 +21,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachine;
 use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface as ResourceStateMachineInterface;
 use Sylius\Resource\Model\ResourceInterface;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class StateMachineTest extends TestCase
 {
@@ -30,6 +31,8 @@ final class StateMachineTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfWinzouStateMachineIsNotAvailable();
+
         $this->stateMachineFactoryMock = $this->createMock(FactoryInterface::class);
         $this->stateMachine = new StateMachine($this->stateMachineFactoryMock);
     }
@@ -157,5 +160,12 @@ final class StateMachineTest extends TestCase
         $stateMachine = $this->createMock(StateMachineInterface::class);
 
         return $stateMachine;
+    }
+
+    private function markAsSkippedIfWinzouStateMachineIsNotAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('Winzou State machine is not available.');
+        }
     }
 }

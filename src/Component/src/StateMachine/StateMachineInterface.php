@@ -14,6 +14,11 @@ declare(strict_types=1);
 namespace Sylius\Resource\StateMachine;
 
 use SM\StateMachine\StateMachineInterface as BaseStateMachineInterface;
+use Sylius\Resource\Exception\RuntimeException;
+
+if (!interface_exists(BaseStateMachineInterface::class)) {
+    throw new RuntimeException(sprintf('Cannot use the "%s" interface when the "winzou/state-machine" package is not installed.', StateMachineInterface::class));
+}
 
 interface StateMachineInterface extends BaseStateMachineInterface
 {

@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Routing;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCompiler;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class RoutesAttributesLoaderTest extends KernelTestCase
 {
@@ -479,6 +480,8 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
     /** @test */
     public function it_generates_routes_from_resource_with_state_machine(): void
     {
+        $this->markAsSkippedIfWinzouStateMachineIsNotAvailable();
+
         self::bootKernel(['environment' => 'test_with_attributes']);
 
         $container = self::getContainer();
@@ -563,5 +566,12 @@ final class RoutesAttributesLoaderTest extends KernelTestCase
             '_controller' => 'app.controller.book::showAction',
             '_sylius' => [],
         ], $route->getDefaults());
+    }
+
+    private function markAsSkippedIfWinzouStateMachineIsNotAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('Winzou State machine is not available.');
+        }
     }
 }

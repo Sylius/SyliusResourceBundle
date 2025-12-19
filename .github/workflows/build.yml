@@ -36,6 +36,7 @@ jobs:
                 gedmo-doctrine-extensions: [""]
                 fos-rest-bundle: [""]
                 symfony: ["6.4.*", "7.4.*"]
+                winzou-state-machine-bundle: [""]
                 include:
                     # with Behat transliterator and Gedmo Doctrine extensions optional packages
                     -   behat-transliterator: '^1.2'
@@ -46,6 +47,11 @@ jobs:
                         symfony: "7.4.*"
                     # with FriendsOfSymfony Rest Bundle optional package
                     -   fos-rest-bundle: '^3.7'
+                        php: "8.3"
+                        orm: "3.*"
+                        symfony: "7.4.*"
+                    # with winzou State Machine Bundle optional package
+                    -   winzou-state-machine-bundle: '^0.6.2'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
@@ -95,10 +101,16 @@ jobs:
                     composer require --dev friendsofsymfony/rest-bundle "${{ matrix.fos-rest-bundle }}" --no-update --no-scripts
 
             -
-                name: Install Gedmo Doctrine Extension
+                name: Install Gedmo Doctrine Extensions
                 if: matrix.gedmo-doctrine-extensions != ''
                 run: |
                     composer require --dev gedmo/doctrine-extensions "${{ matrix.gedmo-doctrine-extensions }}" --no-update --no-scripts
+
+            -
+                name: Install winzou State Machine Bundle
+                if: matrix.winzou-state-machine-bundle != ''
+                run: |
+                    composer require --dev winzou/state-machine-bundle "${{ matrix.winzou-state-machine-bundle }}" --no-update --no-scripts
 
             -
                 name: Install MongoDB ODM package
@@ -136,36 +148,12 @@ jobs:
                 run: (cd tests/Application && bin/console lint:container)
 
             -
-                name: Run state machine PHPUnit tests with winzou/state-machine package
-                run: |
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear)
-                    vendor/bin/phpunit --colors=always
-                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
-
-            -
-                name: Run state machine PHPUnit tests with symfony/workflow package
-                run: |
-                    sed -i -e 's/state_machine_component: winzou/state_machine_component: symfony/g' tests/Application/config/packages/test/sylius_resource.yaml
-                    (cd tests/Application && bin/console cache:clear)
-                    vendor/bin/phpunit --colors=always
-                    sed -i -e 's/state_machine_component: symfony/state_machine_component: winzou/g' tests/Application/config/packages/test/sylius_resource.yaml
-
-            -
                 name: Run lint container without friendsofsymfony/rest-bundle, willdurand/hateoas-bundle & jms/serializer-bundle packages
                 run: |
                     composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
                     (cd tests/Application && bin/console lint:container --env=test_without_fosrest)
                     composer require --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
-
-            -
-                name: Run lint container without winzou/state-machine-bundle package
-                run: |
-                    composer remove --dev winzou/state-machine-bundle --no-scripts
-                    (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
-                    (cd tests/Application && bin/console lint:container --env=test_without_state_machine)
-                    composer require --dev winzou/state-machine-bundle --no-scripts
 
             -
                 name: Run lint container without sylius/grid-bundle package
