@@ -59,11 +59,14 @@ final class PersistProcessorTest extends TestCase
     {
         $manager = $this->createMock(ObjectManager::class);
         $operation = $this->createMock(Operation::class);
+        $metadata = $this->createMock(ClassMetadata::class);
         $data = new \stdClass();
+
+        $metadata->expects(self::once())->method('isChangeTrackingDeferredExplicit')->willReturn(false);
 
         $this->managerRegistry->method('getManagerForClass')->with(\stdClass::class)->willReturn($manager);
         $manager->method('contains')->with($data)->willReturn(true);
-        $manager->method('getClassMetadata')->with(\stdClass::class)->willReturn($data);
+        $manager->method('getClassMetadata')->with(\stdClass::class)->willReturn($metadata);
 
         $manager->expects($this->never())->method('persist')->with($data);
         $manager->expects($this->once())->method('flush');
