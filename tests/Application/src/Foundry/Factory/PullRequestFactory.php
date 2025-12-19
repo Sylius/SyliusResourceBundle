@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Foundry\Factory;
 
 use App\Entity\PullRequest;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<PullRequest>
+ * @extends PersistentObjectFactory<PullRequest>
  */
-final class PullRequestFactory extends PersistentProxyObjectFactory
+final class PullRequestFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {
