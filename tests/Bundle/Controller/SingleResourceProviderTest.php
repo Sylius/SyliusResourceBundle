@@ -171,9 +171,9 @@ final class SingleResourceProviderTest extends TestCase
         $repositoryMock = $this->createMock(RepositoryInterface::class);
         /** @var ResourceInterface|MockObject $resourceMock */
         $resourceMock = $this->createMock(ResourceInterface::class);
-        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn('findAll');
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn('find');
         $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn(['foo']);
-        $repositoryMock->expects($this->once())->method('findAll')->with('foo')->willReturn($resourceMock);
+        $repositoryMock->expects($this->once())->method('find')->with('foo')->willReturn($resourceMock);
         $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 
@@ -187,9 +187,9 @@ final class SingleResourceProviderTest extends TestCase
         $customRepositoryMock = $this->createMock(RepositoryInterface::class);
         /** @var ResourceInterface|MockObject $resourceMock */
         $resourceMock = $this->createMock(ResourceInterface::class);
-        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn([$customRepositoryMock, 'findAll']);
+        $requestConfigurationMock->expects($this->once())->method('getRepositoryMethod')->willReturn([$customRepositoryMock, 'find']);
         $requestConfigurationMock->expects($this->once())->method('getRepositoryArguments')->willReturn(['foo']);
-        $customRepositoryMock->expects($this->once())->method('findAll')->with('foo')->willReturn($resourceMock);
+        $customRepositoryMock->expects($this->once())->method('find')->with('foo')->willReturn($resourceMock);
         $this->assertSame($resourceMock, $this->singleResourceProvider->get($requestConfigurationMock, $repositoryMock));
     }
 }
