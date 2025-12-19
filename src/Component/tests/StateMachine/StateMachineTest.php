@@ -16,6 +16,7 @@ namespace Sylius\Resource\Tests\StateMachine;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\StateMachine\StateMachine;
 use Sylius\Resource\Tests\Dummy\PullRequest;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class StateMachineTest extends TestCase
 {
@@ -23,6 +24,8 @@ final class StateMachineTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfWinzouStateMachineIsNotAvailable();
+
         $this->stateMachine = new StateMachine(new PullRequest(), [
             'graph' => 'pull_request',
             'property_path' => 'currentPlace',
@@ -52,5 +55,12 @@ final class StateMachineTest extends TestCase
     public function testItGetsTransitionToAState(): void
     {
         $this->assertSame('submit', $this->stateMachine->getTransitionToState('test'));
+    }
+
+    private function markAsSkippedIfWinzouStateMachineIsNotAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('Winzou State machine is not available.');
+        }
     }
 }

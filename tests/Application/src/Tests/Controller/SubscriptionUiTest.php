@@ -20,6 +20,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Workflow\Registry;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -217,6 +219,8 @@ final class SubscriptionUiTest extends WebTestCase
     #[Test]
     public function it_allows_accepting_a_subscription(): void
     {
+        $this->markAsSkippedIfNoStateMachineIsAvailable();
+
         $subscription = SubscriptionFactory::createOne();
 
         $this->client->request('GET', '/admin/subscriptions');
@@ -232,6 +236,8 @@ final class SubscriptionUiTest extends WebTestCase
     #[Test]
     public function it_allows_accepting_multiple_subscription(): void
     {
+        $this->markAsSkippedIfNoStateMachineIsAvailable();
+
         DefaultSubscriptionsStory::load();
         $martyMcFly = SubscriptionFactory::find(['email' => 'marty.mcfly@bttf.com']);
         $docBrown = SubscriptionFactory::find(['email' => 'doc.brown@bttf.com']);
@@ -246,5 +252,12 @@ final class SubscriptionUiTest extends WebTestCase
 
         $docBrown->_refresh();
         $this->assertSame('accepted', $docBrown->getState());
+    }
+
+    private function markAsSkippedIfNoStateMachineIsAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class) && !class_exists(Registry::class)) {
+            $this->markTestSkipped('No State machine is available.');
+        }
     }
 }

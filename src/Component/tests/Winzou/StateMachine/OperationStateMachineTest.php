@@ -22,6 +22,7 @@ use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\StateMachineAwareOperationInterface;
 use Sylius\Resource\Winzou\StateMachine\OperationStateMachine;
+use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class OperationStateMachineTest extends TestCase
 {
@@ -31,6 +32,8 @@ final class OperationStateMachineTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfWinzouStateMachineIsNotAvailable();
+
         $this->factory = $this->createMock(Factory::class);
         $this->operationStateMachine = new OperationStateMachine($this->factory);
     }
@@ -98,5 +101,12 @@ final class OperationStateMachineTest extends TestCase
         $operation = new Index();
 
         $this->operationStateMachine->can($data, $operation, new Context());
+    }
+
+    private function markAsSkippedIfWinzouStateMachineIsNotAvailable(): void
+    {
+        if (!class_exists(winzouStateMachineBundle::class)) {
+            $this->markTestSkipped('Winzou State machine is not available.');
+        }
     }
 }

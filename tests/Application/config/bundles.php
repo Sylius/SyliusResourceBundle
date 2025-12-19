@@ -32,13 +32,16 @@ $bundles = [
     TwigBundle::class => ['all' => true, 'test_without_twig' => false],
     JMSSerializerBundle::class => ['all' => true, 'test_without_fosrest' => false],
     BazingaHateoasBundle::class => ['all' => true, 'test_without_hateoas' => false, 'test_without_fosrest' => false, 'test_with_attributes' => false],
-    winzouStateMachineBundle::class => ['all' => true, 'test_without_state_machine' => false],
     SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
 ];
 
 if (class_exists(FOSRestBundle::class)) {
     $bundles[FOSRestBundle::class] = ['all' => true, 'test_without_fosrest' => false];
+}
+
+if (class_exists(winzouStateMachineBundle::class)) {
+    $bundles[winzouStateMachineBundle::class] = ['all' => true, 'test_without_state_machine' => false];
 }
 
 return $bundles;

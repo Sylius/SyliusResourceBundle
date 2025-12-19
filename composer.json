@@ -87,7 +87,6 @@
         "symfony/workflow": "^6.4 || ^7.4",
         "twig/twig": "^3.14",
         "willdurand/hateoas-bundle": "^2.5",
-        "winzou/state-machine-bundle": "^0.6.2",
         "zenstruck/foundry": "^2.3 <2.7"
     },
     "conflict": {
