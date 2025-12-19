@@ -20,6 +20,7 @@ use Sylius\Resource\Metadata\Resource\Factory\EventShortNameResourceMetadataColl
 use Sylius\Resource\Metadata\Resource\Factory\FactoryResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\MutatorResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\PhpFileResourceMetadataCollectionFactory;
+use Sylius\Resource\Metadata\Resource\Factory\PluralNameResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\ProviderResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\RedirectResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -60,6 +61,15 @@ return static function (ContainerConfigurator $container) {
             service('sylius.metadata.mutator_collection.resource'),
             service('sylius.metadata.mutator_collection.operation'),
             service('.inner'),
+        ]);
+
+    $services->set('sylius.resource_metadata_collection.factory.plural_name', PluralNameResourceMetadataCollectionFactory::class)
+        ->decorate('sylius.resource_metadata_collection.factory', null, 300)
+        ->args([
+            service('.inner'),
+            service('sylius.metadata.inflector'),
+            param('sylius.routing_path_bc_layer'),
+            service('sylius.resource_registry'),
         ]);
 
     $services->set('sylius.resource_metadata_collection.factory.state_machine', StateMachineResourceMetadataCollectionFactory::class)

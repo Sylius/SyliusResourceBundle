@@ -16,14 +16,29 @@ on:
 jobs:
     tests:
         runs-on: ubuntu-latest
-        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, ORM ${{ matrix.orm }}"
+        name: >
+            PHP ${{ matrix.php }},
+            Symfony ${{ matrix.symfony }},
+            ORM ${{ matrix.orm }}
+            ${{ matrix['behat-transliterator'] != '' && matrix['gedmo-doctrine-extensions'] != ''
+                && format('(with Behat transliterator {0} & Gedmo {1})', matrix['behat-transliterator'], matrix['gedmo-doctrine-extensions'])
+                || '' }}
         strategy:
             fail-fast: false
             matrix:
                 orm: ['2.*', '3.*']
                 php: ["8.2", "8.3"]
+                behat-transliterator: [""]
                 composer-flags: ['--no-scripts --prefer-stable --prefer-dist']
+                gedmo-doctrine-extensions: [""]
                 symfony: ["6.4.*", "7.4.*"]
+                include:
+                    # with Behat transliterator and Gedmo Doctrine extensions optional packages
+                    -   behat-transliterator: '^1.2'
+                        gedmo-doctrine-extensions: '^3.17.1'
+                        php: "8.3"
+                        orm: "3.*"
+                        symfony: "7.4.*"
 
         steps:
             -
@@ -58,10 +73,22 @@ jobs:
                 run: composer remove --dev willdurand/hateoas-bundle --no-update --no-scripts
 
             -
-              name: Install MongoDB ODM package
-              run: |
-                composer require --dev doctrine/mongodb-odm-bundle "^5.0" --no-update --no-scripts
-                (cd src/Component && composer require --dev doctrine/mongodb-odm "^2.8" --no-update --no-scripts)
+                name: Install Behat transliterator
+                if: matrix.behat-transliterator != ''
+                run: |
+                    composer require --dev behat/transliterator "${{ matrix.behat-transliterator }}" --no-update --no-scripts
+
+            -
+                name: Install Gedmo Doctrine Extension
+                if: matrix.gedmo-doctrine-extensions != ''
+                run: |
+                    composer require --dev gedmo/doctrine-extensions "${{ matrix.gedmo-doctrine-extensions }}" --no-update --no-scripts
+
+            -
+                name: Install MongoDB ODM package
+                run: |
+                    composer require --dev doctrine/mongodb-odm-bundle "^5.0" --no-update --no-scripts
+                    (cd src/Component && composer require --dev doctrine/mongodb-odm "^2.8" --no-update --no-scripts)
 
             -
                 name: Install dependencies
@@ -122,7 +149,7 @@ jobs:
                     composer remove --dev winzou/state-machine-bundle --no-scripts
                     (cd tests/Application && bin/console cache:clear --env=test_without_state_machine)
                     (cd tests/Application && bin/console lint:container --env=test_without_state_machine)
-                    composer require winzou/state-machine-bundle --no-scripts
+                    composer require --dev winzou/state-machine-bundle --no-scripts
 
             -
                 name: Run lint container without sylius/grid-bundle package

@@ -63,6 +63,51 @@ final class ScienceBookUiTest extends WebTestCase
     #[Test]
     public function it_allows_indexing_books(): void
     {
+        $this->markAsSkippedIfBcLayerIsEnabled();
+
+        $firstBook = ScienceBookFactory::new()
+            ->withTitle('A Brief History of Time')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Stephen')
+                    ->withLastName('Hawking'),
+            )
+            ->create()
+        ;
+
+        $secondBook = ScienceBookFactory::new()
+            ->withTitle('The Future of Humanity')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Michio')
+                    ->withLastName('Kaku'),
+            )
+            ->create()
+        ;
+
+        $this->client->request('GET', '/science-books');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $content = $response->getContent();
+        $this->assertStringContainsString('<h1>Books</h1>', $content);
+        $this->assertStringContainsString(
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
+            $content,
+        );
+        $this->assertStringContainsString(
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
+            $content,
+        );
+    }
+
+    #[Test]
+    public function it_allows_indexing_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+
         $firstBook = ScienceBookFactory::new()
             ->withTitle('A Brief History of Time')
             ->withAuthor(
@@ -199,6 +244,26 @@ final class ScienceBookUiTest extends WebTestCase
     #[Test]
     public function it_allows_deleting_a_book(): void
     {
+        $this->markAsSkippedIfBcLayerIsEnabled();
+
+        ScienceBookFactory::createOne();
+
+        $this->client->request('GET', '/science-books');
+        $this->client->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        /** @var ScienceBook[] $books */
+        $books = static::getContainer()->get('app.repository.science_book')->findAll();
+
+        $this->assertEmpty($books);
+    }
+
+    #[Test]
+    public function it_allows_deleting_a_book_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+
         ScienceBookFactory::createOne();
 
         $this->client->request('GET', '/science-books/');
@@ -215,6 +280,49 @@ final class ScienceBookUiTest extends WebTestCase
     #[Test]
     public function it_allows_filtering_books(): void
     {
+        $this->markAsSkippedIfBcLayerIsEnabled();
+
+        $firstBook = ScienceBookFactory::new()
+            ->withTitle('A Brief History of Time')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Stephen')
+                    ->withLastName('Hawking'),
+            )
+            ->create()
+        ;
+
+        $secondBook = ScienceBookFactory::new()
+            ->withTitle('The Future of Humanity')
+            ->withAuthor(
+                AuthorFactory::new()
+                    ->withFirstName('Michio')
+                    ->withLastName('Kaku'),
+            )
+            ->create()
+        ;
+
+        $this->client->request('GET', '/science-books?criteria[search][value]=history of time');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseStatusCodeSame(expectedCode: Response::HTTP_OK);
+        $content = $response->getContent();
+        $this->assertStringContainsString('<h1>Books</h1>', $content);
+        $this->assertStringContainsString(
+            sprintf('<td>%d</td><td>A Brief History of Time</td><td>Stephen Hawking</td>', $firstBook->getId()),
+            $content,
+        );
+        $this->assertStringNotContainsString(
+            sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
+            $content,
+        );
+    }
+
+    #[Test]
+    public function it_allows_filtering_books_with_bc_layer(): void
+    {
+        $this->markAsSkippedIfBcLayerIsNotEnabled();
+
         $firstBook = ScienceBookFactory::new()
             ->withTitle('A Brief History of Time')
             ->withAuthor(
@@ -249,5 +357,24 @@ final class ScienceBookUiTest extends WebTestCase
             sprintf('<td>%d</td><td>The Future of Humanity</td><td>Michio Kaku</td>', $secondBook->getId()),
             $content,
         );
+    }
+
+    private function isRoutingPathBcLayerEnabled(): bool
+    {
+        return (bool) $this->getContainer()->getParameter('sylius.routing_path_bc_layer');
+    }
+
+    private function markAsSkippedIfBcLayerIsEnabled(): void
+    {
+        if ($this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be disabled.');
+        }
+    }
+
+    private function markAsSkippedIfBcLayerIsNotEnabled(): void
+    {
+        if (!$this->isRoutingPathBcLayerEnabled()) {
+            $this->markTestSkipped('This test requires The BC layer to be enabled.');
+        }
     }
 }

@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        public: false
+
+    gedmo_doctrine_extensions.mapping.driver.attribute:
+        class: Gedmo\Mapping\Driver\AttributeReader
+
+    gedmo.listener.sortable:
+        class: Gedmo\Sortable\SortableListener
+        tags:
+            - { name: doctrine.event_listener, event: 'onFlush' }
+            - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+            - { name: doctrine.event_listener, event: 'prePersist' }
+            - { name: doctrine.event_listener, event: 'postPersist' }
+            - { name: doctrine.event_listener, event: 'preUpdate' }
+            - { name: doctrine.event_listener, event: 'postRemove' }
+            - { name: doctrine.event_listener, event: 'postFlush' }
+        calls:
+            - [ setAnnotationReader, [ "@gedmo_doctrine_extensions.mapping.driver.attribute" ] ]

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Symfony\Routing\Factory;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\Operation;
 use Sylius\Resource\Metadata\RegistryInterface;
@@ -32,6 +34,7 @@ use Sylius\Resource\Symfony\Routing\Factory\RouteName\OperationRouteNameFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 use Symfony\Component\Routing\RouteCollection;
 
+#[CoversClass(AttributesOperationRouteFactory::class)]
 final class AttributesOperationRouteFactoryTest extends TestCase
 {
     private RegistryInterface $resourceRegistry;
@@ -47,11 +50,10 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
         $this->attributesOperationRouteFactory = new AttributesOperationRouteFactory(
             $this->resourceRegistry,
-            new OperationRouteFactory($this->routePathFactory),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(new Inflector()), false),
             new AttributesResourceMetadataCollectionFactory(
                 $this->resourceRegistry,
                 new OperationRouteNameFactory(),
-                'symfony',
             ),
         );
     }
@@ -123,6 +125,7 @@ final class AttributesOperationRouteFactoryTest extends TestCase
         $resource = new ResourceMetadata(
             alias: 'app.dummy',
             name: 'dummy',
+            pluralName: 'dummies',
             operations: [
                 'app_dummy_custom' => $nonHttpOperation,
                 'app_dummy_index' => $httpOperation,
@@ -138,9 +141,6 @@ final class AttributesOperationRouteFactoryTest extends TestCase
             ->with(\stdClass::class)
             ->willReturn($resourceCollection);
 
-        $metadata = $this->createDummyMetadataMock();
-        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
-
         $this->routePathFactory
             ->expects($this->once())
             ->method('createRoutePath')
@@ -149,7 +149,7 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
         $factory = new AttributesOperationRouteFactory(
             $this->resourceRegistry,
-            new OperationRouteFactory($this->routePathFactory),
+            new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(new Inflector()), false),
             $resourceMetadataFactory,
         );
 

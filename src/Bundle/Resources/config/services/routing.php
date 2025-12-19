@@ -136,7 +136,11 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.routing.factory.operation_route', OperationRouteFactory::class)
         ->private()
-        ->args([service('sylius.routing.factory.operation_route_path_factory')]);
+        ->args([
+            service('sylius.routing.factory.operation_route_path_factory'),
+            service('sylius.path_segment_name_generator'),
+            param('sylius.routing_path_bc_layer'),
+        ]);
 
     $services->alias(OperationRouteFactoryInterface::class, 'sylius.routing.factory.operation_route');
 

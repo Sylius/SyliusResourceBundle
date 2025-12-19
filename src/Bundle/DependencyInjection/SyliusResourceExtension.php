@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\DependencyInjection;
 
+use Behat\Transliterator\Transliterator;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineODMDriver;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Driver\Doctrine\DoctrineORMDriver;
@@ -72,8 +73,21 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
 
         $container->setParameter('sylius.resource.mapping', $config['mapping']);
         $container->setParameter('sylius.resource.settings', $config['settings']);
-        $container->setParameter('sylius.routing_path_bc_layer', $config['routing_path_bc_layer']);
+
+        $routingPathBcLayer = $config['routing_path_bc_layer'] ?? null;
+
+        if (null === $routingPathBcLayer) {
+            $routingPathBcLayer = class_exists(Transliterator::class);
+        }
+
+        if ($routingPathBcLayer && !class_exists(Transliterator::class)) {
+            throw new RuntimeException(sprintf('The routing path bc-layer is enabled but behat/transliterator package is not installed.'));
+        }
+
+        $container->setParameter('sylius.routing_path_bc_layer', $routingPathBcLayer);
+
         $container->setAlias('sylius.resource_controller.authorization_checker', $config['authorization_checker']);
+        $container->setAlias('sylius.path_segment_name_generator', $config['path_segment_name_generator']);
 
         $this->registerMetadataConfiguration($container, $config);
         $this->autoRegisterResources($config, $container);

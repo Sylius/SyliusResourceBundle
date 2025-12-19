@@ -18,7 +18,9 @@ use App\Entity\BookTranslation;
 use App\Entity\ComicBook;
 use App\Factory\BookFactory;
 use App\Form\Type\BookType;
+use Behat\Transliterator\Transliterator;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\SyliusResourceExtension;
 use Sylius\Bundle\ResourceBundle\Doctrine\ResourceMappingDriverChain;
@@ -30,7 +32,8 @@ use Sylius\Resource\Doctrine\Common\State\PersistProcessor;
 use Sylius\Resource\Doctrine\Common\State\RemoveProcessor;
 use Sylius\Resource\Factory\Factory;
 
-class SyliusResourceExtensionTest extends AbstractExtensionTestCase
+#[CoversClass(SyliusResourceExtension::class)]
+final class SyliusResourceExtensionTest extends AbstractExtensionTestCase
 {
     /** @test */
     public function it_registers_services_and_parameters_for_resources(): void
@@ -77,9 +80,9 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
     public function it_registers_default_translation_parameters(): void
     {
         $this->load([
-             'translation' => [
-                 'locale_provider' => 'test.custom_locale_provider',
-             ],
+            'translation' => [
+                'locale_provider' => 'test.custom_locale_provider',
+            ],
          ]);
 
         $this->assertContainerBuilderHasAlias('sylius.translation_locale_provider', 'test.custom_locale_provider');
@@ -210,6 +213,57 @@ class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $emptyPhpFile = realpath(__DIR__ . '/php/empty_file.php');
         $this->assertContainerBuilderHasService('sylius.metadata.resource_extractor.php_file');
         $this->assertSame([$emptyPhpFile], $this->container->getDefinition('sylius.metadata.resource_extractor.php_file')->getArgument(0));
+    }
+
+    public function testItRegistersRoutingPathBcLayerAutomatically(): void
+    {
+        $this->load();
+
+        if (class_exists(Transliterator::class)) {
+            $this->assertTrue($this->container->getParameter('sylius.routing_path_bc_layer'));
+
+            return;
+        }
+
+        $this->assertFalse($this->container->getParameter('sylius.routing_path_bc_layer'));
+    }
+
+    public function testRoutingPathBcLayerCanBeEnabled(): void
+    {
+        if (!class_exists(Transliterator::class)) {
+            $this->markTestSkipped('This test requires Transliterator.');
+        }
+
+        $this->load([
+            'routing_path_bc_layer' => true,
+        ]);
+
+        $this->assertTrue($this->container->getParameter('sylius.routing_path_bc_layer'));
+    }
+
+    public function testRoutingPathBcLayerCanBeDisabled(): void
+    {
+        $this->load([
+            'routing_path_bc_layer' => false,
+        ]);
+
+        $this->assertFalse($this->container->getParameter('sylius.routing_path_bc_layer'));
+    }
+
+    public function testItRegistersDashPathSegmentNameGeneratorByDefault(): void
+    {
+        $this->load();
+
+        $this->assertSame('sylius.metadata.path_segment_name_generator.dash', $this->container->getAlias('sylius.path_segment_name_generator')->__toString());
+    }
+
+    public function testItRegistersCustomPathSegmentNameGenerator(): void
+    {
+        $this->load([
+            'path_segment_name_generator' => 'sylius.metadata.path_segment_name_generator.underscore',
+        ]);
+
+        $this->assertSame('sylius.metadata.path_segment_name_generator.underscore', $this->container->getAlias('sylius.path_segment_name_generator')->__toString());
     }
 
     protected function getContainerExtensions(): array

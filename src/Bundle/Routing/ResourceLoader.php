@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Routing;
 
+use Behat\Transliterator\Transliterator;
 use Gedmo\Sluggable\Util\Urlizer;
+use Sylius\Resource\Exception\RuntimeException;
+use Sylius\Resource\Metadata\Inflector\Inflector;
+use Sylius\Resource\Metadata\Inflector\InflectorInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -27,16 +31,18 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class ResourceLoader extends Loader
 {
+    private InflectorInterface $inflector;
+
     public function __construct(
         private RegistryInterface $resourceRegistry,
         private RouteFactoryInterface $routeFactory,
         ?string $env = null,
         private ?bool $routingPathBcLayer = null,
+        ?InflectorInterface $inflector = null,
     ) {
         parent::__construct($env);
 
-        $this->resourceRegistry = $resourceRegistry;
-        $this->routeFactory = $routeFactory;
+        $this->inflector = $inflector ?? new Inflector();
     }
 
     public function load($resource, $type = null): RouteCollection
@@ -66,7 +72,7 @@ final class ResourceLoader extends Loader
         $metadata = $this->resourceRegistry->get($configuration['alias']);
         $routes = $this->routeFactory->createRouteCollection();
 
-        $rootPath = sprintf('/%s', $configuration['path'] ?? Urlizer::urlize($metadata->getPluralName()));
+        $rootPath = $configuration['path'] ?? $this->getRootPath($metadata->getPluralName());
         $identifier = sprintf('{%s}', $configuration['identifier']);
 
         /** @var bool $bcLayerEnabled */
@@ -124,6 +130,19 @@ final class ResourceLoader extends Loader
     public function supports($resource, $type = null): bool
     {
         return 'sylius.resource' === $type || 'sylius.resource_api' === $type;
+    }
+
+    private function getRootPath(string $pluralName): string
+    {
+        if ($this->routingPathBcLayer) {
+            if (!class_exists(Urlizer::class) || !class_exists(Transliterator::class)) {
+                throw new RuntimeException('Cannot use the routing bc-layer when the "behat/transliterator" package is not installed. Try to disable the routing path bc-layer in the Sylius Resource Bundle configuration using "sylius_resource.routing_path_bc_layer: false"');
+            }
+
+            return sprintf('/%s', Urlizer::urlize($pluralName));
+        }
+
+        return $this->inflector->dashize($pluralName);
     }
 
     private function createRoute(
