@@ -36,6 +36,7 @@ class ResourceController
 {
     use ControllerTrait;
     use ContainerAwareTrait;
+    use BcLayerRequestTrait;
 
     protected MetadataInterface $metadata;
 
@@ -454,7 +455,7 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $request->get('_csrf_token'))) {
+        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $this->getFromRequest($request, '_csrf_token'))) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid CSRF token.');
         }
 

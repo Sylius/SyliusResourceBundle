@@ -56,6 +56,9 @@ jobs:
                 symfony-workflow: [""]
                 winzou-state-machine-bundle: [""]
                 include:
+                    -   php: "8.4"
+                        orm: "3.*"
+                        symfony: "8.0.*"
                     # with Behat transliterator and Gedmo Doctrine extensions optional packages
                     -   behat-transliterator: '^1.2'
                         gedmo-doctrine-extensions: '^3.17.1'
@@ -191,7 +194,7 @@ jobs:
                     composer remove sylius/grid-bundle --no-scripts --dev
                     (cd tests/Application && bin/console cache:clear --env=test_without_twig)
                     (cd tests/Application && bin/console lint:container --env=test_without_twig)
-                    composer require "sylius/grid-bundle: ^1.11" --no-scripts --dev
+                    composer require "sylius/grid-bundle: ^1.13 || ^1.15@alpha" --no-scripts --dev
 
     tests_with_skeleton:
         runs-on: ubuntu-latest

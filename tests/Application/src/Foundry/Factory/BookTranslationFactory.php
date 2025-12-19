@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Foundry\Factory;
 
 use App\Entity\BookTranslation;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<BookTranslation>
+ * @extends PersistentObjectFactory<BookTranslation>
  */
-final class BookTranslationFactory extends PersistentProxyObjectFactory
+final class BookTranslationFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
 
+use Sylius\Bundle\ResourceBundle\Controller\BcLayerRequestTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class OptionsParser implements OptionsParserInterface
 {
+    use BcLayerRequestTrait;
+
     private ContainerInterface $container;
 
     private ExpressionLanguage $expression;
@@ -71,7 +74,7 @@ final class OptionsParser implements OptionsParserInterface
         }
 
         if (0 === strpos($parameter, '$')) {
-            return $request->get(substr($parameter, 1));
+            return $this->getFromRequest($request, substr($parameter, 1));
         }
 
         if (0 === strpos($parameter, 'expr:')) {
@@ -98,7 +101,7 @@ final class OptionsParser implements OptionsParserInterface
             '/\$(\w+)/',
             /** @return callable */
             function (array $matches) use ($request) {
-                $variable = $request->get($matches[1]);
+                $variable = $this->getFromRequest($request, $matches[1]);
 
                 return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },

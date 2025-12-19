@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use function Zenstruck\Foundry\Persistence\refresh;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -134,7 +135,7 @@ final class BoardGameUiTest extends WebTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        $boardGame->_refresh();
+        $boardGame = refresh($boardGame);
         $this->assertSame('Puerto Rico', (string) $boardGame->name());
     }
 

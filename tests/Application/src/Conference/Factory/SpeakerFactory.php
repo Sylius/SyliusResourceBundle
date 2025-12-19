@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Conference\Factory;
 
 use App\Conference\Entity\Speaker;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Speaker>
+ * @extends PersistentObjectFactory<Speaker>
  */
-final class SpeakerFactory extends PersistentProxyObjectFactory
+final class SpeakerFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

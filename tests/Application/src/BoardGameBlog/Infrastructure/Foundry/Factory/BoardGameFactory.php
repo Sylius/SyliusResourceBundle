@@ -15,12 +15,12 @@ namespace App\BoardGameBlog\Infrastructure\Foundry\Factory;
 
 use App\BoardGameBlog\Domain\Model\BoardGame;
 use App\BoardGameBlog\Domain\ValueObject\BoardGameName;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<BoardGame>
+ * @extends PersistentObjectFactory<BoardGame>
  */
-final class BoardGameFactory extends PersistentProxyObjectFactory
+final class BoardGameFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

@@ -21,6 +21,8 @@ use Webmozart\Assert\Assert;
 
 final class ParametersParser implements ParametersParserInterface
 {
+    use BcLayerRequestTrait;
+
     private ContainerInterface $container;
 
     private ExpressionLanguage $expression;
@@ -85,7 +87,7 @@ final class ParametersParser implements ParametersParserInterface
              * @return mixed
              */
             function (array $matches) use ($request) {
-                $variable = $request->get(substr($matches[1], 1));
+                $variable = $this->getFromRequest($request, substr($matches[1], 1));
 
                 if (is_array($variable) || is_object($variable)) {
                     throw new \InvalidArgumentException(sprintf(

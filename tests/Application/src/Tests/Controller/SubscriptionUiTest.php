@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\Registry;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
+use function Zenstruck\Foundry\Persistence\refresh;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -167,7 +168,7 @@ final class SubscriptionUiTest extends WebTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        $subscription->_refresh();
+        $subscription = refresh($subscription);
         $this->assertSame('biff.tannen@bttf.com', (string) $subscription->email);
     }
 
@@ -228,8 +229,7 @@ final class SubscriptionUiTest extends WebTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        $subscription->_refresh();
-
+        $subscription = refresh($subscription);
         $this->assertSame('accepted', $subscription->getState());
     }
 
@@ -247,10 +247,10 @@ final class SubscriptionUiTest extends WebTestCase
 
         $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
 
-        $martyMcFly->_refresh();
+        $martyMcFly = refresh($martyMcFly);
         $this->assertSame('accepted', $martyMcFly->getState());
 
-        $docBrown->_refresh();
+        $docBrown = refresh($docBrown);
         $this->assertSame('accepted', $docBrown->getState());
     }
 
