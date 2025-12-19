@@ -30,17 +30,20 @@ $bundles = [
     SyliusResourceBundle::class => ['all' => true],
     BabDevPagerfantaBundle::class => ['all' => true],
     TwigBundle::class => ['all' => true, 'test_without_twig' => false],
-    JMSSerializerBundle::class => ['all' => true, 'test_without_fosrest' => false],
     SyliusGridBundle::class => ['all' => true, 'test_without_twig' => false],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
 ];
 
 if (class_exists(BazingaHateoasBundle::class)) {
-    $bundles[BazingaHateoasBundle::class] = ['all' => true, 'test_without_fosrest' => false, 'test_with_attributes' => false];
+    $bundles[BazingaHateoasBundle::class] = ['all' => true, 'test_with_attributes' => false];
 }
 
 if (class_exists(FOSRestBundle::class)) {
-    $bundles[FOSRestBundle::class] = ['all' => true, 'test_without_fosrest' => false];
+    $bundles[FOSRestBundle::class] = ['all' => true];
+}
+
+if (class_exists(JMSSerializerBundle::class)) {
+    $bundles[JMSSerializerBundle::class] = ['all' => true];
 }
 
 if (class_exists(winzouStateMachineBundle::class)) {

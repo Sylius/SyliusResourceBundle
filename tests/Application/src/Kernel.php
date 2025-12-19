@@ -17,6 +17,7 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
 use FOS\RestBundle\FOSRestBundle;
 use Gedmo\Sluggable\Util\Urlizer;
+use JMS\SerializerBundle\JMSSerializerBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -55,6 +56,10 @@ class Kernel extends BaseKernel
             $this->configureAppWithFosRestBundle($loader);
         }
 
+        if (class_exists(JMSSerializerBundle::class)) {
+            $this->configureAppWithJmsSerializerBundle($loader);
+        }
+
         if (class_exists(winzouStateMachineBundle::class)) {
             $this->configureAppWithWinzouStateMachine($loader, $container);
         }
@@ -72,6 +77,11 @@ class Kernel extends BaseKernel
     private function configureAppWithFosRestBundle(YamlFileLoader $loader): void
     {
         $loader->load('integration/fos_rest.yaml');
+    }
+
+    private function configureAppWithJmsSerializerBundle(YamlFileLoader $loader): void
+    {
+        $loader->load('integration/jms_serializer.yaml');
     }
 
     private function configureAppWithWinzouStateMachine(YamlFileLoader $loader, ContainerBuilder $container): void

@@ -20,15 +20,27 @@ jobs:
             PHP ${{ matrix.php }},
             Symfony ${{ matrix.symfony }},
             ORM ${{ matrix.orm }}
-            ${{ matrix['behat-transliterator'] != '' && matrix['gedmo-doctrine-extensions'] != ''
-                && format('(with Behat transliterator {0} & Gedmo {1})', matrix['behat-transliterator'], matrix['gedmo-doctrine-extensions'])
+            ${{ matrix['behat-transliterator'] != ''
+                && format(', Behat transliterator {0}', matrix['behat-transliterator'])
+                || '' }}
+            ${{ matrix['gedmo-doctrine-extensions'] != ''
+                && format(', Gedmo {0}', matrix['gedmo-doctrine-extensions'])
                 || '' }}
             ${{ matrix['fos-rest-bundle'] != ''
-                && format('(with FriendsOfSymfony Rest Bundle {0})', matrix['fos-rest-bundle'])
+                && format(', FriendsOfSymfony Rest Bundle {0}', matrix['fos-rest-bundle'])
+                || '' }}
+            ${{ matrix['hateoas-bundle'] != ''
+            && format(', Hateoas Bundle {0}', matrix['hateoas-bundle'])
+            || '' }}            
+            ${{ matrix['jms-serializer-bundle'] != ''
+                && format(', JMSSerializer Bundle {0}', matrix['jms-serializer-bundle'])
                 || '' }}
             ${{ matrix['symfony-workflow'] != ''
-                && format('(with Symfony Workflow {0})', matrix['symfony-workflow'])
+                && format(', Symfony Workflow {0}', matrix['symfony-workflow'])
                 || '' }}
+            ${{ matrix['winzou-state-machine-bundle'] != ''
+            && format(', winzou State Machine Bundle {0}', matrix['winzou-state-machine-bundle'])
+            || '' }}
         strategy:
             fail-fast: false
             matrix:
@@ -39,6 +51,7 @@ jobs:
                 gedmo-doctrine-extensions: [""]
                 fos-rest-bundle: [""]
                 hateoas-bundle: [""]
+                jms-serializer-bundle: [""]
                 symfony: ["6.4.*", "7.4.*"]
                 symfony-workflow: [""]
                 winzou-state-machine-bundle: [""]
@@ -47,17 +60,14 @@ jobs:
                     -   behat-transliterator: '^1.2'
                         gedmo-doctrine-extensions: '^3.17.1'
                         fos-rest-bundle: '^3.7'
+                        jms-serializer-bundle: '^5.5'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
-                    # with FriendsOfSymfony Rest Bundle optional package
-                    -   fos-rest-bundle: '^3.7'
-                        php: "8.3"
-                        orm: "3.*"
-                        symfony: "7.4.*"
-                    # with FriendsOfSymfony Rest Bundle and HateoasBundle optional packages
+                    # with FriendsOfSymfony Rest Bundle, JMS Serializer Bundle & and Hateoas Bundle optional packages
                     -   fos-rest-bundle: '^3.7'
                         hateoas-bundle: '^2.5'
+                        jms-serializer-bundle: '^5.5'
                         php: "8.3"
                         orm: "3.*"
                         symfony: "7.4.*"
@@ -123,6 +133,11 @@ jobs:
                 run: composer require --dev willdurand/hateoas-bundle "${{ matrix.hateoas-bundle }}" --no-update --no-scripts
 
             -
+                name: Install JMS Serializer bundle
+                if: matrix.jms-serializer-bundle != ''
+                run: composer require --dev jms/serializer-bundle "${{ matrix.jms-serializer-bundle }}" --no-update --no-scripts
+
+            -
                 name: Install winzou State Machine Bundle
                 if: matrix.winzou-state-machine-bundle != ''
                 run: |
@@ -168,14 +183,6 @@ jobs:
             -
                 name: Run lint container
                 run: (cd tests/Application && bin/console lint:container)
-
-            -
-                name: Run lint container without friendsofsymfony/rest-bundle, willdurand/hateoas-bundle & jms/serializer-bundle packages
-                run: |
-                    composer remove --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
-                    (cd tests/Application && bin/console cache:clear --env=test_without_fosrest)
-                    (cd tests/Application && bin/console lint:container --env=test_without_fosrest)
-                    composer require --dev friendsofsymfony/rest-bundle willdurand/hateoas-bundle jms/serializer-bundle --no-scripts
 
             -
                 name: Run lint container without sylius/grid-bundle package
