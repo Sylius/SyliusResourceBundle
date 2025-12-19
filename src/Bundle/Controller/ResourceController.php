@@ -18,6 +18,7 @@ use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Exception\DeleteHandlingException;
+use Sylius\Resource\Exception\LogicException;
 use Sylius\Resource\Exception\UpdateHandlingException;
 use Sylius\Resource\Factory\FactoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
@@ -560,8 +561,8 @@ class ResourceController
      */
     protected function createRestView(RequestConfiguration $configuration, $data, ?int $statusCode = null): Response
     {
-        if (null === $this->viewHandler) {
-            throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
+        if (!class_exists(View::class) || null === $this->viewHandler) {
+            throw new LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
         }
 
         $view = View::create($data, $statusCode);
@@ -572,7 +573,7 @@ class ResourceController
     protected function getStateMachine(): StateMachineInterface
     {
         if (null === $this->stateMachine) {
-            throw new \LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
+            throw new LogicException('You can not use the "state-machine" if Winzou State Machine Bundle is not available. Try running "composer require winzou/state-machine-bundle".');
         }
 
         return $this->stateMachine;

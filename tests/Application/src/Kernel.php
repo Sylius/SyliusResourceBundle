@@ -15,6 +15,7 @@ namespace App;
 
 use App\Shared\Application\Command\CommandHandlerInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
+use FOS\RestBundle\FOSRestBundle;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\FileLocator;
@@ -47,10 +48,19 @@ class Kernel extends BaseKernel
         if (class_exists(Urlizer::class)) {
             $this->configureAppWithGedmoDoctrineExtensions($loader);
         }
+
+        if (class_exists(FosRestBundle::class)) {
+            $this->configureAppWithFosRestBundle($loader);
+        }
     }
 
     private function configureAppWithGedmoDoctrineExtensions(YamlFileLoader $loader): void
     {
         $loader->load('services/integration/gedmo.yaml');
+    }
+
+    private function configureAppWithFosRestBundle(YamlFileLoader $loader): void
+    {
+        $loader->load('integration/fos_rest.yaml');
     }
 }

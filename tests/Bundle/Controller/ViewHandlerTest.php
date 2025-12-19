@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
 use FOS\RestBundle\Context\Context;
+use FOS\RestBundle\FOSRestBundle;
 use FOS\RestBundle\View\ConfigurableViewHandlerInterface;
 use FOS\RestBundle\View\View;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -32,6 +33,8 @@ final class ViewHandlerTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+
         $this->restViewHandlerMock = $this->createMock(ConfigurableViewHandlerInterface::class);
         $this->viewHandler = new ViewHandler($this->restViewHandlerMock);
     }
@@ -68,5 +71,12 @@ final class ViewHandlerTest extends TestCase
         $this->restViewHandlerMock->expects($this->once())->method('setExclusionStrategyVersion')->with('2.0.0');
         $this->restViewHandlerMock->expects($this->once())->method('handle')->with($view)->willReturn($responseMock);
         $this->assertSame($responseMock, $this->viewHandler->handle($requestConfigurationMock, $view));
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
+        }
     }
 }

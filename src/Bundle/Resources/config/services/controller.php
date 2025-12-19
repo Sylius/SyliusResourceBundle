@@ -126,7 +126,7 @@ return static function (ContainerConfigurator $container) {
     $services->alias(EventDispatcherInterface::class, 'sylius.resource_controller.event_dispatcher');
 
     $services->set('sylius.resource_controller.view_handler', ViewHandler::class)
-        ->args([service('fos_rest.view_handler')]);
+        ->args([service('fos_rest.view_handler')->nullOnInvalid()]);
 
     $services->alias(ViewHandlerInterface::class, 'sylius.resource_controller.view_handler');
 

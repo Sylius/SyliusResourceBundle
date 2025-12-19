@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Foundry\Factory\BlogPostFactory;
+use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,11 @@ final class BlogPostApiTest extends ApiTestCase
 {
     use Factories;
     use ResetDatabase;
+
+    protected function setUp(): void
+    {
+        $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+    }
 
     #[Test]
     public function it_allows_creating_a_blog_post(): void
@@ -198,6 +204,13 @@ final class BlogPostApiTest extends ApiTestCase
 
         if (ResourceBundleInterface::STATE_MACHINE_SYMFONY !== $stateMachine) {
             $this->markTestSkipped();
+        }
+    }
+
+    private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
+    {
+        if (!class_exists(FOSRestBundle::class)) {
+            $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
         }
     }
 

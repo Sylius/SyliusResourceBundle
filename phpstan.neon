@@ -63,6 +63,16 @@ parameters:
         - '/has invalid type Doctrine\\ODM\\PHPCR\\Query\\Builder\\QueryBuilder/'
         - '/has invalid type Doctrine\\ODM\\PHPCR\\DocumentManagerInterface/'
 
+        # Optional FOS RestBundle support - requires friendsofsymfony/rest-bundle
+        - '/Call to method getContext\(\) on an unknown class FOS\\RestBundle\\View\\View/'
+        - '/Call to method handle\(\) on an unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface/'
+        - '/Call to method setExclusionStrategyGroups\(\) on an unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface/'
+        - '/Call to method setExclusionStrategyVersion\(\) on an unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface/'
+        - '/Parameter \$restViewHandler of method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandler::__construct\(\) has invalid type FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface/'
+        - '/Parameter \$view of method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandler::handle\(\) has invalid type FOS\\RestBundle\\View\\View/'
+        - '/Parameter \$view of method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandlerInterface::handle\(\) has invalid type FOS\\RestBundle\\View\\View/'
+        - '/Property Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandler::\$restViewHandler has unknown class FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface as its type/'
+
         # Backward compatibility with Doctrine Common 2.x
         # Namespace moved from Doctrine\Common\Persistence to Doctrine\Persistence in 3.x
         # Code uses both namespaces with aliases to support both versions
