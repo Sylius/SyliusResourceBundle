@@ -127,7 +127,7 @@ return static function (ContainerConfigurator $container) {
         ->args([
             service('sylius.resource_registry'),
             service('sylius.routing.factory.operation_route'),
-            service('sylius.resource_metadata_collection.factory.attributes'),
+            service('sylius.resource_metadata_collection.factory'),
         ])
         ->deprecate('sylius/resource-bundle', '1.13', 'The "%service_id%" service is deprecated since sylius/resource-bundle 1.13 and will be removed in sylius/resource-bundle 2.0. Use "sylius.routing.resource.route_collection_factory" instead.');
 
