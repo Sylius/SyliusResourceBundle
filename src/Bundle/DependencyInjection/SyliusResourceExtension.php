@@ -95,6 +95,12 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $this->loadPersistence($config['drivers'], $config['resources'], $loader, $container);
         $this->loadResources($config['resources'], $container);
 
+        $container->registerAttributeForAutoconfiguration(AsResource::class, static function (ChildDefinition $definition): void {
+            $definition->addTag('container.excluded', [
+                'source' => 'by #[AsResource] attribute',
+            ]);
+        });
+
         $container->registerAttributeForAutoconfiguration(
             AsResourceMutator::class,
             static function (ChildDefinition $definition, AsResourceMutator $attribute, \ReflectionClass $reflector): void {
