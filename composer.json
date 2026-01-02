@@ -84,7 +84,7 @@
         "symfony/stopwatch": "^6.4 || ^7.4",
         "symfony/uid": "^6.4 || ^7.4",
         "twig/twig": "^3.14",
-        "zenstruck/foundry": "^2.3 <2.7"
+        "zenstruck/foundry": "^2.8.4"
     },
     "conflict": {
         "behat/transliterator": "<1.2",
