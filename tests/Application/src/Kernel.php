@@ -17,11 +17,13 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
 use FOS\RestBundle\FOSRestBundle;
 use Gedmo\Sluggable\Util\Urlizer;
+use JMS\SerializerBundle\JMSSerializerBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+use Symfony\Component\Workflow\Registry;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 class Kernel extends BaseKernel
@@ -54,8 +56,16 @@ class Kernel extends BaseKernel
             $this->configureAppWithFosRestBundle($loader);
         }
 
+        if (class_exists(JMSSerializerBundle::class)) {
+            $this->configureAppWithJmsSerializerBundle($loader);
+        }
+
         if (class_exists(winzouStateMachineBundle::class)) {
             $this->configureAppWithWinzouStateMachine($loader, $container);
+        }
+
+        if (class_exists(Registry::class)) {
+            $this->configureAppWithSymfonyWorkflow($loader, $container);
         }
     }
 
@@ -69,6 +79,11 @@ class Kernel extends BaseKernel
         $loader->load('integration/fos_rest.yaml');
     }
 
+    private function configureAppWithJmsSerializerBundle(YamlFileLoader $loader): void
+    {
+        $loader->load('integration/jms_serializer.yaml');
+    }
+
     private function configureAppWithWinzouStateMachine(YamlFileLoader $loader, ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('sylius_resource', [
@@ -78,5 +93,16 @@ class Kernel extends BaseKernel
         ]);
 
         $loader->load('integration/winzou_state_machine.yaml');
+    }
+
+    private function configureAppWithSymfonyWorkflow(YamlFileLoader $loader, ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('sylius_resource', [
+            'settings' => [
+                'state_machine_component' => 'symfony',
+            ],
+        ]);
+
+        $loader->load('integration/symfony_workflow.yaml');
     }
 }

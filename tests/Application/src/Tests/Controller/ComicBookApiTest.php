@@ -16,7 +16,9 @@ namespace App\Tests\Controller;
 use App\Foundry\Factory\AuthorFactory;
 use App\Foundry\Factory\ComicBookFactory;
 use App\Foundry\Story\DefaultComicBooksStory;
+use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use FOS\RestBundle\FOSRestBundle;
+use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
@@ -31,6 +33,7 @@ final class ComicBookApiTest extends ApiTestCase
     protected function setUp(): void
     {
         $this->markAsSkippedIfFosRestBundleIsNotAvailable();
+        $this->markAsSkippedIfJMSSerializerBundleIsNotAvailable();
     }
 
     #[Test]
@@ -550,8 +553,8 @@ EOT;
 
     private function markAsSkippedIfHateoasIsNotAvailable(): void
     {
-        if ('test_without_hateoas' === self::getContainer()->get('kernel')->getEnvironment()) {
-            $this->markTestSkipped();
+        if (!class_exists(BazingaHateoasBundle::class)) {
+            $this->markTestSkipped('HateoasBundle is not installed.');
         }
     }
 
@@ -559,6 +562,13 @@ EOT;
     {
         if (!class_exists(FOSRestBundle::class)) {
             $this->markTestSkipped('FriendsOfSymfony Rest Bundle is not installed.');
+        }
+    }
+
+    private function markAsSkippedIfJMSSerializerBundleIsNotAvailable(): void
+    {
+        if (!class_exists(JMSSerializerBundle::class)) {
+            $this->markTestSkipped('JMS Serializer Bundle is not installed.');
         }
     }
 }

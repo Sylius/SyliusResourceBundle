@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
+use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Workflow\Registry;
 use Webmozart\Assert\Assert;
+
+if (!class_exists(Registry::class)) {
+    throw new RuntimeException(sprintf('Cannot use the "%s" class when the "symfony/workflow" package is not installed.', Workflow::class));
+}
 
 final class Workflow implements StateMachineInterface
 {

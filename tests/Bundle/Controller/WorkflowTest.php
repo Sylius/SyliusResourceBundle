@@ -31,6 +31,8 @@ final class WorkflowTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markAsSkippedIfSymfonyWorkflowIsNotAvailable();
+
         $this->registryMock = $this->createMock(Registry::class);
         $this->workflow = new Workflow($this->registryMock);
     }
@@ -183,5 +185,12 @@ final class WorkflowTest extends TestCase
         $workflow = $this->createMock(SymfonyWorkflow::class);
 
         return $workflow;
+    }
+
+    private function markAsSkippedIfSymfonyWorkflowIsNotAvailable(): void
+    {
+        if (!class_exists(Registry::class)) {
+            $this->markTestSkipped('Symfony Workflow is not available.');
+        }
     }
 }
