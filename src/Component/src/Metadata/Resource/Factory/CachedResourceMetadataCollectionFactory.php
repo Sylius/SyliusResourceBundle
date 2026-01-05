@@ -17,6 +17,11 @@ use Psr\Cache\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 use Sylius\Resource\Metadata\Resource\ResourceMetadataCollection;
 
+/**
+ * This class in inspired by this API Platform one:
+ *
+ * @see https://github.com/api-platform/core/blob/main/src/Metadata/Resource/Factory/CachedResourceMetadataCollectionFactory.php
+ */
 final class CachedResourceMetadataCollectionFactory implements ResourceMetadataCollectionFactoryInterface
 {
     public const CACHE_KEY_PREFIX = 'sylius_resource_metadata_collection_';

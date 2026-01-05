@@ -17,6 +17,10 @@ use Psr\Cache\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
+ * This trait in inspired by this API Platform one:
+ *
+ * @see https://github.com/api-platform/core/blob/main/src/Metadata/Util/CachedTrait.php
+ *
  * @internal
  */
 trait CachedTrait
