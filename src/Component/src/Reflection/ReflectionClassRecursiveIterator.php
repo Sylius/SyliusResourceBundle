@@ -16,6 +16,10 @@ namespace Sylius\Resource\Reflection;
 /**
  * Gets reflection classes for php files in the given directories.
  *
+ * This class in inspired by this API Platform one:
+ *
+ * @see https://github.com/api-platform/core/blob/main/src/Metadata/Util/ReflectionClassRecursiveIterator.php
+ *
  * @internal
  */
 final class ReflectionClassRecursiveIterator
