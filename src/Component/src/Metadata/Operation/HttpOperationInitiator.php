@@ -43,9 +43,12 @@ final class HttpOperationInitiator implements HttpOperationInitiatorInterface
         $operationName = $request->attributes->get('_route');
         $syliusOptions = $attributes = $request->attributes->all('_sylius');
 
+        /** @var string|class-string|null $resource */
+        $resource = $attributes['resource'] ?? null;
+
         if (
             [] === $syliusOptions ||
-            null === ($resource = $attributes['resource'] ?? null) ||
+            null === $resource ||
             null === $operationName
         ) {
             return null;

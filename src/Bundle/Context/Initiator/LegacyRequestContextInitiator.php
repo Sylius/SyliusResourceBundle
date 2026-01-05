@@ -49,7 +49,10 @@ final class LegacyRequestContextInitiator implements RequestContextInitiatorInte
             return $context;
         }
 
-        if (null === ($resource = $attributes['resource'] ?? null)) {
+        /** @var string|class-string|null $resource */
+        $resource = $attributes['resource'] ?? null;
+
+        if (null === $resource) {
             return $context;
         }
 
