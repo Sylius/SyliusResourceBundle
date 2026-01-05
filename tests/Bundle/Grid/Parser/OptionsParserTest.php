@@ -37,16 +37,12 @@ final class OptionsParserTest extends TestCase
 
     private OptionsParser $parser;
 
-    /** @var Request&MockObject */
-    private Request $request;
-
     protected function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
         $this->expression = $this->createMock(ExpressionLanguage::class);
         $this->propertyAccessor = $this->createMock(PropertyAccessorInterface::class);
         $this->parser = new OptionsParser($this->container, $this->expression, $this->propertyAccessor);
-        $this->request = $this->createMock(Request::class);
     }
 
     public function testItImplementsOptionsParserInterface(): void
@@ -56,9 +52,7 @@ final class OptionsParserTest extends TestCase
 
     public function testItParsesOptionsWithRequestVariable(): void
     {
-        $this->configureRequestVariable('id', 7);
-
-        $result = $this->parser->parseOptions(['id' => '$id'], $this->request);
+        $result = $this->parser->parseOptions(['id' => '$id'], new Request(attributes: ['id' => 7]));
 
         $this->assertSame(['id' => 7], $result);
     }
@@ -73,15 +67,13 @@ final class OptionsParserTest extends TestCase
             'null' => null,
         ];
 
-        $result = $this->parser->parseOptions($data, $this->request);
+        $result = $this->parser->parseOptions($data, new Request());
 
         $this->assertSame($data, $result);
     }
 
     public function testItParsesOptionsWithMixedTypes(): void
     {
-        $this->configureRequestVariable('status', 'active');
-
         $result = $this->parser->parseOptions([
             'limit' => 25,
             'enabled' => true,
@@ -89,7 +81,7 @@ final class OptionsParserTest extends TestCase
             'price' => 99.99,
             'optional' => null,
             'status' => '$status',
-        ], $this->request);
+        ], new Request(query: ['status' => 'active']));
 
         $this->assertSame([
             'limit' => 25,
@@ -114,7 +106,7 @@ final class OptionsParserTest extends TestCase
                     ],
                 ],
             ],
-            $this->request,
+            new Request(),
         );
 
         $this->assertSame(
@@ -139,7 +131,7 @@ final class OptionsParserTest extends TestCase
             ->with($data, 'id')
             ->willReturn(21);
 
-        $result = $this->parser->parseOptions(['id' => 'resource.id'], $this->request, $data);
+        $result = $this->parser->parseOptions(['id' => 'resource.id'], new Request(), $data);
 
         $this->assertSame(['id' => 21], $result);
     }
@@ -157,10 +149,10 @@ final class OptionsParserTest extends TestCase
                 default => null,
             });
 
-        $result = $this->parser->parseOptions(['name' => 'resource.name'], $this->request, $arrayData);
+        $result = $this->parser->parseOptions(['name' => 'resource.name'], new Request(), $arrayData);
         $this->assertSame(['name' => 'An awesome name'], $result);
 
-        $result = $this->parser->parseOptions(['id' => 'resource[0].id'], $this->request, $arrayData);
+        $result = $this->parser->parseOptions(['id' => 'resource[0].id'], new Request(), $arrayData);
         $this->assertSame(['id' => 21], $result);
     }
 
@@ -176,17 +168,9 @@ final class OptionsParserTest extends TestCase
         array $options,
         array $expectedResult,
     ): void {
-        if ($requestVariables !== null) {
-            if (count($requestVariables) === 1) {
-                $this->configureRequestVariable(array_key_first($requestVariables), reset($requestVariables));
-            } else {
-                $this->configureMultipleRequestVariables($requestVariables);
-            }
-        }
-
         $this->configureExpressionEvaluation($expectedExpression, reset($expectedResult));
 
-        $result = $this->parser->parseOptions($options, $this->request);
+        $result = $this->parser->parseOptions($options, new Request(attributes: $requestVariables ?? []));
 
         $this->assertSame($expectedResult, $result);
     }
@@ -237,24 +221,6 @@ final class OptionsParserTest extends TestCase
             ['data' => 'expr:service("filter").apply($enabled)'],
             ['data' => 'filtered_results'],
         ];
-    }
-
-    private function configureRequestVariable(string $key, mixed $value): void
-    {
-        $this->request->expects($this->once())
-            ->method('get')
-            ->with($key)
-            ->willReturn($value);
-    }
-
-    /**
-     * @param array<string, mixed> $variables
-     */
-    private function configureMultipleRequestVariables(array $variables): void
-    {
-        $this->request->expects($this->exactly(count($variables)))
-            ->method('get')
-            ->willReturnCallback(fn ($key) => $variables[$key] ?? null);
     }
 
     private function configureExpressionEvaluation(string $expression, mixed $result): void

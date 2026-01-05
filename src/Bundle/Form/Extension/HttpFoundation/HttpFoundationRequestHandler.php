@@ -52,6 +52,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
         // from the query string. Otherwise we look for data in the request body.
         if ('GET' === $method || 'HEAD' === $method || 'TRACE' === $method) {
             if ('' === $name) {
+                /** @var array<string, mixed> $data */
                 $data = $request->query->all();
             } else {
                 // Don't submit GET requests if the form's name does not exist
@@ -60,6 +61,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
                     return;
                 }
 
+                /** @var array<string, mixed> $data */
                 $data = $request->query->all()[$name];
             }
         } else {
@@ -103,6 +105,7 @@ final class HttpFoundationRequestHandler implements RequestHandlerInterface
             if (is_array($params) && is_array($files)) {
                 $data = array_replace_recursive($params, $files);
             } else {
+                /** @var array<string, mixed> $data */
                 $data = $params ?: $files;
             }
         }

@@ -17,12 +17,12 @@ use App\Entity\Author;
 use App\Entity\ComicBook;
 use Doctrine\Persistence\Proxy;
 use Zenstruck\Foundry\LazyValue;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<ComicBook>
+ * @extends PersistentObjectFactory<ComicBook>
  */
-final class ComicBookFactory extends PersistentProxyObjectFactory
+final class ComicBookFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

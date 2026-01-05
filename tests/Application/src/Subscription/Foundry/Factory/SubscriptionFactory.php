@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Subscription\Foundry\Factory;
 
 use App\Subscription\Entity\Subscription;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Subscription>
+ * @extends PersistentObjectFactory<Subscription>
  */
-final class SubscriptionFactory extends PersistentProxyObjectFactory
+final class SubscriptionFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace App\Foundry\Factory;
 
 use App\Entity\BlogPost;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<BlogPost>
+ * @extends PersistentObjectFactory<BlogPost>
  */
-final class BlogPostFactory extends PersistentProxyObjectFactory
+final class BlogPostFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

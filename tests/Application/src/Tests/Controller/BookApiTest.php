@@ -23,6 +23,7 @@ use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
+use function Zenstruck\Foundry\Persistence\refresh;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -131,7 +132,7 @@ EOT;
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $book->_refresh();
+        $book = refresh($book);
 
         $enUsTranslation = $book->getTranslation('en_US');
         $plPLTranslation = $book->getTranslation('pl_PL');
@@ -159,8 +160,7 @@ EOT;
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $book->_refresh();
-
+        $book = refresh($book);
         $this->assertEquals('Christie Golden', $book->getAuthor());
     }
 
