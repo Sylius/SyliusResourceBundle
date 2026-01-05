@@ -216,6 +216,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
     private function getResourceAlias(ResourceMetadata $resource, string $className): string
     {
         $alias = $resource->getAlias();
+        $applicationName = $resource->getApplicationName() ?? 'app';
 
         if (null !== $alias) {
             return $alias;
@@ -229,7 +230,7 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
             $shortName = substr($shortName, 0, strlen($shortName) - strlen($suffix));
         }
 
-        return 'app.' . u($shortName)->snake()->toString();
+        return u($applicationName)->snake()->toString() . '.' . u($shortName)->snake()->toString();
     }
 
     /**
