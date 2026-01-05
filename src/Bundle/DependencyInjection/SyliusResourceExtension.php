@@ -32,6 +32,7 @@ use Sylius\Resource\Metadata\OperationMutatorInterface;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\ResourceMutatorInterface;
 use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Reflection\ReflectionClassRecursiveIterator;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\State\ProviderInterface;
 use Sylius\Resource\State\ResponderInterface;
@@ -182,8 +183,8 @@ final class SyliusResourceExtension extends Extension implements PrependExtensio
         $mapping = $container->getParameter('sylius.resource.mapping');
         $paths = $mapping['paths'] ?? [];
 
-        /** @var class-string $className */
-        foreach (ClassReflection::getResourcesByPaths($paths) as $className) {
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($paths) as $reflectionClass) {
+            $className = $reflectionClass->getName();
             $resourceAttributes = ClassReflection::getClassAttributes($className, AsResource::class);
 
             foreach ($resourceAttributes as $resourceAttribute) {

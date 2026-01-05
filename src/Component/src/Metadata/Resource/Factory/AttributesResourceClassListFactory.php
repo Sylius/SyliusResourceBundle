@@ -16,6 +16,7 @@ namespace Sylius\Resource\Metadata\Resource\Factory;
 use Sylius\Resource\Metadata\AsResource;
 use Sylius\Resource\Metadata\Resource\ResourceClassList;
 use Sylius\Resource\Reflection\ClassReflection;
+use Sylius\Resource\Reflection\ReflectionClassRecursiveIterator;
 
 /**
  * Creates a resource class list from {@see AsResource} attributes.
@@ -46,7 +47,9 @@ final class AttributesResourceClassListFactory implements ResourceClassListFacto
 
         $paths = $this->mapping['paths'] ?? [];
 
-        foreach (ClassReflection::getResourcesByPaths($paths) as $resourceClass) {
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($paths) as $reflectionClass) {
+            $resourceClass = $reflectionClass->getName();
+
             if ([] === ClassReflection::getClassAttributes($resourceClass, AsResource::class)) {
                 continue;
             }

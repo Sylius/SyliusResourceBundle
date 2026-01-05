@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Reflection;
 
-use Symfony\Component\Finder\Finder;
-
 final class ClassReflection
 {
     /**
@@ -22,47 +20,24 @@ final class ClassReflection
      */
     public static function getResourcesByPaths(array $paths): iterable
     {
-        foreach ($paths as $resourceDirectory) {
-            $resources = self::getResourcesByPath($resourceDirectory);
+        trigger_deprecation('sylius/resource-bundle', '1.14', 'The method "%s" is deprecated, use "%s::%s" instead.', __METHOD__, ReflectionClassRecursiveIterator::class, 'getReflectionClassesFromDirectories');
 
-            foreach ($resources as $className) {
-                yield $className;
-            }
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($paths) as $reflectionClass) {
+            yield $reflectionClass->getName();
         }
     }
 
     public static function getResourcesByPath(string $path): iterable
     {
-        $finder = new Finder();
-        $finder->files()->in($path)->name('*.php')->sortByName(true);
+        trigger_deprecation('sylius/resource-bundle', '1.14', 'The method "%s" is deprecated, use "%s::%s" instead.', __METHOD__, ReflectionClassRecursiveIterator::class, 'getReflectionClassesFromDirectories');
 
-        foreach ($finder as $file) {
-            $fileContent = file_get_contents((string) $file->getRealPath());
-            if (false === $fileContent) {
-                throw new \RuntimeException(sprintf('Unable to read "%s" file', $file->getRealPath()));
-            }
-
-            preg_match('/namespace (.+);/', $fileContent, $matches);
-
-            $namespace = $matches[1] ?? null;
-
-            if (!preg_match('/class\s+(\w+)/', $fileContent, $matches)) {
-                // no class found
-                continue;
-            }
-
-            $className = trim($matches[1]);
-
-            if (null !== $namespace) {
-                yield $namespace . '\\' . $className;
-            } else {
-                yield $className;
-            }
+        foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories([$path]) as $reflectionClass) {
+            yield $reflectionClass->getName();
         }
     }
 
     /**
-     * @psalm-param class-string $className
+     * @param class-string $className
      *
      * @return \ReflectionAttribute[]
      */
