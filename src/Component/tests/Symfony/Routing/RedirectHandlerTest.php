@@ -355,15 +355,49 @@ final class RedirectHandlerTest extends TestCase
         $data = $this->createDataWithId();
         $operation = (new Create(
             redirectToRoute: 'app_book_show',
-            redirectArguments: ['id' => 'resource.id', 'page' => '1'],
+            redirectArguments: ['id' => 'resource.id', 'page' => "request.query.get('page')"],
         ))->withResource(new ResourceMetadata(alias: 'app.book')); // name is null
         $request = $this->createMock(Request::class);
 
         $this->argumentParser
             ->expects($this->once())
             ->method('parseExpression')
-            ->with('1', ['resource' => $data]) // Only 'resource', no name
+            ->with("request.query.get('page')", ['resource' => $data]) // Only 'resource', no name
             ->willReturn('1');
+
+        $this->mockFilterStorage();
+        $this->router
+            ->method('generate')
+            ->with('app_book_show', ['id' => 'xyz', 'page' => '1'])
+            ->willReturn('/books/xyz?page=1');
+
+        $this->redirectHandler->redirectToResource($data, $operation, $request);
+    }
+
+    public function testItUsesExpressionParserForExpressionLanguagePrefixedValues(): void
+    {
+        $data = $this->createDataWithId();
+        $operation = (new Create(
+            redirectToRoute: 'app_book_show',
+            redirectArguments: ['id' => '@resource.getId()', 'page' => "@=request.query.get('page')"],
+        ))->withResource(new ResourceMetadata(alias: 'app.book')); // name is null
+        $request = $this->createMock(Request::class);
+
+        $this->argumentParser
+            ->expects($this->exactly(2))
+            ->method('parseExpression')
+            ->willReturnCallback(function (string $expression) {
+                if ('@resource.getId()' === $expression) {
+                    return 'xyz';
+                }
+
+                if ("request.query.get('page')" === $expression) {
+                    return '1';
+                }
+
+                return null;
+            })
+        ;
 
         $this->mockFilterStorage();
         $this->router

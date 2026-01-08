@@ -64,6 +64,20 @@ final class FactoryTest extends TestCase
         $this->assertEquals('51353e91-5295-4876-a994-cae4b3ff3a7c', $result->userId);
     }
 
+    public function testItCallsFactoryWithExpressionLanguagePrefixedArgumentsFromOperationAsCallable(): void
+    {
+        $operation = new Create(factory: [FactoryCallable::class, 'create'], factoryArguments: ['userId' => '@=user.getUserIdentifier()']);
+        $this->argumentParser->expects($this->once())
+            ->method('parseExpression')
+            ->with('user.getUserIdentifier()')
+            ->willReturn('51353e91-5295-4876-a994-cae4b3ff3a7c');
+
+        $result = $this->factory->create($operation, new Context());
+
+        $this->assertInstanceOf(\stdClass::class, $result);
+        $this->assertEquals('51353e91-5295-4876-a994-cae4b3ff3a7c', $result->userId);
+    }
+
     public function testItCallsFactoryFromOperationAsString(): void
     {
         $factory = $this->createMock(FactoryInterface::class);
