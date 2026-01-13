@@ -88,6 +88,10 @@ final class ORMTranslatableListener implements EventSubscriber
      */
     private function mapTranslatable(ClassMetadata $metadata): void
     {
+        if ($metadata->hasAssociation('translations')) {
+            return;
+        }
+
         $className = $metadata->name;
 
         try {
@@ -96,24 +100,18 @@ final class ORMTranslatableListener implements EventSubscriber
             return;
         }
 
-        if (!$resourceMetadata->hasParameter('translation')) {
-            return;
-        }
-
         /** @var MetadataInterface $translationResourceMetadata */
         $translationResourceMetadata = $this->resourceMetadataRegistry->get($resourceMetadata->getAlias() . '_translation');
 
-        if (!$metadata->hasAssociation('translations')) {
-            $metadata->mapOneToMany([
-                'fieldName' => 'translations',
-                'targetEntity' => $translationResourceMetadata->getClass('model'),
-                'mappedBy' => 'translatable',
-                'fetch' => ClassMetadata::FETCH_EXTRA_LAZY,
-                'indexBy' => 'locale',
-                'cascade' => ['persist', 'remove'],
-                'orphanRemoval' => true,
-            ]);
-        }
+        $metadata->mapOneToMany([
+            'fieldName' => 'translations',
+            'targetEntity' => $translationResourceMetadata->getClass('model'),
+            'mappedBy' => 'translatable',
+            'fetch' => ClassMetadata::FETCH_EXTRA_LAZY,
+            'indexBy' => 'locale',
+            'cascade' => ['persist', 'remove'],
+            'orphanRemoval' => true,
+        ]);
     }
 
     /**
