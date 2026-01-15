@@ -43,7 +43,7 @@ final class RemoveProcessor implements ProcessorInterface
             throw new DeleteResourceException();
         }
 
-        return null;
+        return $data;
     }
 
     /**
