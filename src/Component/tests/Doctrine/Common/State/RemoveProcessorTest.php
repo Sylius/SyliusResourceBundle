@@ -50,7 +50,8 @@ final class RemoveProcessorTest extends TestCase
         $manager->expects($this->once())->method('remove')->with($data);
         $manager->expects($this->once())->method('flush');
 
-        $this->removeProcessor->process($data, $operation, new Context());
+        $result = $this->removeProcessor->process($data, $operation, new Context());
+        $this->assertSame($data, $result);
     }
 
     public function testItDoesNothingWhenDataIsNotManagedByDoctrine(): void
