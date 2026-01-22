@@ -40,7 +40,7 @@ final class OperationRouteFactory implements OperationRouteFactoryInterface
         $routePath = $operation->getPath() ?? $this->getDefaultRoutePath($metadata, $resource, $operation);
 
         if (null !== $routePrefix = $operation->getRoutePrefix()) {
-            $routePath = $routePrefix . '/' . $routePath;
+            $routePath = sprintf('%s/%s', rtrim($routePrefix, '/'), ltrim($routePath, '/'));
         }
 
         return new Route(
