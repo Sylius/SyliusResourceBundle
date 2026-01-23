@@ -120,7 +120,7 @@ final class OperationRouteFactoryTest extends TestCase
 
         $route = $this->bcOperationRouteFactory->create($metadata, $resource, $operation);
 
-        $this->assertSame('/admin//books', $route->getPath());
+        $this->assertSame('/admin/books', $route->getPath());
     }
 
     public function testItCreatesRouteWithRoutePrefix(): void
@@ -137,7 +137,37 @@ final class OperationRouteFactoryTest extends TestCase
 
         $route = $this->operationRouteFactory->create($metadata, $resource, $operation);
 
-        $this->assertSame('/admin//books', $route->getPath());
+        $this->assertSame('/admin/books', $route->getPath());
+    }
+
+    public function testItCreatesRouteWithCustomPathAndRoutePrefix(): void
+    {
+        $metadata = $this->createMock(MetadataInterface::class);
+        $resource = new ResourceMetadata(alias: 'app.book');
+        $operation = new Index(path: '/custom/books/list', routePrefix: '/admin');
+
+        $this->routePathFactory
+            ->expects($this->never())
+            ->method('createRoutePath');
+
+        $route = $this->operationRouteFactory->create($metadata, $resource, $operation);
+
+        $this->assertSame('/admin/custom/books/list', $route->getPath());
+    }
+
+    public function testItCreatesRouteWithCustomPathAndRoutePrefixAndTooManySlashes(): void
+    {
+        $metadata = $this->createMock(MetadataInterface::class);
+        $resource = new ResourceMetadata(alias: 'app.book');
+        $operation = new Index(path: '/custom/books/list', routePrefix: '/admin/');
+
+        $this->routePathFactory
+            ->expects($this->never())
+            ->method('createRoutePath');
+
+        $route = $this->operationRouteFactory->create($metadata, $resource, $operation);
+
+        $this->assertSame('/admin/custom/books/list', $route->getPath());
     }
 
     public function testItCreatesRouteWithSection(): void
