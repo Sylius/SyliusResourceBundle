@@ -31,8 +31,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 final class RedirectHandler implements RedirectHandlerInterface
 {
-    private const REFERER = 'referer';
-
     public function __construct(
         private RouterInterface $router,
         private ArgumentParserInterface $argumentParser,
@@ -50,7 +48,7 @@ final class RedirectHandler implements RedirectHandlerInterface
             /** @var string|null $referer */
             $referer = $request->headers->get('referer');
 
-            if (null !== $referer and $this->isValidReferer($referer, $request)) {
+            if (null !== $referer && $this->isValidReferer($referer, $request)) {
                 return new RedirectResponse($referer);
             }
         }

@@ -52,7 +52,7 @@ class HttpOperation extends Operation
         string|\Stringable|null $security = null,
         ?string $securityMessage = null,
         string|callable|null $twigContextFactory = null,
-        protected string|null $redirectTo = null,
+        protected ?string $redirectTo = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
         protected ?array $vars = null,
