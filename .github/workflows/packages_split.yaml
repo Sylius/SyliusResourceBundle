@@ -12,68 +12,8 @@ on:
                 required: false
                 type: string
 
-env:
-    SPLIT_ORG: ${{ github.repository_owner }}
-
 jobs:
-    prepare:
-        name: Prepare split configuration
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Validate inputs
-                if: github.event_name == 'workflow_dispatch'
-                run: |
-                    BRANCH="${{ github.event.inputs.branch }}"
-                    TAG="${{ github.event.inputs.tag }}"
-
-                    # Validate at least one is specified
-                    if [ -z "$BRANCH" ] && [ -z "$TAG" ]; then
-                        echo "::error::At least one of 'branch' or 'tag' must be specified."
-                        exit 1
-                    fi
-
-                    # Validate that specified ref exists (tag takes priority)
-                    if [ -n "$TAG" ]; then
-                        if ! git ls-remote --tags origin "$TAG" | grep -q "$TAG"; then
-                            echo "::error::Tag '$TAG' does not exist."
-                            exit 1
-                        fi
-                        echo "✓ Tag '$TAG' exists"
-                    else
-                        if ! git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
-                            echo "::error::Branch '$BRANCH' does not exist."
-                            exit 1
-                        fi
-                        echo "✓ Branch '$BRANCH' exists"
-                    fi
-
-            -   name: Determine targets
-                id: config
-                run: |
-                    if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-                        BRANCH="${{ github.event.inputs.branch }}"
-                        TAG="${{ github.event.inputs.tag }}"
-                    elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
-                        # Push event with tag
-                        BRANCH=""
-                        TAG="${GITHUB_REF#refs/tags/}"
-                    else
-                        # Push event with branch
-                        BRANCH="${GITHUB_REF#refs/heads/}"
-                        TAG=""
-                    fi
-
-                    echo "branch=$BRANCH" >> $GITHUB_OUTPUT
-                    echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-        outputs:
-            branch: ${{ steps.config.outputs.branch }}
-            tag: ${{ steps.config.outputs.tag }}
-
     split_packages:
-        needs: prepare
         name: Split ${{ matrix.package.repository }}
         runs-on: ubuntu-latest
         strategy:
@@ -81,60 +21,15 @@ jobs:
             matrix:
                 package:
                     -
-                        repository: Resource
                         directory: src/Component
+                        repository: Resource
 
         steps:
-            -   uses: actions/checkout@v4
+            -   name: Split package
+                uses: SyliusLabs/SplitPackageAction@v1.0
                 with:
-                    fetch-depth: 0
-                    ref: ${{ needs.prepare.outputs.tag || needs.prepare.outputs.branch }}
-                    persist-credentials: false
-
-            -   name: Cache splitsh-lite
-                id: cache-splitsh
-                uses: actions/cache@v4
-                with:
-                    path: ./splitsh-lite
-                    key: ${{ runner.os }}-splitsh-lite-v1.0.1
-
-            -   name: Install splitsh-lite
-                if: steps.cache-splitsh.outputs.cache-hit != 'true'
-                run: |
-                    curl -L -o splitsh-lite.tar.gz https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
-                    tar -xzf splitsh-lite.tar.gz
-                    chmod +x splitsh-lite
-                    rm splitsh-lite.tar.gz
-
-            -   name: Ensure target repository exists
-                env:
-                    GH_TOKEN: ${{ secrets.SPLIT_TOKEN }}
-                    TARGET_REPO: ${{ env.SPLIT_ORG }}/${{ matrix.package.repository }}
-                run: |
-                    if ! gh repo view "$TARGET_REPO" &>/dev/null; then
-                        echo "Creating repository $TARGET_REPO"
-                        gh repo create "$TARGET_REPO" --public
-                    else
-                        echo "Repository $TARGET_REPO already exists"
-                    fi
-
-            -   name: Split and push package
-                env:
-                    TARGET_BRANCH: ${{ needs.prepare.outputs.branch }}
-                    TARGET_TAG: ${{ needs.prepare.outputs.tag }}
-                    TARGET_REPO: ${{ env.SPLIT_ORG }}/${{ matrix.package.repository }}
-                    PUSH_TOKEN: ${{ secrets.SPLIT_TOKEN }}
-                run: |
-                    SHA=$(./splitsh-lite --prefix=${{ matrix.package.directory }})
-
-                    REMOTE_URL="https://x-access-token:${PUSH_TOKEN}@github.com/${TARGET_REPO}.git"
-
-                    # Tag takes priority - if specified, push only the tag
-                    if [ -n "$TARGET_TAG" ]; then
-                        echo "Pushing tag $TARGET_TAG"
-                        git tag -f "$TARGET_TAG" "$SHA"
-                        git push "$REMOTE_URL" "refs/tags/$TARGET_TAG" -f
-                    elif [ -n "$TARGET_BRANCH" ]; then
-                        echo "Pushing to branch $TARGET_BRANCH"
-                        git push "$REMOTE_URL" "$SHA:refs/heads/$TARGET_BRANCH" -f
-                    fi
+                    directory: ${{ matrix.package.directory }}
+                    repository: ${{ matrix.package.repository }}
+                    branch: ${{ github.event.inputs.branch }}
+                    tag: ${{ github.event.inputs.tag }}
+                    token: ${{ secrets.SPLIT_TOKEN }}
