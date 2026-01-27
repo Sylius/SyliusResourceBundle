@@ -1,0 +1,35 @@
+name: 'Packages Split'
+
+on:
+    workflow_dispatch:
+        inputs:
+            branch:
+                description: 'Branch to checkout and split. Ignored if tag is specified. At least one required.'
+                required: false
+                type: string
+            tag:
+                description: 'Tag to checkout and split. Takes priority over branch. At least one required.'
+                required: false
+                type: string
+
+jobs:
+    split_packages:
+        name: Split ${{ matrix.package.repository }}
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                package:
+                    -
+                        directory: src/Component
+                        repository: Resource
+
+        steps:
+            -   name: Split package
+                uses: SyliusLabs/SplitPackageAction@v1.0
+                with:
+                    directory: ${{ matrix.package.directory }}
+                    repository: ${{ matrix.package.repository }}
+                    branch: ${{ github.event.inputs.branch }}
+                    tag: ${{ github.event.inputs.tag }}
+                    token: ${{ secrets.SPLIT_TOKEN }}
