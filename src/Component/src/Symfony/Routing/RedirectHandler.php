@@ -39,11 +39,8 @@ final class RedirectHandler implements RedirectHandlerInterface
     ) {
     }
 
-    public function redirect(
-        mixed $data,
-        HttpOperation $operation,
-        Request $request,
-    ): RedirectResponse {
+    public function redirectToResource(mixed $data, HttpOperation $operation, Request $request): RedirectResponse
+    {
         if (self::REFERER === $operation->getRedirectTo()) {
             /** @var string|null $referer */
             $referer = $request->headers->get('referer');
@@ -53,11 +50,6 @@ final class RedirectHandler implements RedirectHandlerInterface
             }
         }
 
-        return $this->redirectToResource($data, $operation, $request);
-    }
-
-    public function redirectToResource(mixed $data, HttpOperation $operation, Request $request): RedirectResponse
-    {
         $route = $operation->getRedirectToRoute();
 
         if (null === $route) {
