@@ -52,6 +52,7 @@ class HttpOperation extends Operation
         string|\Stringable|null $security = null,
         ?string $securityMessage = null,
         string|callable|null $twigContextFactory = null,
+        protected ?string $redirectTo = null,
         protected ?string $redirectToRoute = null,
         protected ?array $redirectArguments = null,
         protected ?array $vars = null,
@@ -172,6 +173,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->twigContextFactory = $twigContextFactory;
+
+        return $self;
+    }
+
+    public function getRedirectTo(): ?string
+    {
+        return $this->redirectTo;
+    }
+
+    public function withRedirectTo(?string $redirectTo): self
+    {
+        $self = clone $this;
+        $self->redirectTo = $redirectTo;
 
         return $self;
     }

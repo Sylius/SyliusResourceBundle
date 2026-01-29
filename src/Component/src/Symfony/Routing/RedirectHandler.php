@@ -39,6 +39,23 @@ final class RedirectHandler implements RedirectHandlerInterface
     ) {
     }
 
+    public function redirect(
+        mixed $data,
+        HttpOperation $operation,
+        Request $request,
+    ): RedirectResponse {
+        if (self::REFERER === $operation->getRedirectTo()) {
+            /** @var string|null $referer */
+            $referer = $request->headers->get('referer');
+
+            if (null !== $referer && $this->isValidReferer($referer, $request)) {
+                return new RedirectResponse($referer);
+            }
+        }
+
+        return $this->redirectToResource($data, $operation, $request);
+    }
+
     public function redirectToResource(mixed $data, HttpOperation $operation, Request $request): RedirectResponse
     {
         $route = $operation->getRedirectToRoute();
@@ -149,5 +166,21 @@ final class RedirectHandler implements RedirectHandlerInterface
         $value = substr($value, 2);
 
         return $this->argumentParser->parseExpression($value, $variables);
+    }
+
+    private function isValidReferer(string $referer, Request $request): bool
+    {
+        $parsed = parse_url($referer);
+        if ($parsed === false) {
+            return false;
+        }
+
+        // Relative URL → OK
+        if (!isset($parsed['host'])) {
+            return true;
+        }
+
+        // Same host only
+        return $parsed['host'] === $request->getHost();
     }
 }

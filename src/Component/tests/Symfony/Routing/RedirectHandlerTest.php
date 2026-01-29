@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Symfony\Routing;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\GridBundle\Storage\FilterStorageInterface;
 use Sylius\Resource\Exception\InvalidArgumentException;
@@ -27,13 +28,13 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class RedirectHandlerTest extends TestCase
 {
-    private RouterInterface $router;
+    private RouterInterface&MockObject $router;
 
-    private ArgumentParserInterface $argumentParser;
+    private ArgumentParserInterface&MockObject $argumentParser;
 
-    private OperationRouteNameFactoryInterface $operationRouteNameFactory;
+    private OperationRouteNameFactoryInterface&MockObject $operationRouteNameFactory;
 
-    private FilterStorageInterface $filterStorage;
+    private FilterStorageInterface&MockObject $filterStorage;
 
     private RedirectHandler $redirectHandler;
 
@@ -521,5 +522,64 @@ final class RedirectHandlerTest extends TestCase
         $this->mockRouter('app_book_show', ['id' => 'xyz', 'title' => 'My Book'], '/books/xyz');
 
         $this->redirectHandler->redirectToResource($data, $operation, $request);
+    }
+
+    public function testItRedirectsToRefererWhenHeaderIsPresent(): void
+    {
+        $data = new \stdClass();
+        $operation = (new Create(redirectTo: 'referer', redirectToRoute: 'app_dummy_index'))
+            ->withResource(new ResourceMetadata(alias: 'app.book'));
+
+        $request = new Request();
+        $request->headers->set('referer', '/previous-page');
+
+        // router should never be called
+        $this->router
+            ->expects($this->never())
+            ->method('generate')
+        ;
+
+        $response = $this->redirectHandler->redirect($data, $operation, $request);
+
+        $this->assertSame('/previous-page', $response->getTargetUrl());
+    }
+
+    public function testItFallsBackToRouteWhenRefererIsMissing(): void
+    {
+        $data = new \stdClass();
+        $operation = (new Create(redirectTo: 'referer', redirectToRoute: 'app_dummy_index'))
+            ->withResource(new ResourceMetadata(alias: 'app.book'));
+
+        $request = new Request(); // No referer
+
+        $this->router
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn('/fallback')
+        ;
+
+        $response = $this->redirectHandler->redirect($data, $operation, $request);
+
+        $this->assertSame('/fallback', $response->getTargetUrl());
+    }
+
+    public function testItFallsBackToRouteWhenRefererIsExternal(): void
+    {
+        $data = new \stdClass();
+        $operation = (new Create(redirectTo: 'referer', redirectToRoute: 'app_dummy_index'))
+            ->withResource(new ResourceMetadata(alias: 'app.book'));
+
+        $request = new Request();
+        $request->headers->set('referer', 'https://malicious.com/');
+
+        $this->router
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn('/fallback')
+        ;
+
+        $response = $this->redirectHandler->redirect($data, $operation, $request);
+
+        $this->assertSame('/fallback', $response->getTargetUrl());
     }
 }

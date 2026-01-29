@@ -22,6 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface RedirectHandlerInterface
 {
+    public const REFERER = 'referer';
+
     public function redirectToResource(mixed $data, HttpOperation $operation, Request $request): RedirectResponse;
 
     public function redirectToOperation(mixed $data, HttpOperation $operation, Request $request, string $newOperation): RedirectResponse;
