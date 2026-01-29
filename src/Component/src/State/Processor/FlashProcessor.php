@@ -59,7 +59,9 @@ final class FlashProcessor implements ProcessorInterface
     private function addFlash(Request $request, Operation $operation, Context $context): void
     {
         if ($request->attributes->has('error')) {
-            $this->flashHelper->addErrorFlash($operation, $context);
+            $message = $request->attributes->getString('error');
+
+            $this->flashHelper->addErrorFlash($operation, $context, $message);
 
             return;
         }
