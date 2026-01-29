@@ -94,7 +94,7 @@ final class FlashProcessorTest extends TestCase
 
         $this->flashHelper->expects($this->once())
             ->method('addErrorFlash')
-            ->with($operation, $context, 'Cannot delete, the resource is in use.')
+            ->with($operation, $context)
         ;
 
         $this->flashProcessor->process(['foo' => 'fighters'], $operation, $context);
