@@ -539,7 +539,7 @@ final class RedirectHandlerTest extends TestCase
             ->method('generate')
         ;
 
-        $response = $this->redirectHandler->redirect($data, $operation, $request);
+        $response = $this->redirectHandler->redirectToResource($data, $operation, $request);
 
         $this->assertSame('/previous-page', $response->getTargetUrl());
     }
@@ -558,7 +558,7 @@ final class RedirectHandlerTest extends TestCase
             ->willReturn('/fallback')
         ;
 
-        $response = $this->redirectHandler->redirect($data, $operation, $request);
+        $response = $this->redirectHandler->redirectToResource($data, $operation, $request);
 
         $this->assertSame('/fallback', $response->getTargetUrl());
     }
@@ -578,7 +578,7 @@ final class RedirectHandlerTest extends TestCase
             ->willReturn('/fallback')
         ;
 
-        $response = $this->redirectHandler->redirect($data, $operation, $request);
+        $response = $this->redirectHandler->redirectToResource($data, $operation, $request);
 
         $this->assertSame('/fallback', $response->getTargetUrl());
     }
