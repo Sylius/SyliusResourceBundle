@@ -17,7 +17,11 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Humanizer\StringHumanizer;
 use Sylius\Resource\Metadata\BulkOperationInterface;
+use Sylius\Resource\Metadata\CreateOperationInterface;
+use Sylius\Resource\Metadata\DeleteOperationInterface;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\ResourceMetadata;
+use Sylius\Resource\Metadata\UpdateOperationInterface;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
@@ -79,22 +83,36 @@ final class FlashHelper implements FlashHelperInterface
         $resource = $operation->getResource();
         Assert::notNull($resource);
 
-        $translationKeySuffix = sprintf('%s%s', $operation->getShortName() ?? '', 'error' === $type ? '_error' : '');
-        $key = 'success' === $type ? $operation->getNotificationMessage() : null;
-        $key ??= sprintf('%s.%s.%s', $resource->getApplicationName() ?? '', $resource->getName() ?? '', $translationKeySuffix);
-        $fallbackKey = sprintf('sylius.resource.%s', $translationKeySuffix);
+        $translationKeys = iterator_to_array($this->getTranslationKeys($resource, $operation, $type));
+
+        /** @var string $firstTranslationKey */
+        $firstTranslationKey = reset($translationKeys);
 
         $parameters = $this->getTranslationParameters($operation);
+        $notificationMessage = $operation->getNotificationMessage();
+
+        // It's defined by the user, it should be used.
+        if ('success' === $type && null !== $notificationMessage) {
+            // Do not use the translator if not needed
+            if ($this->translator instanceof TranslatorBagInterface && !$this->translator->getCatalogue()->has($notificationMessage, 'flashes')) {
+                return $notificationMessage;
+            }
+
+            return $this->translator->trans($notificationMessage, $parameters, 'flashes');
+        }
 
         if (!$this->translator instanceof TranslatorBagInterface) {
-            return $this->translator->trans($fallbackKey, $parameters, 'flashes');
+            return $this->translator->trans($firstTranslationKey, $parameters, 'flashes');
         }
 
-        if ($this->translator->getCatalogue()->has($key, 'flashes')) {
-            return $this->translator->trans($key, $parameters, 'flashes');
+        foreach ($translationKeys as $translationKey) {
+            if ($this->translator->getCatalogue()->has($translationKey, 'flashes')) {
+                return $this->translator->trans($translationKey, $parameters, 'flashes');
+            }
         }
 
-        return $this->translator->trans($fallbackKey, $parameters, 'flashes');
+        // Last fallback, use the first translation key.
+        return $this->translator->trans($firstTranslationKey, $parameters, 'flashes');
     }
 
     private function addFlash(string $message, string $type, Context $context): void
@@ -119,13 +137,100 @@ final class FlashHelper implements FlashHelperInterface
             return [];
         }
 
-        $resourceName = $operation instanceof BulkOperationInterface ? $resource->getPluralName() : $resource->getName();
-        $humanizedName = ucfirst(StringHumanizer::humanize($resourceName ?? ''));
+        $humanizedName = ucfirst(StringHumanizer::humanize($resource->getName() ?? ''));
 
         if ($operation instanceof BulkOperationInterface) {
-            return ['%resources%' => $humanizedName];
+            $humanizedPluralName = ucfirst(StringHumanizer::humanize($resource->getPluralName() ?? ''));
+
+            return [
+                '%resource%' => $humanizedName,
+                '%resources%' => $humanizedPluralName,
+            ];
         }
 
         return ['%resource%' => $humanizedName];
+    }
+
+    /**
+     * @return iterable<string>
+     */
+    private function getTranslationKeys(ResourceMetadata $resource, Operation $operation, string $type): iterable
+    {
+        $applicationName = $resource->getApplicationName() ?? '';
+        $resourceName = $resource->getName() ?? '';
+        $operationShortName = $operation->getShortName() ?? '';
+
+        $translationKeySuffix = 'error' === $type ? '_error' : '';
+
+        /**
+         * Examples:
+         * app.product.my_operation
+         * app.product.my_operation_error
+         */
+        yield sprintf(
+            '%s.%s.%s%s',
+            $applicationName,
+            $resourceName,
+            $operationShortName,
+            $translationKeySuffix,
+        );
+
+        $genericOperationType = $this->getGenericOperationType($operation);
+
+        /**
+         * Examples:
+         * app.product.delete
+         * app.product.delete_error
+         */
+        if ($genericOperationType !== $operationShortName) {
+            yield sprintf(
+                '%s.%s.%s%s',
+                $applicationName,
+                $resourceName,
+                $genericOperationType,
+                $translationKeySuffix,
+            );
+        }
+
+        /**
+         * Examples:
+         * sylius.resource.my_operation
+         * sylius.resource.my_operation_error
+         */
+        yield sprintf(
+            'sylius.resource.%s%s',
+            $operationShortName,
+            $translationKeySuffix,
+        );
+
+        /**
+         * Examples:
+         * sylius.resource.delete
+         * sylius.resource.delete_error
+         */
+        if ($genericOperationType !== $operationShortName) {
+            yield sprintf(
+                'sylius.resource.%s%s',
+                $genericOperationType,
+                $translationKeySuffix,
+            );
+        }
+    }
+
+    private function getGenericOperationType(Operation $operation): ?string
+    {
+        if ($operation instanceof DeleteOperationInterface) {
+            return 'delete';
+        }
+
+        if ($operation instanceof CreateOperationInterface) {
+            return 'create';
+        }
+
+        if ($operation instanceof UpdateOperationInterface) {
+            return 'update';
+        }
+
+        return null;
     }
 }
