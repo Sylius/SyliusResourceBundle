@@ -16,7 +16,7 @@ namespace Sylius\Resource\Metadata;
 use RuntimeException;
 
 /**
- * @internal
+ * @experimental
  *
  * @template T of Operation
  */
