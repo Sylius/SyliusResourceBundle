@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\Resource\Tests\Symfony\Form\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
 use Sylius\Resource\Symfony\Form\Factory\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface as SymfonyFormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -24,14 +26,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class FormFactoryTest extends TestCase
 {
-    private SymfonyFormFactoryInterface $symfonyFormFactory;
+    private SymfonyFormFactoryInterface&MockObject $symfonyFormFactory;
+
+    private ArgumentParserInterface&MockObject $argumentParser;
 
     private FormFactory $formFactory;
 
     protected function setUp(): void
     {
         $this->symfonyFormFactory = $this->createMock(SymfonyFormFactoryInterface::class);
-        $this->formFactory = new FormFactory($this->symfonyFormFactory);
+        $this->argumentParser = $this->createMock(ArgumentParserInterface::class);
+        $this->formFactory = new FormFactory($this->symfonyFormFactory, $this->argumentParser);
     }
 
     public function testItIsInitializable(): void
@@ -72,6 +77,36 @@ final class FormFactoryTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->with('App\Form\DummyType', null, ['foo' => 'fighters'])
+            ->willReturn($form);
+
+        $result = $this->formFactory->create($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($form, $result);
+    }
+
+    public function testItUsesExpressionParserForExpressionLanguagePrefixedFormOptions(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $form = $this->createMock(FormInterface::class);
+        $request = $this->createMock(Request::class);
+
+        $operation->method('getFormType')->willReturn('App\Form\DummyType');
+        $operation->method('getFormOptions')->willReturn(['customer' => '@=sylius_context_shopper.getCustomer()']);
+        $request->method('getRequestFormat')->willReturn('html');
+
+        $customer = new \StdClass();
+
+        $this->argumentParser
+            ->expects($this->exactly(1))
+            ->method('parseExpression')
+            ->with('sylius_context_shopper.getCustomer()')
+            ->willReturn($customer)
+        ;
+
+        $this->symfonyFormFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with('App\Form\DummyType', null, ['customer' => $customer])
             ->willReturn($form);
 
         $result = $this->formFactory->create($operation, new Context(new RequestOption($request)));

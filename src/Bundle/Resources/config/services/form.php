@@ -32,7 +32,10 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.form.factory', FormFactory::class)
         ->private()
-        ->args([service('form.factory')]);
+        ->args([
+            service('form.factory'),
+            service('sylius.expression_language.argument_parser.form'),
+        ]);
 
     $services->alias(FormFactoryInterface::class, 'sylius.form.factory');
 };
