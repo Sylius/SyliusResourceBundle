@@ -17,12 +17,11 @@ use Gedmo\Sortable\SortableListener;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 
+#[ResetDatabase]
 final class GedmoApiTest extends ApiTestCase
 {
-    use ResetDatabase;
-
     #[Test]
     public function it_allows_creating_a_comic_book(): void
     {

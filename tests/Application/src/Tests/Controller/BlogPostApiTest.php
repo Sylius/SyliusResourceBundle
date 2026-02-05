@@ -19,14 +19,11 @@ use PHPUnit\Framework\Attributes\Test;
 use Sylius\Bundle\ResourceBundle\ResourceBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 
+#[ResetDatabase]
 final class BlogPostApiTest extends ApiTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     protected function setUp(): void
     {
         $this->markAsSkippedIfFosRestBundleIsNotAvailable();
