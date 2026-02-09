@@ -19,13 +19,12 @@ use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use function Symfony\Component\String\u;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FlashHelper implements FlashHelperInterface
 {
-    private const UI_TRANSLATION_PREFIX = 'sylius.ui.';
-
     /** @var RequestStack|SessionInterface */
     private $requestStack;
 
@@ -149,30 +148,27 @@ final class FlashHelper implements FlashHelperInterface
 
     private function getParametersWithName(MetadataInterface $metadata, string $actionName): array
     {
+        $applicationName = $metadata->getApplicationName();
+
         if (stripos($actionName, 'bulk') !== false) {
             $resourceName = $metadata->getPluralName();
             $fallback = ucfirst($resourceName);
 
-            return ['%resources%' => $this->translateResourceName($resourceName, $fallback)];
+            return ['%resources%' => $this->translateResourceName($applicationName, $resourceName, $fallback)];
         }
 
         $resourceName = $metadata->getName();
         $fallback = ucfirst($metadata->getHumanizedName());
 
-        return ['%resource%' => $this->translateResourceName($resourceName, $fallback)];
+        return ['%resource%' => $this->translateResourceName($applicationName, $resourceName, $fallback)];
     }
 
-    private function translateResourceName(string $resourceName, string $fallback): string
+    private function translateResourceName(string $applicationName, string $resourceName, string $fallback): string
     {
-        $snakeCaseName = $this->convertToSnakeCase($resourceName);
-        $translationKey = sprintf('%s%s', self::UI_TRANSLATION_PREFIX, $snakeCaseName);
+        $snakeCaseName = u($resourceName)->snake()->toString();
+        $translationKey = sprintf('%s.ui.%s', $applicationName, $snakeCaseName);
         $translated = $this->translator->trans($translationKey, [], 'messages');
 
         return $translated === $translationKey ? $fallback : $translated;
-    }
-
-    private function convertToSnakeCase(string $input): string
-    {
-        return strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1_$2', $input));
     }
 }

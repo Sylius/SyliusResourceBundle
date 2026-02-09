@@ -186,6 +186,28 @@ final class FlashHelperTest extends TestCase
         $this->assertSame('Admin user was created successfully.', $session->getFlashBag()->all()['success'][0]);
     }
 
+    public function testItAddsSuccessFlashesWithTranslatedResourceInTheMessage(): void
+    {
+        $session = new Session();
+        $request = new Request();
+        $request->setSession($session);
+
+        $translator = $this->createTranslator([
+            'sylius.resource.create' => '%resource% was created successfully.',
+        ], [
+            'app.ui.promotion' => 'Cart promotion',
+        ]);
+
+        $flashHelper = new FlashHelper($translator);
+
+        $operation = (new Create())->withResource(new ResourceMetadata(alias: 'app.promotion', name: 'promotion', applicationName: 'app'));
+        $context = new Context(new RequestOption($request));
+
+        $flashHelper->addSuccessFlash($operation, $context);
+
+        $this->assertSame('Cart promotion was created successfully.', $session->getFlashBag()->all()['success'][0]);
+    }
+
     public function testItAddsSuccessFlashesWithHumanizedMessageAndPluralNameOnBulkOperation(): void
     {
         $session = new Session();
@@ -204,6 +226,28 @@ final class FlashHelperTest extends TestCase
         $flashHelper->addSuccessFlash($operation, $context);
 
         $this->assertSame('Admin users was removed successfully.', $session->getFlashBag()->all()['success'][0]);
+    }
+
+    public function testItAddsSuccessFlashesWithTranslatedResourceWithPluralNameInTheMessageOnBulkOperation(): void
+    {
+        $session = new Session();
+        $request = new Request();
+        $request->setSession($session);
+
+        $translator = $this->createTranslator([
+            'app.promotion.bulk_delete' => '%resources% was removed successfully.',
+        ], [
+            'app.ui.promotions' => 'Cart promotions',
+        ]);
+
+        $flashHelper = new FlashHelper($translator);
+
+        $operation = (new BulkDelete())->withResource(new ResourceMetadata(alias: 'app.promotion', name: 'promotion', pluralName: 'promotions', applicationName: 'app'));
+        $context = new Context(new RequestOption($request));
+
+        $flashHelper->addSuccessFlash($operation, $context);
+
+        $this->assertSame('Cart promotions was removed successfully.', $session->getFlashBag()->all()['success'][0]);
     }
 
     public function testItAddsErrorFlashesWithCustomMessage(): void
@@ -417,17 +461,24 @@ final class FlashHelperTest extends TestCase
     }
 
     /**
-     * @param array<string, string> $translations
+     * @param array<string, string> $flashesTranslations
+     * @param array<string, string> $messagesTranslations
      */
-    private function createTranslator(array $translations = []): TranslatorInterface&TranslatorBagInterface
+    private function createTranslator(array $flashesTranslations = [], array $messagesTranslations = []): TranslatorInterface&TranslatorBagInterface
     {
         $translator = new Translator('en');
         $translator->addLoader('array', new ArrayLoader());
 
-        foreach ($translations as $key => $translation) {
+        foreach ($flashesTranslations as $key => $translation) {
             $translator->addResource('array', [
                 $key => $translation,
             ], 'en', 'flashes');
+        }
+
+        foreach ($messagesTranslations as $key => $translation) {
+            $translator->addResource('array', [
+                $key => $translation,
+            ], 'en', 'messages');
         }
 
         return $translator;
