@@ -59,7 +59,7 @@ final class FormFactory implements FormFactoryInterface
     {
         foreach ($formOptions as $key => $value) {
             if (\is_array($value)) {
-                $formOptions[$key] = $this->parseFormOptions($formOptions[$key]);
+                $formOptions[$key] = $this->parseFormOptions($value);
 
                 continue;
             }
