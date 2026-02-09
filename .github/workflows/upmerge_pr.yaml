@@ -21,8 +21,8 @@ jobs:
             matrix:
                 include:
                     -
-                        base_branch: "1.13"
-                        target_branch: "1.14"
+                        base_branch: "1.14"
+                        target_branch: "1.15"
 
         steps:
             -
