@@ -100,8 +100,7 @@ final class FormFactoryTest extends TestCase
             ->expects($this->exactly(1))
             ->method('parseExpression')
             ->with('sylius_context_shopper.getCustomer()')
-            ->willReturn($customer)
-        ;
+            ->willReturn($customer);
 
         $this->symfonyFormFactory
             ->expects($this->once())

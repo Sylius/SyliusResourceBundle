@@ -35,8 +35,7 @@ final class FormFactory implements FormFactoryInterface
     public function create(Operation $operation, Context $context, mixed $data = null): FormInterface
     {
         $formType = $operation->getFormType();
-        $formOptions = $operation->getFormOptions() ?? [];
-        $formOptions = $this->parseFormOptions($formOptions);
+        $formOptions = $this->parseFormOptions($operation->getFormOptions() ?? []);
 
         if (null === $formType) {
             throw new \RuntimeException(sprintf('Operation "%s" has no configured form type.', $operation->getName() ?? ''));
