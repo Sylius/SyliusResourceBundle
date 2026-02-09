@@ -22,15 +22,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\Registry;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 use function Zenstruck\Foundry\Persistence\refresh;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
 
+#[ResetDatabase]
 final class SubscriptionUiTest extends WebTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     private KernelBrowser $client;
 
     protected function setUp(): void

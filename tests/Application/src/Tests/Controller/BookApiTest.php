@@ -23,15 +23,12 @@ use FOS\RestBundle\FOSRestBundle;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 use function Zenstruck\Foundry\Persistence\refresh;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
 
-class BookApiTest extends ApiTestCase
+#[ResetDatabase]
+final class BookApiTest extends ApiTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     protected function setUp(): void
     {
         $this->markAsSkippedIfFosRestBundleIsNotAvailable();

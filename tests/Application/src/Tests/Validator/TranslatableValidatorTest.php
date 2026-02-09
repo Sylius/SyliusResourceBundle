@@ -17,14 +17,11 @@ use App\Entity\Book;
 use App\Foundry\Story\DefaultBooksStory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 
+#[ResetDatabase]
 final class TranslatableValidatorTest extends KernelTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     /** @test */
     public function it_fails_validation_with_empty_locale(): void
     {
