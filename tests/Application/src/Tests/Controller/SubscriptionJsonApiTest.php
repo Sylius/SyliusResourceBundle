@@ -19,14 +19,11 @@ use App\Subscription\Foundry\Story\DefaultSubscriptionsStory;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\ApiTestCase;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 
+#[ResetDatabase]
 final class SubscriptionJsonApiTest extends ApiTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     private static array $headers = [
         'HTTP_CONTENT_TYPE' => 'application/json',
         'HTTP_ACCEPT' => 'application/json',

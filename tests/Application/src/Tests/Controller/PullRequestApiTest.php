@@ -20,14 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\Registry;
 use Tests\ApiTestCase;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\ResetDatabase;
 
+#[ResetDatabase]
 final class PullRequestApiTest extends ApiTestCase
 {
-    use Factories;
-    use ResetDatabase;
-
     protected function setUp(): void
     {
         $this->markAsSkippedIfNoStateMachineIsAvailable();
