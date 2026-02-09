@@ -57,6 +57,9 @@ return static function (ContainerConfigurator $container) {
     $services->set('sylius.expression_language.variables_collection.factory', VariablesCollection::class)
         ->args([tagged_iterator('sylius.resource_factory_variables')]);
 
+    $services->set('sylius.expression_language.variables_collection.form', VariablesCollection::class)
+        ->args([tagged_iterator('sylius.form_variables')]);
+
     $services->set('sylius.expression_language.variables_collection.repository', VariablesCollection::class)
         ->args([tagged_iterator('sylius.repository_variables')]);
 
@@ -81,6 +84,13 @@ return static function (ContainerConfigurator $container) {
         ->args([
             service('sylius.resource_factory.expression_language'),
             service('sylius.expression_language.variables_collection.factory'),
+            tagged_iterator('sylius.resource_factory_providers'),
+        ]);
+
+    $services->set('sylius.expression_language.argument_parser.form', ArgumentParser::class)
+        ->args([
+            service('sylius.resource_factory.expression_language'),
+            service('sylius.expression_language.variables_collection.form'),
             tagged_iterator('sylius.resource_factory_providers'),
         ]);
 
