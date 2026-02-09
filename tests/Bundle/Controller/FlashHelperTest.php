@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelper;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[CoversClass(FlashHelper::class)]
 final class FlashHelperTest extends TestCase
 {
     private FlashHelper $flashHelper;
@@ -51,7 +53,7 @@ final class FlashHelperTest extends TestCase
 
     public function testAddsSuccessFlashWithTranslatedResourceNameForSingleResource(): void
     {
-        $this->configureTranslator(['sylius.ui.product' => 'Product']);
+        $this->configureTranslator(['app.ui.product' => 'Product']);
         $requestConfiguration = $this->createRequestConfiguration('product', 'sylius.resource.create');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'create');
@@ -61,7 +63,7 @@ final class FlashHelperTest extends TestCase
 
     public function testAddsSuccessFlashWithTranslatedPluralResourceNameForBulkAction(): void
     {
-        $this->configureTranslator(['sylius.ui.products' => 'Products']);
+        $this->configureTranslator(['app.ui.products' => 'Products']);
         $requestConfiguration = $this->createRequestConfiguration('product', 'sylius.resource.bulk_delete', 'products');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'bulk_delete');
@@ -71,7 +73,7 @@ final class FlashHelperTest extends TestCase
 
     public function testConvertsCamelCaseToSnakeCaseForResourceNames(): void
     {
-        $this->configureTranslator(['sylius.ui.product_variant' => 'Product Variant']);
+        $this->configureTranslator(['app.ui.product_variant' => 'Product Variant']);
         $requestConfiguration = $this->createRequestConfiguration('productVariant', 'sylius.resource.update');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'update');
@@ -81,7 +83,7 @@ final class FlashHelperTest extends TestCase
 
     public function testConvertsCamelCaseToSnakeCaseForPluralResourceNames(): void
     {
-        $this->configureTranslator(['sylius.ui.product_variants' => 'Product Variants']);
+        $this->configureTranslator(['app.ui.product_variants' => 'Product Variants']);
         $requestConfiguration = $this->createRequestConfiguration('productVariant', 'sylius.resource.bulk_update', 'productVariants');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'bulk_update');
@@ -91,7 +93,7 @@ final class FlashHelperTest extends TestCase
 
     public function testAddsErrorFlashWithTranslatedResourceName(): void
     {
-        $this->configureTranslator(['sylius.ui.customer' => 'Customer']);
+        $this->configureTranslator(['app.ui.customer' => 'Customer']);
         $requestConfiguration = $this->createRequestConfiguration('customer', 'sylius.resource.delete');
 
         $this->flashHelper->addErrorFlash($requestConfiguration, 'delete');
@@ -111,7 +113,7 @@ final class FlashHelperTest extends TestCase
 
     public function testTranslatesResourceNameToGerman(): void
     {
-        $this->configureTranslator(['sylius.ui.product' => 'Produkt']);
+        $this->configureTranslator(['app.ui.product' => 'Produkt']);
         $requestConfiguration = $this->createRequestConfiguration('product', 'sylius.resource.create');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'create');
@@ -121,7 +123,7 @@ final class FlashHelperTest extends TestCase
 
     public function testTranslatesPluralResourceNameToGerman(): void
     {
-        $this->configureTranslator(['sylius.ui.products' => 'Produkte']);
+        $this->configureTranslator(['app.ui.products' => 'Produkte']);
         $requestConfiguration = $this->createRequestConfiguration('product', 'sylius.resource.bulk_delete', 'products');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'bulk_delete');
@@ -131,7 +133,7 @@ final class FlashHelperTest extends TestCase
 
     public function testTranslatesResourceNameToGermanForUpdate(): void
     {
-        $this->configureTranslator(['sylius.ui.customer' => 'Kunde']);
+        $this->configureTranslator(['app.ui.customer' => 'Kunde']);
         $requestConfiguration = $this->createRequestConfiguration('customer', 'sylius.resource.update');
 
         $this->flashHelper->addSuccessFlash($requestConfiguration, 'update');
@@ -139,11 +141,11 @@ final class FlashHelperTest extends TestCase
         $this->assertFlashMessage('success', 'sylius.resource.update', ['%resource%' => 'Kunde']);
     }
 
-    private function createRequestConfiguration(string $resourceName, string $flashMessage, ?string $pluralName = null): RequestConfiguration
+    private function createRequestConfiguration(string $resourceName, string $flashMessage, ?string $pluralName = null, ?string $applicationName = null): RequestConfiguration
     {
         $metadata = $this->createMock(MetadataInterface::class);
         $metadata->method('getName')->willReturn($resourceName);
-        $metadata->method('getApplicationName')->willReturn('app');
+        $metadata->method('getApplicationName')->willReturn($applicationName ?? 'app');
 
         if ($pluralName !== null) {
             $metadata->method('getPluralName')->willReturn($pluralName);

@@ -137,10 +137,12 @@ final class FlashHelper implements FlashHelperInterface
             return [];
         }
 
-        $humanizedName = ucfirst(StringHumanizer::humanize($resource->getName() ?? ''));
+        $resourceName = $this->translateResource($resource);
+        $humanizedName = $resourceName ?? ucfirst(StringHumanizer::humanize($resource->getName() ?? ''));
 
         if ($operation instanceof BulkOperationInterface) {
-            $humanizedPluralName = ucfirst(StringHumanizer::humanize($resource->getPluralName() ?? ''));
+            $resourcePluralName = $this->translateResource($resource, true);
+            $humanizedPluralName = $resourcePluralName ?? ucfirst(StringHumanizer::humanize($resource->getPluralName() ?? ''));
 
             return [
                 '%resource%' => $humanizedName,
@@ -149,6 +151,21 @@ final class FlashHelper implements FlashHelperInterface
         }
 
         return ['%resource%' => $humanizedName];
+    }
+
+    private function translateResource(ResourceMetadata $resource, bool $plurialize = false): ?string
+    {
+        $translationKey = sprintf(
+            '%s.ui.%s',
+            $resource->getApplicationName() ?? '',
+            $plurialize ? ($resource->getPluralName() ?? '') : ($resource->getName() ?? ''),
+        );
+
+        if ($this->translator instanceof TranslatorBagInterface && $this->translator->getCatalogue()->has($translationKey)) {
+            return $this->translator->trans($translationKey);
+        }
+
+        return null;
     }
 
     /**
