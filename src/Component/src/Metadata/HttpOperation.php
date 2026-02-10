@@ -28,6 +28,7 @@ class HttpOperation extends Operation
         protected ?string $routePrefix = null,
         protected ?array $routeRequirements = null,
         protected ?string $routeCondition = null,
+        protected ?int $routePriority = null,
         ?string $template = null,
         ?string $shortName = null,
         ?string $name = null,
@@ -160,6 +161,19 @@ class HttpOperation extends Operation
     {
         $self = clone $this;
         $self->routeCondition = $routeCondition;
+
+        return $self;
+    }
+
+    public function getRoutePriority(): ?int
+    {
+        return $this->routePriority;
+    }
+
+    public function withRoutePriority(?int $routePriority): self
+    {
+        $self = clone $this;
+        $self->routePriority = $routePriority;
 
         return $self;
     }

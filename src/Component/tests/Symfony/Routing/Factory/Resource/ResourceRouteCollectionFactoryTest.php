@@ -15,10 +15,12 @@ namespace Sylius\Resource\Tests\Symfony\Routing\Factory\Resource;
 
 use PHPUnit\Framework\TestCase;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePriorities;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Inflector\Inflector;
-use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Registry;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -39,7 +41,7 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->resourceRegistry = new Registry();
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
 
         $this->factory = new ResourceRouteCollectionFactory(
@@ -52,25 +54,11 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
         );
     }
 
-    private function createDummyMetadataMock(): MetadataInterface
-    {
-        $metadata = $this->createMock(MetadataInterface::class);
-        $metadata->method('getServiceId')->with('repository')->willReturn('app.repository.dummy');
-        $metadata->method('getClass')->willReturnMap([
-            ['form', 'App\Form'],
-            ['model', 'App\Dummy'],
-        ]);
-        $metadata->method('getApplicationName')->willReturn('app');
-        $metadata->method('getName')->willReturn('dummy');
-        $metadata->method('getPluralName')->willReturn('dummies');
-
-        return $metadata;
-    }
-
     public function testItCreatesRoutesWithOperations(): void
     {
-        $metadata = $this->createDummyMetadataMock();
-        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $this->resourceRegistry->add(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+        ]));
 
         $routeCollection = $this->factory->createRouteCollectionForClass(DummyResourceWithOperations::class);
 
@@ -79,6 +67,25 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
         $this->assertNotNull($routeCollection->get('app_dummy_create'), 'Route "app_dummy_create" not found but it should.');
         $this->assertNotNull($routeCollection->get('app_dummy_update'), 'Route "app_dummy_update" not found but it should.');
         $this->assertNotNull($routeCollection->get('app_dummy_show'), 'Route "app_dummy_show" not found but it should.');
+    }
+
+    public function testItCreatesRoutesWithPriorities(): void
+    {
+        $this->resourceRegistry->add(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+        ]));
+
+        $routeCollection = $this->factory->createRouteCollectionForClass(DummyResourceWithRoutePriorities::class);
+
+        $this->assertCount(4, $routeCollection);
+
+        $routeNames = array_keys(iterator_to_array($routeCollection->getIterator()));
+        $this->assertSame([
+            'app_dummy_create',
+            'app_dummy_update',
+            'app_dummy_index',
+            'app_dummy_show',
+        ], $routeNames);
     }
 
     public function testItSkipsNonHttpOperations(): void
@@ -111,8 +118,9 @@ final class ResourceRouteCollectionFactoryTest extends TestCase
             ->with(\stdClass::class)
             ->willReturn($resourceCollection);
 
-        $metadata = $this->createDummyMetadataMock();
-        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $this->resourceRegistry->add(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+        ]));
 
         $factory = new ResourceRouteCollectionFactory(
             new OperationRouteFactory($this->routePathFactory, new Operation\DashPathSegmentNameGenerator(new Inflector()), false),

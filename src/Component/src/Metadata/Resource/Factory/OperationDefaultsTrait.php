@@ -113,6 +113,10 @@ trait OperationDefaultsTrait
                 $operation = $operation->withRouteCondition($resource->getRouteCondition());
             }
 
+            if (null === $operation->getRoutePriority()) {
+                $operation = $operation->withRoutePriority($resource->getRoutePriority());
+            }
+
             if (null === $operation->getTwigContextFactory()) {
                 $operation = $operation->withTwigContextFactory('sylius.twig.context.factory.default');
             }

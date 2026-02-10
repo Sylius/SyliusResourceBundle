@@ -75,7 +75,7 @@ final class ResourceRouteCollectionFactory implements ResourceRouteCollectionFac
         ));
 
         $route = $this->createRoute($metadata, $resource, $operation);
-        $routeCollection->add($routeName, $route);
+        $routeCollection->add($routeName, $route, $operation->getRoutePriority() ?? 0);
     }
 
     private function createRoute(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route
