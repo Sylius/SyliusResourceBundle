@@ -21,6 +21,9 @@ class HttpOperation extends Operation
     /** @var string|callable|null */
     protected $twigContextFactory;
 
+    /**
+     * @param array<string, string>|null $routeRequirements
+     */
     public function __construct(
         protected ?array $methods = null,
         protected ?string $path = null,
@@ -139,12 +142,18 @@ class HttpOperation extends Operation
         return $self;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     public function getRouteRequirements(): ?array
     {
         return $this->routeRequirements;
     }
 
-    public function withRouteRequirements(array $routeRequirements): self
+    /**
+     * @param array<string, string>|null $routeRequirements
+     */
+    public function withRouteRequirements(?array $routeRequirements): self
     {
         $self = clone $this;
         $self->routeRequirements = $routeRequirements;

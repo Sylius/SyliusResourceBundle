@@ -17,12 +17,16 @@ final class ResourceMetadata
 {
     private ?Operations $operations;
 
+    /**
+     * @param array<string, string>|null $routeRequirements
+     */
     public function __construct(
         private ?string $alias = null,
         private ?string $section = null,
         private ?string $formType = null,
         private ?string $templatesDir = null,
         private ?string $routePrefix = null,
+        private ?array $routeRequirements = null,
         private ?string $routeCondition = null,
         private ?int $routePriority = null,
         private ?string $name = null,
@@ -153,6 +157,25 @@ final class ResourceMetadata
     {
         $self = clone $this;
         $self->routePrefix = $routePrefix;
+
+        return $self;
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    public function getRouteRequirements(): ?array
+    {
+        return $this->routeRequirements;
+    }
+
+    /**
+     * @param array<string, string>|null $routeRequirements
+     */
+    public function withRouteRequirements(?array $routeRequirements): self
+    {
+        $self = clone $this;
+        $self->routeRequirements = $routeRequirements;
 
         return $self;
     }

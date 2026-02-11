@@ -127,6 +127,7 @@ final class DebugResourceCommandTest extends TestCase
               formType                 null   
               templatesDir             null   
               routePrefix              null   
+              routeRequirements        null   
               routeCondition           null   
               routePriority            null   
               name                     null   
@@ -194,6 +195,7 @@ final class DebugResourceCommandTest extends TestCase
               formType                 null          
               templatesDir             null          
               routePrefix              null          
+              routeRequirements        null          
               routeCondition           null          
               routePriority            null          
               name                     null          

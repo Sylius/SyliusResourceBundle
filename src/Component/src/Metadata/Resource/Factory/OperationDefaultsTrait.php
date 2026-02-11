@@ -109,6 +109,10 @@ trait OperationDefaultsTrait
                 $operation = $operation->withRoutePrefix($resource->getRoutePrefix());
             }
 
+            if (null === $operation->getRouteRequirements()) {
+                $operation = $operation->withRouteRequirements($resource->getRouteRequirements());
+            }
+
             if (null === $operation->getRouteCondition()) {
                 $operation = $operation->withRouteCondition($resource->getRouteCondition());
             }

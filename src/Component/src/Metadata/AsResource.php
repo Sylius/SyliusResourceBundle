@@ -16,12 +16,16 @@ namespace Sylius\Resource\Metadata;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class AsResource
 {
+    /**
+     * @param array<string, string>|null $routeRequirements
+     */
     public function __construct(
         private ?string $alias = null,
         private ?string $section = null,
         private ?string $formType = null,
         private ?string $templatesDir = null,
         private ?string $routePrefix = null,
+        private ?array $routeRequirements = null,
         private ?string $routeCondition = null,
         private ?int $routePriority = null,
         private ?string $name = null,
@@ -46,6 +50,7 @@ final class AsResource
             formType: $this->formType,
             templatesDir: $this->templatesDir,
             routePrefix: $this->routePrefix,
+            routeRequirements: $this->routeRequirements,
             routeCondition: $this->routeCondition,
             routePriority: $this->routePriority,
             name: $this->name,
