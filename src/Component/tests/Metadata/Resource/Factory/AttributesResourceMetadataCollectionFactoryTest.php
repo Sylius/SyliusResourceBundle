@@ -28,6 +28,7 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithPluralName;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRouteCondition;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePrefix;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRoutePriorities;
+use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithRouteRequirements;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSections;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithSectionsAndNestedOperations;
 use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithValidationContext;
@@ -617,6 +618,38 @@ final class AttributesResourceMetadataCollectionFactoryTest extends TestCase
 
         $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
         $this->assertSame('custom_condition', $operation->getRouteCondition());
+    }
+
+    public function testItCreatesResourceMetadataWithRouteRequirements(): void
+    {
+        $this->resourceRegistry
+            ->method('get')
+            ->with('app.dummy')
+            ->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
+                'driver' => 'dummy_driver',
+            ]));
+
+        $metadataCollection = $this->factory->create(DummyResourceWithRouteRequirements::class);
+        $this->assertInstanceOf(ResourceMetadataCollection::class, $metadataCollection);
+
+        $resource = $metadataCollection->getIterator()->current();
+        $this->assertInstanceOf(ResourceMetadata::class, $resource);
+        $this->assertSame('app.dummy', $resource->getAlias());
+
+        $operations = $resource->getOperations();
+        $this->assertInstanceOf(Operations::class, $operations);
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_create');
+        $this->assertSame(['_locale' => 'en|fr|pl'], $operation->getRouteRequirements());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_update');
+        $this->assertSame(['_locale' => 'en|fr|pl'], $operation->getRouteRequirements());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_index');
+        $this->assertSame(['_locale' => 'en|fr|pl'], $operation->getRouteRequirements());
+
+        $operation = $metadataCollection->getOperation('app.dummy', 'app_dummy_show');
+        $this->assertSame(['_locale' => 'en|fr|pl', 'page' => '\d+'], $operation->getRouteRequirements());
     }
 
     public function testItCreatesResourceMetadataWithRoutePriorities(): void
