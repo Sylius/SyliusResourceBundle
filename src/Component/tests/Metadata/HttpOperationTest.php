@@ -72,6 +72,18 @@ final class HttpOperationTest extends TestCase
         $this->assertSame('/admin', $httpOperation->getRoutePrefix());
     }
 
+    public function testItHasNoRoutePriorityByDefault(): void
+    {
+        $httpOperation = new HttpOperation();
+        $this->assertNull($httpOperation->getROutePriority());
+    }
+
+    public function testItCouldHaveARoutePriority(): void
+    {
+        $httpOperation = (new HttpOperation())->withRoutePriority(100);
+        $this->assertSame(100, $httpOperation->getRoutePriority());
+    }
+
     public function testItHasNoTemplateByDefault(): void
     {
         $httpOperation = new HttpOperation();

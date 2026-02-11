@@ -19,8 +19,9 @@ use Sylius\Component\Resource\Tests\Dummy\DummyResourceWithOperations;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Inflector\Inflector;
-use Sylius\Resource\Metadata\MetadataInterface;
+use Sylius\Resource\Metadata\Metadata;
 use Sylius\Resource\Metadata\Operation;
+use Sylius\Resource\Metadata\Registry;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Sylius\Resource\Metadata\Resource\Factory\AttributesResourceMetadataCollectionFactory;
 use Sylius\Resource\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -45,7 +46,7 @@ final class AttributesOperationRouteFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceRegistry = $this->createMock(RegistryInterface::class);
+        $this->resourceRegistry = new Registry();
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
 
         $this->attributesOperationRouteFactory = new AttributesOperationRouteFactory(
@@ -58,27 +59,13 @@ final class AttributesOperationRouteFactoryTest extends TestCase
         );
     }
 
-    private function createDummyMetadataMock(): MetadataInterface
-    {
-        $metadata = $this->createMock(MetadataInterface::class);
-        $metadata->method('getServiceId')->with('repository')->willReturn('app.repository.dummy');
-        $metadata->method('hasClass')->with('form')->willReturn(true);
-        $metadata->method('getClass')->willReturnMap([
-            ['form', 'App\Form'],
-            ['model', 'App\Dummy'],
-        ]);
-        $metadata->method('getApplicationName')->willReturn('app');
-        $metadata->method('getName')->willReturn('dummy');
-        $metadata->method('getPluralName')->willReturn('dummies');
-
-        return $metadata;
-    }
-
     public function testItCreatesRoutesWithOperations(): void
     {
         $routeCollection = new RouteCollection();
-        $metadata = $this->createDummyMetadataMock();
-        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+
+        $this->resourceRegistry->add(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+        ]));
 
         $this->routePathFactory
             ->expects($this->exactly(4))
@@ -112,6 +99,10 @@ final class AttributesOperationRouteFactoryTest extends TestCase
     public function testItSkipsNonHttpOperations(): void
     {
         $routeCollection = new RouteCollection();
+
+        $this->resourceRegistry->add(Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+        ]));
 
         $nonHttpOperation = new class() extends Operation {
             public function getShortName(): ?string

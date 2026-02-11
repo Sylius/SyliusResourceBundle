@@ -65,7 +65,7 @@ final class AttributesOperationRouteFactory implements AttributesOperationRouteF
         Assert::notNull($routeName, sprintf('Operation %s has no route name. Please define one.', $operation::class));
 
         $route = $this->createRoute($metadata, $resource, $operation);
-        $routeCollection->add($routeName, $route);
+        $routeCollection->add($routeName, $route, $operation->getRoutePriority() ?? 0);
     }
 
     private function createRoute(MetadataInterface $metadata, ResourceMetadata $resource, HttpOperation $operation): Route

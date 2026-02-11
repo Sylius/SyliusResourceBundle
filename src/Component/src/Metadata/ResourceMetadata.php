@@ -24,6 +24,7 @@ final class ResourceMetadata
         private ?string $templatesDir = null,
         private ?string $routePrefix = null,
         private ?string $routeCondition = null,
+        private ?int $routePriority = null,
         private ?string $name = null,
         private ?string $pluralName = null,
         private ?string $applicationName = null,
@@ -165,6 +166,19 @@ final class ResourceMetadata
     {
         $self = clone $this;
         $self->routeCondition = $routeCondition;
+
+        return $self;
+    }
+
+    public function getRoutePriority(): ?int
+    {
+        return $this->routePriority;
+    }
+
+    public function withRoutePriority(?int $routePriority): self
+    {
+        $self = clone $this;
+        $self->routePriority = $routePriority;
 
         return $self;
     }
