@@ -21,6 +21,7 @@ use Sylius\Component\Resource\Tests\Dummy\RepositoryWithCallables;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Exception\InvalidArgumentException;
 use Sylius\Resource\Exception\RuntimeException;
 use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Operation;
@@ -199,6 +200,33 @@ final class ProviderTest extends TestCase
         $this->assertSame($stdClass, $response);
     }
 
+    public function testItParsesNestedArrayArguments(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createMock(Request::class);
+        $repository = $this->createMock(RepositoryInterface::class);
+        $stdClass = new \stdClass();
+
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('findOneBy');
+        $operation->method('getRepositoryArguments')->willReturn([['tokenValue' => "@=request.attributes.get('tokenValue')"]]);
+
+        $this->argumentParser
+            ->expects($this->once())
+            ->method('parseExpression')
+            ->with("request.attributes.get('tokenValue')")
+            ->willReturn('my_token');
+
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
+
+        $repository->method('findOneBy')->with(['tokenValue' => 'my_token'])->willReturn($stdClass);
+
+        $response = $this->provider->provide($operation, new Context(new RequestOption($request)));
+
+        $this->assertSame($stdClass, $response);
+    }
+
     public function testItThrowsAnExceptionWhenRepositoryMethodDoesNotExist(): void
     {
         $operation = $this->createMock(Operation::class);
@@ -242,6 +270,25 @@ final class ProviderTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($errorMessage);
+
+        $this->provider->provide($operation, new Context(new RequestOption($request)));
+    }
+
+    public function testItThrowsAnExceptionWhenRepositoryArgumentsAreNotScalarOnes(): void
+    {
+        $operation = $this->createMock(Operation::class);
+        $request = $this->createMock(Request::class);
+        $repository = $this->createMock(RepositoryInterface::class);
+
+        $operation->method('getRepository')->willReturn('App\Repository');
+        $operation->method('getRepositoryMethod')->willReturn('findOneBy');
+        $operation->method('getRepositoryArguments')->willReturn([['foo' => 'resource.code', 'bar' => new \stdClass()]]);
+
+        $this->locator->method('has')->with('App\Repository')->willReturn(true);
+        $this->locator->method('get')->with('App\Repository')->willReturn($repository);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Parameter "bar" should be a scalar or an array.');
 
         $this->provider->provide($operation, new Context(new RequestOption($request)));
     }
