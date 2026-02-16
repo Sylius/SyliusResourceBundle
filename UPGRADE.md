@@ -1,3 +1,48 @@
+## UPGRADE FOR `1.15.x`
+
+### FROM `1.14.x` to `1.15.x`
+
+#### Routing Path
+
+Routing paths may have been changed depending on your configuration.
+
+*Using ResourceController*
+
+```yaml
+# config/packages/
+sylius_resource:
+    routing_path_bc_layer: false
+```
+
+If you have disabled the routing path bc-layer, the bulk delete operations will have this path change:
+
+example:
+```diff
+-/science-books/bulk_delete
++/science-books/bulk-delete
+```
+
+*Using the new routing system with `AsResource` attribute and operations*
+
+If the shortName of your operation contains an underscore, it will be replaced by a dash.
+
+example:
+```diff
+-/subscriptions/bulk_delete
++/subscriptions/bulk-delete
+-/subscriptions/bulk_publish
++/subscriptions/bulk-publish
+```
+
+Note this will keep an underscore if you have configured the resource bundle like this:
+```yaml
+# config/packages/
+sylius_resource:
+    path_segment_name_generator: sylius.metadata.path_segment_name_generator.underscore
+```
+
+Please note this configuration is not recommended for SEO.
+
 ## UPGRADE FOR `1.14.x`
 
 ### FROM `1.13.x` to `1.14.x`

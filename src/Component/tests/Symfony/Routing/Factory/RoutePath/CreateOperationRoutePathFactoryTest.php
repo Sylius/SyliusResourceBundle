@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
+use Sylius\Resource\Metadata\Operation\DashPathSegmentNameGenerator;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\CreateOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
@@ -29,7 +31,10 @@ final class CreateOperationRoutePathFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
-        $this->createOperationRoutePathFactory = new CreateOperationRoutePathFactory($this->routePathFactory);
+        $this->createOperationRoutePathFactory = new CreateOperationRoutePathFactory(
+            $this->routePathFactory,
+            new DashPathSegmentNameGenerator(new Inflector()),
+        );
     }
 
     public function testItGeneratesRoutePathForCreateOperations(): void

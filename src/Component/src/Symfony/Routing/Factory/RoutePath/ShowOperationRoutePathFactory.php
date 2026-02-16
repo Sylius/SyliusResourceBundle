@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Operation\PathSegmentNameGeneratorInterface;
 use Sylius\Resource\Metadata\ShowOperationInterface;
 
 /**
@@ -21,8 +22,10 @@ use Sylius\Resource\Metadata\ShowOperationInterface;
  */
 final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
-    public function __construct(private OperationRoutePathFactoryInterface $decorated)
-    {
+    public function __construct(
+        private OperationRoutePathFactoryInterface $decorated,
+        private PathSegmentNameGeneratorInterface $pathSegmentNameGenerator,
+    ) {
     }
 
     public function createRoutePath(HttpOperation $operation, string $rootPath): string
@@ -33,7 +36,7 @@ final class ShowOperationRoutePathFactory implements OperationRoutePathFactoryIn
         if ($operation instanceof ShowOperationInterface) {
             $path = match ($shortName) {
                 'show', 'get' => '',
-                default => '/' . $shortName,
+                default => '/' . $this->pathSegmentNameGenerator->getSegmentName($shortName ?? '', false),
             };
 
             return sprintf('%s/{%s}%s', $rootPath, $identifier, $path);

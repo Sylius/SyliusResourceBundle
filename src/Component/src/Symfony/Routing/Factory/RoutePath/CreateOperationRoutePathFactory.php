@@ -15,14 +15,17 @@ namespace Sylius\Resource\Symfony\Routing\Factory\RoutePath;
 
 use Sylius\Resource\Metadata\CreateOperationInterface;
 use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Operation\PathSegmentNameGeneratorInterface;
 
 /**
  * @experimental
  */
 final class CreateOperationRoutePathFactory implements OperationRoutePathFactoryInterface
 {
-    public function __construct(private OperationRoutePathFactoryInterface $decorated)
-    {
+    public function __construct(
+        private OperationRoutePathFactoryInterface $decorated,
+        private PathSegmentNameGeneratorInterface $pathSegmentNameGenerator,
+    ) {
     }
 
     public function createRoutePath(HttpOperation $operation, string $rootPath): string
@@ -33,7 +36,7 @@ final class CreateOperationRoutePathFactory implements OperationRoutePathFactory
             $path = match ($shortName) {
                 'create' => '/new',
                 'post' => '',
-                default => '/' . $shortName,
+                default => '/' . $this->pathSegmentNameGenerator->getSegmentName($shortName ?? '', false),
             };
 
             return sprintf('%s%s', $rootPath, $path);

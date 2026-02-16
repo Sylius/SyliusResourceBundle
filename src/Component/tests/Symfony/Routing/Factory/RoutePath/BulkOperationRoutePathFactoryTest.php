@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\BulkUpdate;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
+use Sylius\Resource\Metadata\Operation\DashPathSegmentNameGenerator;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\BulkOperationRoutePathFactory;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
 
@@ -29,7 +31,10 @@ final class BulkOperationRoutePathFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
-        $this->bulkOperationRoutePathFactory = new BulkOperationRoutePathFactory($this->routePathFactory);
+        $this->bulkOperationRoutePathFactory = new BulkOperationRoutePathFactory(
+            $this->routePathFactory,
+            new DashPathSegmentNameGenerator(new Inflector()),
+        );
     }
 
     public function testItGeneratesRoutePathForBulkDeleteOperations(): void
@@ -38,7 +43,7 @@ final class BulkOperationRoutePathFactoryTest extends TestCase
 
         $result = $this->bulkOperationRoutePathFactory->createRoutePath($operation, '/dummies');
 
-        $this->assertSame('/dummies/bulk_delete', $result);
+        $this->assertSame('/dummies/bulk-delete', $result);
     }
 
     public function testItGeneratesRoutePathForBulkUpdateOperations(): void
@@ -47,7 +52,7 @@ final class BulkOperationRoutePathFactoryTest extends TestCase
 
         $result = $this->bulkOperationRoutePathFactory->createRoutePath($operation, '/dummies');
 
-        $this->assertSame('/dummies/bulk_update', $result);
+        $this->assertSame('/dummies/bulk-update', $result);
     }
 
     public function testItDelegatesToDecoratedFactoryForNonBulkOperations(): void

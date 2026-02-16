@@ -110,7 +110,7 @@ final class ResourceLoader extends Loader
                 $httpMethods[] = 'POST';
             }
 
-            $bulkDeleteRoute = $this->createRoute($metadata, $configuration, $rootPath . '/' . ($bcLayerEnabled ? 'bulk-delete' : 'bulk_delete'), 'bulkDelete', $httpMethods, $isApi);
+            $bulkDeleteRoute = $this->createRoute($metadata, $configuration, $rootPath . '/' . 'bulk-delete', 'bulkDelete', $httpMethods, $isApi);
             $routes->add($this->getRouteName($metadata, $configuration, 'bulk_delete'), $bulkDeleteRoute);
         }
 
