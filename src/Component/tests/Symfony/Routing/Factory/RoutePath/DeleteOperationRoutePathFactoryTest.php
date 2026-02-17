@@ -16,6 +16,8 @@ namespace Sylius\Resource\Tests\Symfony\Routing\Factory\RoutePath;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Inflector\Inflector;
+use Sylius\Resource\Metadata\Operation\DashPathSegmentNameGenerator;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\DeleteOperationRoutePathFactory;
@@ -30,7 +32,10 @@ final class DeleteOperationRoutePathFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
-        $this->deleteOperationRoutePathFactory = new DeleteOperationRoutePathFactory($this->routePathFactory);
+        $this->deleteOperationRoutePathFactory = new DeleteOperationRoutePathFactory(
+            $this->routePathFactory,
+            new DashPathSegmentNameGenerator(new Inflector()),
+        );
     }
 
     public function testItGeneratesRoutePathForDeleteOperations(): void

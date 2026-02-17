@@ -259,7 +259,7 @@ YAML;
         $this->assertNotNull($bulkDeleteRoute);
         $this->assertContains('DELETE', $bulkDeleteRoute->getMethods());
         $this->assertContains('POST', $bulkDeleteRoute->getMethods());
-        $this->assertEquals('/products/bulk_delete', $bulkDeleteRoute->getPath());
+        $this->assertEquals('/products/bulk-delete', $bulkDeleteRoute->getPath());
     }
 
     public function testItGeneratesBulkDeleteRoutingWithBcLayerEnabled(): void

@@ -16,6 +16,8 @@ namespace Sylius\Resource\Tests\Symfony\Routing\Factory\RoutePath;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Metadata\Api;
 use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Inflector\Inflector;
+use Sylius\Resource\Metadata\Operation\DashPathSegmentNameGenerator;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Symfony\Routing\Factory\RoutePath\OperationRoutePathFactoryInterface;
@@ -30,7 +32,10 @@ final class ShowOperationRoutePathFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->routePathFactory = $this->createMock(OperationRoutePathFactoryInterface::class);
-        $this->showOperationRoutePathFactory = new ShowOperationRoutePathFactory($this->routePathFactory);
+        $this->showOperationRoutePathFactory = new ShowOperationRoutePathFactory(
+            $this->routePathFactory,
+            new DashPathSegmentNameGenerator(new Inflector()),
+        );
     }
 
     public function testItGeneratesRoutePathForShowOperations(): void

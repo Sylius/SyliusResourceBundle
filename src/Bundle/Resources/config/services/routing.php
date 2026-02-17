@@ -95,27 +95,50 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.routing.factory.operation_route_path_factory.collection', CollectionOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, 60)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ])
+    ;
 
     $services->set('sylius.routing.factory.operation_route_path_factory.create', CreateOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -50)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ])
+    ;
 
     $services->set('sylius.routing.factory.operation_route_path_factory.bulk_operation', BulkOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -40)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ]);
 
     $services->set('sylius.routing.factory.operation_route_path_factory.update', UpdateOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -30)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ])
+    ;
 
     $services->set('sylius.routing.factory.operation_route_path_factory.delete', DeleteOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -20)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ])
+    ;
 
     $services->set('sylius.routing.factory.operation_route_path_factory.show', ShowOperationRoutePathFactory::class)
         ->decorate('sylius.routing.factory.operation_route_path_factory.default', null, -10)
-        ->args([service('.inner')]);
+        ->args([
+            service('.inner'),
+            service('sylius.path_segment_name_generator'),
+        ])
+    ;
 
     $services->set('sylius.routing.factory.route_attributes', RouteAttributesFactory::class)
         ->private();
