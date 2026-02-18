@@ -64,6 +64,10 @@ final class FlashProcessor implements ProcessorInterface
             return;
         }
 
+        if (false === $operation->isNotificationEnabled()) {
+            return;
+        }
+
         $this->flashHelper->addSuccessFlash($operation, $context);
     }
 }
