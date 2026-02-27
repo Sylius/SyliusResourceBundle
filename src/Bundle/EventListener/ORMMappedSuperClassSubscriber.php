@@ -83,6 +83,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
             if ($parentMetadata->isMappedSuperclass) {
                 foreach ($parentMetadata->getAssociationMappings() as $key => $value) {
                     if ($this->isRelation($value['type']) && !isset($metadata->associationMappings[$key])) {
+                        $value['sourceEntity'] = $class;
                         $metadata->associationMappings[$key] = $value;
                     }
                 }
