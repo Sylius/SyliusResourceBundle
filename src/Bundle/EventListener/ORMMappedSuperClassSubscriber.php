@@ -91,7 +91,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
                             $value['sourceEntity'] = $class;
                         } else {
                             /** @psalm-suppress UndefinedClass */
-                            $value->sourceEntity = $class;
+                            $value->sourceEntity = $class; /** @phpstan-ignore-line */
                         }
 
                         $metadata->associationMappings[$key] = $value; /** @phpstan-ignore-line */
