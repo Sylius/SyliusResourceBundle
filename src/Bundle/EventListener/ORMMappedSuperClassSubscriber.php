@@ -90,6 +90,7 @@ final class ORMMappedSuperClassSubscriber extends AbstractDoctrineListener imple
                         if (\is_array($value)) {
                             $value['sourceEntity'] = $class;
                         } else {
+                            /** @psalm-suppress UndefinedClass */
                             $value->sourceEntity = $class;
                         }
 
