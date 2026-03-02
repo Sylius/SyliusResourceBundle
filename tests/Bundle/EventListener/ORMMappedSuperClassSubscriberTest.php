@@ -18,48 +18,55 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\DefaultNamingStrategy;
+use Doctrine\Persistence\Mapping\ClassMetadata as ClassMetadataInterface;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber;
 use Sylius\Bundle\ResourceBundle\Tests\Fixtures\ChildEntity;
 use Sylius\Bundle\ResourceBundle\Tests\Fixtures\ParentEntity;
-use Sylius\Resource\Metadata\RegistryInterface;
+use Sylius\Resource\Metadata\Registry;
 
 final class ORMMappedSuperClassSubscriberTest extends TestCase
 {
     public function testItUpdatesSourceEntityWhenCopyingParentAssociationMappings(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
-        $subscriber = new ORMMappedSuperClassSubscriber($registry);
+        $subscriber = new ORMMappedSuperClassSubscriber(new Registry());
 
         $namingStrategy = new DefaultNamingStrategy();
 
         $childMetadata = new ClassMetadata(ChildEntity::class, $namingStrategy);
         $childMetadata->wakeupReflection(new RuntimeReflectionService());
 
-        $driver = $this->createMock(MappingDriver::class);
-        $driver
-            ->method('getAllClassNames')
-            ->willReturn([ParentEntity::class]);
-        $driver
-            ->method('loadMetadataForClass')
-            ->willReturnCallback(static function (string $className, ClassMetadata $metadata): void {
+        $configuration = new Configuration();
+        $configuration->setNamingStrategy($namingStrategy);
+        $configuration->setMetadataDriverImpl(new class () implements MappingDriver {
+            public function loadMetadataForClass(string $className, ClassMetadataInterface $metadata): void
+            {
                 if ($className !== ParentEntity::class) {
                     return;
                 }
 
+                /** @var ClassMetadata $metadata */
                 $metadata->isMappedSuperclass = true;
                 $metadata->mapOneToOne([
                     'fieldName' => 'relatedEntity',
                     'targetEntity' => ParentEntity::class,
                     'joinColumns' => [['name' => 'related_entity_id', 'referencedColumnName' => 'id']],
                 ]);
-            });
+            }
 
-        $configuration = $this->createMock(Configuration::class);
-        $configuration->method('getMetadataDriverImpl')->willReturn($driver);
-        $configuration->method('getNamingStrategy')->willReturn($namingStrategy);
+            /** @return list<string> */
+            public function getAllClassNames(): array
+            {
+                return [ParentEntity::class];
+            }
+
+            public function isTransient(string $className): bool
+            {
+                return false;
+            }
+        });
 
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getConfiguration')->willReturn($configuration);
