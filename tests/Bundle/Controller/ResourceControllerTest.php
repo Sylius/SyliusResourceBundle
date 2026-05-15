@@ -2898,6 +2898,176 @@ final class ResourceControllerTest extends TestCase
         $this->resourceController->applyStateMachineTransitionAction($request);
     }
 
+    public function testValidatesCsrfWithDefaultParameterName(): void
+    {
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+
+        $request = new Request(request: ['_csrf_token' => 'valid-token-here']);
+
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $request)->willReturn($configurationMock);
+
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'valid-token-here'))->willReturn(true);
+
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+
+        $this->resourceDeleteHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToIndex')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+
+        $this->assertSame($redirectResponseMock, $this->resourceController->deleteAction($request));
+    }
+
+    public function testValidatesCsrfWithCustomParameterName(): void
+    {
+        $controller = $this->buildControllerWithCsrfParameter('_my_csrf_field');
+
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+        /** @var ResourceControllerEvent|MockObject $eventMock */
+        $eventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var ResourceControllerEvent|MockObject $postEventMock */
+        $postEventMock = $this->createMock(ResourceControllerEvent::class);
+        /** @var Response|MockObject $redirectResponseMock */
+        $redirectResponseMock = $this->createMock(Response::class);
+
+        $request = new Request(request: ['_my_csrf_field' => 'valid-token-here']);
+
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $request)->willReturn($configurationMock);
+
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $configurationMock->method('isHtmlRequest')->willReturn(true);
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', 'valid-token-here'))->willReturn(true);
+
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPreEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($eventMock);
+        $eventMock->method('isStopped')->willReturn(false);
+
+        $this->resourceDeleteHandlerMock->expects($this->once())->method('handle')->with($resourceMock, $this->repositoryMock);
+        $this->eventDispatcherMock->expects($this->once())->method('dispatchPostEvent')->with(ResourceActions::DELETE, $configurationMock, $resourceMock)->willReturn($postEventMock);
+
+        $postEventMock->expects($this->once())->method('getResponse')->willReturn(null);
+
+        $this->flashHelperMock->expects($this->once())->method('addSuccessFlash')->with($configurationMock, ResourceActions::DELETE, $resourceMock);
+        $this->redirectHandlerMock->expects($this->once())->method('redirectToIndex')->with($configurationMock, $resourceMock)->willReturn($redirectResponseMock);
+
+        $this->assertSame($redirectResponseMock, $controller->deleteAction($request));
+    }
+
+    public function testRejectsWhenCsrfTokenIsInWrongField(): void
+    {
+        $controller = $this->buildControllerWithCsrfParameter('_my_csrf_field');
+
+        /** @var RequestConfiguration|MockObject $configurationMock */
+        $configurationMock = $this->createMock(RequestConfiguration::class);
+        /** @var ResourceInterface|MockObject $resourceMock */
+        $resourceMock = $this->createMock(ResourceInterface::class);
+        /** @var CsrfTokenManagerInterface|MockObject $csrfTokenManagerMock */
+        $csrfTokenManagerMock = $this->createMock(CsrfTokenManagerInterface::class);
+
+        $request = new Request(request: ['_csrf_token' => 'valid-token-here']);
+
+        $this->requestConfigurationFactoryMock->expects($this->once())->method('create')->with($this->metadataMock, $request)->willReturn($configurationMock);
+
+        $configurationMock->expects($this->once())->method('hasPermission')->willReturn(true);
+        $configurationMock->expects($this->once())->method('getPermission')->with(ResourceActions::DELETE)->willReturn('sylius.product.delete');
+        $configurationMock->expects($this->once())->method('isCsrfProtectionEnabled')->willReturn(true);
+
+        $this->containerMock->expects($this->once())->method('has')->with('security.csrf.token_manager')->willReturn(true);
+        $this->containerMock->expects($this->once())->method('get')->with('security.csrf.token_manager')->willReturn($csrfTokenManagerMock);
+
+        $csrfTokenManagerMock->expects($this->once())->method('isTokenValid')->with(new CsrfToken('1', ''))->willReturn(false);
+
+        $this->authorizationCheckerMock->expects($this->once())->method('isGranted')->with($configurationMock, 'sylius.product.delete')->willReturn(true);
+        $this->singleResourceProviderMock->expects($this->once())->method('get')->with($configurationMock, $this->repositoryMock)->willReturn($resourceMock);
+
+        $resourceMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->resourceDeleteHandlerMock->expects($this->never())->method('handle');
+        $this->eventDispatcherMock->expects($this->never())->method('dispatchPostEvent');
+        $this->flashHelperMock->expects($this->never())->method('addSuccessFlash');
+
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('Invalid csrf token.');
+
+        try {
+            $controller->deleteAction($request);
+        } catch (HttpException $exception) {
+            $this->assertSame(Response::HTTP_FORBIDDEN, $exception->getStatusCode());
+
+            throw $exception;
+        }
+    }
+
+    private function buildControllerWithCsrfParameter(string $csrfParameter): ResourceController
+    {
+        $controller = new ResourceController(
+            $this->metadataMock,
+            $this->requestConfigurationFactoryMock,
+            $this->viewHandlerMock,
+            $this->repositoryMock,
+            $this->factoryMock,
+            $this->newResourceFactoryMock,
+            $this->managerMock,
+            $this->singleResourceProviderMock,
+            $this->resourcesCollectionProviderMock,
+            $this->resourceFormFactoryMock,
+            $this->redirectHandlerMock,
+            $this->flashHelperMock,
+            $this->authorizationCheckerMock,
+            $this->eventDispatcherMock,
+            $this->stateMachineMock,
+            $this->resourceUpdateHandlerMock,
+            $this->resourceDeleteHandlerMock,
+            $csrfParameter,
+        );
+        $controller->setContainer($this->containerMock);
+
+        return $controller;
+    }
+
     private function markAsSkippedIfFosRestBundleIsNotAvailable(): void
     {
         if (!class_exists(FOSRestBundle::class)) {

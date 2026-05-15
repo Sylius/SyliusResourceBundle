@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sylius\Bundle\ResourceBundle\Twig\Context\LegacyContextFactory;
+use Sylius\Bundle\ResourceBundle\Twig\CsrfParameterExtension;
 use Sylius\Resource\Twig\Context\Factory\ContextFactory;
 use Sylius\Resource\Twig\Context\Factory\ContextFactoryInterface;
 use Sylius\Resource\Twig\Context\Factory\DefaultContextFactory;
@@ -21,6 +22,10 @@ use Sylius\Resource\Twig\Context\Factory\RequestContextFactory;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
+
+    $services->set('sylius.twig.extension.csrf_parameter', CsrfParameterExtension::class)
+        ->args(['%sylius.resource.csrf_parameter%'])
+        ->tag('twig.extension');
 
     $services->set('sylius.twig.context.factory', ContextFactory::class)
         ->args([tagged_locator('sylius.twig_context_factory')]);
