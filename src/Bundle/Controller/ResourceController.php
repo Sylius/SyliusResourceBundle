@@ -90,7 +90,7 @@ class ResourceController
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-        private readonly string $csrfParameter = '_csrf_token',
+        protected readonly string $csrfParameter = '_csrf_token',
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
