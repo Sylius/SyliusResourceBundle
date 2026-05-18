@@ -276,6 +276,24 @@ final class SyliusResourceExtensionTest extends AbstractExtensionTestCase
         $this->assertSame('sylius.metadata.path_segment_name_generator.underscore', $this->container->getAlias('sylius.path_segment_name_generator')->__toString());
     }
 
+    public function testItRegistersDefaultCsrfParameter(): void
+    {
+        $this->load();
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.csrf_parameter', '_csrf_token');
+    }
+
+    public function testItRegistersCustomCsrfParameter(): void
+    {
+        $this->load([
+            'settings' => [
+                'csrf_parameter' => '_custom_csrf_token',
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('sylius.resource.csrf_parameter', '_custom_csrf_token');
+    }
+
     protected function getContainerExtensions(): array
     {
         $this->setParameter('kernel.bundles', []);
