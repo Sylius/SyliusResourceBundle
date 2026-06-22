@@ -1,5 +1,23 @@
 ## UPGRADE FOR `1.14.x`
 
+### FROM `1.14.1` to `1.14.2`
+
+#### Validator Constraints
+
+The `Enabled`, `Disabled` and `UniqueWithinCollectionConstraint` constraints now use named arguments
+(`#[HasNamedArguments]`) to be compatible with Symfony 8.
+
+Passing an array of options to configure these constraints is deprecated and will be removed in 2.0.
+Use named arguments instead:
+
+```php
+// Before (deprecated)
+new Enabled(['message' => 'My message']);
+
+// After
+new Enabled(message: 'My message');
+```
+
 ### FROM `1.13.x` to `1.14.x`
 
 #### Minimal Requirements
