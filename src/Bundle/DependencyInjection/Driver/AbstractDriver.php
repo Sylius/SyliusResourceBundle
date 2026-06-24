@@ -84,6 +84,7 @@ abstract class AbstractDriver implements DriverInterface
                 new Reference($metadata->getServiceId('controller_state_machine'), ContainerInterface::NULL_ON_INVALID_REFERENCE),
                 new Reference('sylius.resource_controller.resource_update_handler'),
                 new Reference('sylius.resource_controller.resource_delete_handler'),
+                '%sylius.resource.csrf_parameter%',
             ])
             ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')

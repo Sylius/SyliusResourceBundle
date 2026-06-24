@@ -181,3 +181,12 @@ parameters:
           identifier: return.type
           count: 1
           path: src/Component/src/Metadata/Resource/Factory/CachedResourceClassListFactory.php
+
+        # ResourceMappingDriverChain intentionally extends @final MappingDriverChain
+        # Required for compatibility with Gedmo/DoctrineExtensions which calls instanceof MappingDriverChain
+        # See: src/Bundle/Doctrine/ResourceMappingDriverChain.php class docblock
+        # See: \Gedmo\Mapping\ExtensionMetadataFactory::getDriver()
+        - message: '#^Class Sylius\\Bundle\\ResourceBundle\\Doctrine\\ResourceMappingDriverChain extends @final class Doctrine\\Persistence\\Mapping\\Driver\\MappingDriverChain\.$#'
+          identifier: class.extendsFinalByPhpDoc
+          count: 1
+          path: src/Bundle/Doctrine/ResourceMappingDriverChain.php

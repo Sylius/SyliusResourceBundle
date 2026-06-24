@@ -90,6 +90,7 @@ class ResourceController
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
+        protected readonly string $csrfParameter = '_csrf_token',
     ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -333,7 +334,7 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::DELETE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get('_csrf_token'))) {
+        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), (string) $request->request->get($this->csrfParameter))) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid csrf token.');
         }
 
@@ -392,7 +393,7 @@ class ResourceController
 
         if (
             $configuration->isCsrfProtectionEnabled() &&
-            !$this->isCsrfTokenValid(ResourceActions::BULK_DELETE, (string) $request->request->get('_csrf_token'))
+            !$this->isCsrfTokenValid(ResourceActions::BULK_DELETE, (string) $request->request->get($this->csrfParameter))
         ) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid csrf token.');
         }
@@ -455,7 +456,7 @@ class ResourceController
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
         $resource = $this->findOr404($configuration);
 
-        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $this->getFromRequest($request, '_csrf_token'))) {
+        if ($configuration->isCsrfProtectionEnabled() && !$this->isCsrfTokenValid((string) $resource->getId(), $this->getFromRequest($request, $this->csrfParameter))) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid CSRF token.');
         }
 
