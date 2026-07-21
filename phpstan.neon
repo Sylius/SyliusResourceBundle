@@ -108,6 +108,13 @@ parameters:
         # See: src/Bundle/DependencyInjection/Driver/Doctrine/AbstractDoctrineDriver.php:46
         - '/Class Doctrine\\Common\\Persistence\\ObjectManager not found/'
 
+        # Doctrine Persistence 4.x marks MappingDriverChain as @final
+        # ResourceMappingDriverChain has always extended it to add resource mapping support
+        # The parent is only soft-final (@final phpdoc), so extending it stays runtime-safe
+        # Pulled in transitively by Doctrine ORM 3.x; ORM 2.x ships an older, non-final version
+        # See: src/Bundle/Doctrine/ResourceMappingDriverChain.php
+        - '/Class Sylius\\Bundle\\ResourceBundle\\Doctrine\\ResourceMappingDriverChain extends @final class Doctrine\\Persistence\\Mapping\\Driver\\MappingDriverChain/'
+
         # Doctrine ORM 3.x introduces new mapping classes
         # AssociationMapping class exists only in ORM 3.x, not in ORM 2.x
         # Code supports both versions, so we need to ignore these errors when running with ORM 2.x
