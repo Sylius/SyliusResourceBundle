@@ -53,6 +53,7 @@ abstract class Operation
         protected ?array $denormalizationContext = null,
         protected ?array $validationContext = null,
         protected ?string $eventShortName = null,
+        protected ?bool $notificationEnabled = null,
         protected ?string $notificationMessage = null,
         protected string|\Stringable|null $security = null,
         protected ?string $securityMessage = null,
@@ -256,6 +257,19 @@ abstract class Operation
         $self->serialize = $serialize;
 
         return $self;
+    }
+
+    public function withNotificationEnabled(bool $notificationEnabled): self
+    {
+        $self = clone $this;
+        $self->notificationEnabled = $notificationEnabled;
+
+        return $self;
+    }
+
+    public function isNotificationEnabled(): ?bool
+    {
+        return $this->notificationEnabled;
     }
 
     public function getFormType(): ?string
