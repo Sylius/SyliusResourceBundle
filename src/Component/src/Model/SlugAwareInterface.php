@@ -20,6 +20,6 @@ interface SlugAwareInterface
     public function setSlug(?string $slug): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\SlugAwareInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\SlugAwareInterface::class, false)) {
     class_alias(SlugAwareInterface::class, \Sylius\Component\Resource\Model\SlugAwareInterface::class);
 }

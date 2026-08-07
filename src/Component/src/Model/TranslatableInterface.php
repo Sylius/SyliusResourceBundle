@@ -36,6 +36,6 @@ interface TranslatableInterface
     public function setFallbackLocale(string $locale): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\TranslatableInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\TranslatableInterface::class, false)) {
     class_alias(TranslatableInterface::class, \Sylius\Component\Resource\Model\TranslatableInterface::class);
 }

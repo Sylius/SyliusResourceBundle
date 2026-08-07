@@ -20,6 +20,6 @@ interface TranslatableEntityLocaleAssignerInterface
     public function assignLocale(TranslatableInterface $translatableEntity): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface::class, false)) {
     class_alias(TranslatableEntityLocaleAssignerInterface::class, \Sylius\Component\Resource\Translation\TranslatableEntityLocaleAssignerInterface::class);
 }
