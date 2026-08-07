@@ -20,6 +20,6 @@ interface ArchivableInterface
     public function setArchivedAt(?\DateTimeInterface $archivedAt): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\ArchivableInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\ArchivableInterface::class, false)) {
     class_alias(ArchivableInterface::class, \Sylius\Component\Resource\Model\ArchivableInterface::class);
 }

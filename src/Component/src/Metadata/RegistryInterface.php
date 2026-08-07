@@ -38,6 +38,6 @@ interface RegistryInterface
     public function addFromAliasAndConfiguration(string $alias, array $configuration): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Metadata\RegistryInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Metadata\RegistryInterface::class, false)) {
     class_alias(RegistryInterface::class, \Sylius\Component\Resource\Metadata\RegistryInterface::class);
 }

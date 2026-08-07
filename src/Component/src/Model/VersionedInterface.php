@@ -20,6 +20,6 @@ interface VersionedInterface
     public function setVersion(?int $version): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\VersionedInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\VersionedInterface::class, false)) {
     class_alias(VersionedInterface::class, \Sylius\Component\Resource\Model\VersionedInterface::class);
 }
