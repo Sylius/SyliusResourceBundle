@@ -1,0 +1,3 @@
+app:
+    subscription:
+        delete_error_accepted: 'Cannot delete an accepted subscription.'

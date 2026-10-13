@@ -199,6 +199,26 @@ final class SubscriptionUiTest extends WebTestCase
     }
 
     #[Test]
+    public function it_does_not_allow_deleting_an_accepted_subscription(): void
+    {
+        SubscriptionFactory::new()->accepted()->create();
+
+        $this->client->request('GET', '/admin/subscriptions');
+        $this->client->submitForm('Delete');
+
+        $this->assertResponseRedirects(null, expectedCode: Response::HTTP_FOUND);
+
+        $this->client->followRedirect();
+
+        $this->assertSelectorTextContains('.alert-danger .message', 'Cannot delete an accepted subscription.');
+
+        /** @var Subscription[] $subscriptions */
+        $subscriptions = static::getContainer()->get('app.repository.subscription')->findAll();
+
+        $this->assertCount(1, $subscriptions);
+    }
+
+    #[Test]
     public function it_allows_deleting_multiple_subscriptions(): void
     {
         DefaultSubscriptionsStory::load();
