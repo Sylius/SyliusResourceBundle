@@ -20,6 +20,6 @@ interface CodeAwareInterface
     public function setCode(?string $code): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\CodeAwareInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\CodeAwareInterface::class, false)) {
     class_alias(CodeAwareInterface::class, \Sylius\Component\Resource\Model\CodeAwareInterface::class);
 }

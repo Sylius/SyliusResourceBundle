@@ -29,6 +29,6 @@ interface ToggleableInterface
     public function disable(): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Model\ToggleableInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Model\ToggleableInterface::class, false)) {
     class_alias(ToggleableInterface::class, \Sylius\Component\Resource\Model\ToggleableInterface::class);
 }

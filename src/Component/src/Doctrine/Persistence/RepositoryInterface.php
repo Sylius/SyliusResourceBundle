@@ -39,6 +39,6 @@ interface RepositoryInterface extends ObjectRepository
     public function remove(ResourceInterface $resource): void;
 }
 
-if (!class_exists(\Sylius\Component\Resource\Repository\RepositoryInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\Repository\RepositoryInterface::class, false)) {
     class_alias(RepositoryInterface::class, \Sylius\Component\Resource\Repository\RepositoryInterface::class);
 }

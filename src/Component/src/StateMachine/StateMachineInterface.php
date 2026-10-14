@@ -33,6 +33,6 @@ interface StateMachineInterface extends BaseStateMachineInterface
     public function getTransitionToState(string $toState): ?string;
 }
 
-if (!class_exists(\Sylius\Component\Resource\StateMachine\StateMachineInterface::class, false)) {
+if (!interface_exists(\Sylius\Component\Resource\StateMachine\StateMachineInterface::class, false)) {
     class_alias(StateMachineInterface::class, \Sylius\Component\Resource\StateMachine\StateMachineInterface::class);
 }
