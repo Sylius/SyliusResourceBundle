@@ -47,7 +47,7 @@
         "symfony/twig-bundle": "^6.4 || ^7.4 || ^8.0",
         "symfony/validator": "^6.4 || ^7.4 || ^8.0",
         "symfony/yaml": "^6.4 || ^7.4 || ^8.0",
-        "webmozart/assert": "^1.11",
+        "webmozart/assert": "^2.4",
         "willdurand/negotiation": "^3.1"
     },
     "replace": {
