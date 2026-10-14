@@ -57,7 +57,7 @@ final class FlashHelper implements FlashHelperInterface
 
     private function addFlashFromOperation(Operation $operation, Context $context, string $type, ?string $message): void
     {
-        $message ??= $this->buildOperationMessage($operation, $type);
+        $message ??= $this->buildOperationMessage($operation, $context, $type);
 
         $this->addFlash($message, $type, $context);
     }
@@ -78,7 +78,7 @@ final class FlashHelper implements FlashHelperInterface
         return $message;
     }
 
-    private function buildOperationMessage(Operation $operation, string $type): string
+    private function buildOperationMessage(Operation $operation, Context $context, string $type): string
     {
         $resource = $operation->getResource();
         Assert::notNull($resource);
@@ -103,6 +103,13 @@ final class FlashHelper implements FlashHelperInterface
 
         if (!$this->translator instanceof TranslatorBagInterface) {
             return $this->translator->trans($firstTranslationKey, $parameters, 'flashes');
+        }
+
+        // The message of a WriteResourceException is used when it is a defined translation key.
+        $errorMessage = 'error' === $type ? $context->get(RequestOption::class)?->request()->attributes->get('error') : null;
+
+        if (\is_string($errorMessage) && '' !== $errorMessage && $this->translator->getCatalogue()->has($errorMessage, 'flashes')) {
+            return $this->translator->trans($errorMessage, $parameters, 'flashes');
         }
 
         foreach ($translationKeys as $translationKey) {

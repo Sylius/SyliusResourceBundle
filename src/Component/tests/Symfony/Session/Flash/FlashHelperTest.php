@@ -19,6 +19,7 @@ use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Metadata\BulkDelete;
 use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\Metadata\ResourceMetadata;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelper;
@@ -385,6 +386,68 @@ final class FlashHelperTest extends TestCase
         $flashHelper->addErrorFlash($operation, $context);
 
         $this->assertSame('Cannot delete Dummy resource.', $session->getFlashBag()->all()['error'][0]);
+    }
+
+    public function testItAddsErrorFlashesWithTheTranslatedMessageOfTheWriteException(): void
+    {
+        $session = new Session();
+        $request = new Request(attributes: ['error' => 'app.dummy.delete_error_has_children']);
+        $request->setSession($session);
+
+        $translator = $this->createTranslator([
+            'app.dummy.delete_error_has_children' => 'Cannot delete %resource%, it still has children.',
+            'app.dummy.delete_error' => 'Cannot delete %resource% resource!!',
+        ]);
+
+        $flashHelper = new FlashHelper($translator);
+
+        $operation = (new Delete())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request));
+
+        $flashHelper->addErrorFlash($operation, $context);
+
+        $this->assertSame('Cannot delete Dummy, it still has children.', $session->getFlashBag()->all()['error'][0]);
+    }
+
+    public function testItAddsErrorFlashesWithTheConventionalMessageWhenTheWriteExceptionMessageIsNotATranslationKey(): void
+    {
+        $session = new Session();
+        $request = new Request(attributes: ['error' => 'Cannot delete, the resource is in use.']);
+        $request->setSession($session);
+
+        $translator = $this->createTranslator([
+            'app.dummy.delete_error' => 'Cannot delete %resource% resource!!',
+        ]);
+
+        $flashHelper = new FlashHelper($translator);
+
+        $operation = (new Delete())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request));
+
+        $flashHelper->addErrorFlash($operation, $context);
+
+        $this->assertSame('Cannot delete Dummy resource!!', $session->getFlashBag()->all()['error'][0]);
+    }
+
+    public function testItDoesNotUseTheWriteExceptionMessageForSuccessFlashes(): void
+    {
+        $session = new Session();
+        $request = new Request(attributes: ['error' => 'app.dummy.delete_error_has_children']);
+        $request->setSession($session);
+
+        $translator = $this->createTranslator([
+            'app.dummy.delete_error_has_children' => 'Cannot delete %resource%, it still has children.',
+            'app.dummy.delete' => '%resource% was removed successfully.',
+        ]);
+
+        $flashHelper = new FlashHelper($translator);
+
+        $operation = (new Delete())->withResource(new ResourceMetadata(alias: 'app.dummy', name: 'dummy', applicationName: 'app'));
+        $context = new Context(new RequestOption($request));
+
+        $flashHelper->addSuccessFlash($operation, $context);
+
+        $this->assertSame('Dummy was removed successfully.', $session->getFlashBag()->all()['success'][0]);
     }
 
     public function testItTranslatesFlashesFromEventWhenTranslatorIsNotABag(): void

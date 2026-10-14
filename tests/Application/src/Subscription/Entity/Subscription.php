@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Subscription\Entity;
 
 use App\Subscription\Form\Type\SubscriptionType;
+use App\Subscription\State\Processor\DeleteSubscriptionProcessor;
 use App\Subscription\Twig\Context\Factory\ShowSubscriptionContextFactory;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Metadata\Api;
@@ -40,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Index(shortName: 'withoutGrid', template: 'crud/index.html.twig')]
 #[Create]
 #[Update]
-#[Delete]
+#[Delete(processor: DeleteSubscriptionProcessor::class)]
 #[BulkDelete]
 #[ApplyStateMachineTransition(stateMachineTransition: 'accept', stateMachineGraph: 'subscription')]
 #[ApplyStateMachineTransition(stateMachineTransition: 'reject', stateMachineGraph: 'subscription')]

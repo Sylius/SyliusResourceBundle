@@ -16,9 +16,13 @@ namespace Sylius\Component\Resource\tests\State\Processor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Exception\WriteResourceException;
 use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
 use Sylius\Resource\State\Processor\WriteProcessor;
 use Sylius\Resource\State\ProcessorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class WriteProcessorTest extends TestCase
@@ -55,6 +59,25 @@ final class WriteProcessorTest extends TestCase
 
         $result = $this->writeProcessor->process($data, $operation, $context);
         $this->assertEquals($response, $result);
+    }
+
+    /** @test */
+    public function it_stores_the_message_of_a_write_resource_exception_in_the_request(): void
+    {
+        $data = ['foo' => 'fighters'];
+        $operation = new Delete(processor: 'App\Processor');
+        $request = new Request();
+        $context = new Context(new RequestOption($request));
+        $response = new Response();
+
+        $this->locatorProcessor->expects($this->once())->method('process')->with($data, $operation, $context)->willThrowException(new WriteResourceException(message: 'app.dummy.delete_error_in_use'));
+
+        $this->processor->expects($this->once())->method('process')->with(null, $operation, $context)->willReturn($response);
+
+        $result = $this->writeProcessor->process($data, $operation, $context);
+
+        $this->assertSame($response, $result);
+        $this->assertSame('app.dummy.delete_error_in_use', $request->attributes->get('error'));
     }
 
     /** @test */
