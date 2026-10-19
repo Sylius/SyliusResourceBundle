@@ -31,7 +31,9 @@ trait OperationDefaultsTrait
         ResourceMetadata $resource,
         MetadataInterface $resourceConfiguration,
     ): ResourceMetadata {
-        $resource = $resource->withClass($resourceClass);
+        if (null === $resource->getClass()) {
+            $resource = $resource->withClass($resourceClass);
+        }
 
         if (null === $resource->getAlias()) {
             $resource = $resource->withAlias($resourceConfiguration->getAlias());
