@@ -17,19 +17,18 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Resource\Context\Context;
 use Sylius\Resource\Context\Option\RequestOption;
-use Sylius\Resource\Metadata\HttpOperation;
+use Sylius\Resource\Metadata\Create;
 use Sylius\Resource\State\Processor\FlashProcessor;
 use Sylius\Resource\State\ProcessorInterface;
 use Sylius\Resource\Symfony\Session\Flash\FlashHelperInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class FlashProcessorTest extends TestCase
 {
-    private ProcessorInterface|MockObject $decorated;
+    private ProcessorInterface&MockObject $decorated;
 
-    private FlashHelperInterface|MockObject $flashHelper;
+    private FlashHelperInterface&MockObject $flashHelper;
 
     private FlashProcessor $flashProcessor;
 
@@ -47,15 +46,10 @@ final class FlashProcessorTest extends TestCase
     /** @test */
     public function it_adds_success_flash(): void
     {
-        $request = $this->createMock(Request::class);
-        $operation = $this->createMock(HttpOperation::class);
+        $request = new Request();
+        $request->setMethod('POST');
 
-        $request->attributes = new ParameterBag();
-        $request->method('getRequestFormat')->willReturn('html');
-        $request->method('isMethodSafe')->willReturn(false);
-
-        $operation->method('canWrite')->willReturn(null);
-
+        $operation = new Create();
         $context = new Context(new RequestOption($request));
 
         $this->decorated->expects($this->once())
@@ -75,14 +69,10 @@ final class FlashProcessorTest extends TestCase
     /** @test */
     public function it_adds_error_flash(): void
     {
-        $request = $this->createMock(Request::class);
-        $operation = $this->createMock(HttpOperation::class);
+        $request = new Request(attributes: ['error' => 'Cannot delete, the resource is in use.']);
+        $request->setMethod('POST');
 
-        $request->attributes = new ParameterBag(['error' => 'Cannot delete, the resource is in use.']);
-        $request->method('getRequestFormat')->willReturn('html');
-        $request->method('isMethodSafe')->willReturn(false);
-
-        $operation->method('canWrite')->willReturn(null);
+        $operation = new Create();
 
         $context = new Context(new RequestOption($request));
 
@@ -101,16 +91,38 @@ final class FlashProcessorTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_add_success_flash_when_notification_message_is_disabled(): void
+    {
+        $request = new Request();
+        $request->setMethod('POST');
+
+        $operation = new Create(notificationEnabled: false);
+
+        $context = new Context(new RequestOption($request));
+
+        $this->decorated->expects($this->once())
+            ->method('process')
+            ->with(['foo' => 'fighters'], $operation, $context)
+            ->willReturn(['foo' => 'fighters'])
+        ;
+
+        $this->flashHelper->expects($this->never())
+            ->method('addSuccessFlash')
+            ->with($operation, $context)
+        ;
+
+        $this->flashProcessor->process(['foo' => 'fighters'], $operation, $context);
+    }
+
+    /** @test */
     public function it_does_nothing_when_controller_result_is_a_response(): void
     {
-        $request = $this->createMock(Request::class);
-        $operation = $this->createMock(HttpOperation::class);
-        $response = $this->createMock(Response::class);
+        $request = new Request();
+        $request->setMethod('POST');
 
-        $request->method('getRequestFormat')->willReturn('html');
-        $request->expects($this->never())->method('isMethodSafe');
+        $operation = new Create();
 
-        $operation->expects($this->never())->method('canWrite');
+        $response = new Response();
 
         $context = new Context(new RequestOption($request));
 
@@ -128,14 +140,9 @@ final class FlashProcessorTest extends TestCase
     /** @test */
     public function it_does_nothing_when_method_is_safe(): void
     {
-        $request = $this->createMock(Request::class);
-        $operation = $this->createMock(HttpOperation::class);
+        $request = new Request();
 
-        $request->method('getRequestFormat')->willReturn('html');
-        $request->method('isMethodSafe')->willReturn(true);
-
-        $operation->expects($this->never())->method('canWrite');
-
+        $operation = new Create();
         $context = new Context(new RequestOption($request));
 
         $this->decorated->expects($this->once())
@@ -152,13 +159,10 @@ final class FlashProcessorTest extends TestCase
     /** @test */
     public function it_does_nothing_when_operation_cannot_be_written(): void
     {
-        $request = $this->createMock(Request::class);
-        $operation = $this->createMock(HttpOperation::class);
+        $request = new Request();
+        $request->setMethod('POST');
 
-        $request->method('getRequestFormat')->willReturn('html');
-        $request->method('isMethodSafe')->willReturn(false);
-
-        $operation->method('canWrite')->willReturn(false);
+        $operation = new Create(write: false);
 
         $context = new Context(new RequestOption($request));
 
