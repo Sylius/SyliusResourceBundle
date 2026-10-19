@@ -35,11 +35,15 @@ final class AsResource
         private ?array $normalizationContext = null,
         private ?array $denormalizationContext = null,
         private ?array $validationContext = null,
+        /** @deprecated The class here is always the one that contains the "AsResource" attribute. */
         private ?string $class = null,
         private string|false|null $driver = null,
         private ?array $vars = null,
         private ?array $operations = null,
     ) {
+        if (null !== $this->class) {
+            trigger_deprecation('sylius/resource-bundle', '1.15', 'Configuring the "class" is deprecated. The class is always the one that contains the "AsResource" attribute.');
+        }
     }
 
     public function toMetadata(): ResourceMetadata
