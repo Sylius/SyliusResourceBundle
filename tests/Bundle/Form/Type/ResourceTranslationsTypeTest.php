@@ -135,6 +135,22 @@ final class ResourceTranslationsTypeTest extends TestCase
         self::assertFalse($nonDefaultLocaleOptions['required']);
     }
 
+    public function testReflectsUpdatedLocalesFromProviderAcrossCalls(): void
+    {
+        $provider = $this->createMock(TranslationLocaleProviderInterface::class);
+        $provider->expects(self::exactly(2))
+            ->method('getDefinedLocalesCodes')
+            ->willReturnOnConsecutiveCalls(['en_US', 'pl_PL'], ['en_US', 'pl_PL', 'de_DE']);
+        $provider->method('getDefaultLocaleCode')->willReturn('en_US');
+
+        $formType = new ResourceTranslationsType($provider);
+        $resolver = new OptionsResolver();
+        $formType->configureOptions($resolver);
+
+        self::assertSame(['en_US', 'pl_PL'], $resolver->resolve()['entries']);
+        self::assertSame(['en_US', 'pl_PL', 'de_DE'], $resolver->resolve()['entries']);
+    }
+
     public function testEventListenerSetsLocaleAndTranslatableOnTranslations(): void
     {
         $translatable = $this->createMock(TranslatableInterface::class);

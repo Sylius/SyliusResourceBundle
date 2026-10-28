@@ -20,15 +20,27 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\Service\ResetInterface;
 use Webmozart\Assert\Assert;
 
-final class CookieStorage implements StorageInterface, EventSubscriberInterface
+final class CookieStorage implements StorageInterface, EventSubscriberInterface, ResetInterface
 {
     private ParameterBag $requestCookies;
 
     private ParameterBag $responseCookies;
 
     public function __construct()
+    {
+        $this->requestCookies = new ParameterBag();
+        $this->responseCookies = new ParameterBag();
+    }
+
+    /**
+     * Both bags survive the response, and $requestCookies is only refreshed in
+     * onKernelRequest. On a long-running runtime the next request therefore starts
+     * with the previous visitor's cookies still in place.
+     */
+    public function reset(): void
     {
         $this->requestCookies = new ParameterBag();
         $this->responseCookies = new ParameterBag();
