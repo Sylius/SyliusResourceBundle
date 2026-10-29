@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Sylius\Resource\Grid\View\GridContextAwareInterface;
 use Twig\Environment;
 use Webmozart\Assert\Assert;
 
@@ -41,18 +43,12 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
 
     public function renderBulkAction(GridViewInterface $gridView, Action $bulkAction, $data = null): string
     {
-        Assert::isInstanceOf($gridView, ResourceGridView::class);
-
         $type = $bulkAction->getType();
         if (!isset($this->bulkActionTemplates[$type])) {
             throw new \InvalidArgumentException(sprintf('Missing template for bulk action type "%s".', $type));
         }
 
-        $options = $this->optionsParser->parseOptions(
-            $bulkAction->getOptions(),
-            $gridView->getRequestConfiguration()->getRequest(),
-            $data,
-        );
+        $options = $this->parseOptions($gridView, $bulkAction->getOptions(), $data);
 
         return $this->twig->render($this->bulkActionTemplates[$type], [
             'grid' => $gridView,
@@ -60,5 +56,23 @@ final class TwigBulkActionGridRenderer implements BulkActionGridRendererInterfac
             'data' => $data,
             'options' => $options,
         ]);
+    }
+
+    /**
+     * @param array<array-key, mixed> $options
+     *
+     * @return array<array-key, mixed>
+     */
+    private function parseOptions(GridViewInterface $gridView, array $options, mixed $data): array
+    {
+        // BC layer: the options of the legacy resource grids are still parsed from the request
+        if ($gridView instanceof ResourceGridView) {
+            return $this->optionsParser->parseOptions($options, $gridView->getRequestConfiguration()->getRequest(), $data);
+        }
+
+        Assert::isInstanceOf($gridView, GridContextAwareInterface::class);
+        Assert::isInstanceOf($this->optionsParser, VariablesOptionsParserInterface::class);
+
+        return $this->optionsParser->parseOptionsWithVariables($options, $gridView->getGridContext()->getVariables(), $data);
     }
 }

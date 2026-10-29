@@ -18,6 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -171,6 +172,44 @@ final class OptionsParserTest extends TestCase
         $this->configureExpressionEvaluation($expectedExpression, reset($expectedResult));
 
         $result = $this->parser->parseOptions($options, new Request(attributes: $requestVariables ?? []));
+
+        $this->assertSame($expectedResult, $result);
+    }
+
+    public function testItImplementsVariablesOptionsParserInterface(): void
+    {
+        $this->assertInstanceOf(VariablesOptionsParserInterface::class, $this->parser);
+    }
+
+    public function testItParsesOptionsWithVariables(): void
+    {
+        $data = ['id' => 7];
+        $this->propertyAccessor->method('getValue')->with($data, 'id')->willReturn(7);
+
+        $result = $this->parser->parseOptionsWithVariables(
+            ['link' => ['parameters' => ['id' => 'resource.id', 'productId' => '$productId', 'missing' => '$missing', 'static' => 'foo']]],
+            ['productId' => 42],
+            $data,
+        );
+
+        $this->assertSame(['link' => ['parameters' => ['id' => 7, 'productId' => 42, 'missing' => null, 'static' => 'foo']]], $result);
+    }
+
+    /**
+     * @param array<string, mixed>|null $variables
+     * @param array<string, string> $options
+     * @param array<string, mixed> $expectedResult
+     */
+    #[DataProvider('expressionVariableTypesProvider')]
+    public function testItParsesExpressionWithVariables(
+        ?array $variables,
+        string $expectedExpression,
+        array $options,
+        array $expectedResult,
+    ): void {
+        $this->configureExpressionEvaluation($expectedExpression, reset($expectedResult));
+
+        $result = $this->parser->parseOptionsWithVariables($options, $variables ?? []);
 
         $this->assertSame($expectedResult, $result);
     }

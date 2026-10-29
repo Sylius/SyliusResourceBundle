@@ -17,6 +17,7 @@ use Pagerfanta\Pagerfanta;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\OperationOption;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
 use Sylius\Resource\Metadata\GridAwareOperationInterface;
@@ -59,7 +60,7 @@ final class RequestGridProvider implements ProviderInterface
         $gridConfiguration = $gridDefinition->getDriverConfiguration();
 
         $parameters = $request->query->all();
-        $gridView = $this->gridViewFactory->create($gridDefinition, $context, new Parameters($parameters), $gridConfiguration);
+        $gridView = $this->gridViewFactory->create($gridDefinition, $context->with(new OperationOption($operation)), new Parameters($parameters), $gridConfiguration);
 
         $data = $gridView->getData();
 

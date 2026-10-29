@@ -13,17 +13,25 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\View;
 
+use Sylius\Bundle\ResourceBundle\Context\Option\RequestConfigurationOption;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
+use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Grid\View\GridContext;
+use Sylius\Resource\Grid\View\GridContextAwareInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
-class ResourceGridView extends GridView
+class ResourceGridView extends GridView implements GridContextAwareInterface
 {
     private MetadataInterface $metadata;
 
     private RequestConfiguration $requestConfiguration;
+
+    private ?GridContext $gridContext = null;
 
     /**
      * @param mixed $data
@@ -49,5 +57,26 @@ class ResourceGridView extends GridView
     public function getRequestConfiguration(): RequestConfiguration
     {
         return $this->requestConfiguration;
+    }
+
+    public function getGridContext(): GridContext
+    {
+        if (null !== $this->gridContext) {
+            return $this->gridContext;
+        }
+
+        $request = $this->requestConfiguration->getRequest();
+
+        return $this->gridContext = new GridContext(
+            metadata: $this->metadata,
+            section: $this->requestConfiguration->getSection(),
+            // Same precedence as the "$name" placeholders resolved from the request (attributes, query, then request)
+            variables: array_merge($request->request->all(), $request->query->all(), $request->attributes->all()),
+            context: new Context(
+                new MetadataOption($this->metadata),
+                new RequestOption($request),
+                new RequestConfigurationOption($this->requestConfiguration),
+            ),
+        );
     }
 }

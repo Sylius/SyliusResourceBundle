@@ -19,7 +19,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-final class OptionsParser implements OptionsParserInterface
+final class OptionsParser implements OptionsParserInterface, VariablesOptionsParserInterface
 {
     use BcLayerRequestTrait;
 
@@ -44,18 +44,42 @@ final class OptionsParser implements OptionsParserInterface
      */
     public function parseOptions(array $parameters, Request $request, $data = null): array
     {
+        return $this->doParseOptions($parameters, fn (string $key): mixed => $this->getFromRequest($request, $key), $data);
+    }
+
+    /**
+     * @param array<array-key, mixed> $parameters
+     * @param array<string, mixed> $variables
+     * @param array<array-key, mixed>|object|null $data
+     *
+     * @return array<array-key, mixed>
+     */
+    public function parseOptionsWithVariables(array $parameters, array $variables, mixed $data = null): array
+    {
+        return $this->doParseOptions($parameters, static fn (string $key): mixed => $variables[$key] ?? null, $data);
+    }
+
+    /**
+     * @param array<array-key, mixed> $parameters
+     * @param callable(string): mixed $resolveVariable
+     * @param array<array-key, mixed>|object|null $data
+     *
+     * @return array<array-key, mixed>
+     */
+    private function doParseOptions(array $parameters, callable $resolveVariable, $data): array
+    {
         return array_map(
             /**
              * @param mixed $parameter
              *
              * @return mixed
              */
-            function ($parameter) use ($request, $data) {
+            function ($parameter) use ($resolveVariable, $data) {
                 if (is_array($parameter)) {
-                    return $this->parseOptions($parameter, $request, $data);
+                    return $this->doParseOptions($parameter, $resolveVariable, $data);
                 }
 
-                return $this->parseOption($parameter, $request, $data);
+                return $this->parseOption($parameter, $resolveVariable, $data);
             },
             $parameters,
         );
@@ -63,22 +87,23 @@ final class OptionsParser implements OptionsParserInterface
 
     /**
      * @param mixed $parameter
+     * @param callable(string): mixed $resolveVariable
      * @param array|object|null $data
      *
      * @return mixed
      */
-    private function parseOption($parameter, Request $request, $data)
+    private function parseOption($parameter, callable $resolveVariable, $data)
     {
         if (!is_string($parameter)) {
             return $parameter;
         }
 
         if (0 === strpos($parameter, '$')) {
-            return $this->getFromRequest($request, substr($parameter, 1));
+            return $resolveVariable(substr($parameter, 1));
         }
 
         if (0 === strpos($parameter, 'expr:')) {
-            return $this->parseOptionExpression(substr($parameter, 5), $request);
+            return $this->parseOptionExpression(substr($parameter, 5), $resolveVariable);
         }
 
         if (0 === strpos($parameter, 'resource.')) {
@@ -93,15 +118,17 @@ final class OptionsParser implements OptionsParserInterface
     }
 
     /**
+     * @param callable(string): mixed $resolveVariable
+     *
      * @return mixed
      */
-    private function parseOptionExpression(string $expression, Request $request)
+    private function parseOptionExpression(string $expression, callable $resolveVariable)
     {
         $expression = (string) preg_replace_callback(
             '/\$(\w+)/',
             /** @return callable */
-            function (array $matches) use ($request) {
-                $variable = $this->getFromRequest($request, $matches[1]);
+            function (array $matches) use ($resolveVariable) {
+                $variable = $resolveVariable($matches[1]);
 
                 return is_string($variable) ? sprintf('"%s"', addslashes($variable)) : $variable;
             },

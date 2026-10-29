@@ -17,11 +17,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
+use Sylius\Component\Grid\Definition\Grid;
+use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridView;
+use Sylius\Resource\Grid\View\ContextualGridView;
+use Sylius\Resource\Grid\View\GridContext;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -106,6 +111,43 @@ final class TwigGridRendererTest extends TestCase
         $result = $this->renderer->renderAction($gridView, $action);
 
         $this->assertSame('foo', $result);
+    }
+
+    public function testItParsesTheOptionsOfAGridViewWithContext(): void
+    {
+        $optionsParser = $this->createMockForIntersectionOfInterfaces([OptionsParserInterface::class, VariablesOptionsParserInterface::class]);
+        $renderer = new TwigGridRenderer($this->gridRenderer, $this->twig, $optionsParser, self::ACTION_TEMPLATES);
+
+        $gridView = new ContextualGridView([], Grid::fromCodeAndDriverConfiguration('app_book', 'doctrine/orm', []), new Parameters(), new GridContext(variables: ['productId' => 42]));
+        $action = $this->createActionMock('link', ['link' => ['parameters' => ['productId' => '$productId']]]);
+
+        $optionsParser->expects($this->never())->method('parseOptions');
+        $optionsParser->expects($this->once())
+            ->method('parseOptionsWithVariables')
+            ->with(['link' => ['parameters' => ['productId' => '$productId']]], ['productId' => 42], null)
+            ->willReturn(['link' => ['parameters' => ['productId' => 42]]]);
+
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@SyliusGrid/Action/_link.html.twig', [
+                'grid' => $gridView,
+                'action' => $action,
+                'data' => null,
+                'options' => ['link' => ['parameters' => ['productId' => 42]]],
+            ])
+            ->willReturn('<a href="#">Action!</a>');
+
+        $this->assertSame('<a href="#">Action!</a>', $renderer->renderAction($gridView, $action));
+    }
+
+    public function testItCallsTheInnerRendererWhenTheOptionsParserDoesNotSupportVariables(): void
+    {
+        $gridView = new ContextualGridView([], Grid::fromCodeAndDriverConfiguration('app_book', 'doctrine/orm', []), new Parameters(), new GridContext());
+        $action = $this->createMock(Action::class);
+
+        $this->configureInnerRenderer($gridView, $action, 'foo');
+
+        $this->assertSame('foo', $this->renderer->renderAction($gridView, $action));
     }
 
     /**

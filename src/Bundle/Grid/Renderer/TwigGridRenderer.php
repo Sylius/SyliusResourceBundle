@@ -14,13 +14,16 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\Definition\Filter;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridViewInterface;
+use Sylius\Resource\Grid\View\GridContextAwareInterface;
 use Twig\Environment;
+use Webmozart\Assert\Assert;
 
 final class TwigGridRenderer implements GridRendererInterface
 {
@@ -62,7 +65,7 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     public function renderAction(GridViewInterface $gridView, Action $action, $data = null): string
     {
-        if (!$gridView instanceof ResourceGridView) {
+        if (!$this->canParseOptions($gridView)) {
             return $this->gridRenderer->renderAction($gridView, $action, $data);
         }
 
@@ -74,11 +77,7 @@ final class TwigGridRenderer implements GridRendererInterface
             throw new \InvalidArgumentException(sprintf('Missing template for action type "%s".', $type));
         }
 
-        $options = $this->optionsParser->parseOptions(
-            $action->getOptions(),
-            $gridView->getRequestConfiguration()->getRequest(),
-            $data,
-        );
+        $options = $this->parseOptions($gridView, $action->getOptions(), $data);
 
         return $this->twig->render($template, [
             'grid' => $gridView,
@@ -91,5 +90,31 @@ final class TwigGridRenderer implements GridRendererInterface
     public function renderFilter(GridViewInterface $gridView, Filter $filter): string
     {
         return $this->gridRenderer->renderFilter($gridView, $filter);
+    }
+
+    private function canParseOptions(GridViewInterface $gridView): bool
+    {
+        return
+            $gridView instanceof ResourceGridView ||
+            ($gridView instanceof GridContextAwareInterface && $this->optionsParser instanceof VariablesOptionsParserInterface)
+        ;
+    }
+
+    /**
+     * @param array<array-key, mixed> $options
+     *
+     * @return array<array-key, mixed>
+     */
+    private function parseOptions(GridViewInterface $gridView, array $options, mixed $data): array
+    {
+        // BC layer: the options of the legacy resource grids are still parsed from the request
+        if ($gridView instanceof ResourceGridView) {
+            return $this->optionsParser->parseOptions($options, $gridView->getRequestConfiguration()->getRequest(), $data);
+        }
+
+        Assert::isInstanceOf($gridView, GridContextAwareInterface::class);
+        Assert::isInstanceOf($this->optionsParser, VariablesOptionsParserInterface::class);
+
+        return $this->optionsParser->parseOptionsWithVariables($options, $gridView->getGridContext()->getVariables(), $data);
     }
 }

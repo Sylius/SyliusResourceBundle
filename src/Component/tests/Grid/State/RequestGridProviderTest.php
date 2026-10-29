@@ -21,6 +21,7 @@ use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\Component\Grid\View\GridView;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\OperationOption;
 use Sylius\Resource\Context\Option\RequestOption;
 use Sylius\Resource\Grid\State\RequestGridProvider;
 use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
@@ -64,7 +65,7 @@ final class RequestGridProviderTest extends TestCase
 
         $this->gridProvider->method('get')->with('app_book')->willReturn($gridDefinition);
         $gridDefinition->method('getDriverConfiguration')->willReturn([]);
-        $this->gridViewFactory->method('create')->with($gridDefinition, $context, new Parameters(), [])->willReturn($gridView);
+        $this->gridViewFactory->method('create')->with($gridDefinition, $context->with(new OperationOption($operation)), new Parameters(), [])->willReturn($gridView);
 
         $this->assertSame($gridView, $this->provider->provide($operation, $context));
     }
@@ -83,7 +84,7 @@ final class RequestGridProviderTest extends TestCase
         $this->gridProvider->method('get')->with('app_book')->willReturn($gridDefinition);
         $gridDefinition->method('getLimits')->willReturn([]);
         $gridDefinition->method('getDriverConfiguration')->willReturn([]);
-        $this->gridViewFactory->method('create')->with($gridDefinition, $context, new Parameters(['page' => 42]), [])->willReturn($gridView);
+        $this->gridViewFactory->method('create')->with($gridDefinition, $context->with(new OperationOption($operation)), new Parameters(['page' => 42]), [])->willReturn($gridView);
 
         $gridView->method('getData')->willReturn($pagerfanta);
         $pagerfanta->expects($this->once())->method('setCurrentPage')->with(42)->willReturn($pagerfanta);
@@ -106,7 +107,7 @@ final class RequestGridProviderTest extends TestCase
         $this->gridProvider->method('get')->with('app_book')->willReturn($gridDefinition);
         $gridDefinition->method('getDriverConfiguration')->willReturn([]);
         $gridDefinition->method('getLimits')->willReturn([10, 25]);
-        $this->gridViewFactory->method('create')->with($gridDefinition, $context, new Parameters(['limit' => 25]), [])->willReturn($gridView);
+        $this->gridViewFactory->method('create')->with($gridDefinition, $context->with(new OperationOption($operation)), new Parameters(['limit' => 25]), [])->willReturn($gridView);
 
         $gridView->method('getData')->willReturn($pagerfanta);
         $pagerfanta->expects($this->once())->method('setCurrentPage')->with(1)->willReturn($pagerfanta);
@@ -129,7 +130,7 @@ final class RequestGridProviderTest extends TestCase
         $this->gridProvider->method('get')->with('app_book')->willReturn($gridDefinition);
         $gridDefinition->method('getDriverConfiguration')->willReturn([]);
         $gridDefinition->method('getLimits')->willReturn([15, 30]);
-        $this->gridViewFactory->method('create')->with($gridDefinition, $context, new Parameters([]), [])->willReturn($gridView);
+        $this->gridViewFactory->method('create')->with($gridDefinition, $context->with(new OperationOption($operation)), new Parameters([]), [])->willReturn($gridView);
 
         $gridView->method('getData')->willReturn($pagerfanta);
         $pagerfanta->expects($this->once())->method('setCurrentPage')->with(1)->willReturn($pagerfanta);
@@ -152,7 +153,7 @@ final class RequestGridProviderTest extends TestCase
         $this->gridProvider->method('get')->with('app_book')->willReturn($gridDefinition);
         $gridDefinition->method('getDriverConfiguration')->willReturn([]);
         $gridDefinition->method('getLimits')->willReturn([15, 30]);
-        $this->gridViewFactory->method('create')->with($gridDefinition, $context, new Parameters(['limit' => 40]), [])->willReturn($gridView);
+        $this->gridViewFactory->method('create')->with($gridDefinition, $context->with(new OperationOption($operation)), new Parameters(['limit' => 40]), [])->willReturn($gridView);
 
         $gridView->method('getData')->willReturn($pagerfanta);
         $pagerfanta->expects($this->once())->method('setCurrentPage')->with(1)->willReturn($pagerfanta);

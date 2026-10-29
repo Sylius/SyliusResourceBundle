@@ -21,9 +21,12 @@ use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer as TwigBulkActionGridRendererInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer as TwigGridRendererInterface;
+use Sylius\Bundle\ResourceBundle\Grid\View\LegacyContextualGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
+use Sylius\Resource\Grid\View\Factory\ContextualGridViewFactory;
+use Sylius\Resource\Grid\View\Factory\ContextualGridViewFactoryInterface;
 use Sylius\Resource\Grid\View\Factory\GridViewFactory;
 use Sylius\Resource\Grid\View\Factory\GridViewFactoryInterface;
 
@@ -40,6 +43,19 @@ return static function (ContainerConfigurator $container) {
         ]);
 
     $services->alias(ResourceGridViewFactoryInterface::class, 'sylius.grid.resource_view_factory');
+
+    $services->set('sylius.grid.contextual_view_factory', ContextualGridViewFactory::class)
+        ->args([service('sylius.grid.data_provider')]);
+
+    $services->alias(ContextualGridViewFactoryInterface::class, 'sylius.grid.contextual_view_factory');
+
+    $services->set('sylius.grid.contextual_view_factory.legacy', LegacyContextualGridViewFactory::class)
+        ->private()
+        ->decorate('sylius.grid.contextual_view_factory')
+        ->args([
+            service('.inner'),
+            service('sylius.resource_controller.parameters_parser'),
+        ]);
 
     $services->set('sylius.resource_controller.resources_resolver.grid_aware', ResourcesResolver::class)
         ->decorate('sylius.resource_controller.resources_resolver', null, 256)
