@@ -20,20 +20,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
 final class ResourceTranslationsType extends AbstractType
 {
-    /** @var string[] */
-    private array $definedLocalesCodes;
-
-    private string $defaultLocaleCode;
-
-    public function __construct(TranslationLocaleProviderInterface $localeProvider)
+    public function __construct(private TranslationLocaleProviderInterface $localeProvider)
     {
-        $this->definedLocalesCodes = $localeProvider->getDefinedLocalesCodes();
-        $this->defaultLocaleCode = $localeProvider->getDefaultLocaleCode();
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -66,13 +60,13 @@ final class ResourceTranslationsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'entries' => $this->definedLocalesCodes,
+            'entries' => fn (Options $options): array => $this->localeProvider->getDefinedLocalesCodes(),
             'entry_name' => function (string $localeCode): string {
                 return $localeCode;
             },
             'entry_options' => function (string $localeCode): array {
                 return [
-                    'required' => $localeCode === $this->defaultLocaleCode,
+                    'required' => $localeCode === $this->localeProvider->getDefaultLocaleCode(),
                 ];
             },
         ]);

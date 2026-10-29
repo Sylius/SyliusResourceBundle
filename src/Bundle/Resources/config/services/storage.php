@@ -30,7 +30,8 @@ return static function (ContainerConfigurator $container) {
     $services->alias(SessionStorageInterface::class, 'sylius.storage.session');
 
     $services->set('sylius.storage.cookie', CookieStorage::class)
-        ->tag('kernel.event_subscriber');
+        ->tag('kernel.event_subscriber')
+        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->alias(CookieStorageInterface::class, 'sylius.storage.cookie');
 };
