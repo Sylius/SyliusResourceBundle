@@ -20,7 +20,8 @@ namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
  * BC layer: this method belongs to OptionsParserInterface, but adding it there would break its implementations.
  * It is therefore a separate interface, implemented by OptionsParser, and the grid renderers check for it
  * (falling back to the previous behaviour when the options parser does not implement it).
- * It is meant to be merged into OptionsParserInterface in the next major version.
+ * Like OptionsParserInterface, it is part of the legacy expression syntax, which is meant to be replaced
+ * by the ArgumentParser of the new metadata-based routing: it will go away with OptionsParserInterface.
  *
  * @experimental
  */

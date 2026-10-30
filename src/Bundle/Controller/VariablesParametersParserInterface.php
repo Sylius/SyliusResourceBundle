@@ -19,7 +19,8 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
  *
  * BC layer: this method belongs to ParametersParserInterface, but adding it there would break its implementations.
  * It is therefore a separate interface, implemented by ParametersParser.
- * It is meant to be merged into ParametersParserInterface in the next major version.
+ * Like ParametersParserInterface, it is part of the legacy expression syntax, which is meant to be replaced
+ * by the ArgumentParser of the new metadata-based routing: it will go away with ParametersParserInterface.
  *
  * @experimental
  */

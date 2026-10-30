@@ -26,7 +26,7 @@ use Sylius\Resource\Grid\View\GridContext;
  *
  * BC layer: it keeps the legacy syntax of the grid configurations working with the request-free grid views.
  * It lives in the bundle, as the legacy parsers do, while the grid context and the factory it decorates
- * live in the component.
+ * live in the component. It will go away with the legacy parsers, in favour of the ArgumentParser.
  *
  * @experimental
  */
