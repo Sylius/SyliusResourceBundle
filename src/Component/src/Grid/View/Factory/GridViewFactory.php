@@ -18,6 +18,11 @@ use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\View\GridView;
 use Sylius\Resource\Context\Context;
+use Sylius\Resource\Context\Option\MetadataOption;
+use Sylius\Resource\Context\Option\OperationOption;
+use Sylius\Resource\Context\Option\RequestOption;
+use Sylius\Resource\Grid\View\ContextualGridView;
+use Sylius\Resource\Grid\View\GridContext;
 
 final class GridViewFactory implements GridViewFactoryInterface
 {
@@ -28,6 +33,28 @@ final class GridViewFactory implements GridViewFactoryInterface
 
     public function create(Grid $grid, Context $context, Parameters $parameters, array $driverConfiguration): GridView
     {
-        return new GridView($this->dataProvider->getData($grid, $parameters), $grid, $parameters);
+        return new ContextualGridView(
+            $this->dataProvider->getData($grid, $parameters),
+            $grid,
+            $parameters,
+            $this->createGridContext($context),
+        );
+    }
+
+    private function createGridContext(Context $context): GridContext
+    {
+        $request = $context->get(RequestOption::class)?->request();
+
+        $variables = null === $request ? [] : array_merge(
+            $request->query->all(),
+            $request->attributes->all('_route_params'),
+        );
+
+        return new GridContext(
+            metadata: $context->get(MetadataOption::class)?->metadata(),
+            variables: $variables,
+            operation: $context->get(OperationOption::class)?->operation(),
+            context: $context,
+        );
     }
 }

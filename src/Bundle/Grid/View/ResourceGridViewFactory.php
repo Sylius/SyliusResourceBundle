@@ -15,6 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Grid\View;
 
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
@@ -26,10 +27,16 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
 
     private ParametersParserInterface $parametersParser;
 
-    public function __construct(DataProviderInterface $dataProvider, ParametersParserInterface $parametersParser)
-    {
+    private ?LegacyGridExpressionParser $expressionParser;
+
+    public function __construct(
+        DataProviderInterface $dataProvider,
+        ParametersParserInterface $parametersParser,
+        ?LegacyGridExpressionParser $expressionParser = null,
+    ) {
         $this->dataProvider = $dataProvider;
         $this->parametersParser = $parametersParser;
+        $this->expressionParser = $expressionParser;
     }
 
     public function create(
@@ -41,7 +48,16 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
         $driverConfiguration = $grid->getDriverConfiguration();
         $request = $requestConfiguration->getRequest();
 
-        $grid->setDriverConfiguration($this->parametersParser->parseRequestValues($driverConfiguration, $request));
+        $driverConfiguration = $this->parametersParser->parseRequestValues($driverConfiguration, $request);
+
+        // BC layer: evaluates the "@=" expressions that the legacy parser leaves unevaluated (see LegacyGridExpressionParser)
+        if (null !== $this->expressionParser) {
+            // Same variables as ResourceGridView::getVariables()
+            $variables = array_merge($request->request->all(), $request->query->all(), $request->attributes->all());
+            $driverConfiguration = $this->expressionParser->parseExpressions($driverConfiguration, $variables);
+        }
+
+        $grid->setDriverConfiguration($driverConfiguration);
 
         return new ResourceGridView($this->dataProvider->getData($grid, $parameters), $grid, $parameters, $metadata, $requestConfiguration);
     }

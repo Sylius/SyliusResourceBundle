@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Controller;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParser;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
+use Sylius\Bundle\ResourceBundle\Controller\VariablesParametersParserInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
@@ -180,5 +181,39 @@ final class ParametersParserTest extends TestCase
         $request->request->set('object', $objectMock);
         $this->expectException(\InvalidArgumentException::class);
         $this->parametersParser->parseRequestValues(['expression' => 'expr:$object.callMethod()'], $request);
+    }
+
+    public function testImplementsVariablesParametersParserInterface(): void
+    {
+        $this->assertInstanceOf(VariablesParametersParserInterface::class, $this->parametersParser);
+    }
+
+    public function testParsesParametersWithVariables(): void
+    {
+        $this->assertSame(
+            ['repository' => ['arguments' => [42, null, 'foo']]],
+            $this->parametersParser->parseVariablesValues(
+                ['repository' => ['arguments' => ['$productId', '$missing', 'foo']]],
+                ['productId' => 42],
+            ),
+        );
+    }
+
+    public function testParsesExpressionsAndTypecastsWithVariables(): void
+    {
+        $this->assertSame(
+            ['expression' => true, 'cast' => 42],
+            $this->parametersParser->parseVariablesValues(
+                ['expression' => 'expr:$string === "lorem ipsum"', 'cast' => '!!int $productId'],
+                ['string' => 'lorem ipsum', 'productId' => '42'],
+            ),
+        );
+    }
+
+    public function testThrowsAnExceptionIfArrayVariableIsInjectedIntoExpression(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->parametersParser->parseVariablesValues(['expression' => 'expr:"foo" in $array'], ['array' => ['foo']]);
     }
 }

@@ -17,10 +17,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigBulkActionGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
+use Sylius\Component\Grid\Definition\Grid;
+use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Renderer\BulkActionGridRendererInterface;
+use Sylius\Component\Grid\View\GridView;
+use Sylius\Resource\Grid\View\ContextualGridView;
+use Sylius\Resource\Grid\View\GridContext;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -83,6 +89,41 @@ final class TwigBulkActionGridRendererTest extends TestCase
         $this->expectExceptionMessage('Missing template for bulk action type "foo".');
 
         $this->renderer->renderBulkAction($gridView, $bulkAction);
+    }
+
+    public function testItParsesTheOptionsOfAGridViewWithContext(): void
+    {
+        $optionsParser = $this->createMockForIntersectionOfInterfaces([OptionsParserInterface::class, VariablesOptionsParserInterface::class]);
+        $renderer = new TwigBulkActionGridRenderer($this->twig, $optionsParser, ['delete' => '@SyliusGrid/BulkAction/_delete.html.twig']);
+
+        $gridView = new ContextualGridView([], Grid::fromCodeAndDriverConfiguration('app_book', 'doctrine/orm', []), new Parameters(), new GridContext(variables: ['productId' => 42]));
+        $bulkAction = $this->createBulkActionMock('delete', ['productId' => '$productId']);
+
+        $optionsParser->expects($this->once())
+            ->method('parseOptionsWithVariables')
+            ->with(['productId' => '$productId'], ['productId' => 42], null)
+            ->willReturn(['productId' => 42]);
+
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@SyliusGrid/BulkAction/_delete.html.twig', [
+                'grid' => $gridView,
+                'action' => $bulkAction,
+                'data' => null,
+                'options' => ['productId' => 42],
+            ])
+            ->willReturn('<a href="#">Delete</a>');
+
+        $this->assertSame('<a href="#">Delete</a>', $renderer->renderBulkAction($gridView, $bulkAction));
+    }
+
+    public function testItThrowsAnExceptionWithAGridViewWithoutContext(): void
+    {
+        $gridView = new GridView([], Grid::fromCodeAndDriverConfiguration('app_book', 'doctrine/orm', []), new Parameters());
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->renderer->renderBulkAction($gridView, $this->createBulkActionMock('delete'));
     }
 
     /**

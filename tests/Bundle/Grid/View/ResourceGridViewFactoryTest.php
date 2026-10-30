@@ -15,15 +15,21 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Grid\View;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Sylius\Bundle\ResourceBundle\Controller\ParametersParser;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
+use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluator;
+use Sylius\Component\Grid\ExpressionLanguage\VariablesCollectionAggregate;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Resource\Metadata\MetadataInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ResourceGridViewFactoryTest extends TestCase
@@ -124,5 +130,27 @@ final class ResourceGridViewFactoryTest extends TestCase
         $this->assertSame($parameters, $result->getParameters());
         $this->assertSame($resourceMetadata, $result->getMetadata());
         $this->assertSame($requestConfiguration, $result->getRequestConfiguration());
+    }
+
+    public function testItEvaluatesTheExpressionsOfTheDriverConfigurationWithTheRequestValues(): void
+    {
+        $parameters = new Parameters();
+        $request = new Request(attributes: ['customerId' => 5]);
+        $requestConfiguration = $this->createConfiguredMock(RequestConfiguration::class, ['getRequest' => $request]);
+        $grid = Grid::fromCodeAndDriverConfiguration('app_order', 'doctrine/orm', [
+            'repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => ['$customerId', "@=variables['customerId'] + 1"]],
+        ]);
+
+        $factory = new ResourceGridViewFactory(
+            $this->dataProvider,
+            new ParametersParser(new Container(), new ExpressionLanguage()),
+            new LegacyGridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
+        );
+        $factory->create($grid, $parameters, $this->createMock(MetadataInterface::class), $requestConfiguration);
+
+        $this->assertSame(
+            ['repository' => ['method' => 'createByCustomerQueryBuilder', 'arguments' => [5, 6]]],
+            $grid->getDriverConfiguration(),
+        );
     }
 }
