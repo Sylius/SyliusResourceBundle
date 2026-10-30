@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
 
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
+use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluatorInterface;
 
 /**
  * Evaluates the "@=expression" values of the grid configuration (driver configuration, action options) with the
- * new expression syntax of the metadata-based routing (ArgumentParser), the grid variables being available as
- * "variables", e.g. "@=sylius_repositories.get('sylius.repository.product').find(variables['productId'])".
+ * expression evaluator of sylius/grid-bundle, the grid variables being available as "variables",
+ * e.g. "@=sylius_repositories.get('sylius.repository.product').find(variables['productId'])".
+ *
+ * The resource bundle variables ("request", "token", "user", "sylius_repositories", see GridExpressionVariables)
+ * and functions ("throw_not_found_on_null") are registered in it, as the ones of sylius/grid-bundle.
  *
  * The grid variables are the route parameters of the page for both the regular and the live grids,
  * whereas "request" is the live component request during the live re-renders.
@@ -29,7 +32,7 @@ use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParserInterface;
  */
 final class GridExpressionParser
 {
-    public function __construct(private ArgumentParserInterface $argumentParser)
+    public function __construct(private ExpressionEvaluatorInterface $expressionEvaluator)
     {
     }
 
@@ -54,7 +57,7 @@ final class GridExpressionParser
                     return $value;
                 }
 
-                return $this->argumentParser->parseExpression(
+                return $this->expressionEvaluator->evaluateExpression(
                     substr($value, 2),
                     array_merge($expressionVariables, ['variables' => $variables]),
                 );

@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Controller\ResourcesResolver;
+use Sylius\Bundle\ResourceBundle\Grid\ExpressionLanguage\GridExpressionVariables;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
@@ -26,6 +27,8 @@ use Sylius\Bundle\ResourceBundle\Grid\View\LegacyContextualGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\LegacyGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
+use Sylius\Component\Grid\Attribute\AsExpressionVariables;
+use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluatorInterface;
 use Sylius\Resource\Grid\View\Factory\ContextualGridViewFactory;
 use Sylius\Resource\Grid\View\Factory\ContextualGridViewFactoryInterface;
 use Sylius\Resource\Grid\View\Factory\GridViewFactory;
@@ -41,7 +44,7 @@ return static function (ContainerConfigurator $container) {
         ->args([
             service('sylius.grid.data_provider'),
             service('sylius.resource_controller.parameters_parser'),
-            service('sylius.resource.grid.expression_parser'),
+            service('sylius.resource.grid.expression_parser')->nullOnInvalid(),
         ]);
 
     $services->alias(ResourceGridViewFactoryInterface::class, 'sylius.grid.resource_view_factory');
@@ -57,7 +60,7 @@ return static function (ContainerConfigurator $container) {
         ->args([
             service('.inner'),
             service('sylius.resource_controller.parameters_parser'),
-            service('sylius.resource.grid.expression_parser'),
+            service('sylius.resource.grid.expression_parser')->nullOnInvalid(),
         ]);
 
     $services->set('sylius.resource_controller.resources_resolver.grid_aware', ResourcesResolver::class)
@@ -77,7 +80,7 @@ return static function (ContainerConfigurator $container) {
             service('twig'),
             service('sylius.grid_options_parser'),
             '%sylius.grid.templates.action%',
-            service('sylius.resource.grid.expression_parser'),
+            service('sylius.resource.grid.expression_parser')->nullOnInvalid(),
         ]);
 
     $services->alias(TwigGridRendererInterface::class, 'sylius.custom_grid_renderer.twig');
@@ -88,7 +91,7 @@ return static function (ContainerConfigurator $container) {
             service('twig'),
             service('sylius.grid_options_parser'),
             '%sylius.grid.templates.bulk_action%',
-            service('sylius.resource.grid.expression_parser'),
+            service('sylius.resource.grid.expression_parser')->nullOnInvalid(),
         ]);
 
     $services->alias(TwigBulkActionGridRendererInterface::class, 'sylius.custom_bulk_action_grid_renderer.twig');
@@ -117,7 +120,17 @@ return static function (ContainerConfigurator $container) {
 
     $services->alias(GridViewFactoryInterface::class, 'sylius.grid.view_factory.resource');
 
+    if (!interface_exists(ExpressionEvaluatorInterface::class)) {
+        return;
+    }
+
+    // Requires the grid expressions of sylius/grid-bundle (Sylius/SyliusGridBundle#512)
     $services->set('sylius.resource.grid.expression_parser', GridExpressionParser::class)
         ->private()
-        ->args([service('sylius.expression_language.argument_parser.grid')]);
+        ->args([service('sylius.grid.expression_evaluator')]);
+
+    $services->set('sylius.resource.grid.expression_variables', GridExpressionVariables::class)
+        ->private()
+        ->args([service('sylius.expression_language.variables_collection.grid')])
+        ->tag(AsExpressionVariables::SERVICE_TAG);
 };

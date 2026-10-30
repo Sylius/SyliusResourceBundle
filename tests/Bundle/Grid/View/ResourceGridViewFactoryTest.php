@@ -24,10 +24,10 @@ use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
+use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluator;
+use Sylius\Component\Grid\ExpressionLanguage\VariablesCollectionAggregate;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Resource\Metadata\MetadataInterface;
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
-use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
@@ -144,7 +144,7 @@ final class ResourceGridViewFactoryTest extends TestCase
         $factory = new ResourceGridViewFactory(
             $this->dataProvider,
             new ParametersParser(new Container(), new ExpressionLanguage()),
-            new GridExpressionParser(new ArgumentParser(new ExpressionLanguage(), new VariablesCollection([]))),
+            new GridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
         );
         $factory->create($grid, $parameters, $this->createMock(MetadataInterface::class), $requestConfiguration);
 

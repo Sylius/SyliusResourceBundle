@@ -23,13 +23,13 @@ use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\Grid;
+use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluator;
+use Sylius\Component\Grid\ExpressionLanguage\VariablesCollectionAggregate;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridView;
 use Sylius\Resource\Grid\View\ContextualGridView;
 use Sylius\Resource\Grid\View\GridContext;
-use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
-use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
@@ -216,7 +216,7 @@ final class TwigGridRendererTest extends TestCase
             $this->twig,
             $this->optionsParser,
             self::ACTION_TEMPLATES,
-            new GridExpressionParser(new ArgumentParser(new ExpressionLanguage(), new VariablesCollection([]))),
+            new GridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
         );
 
         $this->optionsParser->method('parseOptions')->willReturnArgument(0);
