@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Grid\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Grid\ExpressionLanguage\GridExpressionVariables;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluator;
 use Sylius\Component\Grid\ExpressionLanguage\ExpressionLanguageFactory;
 use Sylius\Component\Grid\ExpressionLanguage\VariablesCollectionAggregate;
@@ -24,9 +24,9 @@ use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
 use Sylius\Resource\Symfony\ExpressionLanguage\VariablesInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class GridExpressionParserTest extends TestCase
+final class LegacyGridExpressionParserTest extends TestCase
 {
-    private GridExpressionParser $parser;
+    private LegacyGridExpressionParser $parser;
 
     protected function setUp(): void
     {
@@ -38,7 +38,7 @@ final class GridExpressionParserTest extends TestCase
         };
 
         // The resource variables and functions, as registered in the grid expression evaluator
-        $this->parser = new GridExpressionParser(new ExpressionEvaluator(
+        $this->parser = new LegacyGridExpressionParser(new ExpressionEvaluator(
             (new ExpressionLanguageFactory([new ThrowNotFoundOnNullExpressionFunctionProvider()]))(),
             new VariablesCollectionAggregate([new GridExpressionVariables(new VariablesCollection([$appVariables]))]),
         ));

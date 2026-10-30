@@ -16,7 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Grid\Renderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
@@ -216,7 +216,7 @@ final class TwigGridRendererTest extends TestCase
             $this->twig,
             $this->optionsParser,
             self::ACTION_TEMPLATES,
-            new GridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
+            new LegacyGridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
         );
 
         $this->optionsParser->method('parseOptions')->willReturnArgument(0);

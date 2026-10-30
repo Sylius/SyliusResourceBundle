@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Grid\View;
 
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
@@ -27,12 +27,12 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
 
     private ParametersParserInterface $parametersParser;
 
-    private ?GridExpressionParser $expressionParser;
+    private ?LegacyGridExpressionParser $expressionParser;
 
     public function __construct(
         DataProviderInterface $dataProvider,
         ParametersParserInterface $parametersParser,
-        ?GridExpressionParser $expressionParser = null,
+        ?LegacyGridExpressionParser $expressionParser = null,
     ) {
         $this->dataProvider = $dataProvider;
         $this->parametersParser = $parametersParser;

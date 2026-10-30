@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParser;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactory;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridViewFactoryInterface;
@@ -144,7 +144,7 @@ final class ResourceGridViewFactoryTest extends TestCase
         $factory = new ResourceGridViewFactory(
             $this->dataProvider,
             new ParametersParser(new Container(), new ExpressionLanguage()),
-            new GridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
+            new LegacyGridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
         );
         $factory->create($grid, $parameters, $this->createMock(MetadataInterface::class), $requestConfiguration);
 

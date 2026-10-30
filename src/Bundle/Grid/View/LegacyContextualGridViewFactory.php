@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Grid\View;
 
 use Sylius\Bundle\ResourceBundle\Controller\VariablesParametersParserInterface;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Resource\Grid\View\ContextualGridView;
@@ -36,7 +36,7 @@ final class LegacyContextualGridViewFactory implements ContextualGridViewFactory
     public function __construct(
         private ContextualGridViewFactoryInterface $decorated,
         private VariablesParametersParserInterface $parametersParser,
-        private ?GridExpressionParser $expressionParser = null,
+        private ?LegacyGridExpressionParser $expressionParser = null,
     ) {
     }
 

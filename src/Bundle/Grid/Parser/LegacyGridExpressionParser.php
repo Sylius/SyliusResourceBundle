@@ -16,27 +16,22 @@ namespace Sylius\Bundle\ResourceBundle\Grid\Parser;
 use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluatorInterface;
 
 /**
- * Evaluates the "@=expression" values of the grid configuration (driver configuration, action options) with the
- * expression evaluator of sylius/grid-bundle, the grid variables being available as "variables",
- * e.g. "@=sylius_repositories.get('sylius.repository.product').find(variables['productId'])".
+ * BC layer: evaluates the "@=" expressions that the legacy parsers leave unevaluated.
  *
- * The resource bundle variables ("request", "token", "user", "sylius_repositories", see GridExpressionVariables)
- * and functions ("throw_not_found_on_null") are registered in it, as the ones of sylius/grid-bundle.
+ * The resource grids (ResourceGridView, and the context-aware views through the resource renderers
+ * and LegacyContextualGridViewFactory) are still parsed by the legacy OptionsParser / ParametersParser
+ * ("$name", "expr:", "resource."). Those leave the "@=" values as is, so they are evaluated afterwards
+ * (driver configuration, action options), with the expression evaluator of sylius/grid-bundle and the same
+ * variables as the other grids: "variables" (the page variables, e.g. "variables['productId']"), "resource" for the
+ * actions, and the resource bundle ones ("request", "token", "user", "sylius_repositories", "throw_not_found_on_null",
+ * see GridExpressionVariables).
  *
- * The grid variables are the route parameters of the page for both the regular and the live grids,
- * whereas "request" is the live component request during the live re-renders.
- *
- * The other values (the legacy "$name", "expr:" and "resource." ones) are left as is.
- *
- * BC layer: the resource grids (ResourceGridView, and the context-aware views through the resource renderers
- * and LegacyContextualGridViewFactory) are still parsed by the legacy OptionsParser / ParametersParser, which
- * leave the "@=" expressions unevaluated. This evaluates them afterwards, with the same evaluator and variables
- * as sylius/grid-bundle does for the other grids. It will go away with the legacy parsers, when the resource grids
- * are parsed by sylius/grid-bundle (ActionOptionsParser, VariablesResolver).
+ * It will go away with the legacy parsers, when the resource grids are parsed by sylius/grid-bundle
+ * (ActionOptionsParser, VariablesResolver).
  *
  * @experimental
  */
-final class GridExpressionParser
+final class LegacyGridExpressionParser
 {
     public function __construct(private ExpressionEvaluatorInterface $expressionEvaluator)
     {

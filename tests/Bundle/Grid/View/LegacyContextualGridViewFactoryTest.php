@@ -15,7 +15,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Grid\View;
 
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParser;
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\View\LegacyContextualGridViewFactory;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluator;
@@ -70,7 +70,7 @@ final class LegacyContextualGridViewFactoryTest extends TestCase
         $factory = new LegacyContextualGridViewFactory(
             $decorated,
             new ParametersParser(new Container(), new ExpressionLanguage()),
-            new GridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
+            new LegacyGridExpressionParser(new ExpressionEvaluator(new ExpressionLanguage(), new VariablesCollectionAggregate())),
         );
         $factory->create($grid, new Parameters(), $gridContext);
 

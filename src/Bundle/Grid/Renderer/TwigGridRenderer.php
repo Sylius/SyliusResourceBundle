@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
-use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\LegacyGridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
@@ -36,14 +36,14 @@ final class TwigGridRenderer implements GridRendererInterface
 
     private array $actionTemplates;
 
-    private ?GridExpressionParser $expressionParser;
+    private ?LegacyGridExpressionParser $expressionParser;
 
     public function __construct(
         GridRendererInterface $gridRenderer,
         Environment $twig,
         OptionsParserInterface $optionsParser,
         array $actionTemplates = [],
-        ?GridExpressionParser $expressionParser = null,
+        ?LegacyGridExpressionParser $expressionParser = null,
     ) {
         $this->gridRenderer = $gridRenderer;
         $this->twig = $twig;
