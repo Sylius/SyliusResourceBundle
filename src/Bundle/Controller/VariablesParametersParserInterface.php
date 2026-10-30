@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Sylius\Bundle\ResourceBundle\Controller;
 
 /**
- * Parses parameters ("$name", "expr:...", "!!int $name") without any request,
- * the "$name" placeholders being resolved from the given variables (see GridContext::getVariables()).
+ * BC layer: parses the legacy parameters ("$name", "expr:...", "!!int $name") without any request.
  *
- * BC layer: this method belongs to ParametersParserInterface, but adding it there would break its implementations.
- * It is therefore a separate interface, implemented by ParametersParser.
- * Like ParametersParserInterface, it is part of the legacy expression syntax, which is meant to be replaced
- * by the ArgumentParser of the new metadata-based routing: it will go away with ParametersParserInterface.
+ * The "$name" placeholders are resolved from the given variables (see GridContext::getVariables()).
+ * This method belongs to ParametersParserInterface, but adding it there would break its implementations,
+ * so it is a separate interface, implemented by ParametersParser.
+ *
+ * It will go away with ParametersParserInterface and the legacy syntax, replaced by the "@=" expressions
+ * (see LegacyGridExpressionParser).
  *
  * @experimental
  */

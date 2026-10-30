@@ -112,7 +112,9 @@ final class TwigGridRenderer implements GridRendererInterface
      */
     private function parseOptions(GridViewInterface $gridView, array $options, mixed $data): array
     {
-        // BC layer: the options of the legacy resource grids are still parsed from the request
+        // BC layer: the resource grids are still parsed by the legacy options parser, from the request for the
+        // ResourceGridView and from the grid context variables otherwise, then their "@=" expressions are evaluated
+        // (see LegacyGridExpressionParser)
         if ($gridView instanceof ResourceGridView) {
             $options = $this->optionsParser->parseOptions($options, $gridView->getRequestConfiguration()->getRequest(), $data);
             $variables = $gridView->getVariables();

@@ -50,6 +50,7 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
 
         $driverConfiguration = $this->parametersParser->parseRequestValues($driverConfiguration, $request);
 
+        // BC layer: evaluates the "@=" expressions that the legacy parser leaves unevaluated (see LegacyGridExpressionParser)
         if (null !== $this->expressionParser) {
             // Same variables as ResourceGridView::getVariables()
             $variables = array_merge($request->request->all(), $request->query->all(), $request->attributes->all());

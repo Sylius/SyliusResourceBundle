@@ -22,12 +22,15 @@ use Sylius\Resource\Grid\View\Factory\ContextualGridViewFactoryInterface;
 use Sylius\Resource\Grid\View\GridContext;
 
 /**
- * Resolves the legacy "$name", "expr:..." and "!!int" values of the grid driver configuration
- * (e.g. the "$productId" repository argument), as ResourceGridViewFactory does, but from the grid context variables.
+ * BC layer: resolves the legacy values of the grid driver configuration for the request-free grid views.
  *
- * BC layer: it keeps the legacy syntax of the grid configurations working with the request-free grid views.
- * It lives in the bundle, as the legacy parsers do, while the grid context and the factory it decorates
- * live in the component. It will go away with the legacy parsers, in favour of the ArgumentParser.
+ * The legacy "$name", "expr:..." and "!!int" values (e.g. the "$productId" repository argument) are resolved
+ * as ResourceGridViewFactory does, but from the grid context variables, then the "@=" expressions that the legacy
+ * parser leaves unevaluated (see LegacyGridExpressionParser). It lives in the bundle, as the legacy parsers do,
+ * while the grid context and the factory it decorates live in the component.
+ *
+ * It will go away with the legacy parsers, when the driver configuration is resolved by sylius/grid-bundle
+ * (VariablesResolver).
  *
  * @experimental
  */
