@@ -28,6 +28,12 @@ use Sylius\Component\Grid\ExpressionLanguage\ExpressionEvaluatorInterface;
  *
  * The other values (the legacy "$name", "expr:" and "resource." ones) are left as is.
  *
+ * BC layer: the resource grids (ResourceGridView, and the context-aware views through the resource renderers
+ * and LegacyContextualGridViewFactory) are still parsed by the legacy OptionsParser / ParametersParser, which
+ * leave the "@=" expressions unevaluated. This evaluates them afterwards, with the same evaluator and variables
+ * as sylius/grid-bundle does for the other grids. It will go away with the legacy parsers, when the resource grids
+ * are parsed by sylius/grid-bundle (ActionOptionsParser, VariablesResolver).
+ *
  * @experimental
  */
 final class GridExpressionParser
