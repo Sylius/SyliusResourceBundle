@@ -35,4 +35,15 @@ final class ContextualGridView extends GridView implements GridContextAwareInter
     {
         return $this->gridContext;
     }
+
+    /**
+     * The grid context variables, e.g. "variables['productId']" in the grid expressions
+     * (see Sylius\Component\Grid\View\VariablesAwareGridViewInterface in sylius/grid-bundle).
+     *
+     * @return array<string, mixed>
+     */
+    public function getVariables(): array
+    {
+        return $this->gridContext->getVariables();
+    }
 }

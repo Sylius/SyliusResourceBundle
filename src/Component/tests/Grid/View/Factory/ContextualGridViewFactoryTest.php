@@ -44,4 +44,14 @@ final class ContextualGridViewFactoryTest extends TestCase
         // The legacy "$name" values are resolved by the resource bundle (see LegacyContextualGridViewFactory)
         $this->assertSame($driverConfiguration, $grid->getDriverConfiguration());
     }
+
+    public function testTheGridViewHasTheGridContextVariables(): void
+    {
+        $grid = Grid::fromCodeAndDriverConfiguration('app_book', 'doctrine/orm', []);
+
+        $gridView = (new ContextualGridViewFactory($this->createMock(DataProviderInterface::class)))
+            ->create($grid, new Parameters(), new GridContext(variables: ['slug' => 'mug']));
+
+        $this->assertSame(['slug' => 'mug'], $gridView->getVariables());
+    }
 }

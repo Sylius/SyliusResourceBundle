@@ -33,23 +33,28 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('sylius.routing.expression_language', ExpressionLanguage::class);
 
+    $services->set('sylius.resource.grid.expression_language', ExpressionLanguage::class);
+
     $services->set('sylius.expression_language.variables.token', TokenVariables::class)
         ->args([service('security.token_storage')->nullOnInvalid()])
         ->tag('sylius.metadata_variables')
         ->tag('sylius.resource_factory_variables')
-        ->tag('sylius.repository_variables');
+        ->tag('sylius.repository_variables')
+        ->tag('sylius.grid_variables');
 
     $services->set('sylius.expression_language.variables.request', RequestVariables::class)
         ->args([service('request_stack')])
         ->tag('sylius.metadata_variables')
         ->tag('sylius.resource_factory_variables')
         ->tag('sylius.repository_variables')
-        ->tag('sylius.routing_variables');
+        ->tag('sylius.routing_variables')
+        ->tag('sylius.grid_variables');
 
     $services->set('sylius.expression_language.variables.sylius_repositories', SyliusRepositoriesVariables::class)
         ->args([tagged_locator('sylius.repository')])
         ->tag('sylius.metadata_variables')
-        ->tag('sylius.resource_factory_variables');
+        ->tag('sylius.resource_factory_variables')
+        ->tag('sylius.grid_variables');
 
     $services->set('sylius.expression_language.variables_collection.metadata', VariablesCollection::class)
         ->args([tagged_iterator('sylius.metadata_variables')]);
@@ -66,9 +71,13 @@ return static function (ContainerConfigurator $container) {
     $services->set('sylius.expression_language.variables_collection.routing', VariablesCollection::class)
         ->args([tagged_iterator('sylius.routing_variables')]);
 
+    $services->set('sylius.expression_language.variables_collection.grid', VariablesCollection::class)
+        ->args([tagged_iterator('sylius.grid_variables')]);
+
     $services->set('sylius.expression_language.providers.throw_not_found_on_null', ThrowNotFoundOnNullExpressionFunctionProvider::class)
         ->tag('sylius.metadata_providers')
-        ->tag('sylius.resource_factory_providers');
+        ->tag('sylius.resource_factory_providers')
+        ->tag('sylius.grid_providers');
 
     $services->set('sylius.expression_language.vars_resolver.metadata', VarsResolver::class)
         ->args([service('sylius.expression_language.argument_parser.metadata')]);
@@ -106,5 +115,12 @@ return static function (ContainerConfigurator $container) {
             service('sylius.routing.expression_language'),
             service('sylius.expression_language.variables_collection.routing'),
             tagged_iterator('sylius.routing_providers'),
+        ]);
+
+    $services->set('sylius.expression_language.argument_parser.grid', ArgumentParser::class)
+        ->args([
+            service('sylius.resource.grid.expression_language'),
+            service('sylius.expression_language.variables_collection.grid'),
+            tagged_iterator('sylius.grid_providers'),
         ]);
 };

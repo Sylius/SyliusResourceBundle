@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ResourceBundle\Grid\Renderer;
 
+use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
@@ -35,16 +36,20 @@ final class TwigGridRenderer implements GridRendererInterface
 
     private array $actionTemplates;
 
+    private ?GridExpressionParser $expressionParser;
+
     public function __construct(
         GridRendererInterface $gridRenderer,
         Environment $twig,
         OptionsParserInterface $optionsParser,
         array $actionTemplates = [],
+        ?GridExpressionParser $expressionParser = null,
     ) {
         $this->gridRenderer = $gridRenderer;
         $this->twig = $twig;
         $this->optionsParser = $optionsParser;
         $this->actionTemplates = $actionTemplates;
+        $this->expressionParser = $expressionParser;
     }
 
     public function render(GridViewInterface $gridView, ?string $template = null): string
@@ -109,12 +114,16 @@ final class TwigGridRenderer implements GridRendererInterface
     {
         // BC layer: the options of the legacy resource grids are still parsed from the request
         if ($gridView instanceof ResourceGridView) {
-            return $this->optionsParser->parseOptions($options, $gridView->getRequestConfiguration()->getRequest(), $data);
+            $options = $this->optionsParser->parseOptions($options, $gridView->getRequestConfiguration()->getRequest(), $data);
+            $variables = $gridView->getVariables();
+        } else {
+            Assert::isInstanceOf($gridView, GridContextAwareInterface::class);
+            Assert::isInstanceOf($this->optionsParser, VariablesOptionsParserInterface::class);
+
+            $variables = $gridView->getGridContext()->getVariables();
+            $options = $this->optionsParser->parseOptionsWithVariables($options, $variables, $data);
         }
 
-        Assert::isInstanceOf($gridView, GridContextAwareInterface::class);
-        Assert::isInstanceOf($this->optionsParser, VariablesOptionsParserInterface::class);
-
-        return $this->optionsParser->parseOptionsWithVariables($options, $gridView->getGridContext()->getVariables(), $data);
+        return $this->expressionParser?->parseExpressions($options, $variables, ['resource' => $data]) ?? $options;
     }
 }

@@ -16,6 +16,7 @@ namespace Sylius\Bundle\ResourceBundle\Tests\Grid\Renderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Grid\Parser\GridExpressionParser;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\OptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Parser\VariablesOptionsParserInterface;
 use Sylius\Bundle\ResourceBundle\Grid\Renderer\TwigGridRenderer;
@@ -27,6 +28,9 @@ use Sylius\Component\Grid\Renderer\GridRendererInterface;
 use Sylius\Component\Grid\View\GridView;
 use Sylius\Resource\Grid\View\ContextualGridView;
 use Sylius\Resource\Grid\View\GridContext;
+use Sylius\Resource\Symfony\ExpressionLanguage\ArgumentParser;
+use Sylius\Resource\Symfony\ExpressionLanguage\VariablesCollection;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -195,5 +199,37 @@ final class TwigGridRendererTest extends TestCase
             ->method('renderAction')
             ->with($gridView, $action, null)
             ->willReturn($result);
+    }
+
+    public function testItEvaluatesTheExpressionsOfTheOptionsOfALegacyResourceGridView(): void
+    {
+        $request = new Request(attributes: ['slug' => 'mug']);
+        $gridView = $this->createConfiguredMock(ResourceGridView::class, [
+            'getRequestConfiguration' => $this->createConfiguredMock(RequestConfiguration::class, ['getRequest' => $request]),
+            'getVariables' => ['slug' => 'mug'],
+        ]);
+        $action = $this->createActionMock('link', ['link' => ['parameters' => ['slug' => "@=variables['slug']", 'id' => '@=resource.id']]]);
+        $data = (object) ['id' => 7];
+
+        $renderer = new TwigGridRenderer(
+            $this->gridRenderer,
+            $this->twig,
+            $this->optionsParser,
+            self::ACTION_TEMPLATES,
+            new GridExpressionParser(new ArgumentParser(new ExpressionLanguage(), new VariablesCollection([]))),
+        );
+
+        $this->optionsParser->method('parseOptions')->willReturnArgument(0);
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@SyliusGrid/Action/_link.html.twig', [
+                'grid' => $gridView,
+                'action' => $action,
+                'data' => $data,
+                'options' => ['link' => ['parameters' => ['slug' => 'mug', 'id' => 7]]],
+            ])
+            ->willReturn('<a href="#">Action!</a>');
+
+        $this->assertSame('<a href="#">Action!</a>', $renderer->renderAction($gridView, $action, $data));
     }
 }

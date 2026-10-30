@@ -59,6 +59,17 @@ class ResourceGridView extends GridView implements GridContextAwareInterface
         return $this->requestConfiguration;
     }
 
+    /**
+     * The request values (attributes, including the route parameters, then query, then request), as the grid context
+     * variables, so that the grid expressions can use "variables['productId']" both in the regular and in the live grids.
+     *
+     * @return array<string, mixed>
+     */
+    public function getVariables(): array
+    {
+        return $this->getGridContext()->getVariables();
+    }
+
     public function getGridContext(): GridContext
     {
         if (null !== $this->gridContext) {

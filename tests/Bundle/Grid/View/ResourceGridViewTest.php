@@ -88,4 +88,12 @@ final class ResourceGridViewTest extends TestCase
             $this->requestConfiguration,
         );
     }
+
+    public function testItHasTheRequestValuesAsVariables(): void
+    {
+        $request = new Request(query: ['page' => 2], attributes: ['_route_params' => ['slug' => 'mug'], 'slug' => 'mug']);
+        $this->requestConfiguration->method('getRequest')->willReturn($request);
+
+        $this->assertSame(['page' => 2, '_route_params' => ['slug' => 'mug'], 'slug' => 'mug'], $this->gridView->getVariables());
+    }
 }
