@@ -17,6 +17,10 @@ namespace Sylius\Bundle\ResourceBundle\Controller;
  * Parses parameters ("$name", "expr:...", "!!int $name") without any request,
  * the "$name" placeholders being resolved from the given variables (see GridContext::getVariables()).
  *
+ * BC layer: this method belongs to ParametersParserInterface, but adding it there would break its implementations.
+ * It is therefore a separate interface, implemented by ParametersParser.
+ * It is meant to be merged into ParametersParserInterface in the next major version.
+ *
  * @experimental
  */
 interface VariablesParametersParserInterface

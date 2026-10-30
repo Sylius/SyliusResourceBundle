@@ -24,6 +24,10 @@ use Sylius\Resource\Grid\View\GridContext;
  * Resolves the legacy "$name", "expr:..." and "!!int" values of the grid driver configuration
  * (e.g. the "$productId" repository argument), as ResourceGridViewFactory does, but from the grid context variables.
  *
+ * BC layer: it keeps the legacy syntax of the grid configurations working with the request-free grid views.
+ * It lives in the bundle, as the legacy parsers do, while the grid context and the factory it decorates
+ * live in the component.
+ *
  * @experimental
  */
 final class LegacyContextualGridViewFactory implements ContextualGridViewFactoryInterface
