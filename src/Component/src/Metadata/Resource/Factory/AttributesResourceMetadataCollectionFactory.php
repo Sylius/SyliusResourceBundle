@@ -38,6 +38,16 @@ final class AttributesResourceMetadataCollectionFactory implements ResourceMetad
 
         $attributes = ClassReflection::getClassAttributes($resourceClass);
 
+        // Start with the first explicit resource so leading operations use its defaults.
+        foreach ($attributes as $key => $attribute) {
+            if (is_a($attribute->getName(), AsResource::class, true)) {
+                unset($attributes[$key]);
+                array_unshift($attributes, $attribute);
+
+                break;
+            }
+        }
+
         foreach ($this->buildResourceOperations($attributes, $resourceClass) as $resource) {
             $resourceMetadataCollection[] = $resource;
         }

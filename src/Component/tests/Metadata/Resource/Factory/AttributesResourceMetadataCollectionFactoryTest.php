@@ -537,21 +537,21 @@ final class AttributesResourceMetadataCollectionFactoryTest extends TestCase
         $this->assertSame(Responder::class, $operation->getResponder());
     }
 
-    public function testItCreatesResourceMetadataWithRoutePrefix(): void
+    public function testItUsesTheResourceRoutePrefixForOperationsBeforeAndAfterTheResource(): void
     {
-        $this->resourceRegistry
-            ->method('get')
-            ->with('app.dummy')
-            ->willReturn(Metadata::fromAliasAndConfiguration('app.dummy', [
-                'driver' => 'dummy_driver',
-                'classes' => [
-                    'model' => 'App\Dummy',
-                    'form' => 'App\Form',
-                ],
-            ]));
+        $metadata = Metadata::fromAliasAndConfiguration('app.dummy', [
+            'driver' => 'dummy_driver',
+            'classes' => [
+                'model' => 'App\Dummy',
+                'form' => 'App\Form',
+            ],
+        ]);
+        $this->resourceRegistry->method('get')->with('app.dummy')->willReturn($metadata);
+        $this->resourceRegistry->method('getByClass')->with(DummyResourceWithRoutePrefix::class)->willReturn($metadata);
 
         $metadataCollection = $this->factory->create(DummyResourceWithRoutePrefix::class);
         $this->assertInstanceOf(ResourceMetadataCollection::class, $metadataCollection);
+        $this->assertCount(1, $metadataCollection);
 
         $resource = $metadataCollection->getIterator()->current();
         $this->assertInstanceOf(ResourceMetadata::class, $resource);
