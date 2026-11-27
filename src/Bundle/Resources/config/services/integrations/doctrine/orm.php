@@ -17,6 +17,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ContainerRepositoryFactory;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\Form\Builder\DefaultFormBuilder as DefaultFormBuilderInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\Handler\ResourceDeleteHandler;
 use Sylius\Bundle\ResourceBundle\EventListener\ORMMappedSuperClassSubscriber;
 use Sylius\Bundle\ResourceBundle\EventListener\ORMRepositoryClassSubscriber;
 use Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener as TranslatableListener;
@@ -60,4 +61,11 @@ return static function (ContainerConfigurator $container) {
 
     $services->alias(ContainerRepositoryFactory::class, 'sylius.doctrine.orm.container_repository_factory')
         ->private();
+
+    $services->set('sylius.doctrine.orm.resource_controller.resource_delete_handler', ResourceDeleteHandler::class)
+        ->decorate('sylius.resource_controller.resource_delete_handler', priority: -256)
+        ->args([
+            service('sylius.doctrine.orm.resource_controller.resource_delete_handler.inner'),
+            service('doctrine'),
+        ]);
 };
