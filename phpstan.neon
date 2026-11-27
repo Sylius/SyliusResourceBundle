@@ -6,7 +6,7 @@ includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
-    level: max
+    level: 9
 
     reportUnmatchedIgnoredErrors: false
 
