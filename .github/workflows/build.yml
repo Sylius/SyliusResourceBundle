@@ -58,7 +58,7 @@ jobs:
                 include:
                     -   php: "8.4"
                         orm: "3.*"
-                        symfony: "8.0.*"
+                        symfony: "8.1.*"
                     # with Behat transliterator and Gedmo Doctrine extensions optional packages
                     -   behat-transliterator: '^1.2'
                         gedmo-doctrine-extensions: '^3.17.1'
