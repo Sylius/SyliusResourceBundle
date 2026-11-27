@@ -19,8 +19,8 @@ use Sylius\Resource\Metadata\Index;
 use Sylius\Resource\Metadata\Show;
 use Sylius\Resource\Metadata\Update;
 
-#[AsResource(alias: 'app.dummy', routePrefix: '/admin')]
 #[Create]
+#[AsResource(alias: 'app.dummy', routePrefix: '/admin')]
 #[Update]
 #[Index]
 #[Show]

@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Resource\Tests\Dummy;
 
+use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Metadata\AsResource;
 
+#[ORM\Entity]
 #[AsResource]
 final class DummyResource
 {
