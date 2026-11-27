@@ -7,36 +7,6 @@ parameters:
 			path: src/Bundle/AbstractResourceBundle.php
 
 		-
-			message: '#^Parameter \#1 \$class of function class_exists expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/AbstractResourceBundle.php
-
-		-
-			message: '#^Parameter \#1 \$driverType of method Sylius\\Bundle\\ResourceBundle\\AbstractResourceBundle\:\:getMappingCompilerPassInfo\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/AbstractResourceBundle.php
-
-		-
-			message: '#^Parameter \#1 \$pass of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:addCompilerPass\(\) expects Symfony\\Component\\DependencyInjection\\Compiler\\CompilerPassInterface, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/AbstractResourceBundle.php
-
-		-
-			message: '#^Parameter \#2 \$method of function method_exists expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/AbstractResourceBundle.php
-
-		-
-			message: '#^Parameter \#3 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/AbstractResourceBundle.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Command\\DebugResourceCommand\:\:addResourceOperationsRows\(\) has parameter \$rows with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -69,12 +39,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Command\\DebugResourceCommand\:\:resourceToArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/Command/DebugResourceCommand.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/Command/DebugResourceCommand.php
 
@@ -129,12 +93,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\NewResourceFactory\:\:create\(\) has parameter \$factory with generic interface Sylius\\Resource\\Factory\\FactoryInterface but does not specify its types\: T$#'
 			identifier: missingType.generics
-			count: 1
-			path: src/Bundle/Controller/NewResourceFactory.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\NewResourceFactory\:\:create\(\) should return Sylius\\Resource\\Model\\ResourceInterface but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Bundle/Controller/NewResourceFactory.php
 
@@ -331,12 +289,6 @@ parameters:
 			path: src/Bundle/Controller/RequestConfiguration.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\RequestConfiguration\:\:getRedirectReferer\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/RequestConfiguration.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\RequestConfiguration\:\:getRepositoryArguments\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -505,12 +457,6 @@ parameters:
 			path: src/Bundle/Controller/RequestConfigurationFactory.php
 
 		-
-			message: '#^Parameter \#1 \$parameters of class Sylius\\Bundle\\ResourceBundle\\Controller\\Parameters constructor expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/RequestConfigurationFactory.php
-
-		-
 			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -527,12 +473,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/Controller/RequestConfigurationFactory.php
-
-		-
-			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
 
 		-
 			message: '#^Call to an undefined method object\:\:createBuilder\(\)\.$#'
@@ -619,30 +559,6 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Cannot call method add\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Cannot call method duplicate\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Cannot call method getFlashBag\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Cannot call method getUser\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Cannot call method get\(\) on Symfony\\Component\\DependencyInjection\\ContainerInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 19
@@ -658,12 +574,6 @@ parameters:
 			message: '#^Cannot call method withLink\(\) on mixed\.$#'
 			identifier: method.nonObject
 			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 2
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
@@ -709,12 +619,6 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:createFormBuilder\(\) should return Symfony\\Component\\Form\\FormBuilderInterface but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:createForm\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
@@ -723,12 +627,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:createForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:createForm\(\) should return Symfony\\Component\\Form\\FormInterface but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Bundle/Controller/ResourceController.php
 
@@ -751,12 +649,6 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:dispatchMessage\(\) should return Symfony\\Component\\Messenger\\Envelope but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:forward\(\) has parameter \$path with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -769,31 +661,13 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:forward\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:generateUrl\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:generateUrl\(\) should return string but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:getDoctrine\(\) should return Doctrine\\Persistence\\ManagerRegistry but returns object\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:isCsrfTokenValid\(\) should return bool but returns mixed\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Bundle/Controller/ResourceController.php
@@ -807,12 +681,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:isGranted\(\) has parameter \$subject with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:isGranted\(\) should return bool but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Bundle/Controller/ResourceController.php
 
@@ -847,12 +715,6 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:renderView\(\) should return string but returns mixed\.$#'
-			identifier: return.type
-			count: 2
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:render\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -861,24 +723,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController\:\:stream\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Parameter \#1 \$attributes of method Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException\:\:setAttributes\(\) expects array\|string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
-			message: '#^Parameter \#1 \$resource of method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceDeleteHandlerInterface\:\:handle\(\) expects Sylius\\Resource\\Model\\ResourceInterface, mixed given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/Controller/ResourceController.php
 
@@ -903,7 +747,7 @@ parameters:
 		-
 			message: '#^Parameter \#2 \$resource of method Sylius\\Bundle\\ResourceBundle\\Controller\\RedirectHandlerInterface\:\:redirectToIndex\(\) expects Sylius\\Resource\\Model\\ResourceInterface\|null, mixed given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 1
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
@@ -925,21 +769,15 @@ parameters:
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
-			message: '#^Parameter \#2 \$view of method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandlerInterface\:\:handle\(\) expects FOS\\RestBundle\\View\\View, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourceController.php
-
-		-
 			message: '#^Parameter \#3 \$resource of method Sylius\\Bundle\\ResourceBundle\\Controller\\EventDispatcherInterface\:\:dispatchPostEvent\(\) expects Sylius\\Resource\\Model\\ResourceInterface, mixed given\.$#'
 			identifier: argument.type
-			count: 3
+			count: 2
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
 			message: '#^Parameter \#3 \$resource of method Sylius\\Bundle\\ResourceBundle\\Controller\\EventDispatcherInterface\:\:dispatchPreEvent\(\) expects Sylius\\Resource\\Model\\ResourceInterface, mixed given\.$#'
 			identifier: argument.type
-			count: 3
+			count: 2
 			path: src/Bundle/Controller/ResourceController.php
 
 		-
@@ -1021,30 +859,6 @@ parameters:
 			path: src/Bundle/Controller/ResourcesResolver.php
 
 		-
-			message: '#^Parameter \#1 \$criteria of method Doctrine\\Persistence\\ObjectRepository\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:findBy\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourcesResolver.php
-
-		-
-			message: '#^Parameter \#1 \$criteria of method Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:createPaginator\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourcesResolver.php
-
-		-
-			message: '#^Parameter \#2 \$orderBy of method Doctrine\\Persistence\\ObjectRepository\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:findBy\(\) expects array\<string, ''ASC''\|''asc''\|''DESC''\|''desc''\>\|null, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourcesResolver.php
-
-		-
-			message: '#^Parameter \#2 \$sorting of method Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:createPaginator\(\) expects array\<string, string\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ResourcesResolver.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ResourcesResolverInterface\:\:getResources\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -1063,58 +877,10 @@ parameters:
 			path: src/Bundle/Controller/SingleResourceProvider.php
 
 		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\SingleResourceProvider\:\:get\(\) should return Sylius\\Resource\\Model\\ResourceInterface\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/SingleResourceProvider.php
-
-		-
-			message: '#^Parameter \#1 \$criteria of method Doctrine\\Persistence\\ObjectRepository\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:findOneBy\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/SingleResourceProvider.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\SingleResourceProviderInterface\:\:get\(\) has parameter \$repository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Bundle/Controller/SingleResourceProviderInterface.php
-
-		-
-			message: '#^Cannot call method apply\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/StateMachine.php
-
-		-
-			message: '#^Cannot call method can\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/StateMachine.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\StateMachine\:\:can\(\) should return bool but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/StateMachine.php
-
-		-
-			message: '#^Cannot call method enableMaxDepth\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/ViewHandler.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\ViewHandler\:\:handle\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/ViewHandler.php
-
-		-
-			message: '#^Parameter \#1 \$groups of method FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface\:\:setExclusionStrategyGroups\(\) expects array\<string\>\|string, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Controller/ViewHandler.php
 
 		-
 			message: '#^Parameter \#1 \$version of method FOS\\RestBundle\\View\\ConfigurableViewHandlerInterface\:\:setExclusionStrategyVersion\(\) expects string, mixed given\.$#'
@@ -1123,56 +889,14 @@ parameters:
 			path: src/Bundle/Controller/ViewHandler.php
 
 		-
-			message: '#^Cannot call method apply\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/Workflow.php
-
-		-
-			message: '#^Cannot call method can\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Controller/Workflow.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Controller\\Workflow\:\:can\(\) should return bool but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Controller/Workflow.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$resources has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/DoctrineTargetEntitiesResolverPass.php
 
 		-
-			message: '#^Cannot access offset ''classes'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
-			message: '#^Cannot access offset ''interface'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
-			message: '#^Cannot access offset ''model'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:getModel\(\) has parameter \$configuration with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:getModel\(\) should return string but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
 
@@ -1185,18 +909,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:resolve\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
-			message: '#^Parameter \#2 \$configuration of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\Helper\\TargetEntitiesResolver\:\:getModel\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
-
-		-
-			message: '#^Possibly invalid array key type mixed\.$#'
-			identifier: offsetAccess.invalidOffset
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/Helper/TargetEntitiesResolver.php
 
@@ -1225,26 +937,8 @@ parameters:
 			path: src/Bundle/DependencyInjection/Compiler/PrioritizedCompositeServicePass.php
 
 		-
-			message: '#^Parameter \#3 \$attributes of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\PrioritizedCompositeServicePass\:\:addMethodCall\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/PrioritizedCompositeServicePass.php
-
-		-
-			message: '#^Cannot access offset ''type'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterFormBuilderPass.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$resources has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterFqcnControllersPass.php
-
-		-
-			message: '#^Parameter \#2 \$parameters of static method Sylius\\Resource\\Metadata\\Metadata\:\:fromAliasAndConfiguration\(\) expects array, mixed given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/RegisterFqcnControllersPass.php
 
@@ -1255,34 +949,10 @@ parameters:
 			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceRepositoryPass.php
 
 		-
-			message: '#^Cannot access offset ''state_machine_component'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$resources has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/DependencyInjection/Compiler/RegisterResourceStateMachinePass.php
-
-		-
-			message: '#^Cannot access offset ''classes'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
-
-		-
-			message: '#^Cannot access offset ''model'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
 
 		-
 			message: '#^PHPDoc tag @var for variable \$interfaces has no value type specified in iterable type array\.$#'
@@ -1303,12 +973,6 @@ parameters:
 			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
 
 		-
-			message: '#^Parameter \#1 \$class of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\RegisterResourcesPass\:\:validateSyliusResource\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterResourcesPass.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$bundles has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1317,12 +981,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @var for variable \$settings has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php
-
-		-
-			message: '#^Parameter \#2 \$stateMachine of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Compiler\\RegisterStateMachinePass\:\:setStateMachine\(\) expects string, mixed given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/DependencyInjection/Compiler/RegisterStateMachinePass.php
 
@@ -1345,117 +1003,15 @@ parameters:
 			path: src/Bundle/DependencyInjection/Compiler/WinzouStateMachinePass.php
 
 		-
-			message: '#^Cannot call method addDefaultsIfNotSet\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method arrayNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 5
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method booleanNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method cannotBeEmpty\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 12
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method children\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method defaultFalse\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method defaultNull\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 6
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method defaultValue\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 10
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
 			message: '#^Cannot call method end\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 3
 			path: src/Bundle/DependencyInjection/Configuration.php
 
 		-
-			message: '#^Cannot call method end\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 49
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method info\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method integerNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method integerPrototype\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method isRequired\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 4
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method prototype\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method scalarNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 18
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method setDeprecated\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
 			message: '#^Cannot call method variableNode\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 2
-			path: src/Bundle/DependencyInjection/Configuration.php
-
-		-
-			message: '#^Cannot call method variableNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
 			path: src/Bundle/DependencyInjection/Configuration.php
 
 		-
@@ -1477,12 +1033,6 @@ parameters:
 			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
 
 		-
-			message: '#^Parameter \#2 \$type of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:registerAliasForArgument\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Driver/AbstractDriver.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$repositoryInterfaces has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1501,18 +1051,6 @@ parameters:
 			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
 
 		-
-			message: '#^Parameter \#2 \$type of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:registerAliasForArgument\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrineORMDriver.php
-
-		-
-			message: '#^Parameter \#1 \$array of function array_diff expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
-
-		-
 			message: '#^Parameter \#1 \$array of function array_keys expects array, array\|string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -1520,12 +1058,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$class of class Symfony\\Component\\DependencyInjection\\Definition constructor expects string\|null, class\-string\|Symfony\\Component\\DependencyInjection\\Parameter given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed, mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Bundle/DependencyInjection/Driver/Doctrine/DoctrinePHPCRDriver.php
@@ -1549,27 +1081,9 @@ parameters:
 			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
 
 		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/DependencyInjection/Extension/AbstractResourceExtension.php
-
-		-
-			message: '#^Cannot call method defaultValue\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
-
-		-
 			message: '#^Cannot call method end\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 1
-			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
-
-		-
-			message: '#^Cannot call method end\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 4
 			path: src/Bundle/DependencyInjection/PagerfantaConfiguration.php
 
 		-
@@ -1583,54 +1097,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
-
-		-
-			message: '#^Parameter \#2 \$config of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:prependExtensionConfig\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
-
-		-
-			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/PagerfantaExtension.php
-
-		-
-			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Cannot access offset ''driver'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Cannot access offset ''enabled'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Cannot access offset ''imports'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Cannot access offset ''locale_provider'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Cannot access offset ''translation'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
 
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:autoRegisterResources\(\) has parameter \$config with no value type specified in iterable type array\.$#'
@@ -1690,84 +1156,6 @@ parameters:
 			message: '#^PHPDoc tag @var for variable \$resources has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 2
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#1 \$configuredDrivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:checkConfiguredDrivers\(\) expects array\<string\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#1 \$directories of static method Sylius\\Resource\\Reflection\\ReflectionClassRecursiveIterator\:\:getReflectionClassesFromDirectories\(\) expects array\<string\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#1 \$drivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadPersistence\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#1 \$loadedResources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadResources\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$availableDrivers of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:checkConfiguredDrivers\(\) expects array\<string\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$callback of function array_reduce expects callable\(bool, mixed\)\: bool, Closure\(bool, string\)\: bool given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$id of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:setAlias\(\) expects string\|Symfony\\Component\\DependencyInjection\\Alias, mixed given\.$#'
-			identifier: argument.type
-			count: 3
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$parameters of static method Sylius\\Resource\\Metadata\\Metadata\:\:fromAliasAndConfiguration\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$resources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\SyliusResourceExtension\:\:loadPersistence\(\) expects array\<string, array\{driver\?\: string\|false\}\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 3
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
 			path: src/Bundle/DependencyInjection/SyliusResourceExtension.php
 
 		-
@@ -1849,18 +1237,6 @@ parameters:
 			path: src/Bundle/Doctrine/ORM/EntityRepository.php
 
 		-
-			message: '#^Parameter \#2 \$order of method Doctrine\\ORM\\QueryBuilder\:\:addOrderBy\(\) expects SortDirection\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Doctrine/ORM/EntityRepository.php
-
-		-
-			message: '#^Parameter \#2 \$order of method Doctrine\\ORM\\QueryBuilder\:\:addOrderBy\(\) expects string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Doctrine/ORM/EntityRepository.php
-
-		-
 			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:stringNotEmpty\(\) with class\-string will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 1
@@ -1909,12 +1285,6 @@ parameters:
 			path: src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php
 
 		-
-			message: '#^Parameter \#1 \$type of method Sylius\\Bundle\\ResourceBundle\\EventListener\\ORMMappedSuperClassSubscriber\:\:isRelation\(\) expects int, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Bundle/EventListener/ORMMappedSuperClassSubscriber.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\EventListener\\ORMRepositoryClassSubscriber\:\:setCustomRepositoryClass\(\) has parameter \$metadata with generic class Doctrine\\ORM\\Mapping\\ClassMetadata but does not specify its types\: T$#'
 			identifier: missingType.generics
 			count: 1
@@ -1931,12 +1301,6 @@ parameters:
 			identifier: varTag.nativeType
 			count: 1
 			path: src/Bundle/EventListener/ORMRepositoryClassSubscriber.php
-
-		-
-			message: '#^Cannot access offset ''columns'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/EventListener/ORMTranslatableListener.php
 
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\EventListener\\ORMTranslatableListener\:\:hasUniqueConstraint\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
@@ -1963,18 +1327,6 @@ parameters:
 			path: src/Bundle/EventListener/ORMTranslatableListener.php
 
 		-
-			message: '#^Parameter \#1 \$array of function array_diff expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/EventListener/ORMTranslatableListener.php
-
-		-
-			message: '#^Parameter \#2 \$arrays of function array_diff expects an array of values castable to string, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/EventListener/ORMTranslatableListener.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\ExpressionLanguage\\ExpressionLanguage\:\:__construct\(\) has parameter \$providers with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1985,18 +1337,6 @@ parameters:
 			identifier: varTag.nativeType
 			count: 1
 			path: src/Bundle/ExpressionLanguage/ExpressionLanguage.php
-
-		-
-			message: '#^Parameter \#2 \$providers of method Symfony\\Component\\DependencyInjection\\ExpressionLanguage\:\:__construct\(\) expects iterable\<Symfony\\Component\\ExpressionLanguage\\ExpressionFunctionProviderInterface\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/ExpressionLanguage/ExpressionLanguage.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/ExpressionLanguage/NotNullExpressionFunctionProvider.php
 
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Form\\Builder\\DefaultFormBuilderInterface\:\:build\(\) has parameter \$options with no value type specified in iterable type array\.$#'
@@ -2101,100 +1441,16 @@ parameters:
 			path: src/Bundle/Form/EventSubscriber/AddCodeFormSubscriber.php
 
 		-
-			message: '#^Cannot access offset ''button_add_label'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Extension/CollectionTypeExtension.php
-
-		-
-			message: '#^Cannot access offset ''button_delete_label'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Extension/CollectionTypeExtension.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$default has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php
 
 		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 3
-			path: src/Bundle/Form/Registry/FormTypeRegistry.php
-
-		-
-			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Form\\Registry\\FormTypeRegistry\:\:get\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Bundle/Form/Registry/FormTypeRegistry.php
-
-		-
 			message: '#^Property Sylius\\Bundle\\ResourceBundle\\Form\\Registry\\FormTypeRegistry\:\:\$formTypes type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/Form/Registry/FormTypeRegistry.php
-
-		-
-			message: '#^Binary operation "\." between ''\['' and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Parameter \#1 \$child of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects string\|Symfony\\Component\\Form\\FormBuilderInterface, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Parameter \#2 \$type of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects class\-string\<Symfony\\Component\\Form\\FormTypeInterface\>\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Parameter \#2 \$type of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$replacements of function array_replace expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Parameter \#3 \$options of method Symfony\\Component\\Form\\FormBuilderInterface\:\:add\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Form/Type/FixedCollectionType.php
-
-		-
-			message: '#^Cannot access offset ''choice_name'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Type/ResourceAutocompleteChoiceType.php
-
-		-
-			message: '#^Cannot access offset ''choice_value'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Type/ResourceAutocompleteChoiceType.php
-
-		-
-			message: '#^Cannot access offset ''multiple'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Type/ResourceAutocompleteChoiceType.php
-
-		-
-			message: '#^Cannot access offset ''placeholder'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Form/Type/ResourceAutocompleteChoiceType.php
 
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Form\\Type\\ResourceToIdentifierType\:\:__construct\(\) has parameter \$repository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
@@ -2217,12 +1473,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Grid\\Controller\\ResourcesResolver\:\:getResources\(\) has parameter \$repository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
 			identifier: missingType.generics
-			count: 1
-			path: src/Bundle/Grid/Controller/ResourcesResolver.php
-
-		-
-			message: '#^Parameter \#1 \$parameters of class Sylius\\Component\\Grid\\Parameters constructor expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/Grid/Controller/ResourcesResolver.php
 
@@ -2287,12 +1537,6 @@ parameters:
 			path: src/Bundle/Grid/Renderer/TwigBulkActionGridRenderer.php
 
 		-
-			message: '#^Parameter \#1 \$name of method Twig\\Environment\:\:render\(\) expects string\|Twig\\TemplateWrapper, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Grid/Renderer/TwigBulkActionGridRenderer.php
-
-		-
 			message: '#^Property Sylius\\Bundle\\ResourceBundle\\Grid\\Renderer\\TwigBulkActionGridRenderer\:\:\$bulkActionTemplates type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -2311,12 +1555,6 @@ parameters:
 			path: src/Bundle/Grid/Renderer/TwigGridRenderer.php
 
 		-
-			message: '#^Parameter \#1 \$name of method Twig\\Environment\:\:render\(\) expects string\|Twig\\TemplateWrapper, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Grid/Renderer/TwigGridRenderer.php
-
-		-
 			message: '#^Property Sylius\\Bundle\\ResourceBundle\\Grid\\Renderer\\TwigGridRenderer\:\:\$actionTemplates type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -2329,75 +1567,15 @@ parameters:
 			path: src/Bundle/Grid/View/LegacyGridViewFactory.php
 
 		-
-			message: '#^Parameter \#1 \$driverConfiguration of method Sylius\\Component\\Grid\\Definition\\Grid\:\:setDriverConfiguration\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Grid/View/ResourceGridViewFactory.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\ResourceBundleInterface\:\:getSupportedDrivers\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/ResourceBundleInterface.php
 
 		-
-			message: '#^Cannot call method arrayNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method booleanNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method cannotBeEmpty\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 8
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method defaultValue\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method end\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 19
-			path: src/Bundle/Routing/Configuration.php
-
-		-
 			message: '#^Cannot call method scalarNode\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 1
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method scalarNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 7
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method scalarPrototype\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 3
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method useAttributeAsKey\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bundle/Routing/Configuration.php
-
-		-
-			message: '#^Cannot call method variableNode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 2
 			path: src/Bundle/Routing/Configuration.php
 
 		-
@@ -2407,58 +1585,10 @@ parameters:
 			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
 
 		-
-			message: '#^Parameter \#1 \$directories of static method Sylius\\Resource\\Reflection\\ReflectionClassRecursiveIterator\:\:getReflectionClassesFromDirectories\(\) expects array\<string\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
-
-		-
 			message: '#^Property Sylius\\Bundle\\ResourceBundle\\Routing\\CrudRoutesAttributesLoader\:\:\$mapping type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Bundle/Routing/CrudRoutesAttributesLoader.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''''\|''/'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 2
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''/'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 6
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''/new'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''_'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Cannot access offset ''all'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Cannot access offset ''serialization_groups'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
 
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Routing\\ResourceLoader\:\:createRoute\(\) has parameter \$configuration with no value type specified in iterable type array\.$#'
@@ -2497,120 +1627,6 @@ parameters:
 			path: src/Bundle/Routing/ResourceLoader.php
 
 		-
-			message: '#^Parameter \#1 \$alias of method Sylius\\Resource\\Metadata\\RegistryInterface\:\:get\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#1 \$array of function array_diff expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#1 \$haystack of function strpos expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#1 \$input of static method Symfony\\Component\\Yaml\\Yaml\:\:parse\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_diff expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 3
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#3 \$actionName of method Sylius\\Bundle\\ResourceBundle\\Routing\\ResourceLoader\:\:getRouteName\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#8 \$condition of method Sylius\\Bundle\\ResourceBundle\\Routing\\RouteFactoryInterface\:\:createRoute\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/ResourceLoader.php
-
-		-
-			message: '#^Parameter \#1 \$name of method Symfony\\Component\\Routing\\RouteCollection\:\:add\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#1 \$path of class Symfony\\Component\\Routing\\Route constructor expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#3 \$priority of method Symfony\\Component\\Routing\\RouteCollection\:\:add\(\) expects int, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#3 \$requirements of class Symfony\\Component\\Routing\\Route constructor expects array\<string\|Stringable\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#4 \$options of class Symfony\\Component\\Routing\\Route constructor expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#5 \$host of class Symfony\\Component\\Routing\\Route constructor expects string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#6 \$schemes of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
-			message: '#^Parameter \#7 \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteAttributesFactory.php
-
-		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Routing\\RouteFactory\:\:createRoute\(\) has parameter \$defaults with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -2637,24 +1653,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Routing\\RouteFactory\:\:createRoute\(\) has parameter \$schemes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Bundle/Routing/RouteFactory.php
-
-		-
-			message: '#^Parameter \#3 \$requirements of class Symfony\\Component\\Routing\\Route constructor expects array\<string\|Stringable\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteFactory.php
-
-		-
-			message: '#^Parameter \#6 \$schemes of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RouteFactory.php
-
-		-
-			message: '#^Parameter \#7 \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Bundle/Routing/RouteFactory.php
 
@@ -2695,12 +1693,6 @@ parameters:
 			path: src/Bundle/Routing/RoutesAttributesLoader.php
 
 		-
-			message: '#^Parameter \#1 \$directories of static method Sylius\\Resource\\Reflection\\ReflectionClassRecursiveIterator\:\:getReflectionClassesFromDirectories\(\) expects array\<string\>, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Routing/RoutesAttributesLoader.php
-
-		-
 			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:nullOrString\(\) with string\|null will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 1
@@ -2728,18 +1720,6 @@ parameters:
 			message: '#^Method Sylius\\Bundle\\ResourceBundle\\Validator\\UniqueWithinCollectionConstraintValidator\:\:validate\(\) has parameter \$value with no value type specified in iterable type iterable\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php
-
-		-
-			message: '#^Parameter \#1 \$objectOrArray of method Symfony\\Component\\PropertyAccess\\PropertyAccessor\:\:getValue\(\) expects array\|object, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 2
 			path: src/Bundle/Validator/UniqueWithinCollectionConstraintValidator.php
 
 		-
@@ -2959,18 +1939,6 @@ parameters:
 			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
 
 		-
-			message: '#^Parameter \#2 \$offset of function array_slice expects int, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
-
-		-
-			message: '#^Parameter \#3 \$length of function array_slice expects int\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Doctrine/Persistence/InMemoryRepository.php
-
-		-
 			message: '#^Property Sylius\\Resource\\Doctrine\\Persistence\\InMemoryRepository\:\:\$arrayObject with generic class ArrayObject does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -3045,18 +2013,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Resource\\Grid\\State\\RequestGridProvider\:\:resolveMaxPerPage\(\) has parameter \$gridLimits with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Grid/State/RequestGridProvider.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Grid\\State\\RequestGridProvider\:\:resolveMaxPerPage\(\) should return int but returns mixed\.$#'
-			identifier: return.type
-			count: 2
-			path: src/Component/src/Grid/State/RequestGridProvider.php
-
-		-
-			message: '#^Parameter \#1 \$parameters of class Sylius\\Component\\Grid\\Parameters constructor expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Component/src/Grid/State/RequestGridProvider.php
 
@@ -3529,12 +2485,6 @@ parameters:
 			path: src/Component/src/Metadata/Extractor/AbstractResourceExtractor.php
 
 		-
-			message: '#^Parameter \#2 \$callback of function preg_replace_callback expects callable\(array\<string\>\)\: string, Closure\(mixed\)\: mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Extractor/AbstractResourceExtractor.php
-
-		-
 			message: '#^Property Sylius\\Resource\\Metadata\\Extractor\\AbstractResourceExtractor\:\:\$collectedParameters type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3697,12 +2647,6 @@ parameters:
 			path: src/Component/src/Metadata/Index.php
 
 		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:__construct\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3715,12 +2659,6 @@ parameters:
 			path: src/Component/src/Metadata/Metadata.php
 
 		-
-			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getClass\(\) should return class\-string but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getDriver\(\) never returns false so it can be removed from the return type\.$#'
 			identifier: return.unusedType
 			count: 1
@@ -3729,12 +2667,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getParameter\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Metadata\\Metadata\:\:getParameter\(\) should return array\|string but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Component/src/Metadata/Metadata.php
 
@@ -3757,38 +2689,8 @@ parameters:
 			path: src/Component/src/Metadata/Metadata.php
 
 		-
-			message: '#^Parameter \#1 \$name of class Sylius\\Resource\\Metadata\\Metadata constructor expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
-			message: '#^Parameter \#2 \$applicationName of class Sylius\\Resource\\Metadata\\Metadata constructor expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
-			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$driver \(string\) does not accept mixed\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
 			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$parameters type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
-			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$stateMachineComponent \(string\|null\) does not accept mixed\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/Component/src/Metadata/Metadata.php
-
-		-
-			message: '#^Property Sylius\\Resource\\Metadata\\Metadata\:\:\$templatesNamespace \(string\) does not accept mixed\.$#'
-			identifier: assign.propertyType
 			count: 1
 			path: src/Component/src/Metadata/Metadata.php
 
@@ -3919,20 +2821,8 @@ parameters:
 			path: src/Component/src/Metadata/OperationAccessCheckerInterface.php
 
 		-
-			message: '#^Cannot use array destructuring on mixed\.$#'
-			identifier: offsetAccess.nonArray
-			count: 5
-			path: src/Component/src/Metadata/Operations.php
-
-		-
 			message: '#^Class Sylius\\Resource\\Metadata\\Operations implements generic interface IteratorAggregate but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
-			count: 1
-			path: src/Component/src/Metadata/Operations.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Metadata\\Operations\:\:get\(\) should return Sylius\\Resource\\Metadata\\Operation but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Component/src/Metadata/Operations.php
 
@@ -3985,33 +2875,9 @@ parameters:
 			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
 
 		-
-			message: '#^Parameter \#1 \$key of method Sylius\\Resource\\Metadata\\Operations\<Sylius\\Resource\\Metadata\\Operation\>\:\:add\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
-
-		-
-			message: '#^Parameter \#1 \$operations of class Sylius\\Resource\\Metadata\\Operations constructor expects array\<int\|string, T of Sylius\\Resource\\Metadata\\Operation\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
-
-		-
-			message: '#^Parameter \#2 \$value of method Sylius\\Resource\\Metadata\\Operations\<Sylius\\Resource\\Metadata\\Operation\>\:\:add\(\) expects Sylius\\Resource\\Metadata\\Operation, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
-
-		-
-			message: '#^Possibly invalid array key type mixed\.$#'
-			identifier: offsetAccess.invalidOffset
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/AttributesResourceMetadataCollectionFactory.php
-
-		-
 			message: '#^Parameter \#1 \$array of class Sylius\\Resource\\Metadata\\Resource\\ResourceMetadataCollection constructor expects array\<mixed\>\|object, mixed given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 1
 			path: src/Component/src/Metadata/Resource/Factory/CachedResourceMetadataCollectionFactory.php
 
 		-
@@ -4033,18 +2899,6 @@ parameters:
 			path: src/Component/src/Metadata/Resource/Factory/PhpFileResourceMetadataCollectionFactory.php
 
 		-
-			message: '#^Parameter \#1 \$operations of class Sylius\\Resource\\Metadata\\Operations constructor expects array\<int\|string, T of Sylius\\Resource\\Metadata\\Operation\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/PhpFileResourceMetadataCollectionFactory.php
-
-		-
-			message: '#^Possibly invalid array key type mixed\.$#'
-			identifier: offsetAccess.invalidOffset
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/PhpFileResourceMetadataCollectionFactory.php
-
-		-
 			message: '#^PHPDoc tag @var with type Sylius\\Resource\\Metadata\\Operation is not subtype of native type Sylius\\Resource\\Metadata\\StateMachineAwareOperationInterface\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -4053,12 +2907,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Resource\\Metadata\\Resource\\Factory\\TemplatesDirResourceMetadataCollectionFactory\:\:__construct\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Metadata/Resource/Factory/TemplatesDirResourceMetadataCollectionFactory.php
-
-		-
-			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Component/src/Metadata/Resource/Factory/TemplatesDirResourceMetadataCollectionFactory.php
 
@@ -4303,12 +3151,6 @@ parameters:
 			path: src/Component/src/Reflection/ClassReflection.php
 
 		-
-			message: '#^Parameter \#1 \$directories of static method Sylius\\Resource\\Reflection\\ReflectionClassRecursiveIterator\:\:getReflectionClassesFromDirectories\(\) expects array\<string\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Reflection/ClassReflection.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Reflection\\Filter\\FunctionArgumentsFilter\:\:filter\(\) has parameter \$arguments with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4327,18 +3169,6 @@ parameters:
 			path: src/Component/src/Reflection/Filter/FunctionArgumentsFilter.php
 
 		-
-			message: '#^Binary operation "\." between ''@\='' and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Component/src/State/Factory.php
-
-		-
-			message: '#^Method Sylius\\Resource\\State\\Factory\:\:create\(\) should return object\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 2
-			path: src/Component/src/State/Factory.php
-
-		-
 			message: '#^Method Sylius\\Resource\\State\\Factory\:\:parseArgumentValues\(\) has parameter \$arguments with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4351,18 +3181,6 @@ parameters:
 			path: src/Component/src/State/Factory.php
 
 		-
-			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Component/src/State/Factory.php
-
-		-
-			message: '#^Parameter \#1 \$string of function substr expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/State/Factory.php
-
-		-
 			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with Sylius\\Resource\\State\\ProcessorInterface and ''Sylius\\\\Resource\\\\State\\\\ProcessorInterface'' will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 1
@@ -4371,12 +3189,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Resource\\State\\Provider\:\:provide\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/State/Provider.php
-
-		-
-			message: '#^Method Sylius\\Resource\\State\\Provider\:\:provide\(\) should return array\|object\|null but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Component/src/State/Provider.php
 
@@ -4405,54 +3217,6 @@ parameters:
 			path: src/Component/src/State/ProviderInterface.php
 
 		-
-			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 2
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Cannot access offset ''from'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Cannot access offset ''to'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Cannot access offset ''transitions'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Cannot access offset mixed on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Method Sylius\\Resource\\StateMachine\\StateMachine\:\:getTransitionFromState\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Method Sylius\\Resource\\StateMachine\\StateMachine\:\:getTransitionToState\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
-			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/StateMachine/StateMachine.php
-
-		-
 			message: '#^Call to function class_exists\(\) with ''Sylius\\\\Component\\\\Resource\\\\StateMachine\\\\StateMachineInterface'' and false will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 1
@@ -4475,18 +3239,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/Component/src/Symfony/Controller/MainController.php
-
-		-
-			message: '#^Cannot access offset ''operationName'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Component/src/Symfony/DependencyInjection/Compiler/MetadataMutatorPass.php
-
-		-
-			message: '#^Cannot access offset ''resourceClass'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Component/src/Symfony/DependencyInjection/Compiler/MetadataMutatorPass.php
 
 		-
 			message: '#^Method Sylius\\Resource\\Symfony\\EventDispatcher\\GenericEvent\:\:getMessageParameters\(\) return type has no value type specified in iterable type array\.$#'
@@ -4533,12 +3285,6 @@ parameters:
 		-
 			message: '#^Method Sylius\\Resource\\Symfony\\EventListener\\AddFormatListener\:\:getNotAcceptableHttpException\(\) has parameter \$mimeTypes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Symfony/EventListener/AddFormatListener.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Component/src/Symfony/EventListener/AddFormatListener.php
 
@@ -4615,18 +3361,6 @@ parameters:
 			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolver.php
 
 		-
-			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolver.php
-
-		-
-			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/ExpressionLanguage/VarsResolver.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Symfony\\ExpressionLanguage\\VarsResolverInterface\:\:resolve\(\) has parameter \$vars with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4657,18 +3391,6 @@ parameters:
 			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
 
 		-
-			message: '#^Parameter \#1 \$arguments of method Sylius\\Resource\\Symfony\\Request\\RepositoryArgumentResolver\:\:filterPrivateArguments\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
-
-		-
-			message: '#^Parameter \#1 \$arguments of method Sylius\\Resource\\Symfony\\Request\\RepositoryArgumentResolver\:\:filterPrivateArguments\(\) expects array\<string, mixed\>, array\<mixed\> given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Component/src/Symfony/Request/RepositoryArgumentResolver.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Symfony\\Request\\State\\Provider\:\:parseArgumentValues\(\) has parameter \$arguments with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4687,12 +3409,6 @@ parameters:
 			path: src/Component/src/Symfony/Request/State/Provider.php
 
 		-
-			message: '#^Method Sylius\\Resource\\Symfony\\Request\\State\\Provider\:\:provide\(\) should return array\|object\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Symfony/Request/State/Provider.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Symfony\\Response\\ApiHeadersInitiator\:\:initializeHeaders\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4705,26 +3421,8 @@ parameters:
 			path: src/Component/src/Symfony/Response/HeadersInitiatorInterface.php
 
 		-
-			message: '#^Method Sylius\\Resource\\Symfony\\Routing\\Factory\\OperationRouteFactory\:\:getRootPath\(\) should return string but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Symfony\\Routing\\Factory\\OperationRouteFactory\:\:getSyliusOptions\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
-
-		-
-			message: '#^Parameter \$methods of class Symfony\\Component\\Routing\\Route constructor expects array\<string\>\|string, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
-
-		-
-			message: '#^Parameter \$requirements of class Symfony\\Component\\Routing\\Route constructor expects array\<string\|Stringable\>, array given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Component/src/Symfony/Routing/Factory/OperationRouteFactory.php
 
@@ -4783,18 +3481,6 @@ parameters:
 			path: src/Component/src/Symfony/Serializer/State/DeserializeProvider.php
 
 		-
-			message: '#^Parameter \#4 \$context of method Symfony\\Component\\Serializer\\SerializerInterface\:\:deserialize\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/Serializer/State/DeserializeProvider.php
-
-		-
-			message: '#^Parameter \#3 \$context of method Symfony\\Component\\Serializer\\SerializerInterface\:\:serialize\(\) expects array\<string, mixed\>, array given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/Serializer/State/SerializeProcessor.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Symfony\\Session\\Flash\\FlashHelper\:\:getTranslationParameters\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4813,38 +3499,8 @@ parameters:
 			path: src/Component/src/Symfony/Validator/State/ValidateProvider.php
 
 		-
-			message: '#^Parameter \$groups of method Symfony\\Component\\Validator\\Validator\\ValidatorInterface\:\:validate\(\) expects array\<string\|Symfony\\Component\\Validator\\Constraints\\GroupSequence\>\|string\|Symfony\\Component\\Validator\\Constraints\\GroupSequence\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Component/src/Symfony/Validator/State/ValidateProvider.php
-
-		-
-			message: '#^Cannot call method apply\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Component/src/Symfony/Workflow/OperationStateMachine.php
-
-		-
-			message: '#^Cannot call method can\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Component/src/Symfony/Workflow/OperationStateMachine.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Symfony\\Workflow\\OperationStateMachine\:\:can\(\) should return bool but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Symfony/Workflow/OperationStateMachine.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Translation\\Provider\\ImmutableTranslationLocaleProvider\:\:__construct\(\) has parameter \$definedLocalesCodes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: src/Component/src/Translation/Provider/ImmutableTranslationLocaleProvider.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Translation\\Provider\\ImmutableTranslationLocaleProvider\:\:getDefinedLocalesCodes\(\) should return array\<string\> but returns array\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Component/src/Translation/Provider/ImmutableTranslationLocaleProvider.php
 
@@ -4873,12 +3529,6 @@ parameters:
 			path: src/Component/src/Twig/Context/Factory/ContextFactory.php
 
 		-
-			message: '#^Method Sylius\\Resource\\Twig\\Context\\Factory\\ContextFactory\:\:create\(\) should return array but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Twig/Context/Factory/ContextFactory.php
-
-		-
 			message: '#^Method Sylius\\Resource\\Twig\\Context\\Factory\\ContextFactoryInterface\:\:create\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -4895,21 +3545,3 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Component/src/Twig/Context/Factory/RequestContextFactory.php
-
-		-
-			message: '#^Cannot call method apply\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Component/src/Winzou/StateMachine/OperationStateMachine.php
-
-		-
-			message: '#^Cannot call method can\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Component/src/Winzou/StateMachine/OperationStateMachine.php
-
-		-
-			message: '#^Method Sylius\\Resource\\Winzou\\StateMachine\\OperationStateMachine\:\:can\(\) should return bool but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Component/src/Winzou/StateMachine/OperationStateMachine.php
