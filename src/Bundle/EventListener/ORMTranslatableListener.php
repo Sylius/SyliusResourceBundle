@@ -183,7 +183,7 @@ final class ORMTranslatableListener implements EventSubscriber
         }
 
         foreach ($metadata->table['uniqueConstraints'] as $constraint) {
-            if (!array_diff($constraint['columns'], $columns)) {
+            if (isset($constraint['columns']) && !array_diff($constraint['columns'], $columns)) {
                 return true;
             }
         }

@@ -6,7 +6,7 @@ includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
-    level: max
+    level: 9
 
     reportUnmatchedIgnoredErrors: false
 
@@ -16,16 +16,11 @@ parameters:
     excludePaths:
         # External vendor dependencies installed via composer in Component
         # These are third-party packages that shouldn't be analyzed
-        - 'src/Component/vendor/'
-
-        # PHPSpec tests use a different syntax and structure than regular PHP code
-        # They contain specs with methods like it_*() and shouldReturn() that PHPStan doesn't understand
-        - 'src/Bundle/spec/'
-        - 'src/Component/spec/'
+        # Only present once dependencies are installed in src/Component
+        - src/Component/vendor (?)
 
         # PHPUnit tests - test code is not production code and has different quality requirements
         # Tests often use mocks, stubs and test-specific patterns
-        - 'src/Bundle/Tests/'
         - 'src/Component/tests/'
 
         # MongoDB ODM integration - requires doctrine/mongodb-odm which is optional
